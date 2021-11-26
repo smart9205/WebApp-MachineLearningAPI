@@ -1,0 +1,18 @@
+{
+  "name": "t18",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "docker:build": "docker-compose -p pern_stack build",
+    "docker:up": "docker-compose -p pern_stack up --build",
+    "docker:down": "docker-compose -p pern_stack down",
+    "docker:down:volumes": "docker-compose -p pern_stack down --volumes",
+
+    "docker-dev:up": "docker-compose -f docker-compose.dev.yml up -d --build",
+    "docker-dev:down": "docker-compose -f docker-compose.dev.yml down"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
