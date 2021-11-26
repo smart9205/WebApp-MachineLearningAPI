@@ -1,7 +1,7 @@
 import React from "react";
 import { Redirect } from 'react-router-dom';
 import { useSelector } from "react-redux";
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 const Profile = () => {
   const { user: currentUser } = useSelector((state) => state.auth);

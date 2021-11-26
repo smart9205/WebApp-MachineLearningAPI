@@ -9,7 +9,7 @@ import CheckButton from "react-validation/build/button";
 
 import { forgetpassword, resetPwdVerify, resetpassword } from "../../actions/auth";
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
   link: {
