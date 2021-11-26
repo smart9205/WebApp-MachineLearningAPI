@@ -7,13 +7,13 @@ services:
       context: ./api
       dockerfile: Dockerfile
     labels:
-      - "traefik.http.routers.api.rule=Host(`soccerapi.scouting4u.com`)"
+      - "traefik.http.routers.api.rule=Host(`soccerapi.s4upro.com`)"
       - "traefik.http.routers.api.middlewares=force-https"
       - "traefik.http.routers.api.service=api"
       - "traefik.http.routers.api.entrypoints=web"
       - "traefik.http.services.api.loadbalancer.server.port=3000"
 
-      - "traefik.http.routers.api-secure.rule=Host(`soccerapi.scouting4u.com`)"
+      - "traefik.http.routers.api-secure.rule=Host(`soccerapi.s4upro.com`)"
       - "traefik.http.routers.api-secure.entrypoints=websecure"
       - "traefik.http.routers.api-secure.service=api-secure"
       - "traefik.http.services.api-secure.loadbalancer.server.port=3000"
@@ -32,13 +32,13 @@ services:
       context: ./app
       dockerfile: Dockerfile
     labels:
-      - "traefik.http.routers.app.rule=Host(`soccer.scouting4u.com`)"
+      - "traefik.http.routers.app.rule=Host(`soccer.s4upro.com`)"
       - "traefik.http.routers.app.middlewares=force-https"
       - "traefik.http.routers.app.service=app"
       - "traefik.http.routers.app.entrypoints=web"
       - "traefik.http.services.app.loadbalancer.server.port=80"
 
-      - "traefik.http.routers.app-secure.rule=Host(`soccer.scouting4u.com`)"
+      - "traefik.http.routers.app-secure.rule=Host(`soccer.s4upro.com`)"
       - "traefik.http.routers.app-secure.entrypoints=websecure"
       - "traefik.http.routers.app-secure.service=app-secure"
       - "traefik.http.services.app-secure.loadbalancer.server.port=80"
@@ -52,13 +52,13 @@ services:
     container_name: db_manager
     image: dpage/pgadmin4
     labels:
-      - "traefik.http.routers.db_manager.rule=Host(`soccerpgadmin.scouting4u.com`)"
+      - "traefik.http.routers.db_manager.rule=Host(`soccerpgadmin.s4upro.com`)"
       - "traefik.http.routers.db_manager.middlewares=force-https"
       - "traefik.http.routers.db_manager.service=db_manager"
       - "traefik.http.routers.db_manager.entrypoints=web"
       - "traefik.http.services.db_manager.loadbalancer.server.port=80"
 
-      - "traefik.http.routers.db_manager-secure.rule=Host(`soccerpgadmin.scouting4u.comt`)"
+      - "traefik.http.routers.db_manager-secure.rule=Host(`soccerpgadmin.s4upro.comt`)"
       - "traefik.http.routers.db_manager-secure.entrypoints=websecure"
       - "traefik.http.routers.db_manager-secure.service=db_manager-secure"
       - "traefik.http.services.db_manager-secure.loadbalancer.server.port=80"
