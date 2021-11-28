@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -62,3 +62,4 @@
     "redux-devtools-extension": "^2.13.8"
   }
 }
+ 
