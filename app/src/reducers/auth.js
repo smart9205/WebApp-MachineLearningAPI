@@ -9,7 +9,6 @@ import {
 import CryptoJS from 'crypto-js'
 import { SECRET } from "../config/settings"
 
-console.log("AuthVerify1");
 let user;
 try {
   user = localStorage.getItem("user") ? JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("user"), SECRET).toString(CryptoJS.enc.Utf8)) : null;

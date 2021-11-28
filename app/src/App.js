@@ -21,7 +21,16 @@ import { history } from "./helpers/history";
 import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import Game from "./components/game";
+import CryptoJS from 'crypto-js'
+import { SECRET } from "./config/settings"
 
+const parseJwt = (token) => {
+  try {
+    return JSON.parse(atob(token.split(".")[1]));
+  } catch (e) {
+    return null;
+  }
+};
 
 const PrivateRoute = ({component: Component, rememberPath=true, ...rest}) => {
   if(rememberPath) localStorage.setItem("path", rest.location.pathname);
@@ -52,6 +61,21 @@ const AdminRoute = ({component: Component, rememberPath=true, ...rest}) => {
 const App = () => {  
   const { user: currentUser } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
+  let user;
+  try {
+    user = localStorage.getItem("user") ? JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("user"), SECRET).toString(CryptoJS.enc.Utf8)) : null;
+  } catch {
+    console.error("loading user error");
+  }
+  if (user) {
+    const decodedJwt = parseJwt(user.accessToken);
+    
+    console.log("JWT expire at : ", (new Date(decodedJwt.exp * 1000)).toUTCString());
+    if (decodedJwt.exp * 1000 < Date.now()) {
+      logOut();
+    }
+  }
 
   useEffect(() => {
     console.log("Header Effect");
