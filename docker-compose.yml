@@ -58,7 +58,7 @@ services:
       - "traefik.http.routers.db_manager.entrypoints=web"
       - "traefik.http.services.db_manager.loadbalancer.server.port=80"
 
-      - "traefik.http.routers.db_manager-secure.rule=Host(`soccerpgadmin.s4upro.comt`)"
+      - "traefik.http.routers.db_manager-secure.rule=Host(`soccerpgadmin.s4upro.com`)"
       - "traefik.http.routers.db_manager-secure.entrypoints=websecure"
       - "traefik.http.routers.db_manager-secure.service=db_manager-secure"
       - "traefik.http.services.db_manager-secure.loadbalancer.server.port=80"
