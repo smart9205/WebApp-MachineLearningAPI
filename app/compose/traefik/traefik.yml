@@ -28,7 +28,7 @@ certificatesResolvers:
 http:
   routers:
     web-secure-router:
-      rule: "Host(`soccer.scouting4u.com`) || Host(`www.soccer.scouting4u.com`)"
+      rule: "Host(`soccer.s4upro.com`) || Host(`www.soccer.s4upro.com`)"
 
       entryPoints:
         - web-secure
