@@ -228,7 +228,12 @@ const Register = () => {
               </div>
               
               <div className="form-group">
-                <button className="btn btn-primary btn-block" disabled={!human}>{lang.rs_button_signup || 'Sign Up'}</button>
+                <button 
+                  className="btn btn-primary btn-block" 
+                  disabled={!human}
+                >
+                  {lang.rs_button_signup || 'Sign Up'}
+                </button>
               </div>
             </div>
           )}

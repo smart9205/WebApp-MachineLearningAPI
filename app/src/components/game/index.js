@@ -33,7 +33,7 @@ export default function Game() {
       <Button onClick={handleClickOpen()} variant="outlined">Add a new Game</Button>
       <Dialog
         maxWidth="xl"
-        open={open}
+        open={open} 
         onClose={handleClose}
         scroll="paper"
         aria-labelledby="scroll-dialog-title"
