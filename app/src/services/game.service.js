@@ -16,8 +16,8 @@ const addNewTeam = (req) => {
   });
 };
 
-const getWisdomOfCrowd = (req) => {
-  return axios.post(API_URL+"temporary_analyze_line/getwisdomofcrowd", req, {headers: authHeader()}).then((response) => {
+const getAllTeams = () => {
+  return axios.get(API_URL+"team", {headers: authHeader()}).then((response) => {
     return response.data;
   });
 }
@@ -31,7 +31,7 @@ const getSeasons = () => {
 const gameService = {
   addNewPlayer,
   addNewTeam,
-  getWisdomOfCrowd,
+  getAllTeams,
   getSeasons,
 };
 

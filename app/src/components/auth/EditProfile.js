@@ -8,8 +8,6 @@ import CheckButton from "react-validation/build/button";
 import { updateProfile } from "../../actions/auth";
 import { SET_MESSAGE, CLEAR_MESSAGE } from "../../actions/types";
 
-
-
 const EditProfile = () => {
   const form = useRef();
   const checkBtn = useRef();
@@ -23,9 +21,9 @@ const EditProfile = () => {
   const [country, setCountry] = useState("");
   const [successful, setSuccessful] = useState(false);
 
-  const { message } = useSelector(state => state.message);
+  const { message } = useSelector((state) => state.message);
   const { user: currentUser } = useSelector((state) => state.auth);
-  const { lang } = useSelector(state => state.lang);
+  const { lang } = useSelector((state) => state.lang);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -39,77 +37,73 @@ const EditProfile = () => {
     if (!value) {
       return (
         <div className="alert alert-danger" role="alert">
-          {lang.lg_valid_fieldrequired || 'This field is required!'}
+          {lang.lg_valid_fieldrequired || "This field is required!"}
         </div>
       );
     }
   };
-  
+
   const vfirstname = (value) => {
     if (value.length < 1 || value.length > 30) {
       return (
         <div className="alert alert-danger" role="alert">
-          {lang.rs_valid_firstname || 'The first name must be between 1 and 30 characters.'}
+          {lang.rs_valid_firstname || "The first name must be between 1 and 30 characters."}
         </div>
       );
     }
   };
-  
+
   const vlastname = (value) => {
     if (value.length < 1 || value.length > 30) {
       return (
         <div className="alert alert-danger" role="alert">
-          {lang.rs_valid_lastname || 'The last name must be between 1 and 30 characters.'}
+          {lang.rs_valid_lastname || "The last name must be between 1 and 30 characters."}
         </div>
       );
     }
   };
-  
+
   const vphonenumber = (value) => {
     if (value.length < 1 || value.length > 30) {
       return (
         <div className="alert alert-danger" role="alert">
-          {lang.rs_valid_phone || 'The phone number must be between 1 and 30 characters.'}
+          {lang.rs_valid_phone || "The phone number must be between 1 and 30 characters."}
         </div>
       );
     }
   };
-  
+
   const vcountry = (value) => {
     if (value.length < 1 || value.length > 30) {
       return (
         <div className="alert alert-danger" role="alert">
-          {lang.rs_valid_country || 'The country must be between 1 and 30 characters.'}
+          {lang.rs_valid_country || "The country must be between 1 and 30 characters."}
         </div>
       );
     }
   };
 
   const onChangeFirstname = (e) => {
-    const firstname = e.target.value;
-    setFirstname(firstname);
+    setFirstname(e.target.value);
   };
 
   const onChangeLastname = (e) => {
-    const lastname = e.target.value;
-    setLastname(lastname);
+    setLastname(e.target.value);
   };
   const onChangePhonenumber = (e) => {
-    const phonenumber = e.target.value;
-    setPhonenumber(phonenumber);
+    setPhonenumber(e.target.value);
   };
 
   const onChangeCountry = (e) => {
-    const country = e.target.value;
-    setCountry(country);
+    setCountry(e.target.value);
   };
 
   const clearMessage = (v) => {
-    if(v.length)
+    if (v.length)
       dispatch({
         type: CLEAR_MESSAGE,
       });
-  }
+  };
 
   const handleSaveProfile = (e) => {
     e.preventDefault();
@@ -118,7 +112,7 @@ const EditProfile = () => {
 
     form.current.validateAll();
 
-    if(newPassword !== confirmPassword) {
+    if (newPassword !== confirmPassword) {
       setSuccessful(false);
       dispatch({
         type: SET_MESSAGE,
@@ -131,7 +125,7 @@ const EditProfile = () => {
       dispatch(updateProfile(oldPassword, newPassword, firstname, lastname, phonenumber, country))
         .then(() => {
           setSuccessful(true);
-         })
+        })
         .catch(() => {
           setSuccessful(false);
         });
@@ -141,12 +135,11 @@ const EditProfile = () => {
   return (
     <div className="col-md-12">
       <div className="card card-container">
-
         <Form onSubmit={handleSaveProfile} ref={form}>
           {!successful && (
             <div>
               <div className="form-group">
-                <label htmlFor="oldpassword">{lang.ep_label_oldpassword || 'Old Password'}</label>
+                <label htmlFor="oldpassword">{lang.ep_label_oldpassword || "Old Password"}</label>
                 <Input
                   type="password"
                   className="form-control"
@@ -156,33 +149,39 @@ const EditProfile = () => {
                   validations={[required]}
                 />
               </div>
-            
+
               <div className="form-group">
-                <label htmlFor="password">{lang.ep_label_newpassword || 'New Password'}</label>
+                <label htmlFor="password">{lang.ep_label_newpassword || "New Password"}</label>
                 <Input
                   type="password"
                   className="form-control"
                   name="newpassword"
                   value={newPassword}
-                  onChange={(e) => {setNewPassword(e.target.value); clearMessage(e.target.value)}}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                    clearMessage(e.target.value);
+                  }}
                   validations={[required]}
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="password">{lang.ep_label_confirmpassword || 'Confirm Password'}</label>
+                <label htmlFor="password">{lang.ep_label_confirmpassword || "Confirm Password"}</label>
                 <Input
                   type="password"
                   className="form-control"
                   name="confirmpassword"
                   value={confirmPassword}
-                  onChange={(e) => {setConfirmPassword(e.target.value); clearMessage(e.target.value)}}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    clearMessage(e.target.value);
+                  }}
                   validations={[required]}
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="firstname">{lang.rs_label_firstname || 'First Name'}</label>
+                <label htmlFor="firstname">{lang.rs_label_firstname || "First Name"}</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -193,7 +192,7 @@ const EditProfile = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="lastname">{lang.rs_label_lastname || 'Last Name'}</label>
+                <label htmlFor="lastname">{lang.rs_label_lastname || "Last Name"}</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -205,7 +204,7 @@ const EditProfile = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="phonenumber">{lang.rs_label_phonenumber || 'Phone Number'}</label>
+                <label htmlFor="phonenumber">{lang.rs_label_phonenumber || "Phone Number"}</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -216,7 +215,7 @@ const EditProfile = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="country">{lang.rs_label_country || 'Country'}</label>
+                <label htmlFor="country">{lang.rs_label_country || "Country"}</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -226,16 +225,17 @@ const EditProfile = () => {
                   validations={[required, vcountry]}
                 />
               </div>
-              
+
               <div className="form-group">
-                <button className="btn btn-primary btn-block" >{lang.ep_label_saveprofile || 'Save Profile'}</button>
+                <button className="btn btn-primary btn-block">
+                  {lang.ep_label_saveprofile || "Save Profile"}</button>
               </div>
             </div>
           )}
 
           {message && (
             <div className="form-group">
-              <div className={ successful ? "alert alert-success" : "alert alert-danger" } role="alert">
+              <div className={successful ? "alert alert-success" : "alert alert-danger"} role="alert">
                 {message}
               </div>
             </div>

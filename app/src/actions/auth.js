@@ -13,30 +13,28 @@ import {
 
 import AuthService from "../services/auth.service";
 
-export const getLanguage = (lang) => (dispatch) => {
-  return AuthService.getLanguage(lang).then(
+export const getLanguage = (lang) => (dispatch) =>
+  AuthService.getLanguage(lang).then(
     (response) => {
-      const data = response.data.reduce((obj, item) => (obj[item.name]=item.value, obj),{});
+      const data = response.data.reduce((obj, item) => {
+        return ((obj[item.name] = item.value), obj);
+      }, {});
 
       console.log("getLanguages", data);
       dispatch({
         type: SET_LANG_SUCCESS,
-        payload: {...data, type: lang}
+        payload: { ...data, type: lang },
       });
 
       return Promise.resolve();
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
 
       dispatch({
         type: SET_LANG_SUCCESS,
-        payload: {type: lang}
+        payload: { type: lang },
       });
 
       dispatch({
@@ -45,12 +43,11 @@ export const getLanguage = (lang) => (dispatch) => {
       });
 
       return Promise.reject();
-    }
+    },
   );
-};
 
-export const register = (email, firstname, lastname, phonenumber, country, lang) => (dispatch) => {
-  return AuthService.register(email, firstname, lastname, phonenumber, country, lang).then(
+export const register = (email, firstname, lastname, phonenumber, country, lang) => (dispatch) =>
+  AuthService.register(email, firstname, lastname, phonenumber, country, lang).then(
     (response) => {
       dispatch({
         type: REGISTER_SUCCESS,
@@ -65,11 +62,7 @@ export const register = (email, firstname, lastname, phonenumber, country, lang)
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
 
       dispatch({
         type: REGISTER_FAIL,
@@ -81,12 +74,11 @@ export const register = (email, firstname, lastname, phonenumber, country, lang)
       });
 
       return Promise.reject();
-    }
+    },
   );
-};
 
-export const updateProfile = (oldPassword, newPassword, firstname, lastname, phonenumber, country) => (dispatch) => {
-  return AuthService.updateProfile(oldPassword, newPassword, firstname, lastname, phonenumber, country).then(
+export const updateProfile = (oldPassword, newPassword, firstname, lastname, phonenumber, country) => (dispatch) =>
+  AuthService.updateProfile(oldPassword, newPassword, firstname, lastname, phonenumber, country).then(
     (response) => {
       dispatch({
         type: UPDATEPROFILE_SUCCESS,
@@ -101,11 +93,7 @@ export const updateProfile = (oldPassword, newPassword, firstname, lastname, pho
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
 
       dispatch({
         type: UPDATEPROFILE_FAIL,
@@ -117,15 +105,13 @@ export const updateProfile = (oldPassword, newPassword, firstname, lastname, pho
       });
 
       return Promise.reject();
-    }
+    },
   );
-};
 
-
-export const verification = (verificationCode) => (dispatch) => {
-  return AuthService.verification(verificationCode).then(
+export const verification = (verificationCode) => (dispatch) =>
+  AuthService.verification(verificationCode).then(
     (data) => {
-      if(data){
+      if (data) {
         dispatch({
           type: LOGIN_SUCCESS,
           payload: { user: data },
@@ -135,11 +121,7 @@ export const verification = (verificationCode) => (dispatch) => {
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
 
       dispatch({
         type: LOGIN_FAIL,
@@ -151,11 +133,10 @@ export const verification = (verificationCode) => (dispatch) => {
       });
 
       return Promise.reject();
-    }
+    },
   );
-};
-export const login = (email, password, device) => (dispatch) => {
-  return AuthService.login(email, password, device).then(
+export const login = (email, password, device) => (dispatch) =>
+  AuthService.login(email, password, device).then(
     (data) => {
       dispatch({
         type: LOGIN_SUCCESS,
@@ -166,11 +147,7 @@ export const login = (email, password, device) => (dispatch) => {
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
 
       dispatch({
         type: LOGIN_FAIL,
@@ -182,11 +159,10 @@ export const login = (email, password, device) => (dispatch) => {
       });
 
       return Promise.reject();
-    }
+    },
   );
-};
-export const forgetpassword = (email) => (dispatch) => {
-  return AuthService.forgetpassword(email).then(
+export const forgetpassword = (email) => (dispatch) =>
+  AuthService.forgetpassword(email).then(
     (response) => {
       dispatch({
         type: SET_MESSAGE,
@@ -197,11 +173,7 @@ export const forgetpassword = (email) => (dispatch) => {
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
 
       dispatch({
         type: SET_MESSAGE,
@@ -209,9 +181,8 @@ export const forgetpassword = (email) => (dispatch) => {
       });
 
       return Promise.reject();
-    }
+    },
   );
-};
 
 export const resetpassword = (userdata, password, confirmPassword) => (dispatch) => {
   if (password !== confirmPassword) {
@@ -219,7 +190,7 @@ export const resetpassword = (userdata, password, confirmPassword) => (dispatch)
       type: SET_MESSAGE,
       payload: "Confirm Password Failed!",
     });
-    return Promise.reject(); 
+    return Promise.reject();
   }
   return AuthService.resetpassword(userdata, password).then(
     (response) => {
@@ -232,11 +203,7 @@ export const resetpassword = (userdata, password, confirmPassword) => (dispatch)
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
 
       dispatch({
         type: SET_MESSAGE,
@@ -244,12 +211,12 @@ export const resetpassword = (userdata, password, confirmPassword) => (dispatch)
       });
 
       return Promise.reject();
-    }
+    },
   );
 };
 
-export const resetPwdVerify = (code) => (dispatch) => {
-  return AuthService.resetPwdVerify(code).then(
+export const resetPwdVerify = (code) => (dispatch) =>
+  AuthService.resetPwdVerify(code).then(
     (response) => {
       dispatch({
         type: RESET_PWD_READY,
@@ -260,11 +227,7 @@ export const resetPwdVerify = (code) => (dispatch) => {
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
 
       dispatch({
         type: SET_MESSAGE,
@@ -272,9 +235,8 @@ export const resetPwdVerify = (code) => (dispatch) => {
       });
 
       return Promise.reject();
-    }
+    },
   );
-};
 export const logout = () => (dispatch) => {
   AuthService.logout();
   dispatch({

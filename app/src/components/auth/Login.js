@@ -122,7 +122,7 @@ const Login = (props) => {
       try{
         device = JSON.parse(CryptoJS.AES.decrypt(cookies.data, SECRET).toString(CryptoJS.enc.Utf8)).device;
       }
-      catch{
+      catch {
         console.log("JSON Parse error!");
         // make a new string and store in cookie
         device = randomString.generate(16);
