@@ -4,15 +4,21 @@ const Op = db.Sequelize.Op;
 
 exports.create =  (req, res) => {
   // Validate request
-  if (!req.body.name) {
+  if (!req.body.f_name) {
     res.status(400).send({
       message: "Name can not be empty!"
     });
     return;
   }
 
+  console.log("req.body",req.body);
+
   const player = {
-    name: req.body.name,
+    f_name: req.body.f_name,
+    l_name: req.body.l_name,
+    date_of_birth: req.body.date_of_birth,
+    position: req.body.position,
+    jersey_number: req.body.jersey_number
   };
 
   Player.create(player)

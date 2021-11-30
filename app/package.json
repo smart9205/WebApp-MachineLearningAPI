@@ -41,7 +41,10 @@
     "start": "react-scripts start",
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -59,7 +62,17 @@
     ]
   },
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-node": "^4.1.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-standard": "^3.1.0",
     "redux-devtools-extension": "^2.13.8"
   }
 }
- 
