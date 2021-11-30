@@ -40,7 +40,7 @@ export default function SearchComponent() {
 
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
-  const [birth, setBirth] = React.useState(false);
+  const [birth, setBirth] = React.useState(new Date());
   const [position, setPosition] = React.useState("");
   const [jerseyNumber, setJercyNumber] = React.useState(false);
 
