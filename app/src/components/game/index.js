@@ -47,7 +47,6 @@ export default function Game() {
             <Content/>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleClose}>OK</Button>
         </DialogActions>
       </Dialog>

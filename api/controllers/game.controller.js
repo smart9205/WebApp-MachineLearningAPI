@@ -1,21 +1,16 @@
 const db = require("../models");
-const Game = db.Game;
+const Game = db.game;
 const Op = db.Sequelize.Op;
 
 exports.create =  (req, res) => {
   // Validate request
-  if (!req.body.name) {
-    res.status(400).send({
-      message: "Name can not be empty!"
-    });
-    return;
-  }
-
-  const Game = {
-    name: req.body.name,
-  };
-
-  Game.create(Game)
+  // if (!req.body.name) {
+  //   res.status(400).send({
+  //     message: "Name can not be empty!"
+  //   });
+  //   return;
+  // }
+  Game.create(req.body)
     .then(data => {
       res.send(data);
     })

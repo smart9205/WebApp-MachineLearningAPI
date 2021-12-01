@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Router, Switch, Route, Redirect } from "react-router-dom";
 
@@ -46,23 +46,27 @@ const PrivateRoute = ({component: Component, rememberPath=true, ...rest}) => {
   )
 }
 
-const AdminRoute = ({component: Component, rememberPath=true, ...rest}) => {
-  if(rememberPath) localStorage.setItem("path", rest.location.pathname);
-  const { user: currentUser } = useSelector((state) => state.auth);
-  return (
-    <Route
-      {...rest}
-      render={(props) => currentUser && currentUser.subscription && currentUser.subscription.available && currentUser.roles.includes("ROLE_SUPERADMIN")
-        ? <Component {...props} />
-        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
-    />
-  )
-} 
+// const AdminRoute = ({component: Component, rememberPath=true, ...rest}) => {
+//   if(rememberPath) localStorage.setItem("path", rest.location.pathname);
+//   const { user: currentUser } = useSelector((state) => state.auth);
+//   return (
+//     <Route
+//       {...rest}
+//       render={(props) => currentUser && currentUser.subscription && currentUser.subscription.available && currentUser.roles.includes("ROLE_SUPERADMIN")
+//         ? <Component {...props} />
+//         : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+//     />
+//   )
+// } 
 
 const App = () => {  
   const { user: currentUser } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
+  const logOut = useCallback(() => {
+    dispatch(logout());
+  }, [dispatch]);
+  
   let user;
   try {
     user = localStorage.getItem("user") ? JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("user"), SECRET).toString(CryptoJS.enc.Utf8)) : null;
@@ -104,9 +108,7 @@ const App = () => {
     });
   }, [dispatch]);
 
-  const logOut = useCallback(() => {
-    dispatch(logout());
-  }, [dispatch]);
+
 
   useEffect(() => {
     EventBus.on("logout", () => {

@@ -22,8 +22,27 @@ const getAllTeams = () => {
   });
 }
 
-const getSeasons = () => {
-  return axios.get(API_URL+"analyze_line/getseasons", {headers: authHeader()}).then((response) => {
+const getAllPlayers = () => {
+  return axios.get(API_URL+"player", {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+
+const addNewGame = (req) => {
+  return axios.post(API_URL+"game", req, {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+
+
+const getAllSeasons = () => {
+  return axios.get(API_URL+"season", {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+
+const getAllLeagues = () => {
+  return axios.get(API_URL+"league", {headers: authHeader()}).then((response) => {
     return response.data;
   });
 }
@@ -32,7 +51,10 @@ const gameService = {
   addNewPlayer,
   addNewTeam,
   getAllTeams,
-  getSeasons,
+  getAllPlayers,
+  addNewGame,
+  getAllSeasons,
+  getAllLeagues
 };
 
 export default gameService;
