@@ -121,7 +121,7 @@ export default function Content() {
                 </li>
               );
             }}
-            renderInput={(params) => <TextField {...params} label="Search home team" />}
+            renderInput={(params) => <TextField {...params} label="Season" />}
             onChange={(event, newValue) => {
               setSeason(newValue);
             }}
@@ -143,7 +143,7 @@ export default function Content() {
                 </li>
               );
             }}
-            renderInput={(params) => <TextField {...params} label="Search home team" />}
+            renderInput={(params) => <TextField {...params} label="League" />}
             onChange={(event, newValue) => {
               setLeague(newValue);
             }}
