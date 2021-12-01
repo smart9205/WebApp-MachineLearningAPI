@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { history } from '../helpers/history';
 
 import CryptoJS from 'crypto-js'
