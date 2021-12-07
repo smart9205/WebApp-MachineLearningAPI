@@ -90,7 +90,7 @@ const Login = (props) => {
         .then((data) => {
           // Here we receive verification succeess 
           console.log("Verfication Data", data);
-          // window.top.location.replace(`https://${data.lang ? data.lang : "www"}.Stats2Win.net${data.lang ? "/analyzer" : ""}`);
+          // window.location.replace(`https://${data.lang ? data.lang : "www"}.Stats2Win.net${data.lang ? "/analyzer" : ""}`);
         })
         .catch(() => {
           console.log("error");
@@ -155,7 +155,7 @@ const Login = (props) => {
   const handleClose = () => {
     setOpen(false);
     logOut();
-    return window.top.location.replace("https://stats2win.net");
+    return window.location.replace("https://soccer.scouting4u.com");
   };
 
   if (isLoggedIn) {

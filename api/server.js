@@ -31,7 +31,7 @@ db.sequelize.sync();
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Stats2Win!" });
+  res.json({ message: "Welcome to Soccer Scouting4U!" });
 });
 
 // routes

@@ -54,7 +54,7 @@ const BackToLogin = (props) => {
   const classes = useStyles();
 
   const clicked = (e) => {
-    window.top.location.replace("https://stats2win.net/analyzer");
+    window.location.replace("https://soccer.scouting4u.com");
   };
   return (
     <div className={classes.link} onClick={clicked} >Back to Login</div>

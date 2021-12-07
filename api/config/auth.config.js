@@ -1,5 +1,5 @@
 module.exports = {
-  secret: "stats2win-secret-key",
-  forgetpwdkey: "stats2win-forgetpwd-key"
+  secret: "soccerscouting4u-secret-key",
+  forgetpwdkey: "soccerscouting4u-forgetpwd-key"
 };
   
