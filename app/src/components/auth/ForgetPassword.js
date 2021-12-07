@@ -13,7 +13,6 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
   link: {
-    paddingLeft: theme.spacing(3),
     color: '#007bff',
     '&:hover': {
       color: "#5d6e81",
@@ -54,7 +53,7 @@ const BackToLogin = (props) => {
   const classes = useStyles();
 
   const clicked = (e) => {
-    window.location.replace("https://soccer.scouting4u.com");
+    window.location.replace("https://soccer.s4upro.com");
   };
   return (
     <div className={classes.link} onClick={clicked} >Back to Login</div>

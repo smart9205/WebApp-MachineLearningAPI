@@ -155,7 +155,7 @@ const Login = (props) => {
   const handleClose = () => {
     setOpen(false);
     logOut();
-    return window.location.replace("https://soccer.scouting4u.com");
+    return window.location.replace("https://soccer.s4upro.com");
   };
 
   if (isLoggedIn) {
