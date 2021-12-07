@@ -13,15 +13,16 @@ import ForgetPassword from "./components/auth/ForgetPassword";
 import Register from "./components/auth/Register";
 import Home from "./components/Home";
 import Profile from "./components/auth/Profile";
+import Game from "./components/game";
+import Tagging from "./components/tagging";
 
-import { logout, getLanguage } from "./actions/auth";
+import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
 
 import { history } from "./helpers/history";
 
 import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
-import Game from "./components/game";
 import CryptoJS from 'crypto-js'
 import { SECRET } from "./config/settings"
 
@@ -46,18 +47,18 @@ const PrivateRoute = ({component: Component, rememberPath=true, ...rest}) => {
   )
 }
 
-// const AdminRoute = ({component: Component, rememberPath=true, ...rest}) => {
-//   if(rememberPath) localStorage.setItem("path", rest.location.pathname);
-//   const { user: currentUser } = useSelector((state) => state.auth);
-//   return (
-//     <Route
-//       {...rest}
-//       render={(props) => currentUser && currentUser.subscription && currentUser.subscription.available && currentUser.roles.includes("ROLE_SUPERADMIN")
-//         ? <Component {...props} />
-//         : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
-//     />
-//   )
-// } 
+const AdminRoute = ({component: Component, rememberPath=true, ...rest}) => {
+  if(rememberPath) localStorage.setItem("path", rest.location.pathname);
+  const { user: currentUser } = useSelector((state) => state.auth);
+  return (
+    <Route
+      {...rest}
+      render={(props) => currentUser && currentUser.subscription && currentUser.subscription.available && currentUser.roles.includes("ROLE_SUPERADMIN")
+        ? <Component {...props} />
+        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+    />
+  )
+} 
 
 const App = () => {  
   const { user: currentUser } = useSelector((state) => state.auth);
@@ -86,25 +87,6 @@ const App = () => {
     console.log("Header Effect");
     history.listen((location) => {
       dispatch(clearMessage()); // clear message when changing location
-    });
-
-    //eslint-disable-next-line
-    const regex = /(?:http[s]*\:\/\/)*(.*?)\.(?=[^\/]*\..{2,5})/i;
-    var url = (window.location !== window.parent.location)
-    ? document.referrer
-    : document.location.href;
-    
-    const lang = url.match(regex);
-
-    console.log("parentUrl", url, lang ? lang[1] : "en");
-    
-    localStorage.setItem("lang", lang ? lang[1] : "en");
-
-    dispatch(getLanguage(lang ? lang[1] : "en")).then(() => {
-      console.log("set language success!");
-    })
-    .catch(() => {
-      console.log("error");
     });
   }, [dispatch]);
 
@@ -158,9 +140,9 @@ const App = () => {
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
 
-            <PrivateRoute 
-              path='/game' 
-              component={Game} />
+            <PrivateRoute path='/tagging' component={Tagging} />
+
+            <AdminRoute path='/game' component={Game} />
           </Switch>
         </div>
 

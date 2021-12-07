@@ -80,7 +80,6 @@ const Login = (props) => {
 
   const { isLoggedIn, user:currentUser } = useSelector(state => state.auth);
   const { message } = useSelector(state => state.message);
-  const { lang } = useSelector(state => state.lang);
 
   const dispatch = useDispatch();
 
@@ -91,7 +90,7 @@ const Login = (props) => {
         .then((data) => {
           // Here we receive verification succeess 
           console.log("Verfication Data", data);
-          window.top.location.replace(`https://${data.lang ? data.lang : "www"}.Stats2Win.net${data.lang ? "/analyzer" : ""}`);
+          // window.location.replace(`https://${data.lang ? data.lang : "www"}.Stats2Win.net${data.lang ? "/analyzer" : ""}`);
         })
         .catch(() => {
           console.log("error");
@@ -156,18 +155,18 @@ const Login = (props) => {
   const handleClose = () => {
     setOpen(false);
     logOut();
-    return window.top.location.replace("https://stats2win.net");
+    return window.location.replace("https://soccer.scouting4u.com");
   };
 
   if (isLoggedIn) {
     const path = localStorage.getItem("path");
     if (currentUser.subscription !== null && currentUser.subscription.available) {
-      if(!currentUser.roles.includes("ROLE_SUPERADMIN") && path === '/arbitrage'){
+      if(!currentUser.roles.includes("ROLE_SUPERADMIN") && path === '/game'){
         if(!adminOpen) setAdminOpen(true);
       }
       else {
         console.log("Redirect after login", path);
-        return <Redirect to={path ? path : '/calculator'} />;
+        return <Redirect to={path ? path : '/tagging'} />;
       }
     }
     if(!open) handleOpen();
@@ -193,10 +192,10 @@ const Login = (props) => {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <h2 id="transition-modal-title">{lang.lg_label_subscription_expired || "Subscription expired"}</h2>
-            <p id="transition-modal-description">{lang.lg_label_purchase_subscription || "Please purchase subscrition."}</p>
-            <Button variant="contained" color="default" className={classes.button} onClick={()=>handleClose()}>
-              {lang.ca_label_ok || "OK"}
+            <h2 id="transition-modal-title">Subscription expired</h2>
+            <p id="transition-modal-description">Please purchase subscrition.</p>
+            <Button variant="contained" className={classes.button} onClick={()=>handleClose()}>
+              OK
             </Button>
           </div>
         </Fade>
@@ -218,7 +217,7 @@ const Login = (props) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => adminDialogClose()} autoFocus>
-            {lang.ca_label_ok || 'OK'}
+            OK
           </Button>
         </DialogActions>
       </Dialog>
@@ -232,7 +231,7 @@ const Login = (props) => {
 
         <Form onSubmit={handleLogin} ref={form}>
           <div className="form-group">
-            <label htmlFor="email">{lang.lg_label_email || "Email"}</label>
+            <label htmlFor="email">Email</label>
             <Input
               type="text"
               className="form-control"
@@ -244,7 +243,7 @@ const Login = (props) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">{lang.lg_label_password || "Password"}</label>
+            <label htmlFor="password">Password</label>
             <Input
               type="password"
               className="form-control"
@@ -260,7 +259,7 @@ const Login = (props) => {
               {loading && (
                 <span className="spinner-border spinner-border-sm"></span>
               )}
-              <span>{lang.lg_button_login || "Login"}</span>
+              <span>Login</span>
             </button>
           </div>
 
@@ -273,7 +272,7 @@ const Login = (props) => {
           )}
           <div className="form-group">
             <Link to={"/forgetpassword"} className="nav-link">
-              {lang.lg_a_forgetpassword || "Forgot password?"}
+              Forgot password?
             </Link>
           </div>
           <CheckButton style={{ display: "none" }} ref={checkBtn} />

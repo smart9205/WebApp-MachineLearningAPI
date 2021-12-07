@@ -29,8 +29,6 @@ module.exports = function(app) {
 
   app.post("/api/auth/resetpassword",  controller.resetPassword);
 
-  app.post("/language/getbyname",  controller.getLanguage);
-
   app.post(
     "/api/auth/updateprofile", 
     [authJwt.verifyToken],

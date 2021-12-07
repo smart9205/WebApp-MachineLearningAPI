@@ -5,10 +5,6 @@ import CryptoJS from 'crypto-js'
 
 const API_URL = `${APIBASEURL}/api/auth/`;
 
-const getLanguage = (lang) => {
-  return axios.post(`${APIBASEURL}/language/getbyname`, {lang});
-};
-
 const register = (email, first_name, last_name, phone_number, country) => {
   return axios.post(API_URL + "signup", {
     email: email.toLowerCase(),
@@ -90,7 +86,6 @@ const logout = () => {
 };
 
 const authService = {
-  getLanguage,
   register,
   updateProfile,
   login,

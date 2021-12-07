@@ -8,7 +8,7 @@ const Logout = (props) => {
 
 	useEffect(() => {
     dispatch(logout());
-		window.top.location.replace("https://stats2win.net");
+		window.location.replace("https://soccer.scouting4u.com");
 	},[dispatch]);
   
 	return (

@@ -37,9 +37,6 @@ db.league = require("../models/league.js")(sequelize, Sequelize);
 db.season = require("../models/season.js")(sequelize, Sequelize);
 db.user_device = require("../models/user_devices.js")(sequelize, Sequelize);
 db.last_updated = require("../models/last_updated.js")(sequelize, Sequelize);
-db.language = require("../models/language.js")(sequelize, Sequelize);
-db.language_field = require("../models/language_field.js")(sequelize, Sequelize);
-db.language_teams = require("../models/language_teams.js")(sequelize, Sequelize);
 db.email_queue = require("../models/email_queue.js")(sequelize, Sequelize);
 
 db.player = require("../models/player.js")(sequelize, Sequelize);

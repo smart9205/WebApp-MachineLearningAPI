@@ -1,5 +1,5 @@
 {
-  "name": "react-stats2win",
+  "name": "react-soccors4upro",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -28,6 +28,7 @@
     "react-export-excel": "^0.5.3",
     "react-google-recaptcha": "^2.1.0",
     "react-idle-timer": "^4.6.4",
+    "react-player": "^2.9.0",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.3.0",
     "react-scripts": "^4.0.3",
