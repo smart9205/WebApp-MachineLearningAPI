@@ -58,30 +58,35 @@ app.listen(PORT, () => {
 function initial() {
   Role.create({
     id: 1,
-    name: "analyzer"
+    name: "admin"
   });
 
   Role.create({
     id: 2,
-    name: "logger"
+    name: "tagger"
   });
 
   Role.create({
     id: 3,
-    name: "admin"
+    name: "coach"
+  });
+
+  Role.create({
+    id: 4,
+    name: "player"
   });
 
   Subscription.create({
     id: 1,
-    name: "A"
+    name: "tagger"
   })
   Subscription.create({
     id: 2,
-    name: "B"
+    name: "coach"
   })
   Subscription.create({
     id: 3,
-    name: "C"
+    name: "player"
   })
 
 }
