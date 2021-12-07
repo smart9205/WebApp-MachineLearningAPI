@@ -28,7 +28,6 @@ const Register = () => {
 
 
   const { message } = useSelector(state => state.message);
-  const { lang } = useSelector(state => state.lang);
   const dispatch = useDispatch();
 
   const onChangeEmail = (e) => {
@@ -44,7 +43,7 @@ const Register = () => {
     if (!value) {
       return (
         <div className="alert alert-danger" role="alert">
-          {lang.lg_valid_fieldrequired || "This field is required!"}
+          This field is required!
         </div>
       );
     }
@@ -54,7 +53,7 @@ const Register = () => {
     if (!isEmail(value)) {
       return (
         <div className="alert alert-danger" role="alert">
-          {lang.lg_valid_email || "This is not a valid email"}
+          This is not a valid email
         </div>
       );
     }
@@ -64,7 +63,7 @@ const Register = () => {
     if (value.length < 1 || value.length > 30) {
       return (
         <div className="alert alert-danger" role="alert">
-          {lang.rs_valid_phone || "The phone number must be between 1 and 30 characters."}
+          The phone number must be between 1 and 30 characters.
         </div>
       );
     }
@@ -74,7 +73,7 @@ const Register = () => {
     if (value.length < 1 || value.length > 30) {
       return (
         <div className="alert alert-danger" role="alert">
-          {lang.rs_valid_lastname || 'The last name must be between 1 and 30 characters.'}
+          The last name must be between 1 and 30 characters.
         </div>
       );
     }
@@ -84,7 +83,7 @@ const Register = () => {
     if (value.length < 1 || value.length > 30) {
       return (
         <div className="alert alert-danger" role="alert">
-          {lang.rs_valid_phone || 'The phone number must be between 1 and 30 characters.'}
+          The phone number must be between 1 and 30 characters.
         </div>
       );
     }
@@ -94,7 +93,7 @@ const Register = () => {
     if (value.length < 1 || value.length > 30) {
       return (
         <div className="alert alert-danger" role="alert">
-          {lang.rs_valid_country || 'The country must be between 1 and 30 characters.'}
+          The country must be between 1 and 30 characters.
         </div>
       );
     }
@@ -137,7 +136,7 @@ const Register = () => {
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
-      dispatch(register(email, firstname, lastname, phonenumber, country, lang.type ? lang.type : "en"))
+      dispatch(register(email, firstname, lastname, phonenumber, country))
         .then(() => {
           setSuccessful(true);
          })
@@ -161,7 +160,7 @@ const Register = () => {
             <div>
               
               <div className="form-group">
-                <label htmlFor="email">{lang.lg_label_email || 'Email'}</label>
+                <label htmlFor="email">Email</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -173,7 +172,7 @@ const Register = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="firstname">{lang.rs_label_firstname || 'First Name'}</label>
+                <label htmlFor="firstname">First Name</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -184,7 +183,7 @@ const Register = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="lastname">{lang.rs_label_lastname || 'Last Name'}</label>
+                <label htmlFor="lastname">Last Name</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -196,7 +195,7 @@ const Register = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="phonenumber">{lang.rs_label_phonenumber || 'Phone Number'}</label>
+                <label htmlFor="phonenumber">Phone Number</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -207,7 +206,7 @@ const Register = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="country">{lang.rs_label_country || 'Country'}</label>
+                <label htmlFor="country">Country</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -230,9 +229,9 @@ const Register = () => {
               <div className="form-group">
                 <button 
                   className="btn btn-primary btn-block" 
-                  disabled={!human}
+                  // disabled={!human}
                 >
-                  {lang.rs_button_signup || 'Sign Up'}
+                  Sign Up
                 </button>
               </div>
             </div>

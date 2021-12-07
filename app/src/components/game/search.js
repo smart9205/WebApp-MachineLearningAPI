@@ -129,8 +129,9 @@ export default function SearchComponent({selectedTeamCallBack}) {
   };
 
   return (
-    <Card sx={{ minWidth: 275 }}>
-      <CardContent>
+    // <Card sx={{ minWidth: 275 }}>
+    //   <CardContent>
+    <div>
         <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
             {alert}
@@ -262,7 +263,8 @@ export default function SearchComponent({selectedTeamCallBack}) {
           playerSelectedCallBack={playerSelectedCallBack} 
           rows={playerList.filter(p => `${p.f_name} ${p.l_name}`.toLowerCase().includes(playerSearch.toLowerCase()))}
         />
-      </CardContent>
-   </Card>
+      {/* </CardContent>
+   </Card> */}
+    </div>
   );
 }

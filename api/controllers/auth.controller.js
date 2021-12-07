@@ -7,8 +7,6 @@ dotenv.config();
 const User = db.user;
 const VerificationToken = db.verificationToken;
 const User_Device = db.user_device;
-const Language_Field = db.language_field;
-const Language = db.language
 const Email_Queue = db.email_queue
 
 
@@ -18,25 +16,6 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var CryptoJS = require("crypto-js");
 const role = require("../models/role");
-
-exports.getLanguage = async (req, res) => {
-
-  const language = await Language.findOne({where:{name: req.body.lang}})
-
-  Language_Field.findAll({
-    attributes: ['name', 'value'],
-    where: {
-      language_id: language ? language.id : 1
-    }
-  }).then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error retrieving Language with id=" + id
-      });
-    });
-}
 
 sendEmail = async (to, subject, html) => {
   const sendgrid = require('@sendgrid/mail');
@@ -71,7 +50,7 @@ sendEmail = async (to, subject, html) => {
   })
 };
 
-sendSigninSuccessInfo = async (res, user, lang = "en") => {
+sendSigninSuccessInfo = async (res, user) => {
   var token = jwt.sign({ id: user.id }, config.secret, {
     expiresIn: 86400 // 24 hours
   });
@@ -106,7 +85,6 @@ sendSigninSuccessInfo = async (res, user, lang = "en") => {
     roles: authorities,
     accessToken: token,
     subscription: subscription,
-    lang: lang
   });
 }
 
@@ -144,11 +122,10 @@ exports.signup = (req, res) => {
           const data = {
             token: result.token,
             to: user.email,
-            lang: req.body.lang
           };        
           //encrypt data
           const ciphertext = encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify(data), config.secret).toString());
-          const url = `https://analyzer.stats2win.net/verification/${ciphertext}`;
+          const url = `https://soccer.scouting4u.com/verification/${ciphertext}`;
         
           var html = `<!DOCTYPE html>
             <html>
@@ -156,7 +133,7 @@ exports.signup = (req, res) => {
                 <meta charset="UTF-8">
               </head>
               <body>
-                <h2>Email Verification for Stats2Win</h2>
+                <h2>Email Verification for Soccer Scouting4u</h2>
                 Click on this link to verify your email <a href="${url}"> ${url} </a>
                 <br>
                 <h4>Your Password: ${password}</h4>
@@ -263,7 +240,7 @@ exports.firstVerify = (req, res) => {
       }
 
       if (user.is_verified) {
-        sendSigninSuccessInfo(res, user, data.lang ? data.lang : "en");
+        sendSigninSuccessInfo(res, user);
       } else {
         return VerificationToken.findOne({
           where: { [Op.and]: [
@@ -277,7 +254,7 @@ exports.firstVerify = (req, res) => {
               return user
                 .update({ is_verified: true })
                 .then(updatedUser => {
-                  sendSigninSuccessInfo(res, user, data.lang ? data.lang : "en");
+                  sendSigninSuccessInfo(res, user);
                 })
                 .catch(reason => {
                   return res.status(403).json(`Verification failed`);

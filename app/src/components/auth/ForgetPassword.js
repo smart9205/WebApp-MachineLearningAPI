@@ -69,7 +69,6 @@ const SendEmail = (props) => {
   const [successful, setSuccessful] = useState(false);
 
   const { message } = useSelector(state => state.message);
-  const { lang } = useSelector(state => state.lang);
 
   const onChangeEmail = (e) => {
     const email = e.target.value;
@@ -98,9 +97,9 @@ const SendEmail = (props) => {
 
   return (
     <Form onSubmit={handleForgetPassword} ref={form}>
-      <h3>{lang.fp_label_forgetpassword || "Forget Password"}</h3>
+      <h3>Forget Password</h3>
       <div className="form-group">
-        <label htmlFor="email">{lang.fp_label_email || "Email"}</label>
+        <label htmlFor="email">Email</label>
         <Input
           type="text"
           className="form-control"
@@ -113,7 +112,7 @@ const SendEmail = (props) => {
 
       <div className="form-group">
         <button className="btn btn-primary btn-block">
-          <span>{lang.fp_button_submit || "Submit"}</span>
+          <span>Submit</span>
         </button>
       </div>
 
@@ -126,7 +125,7 @@ const SendEmail = (props) => {
       )}
       <div className="form-group">
         <Link to={"/login"} className="nav-link">
-          {lang.fp_a_backtologin || "Back to Login"}
+          Back to Login
         </Link>
       </div>
       <CheckButton style={{ display: "none" }} ref={checkBtn} />

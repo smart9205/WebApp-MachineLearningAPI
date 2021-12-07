@@ -221,11 +221,11 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ width: '100%',  mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
-            sx={{ minWidth: 450 }}
+            // sx={{ minWidth: 450 }}
             aria-labelledby="tableTitle"
             size={'medium'}
           >

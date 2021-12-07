@@ -14,7 +14,7 @@ import Register from "./components/auth/Register";
 import Home from "./components/Home";
 import Profile from "./components/auth/Profile";
 
-import { logout, getLanguage } from "./actions/auth";
+import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
 
 import { history } from "./helpers/history";
@@ -86,25 +86,6 @@ const App = () => {
     console.log("Header Effect");
     history.listen((location) => {
       dispatch(clearMessage()); // clear message when changing location
-    });
-
-    //eslint-disable-next-line
-    const regex = /(?:http[s]*\:\/\/)*(.*?)\.(?=[^\/]*\..{2,5})/i;
-    var url = (window.location !== window.parent.location)
-    ? document.referrer
-    : document.location.href;
-    
-    const lang = url.match(regex);
-
-    console.log("parentUrl", url, lang ? lang[1] : "en");
-    
-    localStorage.setItem("lang", lang ? lang[1] : "en");
-
-    dispatch(getLanguage(lang ? lang[1] : "en")).then(() => {
-      console.log("set language success!");
-    })
-    .catch(() => {
-      console.log("error");
     });
   }, [dispatch]);
 

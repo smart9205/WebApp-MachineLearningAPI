@@ -1,5 +1,4 @@
 import {
-  SET_LANG_SUCCESS,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   UPDATEPROFILE_SUCCESS,
@@ -12,42 +11,8 @@ import {
 } from "./types";
 
 import AuthService from "../services/auth.service";
-
-export const getLanguage = (lang) => (dispatch) =>
-  AuthService.getLanguage(lang).then(
-    (response) => {
-      const data = response.data.reduce((obj, item) => {
-        return ((obj[item.name] = item.value), obj);
-      }, {});
-
-      console.log("getLanguages", data);
-      dispatch({
-        type: SET_LANG_SUCCESS,
-        payload: { ...data, type: lang },
-      });
-
-      return Promise.resolve();
-    },
-    (error) => {
-      const message =
-        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-
-      dispatch({
-        type: SET_LANG_SUCCESS,
-        payload: { type: lang },
-      });
-
-      dispatch({
-        type: SET_MESSAGE,
-        payload: message,
-      });
-
-      return Promise.reject();
-    },
-  );
-
-export const register = (email, firstname, lastname, phonenumber, country, lang) => (dispatch) =>
-  AuthService.register(email, firstname, lastname, phonenumber, country, lang).then(
+export const register = (email, firstname, lastname, phonenumber, country) => (dispatch) =>
+  AuthService.register(email, firstname, lastname, phonenumber, country).then(
     (response) => {
       dispatch({
         type: REGISTER_SUCCESS,
