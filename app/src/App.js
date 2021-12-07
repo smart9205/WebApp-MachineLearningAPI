@@ -13,6 +13,8 @@ import ForgetPassword from "./components/auth/ForgetPassword";
 import Register from "./components/auth/Register";
 import Home from "./components/Home";
 import Profile from "./components/auth/Profile";
+import Game from "./components/game";
+import Tagging from "./components/tagging";
 
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
@@ -21,7 +23,6 @@ import { history } from "./helpers/history";
 
 import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
-import Game from "./components/game";
 import CryptoJS from 'crypto-js'
 import { SECRET } from "./config/settings"
 
@@ -46,18 +47,18 @@ const PrivateRoute = ({component: Component, rememberPath=true, ...rest}) => {
   )
 }
 
-// const AdminRoute = ({component: Component, rememberPath=true, ...rest}) => {
-//   if(rememberPath) localStorage.setItem("path", rest.location.pathname);
-//   const { user: currentUser } = useSelector((state) => state.auth);
-//   return (
-//     <Route
-//       {...rest}
-//       render={(props) => currentUser && currentUser.subscription && currentUser.subscription.available && currentUser.roles.includes("ROLE_SUPERADMIN")
-//         ? <Component {...props} />
-//         : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
-//     />
-//   )
-// } 
+const AdminRoute = ({component: Component, rememberPath=true, ...rest}) => {
+  if(rememberPath) localStorage.setItem("path", rest.location.pathname);
+  const { user: currentUser } = useSelector((state) => state.auth);
+  return (
+    <Route
+      {...rest}
+      render={(props) => currentUser && currentUser.subscription && currentUser.subscription.available && currentUser.roles.includes("ROLE_SUPERADMIN")
+        ? <Component {...props} />
+        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+    />
+  )
+} 
 
 const App = () => {  
   const { user: currentUser } = useSelector((state) => state.auth);
@@ -139,9 +140,9 @@ const App = () => {
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
 
-            <PrivateRoute 
-              path='/game' 
-              component={Game} />
+            <PrivateRoute path='/tagging' component={Tagging} />
+
+            <AdminRoute path='/game' component={Game} />
           </Switch>
         </div>
 

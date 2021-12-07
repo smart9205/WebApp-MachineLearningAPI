@@ -161,12 +161,12 @@ const Login = (props) => {
   if (isLoggedIn) {
     const path = localStorage.getItem("path");
     if (currentUser.subscription !== null && currentUser.subscription.available) {
-      if(!currentUser.roles.includes("ROLE_SUPERADMIN") && path === '/arbitrage'){
+      if(!currentUser.roles.includes("ROLE_SUPERADMIN") && path === '/game'){
         if(!adminOpen) setAdminOpen(true);
       }
       else {
         console.log("Redirect after login", path);
-        return <Redirect to={path ? path : '/calculator'} />;
+        return <Redirect to={path ? path : '/tagging'} />;
       }
     }
     if(!open) handleOpen();
@@ -194,7 +194,7 @@ const Login = (props) => {
           <div className={classes.paper}>
             <h2 id="transition-modal-title">Subscription expired</h2>
             <p id="transition-modal-description">Please purchase subscrition.</p>
-            <Button variant="contained" color="default" className={classes.button} onClick={()=>handleClose()}>
+            <Button variant="contained" className={classes.button} onClick={()=>handleClose()}>
               OK
             </Button>
           </div>
