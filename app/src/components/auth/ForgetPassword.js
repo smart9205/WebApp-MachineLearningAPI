@@ -13,7 +13,6 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
   link: {
-    paddingLeft: theme.spacing(3),
     color: '#007bff',
     '&:hover': {
       color: "#5d6e81",
