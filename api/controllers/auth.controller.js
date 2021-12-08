@@ -61,8 +61,6 @@ sendSigninSuccessInfo = async (res, user) => {
   for (let i = 0; i < roles.length; i++) {
     authorities.push("ROLE_" + roles[i].name.toUpperCase());
   }
-  if(user.id == process.env.SUPER_ADMIN_ID)
-  authorities.push("ROLE_SUPERADMIN");
 
   let subscription = await user.getSubscription();
   console.log("user",subscription);
@@ -112,8 +110,8 @@ exports.signup = (req, res) => {
     phone_number: req.body.phone_number,
   })
     .then(user => {
-      // user role = 1
-      user.setRoles([1]).then(() => {
+      // user role = 2//tagger
+      user.setRoles([2]).then(() => {
         VerificationToken.create({
           user_id: user.id,
           token: randomstring.generate(16)

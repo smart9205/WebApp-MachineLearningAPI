@@ -163,7 +163,7 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
   React.useEffect(() => {
     playerSelectedCallBack(selected);
@@ -221,7 +221,7 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%',  mb: 2 }}>
+      <Paper sx={{ width: '100%'}}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -283,11 +283,12 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10, 15, 20, 25]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
+          labelRowsPerPage="Pages"
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />

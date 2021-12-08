@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SearchComponent({selectedTeamCallBack}) {
+export default function SearchComponent({selectedTeamCallBack, teamtype}) {
   const classes = useStyles();
   
   const mounted = React.useRef(false);
@@ -236,7 +236,7 @@ export default function SearchComponent({selectedTeamCallBack}) {
                 </li>
               );
             }}
-            renderInput={(params) => <TextField {...params} label="Search home team" />}
+            renderInput={(params) => <TextField {...params} label={`Search ${teamtype} team`} />}
             onChange={(event, newValue) => {
               setSelectedTeam(newValue);
             }}

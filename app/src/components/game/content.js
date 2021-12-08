@@ -6,10 +6,12 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import Grid from '@mui/material/Grid';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import Search from './search'
 import GameService from "../../services/game.service";
@@ -33,7 +35,7 @@ export default function Content() {
   const [league, setLeague] = React.useState(false);
   const [seasonList, setSeasonList] = React.useState(false);
   const [leagueList, setLeagueList] = React.useState(false);
-  
+
 
   const [homeTeam, setHomeTeam] = React.useState(false);
   const [awayTeam, setAwayTeam] = React.useState(false);
@@ -46,7 +48,7 @@ export default function Content() {
       setLeagueList(res);
     })
   }, []);
- 
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -55,7 +57,7 @@ export default function Content() {
   };
 
   const addGame = () => {
-    if(!homeTeam || !awayTeam || !season || !league) {
+    if (!homeTeam || !awayTeam || !season || !league) {
       setOpen(true);
       setAlert("Selected enough data to add a new game!");
     }
@@ -78,7 +80,7 @@ export default function Content() {
     setHomeTeam(param);
   }, []);
 
- const awayTeamCallBack = React.useCallback((param) => {
+  const awayTeamCallBack = React.useCallback((param) => {
     console.log("awayTeamCallBack", param);
     setAwayTeam(param);
   }, []);
@@ -91,10 +93,10 @@ export default function Content() {
         </Alert>
       </Snackbar>
       <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={4}>
-          <Search team="home" selectedTeamCallBack={homeTeamCallBack}/>
+        <Grid item xs={3}>
+          <Search teamtype="home" selectedTeamCallBack={homeTeamCallBack} />
         </Grid>
-        <Grid item xs={4} className={classes.central}>
+        <Grid item xs={6} className={classes.central}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="Game Date"
@@ -109,7 +111,7 @@ export default function Content() {
             id="combo-box-demo"
             options={seasonList}
             value={season}
-            isOptionEqualToValue={(option, value) => option && option.name }
+            isOptionEqualToValue={(option, value) => option && option.name}
             getOptionLabel={
               (option) => !option.name ? "" : option.name
             }
@@ -126,28 +128,32 @@ export default function Content() {
               setSeason(newValue);
             }}
           />
-
-          <Autocomplete
-            id="combo-box-demo"
-            options={leagueList}
-            value={league}
-            isOptionEqualToValue={(option, value) => option && option.name }
-            getOptionLabel={
-              (option) => !option.name ? "" : option.name
-            }
-            fullWidth
-            renderOption={(props, option) => {
-              return (
-                <li {...props} key={option.id}>
-                  {option.name}
-                </li>
-              );
-            }}
-            renderInput={(params) => <TextField {...params} label="League" />}
-            onChange={(event, newValue) => {
-              setLeague(newValue);
-            }}
-          />
+          <div style={{ display: 'flex' }}>
+            <Autocomplete
+              id="combo-box-demo"
+              options={leagueList}
+              value={league}
+              isOptionEqualToValue={(option, value) => option && option.name}
+              getOptionLabel={
+                (option) => !option.name ? "" : option.name
+              }
+              fullWidth
+              renderOption={(props, option) => {
+                return (
+                  <li {...props} key={option.id}>
+                    {option.name}
+                  </li>
+                );
+              }}
+              renderInput={(params) => <TextField {...params} label="League" />}
+              onChange={(event, newValue) => {
+                setLeague(newValue);
+              }}
+            />
+            <IconButton style={{ alignSelf: 'center' }} aria-label="delete" size="large" >
+              <AddCircleIcon />
+            </IconButton>
+          </div>
           {/* <TextField
             value={season}
             onChange={e => setSeason(e.target.value)}
@@ -162,12 +168,12 @@ export default function Content() {
             fullWidth
             variant="outlined"
           /> */}
-          <div style={{textAlign: "center"}}>
-          <Button variant="outlined" sx={{mt: 5}} onClick={addGame}>Add Game</Button>
+          <div style={{ textAlign: "center" }}>
+            <Button variant="outlined" sx={{ mt: 5 }} onClick={addGame}>Add Game</Button>
           </div>
         </Grid>
-        <Grid item xs={4}>
-          <Search team="away" selectedTeamCallBack={awayTeamCallBack}/>
+        <Grid item xs={3}>
+          <Search teamtype="away" selectedTeamCallBack={awayTeamCallBack} />
         </Grid>
       </Grid>
     </Box>

@@ -1,15 +1,24 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Last_Updateds', {
+    await queryInterface.createTable('Team_Players', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      script_ran: {
-        type: Sequelize.DATE
+      season_id: {
+        type: Sequelize.INTEGER
+      },
+      league_id: {
+        type: Sequelize.INTEGER
+      },
+      team_id: {
+        type: Sequelize.INTEGER
+      },
+      player_id: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -22,6 +31,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Last_Updateds');
+    await queryInterface.dropTable('Team_Players');
   }
 };
