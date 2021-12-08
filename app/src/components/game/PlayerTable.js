@@ -242,7 +242,7 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
           <Table
             // sx={{ minWidth: 450 }}
             aria-labelledby="tableTitle"
-            size={'medium'}
+            size={'small'}
           >
             <EnhancedTableHead
               numSelected={selected.length}

@@ -13,15 +13,15 @@ exports.create =  (req, res) => {
 
   console.log("req.body",req.body);
 
-  const player = {
-    f_name: req.body.f_name,
-    l_name: req.body.l_name,
-    date_of_birth: req.body.date_of_birth,
-    position: req.body.position,
-    jersey_number: req.body.jersey_number
-  };
+  // const player = {
+  //   f_name: req.body.f_name,
+  //   l_name: req.body.l_name,
+  //   date_of_birth: req.body.date_of_birth,
+  //   position: req.body.position,
+  //   jersey_number: req.body.jersey_number
+  // };
 
-  Player.create(player)
+  Player.create(req.body)
     .then(data => {
       res.send(data);
     })
