@@ -14,7 +14,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import { visuallyHidden } from '@mui/utils';
+import gameService from '../../services/game.service';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -204,6 +208,11 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
     setSelected(newSelected);
   };
 
+  const handleDeleteClick = (id) => {
+    console.log("handle delete ", id);
+    // gameService.deletePlayersInTeam(id),
+  }
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -267,6 +276,12 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
                       </TableCell>
                       <TableCell align="center">{row.jersey_number}</TableCell>
                       <TableCell align="center">{`${row.f_name} ${row.l_name}`}</TableCell>
+                      <TableCell align="center">
+                        <IconButton>
+                          <DeleteIcon onClick={e => handleDeleteClick(row.id)}/>
+                        </IconButton>
+                      </TableCell>
+                     
                     </TableRow>
                   );
                 })}
@@ -283,7 +298,7 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 15, 20, 25]}
+          rowsPerPageOptions={[5, 10, 15, 20]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

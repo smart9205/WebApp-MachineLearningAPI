@@ -34,7 +34,6 @@ const addNewGame = (req) => {
   });
 }
 
-
 const getAllSeasons = () => {
   return axios.get(API_URL+"season", {headers: authHeader()}).then((response) => {
     return response.data;
@@ -47,6 +46,18 @@ const getAllLeagues = () => {
   });
 }
 
+const addNewLeague = (req) => {
+  return axios.post(API_URL+"league", req, {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+
+const deletePlayersInTeam = (id) => {
+  return axios.delete(API_URL+`admin_direction/${id}`,{headers: authHeader(), data:{id}}).then((response) => {
+    return response.data;
+  });
+}
+
 const gameService = {
   addNewPlayer,
   addNewTeam,
@@ -54,7 +65,9 @@ const gameService = {
   getAllPlayers,
   addNewGame,
   getAllSeasons,
-  getAllLeagues
+  getAllLeagues,
+  addNewLeague,
+  deletePlayersInTeam
 };
 
 export default gameService;
