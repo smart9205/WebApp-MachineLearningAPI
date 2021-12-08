@@ -90,6 +90,7 @@ const Login = (props) => {
         .then((data) => {
           // Here we receive verification succeess 
           console.log("Verfication Data", data);
+          window.location.replace('https://soccer.s4upro.com');
           // window.location.replace(`https://${data.lang ? data.lang : "www"}.Stats2Win.net${data.lang ? "/analyzer" : ""}`);
         })
         .catch(() => {
