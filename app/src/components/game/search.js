@@ -131,9 +131,6 @@ export default function SearchComponent({
       setPlayerOpen(false);
       
       if(!result) return;
-
-      console.log("checkadd", checkErrorPlayer());
-      if(checkErrorPlayer()) return;
       
       GameService.addNewTeamPlayer({ 
         ...playerData,
