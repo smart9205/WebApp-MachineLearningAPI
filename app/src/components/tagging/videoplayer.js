@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+// import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import ReactPlayer from 'react-player';
 
 export default function Tagging() {

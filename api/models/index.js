@@ -36,10 +36,10 @@ db.team = require("../models/team.js")(sequelize, Sequelize);
 db.league = require("../models/league.js")(sequelize, Sequelize);
 db.season = require("../models/season.js")(sequelize, Sequelize);
 db.user_device = require("../models/user_devices.js")(sequelize, Sequelize);
-db.last_updated = require("../models/last_updated.js")(sequelize, Sequelize);
 db.email_queue = require("../models/email_queue.js")(sequelize, Sequelize);
 
 db.player = require("../models/player.js")(sequelize, Sequelize);
+db.team_player = require("../models/team_players.js")(sequelize, Sequelize);
 db.player_tag = require("../models/player_tag.js")(sequelize, Sequelize);
 db.team = require("../models/team.js")(sequelize, Sequelize);
 db.team_tag = require("../models/team_tag.js")(sequelize, Sequelize);
@@ -68,7 +68,6 @@ db.user_subscription.belongsTo(db.subscription, {
   foreignKey: "subscription_id"
 });
 
-
-db.ROLES = ["analyzer", "logger", "admin"];
+db.ROLES = ["admin", "tagger", "coach", "player"];
 
 module.exports = db;

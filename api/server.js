@@ -49,6 +49,7 @@ require('./routes/player.routes')(app);
 require('./routes/player_tag.routes')(app);
 require('./routes/team.routes')(app);
 require('./routes/team_tag.routes')(app);
+require('./routes/team_players.routes')(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

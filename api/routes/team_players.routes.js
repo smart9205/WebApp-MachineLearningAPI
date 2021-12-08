@@ -1,5 +1,5 @@
 const { authJwt } = require("../middleware");
-const controller = require("../controllers/last_update.controller");
+const controller = require("../controllers/team_player.controller");
 module.exports = app => {
   app.use(function(req, res, next) {
     res.header(
@@ -10,32 +10,37 @@ module.exports = app => {
   });
   app.use([authJwt.verifyToken]);
 
-	app.post("/last_update",
+	app.post(
+		"/team_player/create",
+		[authJwt.isAdmin],
 		controller.create
 	);
 	
-	// Retrieve all last_updates
-	app.get("/last_update", 
+	app.post(
+		"/team_player/findall", 
 		controller.findAll
 	);
 
-	// Retrieve a single last_update with id
-	app.get("/last_update/:id",
+	app.get(
+		"/team_player/:id",
 		controller.findOne
 	);
 
-	// Update a last_update with id
-	app.put("/last_update/:id",
+	app.put(
+		"/team_player/:id",
+		[authJwt.isAdmin],
 		controller.update
 	);
 
-	// Delete a last_update with id
-	app.delete("/last_update/:id",
+	app.delete(
+		"/team_player/:id",
+		[authJwt.isAdmin],
 		controller.delete
 	);
 
-	// Delete all last_updates
-	app.delete("/last_update", 
+	app.delete(
+		"/team_player", 
+		[authJwt.isAdmin],
 		controller.deleteAll
 	);
 };

@@ -1,6 +1,7 @@
 const db = require("../models");
 const Game = db.game;
 const Op = db.Sequelize.Op;
+const Sequelize = db.sequelize;
 
 exports.create =  (req, res) => {
   // Validate request
@@ -24,18 +25,26 @@ exports.create =  (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  console.log("getGame", req.body);
-  const name = req.query.name;
-  var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
-
-  Game.findAll({ where: condition })
+  Sequelize.query(`
+    SELECT 
+      public."Games".*,
+      public."Seasons".name as season_name,
+      public."Leagues".name as league_name,
+      HomeTeam.name as home_team_name,
+      AwayTeam.name as away_team_name
+    FROM public."Games" 
+    JOIN public."Seasons" on public."Games".season_id = public."Seasons".id
+    JOIN public."Leagues" on public."Games".league_id = public."Leagues".id
+    JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id
+    JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
+  `)
     .then(data => {
-      res.send(data);
+      res.send(data[0]);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Games."
+          err.message || "Some error occurred while retrieving games."
       });
     });
 };

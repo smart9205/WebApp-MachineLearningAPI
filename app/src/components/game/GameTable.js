@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useDispatch } from "react-redux";
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -15,11 +14,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
-import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import gameService from '../../services/game.service';
-import { UPDATE_COUNT } from "../../actions/types";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -53,16 +52,34 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'jersey_number',
-    numeric: true,
+    id: 'season_name',
+    numeric: false,
     disablePadding: true,
-    label: 'NUMBER',
+    label: 'Season',
   },
   {
-    id: 'f_name',
+    id: 'league_name',
     numeric: true,
-    disablePadding: true,
-    label: 'NAME',
+    disablePadding: false,
+    label: 'League',
+  },
+  {
+    id: 'home_team_name',
+    numeric: true,
+    disablePadding: false,
+    label: 'Home Team',
+  },
+  {
+    id: 'away_team_name',
+    numeric: true,
+    disablePadding: false,
+    label: 'Away Team',
+  },
+  {
+    id: 'date',
+    numeric: true,
+    disablePadding: false,
+    label: 'Date',
   },
 ];
 
@@ -90,7 +107,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'center' : 'left'}
+            align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -152,8 +169,22 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Players
+          Games
         </Typography>
+      )}
+
+      {numSelected > 0 ? (
+        <Tooltip title="Delete">
+          <IconButton>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Tooltip title="Filter list">
+          <IconButton>
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
       )}
     </Toolbar>
   );
@@ -163,16 +194,12 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-function EnhancedTable({playerSelectedCallBack, rows}) {
+export default function EnhancedTable({rows}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(15);
-  const dispatch = useDispatch();
-  React.useEffect(() => {
-    playerSelectedCallBack(selected);
-  }, [selected, playerSelectedCallBack]);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -182,19 +209,19 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
+      const newSelecteds = rows.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -209,16 +236,6 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
     setSelected(newSelected);
   };
 
-  const handleDeleteClick = (id) => {
-    console.log("handle delete ", id);
-    gameService.deletePlayersInTeam(id).then((res) => {
-      console.log("delee", res)
-      dispatch({
-        type: UPDATE_COUNT
-      });
-    })
-  }
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -228,7 +245,7 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
     setPage(0);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -236,11 +253,11 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%'}}>
+      <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
-            // sx={{ minWidth: 450 }}
+            sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={'medium'}
           >
@@ -258,43 +275,47 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                  const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
+                      onClick={(event) => handleClick(event, row.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
+                      key={index}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
-                          onClick={(event) => handleClick(event, row.id)}
                           inputProps={{
                             'aria-labelledby': labelId,
                           }}
                         />
                       </TableCell>
-                      <TableCell align="center">{row.jersey_number}</TableCell>
-                      <TableCell align="center">{`${row.f_name} ${row.l_name}`}</TableCell>
-                      <TableCell align="center">
-                        <IconButton  onClick={() => handleDeleteClick(row.id)}>
-                          <DeleteIcon/>
-                        </IconButton>
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
+                        {row.season_name}
                       </TableCell>
-                     
+                      <TableCell align="right">{row.league_name}</TableCell>
+                      <TableCell align="right">{row.home_team_name}</TableCell>
+                      <TableCell align="right">{row.away_team_name}</TableCell>
+                      <TableCell align="right">{row.date}</TableCell>
                     </TableRow>
                   );
                 })}
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: 53 * emptyRows,
+                    height: (53) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />
@@ -304,12 +325,11 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 15, 20]}
+          rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
-          labelRowsPerPage="Pages"
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
@@ -317,5 +337,3 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
     </Box>
   );
 }
-
-export default React.memo(EnhancedTable);

@@ -162,7 +162,7 @@ const Login = (props) => {
   if (isLoggedIn) {
     const path = localStorage.getItem("path");
     if (currentUser.subscription !== null && currentUser.subscription.available) {
-      if(!currentUser.roles.includes("ROLE_SUPERADMIN") && path === '/game'){
+      if(!currentUser.roles.includes("ROLE_ADMIN") && path === '/game'){
         if(!adminOpen) setAdminOpen(true);
       }
       else {

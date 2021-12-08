@@ -11,6 +11,8 @@ import Login from "./components/auth/Login";
 import Logout from "./components/auth/Logout";
 import ForgetPassword from "./components/auth/ForgetPassword";
 import Register from "./components/auth/Register";
+import Signup from "./components/auth/Signup";
+import Signin from "./components/auth/Signin";
 import Home from "./components/Home";
 import Profile from "./components/auth/Profile";
 import Game from "./components/game";
@@ -53,7 +55,7 @@ const AdminRoute = ({component: Component, rememberPath=true, ...rest}) => {
   return (
     <Route
       {...rest}
-      render={(props) => currentUser && currentUser.subscription && currentUser.subscription.available && currentUser.roles.includes("ROLE_SUPERADMIN")
+      render={(props) => currentUser && currentUser.subscription && currentUser.subscription.available && currentUser.roles.includes("ROLE_ADMIN")
         ? <Component {...props} />
         : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
     />
@@ -138,6 +140,8 @@ const App = () => {
             <Route path="/resetPwdVerify/:code" component={ForgetPassword} />
             <Route path="/verification/:code" component={Login} />
             <Route exact path="/register" component={Register} />
+            <Route exact path="/signin" component={Signin} />
+            <Route exact path="/signup" component={Signup} />
             <Route exact path="/profile" component={Profile} />
 
             <PrivateRoute path='/tagging' component={Tagging} />
