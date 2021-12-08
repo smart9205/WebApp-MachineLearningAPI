@@ -5,25 +5,8 @@ const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
 
 exports.create =  async (req, res) => {
-  const [player, playerCreated] = await Player.findOrCreate({
-    where: { 
-      f_name: req.body.f_name,
-      l_name: req.body.l_name,
-      date_of_birth: req.body.date_of_birth,
-      position: req.body.position,
-      jersey_number: req.body.jersey_number
-    }
-  });
 
-  const team_player = {
-    season_id: req.body.season_id,
-    league_id: req.body.league_id,
-    team_id: req.body.team_id,
-    player_id: player.id
-  };
-
-  console.log("Team_Player ::", team_player);
-  Team_Player.create(team_player)
+  Team_Player.create(req.body)
     .then(data => {
       res.send(data);
     })

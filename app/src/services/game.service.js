@@ -9,13 +9,13 @@ const getAllTeamPlayers = (req) => {
     return response.data;
   });
 }
-const addNewTeamPlayer = (req) => {
+const addTeamPlayer = (req) => {
   return axios.post(API_URL+"team_player/create", req, {headers: authHeader()}).then((response) => {
     return response.data;
   });
 };
 
-const addNewTeam = (req) => {
+const addTeam = (req) => {
   return axios.post(API_URL+"team", req, {headers: authHeader()}).then((response) => {
     return response.data;
   });
@@ -28,7 +28,7 @@ const getAllTeams = () => {
 }
 
 
-const addNewGame = (req) => {
+const addGame = (req) => {
   return axios.post(API_URL+"game", req, {headers: authHeader()}).then((response) => {
     return response.data;
   });
@@ -46,11 +46,18 @@ const getAllLeagues = () => {
   });
 }
 
-const addNewLeague = (req) => {
+const addLeague = (req) => {
   return axios.post(API_URL+"league", req, {headers: authHeader()}).then((response) => {
     return response.data;
   });
 }
+
+const addPlayer = (req) => {
+  return axios.post(API_URL+"player", req, {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+
 
 const deletePlayersInTeam = (id) => {
   return axios.delete(API_URL+`team_player/${id}`,{headers: authHeader(), data:{id}}).then((response) => {
@@ -64,17 +71,28 @@ const getAllGames = () => {
   });
 }
 
+const getAllPlayers = () => {
+  return axios.get(API_URL+"player", {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+
+
 const gameService = {
-  addNewTeamPlayer,
-  addNewTeam,
-  getAllTeams,
+  addTeamPlayer,
+  addTeam,
+  addLeague,
+  addGame,
+  addPlayer,
+
   getAllTeamPlayers,
-  addNewGame,
-  getAllSeasons,
+  getAllTeams,
   getAllLeagues,
-  addNewLeague,
-  deletePlayersInTeam,
   getAllGames,
+  getAllSeasons,
+  getAllPlayers,
+
+  deletePlayersInTeam,
 };
 
 export default gameService;
