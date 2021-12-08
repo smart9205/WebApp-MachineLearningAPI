@@ -11,13 +11,13 @@ module.exports = app => {
   app.use([authJwt.verifyToken]);
 
 	app.post(
-		"/team_player",
+		"/team_player/create",
 		[authJwt.isAdmin],
 		controller.create
 	);
 	
-	app.get(
-		"/team_player", 
+	app.post(
+		"/team_player/findall", 
 		controller.findAll
 	);
 

@@ -42,8 +42,8 @@ export default function Content() {
   const [gameDate, setGameDate] = React.useState(new Date());
   const [season, setSeason] = React.useState({});
   const [league, setLeague] = React.useState({});
-  const [seasonList, setSeasonList] = React.useState(false);
-  const [leagueList, setLeagueList] = React.useState(false);
+  const [seasonList, setSeasonList] = React.useState([]);
+  const [leagueList, setLeagueList] = React.useState([]);
 
 
   const [homeTeam, setHomeTeam] = React.useState(false);
@@ -52,10 +52,11 @@ export default function Content() {
   React.useEffect(() => {
     GameService.getAllSeasons().then((res) => {
       setSeasonList(res);
-      // setSeason(res[0])
+      setSeason(res[0]);
     });
     GameService.getAllLeagues().then((res) => {
       setLeagueList(res);
+      setLeague(res[0]);
     })
   }, [count]);
 
@@ -86,12 +87,10 @@ export default function Content() {
   }
 
   const homeTeamCallBack = React.useCallback((param) => {
-    console.log("homeTeamCallBack", param);
     setHomeTeam(param);
   }, []);
 
   const awayTeamCallBack = React.useCallback((param) => {
-    console.log("awayTeamCallBack", param);
     setAwayTeam(param);
   }, []);
 
@@ -142,7 +141,12 @@ export default function Content() {
 
       <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={4}>
-          <Search teamtype="home" selectedTeamCallBack={homeTeamCallBack} />
+          <Search 
+            teamtype="home" 
+            selectedTeamCallBack={homeTeamCallBack}
+            season={season}
+            league={league}
+          />
         </Grid>
         <Grid item xs={4} className={classes.central}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -221,7 +225,12 @@ export default function Content() {
           </div>
         </Grid>
         <Grid item xs={4}>
-          <Search teamtype="away" selectedTeamCallBack={awayTeamCallBack} />
+          <Search 
+            teamtype="away" 
+            selectedTeamCallBack={awayTeamCallBack}
+            season={season}
+            league={league}
+          />
         </Grid>
       </Grid>
     </Box>

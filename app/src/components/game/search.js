@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import {
   TextField,
@@ -20,6 +21,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import PlayerTable from "./PlayerTable"
 import GameService from "../../services/game.service";
+import { UPDATE_COUNT } from "../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -27,7 +29,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SearchComponent({selectedTeamCallBack, teamtype}) {
+export default function SearchComponent({
+  selectedTeamCallBack, 
+  teamtype,
+  season,
+  league,
+}) {
   const classes = useStyles();
   
   const mounted = React.useRef(false);
@@ -44,24 +51,46 @@ export default function SearchComponent({selectedTeamCallBack, teamtype}) {
 
   const [teamName, setTeamName] = React.useState("");
 
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [birth, setBirth] = React.useState(new Date());
-  const [position, setPosition] = React.useState("");
-  const [jerseyNumber, setJercyNumber] = React.useState(false);
-
-  const [count, setCount] = React.useState(0);
-
+  const [playerData, setPlayerData] = React.useState({
+    f_name: "",
+    l_name: "",
+    date_of_birth: new Date(),
+    position: "",
+    jersey_number: 1
+  });
+  const [error, setError] = React.useState({
+    f_name: false,
+    l_name: false,
+    position: false,
+    jersey_number: false
+  });
+  
+  const { updateCnt } = useSelector(state => state.game);
+  const dispatch = useDispatch();
+  
   React.useEffect(() => {
     GameService.getAllTeams().then((res) => {
       setTeamList(res);
+      setSelectedTeam(res[0]);
     });
-    GameService.getAllPlayers().then((res) => {
-      console.log("players", res)
-      setPlayerList(res);
-    })
-  }, [count])
-
+  }, [updateCnt]);
+  
+  React.useEffect(() => {
+    try{
+      if(!season.id || !league.id || !selectedTeam.id) return;
+      GameService.getAllTeamPlayers({
+        season_id: season.id,
+        league_id: league.id,
+        team_id: selectedTeam.id
+      }).then((res) => {
+        console.log("players", res, updateCnt)
+        setPlayerList(res);
+      })
+    } catch(e) {
+      setPlayerList([]);
+    }
+  }, [updateCnt, season, league, selectedTeam])
+  
   React.useEffect(() => {
     if (mounted.current) {
       selectedTeamCallBack(selectedTeam);
@@ -69,67 +98,91 @@ export default function SearchComponent({selectedTeamCallBack, teamtype}) {
       mounted.current = true;
     }
   }, [selectedTeam, selectedTeamCallBack])
-
+  
   const playerSelectedCallBack = React.useCallback((param) => {
-    console.log("Sl", param)
+    console.log("selected players", param)
   }, []);
-
+  
   const handleClickTeamOpen = () => {
     setTeamOpen(true);
   };
   const handleClickPlayerOpen = () => {
     setPlayerOpen(true);
   };
-
+  
   const handleTeamClose = (result) => {
     setTeamOpen(false);
-
+    
     if(!result) return;
     GameService.addNewTeam({ name: teamName }).then(
       (response) => {
         console.log("NewTeam", response);
-        setCount(count + 1);
+        dispatch({
+          type: UPDATE_COUNT
+        });
         setOpen(true);
         setAlert(`${teamName} is successfully added!`);
       },
       (error) => {
       }
-    );
-  };
-  const handlePlayerClose = (result) => {
-    setPlayerOpen(false);
+      );
+    };
+    const handlePlayerClose = (result) => {
+      setPlayerOpen(false);
+      
+      if(!result) return;
 
-    if(!result) return;
-
-    GameService.addNewPlayer({ 
-      f_name: firstName,
-      l_name: lastName,
-      date_of_birth: birth,
-      position: position,
-      jersey_number: jerseyNumber,
-    }).then((response) => {
+      console.log("checkadd", checkErrorPlayer());
+      if(checkErrorPlayer()) return;
+      
+      GameService.addNewTeamPlayer({ 
+        ...playerData,
+        season_id: season.id,
+        league_id: league.id,
+        team_id: selectedTeam.id
+      }).then((response) => {
         console.log("NewPlayer", response);
-        setCount(count + 1);
+        dispatch({
+          type: UPDATE_COUNT
+        });
         setOpen(true);
         setAlert(`${response.f_name} ${response.l_name} is successfully added!`);
       },
       (error) => {
       }
-    );
-  };
+      );
+    };
+    
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      
+      setOpen(false);
+    };
+    
+    const handleChange = name => event => {
+      setPlayerData({ ...playerData, [name]: event.target.value });
+    };
+    
+    React.useEffect(() => {
+      setError({
+        f_name: playerData.f_name.length === 0,
+        l_name: playerData.l_name.length === 0,
+        position: playerData.position.length === 0,
+        jersey_number: Number(playerData.jersey_number) <= 0
+      })
+      console.log("palyer", playerData)
+    }, [playerData])
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
+    const checkErrorPlayer = () => {
+      return !(Object.keys(error).find(key => error[key]));
     }
 
-    setOpen(false);
-  };
-
-  return (
-    // <Card sx={{ minWidth: 275 }}>
-    //   <CardContent>
-    <div>
+    return (
+      // <Card sx={{ minWidth: 275 }}>
+      //   <CardContent>
+      <div>
         <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
             {alert}
@@ -168,16 +221,20 @@ export default function SearchComponent({selectedTeamCallBack, teamtype}) {
               <TextField
                 autoFocus
                 className={classes.input}
-                value={firstName}
-                onChange={e => setFirstName(e.target.value)}
+                value={playerData.f_name}
+                onChange={handleChange("f_name")}
+                helperText={error.f_name ? "First Name cannot be empty" : ""}
+                error={error.f_name}
                 label="First Name"
                 fullWidth
                 variant="outlined"
               />
               <TextField
                 className={classes.input}
-                value={lastName}
-                onChange={e => setLastName(e.target.value)}
+                value={playerData.l_name}
+                onChange={handleChange("l_name")}
+                helperText={error.l_name ? "Last Name cannot be empty" : ""}
+                error={error.l_name}
                 label="Last  Name"
                 fullWidth
                 variant="outlined"
@@ -186,8 +243,10 @@ export default function SearchComponent({selectedTeamCallBack, teamtype}) {
             <div style={{ display: 'flex' }}>
               <TextField
                 className={classes.input}
-                value={position}
-                onChange={e => setPosition(e.target.value)}
+                value={playerData.position}
+                onChange={handleChange("position")}
+                helperText={error.position ? "Position cannot be empty" : ""}
+                error={error.position}
                 label="Position"
                 fullWidth
                 variant="outlined"
@@ -195,25 +254,31 @@ export default function SearchComponent({selectedTeamCallBack, teamtype}) {
               <LocalizationProvider dateAdapter={AdapterDateFns} >
                 <DatePicker
                   label="Date of Birth"
-                  value={birth}
-                  onChange={(newValue) => {
-                    setBirth(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} className={classes.input} />}
+                  value={playerData.date_of_birth}
+                  onChange={handleChange("date_of_birth")}
+                  renderInput={(params) => 
+                    <TextField 
+                      {...params} 
+                      className={classes.input} 
+                    />
+                  }
                 />
               </LocalizationProvider>
             </div>
             <TextField
               label="Jercey Number"
               type="number"
-              value={jerseyNumber}
-              onChange={e => setJercyNumber(e.target.value)}
+              value={playerData.jersey_number}
+              onChange={handleChange("jersey_number")}
+              helperText={error.jersey_number ? "Jersey Number cannot be less than 0" : ""}
+              error={error.jersey_number}
               className={classes.input}
+              variant="outlined"
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={e => handlePlayerClose(false)}>Cancel</Button>
-            <Button onClick={e => handlePlayerClose(true)}>Add</Button>
+            <Button onClick={e => checkErrorPlayer() && handlePlayerClose(true)}>Add</Button>
           </DialogActions>
         </Dialog>
 

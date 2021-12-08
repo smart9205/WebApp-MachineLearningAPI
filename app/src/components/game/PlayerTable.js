@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useDispatch } from "react-redux";
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -18,6 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { visuallyHidden } from '@mui/utils';
 import gameService from '../../services/game.service';
+import { UPDATE_COUNT } from "../../actions/types";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -167,7 +169,7 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
-
+  const dispatch = useDispatch();
   React.useEffect(() => {
     playerSelectedCallBack(selected);
   }, [selected, playerSelectedCallBack]);
@@ -209,7 +211,12 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
 
   const handleDeleteClick = (id) => {
     console.log("handle delete ", id);
-    // gameService.deletePlayersInTeam(id),
+    gameService.deletePlayersInTeam(id).then((res) => {
+      console.log("delee", res)
+      dispatch({
+        type: UPDATE_COUNT
+      });
+    })
   }
 
   const handleChangePage = (event, newPage) => {
@@ -257,7 +264,6 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -268,6 +274,7 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
+                          onClick={(event) => handleClick(event, row.id)}
                           inputProps={{
                             'aria-labelledby': labelId,
                           }}
@@ -276,8 +283,8 @@ function EnhancedTable({playerSelectedCallBack, rows}) {
                       <TableCell align="center">{row.jersey_number}</TableCell>
                       <TableCell align="center">{`${row.f_name} ${row.l_name}`}</TableCell>
                       <TableCell align="center">
-                        <IconButton>
-                          <DeleteIcon onClick={e => handleDeleteClick(row.id)}/>
+                        <IconButton  onClick={() => handleDeleteClick(row.id)}>
+                          <DeleteIcon/>
                         </IconButton>
                       </TableCell>
                      

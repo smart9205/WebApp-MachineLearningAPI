@@ -68,7 +68,6 @@ db.user_subscription.belongsTo(db.subscription, {
   foreignKey: "subscription_id"
 });
 
-
 db.ROLES = ["admin", "tagger", "coach", "player"];
 
 module.exports = db;
