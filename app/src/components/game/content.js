@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Content() {
+export default function Content({newGameAdded}) {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -81,6 +81,8 @@ export default function Content() {
       date: gameDate
     }).then((res) => {
       console.log("Add Game Result", res);
+
+      newGameAdded();
       setOpen(true);
       setAlert("Added a new game");
     })
