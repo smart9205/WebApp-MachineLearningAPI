@@ -58,6 +58,14 @@ export default function SearchComponent({
     console.log("selected players", param)
   }, []);
 
+  const deletePlayerCallBack = (id) => {
+    console.log("delete players", id)
+    gameService.deletePlayersInTeam(id).then((res) => {
+      console.log("delete", res)
+      setCount(count + 1);
+    })
+  };
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -154,6 +162,7 @@ export default function SearchComponent({
       </div>
       <PlayerTable
         playerSelectedCallBack={playerSelectedCallBack}
+        deletePlayerCallBack={deletePlayerCallBack}
         rows={teamPlayerList}
       />
     </div>
