@@ -19,7 +19,7 @@ import GameService from "../../services/game.service";
 const useStyles = makeStyles((theme) => ({
   central: {
     '& > *': {
-      margin: 5,
+      margin: 6,
     },
   },
 }));
@@ -93,10 +93,10 @@ export default function Content() {
         </Alert>
       </Snackbar>
       <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Search teamtype="home" selectedTeamCallBack={homeTeamCallBack} />
         </Grid>
-        <Grid item xs={6} className={classes.central}>
+        <Grid item xs={4} className={classes.central}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="Game Date"
@@ -172,7 +172,7 @@ export default function Content() {
             <Button variant="outlined" sx={{ mt: 5 }} onClick={addGame}>Add Game</Button>
           </div>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Search teamtype="away" selectedTeamCallBack={awayTeamCallBack} />
         </Grid>
       </Grid>
