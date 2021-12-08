@@ -229,7 +229,7 @@ const Register = () => {
               <div className="form-group">
                 <button 
                   className="btn btn-primary btn-block" 
-                  // disabled={!human}
+                  disabled={!human}
                 >
                   Sign Up
                 </button>

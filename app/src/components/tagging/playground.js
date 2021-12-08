@@ -2,20 +2,9 @@ import * as React from 'react';
 
 export default function Playground() {
 
-  const [width, setWidth] = React.useState(0);
-
-  const div = React.useRef(null);
-
   React.useEffect(() => {
     draw();
   }, []);
-
-  React.useEffect(() => {
-    if(div.current){
-      setWidth(div.current.offsetWidth);
-    }
-  }, [div]);
-
 
   const draw = () => {  
     let canvas = document.getElementById('pitch');

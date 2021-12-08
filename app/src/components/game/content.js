@@ -40,8 +40,8 @@ export default function Content() {
   const [leagueName, setLeagueName] = React.useState("");
 
   const [gameDate, setGameDate] = React.useState(new Date());
-  const [season, setSeason] = React.useState(false);
-  const [league, setLeague] = React.useState(false);
+  const [season, setSeason] = React.useState({});
+  const [league, setLeague] = React.useState({});
   const [seasonList, setSeasonList] = React.useState(false);
   const [leagueList, setLeagueList] = React.useState(false);
 
@@ -52,6 +52,7 @@ export default function Content() {
   React.useEffect(() => {
     GameService.getAllSeasons().then((res) => {
       setSeasonList(res);
+      // setSeason(res[0])
     });
     GameService.getAllLeagues().then((res) => {
       setLeagueList(res);
