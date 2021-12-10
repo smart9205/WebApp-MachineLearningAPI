@@ -7,8 +7,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import GameTable from './GameTable'
 import Content from './content'
 import gameService from '../../services/game.service';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles(() => ({
+  paper: { minWidth: "90%" },
+}));
 
 export default function Game() {
+  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [gameList, setGameList] = React.useState([]);
   const [count, setCount] = React.useState(0);
@@ -50,8 +56,8 @@ export default function Game() {
     <div>
       <Button onClick={handleClickOpen()} variant="outlined">Add a new Game</Button>
       <Dialog
-        maxWidth="xl"
         open={open} 
+        classes={{ paper: classes.paper}}
         onClose={handleClose}
         scroll="paper"
         aria-labelledby="scroll-dialog-title"
@@ -60,6 +66,7 @@ export default function Game() {
         <DialogTitle id="scroll-dialog-title">New Game</DialogTitle>
         <DialogContent 
           dividers={true}
+          style={{height:'90vh'}}
           ref={descriptionElementRef}
           >
             <Content newGameAdded={newGameAdded}/>

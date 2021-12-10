@@ -61,6 +61,12 @@ const headCells = [
     disablePadding: true,
     label: 'NAME',
   },
+  {
+    id: 'delete',
+    numeric: true,
+    disablePadding: true,
+    label: '',
+  },
 ];
 
 function EnhancedTableHead(props) {
@@ -223,10 +229,13 @@ function EnhancedTable({playerSelectedCallBack, rows, deletePlayerCallBack}) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%'}}>
+      <Paper sx={{ width: '100%', height: "100%"}}>
         <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table
+        <TableContainer
+          style={{ height: "calc(90vh - 400px)" }}
+        >
+          <Table 
+            stickyHeader 
             // sx={{ minWidth: 450 }}
             aria-labelledby="tableTitle"
             size={'small'}
@@ -270,7 +279,7 @@ function EnhancedTable({playerSelectedCallBack, rows, deletePlayerCallBack}) {
                       <TableCell align="center">{row.jersey_number}</TableCell>
                       <TableCell align="center">{`${row.f_name} ${row.l_name}`}</TableCell>
                       <TableCell align="center">
-                        <IconButton  onClick={() => deletePlayerCallBack(row.id)}>
+                        <IconButton  onClick={() => deletePlayerCallBack(row.id)} sx={{padding: 0}}>
                           <DeleteIcon/>
                         </IconButton>
                       </TableCell>
