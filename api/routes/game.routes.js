@@ -15,7 +15,12 @@ module.exports = app => {
 		[authJwt.isAdmin],
 		controller.create
 	);
-	
+	app.post(
+		"/game/deleteGames",
+		[authJwt.isAdmin],
+		controller.deleteGames
+	);
+
 	app.get(
 		"/game", 
 		controller.findAll

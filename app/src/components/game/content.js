@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Content({ newGameAdded }) {
+export default function Content({ gameListUpdated }) {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -54,6 +54,8 @@ export default function Content({ newGameAdded }) {
   const [awayTeam, setAwayTeam] = React.useState(false);
   const [playerOpen, setPlayerOpen] = React.useState(false);
 
+  const [videoUrl, setVideoUrl] = React.useState("");
+ 
   const [error, setError] = React.useState({
     f_name: false,
     l_name: false,
@@ -158,9 +160,10 @@ export default function Content({ newGameAdded }) {
   };
 
   const addGame = () => {
-    if (!homeTeam || !awayTeam || !season || !league) {
+    if (!homeTeam || !awayTeam || !season || !league || !videoUrl.length) {
       setOpen(true);
-      setAlert("Selected enough data to add a new game!");
+      setAlert("Input enough data to add a new game!");
+      return;
     }
 
     GameService.addGame({
@@ -168,11 +171,12 @@ export default function Content({ newGameAdded }) {
       league_id: league.id,
       home_team_id: homeTeam.id,
       away_team_id: awayTeam.id,
-      date: gameDate
+      date: gameDate,
+      video_url: videoUrl
     }).then((res) => {
       console.log("Add Game Result", res);
 
-      newGameAdded();
+      gameListUpdated();
       setOpen(true);
       setAlert("Added a new game");
     })
@@ -363,7 +367,7 @@ export default function Content({ newGameAdded }) {
               onChange={(newValue) => {
                 setGameDate(newValue);
               }}
-              renderInput={(params) => <TextField {...params} fullWidth />}
+              renderInput={(params) => <TextField {...params} fullWidth sx={{my:2}}/>}
             />
           </LocalizationProvider>
           <Autocomplete
@@ -374,7 +378,6 @@ export default function Content({ newGameAdded }) {
             getOptionLabel={
               (option) => !option.name ? "" : option.name
             }
-            fullWidth
             renderOption={(props, option) => {
               return (
                 <li {...props} key={option.id}>
@@ -382,7 +385,7 @@ export default function Content({ newGameAdded }) {
                 </li>
               );
             }}
-            renderInput={(params) => <TextField {...params} label="Season" />}
+            renderInput={(params) => <TextField {...params} label="Season" sx={{my:1}} />}
             onChange={(event, newValue) => {
               setSeason(newValue);
             }}
@@ -404,7 +407,7 @@ export default function Content({ newGameAdded }) {
                   </li>
                 );
               }}
-              renderInput={(params) => <TextField {...params} label="League" />}
+              renderInput={(params) => <TextField {...params} label="League" sx={{my:1}}/>}
               onChange={(event, newValue) => {
                 setLeague(newValue);
               }}
@@ -413,6 +416,16 @@ export default function Content({ newGameAdded }) {
               <AddCircleIcon />
             </IconButton>
           </div>
+          <TextField
+            id="outlined-textarea"
+            label="Video URL"
+            placeholder="Video URL"
+            multiline
+            fullWidth
+            sx={{my:1}}
+            value={videoUrl}
+            onChange={e => setVideoUrl(e.target.value)}
+          />
           <div style={{ textAlign: "center" }}>
             <Button variant="outlined" sx={{ mt: 5 }} onClick={addGame}>Add Game</Button>
           </div>

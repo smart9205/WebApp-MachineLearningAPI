@@ -47,10 +47,9 @@ export default function Game() {
     });
   }, [count]);
 
-  const newGameAdded = () => {
-    console.log("INDEx New Game Addes")
+  const gameListUpdated = React.useCallback(() => {
     setCount(count + 1);
-  }
+  }, [count]);
 
   return (
     <div>
@@ -69,14 +68,14 @@ export default function Game() {
           style={{height:'90vh'}}
           ref={descriptionElementRef}
           >
-            <Content newGameAdded={newGameAdded}/>
+            <Content gameListUpdated={gameListUpdated}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>OK</Button>
         </DialogActions>
       </Dialog>
 
-      <GameTable rows={gameList}/>
+      <GameTable rows={gameList} gameListUpdated={gameListUpdated}/>
     </div>
   );
 }

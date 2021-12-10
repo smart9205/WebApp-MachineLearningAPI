@@ -18,8 +18,14 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContentText from '@mui/material/DialogContentText';
+import Button from '@mui/material/Button';
 import { visuallyHidden } from '@mui/utils';
-
+import GameService from "../../services/game.service";
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -81,6 +87,12 @@ const headCells = [
     disablePadding: false,
     label: 'Date',
   },
+  {
+    id: 'video_url',
+    numeric: true,
+    disablePadding: false,
+    label: 'Video URL',
+  },
 ];
 
 function EnhancedTableHead(props) {
@@ -140,7 +152,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
+  const { numSelected, deleteButtonClicked } = props;
 
   return (
     <Toolbar
@@ -175,7 +187,7 @@ const EnhancedTableToolbar = (props) => {
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={deleteButtonClicked}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -194,12 +206,13 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({rows}) {
+export default function EnhancedTable({rows, gameListUpdated}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -209,19 +222,19 @@ export default function EnhancedTable({rows}) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -245,7 +258,27 @@ export default function EnhancedTable({rows}) {
     setPage(0);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const handleDeleteClose = (result) => {
+    setDeleteOpen(false);
+
+    if (!result) return;
+
+    GameService.deleteGames({ games: selected }).then(
+      (response) => {
+        gameListUpdated();
+      },
+      (error) => {
+      }
+    );
+  };
+
+  const deleteButtonClicked = () => {
+    console.log("deletebuttonClicked", selected);
+    setDeleteOpen(true);
+
+  }
+
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -253,8 +286,20 @@ export default function EnhancedTable({rows}) {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <Dialog open={deleteOpen} onClose={e => handleDeleteClose(false)}>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You are going to delete games, are you sure?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={e => handleDeleteClose(false)}>Cancel</Button>
+          <Button onClick={e => handleDeleteClose(true)}>Delete</Button>
+        </DialogActions>
+      </Dialog>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} deleteButtonClicked={deleteButtonClicked}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -275,17 +320,17 @@ export default function EnhancedTable({rows}) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={index}
+                      key={row.id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -308,7 +353,8 @@ export default function EnhancedTable({rows}) {
                       <TableCell align="right">{row.league_name}</TableCell>
                       <TableCell align="right">{row.home_team_name}</TableCell>
                       <TableCell align="right">{row.away_team_name}</TableCell>
-                      <TableCell align="right">{row.date}</TableCell>
+                      <TableCell align="right">{row.date.slice(0,10)}</TableCell>
+                      <TableCell align="right">{row.video_url}</TableCell>
                     </TableRow>
                   );
                 })}

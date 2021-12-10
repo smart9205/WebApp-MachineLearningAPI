@@ -24,6 +24,28 @@ exports.create =  (req, res) => {
  
 };
 
+exports.deleteGames =  (req, res) => {
+  // Validate request
+  // if (!req.body.name) {
+  //   res.status(400).send({
+  //     message: "Name can not be empty!"
+  //   });
+  //   return;
+  // }
+  Sequelize.query(`
+    DELETE FROM public."Games" WHERE id IN (${req.body.games.map((id) => id)})
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+};
+
 exports.findAll = (req, res) => {
   Sequelize.query(`
     SELECT 

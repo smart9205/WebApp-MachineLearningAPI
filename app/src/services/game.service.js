@@ -77,6 +77,11 @@ const getAllPlayers = () => {
   });
 }
 
+const deleteGames = (req) => {
+  return axios.post(API_URL+"game/deletegames", req, {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
 
 const gameService = {
   addTeamPlayer,
@@ -93,6 +98,8 @@ const gameService = {
   getAllPlayers,
 
   deletePlayersInTeam,
+
+  deleteGames,
 };
 
 export default gameService;
