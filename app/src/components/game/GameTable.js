@@ -378,7 +378,7 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
                         </Button>
                       </TableCell>
                       <TableCell align="right" sx={{ width: 100 }}>
-                        <Link variant="outlined" to="/tagging">
+                        <Link variant="outlined" to={`/tagging?game_id=${row.id}`}>
                           <Button
                             variant="outlined"
                             startIcon={<TagIcon />}

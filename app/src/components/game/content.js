@@ -242,7 +242,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
 
   return (
     <Box>
-      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical : "top", horizontal :"center"}}>
         <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
           {alert}
         </Alert>

@@ -82,10 +82,10 @@ export default function SearchComponent({
   };
 
   const addTeamPlayer = () => {
-    if(!selectedPlayer) {openAlert("Please select player"); return;}
-    if(!selectedTeam) {openAlert("Please select Team"); return;}
-    if(!season) {openAlert("Please select Season"); return;}
-    if(!league) {openAlert("Please select League"); return;}
+    if(!selectedPlayer) {openAlert("Please select player", "warning"); return;}
+    if(!selectedTeam) {openAlert("Please select Team", "warning"); return;}
+    if(!season) {openAlert("Please select Season", "warning"); return;}
+    if(!league) {openAlert("Please select League", "warning"); return;}
     
     gameService.addTeamPlayer({
       season_id: season.id,
@@ -111,7 +111,12 @@ export default function SearchComponent({
 
   return (
     <div>
-      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+      <Snackbar 
+        open={open} 
+        anchorOrigin={{vertical : "top", horizontal :"center"}}
+        autoHideDuration={2000} 
+        onClose={handleClose}
+      >
         <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
           {alert}
         </Alert>
