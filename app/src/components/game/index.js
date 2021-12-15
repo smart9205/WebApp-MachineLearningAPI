@@ -40,7 +40,6 @@ export default function Game() {
 
   React.useEffect(() => {
     gameService.getAllGames().then((response) => {
-      console.log("all games", response);
       setGameList(response);
     },
     (error) => {

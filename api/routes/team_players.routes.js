@@ -32,6 +32,12 @@ module.exports = app => {
 		controller.update
 	);
 
+	app.post(
+		"/team_player/updatejersey",
+		[authJwt.isAdmin],
+		controller.updateJersey
+	);
+
 	app.delete(
 		"/team_player/:id",
 		[authJwt.isAdmin],

@@ -53,6 +53,7 @@ export default function Content({ gameListUpdated }) {
   const [homeTeam, setHomeTeam] = React.useState(false);
   const [awayTeam, setAwayTeam] = React.useState(false);
   const [playerOpen, setPlayerOpen] = React.useState(false);
+  const [alertType, setAlertType] = React.useState("success");
 
   const [videoUrl, setVideoUrl] = React.useState("");
  
@@ -133,13 +134,17 @@ export default function Content({ gameListUpdated }) {
 
     if (!result) return;
     GameService.addTeam({ name: teamName }).then(
-      (response) => {
-        console.log("NewTeam", response);
-        getTeamList();
-        setOpen(true);
-        setAlert(`${teamName} is successfully added!`);
+      (res) => {
+        console.log("NewTeam", res);
+        if(res.status === "success") {
+          getTeamList();
+          OpenAlert(`${teamName} is successfully added!`);
+        } else {
+          OpenAlert(res.data, "error");
+        }
       },
       (error) => {
+        console.log("ERROR", error);
       }
     );
   };
@@ -148,21 +153,24 @@ export default function Content({ gameListUpdated }) {
     
     if(!result) return;
     
-    GameService.addPlayer(playerData).then((response) => {
-      console.log("NewPlayer", response);
-      getPlayerList();
-      setOpen(true);
-      setAlert(`${response.f_name} ${response.l_name} is successfully added!`);
-    },
-    (error) => {
-    }
-    );
+    GameService.addPlayer(playerData).then((res) => {
+      if(res.status === "success") {
+        getPlayerList();
+        OpenAlert(`${res.f_name} ${res.l_name} is successfully added!`);
+      } else {
+        OpenAlert(res.data, "error");
+      }
+    });
   };
 
+  const OpenAlert = (msg, type = "success") => {
+    setOpen(true);
+    setAlert(msg);
+    setAlertType(type);
+  }
   const addGame = () => {
     if (!homeTeam || !awayTeam || !season || !league || !videoUrl.length) {
-      setOpen(true);
-      setAlert("Input enough data to add a new game!");
+      OpenAlert("Input enough data to add a new game!", "warning");
       return;
     }
 
@@ -177,8 +185,7 @@ export default function Content({ gameListUpdated }) {
       console.log("Add Game Result", res);
 
       gameListUpdated();
-      setOpen(true);
-      setAlert("Added a new game");
+      OpenAlert("Added a new game");
     })
   }
 
@@ -196,9 +203,8 @@ export default function Content({ gameListUpdated }) {
     if (!result) return;
     GameService.addLeague({ name: leagueName }).then(
       (response) => {
-        setOpen(true);
         setCount(count + 1);
-        setAlert(`${leagueName} is successfully added!`);
+        OpenAlert(`${leagueName} is successfully added!`);
       },
       (error) => {
       }
@@ -208,7 +214,7 @@ export default function Content({ gameListUpdated }) {
   return (
     <Box>
       <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
           {alert}
         </Alert>
       </Snackbar>

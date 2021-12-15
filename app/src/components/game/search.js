@@ -24,6 +24,7 @@ export default function SearchComponent({
   const mounted = React.useRef(false);
   const [open, setOpen] = React.useState(false);
   const [alert, setAlert] = React.useState("");
+  const [alertType, setAlertType] = React.useState("success");
 
   const [selectedTeam, setSelectedTeam] = React.useState("");
   const [selectedPlayer, setSelectedPlayer] = React.useState("");
@@ -54,14 +55,12 @@ export default function SearchComponent({
     }
   }, [selectedTeam, selectedTeamCallBack])
 
-  const playerSelectedCallBack = React.useCallback((param) => {
-    console.log("selected players", param)
-  }, []);
+  const jerseyUpdatedCallBack = () => {
+    setCount(count + 1);
+  }
 
   const deletePlayerCallBack = (id) => {
-    console.log("delete players", id)
     gameService.deletePlayersInTeam(id).then((res) => {
-      console.log("delete", res)
       setCount(count + 1);
     })
   };
@@ -86,19 +85,25 @@ export default function SearchComponent({
       team_id: selectedTeam.id,
       player_id: selectedPlayer.id
     }).then((res) => {
-      setCount(count + 1);
+      if(res.status === "success") {
+        setCount(count + 1);
+        openAlert(`Player is successfully added!`);
+      } else {
+        openAlert(res.data, "error");
+      }
     })
   }
 
-  const openAlert = (text) => {
+  const openAlert = (text, type="success") => {
     setAlert(text);
     setOpen(true);
+    setAlertType(type);
   }
 
   return (
     <div>
       <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
           {alert}
         </Alert>
       </Snackbar>
@@ -131,15 +136,15 @@ export default function SearchComponent({
           id="combo-box-demo"
           options={playerList}
           value={selectedPlayer}
-          isOptionEqualToValue={(option, value) => option && option.f_name}
+          isOptionEqualToValue={(player, value) => player && player.f_name}
           getOptionLabel={
-            (option) => !option.f_name ? "" : `${option.f_name} ${option.l_name} (${option.date_of_birth && option.date_of_birth.slice(0, 10)})`
+            (player) => !player.f_name ? "" : `${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`
           }
           fullWidth
-          renderOption={(props, option) => {
+          renderOption={(props, player) => {
             return (
-              <li {...props} key={option.id}>
-                {`${option.f_name} ${option.l_name} (${option.date_of_birth && option.date_of_birth.slice(0, 10)})`}
+              <li {...props} key={player.id}>
+                {`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`}
               </li>
             );
           }}
@@ -148,20 +153,12 @@ export default function SearchComponent({
             setSelectedPlayer(newValue);
           }}
         />
-        {/* <TextField
-            sx={{ my: 2 }}
-            id="outlined-required"
-            label="Search Players"
-            value={playerSearch}
-            fullWidth
-            onChange={(e) => setPlayerSearch(e.target.value)}
-          /> */}
         <IconButton style={{ alignSelf: 'center' }} aria-label="delete" size="large" onClick={() => addTeamPlayer()}>
           <AddCircleIcon />
         </IconButton>
       </div>
       <PlayerTable
-        playerSelectedCallBack={playerSelectedCallBack}
+        jerseyUpdatedCallBack={jerseyUpdatedCallBack}
         deletePlayerCallBack={deletePlayerCallBack}
         rows={teamPlayerList}
       />

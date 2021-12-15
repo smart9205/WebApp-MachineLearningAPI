@@ -6,9 +6,24 @@ const Sequelize = db.sequelize;
 
 exports.create =  async (req, res) => {
 
+  console.log("TeamPlayer ", req.body)
+
+  
+
+  const checkTeamPlayer = await Team_Player.findOne({ where: {
+    season_id: req.body.season_id,
+    league_id: req.body.league_id,
+    team_id: req.body.team_id,
+    player_id: req.body.player_id,
+  }});
+  
+  if(checkTeamPlayer !== null) {
+    return res.send({status: "error", data: "Player already exists in the Team"});
+  }
+
   Team_Player.create(req.body)
     .then(data => {
-      res.send(data);
+      res.send({status: "error", data});
     })
     .catch(err => {
       res.status(500).send({
@@ -78,6 +93,21 @@ exports.update = (req, res) => {
       });
     });
 };
+
+exports.updateJersey = async (req, res) => {
+
+  const teamPlayer = await Team_Player.findByPk(req.body.id);
+
+  const player = await Player.findByPk(teamPlayer.player_id);
+
+  player.jersey_number = req.body.jersey_number;
+
+  await player.save();
+ 
+  res.send({
+    message: "Player Jersey updated"
+  });
+}
 
 exports.delete = (req, res) => {
   const id = req.params.id;
