@@ -13,10 +13,12 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
+import Input from '@mui/material/Input';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+
 import { visuallyHidden } from '@mui/utils';
+import GameService from "../../services/game.service";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -70,7 +72,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { order, orderBy, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -79,17 +81,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -166,16 +157,15 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-function EnhancedTable({playerSelectedCallBack, rows, deletePlayerCallBack}) {
+function EnhancedTable({jerseyUpdatedCallBack, rows, deletePlayerCallBack}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
-  React.useEffect(() => {
-    playerSelectedCallBack(selected);
-  }, [selected, playerSelectedCallBack]);
+  const [openEdit, setOpenEdit] = React.useState(0);
+  const [editJersey, setEditJersey] = React.useState(0);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -192,26 +182,6 @@ function EnhancedTable({playerSelectedCallBack, rows, deletePlayerCallBack}) {
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -226,6 +196,13 @@ function EnhancedTable({playerSelectedCallBack, rows, deletePlayerCallBack}) {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+  const updateJersey = () => {
+    setOpenEdit(0)
+    GameService.updateJersey({id: openEdit, jersey_number: Number(editJersey)}).then((data) => {
+      jerseyUpdatedCallBack();
+    });
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -255,8 +232,6 @@ function EnhancedTable({playerSelectedCallBack, rows, deletePlayerCallBack}) {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
                     <TableRow
                       hover
@@ -266,17 +241,28 @@ function EnhancedTable({playerSelectedCallBack, rows, deletePlayerCallBack}) {
                       key={row.id}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          onClick={(event) => handleClick(event, row.id)}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
+                      <TableCell align="center" >
+                        {
+                          openEdit === row.id ? 
+                            <Input 
+                              sx={{maxWidth:60}}
+                              type="number" 
+                              value={editJersey}
+                              onChange={e => setEditJersey(e.target.value)}
+                              onBlur={e => updateJersey()} 
+                              onKeyPress={(ev) => {
+                                if (ev.key === 'Enter') {
+                                  ev.preventDefault();
+                                  updateJersey()
+                                }
+                              }}
+                            />
+                          :
+                          <div onClick={e => {setOpenEdit(row.id); setEditJersey(row.jersey_number)}}>
+                            {row.jersey_number}
+                          </div>
+                        }
                       </TableCell>
-                      <TableCell align="center">{row.jersey_number}</TableCell>
                       <TableCell align="center">{`${row.f_name} ${row.l_name}`}</TableCell>
                       <TableCell align="center">
                         <IconButton  onClick={() => deletePlayerCallBack(row.id)} sx={{padding: 0}}>

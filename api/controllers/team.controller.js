@@ -2,7 +2,7 @@ const db = require("../models");
 const Team = db.team;
 const Op = db.Sequelize.Op;
 
-exports.create =  (req, res) => {
+exports.create = async (req, res) => {
   // Validate request
   if (!req.body.name) {
     res.status(400).send({
@@ -14,10 +14,18 @@ exports.create =  (req, res) => {
   const team = {
     name: req.body.name,
   };
+  
+  const checkTeam = await Team.findOne({ where: {
+    name: req.body.name
+  }});
+  
+  if(checkTeam !== null) {
+    return res.send({status: "error", data: "Same Name of Team already exist"});
+  }
 
   Team.create(team)
     .then(data => {
-      res.send(data);
+      res.send({status: "success", data});
     })
     .catch(err => {
       res.status(500).send({

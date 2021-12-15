@@ -2,7 +2,7 @@ const db = require("../models");
 const Player = db.player;
 const Op = db.Sequelize.Op;
 
-exports.create =  (req, res) => {
+exports.create = async (req, res) => {
   // Validate request
   if (!req.body.f_name) {
     res.status(400).send({
@@ -10,20 +10,21 @@ exports.create =  (req, res) => {
     });
     return;
   }
-
-  console.log("req.body",req.body);
-
-  // const player = {
-  //   f_name: req.body.f_name,
-  //   l_name: req.body.l_name,
-  //   date_of_birth: req.body.date_of_birth,
-  //   position: req.body.position,
-  //   jersey_number: req.body.jersey_number
-  // };
+  const checkPlayer = await Player.findOne({ where: {
+    f_name: req.body.f_name,
+    l_name: req.body.l_name,
+    date_of_birth: req.body.date_of_birth,
+    position: req.body.position,
+    jersey_number: req.body.jersey_number
+  }});
+  
+  if(checkPlayer !== null) {
+    return res.send({status: "error", data: "Player already exists"});
+  }
 
   Player.create(req.body)
     .then(data => {
-      res.send(data);
+      res.send({status:"success",data});
     })
     .catch(err => {
       res.status(500).send({

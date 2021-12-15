@@ -83,6 +83,12 @@ const deleteGames = (req) => {
   });
 }
 
+const updateJersey = (req) => {
+  return axios.post(API_URL+"team_player/updatejersey", req, {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+
 const gameService = {
   addTeamPlayer,
   addTeam,
@@ -96,6 +102,8 @@ const gameService = {
   getAllGames,
   getAllSeasons,
   getAllPlayers,
+
+  updateJersey,
 
   deletePlayersInTeam,
 
