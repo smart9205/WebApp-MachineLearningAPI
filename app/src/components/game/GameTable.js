@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from "react-router-dom";
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -27,14 +28,9 @@ import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import TagIcon from '@mui/icons-material/Tag';
 import { visuallyHidden } from '@mui/utils';
-import ReactPlayer from 'react-player';
+// import ReactPlayer from 'react-player';
 import GameService from "../../services/game.service";
 import NBA from '../../assets/NBA.png';
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles(() => ({
-  paper: { minWidth: "90%" },
-}));
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -101,7 +97,7 @@ const headCells = [
     id: 'video_url',
     numeric: true,
     disablePadding: false,
-    label: 'Video URL',
+    label: 'Video',
   },
 ];
 
@@ -217,15 +213,12 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
-  const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
-  const [videoOpen, setVideoOpen] = React.useState(false);
-  const [videoLink, setVideoLink] = React.useState("");
 
 
   const handleRequestSort = (event, property) => {
@@ -298,28 +291,8 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const openVideo = (link) => {
-    setVideoOpen(true)
-    setVideoLink(link)
-  }
-
   return (
     <Box sx={{ width: '100%' }}>
-      <Dialog open={videoOpen} onClose={e => setVideoOpen(false)} classes={{ paper: classes.paper}}>
-        <DialogTitle>Video</DialogTitle>
-        <DialogContent>
-          <ReactPlayer
-            url={videoLink}
-            playing={true}
-            controls={true}
-            width='100%'
-            height='100%'
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={e => setVideoOpen(false)}>Close</Button>
-        </DialogActions>
-      </Dialog>
       <Dialog open={deleteOpen} onClose={e => handleDeleteClose(false)}>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
@@ -365,7 +338,7 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
                       tabIndex={-1}
                       key={row.id}
                       selected={isItemSelected}
-                      >
+                    >
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
@@ -388,11 +361,12 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
                       <TableCell align="right">{row.home_team_name}</TableCell>
                       <TableCell align="right">{row.away_team_name}</TableCell>
                       <TableCell align="right" >{row.date.slice(0, 10)}</TableCell>
-                      <TableCell align="right" style={{maxWidth:300, wordBreak: "break-word" }}>{row.video_url}</TableCell>
-                      <TableCell align="right" sx={{ width: 100 }} onClick={e => openVideo(row.video_url)}>
-                        <Paper style={{ display: "flex", justifyContent: "center", alignItems: "center"}} elevation={3}>
-                          <img src={NBA} style={{width: 60, height: 60, borderRadius:5}} alt="video"/>
-                        </Paper>
+                      <TableCell align="right" sx={{ width: 100 }}>
+                        <a href={row.video_url} target="_blank" rel="noreferrer">
+                          <Paper style={{ display: "flex", justifyContent: "center", alignItems: "center" }} elevation={3}>
+                            <img src={NBA} style={{ width: 60, height: 60, borderRadius: 5 }} alt="video" />
+                          </Paper>
+                        </a>
                       </TableCell>
                       <TableCell align="right" sx={{ width: 100 }}>
                         <Button
@@ -404,13 +378,14 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
                         </Button>
                       </TableCell>
                       <TableCell align="right" sx={{ width: 100 }}>
-                        <Button
-                          variant="outlined"
-                          // onClick={() => handleClickTeamOpen()}
-                          startIcon={<TagIcon />}
-                        >
-                          Tag
-                        </Button>
+                        <Link variant="outlined" to="/tagging">
+                          <Button
+                            variant="outlined"
+                            startIcon={<TagIcon />}
+                          >
+                            Tag
+                          </Button>
+                        </Link>
                       </TableCell>
                     </TableRow>
                   );
