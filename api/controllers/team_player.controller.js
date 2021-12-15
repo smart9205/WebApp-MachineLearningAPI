@@ -23,7 +23,7 @@ exports.create =  async (req, res) => {
 
   Team_Player.create(req.body)
     .then(data => {
-      res.send({status: "error", data});
+      res.send({status: "success", data});
     })
     .catch(err => {
       res.status(500).send({

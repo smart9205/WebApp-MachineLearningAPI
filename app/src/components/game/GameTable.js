@@ -216,7 +216,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ rows, gameListUpdated }) {
+export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
@@ -225,7 +225,7 @@ export default function EnhancedTable({ rows, gameListUpdated }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [videoOpen, setVideoOpen] = React.useState(false);
-  const [videoLink, setVideoLink] = React.useState(false);
+  const [videoLink, setVideoLink] = React.useState("");
 
 
   const handleRequestSort = (event, property) => {
@@ -387,8 +387,8 @@ export default function EnhancedTable({ rows, gameListUpdated }) {
                       <TableCell align="right">{row.league_name}</TableCell>
                       <TableCell align="right">{row.home_team_name}</TableCell>
                       <TableCell align="right">{row.away_team_name}</TableCell>
-                      <TableCell align="right">{row.date.slice(0, 10)}</TableCell>
-                      <TableCell align="right">{row.video_url}</TableCell>
+                      <TableCell align="right" >{row.date.slice(0, 10)}</TableCell>
+                      <TableCell align="right" style={{maxWidth:300, wordBreak: "break-word" }}>{row.video_url}</TableCell>
                       <TableCell align="right" sx={{ width: 100 }} onClick={e => openVideo(row.video_url)}>
                         <Paper style={{ display: "flex", justifyContent: "center", alignItems: "center"}} elevation={3}>
                           <img src={NBA} style={{width: 60, height: 60, borderRadius:5}} alt="video"/>
@@ -397,7 +397,7 @@ export default function EnhancedTable({ rows, gameListUpdated }) {
                       <TableCell align="right" sx={{ width: 100 }}>
                         <Button
                           variant="outlined"
-                          // onClick={() => handleClickTeamOpen()}
+                          onClick={() => editCallBack(row)}
                           startIcon={<EditIcon />}
                         >
                           Edit

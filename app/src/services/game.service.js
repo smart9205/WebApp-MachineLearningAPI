@@ -34,6 +34,12 @@ const addGame = (req) => {
   });
 }
 
+const updateGame = (req) => {
+  return axios.put(API_URL+`game/${req.id}`, req, {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+
 const getAllSeasons = () => {
   return axios.get(API_URL+"season", {headers: authHeader()}).then((response) => {
     return response.data;
@@ -104,6 +110,7 @@ const gameService = {
   getAllPlayers,
 
   updateJersey,
+  updateGame,
 
   deletePlayersInTeam,
 

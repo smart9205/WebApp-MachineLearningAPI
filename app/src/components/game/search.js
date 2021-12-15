@@ -19,7 +19,8 @@ export default function SearchComponent({
   season,
   league,
   teamList,
-  playerList
+  playerList,
+  defaultTeamId
 }) {
   const mounted = React.useRef(false);
   const [open, setOpen] = React.useState(false);
@@ -31,6 +32,13 @@ export default function SearchComponent({
   const [teamPlayerList, setTeamPlayerList] = React.useState([]);
 
   const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    if(!teamList.length) return;
+    // setSeason(seasonList.find(s => s.id === editData.season_id));
+    const editTeam = teamList.find(s => s.id === defaultTeamId);
+    editTeam && setSelectedTeam(editTeam);
+  }, [defaultTeamId, teamList])
 
   React.useEffect(() => {
     try {
@@ -85,6 +93,7 @@ export default function SearchComponent({
       team_id: selectedTeam.id,
       player_id: selectedPlayer.id
     }).then((res) => {
+      console.log("addTeamPlayer", res)
       if(res.status === "success") {
         setCount(count + 1);
         openAlert(`Player is successfully added!`);
