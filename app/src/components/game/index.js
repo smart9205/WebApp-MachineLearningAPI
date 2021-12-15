@@ -16,8 +16,10 @@ const useStyles = makeStyles(() => ({
 export default function Game() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [actionType, setActionType] = React.useState("Add");
   const [gameList, setGameList] = React.useState([]);
   const [count, setCount] = React.useState(0);
+  const [editData, setEditData] = React.useState({});
 
   const handleClickOpen = () => () => {
     setOpen(true);
@@ -48,7 +50,15 @@ export default function Game() {
 
   const gameListUpdated = React.useCallback(() => {
     setCount(count + 1);
+    setOpen(false);
   }, [count]);
+
+  const editCallBack = React.useCallback((param) => {
+    console.log("edit param", param)
+    setEditData(param)
+    setActionType("Edit")
+    setOpen(true)
+  }, []);
 
   return (
     <div>
@@ -61,20 +71,20 @@ export default function Game() {
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
       >
-        <DialogTitle id="scroll-dialog-title">New Game</DialogTitle>
+        <DialogTitle id="scroll-dialog-title">{actionType} Game</DialogTitle>
         <DialogContent 
           dividers={true}
           style={{height:'90vh'}}
           ref={descriptionElementRef}
           >
-            <Content gameListUpdated={gameListUpdated}/>
+            <Content gameListUpdated={gameListUpdated} actionType={actionType} editData={editData}/>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>OK</Button>
+          <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
 
-      <GameTable rows={gameList} gameListUpdated={gameListUpdated}/>
+      <GameTable rows={gameList} gameListUpdated={gameListUpdated} editCallBack={editCallBack}/>
     </div>
   );
 }
