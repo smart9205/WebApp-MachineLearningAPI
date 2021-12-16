@@ -112,6 +112,10 @@ export default function Content({ gameListUpdated, actionType, editData }) {
     getPlayerList();
   }, []);
 
+  const updatePlayerListCallBack = () => {
+    getPlayerList();
+  }
+
   const handleChange = name => event => {
     setPlayerData({ ...playerData, [name]: event.target.value });
   };
@@ -373,6 +377,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
             teamList={teamList}
             playerList={playerList}
             defaultTeamId={editData.home_team_id}
+            updatePlayerListCallBack={updatePlayerListCallBack}
           />
         </Grid>
         <Grid item xs={4} className={classes.central}>
@@ -475,6 +480,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
             teamList={teamList}
             playerList={playerList}
             defaultTeamId={editData.away_team_id}
+            updatePlayerListCallBack={updatePlayerListCallBack}
           />
         </Grid>
       </Grid>

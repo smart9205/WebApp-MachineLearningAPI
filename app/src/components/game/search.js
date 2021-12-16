@@ -15,6 +15,7 @@ import gameService from '../../services/game.service';
 
 export default function SearchComponent({
   selectedTeamCallBack,
+  updatePlayerListCallBack,
   teamtype,
   season,
   league,
@@ -65,6 +66,7 @@ export default function SearchComponent({
 
   const jerseyUpdatedCallBack = () => {
     setCount(count + 1);
+    updatePlayerListCallBack();
   }
 
   const deletePlayerCallBack = (id) => {

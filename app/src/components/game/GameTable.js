@@ -71,31 +71,31 @@ const headCells = [
   },
   {
     id: 'league_name',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'League',
   },
   {
     id: 'home_team_name',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'Home Team',
   },
   {
     id: 'away_team_name',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'Away Team',
   },
   {
     id: 'date',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'Date',
   },
   {
     id: 'video_url',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'Video',
   },
@@ -125,7 +125,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align={headCell.numeric ? 'right' : 'center'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -311,7 +311,7 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={'medium'}
+            size={'small'}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -354,21 +354,22 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
                         id={labelId}
                         scope="row"
                         padding="none"
+                        align="center"
                       >
                         {row.season_name}
                       </TableCell>
-                      <TableCell align="right">{row.league_name}</TableCell>
-                      <TableCell align="right">{row.home_team_name}</TableCell>
-                      <TableCell align="right">{row.away_team_name}</TableCell>
-                      <TableCell align="right" >{row.date.slice(0, 10)}</TableCell>
-                      <TableCell align="right" sx={{ width: 100 }}>
+                      <TableCell align="center">{row.league_name}</TableCell>
+                      <TableCell align="center">{row.home_team_name}</TableCell>
+                      <TableCell align="center">{row.away_team_name}</TableCell>
+                      <TableCell align="center" >{row.date.slice(0, 10)}</TableCell>
+                      <TableCell align="center" sx={{ width: 100 }}>
                         <a href={row.video_url} target="_blank" rel="noreferrer">
                           <Paper style={{ display: "flex", justifyContent: "center", alignItems: "center" }} elevation={3}>
                             <img src={NBA} style={{ width: 60, height: 60, borderRadius: 5 }} alt="video" />
                           </Paper>
                         </a>
                       </TableCell>
-                      <TableCell align="right" sx={{ width: 100 }}>
+                      <TableCell align="center" sx={{ width: 100 }}>
                         <Button
                           variant="outlined"
                           onClick={() => editCallBack(row)}
@@ -377,8 +378,8 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
                           Edit
                         </Button>
                       </TableCell>
-                      <TableCell align="right" sx={{ width: 100 }}>
-                        <Link variant="outlined" to={`/tagging?game_id=${row.id}`}>
+                      <TableCell align="center" sx={{ width: 100 }}>
+                        <Link variant="outlined" to={`/tagging?game_id=${row.id}`} target="_blank" rel="noopener noreferrer">
                           <Button
                             variant="outlined"
                             startIcon={<TagIcon />}
