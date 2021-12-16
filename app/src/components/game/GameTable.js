@@ -31,6 +31,8 @@ import { visuallyHidden } from '@mui/utils';
 // import ReactPlayer from 'react-player';
 import GameService from "../../services/game.service";
 import NBA from '../../assets/NBA.png';
+import CryptoJS from 'crypto-js'
+import { SECRET } from "../../config/settings"
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -379,7 +381,7 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
                         </Button>
                       </TableCell>
                       <TableCell align="center" sx={{ width: 100 }}>
-                        <Link variant="outlined" to={`/tagging?game_id=${row.id}`} target="_blank" rel="noopener noreferrer">
+                        <Link variant="outlined" to={`/tagging/${CryptoJS.AES.encrypt(""+row.id, SECRET).toString()}`} target="_blank" rel="noopener noreferrer">
                           <Button
                             variant="outlined"
                             startIcon={<TagIcon />}
