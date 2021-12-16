@@ -71,6 +71,12 @@ const deletePlayersInTeam = (id) => {
   });
 }
 
+const getGame = (id) => {
+  return axios.get(API_URL+`game/${id}`,{headers: authHeader(), data:{id}}).then((response) => {
+    return response.data;
+  });
+}
+
 const getAllGames = () => {
   return axios.get(API_URL+"game", {headers: authHeader()}).then((response) => {
     return response.data;
@@ -101,6 +107,8 @@ const gameService = {
   addLeague,
   addGame,
   addPlayer,
+
+  getGame,
 
   getAllTeamPlayers,
   getAllTeams,

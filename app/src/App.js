@@ -144,7 +144,7 @@ const App = () => {
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/profile" component={Profile} />
 
-            <PrivateRoute path='/tagging' component={Tagging} />
+            <PrivateRoute path='/tagging/:id' component={Tagging} />
 
             <AdminRoute path='/game' component={Game} />
           </Switch>

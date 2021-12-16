@@ -5,12 +5,12 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 // import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import ReactPlayer from 'react-player';
 
-export default function Tagging() {
+export default function VideoPlayer({url}) {
   return (
     <div>
       <ReactPlayer
-        url='https://d25i0exly9qfnd.cloudfront.net/games/2021/SUMMER 2021 - Friendly Games (Club) - 2021-10-01 - Ironi Naharia vs Team A_211002150439.mp4'
-        // playing={true}
+        url={url}
+        playing={true}
         // controls={true}
         width='100%'
         height='100%'
