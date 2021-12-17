@@ -287,6 +287,7 @@ export default function Tagging() {
               "Cross",
               "Penality",
               "Free Kick",
+              "Corner",
               "Dribble",
               "Foul"
             ].map(title => (
