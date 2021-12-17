@@ -3,12 +3,16 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import Drawer from '@mui/material/Drawer';
+import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
 import CssBaseline from '@mui/material/CssBaseline';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import IconButton from '@mui/material/IconButton';
-
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListSubheader from '@mui/material/ListSubheader';
+import ListItemText from '@mui/material/ListItemText';
 import { useParams } from "react-router-dom";
 import VideoPlayer from './videoplayer';
 import CryptoJS from 'crypto-js'
@@ -36,16 +40,36 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     }),
   }),
 );
-
+const style = {
+  position: 'absolute',
+  top: '45%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '100%',
+  display: 'flex',
+  // boxShadow: 24,
+  justifyContent: 'center',
+  p: 4,
+};
 const TagButton = styled(({ color, ...otherProps }) => <Button {...otherProps} variant="outlined" />)`
   color: ${props => props.color};
   width: 100%
+`;
+const SubBox = styled(Box)`
+  margin: 6px;
+  & nav {
+    padding: 6px;
+    border-radius: 6px;
+  }
 `;
 
 export default function Tagging() {
   const { id } = useParams();
 
   const [url, setUrl] = React.useState("");
+  const [homePlayerList, setHomePlayerList] = React.useState([]);
+  const [awayPlayerList, setAwayPlayerList] = React.useState([]);
+  const [selectedPlayer, setSelectedPlayer] = React.useState({});
 
   React.useEffect(() => {
     const game_id = CryptoJS.AES.decrypt(id, SECRET).toString(CryptoJS.enc.Utf8)
@@ -53,11 +77,20 @@ export default function Tagging() {
     GameService.getGame(game_id).then((res) => {
       console.log("game Data", res);
       setUrl(res.video_url);
-    })
+    });
 
+    GameService.getGameTeamPlayers({ game_id, home: true }).then((res) => {
+      console.log("team players", res)
+      setHomePlayerList(res);
+    })
+    GameService.getGameTeamPlayers({ game_id, home: false }).then((res) => {
+      console.log("team players", res)
+      setAwayPlayerList(res);
+    })
   }, [id])
 
   const [open, setOpen] = React.useState(true);
+  const [modalOpen, setModalOpen] = React.useState(false)
 
   const handleDrawerOpen = () => {
     setOpen(!open);
@@ -65,6 +98,155 @@ export default function Tagging() {
 
   return (
     <Box sx={{ display: 'flex' }}>
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box style={style}>
+          <SubBox>
+            <List
+              sx={{ bgcolor: 'background.paper' }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  List of Players
+                </ListSubheader>
+              }
+            >
+              {
+                homePlayerList.map(player => (
+                  <ListItemButton
+                    selected={selectedPlayer === player}
+                    onClick={() => setSelectedPlayer(player)}
+                  >
+                    <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
+                  </ListItemButton>
+                ))
+              }
+            </List>
+          </SubBox>
+
+          <SubBox>
+            <List
+              sx={{ bgcolor: 'background.paper' }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  Type
+                </ListSubheader>
+              }
+            >
+              {
+                [
+                  "Right",
+                  "Left",
+                  "Header"
+                ].map(player => (
+                  <ListItemButton>
+                    <ListItemText primary={player} />
+                  </ListItemButton>
+                ))
+              }
+            </List>
+          </SubBox>
+          <SubBox>
+            <List
+              sx={{ bgcolor: 'background.paper' }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  On Target
+                </ListSubheader>
+              }
+            >
+              {
+                [
+                  "Yes",
+                  "No"
+                ].map(player => (
+                  <ListItemButton>
+                    <ListItemText primary={player} />
+                  </ListItemButton>
+                ))
+              }
+            </List>
+          </SubBox>
+          <SubBox>
+            <List
+              sx={{ bgcolor: 'background.paper' }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  Goal
+                </ListSubheader>
+              }
+            >
+              {
+                [
+                  "Yes",
+                  "No"
+                ].map(player => (
+                  <ListItemButton>
+                    <ListItemText primary={player} />
+                  </ListItemButton>
+                ))
+              }
+            </List>
+          </SubBox>
+          <SubBox>
+            <List
+              sx={{ bgcolor: 'background.paper' }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  Assist
+                </ListSubheader>
+              }
+            >
+              {
+                homePlayerList.map(player => (
+                  <ListItemButton
+                    selected={selectedPlayer === player}
+                    onClick={() => setSelectedPlayer(player)}
+                  >
+                    <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
+                  </ListItemButton>
+                ))
+              }
+            </List>
+          </SubBox>
+          <SubBox>
+            <List
+              sx={{ bgcolor: 'background.paper' }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  Assist
+                </ListSubheader>
+              }
+            >
+              {
+                awayPlayerList.map(player => (
+                  <ListItemButton
+                    // selected={selectedPlayer === player}
+                    // onClick={() => setSelectedPlayer(player)}
+                  >
+                    <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
+                  </ListItemButton>
+                ))
+              }
+            </List>
+          </SubBox>
+        </Box>
+      </Modal>
       <CssBaseline />
       <Drawer
         sx={{
@@ -90,7 +272,7 @@ export default function Tagging() {
               aria-label="open drawer"
               onClick={handleDrawerOpen}
               edge="start"
-              sx={{ height: 50, width: 50, position: 'fixed', zIndex: 999999, top: '45%', }}
+              sx={{ height: 50, width: 50, position: 'fixed', zIndex: 1300, top: '45%', }}
             >
               {open ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
             </IconButton>
@@ -98,8 +280,8 @@ export default function Tagging() {
         </div>
         <Box sx={{ flexGrow: 1 }}>
           <VideoPlayer url={url} />
-          <Grid container spacing={2} sx={{textAlign:'center', mt: 1}}>
-            <Grid item xs={6} md={3}>
+          <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1 }}>
+            <Grid item xs={6} md={3} onClick={() => setModalOpen(true)}>
               <TagButton>Shot</TagButton>
             </Grid>
             <Grid item xs={6} md={3}>

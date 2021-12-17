@@ -21,6 +21,11 @@ module.exports = app => {
 		controller.findAll
 	);
 
+	app.post(
+		"/team_player/playersbygameteam", 
+		controller.getPlayersByGameTeam
+	);
+
 	app.get(
 		"/team_player/:id",
 		controller.findOne

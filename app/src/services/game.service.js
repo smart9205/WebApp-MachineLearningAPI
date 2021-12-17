@@ -9,6 +9,13 @@ const getAllTeamPlayers = (req) => {
     return response.data;
   });
 }
+
+const getGameTeamPlayers = (req) => {
+  return axios.post(API_URL+"team_player/playersbygameteam", req, {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+
 const addTeamPlayer = (req) => {
   return axios.post(API_URL+"team_player/create", req, {headers: authHeader()}).then((response) => {
     return response.data;
@@ -107,9 +114,10 @@ const gameService = {
   addLeague,
   addGame,
   addPlayer,
-
+  
   getGame,
-
+  
+  getGameTeamPlayers,
   getAllTeamPlayers,
   getAllTeams,
   getAllLeagues,
