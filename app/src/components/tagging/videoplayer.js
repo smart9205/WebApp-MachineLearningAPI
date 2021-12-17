@@ -1,9 +1,15 @@
 import * as React from 'react';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import ReactPlayer from 'react-player';
+
+const ControlButton = styled(({ color, ...otherProps }) => <Button {...otherProps} variant="outlined" />)`
+  color: ${props => props.color};
+  margin: 6px
+`;
 
 export default function VideoPlayer({ url }) {
   const [play, setPlay] = React.useState(false)
@@ -14,7 +20,7 @@ export default function VideoPlayer({ url }) {
   } 
 
   return (
-    <div width='100%' height='100%'>
+    <div>
       <ReactPlayer
         url={url}
         ref={player}
@@ -25,38 +31,38 @@ export default function VideoPlayer({ url }) {
       />
       <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
         {play ?
-          <Button variant="outlined" sx={{width:100}} startIcon={<PauseCircleOutlineIcon />} onClick={() => setPlay(false)}>
+          <ControlButton style={{width:100}} startIcon={<PauseCircleOutlineIcon />} onClick={() => setPlay(false)}>
             Pause
-          </Button>
+          </ControlButton>
           :
-          <Button variant="outlined" sx={{width:100}} startIcon={<PlayCircleOutlineIcon />} onClick={() => setPlay(true)}>
+          <ControlButton style={{width:100}} startIcon={<PlayCircleOutlineIcon />} onClick={() => setPlay(true)}>
             Play
-          </Button>
+          </ControlButton>
         }
-        <Button variant="outlined" onClick={() => seekTo(-10)}>
+        <ControlButton onClick={() => seekTo(-10)}>
           -10s
-        </Button>
-        <Button variant="outlined" onClick={() => seekTo(-5)}>
+        </ControlButton>
+        <ControlButton onClick={() => seekTo(-5)}>
           -5s
-        </Button>
-        <Button variant="outlined" onClick={() => seekTo(-3)}>
+        </ControlButton>
+        <ControlButton onClick={() => seekTo(-3)}>
           -3s
-        </Button>
-        <Button variant="outlined" onClick={() => seekTo(-1)}>
+        </ControlButton>
+        <ControlButton onClick={() => seekTo(-1)}>
           -1s
-        </Button>
-        <Button variant="outlined" onClick={() => seekTo(1)}>
+        </ControlButton>
+        <ControlButton onClick={() => seekTo(1)}>
           +1s
-        </Button>
-        <Button variant="outlined" onClick={() => seekTo(3)}>
+        </ControlButton>
+        <ControlButton onClick={() => seekTo(3)}>
           +3s
-        </Button>
-        <Button variant="outlined" onClick={() => seekTo(5)}>
+        </ControlButton>
+        <ControlButton onClick={() => seekTo(5)}>
           +5s
-        </Button>
-        <Button variant="outlined" onClick={() => seekTo(10)}>
+        </ControlButton>
+        <ControlButton onClick={() => seekTo(10)}>
           +10s
-        </Button>
+        </ControlButton>
       </Box>
     </div>
   );

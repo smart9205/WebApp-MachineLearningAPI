@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import Drawer from '@mui/material/Drawer';
+import Grid from '@mui/material/Grid';
 import CssBaseline from '@mui/material/CssBaseline';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -12,6 +14,8 @@ import VideoPlayer from './videoplayer';
 import CryptoJS from 'crypto-js'
 import { SECRET } from "../../config/settings"
 import GameService from '../../services/game.service';
+import TagTable from "./tagTable"
+import { Button } from '@mui/material';
 const drawerWidth = "30%";
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -32,6 +36,11 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     }),
   }),
 );
+
+const TagButton = styled(({ color, ...otherProps }) => <Button {...otherProps} variant="outlined" />)`
+  color: ${props => props.color};
+  width: 100%
+`;
 
 export default function Tagging() {
   const { id } = useParams();
@@ -70,25 +79,51 @@ export default function Tagging() {
         anchor="left"
         open={open}
       >
-        Hello there!
-        here is drawer
+        <TagTable title="Team Tags" />
+        <TagTable title="Individual Tags" />
       </Drawer>
       <Main open={open}>
-        <div style={{width:50}}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{height: 50, width: 50, position: 'fixed', zIndex: 999999, top: '45%', border: 2, }}
-          >
-            {open ? <KeyboardArrowLeftIcon/> : <KeyboardArrowRightIcon/>}
-          </IconButton>
+        <div style={{ width: 50 }}>
+          <Tooltip title={`${open ? "Close" : "Open"} Tags`}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ height: 50, width: 50, position: 'fixed', zIndex: 999999, top: '45%', }}
+            >
+              {open ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
+            </IconButton>
+          </Tooltip>
         </div>
         <Box sx={{ flexGrow: 1 }}>
           <VideoPlayer url={url} />
-          <div>
-          </div>
+          <Grid container spacing={2} sx={{textAlign:'center', mt: 1}}>
+            <Grid item xs={6} md={3}>
+              <TagButton>Shot</TagButton>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <TagButton>Pass</TagButton>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <TagButton>Cross</TagButton>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <TagButton>Penalty</TagButton>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <TagButton>Corner</TagButton>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <TagButton>Free Kick</TagButton>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <TagButton>Dribble</TagButton>
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <TagButton>Foul</TagButton>
+            </Grid>
+          </Grid>
         </Box>
       </Main>
     </Box>
