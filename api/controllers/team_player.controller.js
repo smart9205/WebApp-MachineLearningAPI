@@ -1,14 +1,13 @@
 const db = require("../models");
 const Team_Player = db.team_player;
 const Player = db.player;
+const Game = db.game;
 const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
 
 exports.create =  async (req, res) => {
 
   console.log("TeamPlayer ", req.body)
-
-  
 
   const checkTeamPlayer = await Team_Player.findOne({ where: {
     season_id: req.body.season_id,
@@ -32,7 +31,32 @@ exports.create =  async (req, res) => {
       });
     });
 };
+exports.getPlayersByGameTeam = async (req, res) => {
+  console.log("getPlayersByGameTeam",req.body);
+  const game = await Game.findByPk(req.body.game_id);
+  // if(req.body.home) 
+  if(!game) return res.status(500).send({message: "Game not found!"});
 
+  Sequelize.query(`
+  SELECT * 
+    FROM public."Players" 
+    JOIN 
+      public."Team_Players" on public."Players".id = public."Team_Players".player_id
+  WHERE
+    season_id = ${game.season_id} and 
+    league_id = ${game.league_id} and 
+    team_id = ${req.body.home ? game.home_team_id : game.away_team_id} 
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving seasons."
+      });
+    });
+}
 exports.findAll = (req, res) => {
   console.log("req team_player",req.body);
   Sequelize.query(`
