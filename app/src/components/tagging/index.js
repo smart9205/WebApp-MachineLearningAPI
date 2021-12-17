@@ -281,30 +281,19 @@ export default function Tagging() {
         <Box sx={{ flexGrow: 1 }}>
           <VideoPlayer url={url} />
           <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1 }}>
-            <Grid item xs={6} md={3} onClick={() => setModalOpen(true)}>
-              <TagButton>Shot</TagButton>
-            </Grid>
-            <Grid item xs={6} md={3} onClick={() => setModalOpen(true)}>
-              <TagButton>Pass</TagButton>
-            </Grid>
-            <Grid item xs={6} md={3} onClick={() => setModalOpen(true)}>
-              <TagButton>Cross</TagButton>
-            </Grid>
-            <Grid item xs={6} md={3} onClick={() => setModalOpen(true)}>
-              <TagButton>Penalty</TagButton>
-            </Grid>
-            <Grid item xs={6} md={3} onClick={() => setModalOpen(true)}>
-              <TagButton>Corner</TagButton>
-            </Grid>
-            <Grid item xs={6} md={3} onClick={() => setModalOpen(true)}>
-              <TagButton>Free Kick</TagButton>
-            </Grid>
-            <Grid item xs={6} md={3} onClick={() => setModalOpen(true)}>
-              <TagButton>Dribble</TagButton>
-            </Grid>
-            <Grid item xs={6} md={3} onClick={() => setModalOpen(true)}>
-              <TagButton>Foul</TagButton>
-            </Grid>
+            {[
+              "Shot",
+              "Pass",
+              "Cross",
+              "Penality",
+              "Free Kick",
+              "Dribble",
+              "Foul"
+            ].map(title => (
+              <Grid item xs={6} md={3} onClick={() => setModalOpen(true)}>
+                <TagButton>{title}</TagButton>
+              </Grid>
+            ))}
           </Grid>
         </Box>
       </Main>
