@@ -16,7 +16,9 @@ module.exports = (sequelize, DataTypes) => {
   Team_Tag.init({
     game_id: DataTypes.INTEGER,
     offensive_team_id: DataTypes.INTEGER,
-    defensive_team_id: DataTypes.INTEGER
+    defensive_team_id: DataTypes.INTEGER,
+    start_time: DataTypes.STRING,
+    end_time: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Team_Tag',
