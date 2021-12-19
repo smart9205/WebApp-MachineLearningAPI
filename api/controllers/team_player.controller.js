@@ -39,26 +39,32 @@ exports.getPlayersByGameTeam = async (req, res) => {
   }catch(e) {
     return res.status(500).send({message: "Game not found!"});
   }
-
-  Sequelize.query(`
-  SELECT * 
-    FROM public."Players" 
-    JOIN 
-      public."Team_Players" on public."Players".id = public."Team_Players".player_id
-  WHERE
-    season_id = ${game.season_id} and 
-    league_id = ${game.league_id} and 
-    team_id = ${req.body.home ? game.home_team_id : game.away_team_id} 
-  `)
-    .then(data => {
-      res.send(data[0]);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving seasons."
-      });
-    });
+  let home_team, away_team;
+  try {
+    home_team = await Sequelize.query(`
+      SELECT * 
+        FROM public."Players" 
+        JOIN 
+          public."Team_Players" on public."Players".id = public."Team_Players".player_id
+      WHERE
+        season_id = ${game.season_id} and 
+        league_id = ${game.league_id} and 
+        team_id = ${game.home_team_id} 
+    `);
+      
+    away_team = await Sequelize.query(`
+      SELECT * 
+        FROM public."Players" 
+        JOIN 
+          public."Team_Players" on public."Players".id = public."Team_Players".player_id
+      WHERE
+        season_id = ${game.season_id} and 
+        league_id = ${game.league_id} and 
+        team_id = ${game.away_team_id} 
+    `);
+  }catch(e) {
+  } 
+  res.send({home_team: home_team[0], away_team:away_team[0]});
 }
 exports.findAll = (req, res) => {
   console.log("req team_player",req.body);

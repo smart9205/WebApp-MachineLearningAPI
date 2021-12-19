@@ -14,11 +14,22 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListSubheader from '@mui/material/ListSubheader';
 import ListItemText from '@mui/material/ListItemText';
 import { useParams } from "react-router-dom";
-import VideoPlayer from './videoplayer';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+import ReactPlayer from 'react-player';
 import GameService from '../../services/game.service';
 import TagTable from "./tagTable"
-import { Button } from '@mui/material';
+import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+
 const drawerWidth = "30%";
+
+const ControlButton = styled(({ color, ...otherProps }) => <Button {...otherProps} variant="outlined" />)`
+  color: ${props => props.color};
+  margin: 6px
+`;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -63,27 +74,42 @@ const SubBox = styled(Box)`
 
 export default function Tagging() {
   const { id } = useParams();
+  const player = React.useRef(null);
 
-  const [url, setUrl] = React.useState("");
-  const [homePlayerList, setHomePlayerList] = React.useState([]);
-  const [awayPlayerList, setAwayPlayerList] = React.useState([]);
-  const [selectedPlayer, setSelectedPlayer] = React.useState({});
+  const seekTo = (sec) => {
+    player.current.seekTo(player.current.getCurrentTime() + sec)
+  }
+
+  const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
+    url: "",
+    offense: "home",
+    first_second: "first",
+    homeTeam: [],
+    awayTeam: [],
+  })
+  const [modalState, setModalState] = React.useReducer((old, action) => ({ ...old, ...action }), {
+    offensePlayer: {},
+    type: "Right",
+    onTarget: "Yes",
+    goal: "Yes",
+    assistPlayer: {},
+    saved: {}
+  })
+  const [videoState, setVideoState] = React.useReducer((old, action) => ({ ...old, ...action }), {
+    play: false
+  })
 
   React.useEffect(() => {
     const game_id = atob(id).slice(3, 5)
     console.log("Game id", game_id)
     GameService.getGame(game_id).then((res) => {
       console.log("game Data", res);
-      setUrl(res.video_url);
+      setState({ url: res.video_url });
     });
 
-    GameService.getGameTeamPlayers({ game_id, home: true }).then((res) => {
+    GameService.getGameTeamPlayers({ game_id }).then((res) => {
       console.log("team players", res)
-      setHomePlayerList(res);
-    })
-    GameService.getGameTeamPlayers({ game_id, home: false }).then((res) => {
-      console.log("team players", res)
-      setAwayPlayerList(res);
+      setState({ homeTeam: res.home_team, awayTeam: res.away_team })
     })
   }, [id])
 
@@ -93,6 +119,9 @@ export default function Tagging() {
   const handleDrawerOpen = () => {
     setOpen(!open);
   };
+
+  const offenseTeam = () => state.offense === "home" ? state.homeTeam : state.awayTeam
+  const defenseTeam = () => state.offense === "home" ? state.awayTeam : state.homeTeam
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -115,10 +144,10 @@ export default function Tagging() {
               }
             >
               {
-                homePlayerList.map(player => (
-                  <ListItemButton
-                    selected={selectedPlayer === player}
-                    onClick={() => setSelectedPlayer(player)}
+                offenseTeam().map((player, i) => (
+                  <ListItemButton key={i}
+                    selected={modalState.offensePlayer === player}
+                    onClick={() => setModalState({ offensePlayer: player })}
                   >
                     <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
                   </ListItemButton>
@@ -139,13 +168,12 @@ export default function Tagging() {
               }
             >
               {
-                [
-                  "Right",
-                  "Left",
-                  "Header"
-                ].map(player => (
-                  <ListItemButton>
-                    <ListItemText primary={player} />
+                ["Right", "Left", "Header"].map((type, i) => (
+                  <ListItemButton key={i}
+                    selected={modalState.type === type}
+                    onClick={() => setModalState({ type })}
+                  >
+                    <ListItemText primary={type} />
                   </ListItemButton>
                 ))
               }
@@ -163,63 +191,68 @@ export default function Tagging() {
               }
             >
               {
-                [
-                  "Yes",
-                  "No"
-                ].map(player => (
-                  <ListItemButton>
-                    <ListItemText primary={player} />
-                  </ListItemButton>
-                ))
-              }
-            </List>
-          </SubBox>
-          <SubBox>
-            <List
-              sx={{ bgcolor: 'background.paper' }}
-              component="nav"
-              aria-labelledby="nested-list-subheader"
-              subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                  Goal
-                </ListSubheader>
-              }
-            >
-              {
-                [
-                  "Yes",
-                  "No"
-                ].map(player => (
-                  <ListItemButton>
-                    <ListItemText primary={player} />
-                  </ListItemButton>
-                ))
-              }
-            </List>
-          </SubBox>
-          <SubBox>
-            <List
-              sx={{ bgcolor: 'background.paper' }}
-              component="nav"
-              aria-labelledby="nested-list-subheader"
-              subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                  Assist
-                </ListSubheader>
-              }
-            >
-              {
-                homePlayerList.map(player => (
-                  <ListItemButton
-                    selected={selectedPlayer === player}
-                    onClick={() => setSelectedPlayer(player)}
+                ["Yes", "No"].map((target, i) => (
+                  <ListItemButton key={i}
+                    selected={modalState.onTarget === target}
+                    onClick={() => setModalState({ onTarget: target })}
                   >
-                    <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
+                    <ListItemText primary={target} />
                   </ListItemButton>
                 ))
               }
             </List>
           </SubBox>
+          {
+            modalState.onTarget === "Yes" &&
+            <SubBox>
+              <List
+                sx={{ bgcolor: 'background.paper' }}
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+                subheader={
+                  <ListSubheader component="div" id="nested-list-subheader">
+                    Goal
+                  </ListSubheader>
+                }
+              >
+                {
+                  ["Yes", "No"].map((goal, i) => (
+                    <ListItemButton key={i}
+                      selected={modalState.goal === goal}
+                      onClick={() => setModalState({ goal })}
+                    >
+                      <ListItemText primary={goal} />
+                    </ListItemButton>
+                  ))
+                }
+              </List>
+            </SubBox>
+          }
+          {
+            modalState.onTarget === "Yes" && modalState.goal === "Yes" &&
+            <SubBox>
+              <List
+                sx={{ bgcolor: 'background.paper' }}
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+                subheader={
+                  <ListSubheader component="div" id="nested-list-subheader">
+                    Assist
+                  </ListSubheader>
+                }
+              >
+                {
+                  offenseTeam().map((player, i) => (
+                    <ListItemButton key={i} selected={modalState.assistPlayer === player}
+                      onClick={() => setModalState({ assistPlayer: player })}
+                    >
+                      <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
+                    </ListItemButton>
+                  ))
+                }
+              </List>
+            </SubBox>
+          }
           <SubBox>
             <List
               sx={{ bgcolor: 'background.paper' }}
@@ -227,15 +260,15 @@ export default function Tagging() {
               aria-labelledby="nested-list-subheader"
               subheader={
                 <ListSubheader component="div" id="nested-list-subheader">
-                  Assist
+                  Saved
                 </ListSubheader>
               }
             >
               {
-                awayPlayerList.map(player => (
-                  <ListItemButton
-                    // selected={selectedPlayer === player}
-                    // onClick={() => setSelectedPlayer(player)}
+                defenseTeam().map((player, i) => (
+                  <ListItemButton key={i}
+                    selected={modalState.saved === player}
+                    onClick={() => setModalState({ saved: player })}
                   >
                     <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
                   </ListItemButton>
@@ -276,24 +309,98 @@ export default function Tagging() {
             </IconButton>
           </Tooltip>
         </div>
-        <Box sx={{ flexGrow: 1 }}>
-          <VideoPlayer url={url} />
-          <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1 }}>
-            {[
-              "Shot",
-              "Pass",
-              "Cross",
-              "Penality",
-              "Free Kick",
-              "Corner",
-              "Dribble",
-              "Foul"
-            ].map(title => (
-              <Grid item xs={6} md={3} onClick={() => setModalOpen(true)}>
-                <TagButton>{title}</TagButton>
-              </Grid>
-            ))}
-          </Grid>
+        <Box>
+          <div>
+            <div style={{ maxWidth: 1300, margin: 'auto' }}>
+              <ReactPlayer
+                url={state.url}
+                ref={player}
+                playing={videoState.play}
+                // controls={true}
+                width='100%'
+                height='100%'
+              />
+            </div>
+            <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
+              {videoState.play ?
+                <ControlButton style={{ width: 100 }} startIcon={<PauseCircleOutlineIcon />} onClick={() => setVideoState({play: false})}>
+                  Pause
+                </ControlButton>
+                :
+                <ControlButton style={{ width: 100 }} startIcon={<PlayCircleOutlineIcon />} onClick={() => setVideoState({play: true})}>
+                  Play
+                </ControlButton>
+              }
+              <ControlButton onClick={() => seekTo(-10)}>
+                -10s
+              </ControlButton>
+              <ControlButton onClick={() => seekTo(-5)}>
+                -5s
+              </ControlButton>
+              <ControlButton onClick={() => seekTo(-3)}>
+                -3s
+              </ControlButton>
+              <ControlButton onClick={() => seekTo(-1)}>
+                -1s
+              </ControlButton>
+              <ControlButton onClick={() => seekTo(1)}>
+                +1s
+              </ControlButton>
+              <ControlButton onClick={() => seekTo(3)}>
+                +3s
+              </ControlButton>
+              <ControlButton onClick={() => seekTo(5)}>
+                +5s
+              </ControlButton>
+              <ControlButton onClick={() => seekTo(10)}>
+                +10s
+              </ControlButton>
+            </Box>
+          </div>
+          <div style={{ display: 'flex' }}>
+            <FormControl component="fieldset" style={{ minWidth: "300px" }}>
+              {/* <FormLabel component="legend">Offense Team</FormLabel> */}
+              <RadioGroup
+                row
+                aria-label="offenseTeam"
+                name="row-radio-buttons-group"
+                value={state.offense}
+                sx={{ my: 0, mx: "auto" }}
+                onChange={e => setState({ offense: e.target.value })}
+              >
+                <FormControlLabel value="home" control={<Radio />} label="Home Team" />
+                <FormControlLabel value="away" control={<Radio />} label="Away Team" />
+              </RadioGroup>
+              <Button variant="outlined" sx={{ mx: "auto" }}>C.P.</Button>
+              <RadioGroup
+                row
+                aria-label="firstsecond"
+                name="row-radio-buttons-group"
+                value={state.first_second}
+                sx={{ my: 0, mx: "auto" }}
+                onChange={e => setState({ first_second: e.target.value })}
+              >
+                <FormControlLabel value="first" control={<Radio />} label="1st half" />
+                <FormControlLabel value="second" control={<Radio />} label="2nd half" />
+              </RadioGroup>
+            </FormControl>
+            <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1 }}>
+              {[
+                "Shot",
+                "Pass",
+                "Cross",
+                "Penality",
+                "Free Kick",
+                "Corner",
+                "Dribble",
+                "Foul"
+              ].map((title, i) => (
+                <Grid key={i} item xs={6} md={3} onClick={() => {setModalOpen(true);setVideoState({play: false})}}>
+                  <TagButton>{title}</TagButton>
+                </Grid>
+              ))}
+            </Grid>
+          </div>
         </Box>
       </Main>
     </Box>
