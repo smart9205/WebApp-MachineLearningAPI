@@ -23,6 +23,7 @@ import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
+import "./player.css";
 
 const drawerWidth = "30%";
 
@@ -100,7 +101,7 @@ export default function Tagging() {
   })
 
   React.useEffect(() => {
-    const game_id = atob(id).slice(3, 5)
+    const game_id = atob(id).slice(3, -3)
     console.log("Game id", game_id)
     GameService.getGame(game_id).then((res) => {
       console.log("game Data", res);
@@ -311,8 +312,9 @@ export default function Tagging() {
         </div>
         <Box>
           <div>
-            <div style={{ maxWidth: 1300, margin: 'auto' }}>
+            <div className="video-wrapper">
               <ReactPlayer
+                className="react-player"
                 url={state.url}
                 ref={player}
                 playing={videoState.play}

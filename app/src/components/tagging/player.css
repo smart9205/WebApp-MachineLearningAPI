@@ -1,0 +1,15 @@
+.player-wrapper {
+    max-width: 1300px;
+    margin: auto;
+    width: auto;
+    height: auto;
+  }
+  .react-player {
+    padding-top: 56.25%; 
+    position: relative; 
+  }
+  
+  .react-player > div {
+    top:0;
+    position: absolute; 
+  }
