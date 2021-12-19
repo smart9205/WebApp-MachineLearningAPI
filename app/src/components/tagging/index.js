@@ -22,23 +22,25 @@ import TagTable from "./tagTable"
 import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import "./Player.css";
 
 const drawerWidth = "30%";
 
 const PLAYBACK_RATE = [
-  {rate: 0.25, label: "x 1/4"}, 
-  {rate: 0.5, label: "x 1/2"},
-  {rate: 1, label: "x 1"},
-  {rate: 2, label: "x 2"},
-  {rate: 4, label: "x 4"},
-  {rate: 8, label: "x 8"}
+  { rate: 0.3, label: "x 0.3" },
+  { rate: 0.5, label: "x 0.5" },
+  { rate: 1, label: "x 1" },
+  { rate: 1.5, label: "x 1.5" },
+  { rate: 2, label: "x 2" },
+  { rate: 2.5, label: "x 2.5" },
+  { rate: 3, label: "x 3" }
 ];
 
 const ControlButton = styled(({ color, ...otherProps }) => <Button {...otherProps} variant="outlined" />)`
   color: ${props => props.color};
-  margin: 6px
+  margin: 4px;
+  text-transform: none
 `;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -80,7 +82,7 @@ const SubBox = styled(Box)`
     padding: 6px;
     border-radius: 6px;
   }
-`;
+  `;
 
 export default function Tagging() {
   const { id } = useParams();
@@ -89,8 +91,9 @@ export default function Tagging() {
   const seekTo = (sec) => {
     player.current.seekTo(player.current.getCurrentTime() + sec)
   }
-
+  const [count, setCount] = React.useState(0);
   const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
+    game_id: 0,
     url: "",
     offense: "home",
     first_second: "first",
@@ -112,21 +115,28 @@ export default function Tagging() {
     playbackRate: 3
   })
 
+  const offenseTeam = () => state.offense === "home" ? state.homeTeam : state.awayTeam
+  const defenseTeam = () => state.offense === "home" ? state.awayTeam : state.homeTeam
+
   React.useEffect(() => {
     const game_id = atob(id).slice(3, -3)
-    console.log("Game id", game_id)
+    setState({game_id});
     GameService.getGame(game_id).then((res) => {
       console.log("game Data", res);
-      setState({ url: res.video_url });
-      setState({ homeTeamName: res.home_team_name });
-      setState({ awayTeamName: res.away_team_name });
+      setState({
+        game_id,
+        url: res.video_url, 
+        homeTeamName: res.home_team_name, 
+        awayTeamName: res.away_team_name 
+      });
     });
 
     GameService.getGameTeamPlayers({ game_id }).then((res) => {
       console.log("team players", res)
       setState({ homeTeam: res.home_team, awayTeam: res.away_team })
     })
-  }, [id])
+  }, [id, count])
+
 
   const [open, setOpen] = React.useState(true);
   const [modalOpen, setModalOpen] = React.useState(false)
@@ -135,16 +145,14 @@ export default function Tagging() {
     setOpen(!open);
   };
 
-  const offenseTeam = () => state.offense === "home" ? state.homeTeam : state.awayTeam
-  const defenseTeam = () => state.offense === "home" ? state.awayTeam : state.homeTeam
-
   const changePlayRate = (flag) => {
     let newRate = flag ? (videoState.playbackRate + 1) : (videoState.playbackRate - 1);
-    if(newRate < 0) newRate = 0;
-    if(newRate > PLAYBACK_RATE.length-1) newRate = PLAYBACK_RATE.length-1;
-    setVideoState({playbackRate: newRate, play:true}) 
+    if (newRate < 0) newRate = 0;
+    if (newRate > PLAYBACK_RATE.length - 1) newRate = PLAYBACK_RATE.length - 1;
+    setVideoState({ playbackRate: newRate, play: true })
     console.log("rate", PLAYBACK_RATE[newRate])
   }
+
   return (
     <Box sx={{ display: 'flex' }}>
       <Modal
@@ -333,31 +341,32 @@ export default function Tagging() {
         </div>
         <Box>
           <div>
-            <div style={{ maxWidth: 1300, margin: 'auto' }} >
+            <div style={{ maxWidth: 1200, margin: 'auto' }} >
               <div className="player-wrapper">
                 <ReactPlayer
                   className="react-player"
                   url={state.url}
                   ref={player}
+                  onPlay={() => setVideoState({play: true})}
+                  onPause={() => setVideoState({play: false})}
                   playing={videoState.play}
                   playbackRate={PLAYBACK_RATE[videoState.playbackRate].rate}
-                  // controls={true}
+                  controls={true}
                   width='100%'
                   height='100%'
                 />
               </div>
             </div>
             <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
+              {[-10, -5, -3, -1].map(t =>
+                <ControlButton key={t} onClick={() => seekTo(t)}>
+                  {t}s
+                </ControlButton>
+              )}
+
               <ControlButton onClick={() => changePlayRate(false)}>
                 slow
               </ControlButton>
-              <label style={{width:"40px"}}>
-                {PLAYBACK_RATE[videoState.playbackRate].label}
-              </label>
-              <ControlButton onClick={() => changePlayRate(true)}>
-                fast
-              </ControlButton>
-
               {videoState.play ?
                 <ControlButton style={{ width: 100 }} startIcon={<PauseCircleOutlineIcon />} onClick={() => setVideoState({ play: false })}>
                   Pause
@@ -367,50 +376,41 @@ export default function Tagging() {
                   Play
                 </ControlButton>
               }
+              <label style={{ width: "40px" }}>
+                {PLAYBACK_RATE[videoState.playbackRate].label}
+              </label>
+              <ControlButton onClick={() => changePlayRate(true)}>
+                fast
+              </ControlButton>
 
-              {[-10,-5,-3,-1,1,3,5,10].map(t => 
+              {[1, 3, 5, 10].map(t =>
                 <ControlButton key={t} onClick={() => seekTo(t)}>
-                {t}s
+                  {t}s
                 </ControlButton>
               )}
-
-              <ControlButton>
-                clip length before
-              </ControlButton>
-              <ControlButton>
-                clip length after
-              </ControlButton>
+              
             </Box>
           </div>
           <div style={{ display: 'flex' }}>
-            <FormControl component="fieldset" style={{ minWidth: "330px" }}>
-              {/* <FormLabel component="legend">Offense Team</FormLabel> */}
-              <RadioGroup
-                row
-                aria-label="offenseTeam"
-                name="row-radio-buttons-group"
-                value={state.offense}
-                sx={{ my: 0, mx: "auto" }}
-                onChange={e => setState({ offense: e.target.value })}
-              >
-                <FormControlLabel value="home" control={<Radio />} label={state.homeTeamName} />
-                <FormControlLabel value="away" control={<Radio />} label={state.awayTeamName} />
-              </RadioGroup>
-              <Button variant="outlined" sx={{ mx: "auto" }}>C.P.</Button>
-              <RadioGroup
-                row
-                aria-label="firstsecond"
-                name="row-radio-buttons-group"
-                value={state.first_second}
-                sx={{ my: 0, mx: "auto" }}
-                onChange={e => setState({ first_second: e.target.value })}
-              >
-                <FormControlLabel value="first" control={<Radio />} label="1st half" />
-                <FormControlLabel value="second" control={<Radio />} label="2nd half" />
-                <FormControlLabel value="overtime" control={<Radio />} label="Overtime" />
-              </RadioGroup>
-            </FormControl>
-            <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1 }}>
+            <Box sx={{mx:2, textAlign:'center'}}>
+              <IconButton sx={{my:1}} onClick={() => setCount(count + 1)}><RefreshIcon/></IconButton>
+              <ControlButton fullWidth>
+                sec. before
+              </ControlButton>
+              <ControlButton fullWidth>
+                sec. after
+              </ControlButton>
+            </Box>
+            <Box sx={{textAlign:"center", mt:2}}>
+              <ControlButton fullWidth>
+                {state.homeTeamName}
+              </ControlButton>
+              <ControlButton fullWidth>
+                {state.awayTeamName} 
+              </ControlButton>
+              <ControlButton sx={{ mx: "auto", mt: 2 }}>C.P.</ControlButton>
+            </Box>
+            <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1, mx:2 }}>
               {[
                 "Shot",
                 "Pass",
@@ -421,11 +421,23 @@ export default function Tagging() {
                 "Dribble",
                 "Foul"
               ].map((title, i) => (
-                <Grid key={i} item xs={6} md={3} onClick={() => { setModalOpen(true); setVideoState({ play: false }) }}>
+                <Grid key={i} item xs={6} md={4} onClick={() => { setModalOpen(true); setVideoState({ play: false }) }}>
                   <TagButton>{title}</TagButton>
                 </Grid>
               ))}
             </Grid>
+
+            <RadioGroup
+              sx={{ my: 0, mx: 2 }}
+              aria-label="firstsecond"
+              name="row-radio-buttons-group"
+              value={state.first_second}
+              onChange={e => setState({ first_second: e.target.value })}
+            >
+              <FormControlLabel value="first" control={<Radio />} label="1st half" />
+              <FormControlLabel value="second" control={<Radio />} label="2nd half" />
+              <FormControlLabel value="overtime" control={<Radio />} label="Overtime" />
+            </RadioGroup>
           </div>
         </Box>
       </Main>
