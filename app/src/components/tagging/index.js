@@ -100,7 +100,7 @@ export default function Tagging() {
   })
 
   React.useEffect(() => {
-    const game_id = atob(id).slice(3, 5)
+    const game_id = atob(id).slice(3, -3)
     console.log("Game id", game_id)
     GameService.getGame(game_id).then((res) => {
       console.log("game Data", res);
