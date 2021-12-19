@@ -76,15 +76,30 @@ exports.findOne = (req, res) => {
 
   console.log("find game one", id)
 
-  Game.findByPk(id)
+  Sequelize.query(`
+    SELECT 
+      public."Games".*,
+      public."Seasons".name as season_name,
+      public."Leagues".name as league_name,
+      HomeTeam.name as home_team_name,
+      AwayTeam.name as away_team_name
+    FROM public."Games" 
+    JOIN public."Seasons" on public."Games".season_id = public."Seasons".id
+    JOIN public."Leagues" on public."Games".league_id = public."Leagues".id
+    JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id
+    JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
+    where public."Games".id = ${id}
+  `)
     .then(data => {
-      res.send(data);
+      res.send(data[0][0]);
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Game with id=" + id
+        message:
+          err.message || "Some error occurred while retrieving games."
       });
     });
+
 };
 
 exports.update = (req, res) => {

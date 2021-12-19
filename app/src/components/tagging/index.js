@@ -23,8 +23,18 @@ import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
+import "./Player.css";
 
 const drawerWidth = "30%";
+
+const PLAYBACK_RATE = [
+  {rate: 0.25, label: "x 1/4"}, 
+  {rate: 0.5, label: "x 1/2"},
+  {rate: 1, label: "x 1"},
+  {rate: 2, label: "x 2"},
+  {rate: 4, label: "x 4"},
+  {rate: 8, label: "x 8"}
+];
 
 const ControlButton = styled(({ color, ...otherProps }) => <Button {...otherProps} variant="outlined" />)`
   color: ${props => props.color};
@@ -34,7 +44,7 @@ const ControlButton = styled(({ color, ...otherProps }) => <Button {...otherProp
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
-    display: 'flex',
+    display: 'block',
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -84,6 +94,8 @@ export default function Tagging() {
     url: "",
     offense: "home",
     first_second: "first",
+    homeTeamName: "",
+    awayTeamName: "",
     homeTeam: [],
     awayTeam: [],
   })
@@ -96,7 +108,8 @@ export default function Tagging() {
     saved: {}
   })
   const [videoState, setVideoState] = React.useReducer((old, action) => ({ ...old, ...action }), {
-    play: false
+    play: false,
+    playbackRate: 3
   })
 
   React.useEffect(() => {
@@ -105,6 +118,8 @@ export default function Tagging() {
     GameService.getGame(game_id).then((res) => {
       console.log("game Data", res);
       setState({ url: res.video_url });
+      setState({ homeTeamName: res.home_team_name });
+      setState({ awayTeamName: res.away_team_name });
     });
 
     GameService.getGameTeamPlayers({ game_id }).then((res) => {
@@ -123,6 +138,13 @@ export default function Tagging() {
   const offenseTeam = () => state.offense === "home" ? state.homeTeam : state.awayTeam
   const defenseTeam = () => state.offense === "home" ? state.awayTeam : state.homeTeam
 
+  const changePlayRate = (flag) => {
+    let newRate = flag ? (videoState.playbackRate + 1) : (videoState.playbackRate - 1);
+    if(newRate < 0) newRate = 0;
+    if(newRate > PLAYBACK_RATE.length-1) newRate = PLAYBACK_RATE.length-1;
+    setVideoState({playbackRate: newRate, play:true}) 
+    console.log("rate", PLAYBACK_RATE[newRate])
+  }
   return (
     <Box sx={{ display: 'flex' }}>
       <Modal
@@ -311,54 +333,57 @@ export default function Tagging() {
         </div>
         <Box>
           <div>
-            <div style={{ maxWidth: 1300, margin: 'auto' }}>
-              <ReactPlayer
-                url={state.url}
-                ref={player}
-                playing={videoState.play}
-                // controls={true}
-                width='100%'
-                height='100%'
-              />
+            <div style={{ maxWidth: 1300, margin: 'auto' }} >
+              <div className="player-wrapper">
+                <ReactPlayer
+                  className="react-player"
+                  url={state.url}
+                  ref={player}
+                  playing={videoState.play}
+                  playbackRate={PLAYBACK_RATE[videoState.playbackRate].rate}
+                  // controls={true}
+                  width='100%'
+                  height='100%'
+                />
+              </div>
             </div>
             <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
+              <ControlButton onClick={() => changePlayRate(false)}>
+                slow
+              </ControlButton>
+              <label style={{width:"40px"}}>
+                {PLAYBACK_RATE[videoState.playbackRate].label}
+              </label>
+              <ControlButton onClick={() => changePlayRate(true)}>
+                fast
+              </ControlButton>
+
               {videoState.play ?
-                <ControlButton style={{ width: 100 }} startIcon={<PauseCircleOutlineIcon />} onClick={() => setVideoState({play: false})}>
+                <ControlButton style={{ width: 100 }} startIcon={<PauseCircleOutlineIcon />} onClick={() => setVideoState({ play: false })}>
                   Pause
                 </ControlButton>
                 :
-                <ControlButton style={{ width: 100 }} startIcon={<PlayCircleOutlineIcon />} onClick={() => setVideoState({play: true})}>
+                <ControlButton style={{ width: 100 }} startIcon={<PlayCircleOutlineIcon />} onClick={() => setVideoState({ play: true })}>
                   Play
                 </ControlButton>
               }
-              <ControlButton onClick={() => seekTo(-10)}>
-                -10s
+
+              {[-10,-5,-3,-1,1,3,5,10].map(t => 
+                <ControlButton key={t} onClick={() => seekTo(t)}>
+                {t}s
+                </ControlButton>
+              )}
+
+              <ControlButton>
+                clip length before
               </ControlButton>
-              <ControlButton onClick={() => seekTo(-5)}>
-                -5s
-              </ControlButton>
-              <ControlButton onClick={() => seekTo(-3)}>
-                -3s
-              </ControlButton>
-              <ControlButton onClick={() => seekTo(-1)}>
-                -1s
-              </ControlButton>
-              <ControlButton onClick={() => seekTo(1)}>
-                +1s
-              </ControlButton>
-              <ControlButton onClick={() => seekTo(3)}>
-                +3s
-              </ControlButton>
-              <ControlButton onClick={() => seekTo(5)}>
-                +5s
-              </ControlButton>
-              <ControlButton onClick={() => seekTo(10)}>
-                +10s
+              <ControlButton>
+                clip length after
               </ControlButton>
             </Box>
           </div>
           <div style={{ display: 'flex' }}>
-            <FormControl component="fieldset" style={{ minWidth: "300px" }}>
+            <FormControl component="fieldset" style={{ minWidth: "330px" }}>
               {/* <FormLabel component="legend">Offense Team</FormLabel> */}
               <RadioGroup
                 row
@@ -368,8 +393,8 @@ export default function Tagging() {
                 sx={{ my: 0, mx: "auto" }}
                 onChange={e => setState({ offense: e.target.value })}
               >
-                <FormControlLabel value="home" control={<Radio />} label="Home Team" />
-                <FormControlLabel value="away" control={<Radio />} label="Away Team" />
+                <FormControlLabel value="home" control={<Radio />} label={state.homeTeamName} />
+                <FormControlLabel value="away" control={<Radio />} label={state.awayTeamName} />
               </RadioGroup>
               <Button variant="outlined" sx={{ mx: "auto" }}>C.P.</Button>
               <RadioGroup
@@ -382,6 +407,7 @@ export default function Tagging() {
               >
                 <FormControlLabel value="first" control={<Radio />} label="1st half" />
                 <FormControlLabel value="second" control={<Radio />} label="2nd half" />
+                <FormControlLabel value="overtime" control={<Radio />} label="Overtime" />
               </RadioGroup>
             </FormControl>
             <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1 }}>
@@ -395,7 +421,7 @@ export default function Tagging() {
                 "Dribble",
                 "Foul"
               ].map((title, i) => (
-                <Grid key={i} item xs={6} md={3} onClick={() => {setModalOpen(true);setVideoState({play: false})}}>
+                <Grid key={i} item xs={6} md={3} onClick={() => { setModalOpen(true); setVideoState({ play: false }) }}>
                   <TagButton>{title}</TagButton>
                 </Grid>
               ))}
