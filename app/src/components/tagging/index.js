@@ -312,16 +312,18 @@ export default function Tagging() {
         </div>
         <Box>
           <div>
-            <div style={{maxWidth:1300, margin:'auto'}} className="player-wrapper">
-              <ReactPlayer
-                className="react-player"
-                url={state.url}
-                ref={player}
-                playing={videoState.play}
-                // controls={true}
-                width='100%'
-                height='100%'
-              />
+            <div  style={{maxWidth:1300, margin:'auto'}} >
+              <div className="player-wrapper">
+                <ReactPlayer
+                  className="react-player"
+                  url={state.url}
+                  ref={player}
+                  playing={videoState.play}
+                  // controls={true}
+                  width='100%'
+                  height='100%'
+                />
+              </div>
             </div>
             <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
               {videoState.play ?
