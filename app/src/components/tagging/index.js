@@ -35,7 +35,7 @@ const ControlButton = styled(({ color, ...otherProps }) => <Button {...otherProp
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
-    display: 'flex',
+    display: 'block',
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -312,14 +312,13 @@ export default function Tagging() {
         </div>
         <Box>
           <div>
-            <div>
+            <div style={{maxWidth:1300, margin:'auto'}}>
               <ReactPlayer
-                style={{margin:"auto"}}
                 url={state.url}
                 ref={player}
                 playing={videoState.play}
                 // controls={true}
-                width={open ? '100%' : '70%'}
+                width='100%'
                 height='100%'
               />
             </div>
