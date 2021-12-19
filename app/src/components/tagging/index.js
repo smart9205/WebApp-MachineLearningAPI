@@ -23,7 +23,7 @@ import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-// import "./player.css";
+import "./Player.css";
 
 const drawerWidth = "30%";
 
@@ -312,8 +312,9 @@ export default function Tagging() {
         </div>
         <Box>
           <div>
-            <div style={{maxWidth:1300, margin:'auto'}}>
+            <div style={{maxWidth:1300, margin:'auto'}} className="player-wrapper">
               <ReactPlayer
+                className="react-player"
                 url={state.url}
                 ref={player}
                 playing={videoState.play}
