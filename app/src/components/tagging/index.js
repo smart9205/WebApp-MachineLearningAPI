@@ -15,8 +15,6 @@ import ListSubheader from '@mui/material/ListSubheader';
 import ListItemText from '@mui/material/ListItemText';
 import { useParams } from "react-router-dom";
 import VideoPlayer from './videoplayer';
-import CryptoJS from 'crypto-js'
-import { SECRET } from "../../config/settings"
 import GameService from '../../services/game.service';
 import TagTable from "./tagTable"
 import { Button } from '@mui/material';
@@ -72,7 +70,7 @@ export default function Tagging() {
   const [selectedPlayer, setSelectedPlayer] = React.useState({});
 
   React.useEffect(() => {
-    const game_id = CryptoJS.AES.decrypt(id, SECRET).toString(CryptoJS.enc.Utf8)
+    const game_id = atob(id).slice(3, 5)
     console.log("Game id", game_id)
     GameService.getGame(game_id).then((res) => {
       console.log("game Data", res);

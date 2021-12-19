@@ -32,10 +32,13 @@ exports.create =  async (req, res) => {
     });
 };
 exports.getPlayersByGameTeam = async (req, res) => {
-  console.log("getPlayersByGameTeam",req.body);
-  const game = await Game.findByPk(req.body.game_id);
-  // if(req.body.home) 
-  if(!game) return res.status(500).send({message: "Game not found!"});
+  let game;
+  try{
+    game = await Game.findByPk(req.body.game_id);
+    if(!game) return res.status(500).send({message: "Game not found!"});
+  }catch(e) {
+    return res.status(500).send({message: "Game not found!"});
+  }
 
   Sequelize.query(`
   SELECT * 

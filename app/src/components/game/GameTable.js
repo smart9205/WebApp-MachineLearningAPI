@@ -28,11 +28,10 @@ import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import TagIcon from '@mui/icons-material/Tag';
 import { visuallyHidden } from '@mui/utils';
+import randomString from 'randomstring'
 // import ReactPlayer from 'react-player';
 import GameService from "../../services/game.service";
-import NBA from '../../assets/NBA.png';
-import CryptoJS from 'crypto-js'
-import { SECRET } from "../../config/settings"
+import VIDEO_ICON from '../../assets/video_icon.jpg';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -364,10 +363,10 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
                       <TableCell align="center">{row.home_team_name}</TableCell>
                       <TableCell align="center">{row.away_team_name}</TableCell>
                       <TableCell align="center" >{row.date.slice(0, 10)}</TableCell>
-                      <TableCell align="center" sx={{ width: 100 }}>
+                      <TableCell align="center" sx={{ width: 40 }}>
                         <a href={row.video_url} target="_blank" rel="noreferrer">
                           <Paper style={{ display: "flex", justifyContent: "center", alignItems: "center" }} elevation={3}>
-                            <img src={NBA} style={{ width: 60, height: 60, borderRadius: 5 }} alt="video" />
+                            <img src={VIDEO_ICON} style={{ width: 40, height: 40, borderRadius: 5 }} alt="video" />
                           </Paper>
                         </a>
                       </TableCell>
@@ -381,7 +380,7 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
                         </Button>
                       </TableCell>
                       <TableCell align="center" sx={{ width: 100 }}>
-                        <Link variant="outlined" to={`/tagging/${CryptoJS.AES.encrypt(""+row.id, SECRET).toString()}`} target="_blank" rel="noopener noreferrer">
+                        <Link variant="outlined" to={`/tagging/${btoa(randomString.generate(3)+row.id+randomString.generate(3))}`} target="_blank" rel="noopener noreferrer">
                           <Button
                             variant="outlined"
                             startIcon={<TagIcon />}

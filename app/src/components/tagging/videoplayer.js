@@ -21,14 +21,16 @@ export default function VideoPlayer({ url }) {
 
   return (
     <div>
-      <ReactPlayer
-        url={url}
-        ref={player}
-        playing={play}
-        // controls={true}
-        width='100%'
-        height='100%'
-      />
+      <div style={{maxWidth: 1300, margin: 'auto'}}>
+        <ReactPlayer
+          url={url}
+          ref={player}
+          playing={play}
+          // controls={true}
+          width='100%'
+          height='100%'
+        />
+      </div>
       <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
         {play ?
           <ControlButton style={{width:100}} startIcon={<PauseCircleOutlineIcon />} onClick={() => setPlay(false)}>
