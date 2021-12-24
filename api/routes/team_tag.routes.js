@@ -12,7 +12,6 @@ module.exports = app => {
 
 	app.post(
 		"/team_tag",
-		[authJwt.isAdmin],
 		controller.create
 	);
 	
@@ -24,6 +23,11 @@ module.exports = app => {
 	app.get(
 		"/team_tag/:id",
 		controller.findOne
+	);
+
+	app.get(
+		"/team_tag/getbygame/:id",
+		controller.getByGameId
 	);
 
 	app.put(

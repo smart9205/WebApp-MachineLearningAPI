@@ -1,8 +1,7 @@
 import axios from "axios";
-import { APIBASEURL, SECRET } from "../config/settings"
+import { APIBASEURL } from "../config/settings"
 import authHeader from "./auth-header";
-import CryptoJS from 'crypto-js'
-
+import { setUser } from '../common/utilities'
 const API_URL = `${APIBASEURL}/api/auth/`;
 
 const register = (email, first_name, last_name, phone_number, country) => {
@@ -33,7 +32,7 @@ const verification = (verificationCode) => {
     })
     .then((response) => {
       if (response.data.accessToken) {
-        localStorage.setItem("user", CryptoJS.AES.encrypt(JSON.stringify(response.data), SECRET).toString());
+        setUser(response.data)
       }
       return response.data;
     });
@@ -49,7 +48,7 @@ const login = (email, password, device) => {
     })
     .then((response) => {
       if (response.data.accessToken) {
-        localStorage.setItem("user", CryptoJS.AES.encrypt(JSON.stringify(response.data), SECRET).toString());
+        setUser(response.data)
       }
       return response.data;
     });

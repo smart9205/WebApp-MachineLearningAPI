@@ -13,16 +13,20 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListSubheader from '@mui/material/ListSubheader';
 import ListItemText from '@mui/material/ListItemText';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 import { useParams } from "react-router-dom";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import ReactPlayer from 'react-player';
 import GameService from '../../services/game.service';
-import TagTable from "./tagTable"
+import IndividualTagTable from "./IndividualTagTable"
+import TeamTagTable from "./TeamTagTable"
 import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { toHHMMSS, getUser, setUser } from "../../common/utilities"
 import "./Player.css";
 
 const drawerWidth = "30%";
@@ -36,6 +40,22 @@ const PLAYBACK_RATE = [
   { rate: 2.5, label: "x 2.5" },
   { rate: 3, label: "x 3" }
 ];
+
+const Default = {
+  shot: {
+    type: "Right",
+    on_target: "Yes",
+    goal: "No",
+  }
+}
+
+const DISPLAY_DATA = {
+  shot: {
+    type: ["Right", "Left","Header"],
+    on_target: ["Yes","No"],
+    goal: ["Yes", "No"]
+  }
+}
 
 const ControlButton = styled(({ color, ...otherProps }) => <Button {...otherProps} variant="outlined" />)`
   color: ${props => props.color};
@@ -61,6 +81,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     }),
   }),
 );
+
 const style = {
   position: 'absolute',
   top: '45%',
@@ -83,30 +104,40 @@ const SubBox = styled(Box)`
     border-radius: 6px;
   }
   `;
-
+  
 export default function Tagging() {
   const { id } = useParams();
-  const player = React.useRef(null);
+  const game_id = Number(atob(id).slice(3, -3))
+  const player = React.useRef(null)
 
-  const seekTo = (sec) => {
-    player.current.seekTo(player.current.getCurrentTime() + sec)
-  }
-  const [count, setCount] = React.useState(0);
+  const seekTo = (sec) => player.current.seekTo(player.current.getCurrentTime() + sec)
+
+  const [open, setOpen] = React.useState(true);
+  const [modalOpen, setModalOpen] = React.useState(false)
+
+  const [count, setCount] = React.useState(0)
+  const [teamTagList, setTeamTagList] = React.useState([])
+  const [indTagList, setIndTagList] = React.useState([])
+  const [tagCnt, setTagCnt] = React.useState(0)
   const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
-    game_id: 0,
     url: "",
     offense: "home",
     first_second: "first",
-    homeTeamName: "",
-    awayTeamName: "",
-    homeTeam: [],
-    awayTeam: [],
+    home_team_name: "",
+    away_team_name: "",
+    homePlayers: [],
+    awayPlayers: [],
+  })
+
+  const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
+    sec_before: getUser()?.user_config ? getUser()?.user_config.sec_before : 3,
+    sec_after: getUser()?.user_config ? getUser()?.user_config.sec_after : 10,
   })
   const [modalState, setModalState] = React.useReducer((old, action) => ({ ...old, ...action }), {
     offensePlayer: {},
     type: "Right",
     onTarget: "Yes",
-    goal: "Yes",
+    goal: "No",
     assistPlayer: {},
     saved: {}
   })
@@ -115,31 +146,53 @@ export default function Tagging() {
     playbackRate: 3
   })
 
-  const offenseTeam = () => state.offense === "home" ? state.homeTeam : state.awayTeam
-  const defenseTeam = () => state.offense === "home" ? state.awayTeam : state.homeTeam
+  const [teamTag, setTeamTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
+    game_id,
+    offensive_team_id: 0,
+    defensive_team_id: 0,
+    start_time: "00:00:00",
+    end_time: "00:00:00",
+  })
+  const [indTag, setIndTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
+    team_tag_id: 0,
+    team_id: 0,
+    action_id: 0,
+    action_type_id: 0,
+    action_result_id: 0,
+    start_time: "00:00:00",
+    end_time: "00:00:00",
+  })
+
+  const offenseTeam = () => state.offense === "home" ? state.homePlayers : state.awayPlayers
+  const defenseTeam = () => state.offense === "away" ? state.homePlayers : state.awayPlayers
+
+  const offenseTeamId = () => state.offense === "home" ? state.home_team_id : state.away_team_id
+  const defenseTeamId = () => state.offense === "away" ? state.home_team_id : state.away_team_id
 
   React.useEffect(() => {
-    const game_id = atob(id).slice(3, -3)
-    setState({game_id});
     GameService.getGame(game_id).then((res) => {
       console.log("game Data", res);
       setState({
-        game_id,
         url: res.video_url, 
-        homeTeamName: res.home_team_name, 
-        awayTeamName: res.away_team_name 
+        home_team_id: res.home_team_id,
+        away_team_id: res.away_team_id,
+        home_team_name: res.home_team_name, 
+        away_team_name: res.away_team_name 
       });
     });
 
     GameService.getGameTeamPlayers({ game_id }).then((res) => {
       console.log("team players", res)
-      setState({ homeTeam: res.home_team, awayTeam: res.away_team })
+      setState({ homePlayers: res.home_team, awayPlayers: res.away_team })
     })
-  }, [id, count])
+  }, [count, game_id])
 
-
-  const [open, setOpen] = React.useState(true);
-  const [modalOpen, setModalOpen] = React.useState(false)
+  React.useEffect(() => {
+    if(game_id <= 0) return;
+    GameService.getAllTeamTagsByGame(game_id).then(res => 
+      setTeamTagList(res)
+    )
+  }, [game_id, tagCnt])
 
   const handleDrawerOpen = () => {
     setOpen(!open);
@@ -153,6 +206,51 @@ export default function Tagging() {
     console.log("rate", PLAYBACK_RATE[newRate])
   }
 
+  const teamClicked = (team) => {
+    setState({offense: team})
+
+    setTeamTag({
+      start_time: toHHMMSS(`${player.current.getCurrentTime()}`),
+    })
+  }
+  
+  const taggingButtonClicked = () => {
+    setModalOpen(true)
+    setVideoState({ play: false }) 
+    
+    const curTime = player.current.getCurrentTime()
+    setTeamTag({
+      game_id,
+      offensive_team_id: offenseTeamId(),
+      defensive_team_id: defenseTeamId(),
+      end_time: toHHMMSS(`${curTime}`),
+    })
+    setIndTag({
+      start_time: toHHMMSS(`${curTime - state.sec_before}`),
+      end_time: toHHMMSS(`${curTime + state.sec_after}`),
+    })
+  }
+  
+  const saveTeamTag = () => {
+    GameService.addTeamTag(teamTag).then(res => {
+      console.log("TeamTag", res)
+      setModalOpen(false)
+      setTagCnt(tagCnt + 1)
+    })
+  }
+  const saveIndTag = () => {
+    
+  }
+
+  React.useEffect(() => {
+    GameService.updateTaggerConfig(config).then(res => {
+      console.log("data", res);
+      setUser({...getUser(), user_config: {
+        sec_before: config.sec_before,
+        sec_after: config.sec_after
+      }})
+    })
+  }, [config]);
   return (
     <Box sx={{ display: 'flex' }}>
       <Modal
@@ -224,7 +322,10 @@ export default function Tagging() {
                 ["Yes", "No"].map((target, i) => (
                   <ListItemButton key={i}
                     selected={modalState.onTarget === target}
-                    onClick={() => setModalState({ onTarget: target })}
+                    onClick={() => {
+                        setModalState({ onTarget: target })
+                        if(target === "No") {saveIndTag(); saveTeamTag();};
+                      }}
                   >
                     <ListItemText primary={target} />
                   </ListItemButton>
@@ -322,8 +423,8 @@ export default function Tagging() {
         anchor="left"
         open={open}
       >
-        <TagTable title="Team Tags" />
-        <TagTable title="Individual Tags" />
+        <TeamTagTable rows={teamTagList}/>
+        <IndividualTagTable rows={indTagList}/>
       </Drawer>
       <Main open={open}>
         <div style={{ width: 50 }}>
@@ -393,21 +494,42 @@ export default function Tagging() {
           </div>
           <div style={{ display: 'flex' }}>
             <Box sx={{mx:2, textAlign:'center'}}>
-              <IconButton sx={{my:1}} onClick={() => setCount(count + 1)}><RefreshIcon/></IconButton>
-              <ControlButton fullWidth>
-                sec. before
-              </ControlButton>
-              <ControlButton fullWidth>
-                sec. after
-              </ControlButton>
+              <IconButton sx={{my:1}} onClick={() => setCount(count + 1)}><RefreshIcon/></IconButton><br/>
+              <TextField
+                label="sec. before"
+                sx={{ m: 1, width: 100, }}
+                type="number"
+                value={config.sec_before}
+                onChange={e => setConfig({sec_before: e.target.value})}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">s</InputAdornment>,
+                }}
+              />
+              <TextField
+                label="sec. after"
+                sx={{ m: 1, width: 100, textAlign: "center" }}
+                type="number"
+                value={config.sec_after}
+                onChange={e => setConfig({sec_after: e.target.value})}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">s</InputAdornment>,
+                }}
+              />
             </Box>
             <Box sx={{textAlign:"center", mt:2}}>
-              <ControlButton fullWidth>
-                {state.homeTeamName}
+              {["home", "away"].map(t => 
+              <ControlButton 
+                key={t} 
+                fullWidth 
+                onClick={() => 
+                  teamClicked(t)
+
+                } 
+                style={{ backgroundColor: t===state.offense ? "#0F0F0F": ""}}
+              >
+                {state[`${t}_team_name`]}
               </ControlButton>
-              <ControlButton fullWidth>
-                {state.awayTeamName} 
-              </ControlButton>
+              )}
               <ControlButton sx={{ mx: "auto", mt: 2 }}>C.P.</ControlButton>
             </Box>
             <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1, mx:2 }}>
@@ -421,7 +543,7 @@ export default function Tagging() {
                 "Dribble",
                 "Foul"
               ].map((title, i) => (
-                <Grid key={i} item xs={6} md={4} onClick={() => { setModalOpen(true); setVideoState({ play: false }) }}>
+                <Grid key={i} item xs={6} md={4} onClick={() => taggingButtonClicked()}>
                   <TagButton>{title}</TagButton>
                 </Grid>
               ))}

@@ -25,16 +25,7 @@ import { history } from "./helpers/history";
 
 import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
-import CryptoJS from 'crypto-js'
-import { SECRET } from "./config/settings"
-
-const parseJwt = (token) => {
-  try {
-    return JSON.parse(atob(token.split(".")[1]));
-  } catch (e) {
-    return null;
-  }
-};
+import { getUser, parseJwt } from './common/utilities'
 
 const PrivateRoute = ({component: Component, rememberPath=true, ...rest}) => {
   if(rememberPath) localStorage.setItem("path", rest.location.pathname);
@@ -70,12 +61,8 @@ const App = () => {
     dispatch(logout());
   }, [dispatch]);
   
-  let user;
-  try {
-    user = localStorage.getItem("user") ? JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("user"), SECRET).toString(CryptoJS.enc.Utf8)) : null;
-  } catch {
-    console.error("loading user error");
-  }
+  const user = getUser();
+  console.log(user)
   if (user) {
     const decodedJwt = parseJwt(user.accessToken);
     

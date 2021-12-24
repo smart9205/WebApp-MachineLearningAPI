@@ -1,6 +1,23 @@
 const db = require("../models");
 const Player = db.player;
+const User_Config = db.user_config;
 const Op = db.Sequelize.Op;
+
+exports.updateTaggerConfig = async (req, res) => {
+
+  if(!req.body.sec_before || !req.body.sec_after) return res.send({status: "fail"});
+  
+  await User_Config.findOrCreate({where: {user_id: req.userId}})
+  
+  const updated = await User_Config.update({
+    sec_before : req.body.sec_before,
+    sec_after : req.body.sec_after
+  },{
+    where: {user_id: req.userId}
+  })
+
+  return res.send({status: "success",updated});
+};
 
 exports.create = async (req, res) => {
   // Validate request

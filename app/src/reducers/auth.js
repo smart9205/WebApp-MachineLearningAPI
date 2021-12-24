@@ -6,15 +6,9 @@ import {
   LOGOUT,
 } from "../actions/types";
 
-import CryptoJS from 'crypto-js'
-import { SECRET } from "../config/settings"
+import { getUser  } from '../common/utilities'
 
-let user;
-try {
-  user = localStorage.getItem("user") ? JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("user"), SECRET).toString(CryptoJS.enc.Utf8)) : null;
-} catch {
-  console.error("loading user error");
-}
+const user = getUser();
 
 const initialState = user
   ? { isLoggedIn: true, user }

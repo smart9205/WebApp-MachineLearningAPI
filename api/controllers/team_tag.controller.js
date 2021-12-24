@@ -1,21 +1,18 @@
 const db = require("../models");
 const Team_Tag = db.team_tag;
 const Op = db.Sequelize.Op;
+const Sequelize = db.sequelize;
 
 exports.create =  (req, res) => {
-  // Validate request
-  if (!req.body.name) {
-    res.status(400).send({
-      message: "Name can not be empty!"
-    });
-    return;
-  }
+  console.log("req", req.body)
 
-  const team_tag = {
-    name: req.body.name,
-  };
-
-  Team_Tag.create(team_tag)
+  Team_Tag.create({
+    game_id: req.body.game_id,
+    offensive_team_id: req.body.offensive_team_id,
+    defensive_team_id: req.body.defensive_team_id,
+    start_time: req.body.start_time,
+    end_time: req.body.end_time,
+  })
     .then(data => {
       res.send(data);
     })
@@ -57,6 +54,33 @@ exports.findOne = (req, res) => {
         message: "Error retrieving Team_Tag with id=" + id
       });
     });
+};
+
+exports.getByGameId = (req, res) => {
+  const id = req.params.id;
+
+  Sequelize.query(`
+    SELECT 
+      public."Team_Tags".*,
+      public."Games".*,
+      offenseTeam.name as offensive_team_name,
+      defenseTeam.name as defensive_team_name
+    FROM public."Team_Tags" 
+    JOIN public."Games" on public."Games".id = public."Team_Tags".game_id
+    JOIN public."Teams" as offenseTeam on public."Team_Tags".offensive_team_id = offenseTeam.id
+    JOIN public."Teams" as defenseTeam on public."Team_Tags".defensive_team_id = defenseTeam.id
+    WHERE public."Team_Tags".game_id = ${id}
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+
 };
 
 exports.update = (req, res) => {
