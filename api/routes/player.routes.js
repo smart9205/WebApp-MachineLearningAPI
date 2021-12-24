@@ -43,5 +43,10 @@ module.exports = app => {
 		[authJwt.isAdmin],
 		controller.deleteAll
 	);
+
+	app.post(
+		"/user/updateConfig", 
+		controller.updateTaggerConfig
+	);
 };
   

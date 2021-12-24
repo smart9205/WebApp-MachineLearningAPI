@@ -21,10 +21,6 @@ module.exports = (sequelize, DataTypes) => {
     action_result_id: DataTypes.INTEGER,
     start_time: DataTypes.STRING,
     end_time: DataTypes.STRING,
-
-    game_id: DataTypes.INTEGER,
-    offensive_team_id: DataTypes.INTEGER,
-    defensive_team_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Player_Tag',

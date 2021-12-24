@@ -6,7 +6,7 @@ dotenv.config();
 
 const User = db.user;
 const VerificationToken = db.verificationToken;
-const User_Device = db.user_device;
+const User_Config = db.user_config;
 const Email_Queue = db.email_queue
 
 
@@ -73,6 +73,10 @@ sendSigninSuccessInfo = async (res, user) => {
     }    
   }
 
+  userConf = await User_Config.findOne({where: {
+    user_id: user.id
+  }})
+
   res.status(200).send({
     id: user.id,
     email: user.email,
@@ -83,6 +87,7 @@ sendSigninSuccessInfo = async (res, user) => {
     roles: authorities,
     accessToken: token,
     subscription: subscription,
+    user_config: userConf 
   });
 }
 
@@ -174,46 +179,7 @@ exports.signin = async (req, res) => {
         message: "Invalid Password!"
       });
     }
-
-    const roles = await user.getRoles();
     
-    if(!(roles.map((role)=> role.name.toUpperCase())).includes("ADMIN")) {
-      // add and checkuser device in user_device table
-      const userDevice = await User_Device.findAndCountAll({ where: { user_id: user.id }, order: [['id', 'ASC']] });
-
-      if(!(userDevice.rows.map((row)=> row.device)).includes(req.body.device)) {
-       
-        if(userDevice.count < 3 ) {
-          User_Device.create({user_id: user.id, device:req.body.device});
-        } else {
-          let currentTime = new Date();
-          if(userDevice.rows.pop().createdAt > currentTime.setDate(currentTime.getDate() - 1)) {
-            return res.status(401).send({ message: 
-              `You reach the maximum amount of devices for your account.\n\n
-              Your account will be reset automatically after 24 hours.\n\n
-              Please play fair.`});
-          }
-          else {
-            console.log('User Device Deleted');
-            await User_Device.destroy({where : {user_id: user.id}});
-            await User_Device.create({user_id: user.id, device:req.body.device});
-
-          }
-        // get the create date and time of the last row //OK
-
-          //delete and send// do i have   to delete this express corn for delete?YEs, just remark it for now
-          // const task = cron.schedule('0 0 * * *', async () => {
-          //   console.log('User Device Deleted');
-          //   await User_Device.destroy({where : {user_id: user.id}});
-          //   await User_Device.create({user_id: user.id, device:req.body.device});
-          // }, {
-          //   scheduled: false
-          // });
-          // task.start();
-        }
-      }
-    }
-
     sendSigninSuccessInfo(res, user);
   } else {
     return res.status(401).send({ message: "Please Verify your Eamil"});

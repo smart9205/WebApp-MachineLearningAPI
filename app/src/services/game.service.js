@@ -107,6 +107,22 @@ const updateJersey = (req) => {
     return response.data;
   });
 }
+const updateTaggerConfig = (req) => {
+  return axios.post(API_URL+"user/updateConfig", req, {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+
+const addTeamTag = (req) => {
+  return axios.post(API_URL+"team_tag", req, {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+const getAllTeamTagsByGame = (id) => {
+  return axios.get(API_URL+`team_tag/getbygame/${id}`,{headers: authHeader(), data:{id}}).then((response) => {
+    return response.data;
+  });
+}
 
 const gameService = {
   addTeamPlayer,
@@ -114,6 +130,7 @@ const gameService = {
   addLeague,
   addGame,
   addPlayer,
+  addTeamTag,
   
   getGame,
   
@@ -124,9 +141,11 @@ const gameService = {
   getAllGames,
   getAllSeasons,
   getAllPlayers,
+  getAllTeamTagsByGame,
 
   updateJersey,
   updateGame,
+  updateTaggerConfig,
 
   deletePlayersInTeam,
 
