@@ -3,11 +3,13 @@ const Player_Tag = db.player_tag;
 const Op = db.Sequelize.Op;
 
 exports.create =  (req, res) => {
+  console.log("PlayerTag", req.body)
 
   Player_Tag.create({
     team_tag_id: req.body.team_tag_id,
     team_id: req.body.team_id,
     action_id: req.body.action_id,
+    player_id: req.body.player_id,
     action_type_id: req.body.action_type_id,
     action_result_id: req.body.action_result_id,
     start_time: req.body.start_time,
