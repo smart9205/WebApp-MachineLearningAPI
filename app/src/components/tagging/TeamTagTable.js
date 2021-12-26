@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -16,6 +15,7 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
+import GameService from '../../services/game.service';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -137,13 +137,11 @@ const EnhancedTableToolbar = (props) => {
   );
 };
 
-export default function EnhancedTable({rows}) {
+export default function EnhancedTable({rows, updateTagList}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  console.log("teamtagdata", rows)
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -160,9 +158,11 @@ export default function EnhancedTable({rows}) {
     setPage(0);
   };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const deleteTag = (id) => {
+    GameService.deleteTeamTag(id).then(res => {
+      updateTagList()
+    })
+  }
 
   return (
     <Box sx={{ width: '100%', }}>
@@ -185,29 +185,19 @@ export default function EnhancedTable({rows}) {
                 .map((row, index) => 
                     <TableRow
                       hover
-                      tabIndex={-1}
-                      key={row.name}
+                      key={row.id}
                     >
                       <TableCell align="center">{row.offensive_team_name}</TableCell>
                       <TableCell align="center">{row.defensive_team_name}</TableCell>
                       <TableCell align="center">{row.start_time}</TableCell>
                       <TableCell align="center">{row.end_time}</TableCell>
                       <TableCell align="center" sx={{py:0}}>
-                        <IconButton onClick={e => {}}>
+                        <IconButton onClick={() => deleteTag(row.id)}>
                           <DeleteIcon />
                         </IconButton>
                       </TableCell>
                     </TableRow>
                     )}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (33) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </TableContainer>

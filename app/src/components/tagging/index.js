@@ -131,6 +131,7 @@ export default function Tagging() {
   })
 
   const [teamTag, setTeamTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
+    id: 0,
     game_id,
     offensive_team_id: 0,
     defensive_team_id: 0,
@@ -178,6 +179,10 @@ export default function Tagging() {
     )
   }, [game_id, tagCnt])
 
+  const updateTagList = () => {
+    setTagCnt(tagCnt + 1)
+  }
+
   const handleDrawerOpen = () => {
     setOpen(!open);
   };
@@ -190,12 +195,15 @@ export default function Tagging() {
     console.log("rate", PLAYBACK_RATE[newRate])
   }
 
-  const teamClicked = (team) => {
+  const teamClicked = async (team) => {
     const st = toHHMMSS(`${player.current.getCurrentTime()}`)
-    setState({offense: team, start_time: st})
+    await setState({offense: team, start_time: st})
 
     setTeamTag({
+      game_id,
       start_time: st,
+      offensive_team_id: offenseTeamId(),
+      defensive_team_id: defenseTeamId(),
     })
   }
   
@@ -205,10 +213,7 @@ export default function Tagging() {
     
     const curTime = player.current.getCurrentTime()
     setTeamTag({
-      game_id,
-      offensive_team_id: offenseTeamId(),
-      defensive_team_id: defenseTeamId(),
-      end_time: toHHMMSS(`${curTime}`),
+      end_time: toHHMMSS(`${curTime + state.sec_after}`),
     })
     setIndTag({
       start_time: toHHMMSS(`${curTime - state.sec_before}`),
@@ -220,11 +225,21 @@ export default function Tagging() {
     GameService.addTeamTag(teamTag).then(res => {
       console.log("TeamTag", res)
       setModalOpen(false)
+      setTeamTag({id: res.id})
       setTagCnt(tagCnt + 1)
     })
   }
   const saveIndTag = () => {
-    
+    if(!teamTag.id) return
+    setIndTag({
+      team_tag_id: teamTag.id,
+      team_id: 0,
+      action_id: 0,
+      action_type_id: 0,
+      action_result_id: 0,
+      start_time: "00:00:00",
+      end_time: "00:00:00",
+    })
   }
 
   React.useEffect(() => {
@@ -408,7 +423,7 @@ export default function Tagging() {
         anchor="left"
         open={open}
       >
-        <TeamTagTable rows={teamTagList}/>
+        <TeamTagTable rows={teamTagList} updateTagList={updateTagList}/>
         <IndividualTagTable rows={indTagList}/>
       </Drawer>
       <Main open={open}>
@@ -504,7 +519,6 @@ export default function Tagging() {
                 fullWidth 
                 onClick={() => 
                   teamClicked(t)
-
                 } 
                 style={{  backgroundColor: t===state.offense && "darkblue", color: t===state.offense && "white"}}
               >

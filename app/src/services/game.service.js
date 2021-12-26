@@ -77,6 +77,11 @@ const deletePlayersInTeam = (id) => {
     return response.data;
   });
 }
+const deleteTeamTag = (id) => {
+  return axios.delete(API_URL+`team_tag/${id}`,{headers: authHeader(), data:{id}}).then((response) => {
+    return response.data;
+  });
+}
 
 const getGame = (id) => {
   return axios.get(API_URL+`game/${id}`,{headers: authHeader(), data:{id}}).then((response) => {
@@ -112,12 +117,17 @@ const updateTaggerConfig = (req) => {
     return response.data;
   });
 }
-
 const addTeamTag = (req) => {
   return axios.post(API_URL+"team_tag", req, {headers: authHeader()}).then((response) => {
     return response.data;
   });
 }
+const addPlayerTag = (req) => {
+  return axios.post(API_URL+"player_tag", req, {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+
 const getAllTeamTagsByGame = (id) => {
   return axios.get(API_URL+`team_tag/getbygame/${id}`,{headers: authHeader(), data:{id}}).then((response) => {
     return response.data;
@@ -131,6 +141,7 @@ const gameService = {
   addGame,
   addPlayer,
   addTeamTag,
+  addPlayerTag,
   
   getGame,
   
@@ -150,6 +161,7 @@ const gameService = {
   deletePlayersInTeam,
 
   deleteGames,
+  deleteTeamTag,
 };
 
 export default gameService;

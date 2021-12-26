@@ -62,7 +62,6 @@ exports.getByGameId = (req, res) => {
   Sequelize.query(`
     SELECT 
       public."Team_Tags".*,
-      public."Games".*,
       offenseTeam.name as offensive_team_name,
       defenseTeam.name as defensive_team_name
     FROM public."Team_Tags" 
