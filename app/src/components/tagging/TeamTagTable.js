@@ -13,6 +13,8 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 
 function descendingComparator(a, b, orderBy) {
@@ -116,50 +118,28 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
-
   return (
     <Toolbar
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Team Tag
-        </Typography>
-      )}
+      <Typography
+        sx={{ flex: '1 1 100%' }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        Team Tag
+      </Typography>
     </Toolbar>
   );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
 };
 
 export default function EnhancedTable({rows}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -169,26 +149,6 @@ export default function EnhancedTable({rows}) {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -207,14 +167,13 @@ export default function EnhancedTable({rows}) {
   return (
     <Box sx={{ width: '100%', }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length}/>
+        <EnhancedTableToolbar />
         <TableContainer sx={{ m:1}}>
           <Table
             aria-labelledby="tableTitle"
             size={'small'}
           >
             <EnhancedTableHead
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
@@ -226,7 +185,6 @@ export default function EnhancedTable({rows}) {
                 .map((row, index) => 
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
                       tabIndex={-1}
                       key={row.name}
                     >
@@ -234,6 +192,11 @@ export default function EnhancedTable({rows}) {
                       <TableCell align="center">{row.defensive_team_name}</TableCell>
                       <TableCell align="center">{row.start_time}</TableCell>
                       <TableCell align="center">{row.end_time}</TableCell>
+                      <TableCell align="center" sx={{py:0}}>
+                        <IconButton onClick={e => {}}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                     )}
               {emptyRows > 0 && (
