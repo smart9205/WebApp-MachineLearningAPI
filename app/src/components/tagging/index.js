@@ -14,7 +14,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListSubheader from '@mui/material/ListSubheader';
 import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import { useParams } from "react-router-dom";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
@@ -40,22 +39,6 @@ const PLAYBACK_RATE = [
   { rate: 2.5, label: "x 2.5" },
   { rate: 3, label: "x 3" }
 ];
-
-const Default = {
-  shot: {
-    type: "Right",
-    on_target: "Yes",
-    goal: "No",
-  }
-}
-
-const DISPLAY_DATA = {
-  shot: {
-    type: ["Right", "Left","Header"],
-    on_target: ["Yes","No"],
-    goal: ["Yes", "No"]
-  }
-}
 
 const ControlButton = styled(({ color, ...otherProps }) => <Button {...otherProps} variant="outlined" />)`
   color: ${props => props.color};
@@ -123,6 +106,7 @@ export default function Tagging() {
     url: "",
     offense: "home",
     first_second: "first",
+    start_time: "00:00:00",
     home_team_name: "",
     away_team_name: "",
     homePlayers: [],
@@ -207,14 +191,15 @@ export default function Tagging() {
   }
 
   const teamClicked = (team) => {
-    setState({offense: team})
+    const st = toHHMMSS(`${player.current.getCurrentTime()}`)
+    setState({offense: team, start_time: st})
 
     setTeamTag({
-      start_time: toHHMMSS(`${player.current.getCurrentTime()}`),
+      start_time: st,
     })
   }
   
-  const taggingButtonClicked = () => {
+  const taggingButtonClicked = (btn) => {
     setModalOpen(true)
     setVideoState({ play: false }) 
     
@@ -497,23 +482,19 @@ export default function Tagging() {
               <IconButton sx={{my:1}} onClick={() => setCount(count + 1)}><RefreshIcon/></IconButton><br/>
               <TextField
                 label="sec. before"
-                sx={{ m: 1, width: 100, }}
+                sx={{ m: 1, width: 100 }}
+                inputProps={{min: 0, style: { textAlign: 'center' }}}
                 type="number"
                 value={config.sec_before}
                 onChange={e => setConfig({sec_before: e.target.value})}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">s</InputAdornment>,
-                }}
               />
               <TextField
                 label="sec. after"
-                sx={{ m: 1, width: 100, textAlign: "center" }}
+                sx={{ m: 1, width: 100 }}
+                inputProps={{min: 0, style: { textAlign: 'center' }}}
                 type="number"
                 value={config.sec_after}
                 onChange={e => setConfig({sec_after: e.target.value})}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">s</InputAdornment>,
-                }}
               />
             </Box>
             <Box sx={{textAlign:"center", mt:2}}>
@@ -525,25 +506,28 @@ export default function Tagging() {
                   teamClicked(t)
 
                 } 
-                style={{ backgroundColor: t===state.offense ? "#0F0F0F": ""}}
+                style={{  backgroundColor: t===state.offense && "darkblue", color: t===state.offense && "white"}}
               >
                 {state[`${t}_team_name`]}
               </ControlButton>
               )}
-              <ControlButton sx={{ mx: "auto", mt: 2 }}>C.P.</ControlButton>
+              <Box style={{ mt: 2, display: "flex", alignItems: "center" }}>
+                Start Time : {state.start_time} <ControlButton sx={{mr: 0}} >C.P.</ControlButton>
+              </Box>
             </Box>
             <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1, mx:2 }}>
               {[
-                "Shot",
+                "Short Pass",
                 "Pass",
+                "Free Kick",
+                "Shot",
                 "Cross",
                 "Penality",
-                "Free Kick",
                 "Corner",
                 "Dribble",
                 "Foul"
               ].map((title, i) => (
-                <Grid key={i} item xs={6} md={4} onClick={() => taggingButtonClicked()}>
+                <Grid key={i} item xs={6} md={4} onClick={() => taggingButtonClicked(title)}>
                   <TagButton>{title}</TagButton>
                 </Grid>
               ))}
