@@ -16,9 +16,7 @@ const SubBox = styled(Box)`
 
 export default function ShortPass({ defenseTeam, offenseTeam }) {
 
-  const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
-    onTarget: "Yes"
-  })
+  const [result, setResult] = React.useState("Successful")
 
   return (
     <>
@@ -54,41 +52,41 @@ export default function ShortPass({ defenseTeam, offenseTeam }) {
           subheader={<ListSubheader component="div" id="nested-list-subheader">Result</ListSubheader>}
         >
           {[
-            { id: 1, name: "Successful" },
-            { id: 2, name: "TurnOver" },
-          ].map((type, i) => (
-            <ListItemButton key={i}
-              // selected={playerTag.action_type_id === type.id}
-              // onClick={() => setPlayerTag({ action_type_id: type.id })}
+            { id: 4, name: "Successful" },
+            { id: 5, name: "Turnover" },
+          ].map((r, i) => (
+            <ListItemButton key={r.id}
+              selected={result === r.name}
+              onClick={() => setResult(r.name)}
             >
-              <ListItemText primary={type.name} />
+              <ListItemText primary={r.name} />
             </ListItemButton>
           ))}
         </List>
       </SubBox>
-      <SubBox>
+      {result === "Turnover" && <SubBox>
         <List
           sx={{ bgcolor: 'background.paper' }}
           component="nav"
           aria-labelledby="nested-list-subheader"
           subheader={
             <ListSubheader component="div" id="nested-list-subheader">
-              Saved
+              Defensive Player List
             </ListSubheader>
           }
         >
           {
             defenseTeam.map((player, i) => (
               <ListItemButton key={i}
-                selected={state.savedPlayer === player}
-                onClick={() => setState({ savedPlayer: player })}
+                // selected={state.savedPlayer === player}
+                // onClick={() => setState({ savedPlayer: player })}
               >
                 <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
               </ListItemButton>
             ))
           }
         </List>
-      </SubBox>
+      </SubBox>}
     </>
   );
 } 
