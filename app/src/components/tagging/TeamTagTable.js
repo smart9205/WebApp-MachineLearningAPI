@@ -137,10 +137,11 @@ const EnhancedTableToolbar = (props) => {
   );
 };
 
-export default function EnhancedTable({rows, updateTagList}) {
+export default function EnhancedTable({rows, updateTagList, handleRowClick}) {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('id');
   const [page, setPage] = React.useState(0);
+  const [selectedRowId, setSelectedRowId] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -186,6 +187,8 @@ export default function EnhancedTable({rows, updateTagList}) {
                     <TableRow
                       hover
                       key={row.id}
+                      selected={row.id === selectedRowId}
+                      onClick={() => {handleRowClick(row.id); setSelectedRowId(row.id)}}
                     >
                       <TableCell align="center">{row.offensive_team_name}</TableCell>
                       <TableCell align="center">{row.defensive_team_name}</TableCell>

@@ -1,6 +1,7 @@
 const db = require("../models");
 const Player_Tag = db.player_tag;
 const Op = db.Sequelize.Op;
+const Sequelize = db.sequelize;
 
 exports.create =  (req, res) => {
   console.log("PlayerTag", req.body)
@@ -54,6 +55,37 @@ exports.findOne = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message: "Error retrieving Player_Tag with id=" + id
+      });
+    });
+};
+
+exports.getByTeamTag = (req, res) => {
+  const id = req.params.id;
+
+  Sequelize.query(`
+    SELECT 
+      public."Player_Tags".*,
+      public."Actions".name as action_name,
+      public."Action_Types".name as action_type_name,
+      public."Action_Results".name as action_result_name,
+      public."Teams".name as team_name,
+      public."Players".f_name as player_fname,
+      public."Players".l_name as player_lname
+    FROM public."Player_Tags"
+    JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
+    JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
+    JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
+    JOIN public."Teams" on public."Teams".id = public."Player_Tags".team_id
+    JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
+      WHERE public."Player_Tags".team_tag_id = ${id}
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
       });
     });
 };

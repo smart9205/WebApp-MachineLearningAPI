@@ -102,7 +102,7 @@ export default function Tagging() {
   const [teamTagList, setTeamTagList] = React.useState([])
   const [playerTagList, setPlayerTagList] = React.useState([])
   const [tagCnt, setTagCnt] = React.useState(0)
-  
+
   const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
     url: "",
     offense: "home",
@@ -116,6 +116,7 @@ export default function Tagging() {
     assistPlayer: {},
     savedPlayer: {},
     goal: "No",
+    disp_teamTag_id: 0
   })
 
   const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -177,6 +178,14 @@ export default function Tagging() {
       setTeamTagList(res)
     )
   }, [game_id, tagCnt])
+  
+  React.useEffect(() => {
+    if(!state.disp_teamTag_id) return
+    GameService.getAllPlayerTagsByTeamTag(state.disp_teamTag_id).then(res => {
+      console.log("playerTag", res)
+      setPlayerTagList(res);
+    })
+  }, [state.disp_teamTag_id])
 
   const updateTagList = () => {
     setTagCnt(tagCnt + 1)
@@ -428,7 +437,11 @@ export default function Tagging() {
         anchor="left"
         open={open}
       >
-        <TeamTagTable rows={teamTagList} updateTagList={updateTagList}/>
+        <TeamTagTable 
+          rows={teamTagList} 
+          updateTagList={updateTagList} 
+          handleRowClick={id => setState({disp_teamTag_id: id})}
+        />
         <IndividualTagTable rows={playerTagList}/>
       </Drawer>
       
