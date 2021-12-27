@@ -134,6 +134,12 @@ const getAllTeamTagsByGame = (id) => {
   });
 }
 
+const getAllPlayerTagsByTeamTag = (id) => {
+  return axios.get(API_URL+`player_tag/getbyteamtag/${id}`,{headers: authHeader(), data:{id}}).then((response) => {
+    return response.data;
+  });
+}
+
 const gameService = {
   addTeamPlayer,
   addTeam,
@@ -153,6 +159,7 @@ const gameService = {
   getAllSeasons,
   getAllPlayers,
   getAllTeamTagsByGame,
+  getAllPlayerTagsByTeamTag,
 
   updateJersey,
   updateGame,

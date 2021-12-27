@@ -26,6 +26,11 @@ module.exports = app => {
 		controller.findOne
 	);
 
+	app.get(
+		"/player_tag/getbyteamtag/:id",
+		controller.getByTeamTag
+	);
+
 	app.put(
 		"/player_tag/:id",
 		[authJwt.isAdmin],

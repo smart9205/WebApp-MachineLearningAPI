@@ -52,17 +52,47 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'name',
+    id: 'action_name',
     numeric: false,
     disablePadding: true,
-    label: 'Dessert (100g serving)',
+    label: 'Action',
   },
   {
-    id: 'calories',
-    numeric: true,
+    id: 'action_type_name',
+    numeric: false,
     disablePadding: false,
-    label: 'Calories',
-  }
+    label: 'Action Type',
+  },
+  {
+    id: 'action_result_name',
+    numeric: false,
+    disablePadding: false,
+    label: 'Action Result',
+  },
+  {
+    id: 'team_name',
+    numeric: false,
+    disablePadding: false,
+    label: 'Team',
+  },
+  {
+    id: 'player_fname',
+    numeric: false,
+    disablePadding: false,
+    label: 'Player',
+  },
+  {
+    id: 'start_time',
+    numeric: false,
+    disablePadding: false,
+    label: 'Start Time',
+  },
+  {
+    id: 'end_time',
+    numeric: false,
+    disablePadding: false,
+    label: 'End Time',
+  },
 ];
 
 function EnhancedTableHead(props) {
@@ -191,19 +221,19 @@ export default function EnhancedTable({rows}) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -227,7 +257,7 @@ export default function EnhancedTable({rows}) {
     setPage(0);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -257,17 +287,17 @@ export default function EnhancedTable({rows}) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -279,15 +309,13 @@ export default function EnhancedTable({rows}) {
                           }}
                         />
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
+                      <TableCell align="center">{row.action_name}</TableCell>
+                      <TableCell align="center">{row.action_type_name}</TableCell>
+                      <TableCell align="center">{row.action_result_name}</TableCell>
+                      <TableCell align="center">{row.team_name}</TableCell>
+                      <TableCell align="center">{`${row.player_fname} ${row.player_lname}`}</TableCell>
+                      <TableCell align="center">{row.start_time}</TableCell>
+                      <TableCell align="center">{row.end_time}</TableCell>
                     </TableRow>
                   );
                 })}
