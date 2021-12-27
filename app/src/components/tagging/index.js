@@ -9,10 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListSubheader from '@mui/material/ListSubheader';
-import ListItemText from '@mui/material/ListItemText';
+
 import TextField from '@mui/material/TextField';
 import { useParams } from "react-router-dom";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
@@ -26,6 +23,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { toHHMMSS, getUser, setUser } from "../../common/utilities"
+import Shot from './contents/Shot';
+import ShortPass from './contents/ShortPass';
 import "./Player.css";
 
 const drawerWidth = "30%";
@@ -80,14 +79,7 @@ const TagButton = styled(({ color, ...otherProps }) => <Button {...otherProps} v
   color: ${props => props.color};
   width: 100%
 `;
-const SubBox = styled(Box)`
-  margin: 6px;
-  & nav {
-    padding: 6px;
-    border-radius: 6px;
-  }
-  `;
-  
+
 export default function Tagging() {
   const { id } = useParams();
   const game_id = Number(atob(id).slice(3, -3))
@@ -97,12 +89,12 @@ export default function Tagging() {
 
   const [open, setOpen] = React.useState(true);
   const [modalOpen, setModalOpen] = React.useState(false)
+  const [modalContent, setModalContent] = React.useState("")
 
   const [count, setCount] = React.useState(0)
   const [teamTagList, setTeamTagList] = React.useState([])
   const [playerTagList, setPlayerTagList] = React.useState([])
   const [tagCnt, setTagCnt] = React.useState(0)
-
   const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
     url: "",
     offense: "home",
@@ -116,7 +108,7 @@ export default function Tagging() {
     assistPlayer: {},
     savedPlayer: {},
     goal: "No",
-    disp_teamTag_id: 0
+    disp_teamTag_id: 0,
   })
 
   const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -217,6 +209,8 @@ export default function Tagging() {
   
   const taggingButtonClicked = (action) => {
     setModalOpen(true)
+    setModalContent(action.title)
+    
     setVideoState({ play: false }) 
     
     const curTime = player.current.getCurrentTime()
@@ -276,151 +270,8 @@ export default function Tagging() {
         aria-describedby="modal-modal-description"
       >
         <Box style={style}>
-          <SubBox>
-            <List
-              sx={{ bgcolor: 'background.paper' }}
-              component="nav"
-              aria-labelledby="nested-list-subheader"
-              subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                  List of Players
-                </ListSubheader>
-              }
-            >
-              {
-                offenseTeam().map((player, i) => (
-                  <ListItemButton key={i}
-                    selected={state.offensePlayer === player}
-                    onClick={() => setState({ offensePlayer: player })}
-                  >
-                    <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
-                  </ListItemButton>
-                ))
-              }
-            </List>
-          </SubBox>
-
-          <SubBox>
-            <List
-              sx={{ bgcolor: 'background.paper' }}
-              component="nav"
-              aria-labelledby="nested-list-subheader"
-              subheader={<ListSubheader component="div" id="nested-list-subheader">Type</ListSubheader>}
-            >
-              {[
-                {id: 1, name: "Right"},
-                {id: 2, name: "Left"},
-                {id: 3, name: "Header"}
-              ].map((type, i) => (
-                <ListItemButton key={i}
-                  selected={playerTag.action_type_id === type.id}
-                  onClick={() => setPlayerTag({ action_type_id: type.id })}
-                >
-                  <ListItemText primary={type.name} />
-                </ListItemButton>
-              ))}
-            </List>
-          </SubBox>
-          <SubBox>
-            <List
-              sx={{ bgcolor: 'background.paper' }}
-              component="nav"
-              aria-labelledby="nested-list-subheader"
-              subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                  On Target
-                </ListSubheader>
-              }
-            >
-              {
-                [
-                  {id: 1, name:"Yes"}, 
-                  {id: 2, name:"No"}
-                ].map((target, i) => (
-                  <ListItemButton key={i}
-                    selected={playerTag.action_result_id === target.id}
-                    onClick={() => targetClicked(target)}
-                  >
-                    <ListItemText primary={target.name} />
-                  </ListItemButton>
-                ))
-              }
-            </List>
-          </SubBox>
-          {
-            state.onTarget === "Yes" &&
-            <SubBox>
-              <List
-                sx={{ bgcolor: 'background.paper' }}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                subheader={
-                  <ListSubheader component="div" id="nested-list-subheader">
-                    Goal
-                  </ListSubheader>
-                }
-              >
-                {
-                  ["Yes", "No"].map((goal, i) => (
-                    <ListItemButton key={i}
-                      selected={state.goal === goal}
-                      onClick={() => setState({ goal })}
-                    >
-                      <ListItemText primary={goal} />
-                    </ListItemButton>
-                  ))
-                }
-              </List>
-            </SubBox>
-          }
-          {
-            state.onTarget === "Yes" && state.goal === "Yes" &&
-            <SubBox>
-              <List
-                sx={{ bgcolor: 'background.paper' }}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                subheader={
-                  <ListSubheader component="div" id="nested-list-subheader">
-                    Assist
-                  </ListSubheader>
-                }
-              >
-                {
-                  offenseTeam().map((player, i) => (
-                    <ListItemButton key={i} selected={state.assistPlayer === player}
-                      onClick={() => setState({ assistPlayer: player })}
-                    >
-                      <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
-                    </ListItemButton>
-                  ))
-                }
-              </List>
-            </SubBox>
-          }
-          <SubBox>
-            <List
-              sx={{ bgcolor: 'background.paper' }}
-              component="nav"
-              aria-labelledby="nested-list-subheader"
-              subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                  Saved
-                </ListSubheader>
-              }
-            >
-              {
-                defenseTeam().map((player, i) => (
-                  <ListItemButton key={i}
-                    selected={state.savedPlayer === player}
-                    onClick={() => setState({ savedPlayer: player })}
-                  >
-                    <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
-                  </ListItemButton>
-                ))
-              }
-            </List>
-          </SubBox>
+          {modalContent === "Shot" && <Shot offenseTeam={offenseTeam()} defenseTeam={defenseTeam()}/>}
+          {modalContent === "Short Pass" && <ShortPass offenseTeam={offenseTeam()} defenseTeam={defenseTeam()}/>}
         </Box>
       </Modal>
       <CssBaseline />
@@ -522,16 +373,16 @@ export default function Tagging() {
             </Box>
             <Box sx={{textAlign:"center", mt:2}}>
               {["home", "away"].map(t => 
-              <ControlButton 
-                key={t} 
-                fullWidth 
-                style={{  backgroundColor: t===state.offense && "darkblue", color: t===state.offense && "white"}}
-                onClick={() => 
-                  teamClicked(t)
-                } 
-              >
-                {state[`${t}_team_name`]}
-              </ControlButton>
+                <ControlButton 
+                  key={t} 
+                  fullWidth 
+                  style={{  backgroundColor: t===state.offense && "darkblue", color: t===state.offense && "white"}}
+                  onClick={() => 
+                    teamClicked(t)
+                  } 
+                >
+                  {state[`${t}_team_name`]}
+                </ControlButton>
               )}
               <Box style={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-around" }}>
                 Start Time : {state.start_time} <ControlButton sx={{mr: 0}} >C.P.</ControlButton>
