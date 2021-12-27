@@ -3,19 +3,18 @@ const Player_Tag = db.player_tag;
 const Op = db.Sequelize.Op;
 
 exports.create =  (req, res) => {
-  // Validate request
-  if (!req.body.name) {
-    res.status(400).send({
-      message: "Name can not be empty!"
-    });
-    return;
-  }
+  console.log("PlayerTag", req.body)
 
-  const player_tag = {
-    name: req.body.name,
-  };
-
-  Player_Tag.create(player_tag)
+  Player_Tag.create({
+    team_tag_id: req.body.team_tag_id,
+    team_id: req.body.team_id,
+    action_id: req.body.action_id,
+    player_id: req.body.player_id,
+    action_type_id: req.body.action_type_id,
+    action_result_id: req.body.action_result_id,
+    start_time: req.body.start_time,
+    end_time: req.body.end_time,
+  })
     .then(data => {
       res.send(data);
     })

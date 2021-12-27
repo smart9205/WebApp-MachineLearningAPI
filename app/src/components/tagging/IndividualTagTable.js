@@ -181,7 +181,6 @@ export default function EnhancedTable({rows}) {
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -242,7 +241,7 @@ export default function EnhancedTable({rows}) {
           <Table
             // sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size={'small'}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -295,7 +294,7 @@ export default function EnhancedTable({rows}) {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: (33) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />

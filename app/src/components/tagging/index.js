@@ -100,8 +100,9 @@ export default function Tagging() {
 
   const [count, setCount] = React.useState(0)
   const [teamTagList, setTeamTagList] = React.useState([])
-  const [indTagList, setIndTagList] = React.useState([])
+  const [playerTagList, setPlayerTagList] = React.useState([])
   const [tagCnt, setTagCnt] = React.useState(0)
+  
   const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
     url: "",
     offense: "home",
@@ -111,37 +112,36 @@ export default function Tagging() {
     away_team_name: "",
     homePlayers: [],
     awayPlayers: [],
+    offensePlayer: {},
+    assistPlayer: {},
+    savedPlayer: {},
+    goal: "No",
   })
 
   const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
     sec_before: getUser()?.user_config ? getUser()?.user_config.sec_before : 3,
     sec_after: getUser()?.user_config ? getUser()?.user_config.sec_after : 10,
   })
-  const [modalState, setModalState] = React.useReducer((old, action) => ({ ...old, ...action }), {
-    offensePlayer: {},
-    type: "Right",
-    onTarget: "Yes",
-    goal: "No",
-    assistPlayer: {},
-    saved: {}
-  })
+
   const [videoState, setVideoState] = React.useReducer((old, action) => ({ ...old, ...action }), {
     play: false,
     playbackRate: 3
   })
 
   const [teamTag, setTeamTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
+    id: 0,
     game_id,
     offensive_team_id: 0,
     defensive_team_id: 0,
     start_time: "00:00:00",
     end_time: "00:00:00",
   })
-  const [indTag, setIndTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
+  const [playerTag, setPlayerTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
     team_tag_id: 0,
     team_id: 0,
+    player_id: 0,
     action_id: 0,
-    action_type_id: 0,
+    action_type_id: 1,
     action_result_id: 0,
     start_time: "00:00:00",
     end_time: "00:00:00",
@@ -178,6 +178,10 @@ export default function Tagging() {
     )
   }, [game_id, tagCnt])
 
+  const updateTagList = () => {
+    setTagCnt(tagCnt + 1)
+  }
+
   const handleDrawerOpen = () => {
     setOpen(!open);
   };
@@ -190,43 +194,61 @@ export default function Tagging() {
     console.log("rate", PLAYBACK_RATE[newRate])
   }
 
-  const teamClicked = (team) => {
+  const teamClicked = async (team) => {
     const st = toHHMMSS(`${player.current.getCurrentTime()}`)
-    setState({offense: team, start_time: st})
+    await setState({offense: team, start_time: st})
 
     setTeamTag({
+      game_id,
       start_time: st,
+      offensive_team_id: offenseTeamId(),
+      defensive_team_id: defenseTeamId(),
     })
   }
   
-  const taggingButtonClicked = (btn) => {
+  const taggingButtonClicked = (action) => {
     setModalOpen(true)
     setVideoState({ play: false }) 
     
     const curTime = player.current.getCurrentTime()
     setTeamTag({
-      game_id,
-      offensive_team_id: offenseTeamId(),
-      defensive_team_id: defenseTeamId(),
-      end_time: toHHMMSS(`${curTime}`),
+      end_time: toHHMMSS(`${curTime + state.sec_after}`),
     })
-    setIndTag({
+    setPlayerTag({
+      team_id: offenseTeamId(),
+      action_id: action.id,
       start_time: toHHMMSS(`${curTime - state.sec_before}`),
       end_time: toHHMMSS(`${curTime + state.sec_after}`),
     })
   }
   
-  const saveTeamTag = () => {
-    GameService.addTeamTag(teamTag).then(res => {
-      console.log("TeamTag", res)
+  const saveTeamTag = async () => {
+    try {
+      const res = await GameService.addTeamTag(teamTag)
       setModalOpen(false)
+      setTeamTag({id: res.id})
       setTagCnt(tagCnt + 1)
+      return res;
+    } catch(e) {}
+  }
+  const savePlayerTag = (PTag) => {
+    GameService.addPlayerTag(PTag).then(res => {
+      console.log("playerTag", res)
     })
   }
-  const saveIndTag = () => {
-    
-  }
 
+  const targetClicked = async (target) => {
+    await setPlayerTag({ action_result_id: target.id })
+    if(target.name === "No") { 
+      const t = await saveTeamTag(); 
+      await setPlayerTag({
+        team_tag_id: t.id,
+      })
+      if(!state.offensePlayer?.id) return
+      savePlayerTag({...playerTag, player_id: state.offensePlayer.id}); 
+    };
+  }
+ 
   React.useEffect(() => {
     GameService.updateTaggerConfig(config).then(res => {
       console.log("data", res);
@@ -259,8 +281,8 @@ export default function Tagging() {
               {
                 offenseTeam().map((player, i) => (
                   <ListItemButton key={i}
-                    selected={modalState.offensePlayer === player}
-                    onClick={() => setModalState({ offensePlayer: player })}
+                    selected={state.offensePlayer === player}
+                    onClick={() => setState({ offensePlayer: player })}
                   >
                     <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
                   </ListItemButton>
@@ -274,22 +296,20 @@ export default function Tagging() {
               sx={{ bgcolor: 'background.paper' }}
               component="nav"
               aria-labelledby="nested-list-subheader"
-              subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                  Type
-                </ListSubheader>
-              }
+              subheader={<ListSubheader component="div" id="nested-list-subheader">Type</ListSubheader>}
             >
-              {
-                ["Right", "Left", "Header"].map((type, i) => (
-                  <ListItemButton key={i}
-                    selected={modalState.type === type}
-                    onClick={() => setModalState({ type })}
-                  >
-                    <ListItemText primary={type} />
-                  </ListItemButton>
-                ))
-              }
+              {[
+                {id: 1, name: "Right"},
+                {id: 2, name: "Left"},
+                {id: 3, name: "Header"}
+              ].map((type, i) => (
+                <ListItemButton key={i}
+                  selected={playerTag.action_type_id === type.id}
+                  onClick={() => setPlayerTag({ action_type_id: type.id })}
+                >
+                  <ListItemText primary={type.name} />
+                </ListItemButton>
+              ))}
             </List>
           </SubBox>
           <SubBox>
@@ -304,22 +324,22 @@ export default function Tagging() {
               }
             >
               {
-                ["Yes", "No"].map((target, i) => (
+                [
+                  {id: 1, name:"Yes"}, 
+                  {id: 2, name:"No"}
+                ].map((target, i) => (
                   <ListItemButton key={i}
-                    selected={modalState.onTarget === target}
-                    onClick={() => {
-                        setModalState({ onTarget: target })
-                        if(target === "No") {saveIndTag(); saveTeamTag();};
-                      }}
+                    selected={playerTag.action_result_id === target.id}
+                    onClick={() => targetClicked(target)}
                   >
-                    <ListItemText primary={target} />
+                    <ListItemText primary={target.name} />
                   </ListItemButton>
                 ))
               }
             </List>
           </SubBox>
           {
-            modalState.onTarget === "Yes" &&
+            state.onTarget === "Yes" &&
             <SubBox>
               <List
                 sx={{ bgcolor: 'background.paper' }}
@@ -334,8 +354,8 @@ export default function Tagging() {
                 {
                   ["Yes", "No"].map((goal, i) => (
                     <ListItemButton key={i}
-                      selected={modalState.goal === goal}
-                      onClick={() => setModalState({ goal })}
+                      selected={state.goal === goal}
+                      onClick={() => setState({ goal })}
                     >
                       <ListItemText primary={goal} />
                     </ListItemButton>
@@ -345,7 +365,7 @@ export default function Tagging() {
             </SubBox>
           }
           {
-            modalState.onTarget === "Yes" && modalState.goal === "Yes" &&
+            state.onTarget === "Yes" && state.goal === "Yes" &&
             <SubBox>
               <List
                 sx={{ bgcolor: 'background.paper' }}
@@ -359,8 +379,8 @@ export default function Tagging() {
               >
                 {
                   offenseTeam().map((player, i) => (
-                    <ListItemButton key={i} selected={modalState.assistPlayer === player}
-                      onClick={() => setModalState({ assistPlayer: player })}
+                    <ListItemButton key={i} selected={state.assistPlayer === player}
+                      onClick={() => setState({ assistPlayer: player })}
                     >
                       <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
                     </ListItemButton>
@@ -383,8 +403,8 @@ export default function Tagging() {
               {
                 defenseTeam().map((player, i) => (
                   <ListItemButton key={i}
-                    selected={modalState.saved === player}
-                    onClick={() => setModalState({ saved: player })}
+                    selected={state.savedPlayer === player}
+                    onClick={() => setState({ savedPlayer: player })}
                   >
                     <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
                   </ListItemButton>
@@ -408,9 +428,10 @@ export default function Tagging() {
         anchor="left"
         open={open}
       >
-        <TeamTagTable rows={teamTagList}/>
-        <IndividualTagTable rows={indTagList}/>
+        <TeamTagTable rows={teamTagList} updateTagList={updateTagList}/>
+        <IndividualTagTable rows={playerTagList}/>
       </Drawer>
+      
       <Main open={open}>
         <div style={{ width: 50 }}>
           <Tooltip title={`${open ? "Close" : "Open"} Tags`}>
@@ -444,15 +465,11 @@ export default function Tagging() {
               </div>
             </div>
             <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
-              {[-10, -5, -3, -1].map(t =>
-                <ControlButton key={t} onClick={() => seekTo(t)}>
-                  {t}s
-                </ControlButton>
-              )}
 
-              <ControlButton onClick={() => changePlayRate(false)}>
-                slow
-              </ControlButton>
+              {[-10, -5, -3, -1].map(t =><ControlButton key={t} onClick={() => seekTo(t)}>{t}s</ControlButton>)}
+              
+              <ControlButton onClick={() => changePlayRate(false)}>slow</ControlButton>
+              
               {videoState.play ?
                 <ControlButton style={{ width: 100 }} startIcon={<PauseCircleOutlineIcon />} onClick={() => setVideoState({ play: false })}>
                   Pause
@@ -462,19 +479,12 @@ export default function Tagging() {
                   Play
                 </ControlButton>
               }
-              <label style={{ width: "40px" }}>
-                {PLAYBACK_RATE[videoState.playbackRate].label}
-              </label>
-              <ControlButton onClick={() => changePlayRate(true)}>
-                fast
-              </ControlButton>
-
-              {[1, 3, 5, 10].map(t =>
-                <ControlButton key={t} onClick={() => seekTo(t)}>
-                  {t}s
-                </ControlButton>
-              )}
               
+              <label style={{ width: "40px" }}>{PLAYBACK_RATE[videoState.playbackRate].label}</label>
+              
+              <ControlButton onClick={() => changePlayRate(true)}>fast</ControlButton>
+
+              {[1, 3, 5, 10].map(t =><ControlButton key={t} onClick={() => seekTo(t)}>{t}s</ControlButton>)}
             </Box>
           </div>
           <div style={{ display: 'flex' }}>
@@ -502,33 +512,33 @@ export default function Tagging() {
               <ControlButton 
                 key={t} 
                 fullWidth 
+                style={{  backgroundColor: t===state.offense && "darkblue", color: t===state.offense && "white"}}
                 onClick={() => 
                   teamClicked(t)
-
                 } 
-                style={{  backgroundColor: t===state.offense && "darkblue", color: t===state.offense && "white"}}
               >
                 {state[`${t}_team_name`]}
               </ControlButton>
               )}
-              <Box style={{ mt: 2, display: "flex", alignItems: "center" }}>
+              <Box style={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-around" }}>
                 Start Time : {state.start_time} <ControlButton sx={{mr: 0}} >C.P.</ControlButton>
               </Box>
             </Box>
+            
             <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1, mx:2 }}>
               {[
-                "Short Pass",
-                "Pass",
-                "Free Kick",
-                "Shot",
-                "Cross",
-                "Penality",
-                "Corner",
-                "Dribble",
-                "Foul"
-              ].map((title, i) => (
-                <Grid key={i} item xs={6} md={4} onClick={() => taggingButtonClicked(title)}>
-                  <TagButton>{title}</TagButton>
+                {id: 2, title:"Short Pass"},
+                {id: 2, title:"Pass"},
+                {id: 6, title:"Free Kick"},
+                {id: 1, title:"Shot"},
+                {id: 3, title:"Cross"},
+                {id: 4, title:"Penality"},
+                {id: 5, title:"Corner"},
+                {id: 7, title:"Dribble"},
+                {id: 8, title:"Foul"},
+              ].map((action, i) => (
+                <Grid key={i} item xs={6} md={4} onClick={() => taggingButtonClicked(action)}>
+                  <TagButton>{action.title}</TagButton>
                 </Grid>
               ))}
             </Grid>
