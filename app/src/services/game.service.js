@@ -58,7 +58,21 @@ const getAllLeagues = () => {
     return response.data;
   });
 }
-
+const getAllActions = () => {
+  return axios.get(API_URL+"action", {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+const getAllActionTypes = () => {
+  return axios.get(API_URL+"action_type", {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
+const getAllActionResults = () => {
+  return axios.get(API_URL+"action_result", {headers: authHeader()}).then((response) => {
+    return response.data;
+  });
+}
 const addLeague = (req) => {
   return axios.post(API_URL+"league", req, {headers: authHeader()}).then((response) => {
     return response.data;
@@ -160,6 +174,9 @@ const gameService = {
   getAllPlayers,
   getAllTeamTagsByGame,
   getAllPlayerTagsByTeamTag,
+  getAllActions,
+  getAllActionTypes,
+  getAllActionResults,
 
   updateJersey,
   updateGame,
