@@ -14,9 +14,11 @@ const SubBox = styled(Box)`
   }
   `;
 
-export default function ShortPass({ defenseTeam, offenseTeam }) {
+export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
 
   const [result, setResult] = React.useState("Successful")
+  const [offensivePlayer, setOffensivePlayer] = React.useState({});
+  const [defensivePlayer, setDefensivePlayer] = React.useState({});
 
   return (
     <>
@@ -34,8 +36,8 @@ export default function ShortPass({ defenseTeam, offenseTeam }) {
           {
             offenseTeam.map((player, i) => (
               <ListItemButton key={i}
-                // selected={state.offensePlayer === player}
-                // onClick={() => setState({ offensePlayer: player })}
+                selected={offensivePlayer === player}
+                onClick={() => setOffensivePlayer( player )}
               >
                 <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
               </ListItemButton>
@@ -57,7 +59,15 @@ export default function ShortPass({ defenseTeam, offenseTeam }) {
           ].map((r, i) => (
             <ListItemButton key={r.id}
               selected={result === r.name}
-              onClick={() => setResult(r.name)}
+              onClick={() => {
+                setResult(r.name) 
+                taggingState({
+                  player_id: offensivePlayer.id,
+                  action_id: 2,
+                  action_type_id: 4, 
+                  action_result_id: r.id
+                })
+              }}// here we need to call to a new function and pass parameters player id, action id , action type, action result, 
             >
               <ListItemText primary={r.name} />
             </ListItemButton>

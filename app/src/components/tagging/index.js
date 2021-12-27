@@ -109,6 +109,7 @@ export default function Tagging() {
     savedPlayer: {},
     goal: "No",
     disp_teamTag_id: 0,
+    temp_playerTag_list: [],
   })
 
   const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -261,6 +262,11 @@ export default function Tagging() {
       }})
     })
   }, [config]);
+
+  const storeTempPlayerTag = (data) => {
+    setState({})
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
       <Modal
@@ -271,7 +277,7 @@ export default function Tagging() {
       >
         <Box style={style}>
           {modalContent === "Shot" && <Shot offenseTeam={offenseTeam()} defenseTeam={defenseTeam()}/>}
-          {modalContent === "Short Pass" && <ShortPass offenseTeam={offenseTeam()} defenseTeam={defenseTeam()}/>}
+          {modalContent === "Short Pass" && <ShortPass offenseTeam={offenseTeam()} defenseTeam={defenseTeam()} taggingState={e => storeTempPlayerTag(e)}/>}
         </Box>
       </Modal>
       <CssBaseline />
