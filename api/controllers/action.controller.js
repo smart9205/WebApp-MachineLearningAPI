@@ -29,11 +29,9 @@ exports.create =  (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  console.log("getSeason", req.body);
-  const name = req.query.name;
-  var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
+  console.log("find all actions:")
 
-  Action.findAll({ where: condition })
+  Action.findAll()
     .then(data => {
       res.send(data);
     })

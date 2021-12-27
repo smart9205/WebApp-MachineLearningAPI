@@ -148,6 +148,18 @@ export default function Tagging() {
   const defenseTeamId = () => state.offense === "away" ? state.home_team_id : state.away_team_id
 
   React.useEffect(() => {
+    GameService.getAllActions().then((res) => {
+      console.log("action :", res);
+    });
+    GameService.getAllActionTypes().then((res) => {
+      console.log("action_type :", res);
+    });
+    GameService.getAllActionResults().then((res) => {
+      console.log("action_result :", res);
+    });
+  }, [])
+
+  React.useEffect(() => {
     GameService.getGame(game_id).then((res) => {
       console.log("game Data", res);
       setState({
