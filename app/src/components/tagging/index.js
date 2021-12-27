@@ -18,7 +18,7 @@ import ReactPlayer from 'react-player';
 import GameService from '../../services/game.service';
 import IndividualTagTable from "./IndividualTagTable"
 import TeamTagTable from "./TeamTagTable"
-import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
+import { Button, stepClasses } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -79,7 +79,7 @@ const TagButton = styled(({ color, ...otherProps }) => <Button {...otherProps} v
   color: ${props => props.color};
   width: 100%
 `;
-
+let ALL_ACTIONS=[];
 export default function Tagging() {
   const { id } = useParams();
   const game_id = Number(atob(id).slice(3, -3))
@@ -95,6 +95,8 @@ export default function Tagging() {
   const [teamTagList, setTeamTagList] = React.useState([])
   const [playerTagList, setPlayerTagList] = React.useState([])
   const [tagCnt, setTagCnt] = React.useState(0)
+  const [temp_playerTag_list, setTempPlayerTagList] = React.useState([])
+  
   const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
     url: "",
     offense: "home",
@@ -109,7 +111,6 @@ export default function Tagging() {
     savedPlayer: {},
     goal: "No",
     disp_teamTag_id: 0,
-    temp_playerTag_list: [],
   })
 
   const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -130,6 +131,7 @@ export default function Tagging() {
     start_time: "00:00:00",
     end_time: "00:00:00",
   })
+
   const [playerTag, setPlayerTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
     team_tag_id: 0,
     team_id: 0,
@@ -150,6 +152,7 @@ export default function Tagging() {
   React.useEffect(() => {
     GameService.getAllActions().then((res) => {
       console.log("action :", res);
+      ALL_ACTIONS = res;
     });
     GameService.getAllActionTypes().then((res) => {
       console.log("action_type :", res);
@@ -227,14 +230,15 @@ export default function Tagging() {
     setVideoState({ play: false }) 
     
     const curTime = player.current.getCurrentTime()
+    console.log("current Time", curTime, config.sec_after);
     setTeamTag({
-      end_time: toHHMMSS(`${curTime + state.sec_after}`),
+      end_time: toHHMMSS(`${curTime + config.sec_after}`),
     })
     setPlayerTag({
       team_id: offenseTeamId(),
       action_id: action.id,
-      start_time: toHHMMSS(`${curTime - state.sec_before}`),
-      end_time: toHHMMSS(`${curTime + state.sec_after}`),
+      start_time: toHHMMSS(`${curTime - config.sec_before}`),
+      end_time: toHHMMSS(`${curTime + config.sec_after}`),
     })
   }
   
@@ -244,12 +248,15 @@ export default function Tagging() {
       setModalOpen(false)
       setTeamTag({id: res.id})
       setTagCnt(tagCnt + 1)
+      // savePlayerTag()
       return res;
     } catch(e) {}
+    
   }
+
   const savePlayerTag = (PTag) => {
     GameService.addPlayerTag(PTag).then(res => {
-      console.log("playerTag", res)
+      console.log("addplayerTag", res)
     })
   }
 
@@ -275,8 +282,19 @@ export default function Tagging() {
     })
   }, [config]);
 
-  const storeTempPlayerTag = (data) => {
-    setState({})
+  const storeTempPlayerTag = async (data) => {
+    //Steps
+    // 1. add the data to the temp_players_tags
+    await setTempPlayerTagList([...temp_playerTag_list, data])
+    console.log("tempPlayerTaglist", temp_playerTag_list)
+    setState({}) 
+    if (ALL_ACTIONS.find(f => f.id === data.action_id).end_possession) {
+      // call save team tag
+      const tTag = saveTeamTag() // we need to get the team tag id to pass it to the player table
+      temp_playerTag_list.map(pTag => 
+        savePlayerTag({...pTag, team_tag_id: tTag.id}) 
+      )
+    }
   }
 
   return (
