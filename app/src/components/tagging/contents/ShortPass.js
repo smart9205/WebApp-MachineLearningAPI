@@ -91,4 +91,4 @@ export default function ShortPass({ defenseTeam, offenseTeam }) {
       </SubBox>
     </>
   );
-}
+} 
