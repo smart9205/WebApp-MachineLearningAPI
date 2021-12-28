@@ -24,6 +24,8 @@ export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
   const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
   const [defensivePlayer, setDefensivePlayer] = React.useState({});
 
+  console.log("players", offenseTeam, defenseTeam)
+
   const defensivePlayerClicked = (player) => {
     setDefensivePlayer(player)
     taggingState([{
