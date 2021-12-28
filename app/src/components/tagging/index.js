@@ -302,6 +302,7 @@ export default function Tagging() {
             team_tag_id: tTag.id
           })
         )
+        setTempPlayerTagList([])
       }
       saveTags()
     }
