@@ -18,23 +18,38 @@ const SUCCESSFUL = "Successful"
 const STOLE_BY = "Stole By"
 const BAD_PASS = "Bad Pass"
 
-export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
+export default function ShortPass({ 
+  defenseTeam, 
+  offenseTeam, 
+  taggingState, 
+  startTime, 
+  endTime,
+  defenseTeamId,
+  offenseTeamId, 
+}) {
 
   const [result, setResult] = React.useState({ id: 4, name: SUCCESSFUL })
   const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
   const [defensivePlayer, setDefensivePlayer] = React.useState({});
 
-  console.log("players", offenseTeam, defenseTeam)
+  const tagData = {
+    start_time: startTime,
+    end_time: endTime
+  }
 
   const defensivePlayerClicked = (player) => {
     setDefensivePlayer(player)
     taggingState([{
+      ...tagData,
+      team_id: defenseTeamId,
       player_id: player.id,
       action_id: 14,
       action_type_id: 4, 
       action_result_id: 11
     },{
+      ...tagData,
       player_id: offensivePlayer.id,
+      team_id: offenseTeamId,
       action_id: 10,
       action_type_id: 4, 
       action_result_id: 11
@@ -92,12 +107,14 @@ export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
                   }])
                 if(r.name === BAD_PASS)
                   taggingState([{
+                    ...tagData,
+                    team_id: offenseTeamId,
                     player_id: offensivePlayer.id,
                     action_id: 10,
                     action_type_id: 4, 
                     action_result_id: r.id
                   }])
-              }}// here we need to call to a new function and pass parameters player id, action id , action type, action result, 
+              }}
             >
               <ListItemText primary={r.name} />
             </ListItemButton>

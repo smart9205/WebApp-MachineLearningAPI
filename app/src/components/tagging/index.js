@@ -288,17 +288,22 @@ export default function Tagging() {
   }
   
   React.useEffect(() => {
-    const data = temp_playerTag_list.slice(-1)
+    const data = temp_playerTag_list.slice(-1)[0]
     
-    console.log("temp_playerTag_list", temp_playerTag_list)
+    console.log("temp_playerTag_list", temp_playerTag_list, data?.action_id)
 
     if (ALL_ACTIONS.find(f => f.id === data.action_id)?.end_possession) {
-      // call save team tag
-      console.log("SaveTempPlayerTags: ", temp_playerTag_list, ALL_ACTIONS)
-      const tTag = saveTeamTag() // we need to get the team tag id to pass it to the player table
-      temp_playerTag_list.map(pTag =>
-        savePlayerTag({ ...pTag, team_tag_id: tTag.id })
-      )
+      const saveTags = async() => {
+        const tTag = await saveTeamTag() // we need to get the team tag id to pass it to the player table
+        console.log("save Team: ", tTag);
+        temp_playerTag_list.map(pTag =>
+          savePlayerTag({ 
+            ...pTag, 
+            team_tag_id: tTag.id
+          })
+        )
+      }
+      saveTags()
     }
     setModalOpen(false)
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -314,7 +319,17 @@ export default function Tagging() {
       >
         <Box style={style}>
           {modalContent === "Shot" && <Shot offenseTeam={offenseTeam()} defenseTeam={defenseTeam()} />}
-          {modalContent === "Short Pass" && <ShortPass offenseTeam={offenseTeam()} defenseTeam={defenseTeam()} taggingState={e => storeTempPlayerTag(e)} />}
+          {modalContent === "Short Pass" && 
+            <ShortPass 
+              offenseTeam={offenseTeam()} 
+              defenseTeam={defenseTeam()} 
+              taggingState={e => storeTempPlayerTag(e)} 
+              startTime={playerTag.start_time}
+              endTime={playerTag.end_time}
+              offenseTeamId={offenseTeamId()}
+              defenseTeamId={defenseTeamId()}
+            />
+          }
         </Box>
       </Modal>
       <CssBaseline />
