@@ -98,22 +98,15 @@ export default function ShortPass({
               selected={result?.id === r.id}
               onClick={() => {
                 setResult(r) 
-                if(r.name === SUCCESSFUL)
-                  taggingState([{
-                    player_id: offensivePlayer.id,
-                    action_id: 2,
-                    action_type_id: 4, 
-                    action_result_id: r.id
-                  }])
-                if(r.name === BAD_PASS)
-                  taggingState([{
-                    ...tagData,
-                    team_id: offenseTeamId,
-                    player_id: offensivePlayer.id,
-                    action_id: 10,
-                    action_type_id: 4, 
-                    action_result_id: r.id
-                  }])
+                const d = {
+                  ...tagData,
+                  team_id: offenseTeamId,
+                  player_id: offensivePlayer.id,
+                  action_type_id: 4, 
+                  action_result_id: r.id
+                };
+                if(r.name === SUCCESSFUL) taggingState([{...d, action_id: 2,}])
+                if(r.name === BAD_PASS) taggingState([{...d, action_id: 10,}])
               }}
             >
               <ListItemText primary={r.name} />
