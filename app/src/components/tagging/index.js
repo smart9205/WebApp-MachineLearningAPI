@@ -25,6 +25,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { toHHMMSS, getUser, setUser } from "../../common/utilities"
 import Shot from './contents/Shot';
 import ShortPass from './contents/ShortPass';
+import Pass from './contents/Pass';
 import "./Player.css";
 
 const drawerWidth = "30%";
@@ -320,9 +321,25 @@ export default function Tagging() {
         aria-describedby="modal-modal-description"
       >
         <Box style={style}>
-          {modalContent === "Shot" && <Shot offenseTeam={offenseTeam()} defenseTeam={defenseTeam()} />}
+          {modalContent === "Shot" && 
+            <Shot 
+              offenseTeam={offenseTeam()} 
+              defenseTeam={defenseTeam()} 
+            />
+          }
           {modalContent === "Short Pass" && 
             <ShortPass 
+              offenseTeam={offenseTeam()} 
+              defenseTeam={defenseTeam()} 
+              taggingState={e => storeTempPlayerTag(e)} 
+              startTime={playerTag.start_time}
+              endTime={playerTag.end_time}
+              offenseTeamId={offenseTeamId()}
+              defenseTeamId={defenseTeamId()}
+            />
+          }
+          {modalContent === "Pass" && 
+            <Pass 
               offenseTeam={offenseTeam()} 
               defenseTeam={defenseTeam()} 
               taggingState={e => storeTempPlayerTag(e)} 
