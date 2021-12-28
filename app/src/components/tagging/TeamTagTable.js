@@ -138,11 +138,20 @@ const EnhancedTableToolbar = (props) => {
 };
 
 export default function EnhancedTable({rows, updateTagList, handleRowClick}) {
-  const [order, setOrder] = React.useState('asc');
+  const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('id');
   const [page, setPage] = React.useState(0);
-  const [selectedRowId, setSelectedRowId] = React.useState(0);
+  const [selectedRowId, setSelectedRowId] = React.useState(rows[0]?.id);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  React.useEffect(() => {
+    setSelectedRowId(rows[0]?.id)
+  }, [rows])
+
+  React.useEffect(() => {
+    handleRowClick(selectedRowId); 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRowId])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -188,7 +197,7 @@ export default function EnhancedTable({rows, updateTagList, handleRowClick}) {
                       hover
                       key={row.id}
                       selected={row.id === selectedRowId}
-                      onClick={() => {handleRowClick(row.id); setSelectedRowId(row.id)}}
+                      onClick={() => {setSelectedRowId(row.id)}}
                     >
                       <TableCell align="center">{row.offensive_team_name}</TableCell>
                       <TableCell align="center">{row.defensive_team_name}</TableCell>

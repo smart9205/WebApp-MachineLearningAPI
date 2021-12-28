@@ -12,6 +12,7 @@ exports.create =  (req, res) => {
     defensive_team_id: req.body.defensive_team_id,
     start_time: req.body.start_time,
     end_time: req.body.end_time,
+    period: req.body.period
   })
     .then(data => {
       res.send(data);
@@ -61,7 +62,7 @@ exports.getByGameId = (req, res) => {
 
   Sequelize.query(`
     SELECT 
-      public."Team_Tags".*,
+      public."Team_Tags".*, public."Team_Tags".id as id,
       offenseTeam.name as offensive_team_name,
       defenseTeam.name as defensive_team_name
     FROM public."Team_Tags" 
@@ -69,6 +70,7 @@ exports.getByGameId = (req, res) => {
     JOIN public."Teams" as offenseTeam on public."Team_Tags".offensive_team_id = offenseTeam.id
     JOIN public."Teams" as defenseTeam on public."Team_Tags".defensive_team_id = defenseTeam.id
     WHERE public."Team_Tags".game_id = ${id}
+    order by public."Team_Tags".id desc
   `)
     .then(data => {
       res.send(data[0]);

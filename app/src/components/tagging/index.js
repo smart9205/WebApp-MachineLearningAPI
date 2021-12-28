@@ -130,6 +130,7 @@ export default function Tagging() {
     defensive_team_id: 0,
     start_time: "00:00:00",
     end_time: "00:00:00",
+    period: 1,
   })
 
   const [playerTag, setPlayerTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -470,12 +471,12 @@ export default function Tagging() {
               sx={{ my: 0, mx: 2 }}
               aria-label="firstsecond"
               name="row-radio-buttons-group"
-              value={state.first_second}
-              onChange={e => setState({ first_second: e.target.value })}
+              value={teamTag.period}
+              onChange={e => setTeamTag({ period: e.target.value })}
             >
-              <FormControlLabel value="first" control={<Radio />} label="1st half" />
-              <FormControlLabel value="second" control={<Radio />} label="2nd half" />
-              <FormControlLabel value="overtime" control={<Radio />} label="Overtime" />
+              <FormControlLabel value="1" control={<Radio />} label="1st half" />
+              <FormControlLabel value="2" control={<Radio />} label="2nd half" />
+              <FormControlLabel value="3" control={<Radio />} label="Overtime" />
             </RadioGroup>
           </div>
         </Box>
