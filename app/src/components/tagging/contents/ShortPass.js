@@ -35,7 +35,7 @@ export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
       action_result_id: 11
     },{
       player_id: offensivePlayer.id,
-      action_id: 14,
+      action_id: 10,
       action_type_id: 4, 
       action_result_id: 11
     }])
