@@ -212,7 +212,7 @@ export default function Tagging() {
   }
 
   const teamClicked = async (team) => {
-    const st = toHHMMSS(`${player.current.getCurrentTime()}`)
+    const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
     await setState({ offense: team, start_time: st })
 
     setTeamTag({

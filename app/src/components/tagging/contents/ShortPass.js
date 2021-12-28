@@ -21,8 +21,23 @@ const BAD_PASS = "Bad Pass"
 export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
 
   const [result, setResult] = React.useState({ id: 4, name: SUCCESSFUL })
-  const [offensivePlayer, setOffensivePlayer] = React.useState({});
+  const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
   const [defensivePlayer, setDefensivePlayer] = React.useState({});
+
+  const defensivePlayerClicked = (player) => {
+    setDefensivePlayer(player)
+    taggingState([{
+      player_id: player.id,
+      action_id: 14,
+      action_type_id: 4, 
+      action_result_id: 11
+    },{
+      player_id: offensivePlayer.id,
+      action_id: 14,
+      action_type_id: 4, 
+      action_result_id: 11
+    }])
+  }
 
   return (
     <>
@@ -95,20 +110,7 @@ export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
             defenseTeam.map((player, i) => (
               <ListItemButton key={i}
                 selected={defensivePlayer === player}
-                onClick={() => {
-                  setDefensivePlayer(player)
-                  taggingState([{
-                    player_id: defensivePlayer.id,
-                    action_id: 14,
-                    action_type_id: 4, 
-                    action_result_id: 11
-                  },{
-                    player_id: offensivePlayer.id,
-                    action_id: 14,
-                    action_type_id: 4, 
-                    action_result_id: 11
-                  }])
-                }}
+                onClick={() => defensivePlayerClicked(player)}
               >
                 <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
               </ListItemButton>
