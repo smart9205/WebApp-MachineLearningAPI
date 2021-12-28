@@ -166,10 +166,10 @@ export default function EnhancedTable({rows, updateTagList, handleRowClick}) {
   }
 
   return (
-    <Box sx={{ width: '100%', }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+    <Box sx={{ width: '100%', p:1 }}>
+      <Paper sx={{ width: '100%', p:1}} elevation={3}>
         <EnhancedTableToolbar />
-        <TableContainer sx={{ m:1}}>
+        <TableContainer style={{ height: "calc(60vh - 140px)", margin: 1 }}>
           <Table
             aria-labelledby="tableTitle"
             size={'small'}

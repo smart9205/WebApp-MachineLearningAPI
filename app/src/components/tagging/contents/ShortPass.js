@@ -95,7 +95,7 @@ export default function ShortPass({
             { id: 11, name: BAD_PASS },
           ].map((r, i) => (
             <ListItemButton key={r.id}
-              selected={result === r}
+              selected={result?.id === r.id}
               onClick={() => {
                 setResult(r) 
                 if(r.name === SUCCESSFUL)

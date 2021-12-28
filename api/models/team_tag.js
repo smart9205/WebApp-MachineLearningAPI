@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     offensive_team_id: DataTypes.INTEGER,
     defensive_team_id: DataTypes.INTEGER,
     start_time: DataTypes.STRING,
-    end_time: DataTypes.STRING
+    end_time: DataTypes.STRING,
+    period: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Team_Tag',

@@ -292,7 +292,7 @@ export default function Tagging() {
     
     console.log("temp_playerTag_list", temp_playerTag_list, data?.action_id)
 
-    if (ALL_ACTIONS.find(f => f.id === data.action_id)?.end_possession) {
+    if (ALL_ACTIONS.find(f => f.id === data?.action_id)?.end_possession) {
       const saveTags = async() => {
         const tTag = await saveTeamTag() // we need to get the team tag id to pass it to the player table
         console.log("save Team: ", tTag);
@@ -410,7 +410,7 @@ export default function Tagging() {
               {[1, 3, 5, 10].map(t => <ControlButton key={t} onClick={() => seekTo(t)}>{t}s</ControlButton>)}
             </Box>
           </div>
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Box sx={{ mx: 2, textAlign: 'center' }}>
               <IconButton sx={{ my: 1 }} onClick={() => setCount(count + 1)}><RefreshIcon /></IconButton><br />
               <TextField
@@ -448,7 +448,7 @@ export default function Tagging() {
               </Box>
             </Box>
 
-            <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1, mx: 2 }}>
+            <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 500 }}>
               {[
                 { id: 2, title: "Short Pass" },
                 { id: 2, title: "Pass" },

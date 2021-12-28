@@ -264,12 +264,11 @@ export default function EnhancedTable({rows}) {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+    <Box sx={{ width: '100%',p:1 }}>
+      <Paper sx={{ width: '100%', p:1 }}>
         <EnhancedTableToolbar numSelected={selected.length}/>
-        <TableContainer>
+        <TableContainer style={{ height: "calc(30vh - 70px)" }}>
           <Table
-            // sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={'small'}
           >
