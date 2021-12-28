@@ -287,7 +287,7 @@ export default function Tagging() {
     // 1. add the data to the temp_players_tags
     await setTempPlayerTagList([...temp_playerTag_list, data])
     console.log("tempPlayerTaglist", temp_playerTag_list)
-    setState({}) 
+
     if (ALL_ACTIONS.find(f => f.id === data.action_id).end_possession) {
       // call save team tag
       const tTag = saveTeamTag() // we need to get the team tag id to pass it to the player table
