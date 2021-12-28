@@ -131,7 +131,7 @@ export default function Tagging() {
     defensive_team_id: 0,
     start_time: "00:00:00",
     end_time: "00:00:00",
-    period: 1,
+    period: "1",
   })
 
   const [playerTag, setPlayerTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
