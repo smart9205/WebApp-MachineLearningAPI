@@ -286,7 +286,7 @@ export default function Tagging() {
     //Steps
     // 1. add the data to the temp_players_tags
     await setTempPlayerTagList([...temp_playerTag_list, data])
-    console.log("tempPlayerTaglist", temp_playerTag_list)
+    console.log("tempPlayerTaglist", temp_playerTag_list, ALL_ACTIONS)
 
     if (ALL_ACTIONS.find(f => f.id === data.action_id).end_possession) {
       // call save team tag
@@ -295,6 +295,7 @@ export default function Tagging() {
         savePlayerTag({...pTag, team_tag_id: tTag.id}) 
       )
     }
+    setModalOpen(false)
   }
 
   return (
