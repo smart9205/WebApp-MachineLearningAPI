@@ -16,7 +16,7 @@ const SubBox = styled(Box)`
 
 export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
 
-  const [result, setResult] = React.useState("Successful")
+  const [result, setResult] = React.useState({})
   const [offensivePlayer, setOffensivePlayer] = React.useState({});
   const [defensivePlayer, setDefensivePlayer] = React.useState({});
 
@@ -58,15 +58,16 @@ export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
             { id: 5, name: "Turnover" },
           ].map((r, i) => (
             <ListItemButton key={r.id}
-              selected={result === r.name}
+              selected={result === r}
               onClick={() => {
-                setResult(r.name) 
-                taggingState({
-                  player_id: offensivePlayer.id,
-                  action_id: 2,
-                  action_type_id: 4, 
-                  action_result_id: r.id
-                })
+                setResult(r) 
+                if(r.name === "Successful")
+                  taggingState({
+                    player_id: offensivePlayer.id,
+                    action_id: 2,
+                    action_type_id: 4, 
+                    action_result_id: r.id
+                  })
               }}// here we need to call to a new function and pass parameters player id, action id , action type, action result, 
             >
               <ListItemText primary={r.name} />
@@ -88,8 +89,16 @@ export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
           {
             defenseTeam.map((player, i) => (
               <ListItemButton key={i}
-                // selected={state.savedPlayer === player}
-                // onClick={() => setState({ savedPlayer: player })}
+                selected={defensivePlayer === player}
+                onClick={() => {
+                  setDefensivePlayer(player)
+                  taggingState({
+                    player_id: offensivePlayer.id,
+                    action_id: 2,
+                    action_type_id: 4, 
+                    action_result_id: result.id
+                  })
+                }}
               >
                 <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
               </ListItemButton>
