@@ -294,7 +294,7 @@ export default function Tagging() {
 
     if (ALL_ACTIONS.find(f => f.id === data.action_id)?.end_possession) {
       // call save team tag
-      console.log("tempPlayerTaglist", temp_playerTag_list, ALL_ACTIONS)
+      console.log("SaveTempPlayerTags: ", temp_playerTag_list, ALL_ACTIONS)
       const tTag = saveTeamTag() // we need to get the team tag id to pass it to the player table
       temp_playerTag_list.map(pTag =>
         savePlayerTag({ ...pTag, team_tag_id: tTag.id })
