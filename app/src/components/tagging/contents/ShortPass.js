@@ -83,10 +83,17 @@ export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
               selected={result === r}
               onClick={() => {
                 setResult(r) 
-                if(r.name === SUCCESSFUL || r.name === BAD_PASS)
+                if(r.name === SUCCESSFUL)
                   taggingState([{
                     player_id: offensivePlayer.id,
                     action_id: 2,
+                    action_type_id: 4, 
+                    action_result_id: r.id
+                  }])
+                if(r.name === BAD_PASS)
+                  taggingState([{
+                    player_id: offensivePlayer.id,
+                    action_id: 10,
                     action_type_id: 4, 
                     action_result_id: r.id
                   }])
