@@ -14,9 +14,13 @@ const SubBox = styled(Box)`
   }
   `;
 
+const SUCCESSFUL = "Successful"
+const STOLE_BY = "Stole By"
+const BAD_PASS = "Bad Pass"
+
 export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
 
-  const [result, setResult] = React.useState({})
+  const [result, setResult] = React.useState({ id: 4, name: SUCCESSFUL })
   const [offensivePlayer, setOffensivePlayer] = React.useState({});
   const [defensivePlayer, setDefensivePlayer] = React.useState({});
 
@@ -54,20 +58,21 @@ export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
           subheader={<ListSubheader component="div" id="nested-list-subheader">Result</ListSubheader>}
         >
           {[
-            { id: 4, name: "Successful" },
-            { id: 5, name: "Turnover" },
+            { id: 4, name: SUCCESSFUL },
+            { id: 5, name: STOLE_BY },
+            { id: 11, name: BAD_PASS },
           ].map((r, i) => (
             <ListItemButton key={r.id}
               selected={result === r}
               onClick={() => {
                 setResult(r) 
-                if(r.name === "Successful")
-                  taggingState({
+                if(r.name === SUCCESSFUL || r.name === BAD_PASS)
+                  taggingState([{
                     player_id: offensivePlayer.id,
                     action_id: 2,
                     action_type_id: 4, 
                     action_result_id: r.id
-                  })
+                  }])
               }}// here we need to call to a new function and pass parameters player id, action id , action type, action result, 
             >
               <ListItemText primary={r.name} />
@@ -75,7 +80,7 @@ export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
           ))}
         </List>
       </SubBox>
-      {result === "Turnover" && <SubBox>
+      {result.name === STOLE_BY && <SubBox>
         <List
           sx={{ bgcolor: 'background.paper' }}
           component="nav"
@@ -92,12 +97,17 @@ export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
                 selected={defensivePlayer === player}
                 onClick={() => {
                   setDefensivePlayer(player)
-                  taggingState({
+                  taggingState([{
                     player_id: defensivePlayer.id,
-                    action_id: 2,
+                    action_id: 14,
                     action_type_id: 4, 
-                    action_result_id: result.id
-                  })
+                    action_result_id: 11
+                  },{
+                    player_id: offensivePlayer.id,
+                    action_id: 14,
+                    action_type_id: 4, 
+                    action_result_id: 11
+                  }])
                 }}
               >
                 <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.date_of_birth && player.date_of_birth.slice(0, 10)})`} />
