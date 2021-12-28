@@ -93,7 +93,7 @@ export default function ShortPass({ defenseTeam, offenseTeam, taggingState }) {
                 onClick={() => {
                   setDefensivePlayer(player)
                   taggingState({
-                    player_id: offensivePlayer.id,
+                    player_id: defensivePlayer.id,
                     action_id: 2,
                     action_type_id: 4, 
                     action_result_id: result.id
