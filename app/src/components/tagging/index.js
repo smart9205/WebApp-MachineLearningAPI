@@ -26,7 +26,7 @@ import { toHHMMSS, getUser, setUser } from "../../common/utilities"
 import Shot from './contents/Shot';
 import ShortPass from './contents/ShortPass';
 import Pass from './contents/Pass';
-import "./Player.css";
+import "./CSS/Player.css";
 
 const drawerWidth = "30%";
 

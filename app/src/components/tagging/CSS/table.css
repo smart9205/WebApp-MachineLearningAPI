@@ -1,0 +1,6 @@
+.MuiTableCell-root {
+    padding: 6px 2px !important;
+}
+.MuiTablePagination-root p{
+    margin: 0px !important;
+}
