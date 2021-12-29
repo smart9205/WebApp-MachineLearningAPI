@@ -1,5 +1,6 @@
 const db = require("../models");
 const Team_Tag = db.team_tag;
+const Player_Tag = db.player_tag;
 const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
 
@@ -108,8 +109,13 @@ exports.update = (req, res) => {
     });
 };
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
+
+  // delete playertags first
+  await Player_Tag.destroy({
+    where: { team_tag_id: id }
+  })
 
   Team_Tag.destroy({
     where: { id: id }
