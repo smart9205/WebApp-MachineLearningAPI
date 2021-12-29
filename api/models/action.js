@@ -14,8 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Action.init({
-    name: DataTypes.STRING,
-    end_possession: DataTypes.BOOLEAN
+    name: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Action',

@@ -465,7 +465,7 @@ export default function Tagging() {
               </Box>
             </Box>
 
-            <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 380 }}>
+            <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 400 }}>
               {[
                 { id: 2, title: "Short Pass" },
                 { id: 2, title: "Pass" },
