@@ -71,7 +71,7 @@ exports.getByGameId = (req, res) => {
     JOIN public."Teams" as offenseTeam on public."Team_Tags".offensive_team_id = offenseTeam.id
     JOIN public."Teams" as defenseTeam on public."Team_Tags".defensive_team_id = defenseTeam.id
     WHERE public."Team_Tags".game_id = ${id}
-    order by public."Team_Tags".start_time
+    order by public."Team_Tags".start_time desc
   `)
     .then(data => {
       res.send(data[0]);
