@@ -328,12 +328,10 @@ export default function Tagging() {
           {modalContent === "Short Pass" && 
             <ShortPass 
               offenseTeam={offenseTeam} 
-              defenseTeam={defenseTeam} 
               taggingState={e => storeTempPlayerTag(e)} 
               startTime={playerTag.start_time}
               endTime={playerTag.end_time}
               offenseTeamId={offenseTeamId}
-              defenseTeamId={defenseTeamId}
             />
           }
           {modalContent === "Pass" && 

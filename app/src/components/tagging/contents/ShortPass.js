@@ -18,12 +18,10 @@ const STOLE_BY = "Stole By"
 const BAD_PASS = "Bad Pass"
 
 export default function ShortPass({ 
-  defenseTeam, 
   offenseTeam, 
   taggingState, 
   startTime, 
   endTime,
-  defenseTeamId,
   offenseTeamId, 
 }) {
 
