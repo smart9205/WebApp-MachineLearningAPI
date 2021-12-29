@@ -199,7 +199,6 @@ const EnhancedTableToolbar = (props) => {
               <FilterListIcon />
             </IconButton>
           </Tooltip>
-        
       )}
 
     </Toolbar>

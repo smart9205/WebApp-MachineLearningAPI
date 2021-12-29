@@ -12,7 +12,7 @@ export default function ModalList({header, ...rest }) {
         aria-labelledby="nested-list-subheader"
         subheader={
         <ListSubheader component="div" id="nested-list-subheader">
-            header
+            {header}
         </ListSubheader>
         }
     />
