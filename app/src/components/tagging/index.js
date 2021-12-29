@@ -175,12 +175,16 @@ export default function Tagging() {
         away_team_name: res.away_team_name
       });
     });
-
+    
     GameService.getGameTeamPlayers({ game_id }).then((res) => {
       console.log("team players", res)
       setState({ homePlayers: res.home_team, awayPlayers: res.away_team })
     })
   }, [count, game_id])
+
+  const updateTagList = () => setTagCnt(tagCnt + 1)
+
+  const handleDrawerOpen = () => setOpen(!open)
 
   React.useEffect(() => {
     if (game_id <= 0) return;
@@ -200,15 +204,6 @@ export default function Tagging() {
       setState({pTagListLoading: false})
     })
   }
-
-
-  const updateTagList = () => {
-    setTagCnt(tagCnt + 1)
-  }
-
-  const handleDrawerOpen = () => {
-    setOpen(!open);
-  };
 
   const changePlayRate = (flag) => {
     let newRate = flag ? (videoState.playbackRate + 1) : (videoState.playbackRate - 1);
@@ -235,9 +230,7 @@ export default function Tagging() {
 
     const curTime = player.current.getCurrentTime()
     console.log("current Time", curTime, config.sec_after);
-    setTeamTag({
-      end_time: toHHMMSS(`${curTime + config.sec_after}`),
-    })
+    setTeamTag({end_time: toHHMMSS(`${curTime + config.sec_after}`)})
     setPlayerTag({
       team_id: offenseTeamId,
       action_id: action.id,
@@ -256,10 +249,7 @@ export default function Tagging() {
     } catch (e) {}
   }
 
-  const addPlayerTag = async (PTag) => {
-    const res = await GameService.addPlayerTag(PTag)
-    console.log("addPlayerTag", res)
-  }
+  const addPlayerTag = async (PTag) => await GameService.addPlayerTag(PTag)
 
   const targetClicked = async (target) => {
     await setPlayerTag({ action_result_id: target.id })
@@ -285,10 +275,6 @@ export default function Tagging() {
     })
   }, [config]);
 
-  const storeTempPlayerTag = (data) => {
-    setTempPlayerTagList([...temp_playerTag_list, ...data])
-  }
-  
   React.useEffect(() => {
     const data = temp_playerTag_list.slice(-1)[0]
     
@@ -328,7 +314,7 @@ export default function Tagging() {
           {modalContent === "Short Pass" && 
             <ShortPass 
               offenseTeam={offenseTeam} 
-              taggingState={e => storeTempPlayerTag(e)} 
+              taggingState={e => setTempPlayerTagList([...temp_playerTag_list, ...e])} 
               startTime={playerTag.start_time}
               endTime={playerTag.end_time}
               offenseTeamId={offenseTeamId}
@@ -338,7 +324,7 @@ export default function Tagging() {
             <Pass 
               offenseTeam={offenseTeam} 
               defenseTeam={defenseTeam} 
-              taggingState={e => storeTempPlayerTag(e)} 
+              taggingState={e => setTempPlayerTagList([...temp_playerTag_list, ...e])} 
               startTime={playerTag.start_time}
               endTime={playerTag.end_time}
               offenseTeamId={offenseTeamId}
