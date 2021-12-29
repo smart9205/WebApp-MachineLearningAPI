@@ -44,7 +44,7 @@ export default function StickyHeadTable({ rows, loading }) {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                       <TableCell align="center">{row.action_name}</TableCell>
                       <TableCell align="center">{row.action_type_name}</TableCell>
                       <TableCell align="center">{row.action_result_name}</TableCell>

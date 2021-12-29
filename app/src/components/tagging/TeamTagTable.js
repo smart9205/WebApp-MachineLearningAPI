@@ -49,11 +49,11 @@ export default function StickyHeadTable({rows, updateTagList, handleRowClick}) {
           <Table stickyHeader aria-label="sticky table" size={'small'}>
             <TableHead>
               <TableRow>
-                <TableCell>Offensive Team</TableCell>
-                <TableCell>Defensive Team</TableCell>
-                <TableCell>Start Time</TableCell>
-                <TableCell>End Time</TableCell>
-                <TableCell></TableCell>
+                <TableCell align="center">Offensive Team</TableCell>
+                <TableCell align="center">Defensive Team</TableCell>
+                <TableCell align="center">Start Time</TableCell>
+                <TableCell align="center">End Time</TableCell>
+                <TableCell align="center"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -69,8 +69,8 @@ export default function StickyHeadTable({rows, updateTagList, handleRowClick}) {
                         <TableCell align="center">{row.defensive_team_name}</TableCell>
                         <TableCell align="center">{row.start_time}</TableCell>
                         <TableCell align="center">{row.end_time}</TableCell>
-                        <TableCell align="center" sx={{p:0}}>
-                          <IconButton onClick={() => deleteTag(row.id)}>
+                        <TableCell align="center" sx={{p:0 , m:0}}>
+                          <IconButton size="small" onClick={() => deleteTag(row.id)}>
                             <DeleteIcon />
                           </IconButton>
                         </TableCell>

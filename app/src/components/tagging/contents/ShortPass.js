@@ -13,10 +13,6 @@ const SubBox = styled(Box)`
   }
   `;
 
-const SUCCESSFUL = "Successful"
-const STOLE_BY = "Stole By"
-const BAD_PASS = "Bad Pass"
-
 export default function ShortPass({ 
   offenseTeam, 
   taggingState, 

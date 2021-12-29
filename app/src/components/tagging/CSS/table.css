@@ -1,5 +1,6 @@
 .MuiTableCell-root {
-    padding: 6px 2px !important;
+    padding: 5px 2px !important;
+    font-size: 12px !important;
 }
 .MuiTablePagination-root p{
     margin: 0px !important;
