@@ -18,6 +18,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import CircularProgress from '@mui/material/CircularProgress';
 import { visuallyHidden } from '@mui/utils';
 
 function descendingComparator(a, b, orderBy) {
@@ -152,7 +153,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
+  const { numSelected, loading } = props;
 
   return (
     <Toolbar
@@ -164,7 +165,7 @@ const EnhancedTableToolbar = (props) => {
             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }),
       }}
-    >
+    > 
       {numSelected > 0 ? (
         <Typography
           sx={{ flex: '1 1 100%' }}
@@ -184,20 +185,23 @@ const EnhancedTableToolbar = (props) => {
           Individual Tag
         </Typography>
       )}
+      {loading ? <CircularProgress /> : 
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        numSelected > 0 ? (
+          <Tooltip title="Delete">
+            <IconButton>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Tooltip title="Filter list">
+            <IconButton>
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        
       )}
+
     </Toolbar>
   );
 };
@@ -206,7 +210,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({rows}) {
+export default function EnhancedTable({rows, loading}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -266,7 +270,7 @@ export default function EnhancedTable({rows}) {
   return (
     <Box sx={{ width: '100%',p:1 }}>
       <Paper sx={{ width: '100%', p:1 }}>
-        <EnhancedTableToolbar numSelected={selected.length}/>
+        <EnhancedTableToolbar numSelected={selected.length} loading={loading}/>
         <TableContainer style={{ height: "calc(30vh - 70px)" }}>
           <Table
             aria-labelledby="tableTitle"

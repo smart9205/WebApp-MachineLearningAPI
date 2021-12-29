@@ -18,7 +18,7 @@ import ReactPlayer from 'react-player';
 import GameService from '../../services/game.service';
 import IndividualTagTable from "./IndividualTagTable"
 import TeamTagTable from "./TeamTagTable"
-import { Button, stepClasses } from '@mui/material'; import Radio from '@mui/material/Radio';
+import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -111,7 +111,7 @@ export default function Tagging() {
     assistPlayer: {},
     savedPlayer: {},
     goal: "No",
-    disp_teamTag_id: 0,
+    pTagListLoading: false
   })
 
   const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -189,13 +189,18 @@ export default function Tagging() {
     )
   }, [game_id, tagCnt])
 
-  React.useEffect(() => {
-    if (!state.disp_teamTag_id) return
-    GameService.getAllPlayerTagsByTeamTag(state.disp_teamTag_id).then(res => {
-      console.log("playerTag", res)
+  const dispPlayerTags = (disp_teamTag_id) => {
+    if (!disp_teamTag_id) return
+
+    setState({pTagListLoading: true})
+    GameService.getAllPlayerTagsByTeamTag(disp_teamTag_id).then(res => {
       setPlayerTagList(res);
+      setState({pTagListLoading: false})
+    }).catch(() => {
+      setState({pTagListLoading: false})
     })
-  }, [state.disp_teamTag_id])
+  }
+
 
   const updateTagList = () => {
     setTagCnt(tagCnt + 1)
@@ -244,32 +249,30 @@ export default function Tagging() {
     })
   }
 
-  const saveTeamTag = async () => {
+  const addTeamTag = async () => {
     try {
       const res = await GameService.addTeamTag(teamTag)
       setModalOpen(false)
       setTeamTag({ id: res.id })
       setTagCnt(tagCnt + 1)
-      // savePlayerTag()
       return res;
-    } catch (e) { }
+    } catch (e) {}
   }
 
-  const savePlayerTag = (PTag) => {
-    GameService.addPlayerTag(PTag).then(res => {
-      console.log("addplayerTag", res)
-    })
+  const addPlayerTag = async (PTag) => {
+    const res = await GameService.addPlayerTag(PTag)
+    console.log("addPlayerTag", res)
   }
 
   const targetClicked = async (target) => {
     await setPlayerTag({ action_result_id: target.id })
     if (target.name === "No") {
-      const t = await saveTeamTag();
+      const t = await addTeamTag();
       await setPlayerTag({
         team_tag_id: t.id,
       })
       if (!state.offensePlayer?.id) return
-      savePlayerTag({ ...playerTag, player_id: state.offensePlayer.id });
+      addPlayerTag({ ...playerTag, player_id: state.offensePlayer.id });
     };
   }
 
@@ -296,15 +299,13 @@ export default function Tagging() {
 
     if (ALL_ACTIONS.find(f => f.id === data?.action_id)?.end_possession) {
       const saveTags = async() => {
-        const tTag = await saveTeamTag() // we need to get the team tag id to pass it to the player table
+        const tTag = await addTeamTag()
         console.log("save Team: ", tTag);
-        temp_playerTag_list.map(pTag =>
-          savePlayerTag({ 
-            ...pTag, 
-            team_tag_id: tTag.id
-          })
-        )
+        for (const pTag of temp_playerTag_list) {
+          await addPlayerTag({...pTag, team_tag_id: tTag.id})
+        }
         setTempPlayerTagList([])
+        dispPlayerTags(tTag.id)
       }
       saveTags()
     }
@@ -368,9 +369,9 @@ export default function Tagging() {
         <TeamTagTable
           rows={teamTagList}
           updateTagList={updateTagList}
-          handleRowClick={id => setState({ disp_teamTag_id: id })}
+          handleRowClick={id => dispPlayerTags( id )}
         />
-        <IndividualTagTable rows={playerTagList} />
+        <IndividualTagTable rows={playerTagList} loading={state.pTagListLoading}/>
       </Drawer>
 
       <Main open={open}>
