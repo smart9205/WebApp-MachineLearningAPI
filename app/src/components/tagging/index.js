@@ -80,7 +80,7 @@ const TagButton = styled(({ color, ...otherProps }) => <Button {...otherProps} v
   color: ${props => props.color};
   width: 100%
 `;
-let ALL_ACTIONS = [];
+let ALL_ACTION_RESULTS = [];
 export default function Tagging() {
   const { id } = useParams();
   const game_id = Number(atob(id).slice(3, -3))
@@ -154,13 +154,13 @@ export default function Tagging() {
   React.useEffect(() => {
     GameService.getAllActions().then((res) => {
       console.log("action :", res);
-      ALL_ACTIONS = res;
     });
     GameService.getAllActionTypes().then((res) => {
       console.log("action_type :", res);
     });
     GameService.getAllActionResults().then((res) => {
       console.log("action_result :", res);
+      ALL_ACTION_RESULTS = res;
     });
   }, [])
 
@@ -292,9 +292,9 @@ export default function Tagging() {
   React.useEffect(() => {
     const data = temp_playerTag_list.slice(-1)[0]
     
-    console.log("temp_playerTag_list", temp_playerTag_list, data?.action_id)
+    console.log("temp_playerTag_list", temp_playerTag_list, data?.action_result_id)
 
-    if (ALL_ACTIONS.find(f => f.id === data?.action_id)?.end_possession) {
+    if (ALL_ACTION_RESULTS.find(f => f.id === data?.action_result_id)?.end_possession) {
       const saveTags = async() => {
         const tTag = await addTeamTag()
         console.log("save Team: ", tTag);
