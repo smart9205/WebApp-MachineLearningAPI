@@ -461,12 +461,12 @@ export default function Tagging() {
                   {state[`${t}_team_name`]}
                 </ControlButton>
               )}
-              <Box style={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-around" }}>
+              <Box style={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-around", marginLeft:20 }}>
                 Start Time : {state.start_time} <ControlButton sx={{ mr: 0 }} >C.P.</ControlButton>
               </Box>
             </Box>
 
-            <Grid container spacing={2} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 500 }}>
+            <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 380 }}>
               {[
                 { id: 2, title: "Short Pass" },
                 { id: 2, title: "Pass" },
