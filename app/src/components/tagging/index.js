@@ -145,11 +145,11 @@ export default function Tagging() {
     end_time: "00:00:00",
   })
 
-  const offenseTeam = () => state.offense === "home" ? state.homePlayers : state.awayPlayers
-  const defenseTeam = () => state.offense === "away" ? state.homePlayers : state.awayPlayers
+  const offenseTeam = state.offense === "home" ? state.homePlayers : state.awayPlayers
+  const defenseTeam = state.offense === "away" ? state.homePlayers : state.awayPlayers
 
-  const offenseTeamId = () => state.offense === "home" ? state.home_team_id : state.away_team_id
-  const defenseTeamId = () => state.offense === "away" ? state.home_team_id : state.away_team_id
+  const offenseTeamId = state.offense === "home" ? state.home_team_id : state.away_team_id
+  const defenseTeamId = state.offense === "away" ? state.home_team_id : state.away_team_id
 
   React.useEffect(() => {
     GameService.getAllActions().then((res) => {
@@ -218,17 +218,14 @@ export default function Tagging() {
     console.log("rate", PLAYBACK_RATE[newRate])
   }
 
-  const teamClicked = async (team) => {
-    const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
-    await setState({ offense: team, start_time: st })
-
+  React.useEffect(() => {
     setTeamTag({
       game_id,
-      start_time: st,
-      offensive_team_id: offenseTeamId(),
-      defensive_team_id: defenseTeamId(),
+      start_time: state.start_time,
+      offensive_team_id: offenseTeamId,
+      defensive_team_id: defenseTeamId,
     })
-  }
+  }, [offenseTeamId, defenseTeamId, state.start_time, game_id])
 
   const taggingButtonClicked = (action) => {
     setModalOpen(true)
@@ -242,7 +239,7 @@ export default function Tagging() {
       end_time: toHHMMSS(`${curTime + config.sec_after}`),
     })
     setPlayerTag({
-      team_id: offenseTeamId(),
+      team_id: offenseTeamId,
       action_id: action.id,
       start_time: toHHMMSS(`${curTime - config.sec_before}`),
       end_time: toHHMMSS(`${curTime + config.sec_after}`),
@@ -324,30 +321,30 @@ export default function Tagging() {
         <Box style={style}>
           {modalContent === "Shot" && 
             <Shot 
-              offenseTeam={offenseTeam()} 
-              defenseTeam={defenseTeam()} 
+              offenseTeam={offenseTeam} 
+              defenseTeam={defenseTeam} 
             />
           }
           {modalContent === "Short Pass" && 
             <ShortPass 
-              offenseTeam={offenseTeam()} 
-              defenseTeam={defenseTeam()} 
+              offenseTeam={offenseTeam} 
+              defenseTeam={defenseTeam} 
               taggingState={e => storeTempPlayerTag(e)} 
               startTime={playerTag.start_time}
               endTime={playerTag.end_time}
-              offenseTeamId={offenseTeamId()}
-              defenseTeamId={defenseTeamId()}
+              offenseTeamId={offenseTeamId}
+              defenseTeamId={defenseTeamId}
             />
           }
           {modalContent === "Pass" && 
             <Pass 
-              offenseTeam={offenseTeam()} 
-              defenseTeam={defenseTeam()} 
+              offenseTeam={offenseTeam} 
+              defenseTeam={defenseTeam} 
               taggingState={e => storeTempPlayerTag(e)} 
               startTime={playerTag.start_time}
               endTime={playerTag.end_time}
-              offenseTeamId={offenseTeamId()}
-              defenseTeamId={defenseTeamId()}
+              offenseTeamId={offenseTeamId}
+              defenseTeamId={defenseTeamId}
             />
           }
         </Box>
@@ -455,8 +452,9 @@ export default function Tagging() {
                   key={t}
                   fullWidth
                   style={{ backgroundColor: t === state.offense && "darkblue", color: t === state.offense && "white" }}
-                  onClick={() =>
-                    teamClicked(t)
+                  onClick={() => {
+                    const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
+                    setState({ offense: t, start_time: st })}
                   }
                 >
                   {state[`${t}_team_name`]}
