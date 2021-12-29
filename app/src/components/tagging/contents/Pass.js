@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListSubheader from '@mui/material/ListSubheader';
+import List from "./basic/ModalList"
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 
@@ -63,16 +62,7 @@ export default function ShortPass({
   return (
     <>
       <SubBox>
-        <List
-          sx={{ bgcolor: 'background.paper' }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              List of Players
-            </ListSubheader>
-          }
-        >
+        <List header="Offensive Player List">
           {
             offenseTeam.map((player, i) => (
               <ListItemButton key={i}
@@ -87,12 +77,7 @@ export default function ShortPass({
       </SubBox>
 
       <SubBox>
-        <List
-          sx={{ bgcolor: 'background.paper' }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-          subheader={<ListSubheader component="div" id="nested-list-subheader">Result</ListSubheader>}
-        >
+        <List header="Action Type">
           {[
             { id: 5, name: LONG_PASS },
             { id: 6, name: THROUGH_PASS },
@@ -111,12 +96,7 @@ export default function ShortPass({
       </SubBox>
 
       <SubBox>
-        <List
-          sx={{ bgcolor: 'background.paper' }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-          subheader={<ListSubheader component="div" id="nested-list-subheader">Result</ListSubheader>}
-        >
+        <List header="Result">
           {[
             { id: 4, name: SUCCESSFUL },
             { id: 5, name: STOLE_BY },
@@ -142,16 +122,7 @@ export default function ShortPass({
         </List>
       </SubBox>
       {result.name === STOLE_BY && <SubBox>
-        <List
-          sx={{ bgcolor: 'background.paper' }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              Defensive Player List
-            </ListSubheader>
-          }
-        >
+        <List header="Defensive Player List">
           {
             defenseTeam.map((player, i) => (
               <ListItemButton key={i}

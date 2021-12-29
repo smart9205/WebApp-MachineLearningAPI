@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListSubheader from '@mui/material/ListSubheader';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import List from "./basic/ModalList"
 
 const SubBox = styled(Box)`
   margin: 6px;
@@ -23,16 +22,7 @@ export default function Shot({ defenseTeam, offenseTeam }) {
   return (
     <>
       <SubBox>
-        <List
-          sx={{ bgcolor: 'background.paper' }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              List of Players
-            </ListSubheader>
-          }
-        >
+        <List header="List of Players">
           {
             offenseTeam.map((player, i) => (
               <ListItemButton key={i}
@@ -47,12 +37,7 @@ export default function Shot({ defenseTeam, offenseTeam }) {
       </SubBox>
 
       <SubBox>
-        <List
-          sx={{ bgcolor: 'background.paper' }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-          subheader={<ListSubheader component="div" id="nested-list-subheader">Type</ListSubheader>}
-        >
+        <List header="Type">
           {[
             { id: 1, name: "Right" },
             { id: 2, name: "Left" },
@@ -68,16 +53,7 @@ export default function Shot({ defenseTeam, offenseTeam }) {
         </List>
       </SubBox>
       <SubBox>
-        <List
-          sx={{ bgcolor: 'background.paper' }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              On Target
-            </ListSubheader>
-          }
-        >
+        <List header="On Target">
           {
             [
               { id: 1, name: "Yes" },
@@ -96,16 +72,7 @@ export default function Shot({ defenseTeam, offenseTeam }) {
       {
         state.onTarget === "Yes" &&
         <SubBox>
-          <List
-            sx={{ bgcolor: 'background.paper' }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-            subheader={
-              <ListSubheader component="div" id="nested-list-subheader">
-                Goal
-              </ListSubheader>
-            }
-          >
+          <List header="Goal">
             {
               ["Yes", "No"].map((goal, i) => (
                 <ListItemButton key={i}
@@ -122,16 +89,7 @@ export default function Shot({ defenseTeam, offenseTeam }) {
       {
         state.onTarget === "Yes" && state.goal === "Yes" &&
         <SubBox>
-          <List
-            sx={{ bgcolor: 'background.paper' }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-            subheader={
-              <ListSubheader component="div" id="nested-list-subheader">
-                Assist
-              </ListSubheader>
-            }
-          >
+          <List header="Assist">
             {
               offenseTeam.map((player, i) => (
                 <ListItemButton key={i} selected={state.assistPlayer === player}
@@ -145,16 +103,7 @@ export default function Shot({ defenseTeam, offenseTeam }) {
         </SubBox>
       }
       <SubBox>
-        <List
-          sx={{ bgcolor: 'background.paper' }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              Saved
-            </ListSubheader>
-          }
-        >
+        <List header="Saved">
           {
             defenseTeam.map((player, i) => (
               <ListItemButton key={i}
