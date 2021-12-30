@@ -21,10 +21,6 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
   const [onTarget, setOnTarget] = React.useState("Yes");
   const [goal, setGoal] = React.useState("No");
 
-  const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
-    onTarget: "Yes"
-  })
-
   const targetClicked = (target) => {
     setOnTarget(target)
     if (target === "No") {
@@ -144,9 +140,7 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
             {
               defenseTeam.map((player, i) => (
                 <ListItemButton key={i}
-                  selected={state.savedPlayer === player}
                   onClick={() => {
-                    setState({ savedPlayer: player })
                     taggingState([
                       {
                         action_type_id: actionTypeId,
