@@ -3,61 +3,63 @@ import {
     TableCell,
     Input,
 } from '@mui/material';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import TimePicker from '@mui/lab/TimePicker';
+import { IMaskInput } from 'react-imask';
 
-export default function TCellEdit({ value }) {
+const TextMaskCustom = React.forwardRef(function TextMaskCustom(props, ref) {
+    const { onChange, ...other } = props;
+    return (
+      <IMaskInput
+        {...other}
+        mask="00:00:00"
+        definitions={{
+          '#': /[1-9]/,
+        }}
+        inputRef={ref}
+        onAccept={(value) => onChange({ target: { name: props.name, value } })}
+        overwrite
+      />
+    );
+  });
+
+export default function TCellEdit({ value, update }) {
 
     const [editable, setEditable] = React.useState(false)
 
-    const [temp, setTemp] = React.useState("")
-
-    const cellClicked = () => {
-        setEditable(true)
+    const [temp, setTemp] = React.useState(value)
+      
+    
+    const handleChange = (event) => {
+        setTemp(event.target.value)
     }
 
     const updateValue = () => {
         setEditable(false)
-        // getValue(temp)
+        console.log("TIME STAMP", temp)
+        update(temp)
     }
 
     return (
         <TableCell
             align="center"
-            onClick={() => cellClicked()}
+            onClick={() => setEditable(true)}
         >
             {editable ?
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <TimePicker
-                        ampm={false}
-                        openTo="hours"
-                        views={['hours', 'minutes', 'seconds']}
-                        inputFormat="HH:mm:ss"
-                        mask="__:__:__"
-                        label="With seconds"
-                        value={temp}
-                        onChange={(newValue) => {
-                            setTemp(newValue);
-                        }}
-
-                        renderInput={(params) =>
-                            <Input
-                                {...params}
-                                autoFocus
-                                sx={{ maxWidth: 65, fontSize: 14 }}
-                                size="small"
-                                onBlur={() => updateValue()}
-                                onKeyPress={(ev) => {
-                                    if (ev.key === 'Enter') {
-                                        ev.preventDefault();
-                                        updateValue()
-                                    }
-                                }}
-                            />
+                <Input
+                    value={temp}
+                    id="formatted-text-mask-input"
+                    autoFocus
+                    sx={{ maxWidth: 65, fontSize: 14 }}
+                    size="small"
+                    onBlur={() => updateValue()}
+                    onKeyPress={(ev) => {
+                        if (ev.key === 'Enter') {
+                            ev.preventDefault();
+                            updateValue()
                         }
-                    />
-                </LocalizationProvider>
+                    }}
+                    onChange={handleChange}
+                    inputComponent={TextMaskCustom}
+                />
                 : <>{value}</>
             }
         </TableCell>

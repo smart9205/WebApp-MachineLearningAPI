@@ -86,8 +86,14 @@ export default function StickyHeadTable({
                         value={{id: row.player_id, name: `${row.player_fname} ${row.player_lname}`}} 
                         update={v => update({...row, player_id: v})}
                       />
-                      <TCellTimeEdit type="TimePicker" value={row.start_time} />
-                      <TCellTimeEdit type="TimePicker" value={row.end_time} />
+                      <TCellTimeEdit 
+                        value={row.start_time} 
+                        update={v => update({...row, start_time: v})}
+                      />
+                      <TCellTimeEdit 
+                        value={row.end_time} 
+                        update={v => update({...row, end_time: v})}
+                      />
                       <TableCell align="center" sx={{p:0 , m:0}}>
                           <IconButton size="small" onClick={() => {}}>
                             <DeleteIcon />
