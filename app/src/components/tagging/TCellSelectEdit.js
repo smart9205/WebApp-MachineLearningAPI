@@ -12,10 +12,10 @@ export default function TCellAutoCompleteEdit({ value, rows, update }) {
 
     const [temp, setTemp] = React.useState(value.id)
 
-    const updateValue = () => {
+    const updateValue = (v) => {
+        setTemp(v)
         setEditable(false)
-        console.log("temp data", temp)
-        update(temp)
+        update(v)
     }
 
     return (
@@ -27,7 +27,7 @@ export default function TCellAutoCompleteEdit({ value, rows, update }) {
                 <Select
                     sx={{ fontSize: 14 }}
                     value={temp}
-                    onChange={e => setTemp(e.target.value)}
+                    onChange={e => updateValue(e.target.value)}
                     input={<Input autoFocus onBlur={() => updateValue()}/>}
                 >
                     {rows.map(row => 

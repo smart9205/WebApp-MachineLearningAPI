@@ -12,6 +12,7 @@ import Paper from '@mui/material/Paper';
 import TCellTimeEdit from './TCellTimeEdit';
 import TCellSelectEdit from './TCellSelectEdit';
 import GameService from '../../services/game.service';
+import CircularProgress from '@mui/material/CircularProgress';
 import "./CSS/table.css";
 
 export default function StickyHeadTable({ 
@@ -26,10 +27,14 @@ export default function StickyHeadTable({
 }) {
   console.log("Player Tag", rows)  
 
+  const [loading, setLoading] = React.useState(false)
+
   const update = (data) => {
+    setLoading(true)
     GameService.updatePlayerTag(data).then(res => {
       console.log("UPdated Player tag", res)
       updateTagList()
+      setLoading(false)
     })
   }
   
@@ -51,6 +56,13 @@ export default function StickyHeadTable({
               </TableRow>
             </TableHead>
             <TableBody>
+              {loading ? 
+                <TableRow>
+                  <TableCell colSpan={7} align="center">
+                    <CircularProgress/>
+                  </TableCell>
+                </TableRow> : 
+              <>
               {rows.map((row) => {
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
@@ -84,6 +96,7 @@ export default function StickyHeadTable({
                     </TableRow>
                   );
                 })}
+              </>}
             </TableBody>
           </Table>
         </TableContainer>
