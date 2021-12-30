@@ -110,10 +110,6 @@ export default function Tagging() {
     away_team_name: "",
     homePlayers: [],
     awayPlayers: [],
-    offensePlayer: {},
-    assistPlayer: {},
-    savedPlayer: {},
-    goal: "No",
     curTeamTagId: 0,
   })
 
@@ -177,7 +173,7 @@ export default function Tagging() {
         away_team_name: res.away_team_name
       });
     });
-    
+
     GameService.getGameTeamPlayers({ game_id }).then((res) => {
       console.log("team players", res)
       setState({ homePlayers: res.home_team, awayPlayers: res.away_team })
@@ -195,7 +191,7 @@ export default function Tagging() {
   }, [game_id, tagCnt])
 
   const dispPlayerTags = (id) => {
-    setState({curTeamTagId: id})
+    setState({ curTeamTagId: id })
     if (!id) {
       setPlayerTagList([]);
       return
@@ -203,7 +199,7 @@ export default function Tagging() {
 
     GameService.getAllPlayerTagsByTeamTag(id).then(res => {
       setPlayerTagList(res);
-    }).catch(() => {})
+    }).catch(() => { })
   }
 
   const changePlayRate = (flag) => {
@@ -231,7 +227,7 @@ export default function Tagging() {
 
     const curTime = player.current.getCurrentTime()
     console.log("current Time", curTime, config.sec_after);
-    setTeamTag({end_time: toHHMMSS(`${curTime + config.sec_after}`)})
+    setTeamTag({ end_time: toHHMMSS(`${curTime + config.sec_after}`) })
     setPlayerTag({
       team_id: offenseTeamId,
       action_id: action.id,
@@ -247,22 +243,12 @@ export default function Tagging() {
       setTeamTag({ id: res.id })
       setTagCnt(tagCnt + 1)
       return res;
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const addPlayerTag = async (PTag) => await GameService.addPlayerTag(PTag)
 
-  const targetClicked = async (target) => {
-    await setPlayerTag({ action_result_id: target.id })
-    if (target.name === "No") {
-      const t = await addTeamTag();
-      await setPlayerTag({
-        team_tag_id: t.id,
-      })
-      if (!state.offensePlayer?.id) return
-      addPlayerTag({ ...playerTag, player_id: state.offensePlayer.id });
-    };
-  }
+  const setTaggingState = (e) => setTempPlayerTagList([...temp_playerTag_list, ...e])
 
   React.useEffect(() => {
     GameService.updateTaggerConfig(config).then(res => {
@@ -278,15 +264,20 @@ export default function Tagging() {
 
   React.useEffect(() => {
     const data = temp_playerTag_list.slice(-1)[0]
-    
+
     console.log("temp_playerTag_list", temp_playerTag_list, data?.action_result_id)
 
     if (ALL_ACTION_RESULTS.find(f => f.id === data?.action_result_id)?.end_possession) {
-      const saveTags = async() => {
+      const saveTags = async () => {
         const tTag = await addTeamTag()
         console.log("save Team: ", tTag);
         for (const pTag of temp_playerTag_list) {
-          await addPlayerTag({...pTag, team_tag_id: tTag.id})
+          await addPlayerTag({
+            ...pTag,
+            team_tag_id: tTag.id,
+            start_time: playerTag.start_time,
+            end_time: playerTag.end_time
+          })
         }
         setTempPlayerTagList([])
         dispPlayerTags(tTag.id)
@@ -294,7 +285,7 @@ export default function Tagging() {
       saveTags()
     }
     setModalOpen(false)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [temp_playerTag_list])
 
   return (
@@ -306,28 +297,27 @@ export default function Tagging() {
         aria-describedby="modal-modal-description"
       >
         <Box style={style}>
-          {modalContent === "Shot" && 
-            <Shot 
-              offenseTeam={offenseTeam} 
-              defenseTeam={defenseTeam} 
+          {modalContent === "Shot" &&
+            <Shot
+              offenseTeamId={offenseTeamId}
+              defenseTeamId={defenseTeamId}
+              offenseTeam={offenseTeam}
+              defenseTeam={defenseTeam}
+              taggingState={setTaggingState}
             />
           }
-          {modalContent === "Short Pass" && 
-            <ShortPass 
-              offenseTeam={offenseTeam} 
-              taggingState={e => setTempPlayerTagList([...temp_playerTag_list, ...e])} 
-              startTime={playerTag.start_time}
-              endTime={playerTag.end_time}
+          {modalContent === "Short Pass" &&
+            <ShortPass
+              offenseTeam={offenseTeam}
+              taggingState={setTaggingState}
               offenseTeamId={offenseTeamId}
             />
           }
-          {modalContent === "Pass" && 
-            <Pass 
-              offenseTeam={offenseTeam} 
-              defenseTeam={defenseTeam} 
-              taggingState={e => setTempPlayerTagList([...temp_playerTag_list, ...e])} 
-              startTime={playerTag.start_time}
-              endTime={playerTag.end_time}
+          {modalContent === "Pass" &&
+            <Pass
+              offenseTeam={offenseTeam}
+              defenseTeam={defenseTeam}
+              taggingState={setTaggingState}
               offenseTeamId={offenseTeamId}
               defenseTeamId={defenseTeamId}
             />
@@ -351,17 +341,17 @@ export default function Tagging() {
         <TeamTagTable
           rows={teamTagList}
           updateTagList={updateTagList}
-          handleRowClick={id => dispPlayerTags( id )}
+          handleRowClick={id => dispPlayerTags(id)}
 
         />
-        <IndividualTagTable 
-          rows={playerTagList} 
+        <IndividualTagTable
+          rows={playerTagList}
           actions={ALL_ACTIONS}
           actionTypes={ALL_ACTION_TYPES}
           actionResults={ALL_ACTION_RESULTS}
           offenseTeamId={offenseTeamId}
-          offenseTeam={offenseTeam} 
-          defenseTeam={defenseTeam} 
+          offenseTeam={offenseTeam}
+          defenseTeam={defenseTeam}
           updateTagList={() => {
             console.log("update PlayerTag", state.curTeamTagId)
             dispPlayerTags(state.curTeamTagId)
@@ -452,13 +442,14 @@ export default function Tagging() {
                   style={{ backgroundColor: t === state.offense && "darkblue", color: t === state.offense && "white" }}
                   onClick={() => {
                     const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
-                    setState({ offense: t, start_time: st })}
+                    setState({ offense: t, start_time: st })
+                  }
                   }
                 >
                   {state[`${t}_team_name`]}
                 </ControlButton>
               )}
-              <Box style={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-around", marginLeft:20 }}>
+              <Box style={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-around", marginLeft: 20 }}>
                 Start Time : {state.start_time} <ControlButton sx={{ mr: 0 }} >C.P.</ControlButton>
               </Box>
             </Box>

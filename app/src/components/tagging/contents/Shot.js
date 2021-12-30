@@ -13,11 +13,31 @@ const SubBox = styled(Box)`
   }
   `;
 
-export default function Shot({ defenseTeam, offenseTeam }) {
+export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTeamId, defenseTeamId }) {
+
+  const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
+  const [assistPlayer, setAssistPlayer] = React.useState(offenseTeam[0]);
+  const [actionTypeId, setActionTypeId] = React.useState(1);
+  const [onTarget, setOnTarget] = React.useState("Yes");
+  const [goal, setGoal] = React.useState("No");
 
   const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
     onTarget: "Yes"
   })
+
+  const targetClicked = (target) => {
+    setOnTarget(target)
+    if (target === "No") {
+      taggingState([{
+        action_type_id: actionTypeId,
+        team_id: offenseTeamId,
+        player_id: offensivePlayer.id,
+        action_id: 1,
+        action_result_id: 2
+      }])
+    };
+  }
+
 
   return (
     <>
@@ -26,8 +46,8 @@ export default function Shot({ defenseTeam, offenseTeam }) {
           {
             offenseTeam.map((player, i) => (
               <ListItemButton key={i}
-                // selected={state.offensePlayer === player}
-                // onClick={() => setState({ offensePlayer: player })}
+                selected={offensivePlayer === player}
+                onClick={() => setOffensivePlayer(player)}
               >
                 <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
               </ListItemButton>
@@ -44,8 +64,8 @@ export default function Shot({ defenseTeam, offenseTeam }) {
             { id: 3, name: "Header" }
           ].map((type, i) => (
             <ListItemButton key={i}
-              // selected={playerTag.action_type_id === type.id}
-              // onClick={() => setPlayerTag({ action_type_id: type.id })}
+              selected={actionTypeId === type.id}
+              onClick={() => setActionTypeId(type.id)}
             >
               <ListItemText primary={type.name} />
             </ListItemButton>
@@ -55,31 +75,28 @@ export default function Shot({ defenseTeam, offenseTeam }) {
       <SubBox>
         <List header="On Target">
           {
-            [
-              { id: 1, name: "Yes" },
-              { id: 2, name: "No" }
-            ].map((target, i) => (
+            ["Yes", "No"].map((t, i) => (
               <ListItemButton key={i}
-                // selected={playerTag.action_result_id === target.id}
-                // onClick={() => targetClicked(target)}
+                selected={onTarget === t}
+                onClick={() => targetClicked(t)}
               >
-                <ListItemText primary={target.name} />
+                <ListItemText primary={t} />
               </ListItemButton>
             ))
           }
         </List>
       </SubBox>
       {
-        state.onTarget === "Yes" &&
+        onTarget === "Yes" &&
         <SubBox>
           <List header="Goal">
             {
-              ["Yes", "No"].map((goal, i) => (
+              ["Yes", "No"].map((g, i) => (
                 <ListItemButton key={i}
-                  selected={state.goal === goal}
-                  onClick={() => setState({ goal })}
+                  selected={goal === g}
+                  onClick={() => setGoal(g)}
                 >
-                  <ListItemText primary={goal} />
+                  <ListItemText primary={g} />
                 </ListItemButton>
               ))
             }
@@ -87,13 +104,31 @@ export default function Shot({ defenseTeam, offenseTeam }) {
         </SubBox>
       }
       {
-        state.onTarget === "Yes" && state.goal === "Yes" &&
+        onTarget === "Yes" && goal === "Yes" &&
         <SubBox>
           <List header="Assist">
             {
               offenseTeam.map((player, i) => (
-                <ListItemButton key={i} selected={state.assistPlayer === player}
-                  onClick={() => setState({ assistPlayer: player })}
+                <ListItemButton key={i} selected={assistPlayer === player}
+                  onClick={() => {
+                    setAssistPlayer(player)
+                    taggingState([
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: offenseTeamId,
+                        player_id: offensivePlayer.id,
+                        action_id: 11,
+                        action_result_id: 3
+                      },
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: offenseTeamId,
+                        player_id: player.id,
+                        action_id: 13,
+                        action_result_id: 3
+                      }
+                    ])
+                  }}
                 >
                   <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
                 </ListItemButton>
@@ -102,20 +137,41 @@ export default function Shot({ defenseTeam, offenseTeam }) {
           </List>
         </SubBox>
       }
-      <SubBox>
-        <List header="Saved">
-          {
-            defenseTeam.map((player, i) => (
-              <ListItemButton key={i}
-                selected={state.savedPlayer === player}
-                onClick={() => setState({ savedPlayer: player })}
-              >
-                <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
-              </ListItemButton>
-            ))
-          }
-        </List>
-      </SubBox>
+      {
+        goal === "No" &&
+        <SubBox>
+          <List header="Saved">
+            {
+              defenseTeam.map((player, i) => (
+                <ListItemButton key={i}
+                  selected={state.savedPlayer === player}
+                  onClick={() => {
+                    setState({ savedPlayer: player })
+                    taggingState([
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: offenseTeamId,
+                        player_id: offensivePlayer.id,
+                        action_id: 12,
+                        action_result_id: 1
+                      },
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: defenseTeamId,
+                        player_id: player.id,
+                        action_id: 12,
+                        action_result_id: 1
+                      }
+                    ])
+                  }}
+                >
+                  <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
+                </ListItemButton>
+              ))
+            }
+          </List>
+        </SubBox>
+      }
     </>
   );
 }

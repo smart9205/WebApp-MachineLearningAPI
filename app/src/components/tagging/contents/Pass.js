@@ -25,8 +25,6 @@ export default function ShortPass({
   defenseTeam,
   offenseTeam,
   taggingState,
-  startTime,
-  endTime,
   defenseTeamId,
   offenseTeamId,
 }) {
@@ -37,8 +35,6 @@ export default function ShortPass({
   const [actionTypeId, setActionTypeId] = React.useState(5);
 
   const tagData = {
-    start_time: startTime,
-    end_time: endTime,
     action_type_id: actionTypeId
   }
 

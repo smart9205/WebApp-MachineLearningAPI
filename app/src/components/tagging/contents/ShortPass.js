@@ -13,12 +13,10 @@ const SubBox = styled(Box)`
   }
   `;
 
-export default function ShortPass({ 
-  offenseTeam, 
-  taggingState, 
-  startTime, 
-  endTime,
-  offenseTeamId, 
+export default function ShortPass({
+  offenseTeam,
+  taggingState,
+  offenseTeamId,
 }) {
 
   return (
@@ -28,14 +26,12 @@ export default function ShortPass({
           {
             offenseTeam.map((player, i) => (
               <ListItemButton key={i}
-                onClick={() => 
+                onClick={() =>
                   taggingState([{
-                    start_time: startTime,
-                    end_time: endTime,
                     team_id: offenseTeamId,
                     player_id: player.id,
-                    action_type_id: 4, 
-                    action_result_id: 4, 
+                    action_type_id: 4,
+                    action_result_id: 4,
                     action_id: 2
                   }])
                 }
