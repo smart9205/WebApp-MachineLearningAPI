@@ -42,7 +42,9 @@ exports.getPlayersByGameTeam = async (req, res) => {
   let home_team, away_team;
   try {
     home_team = await Sequelize.query(`
-      SELECT *, public."Players".id as id
+      SELECT *, 
+        public."Players".id as id,
+        CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
         FROM public."Players" 
         JOIN 
           public."Team_Players" on public."Players".id = public."Team_Players".player_id
@@ -53,7 +55,9 @@ exports.getPlayersByGameTeam = async (req, res) => {
     `);
       
     away_team = await Sequelize.query(`
-      SELECT *, public."Players".id as id
+      SELECT *, 
+        public."Players".id as id,
+        CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
         FROM public."Players" 
         JOIN 
           public."Team_Players" on public."Players".id = public."Team_Players".player_id

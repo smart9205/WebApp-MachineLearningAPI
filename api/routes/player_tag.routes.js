@@ -33,7 +33,6 @@ module.exports = app => {
 
 	app.put(
 		"/player_tag/:id",
-		[authJwt.isAdmin],
 		controller.update
 	);
 

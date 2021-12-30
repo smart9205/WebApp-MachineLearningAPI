@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
 import GameService from '../../services/game.service';
+import TCellTimeEdit from './TCellTimeEdit';
 
 export default function StickyHeadTable({rows, updateTagList, handleRowClick}) {
   const [selectedRowId, setSelectedRowId] = React.useState(rows[0]?.id);
@@ -28,6 +29,7 @@ export default function StickyHeadTable({rows, updateTagList, handleRowClick}) {
       updateTagList()
     })
   }
+  
   return (
     <Box sx={{ width: '100%', p: 1 }}>
       <Paper sx={{ width: '100%', overflow: 'hidden', p: 0.5 }}>
@@ -40,7 +42,7 @@ export default function StickyHeadTable({rows, updateTagList, handleRowClick}) {
                 <TableCell align="center">Defensive Team</TableCell>
                 <TableCell align="center">Start Time</TableCell>
                 <TableCell align="center">End Time</TableCell>
-                <TableCell align="center"></TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -51,14 +53,14 @@ export default function StickyHeadTable({rows, updateTagList, handleRowClick}) {
                       onClick={() => setSelectedRowId(row.id)}
                       >
                       <TableCell align="center">{row.offensive_team_name}</TableCell>
-                        <TableCell align="center">{row.defensive_team_name}</TableCell>
-                        <TableCell align="center">{row.start_time}</TableCell>
-                        <TableCell align="center">{row.end_time}</TableCell>
-                        <TableCell align="center" sx={{p:0 , m:0}}>
-                          <IconButton size="small" onClick={() => deleteTag(row.id)}>
-                            <DeleteIcon />
-                          </IconButton>
-                        </TableCell>
+                      <TableCell align="center">{row.defensive_team_name}</TableCell>
+                      <TCellTimeEdit type="TimePicker" value={row.start_time} />
+                      <TCellTimeEdit type="TimePicker" value={row.end_time} />
+                      <TableCell align="center" sx={{p:0 , m:0}}>
+                        <IconButton size="small" onClick={() => deleteTag(row.id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}

@@ -121,6 +121,12 @@ const deleteGames = (req) => {
   });
 }
 
+const updatePlayerTag = (req) => {
+  return axios.put(API_URL+`player_tag/${req.id}`, req, {headers: authHeader(), data:{id:req.id}}).then((response) => {
+    return response.data;
+  });
+}
+
 const updateJersey = (req) => {
   return axios.post(API_URL+"team_player/updatejersey", req, {headers: authHeader()}).then((response) => {
     return response.data;
@@ -181,6 +187,7 @@ const gameService = {
   updateJersey,
   updateGame,
   updateTaggerConfig,
+  updatePlayerTag,
 
   deletePlayersInTeam,
 

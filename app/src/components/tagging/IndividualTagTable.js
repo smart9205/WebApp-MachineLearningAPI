@@ -9,9 +9,30 @@ import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Paper from '@mui/material/Paper';
+import TCellTimeEdit from './TCellTimeEdit';
+import TCellSelectEdit from './TCellSelectEdit';
+import GameService from '../../services/game.service';
 import "./CSS/table.css";
 
-export default function StickyHeadTable({ rows, loading }) {
+export default function StickyHeadTable({ 
+  rows, 
+  actions, 
+  actionTypes, 
+  actionResults,
+  offenseTeamId,
+  offenseTeam,
+  defenseTeam,
+  updateTagList,
+}) {
+  console.log("Player Tag", rows)  
+
+  const update = (data) => {
+    GameService.updatePlayerTag(data).then(res => {
+      console.log("UPdated Player tag", res)
+      updateTagList()
+    })
+  }
+  
   return (
     <Box sx={{ width: '100%', p: 1 }}>
       <Paper sx={{ width: '100%', overflow: 'hidden', p: 0.5 }}>
@@ -33,12 +54,28 @@ export default function StickyHeadTable({ rows, loading }) {
               {rows.map((row) => {
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      <TableCell align="center">{row.action_name}</TableCell>
-                      <TableCell align="center">{row.action_type_name}</TableCell>
-                      <TableCell align="center">{row.action_result_name}</TableCell>
-                      <TableCell align="center">{`${row.player_fname} ${row.player_lname}`}</TableCell>
-                      <TableCell align="center">{row.start_time}</TableCell>
-                      <TableCell align="center">{row.end_time}</TableCell>
+                      <TCellSelectEdit 
+                        rows={actions} 
+                        value={{id: row.action_id, name:row.action_name}} 
+                        update={v => update({...row, action_id: v})}
+                      />
+                      <TCellSelectEdit 
+                        rows={actionTypes} 
+                        value={{id: row.action_type_id, name:row.action_type_name}}
+                        update={v => update({...row, action_type_id: v})} 
+                      />
+                      <TCellSelectEdit 
+                        rows={actionResults} 
+                        value={{id: row.action_result_id, name:row.action_result_name}} 
+                        update={v => update({...row, action_result_id: v})}
+                      />
+                      <TCellSelectEdit 
+                        rows={row.team_id === offenseTeamId ? offenseTeam : defenseTeam} 
+                        value={{id: row.player_id, name: `${row.player_fname} ${row.player_lname}`}} 
+                        update={v => update({...row, player_id: v})}
+                      />
+                      <TCellTimeEdit type="TimePicker" value={row.start_time} />
+                      <TCellTimeEdit type="TimePicker" value={row.end_time} />
                       <TableCell align="center" sx={{p:0 , m:0}}>
                           <IconButton size="small" onClick={() => {}}>
                             <DeleteIcon />

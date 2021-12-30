@@ -81,6 +81,9 @@ const TagButton = styled(({ color, ...otherProps }) => <Button {...otherProps} v
   width: 100%
 `;
 let ALL_ACTION_RESULTS = [];
+let ALL_ACTIONS = [];
+let ALL_ACTION_TYPES = [];
+
 export default function Tagging() {
   const { id } = useParams();
   const game_id = Number(atob(id).slice(3, -3))
@@ -111,7 +114,7 @@ export default function Tagging() {
     assistPlayer: {},
     savedPlayer: {},
     goal: "No",
-    pTagListLoading: false
+    curTeamTagId: 0,
   })
 
   const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -153,13 +156,12 @@ export default function Tagging() {
 
   React.useEffect(() => {
     GameService.getAllActions().then((res) => {
-      console.log("action :", res);
+      ALL_ACTIONS = res;
     });
     GameService.getAllActionTypes().then((res) => {
-      console.log("action_type :", res);
+      ALL_ACTION_TYPES = res;
     });
     GameService.getAllActionResults().then((res) => {
-      console.log("action_result :", res);
       ALL_ACTION_RESULTS = res;
     });
   }, [])
@@ -183,7 +185,6 @@ export default function Tagging() {
   }, [count, game_id])
 
   const updateTagList = () => setTagCnt(tagCnt + 1)
-
   const handleDrawerOpen = () => setOpen(!open)
 
   React.useEffect(() => {
@@ -193,16 +194,16 @@ export default function Tagging() {
     )
   }, [game_id, tagCnt])
 
-  const dispPlayerTags = (disp_teamTag_id) => {
-    if (!disp_teamTag_id) return
+  const dispPlayerTags = (id) => {
+    setState({curTeamTagId: id})
+    if (!id) {
+      setPlayerTagList([]);
+      return
+    }
 
-    setState({pTagListLoading: true})
-    GameService.getAllPlayerTagsByTeamTag(disp_teamTag_id).then(res => {
+    GameService.getAllPlayerTagsByTeamTag(id).then(res => {
       setPlayerTagList(res);
-      setState({pTagListLoading: false})
-    }).catch(() => {
-      setState({pTagListLoading: false})
-    })
+    }).catch(() => {})
   }
 
   const changePlayRate = (flag) => {
@@ -351,8 +352,21 @@ export default function Tagging() {
           rows={teamTagList}
           updateTagList={updateTagList}
           handleRowClick={id => dispPlayerTags( id )}
+
         />
-        <IndividualTagTable rows={playerTagList} loading={state.pTagListLoading}/>
+        <IndividualTagTable 
+          rows={playerTagList} 
+          actions={ALL_ACTIONS}
+          actionTypes={ALL_ACTION_TYPES}
+          actionResults={ALL_ACTION_RESULTS}
+          offenseTeamId={offenseTeamId}
+          offenseTeam={offenseTeam} 
+          defenseTeam={defenseTeam} 
+          updateTagList={() => {
+            console.log("update PlayerTag", state.curTeamTagId)
+            dispPlayerTags(state.curTeamTagId)
+          }}
+        />
       </Drawer>
 
       <Main open={open}>
