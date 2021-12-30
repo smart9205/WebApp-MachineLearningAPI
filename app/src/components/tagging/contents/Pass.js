@@ -21,14 +21,14 @@ const LONG_PASS = "Long Pass"
 const THROUGH_PASS = "Through Pass"
 const KEY_PASS = "Key Pass"
 
-export default function ShortPass({ 
-  defenseTeam, 
-  offenseTeam, 
-  taggingState, 
-  startTime, 
+export default function ShortPass({
+  defenseTeam,
+  offenseTeam,
+  taggingState,
+  startTime,
   endTime,
   defenseTeamId,
-  offenseTeamId, 
+  offenseTeamId,
 }) {
 
   const [result, setResult] = React.useState({ id: 4, name: SUCCESSFUL })
@@ -50,7 +50,7 @@ export default function ShortPass({
       player_id: player.id,
       action_id: 14,
       action_result_id: 11
-    },{
+    }, {
       ...tagData,
       player_id: offensivePlayer.id,
       team_id: offenseTeamId,
@@ -67,7 +67,7 @@ export default function ShortPass({
             offenseTeam.map((player, i) => (
               <ListItemButton key={i}
                 selected={offensivePlayer === player}
-                onClick={() => setOffensivePlayer( player )}
+                onClick={() => setOffensivePlayer(player)}
               >
                 <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
               </ListItemButton>
@@ -86,7 +86,14 @@ export default function ShortPass({
             <ListItemButton key={r.id}
               selected={actionTypeId === r.id}
               onClick={() => {
-                setActionTypeId(r.id) 
+                setActionTypeId(r.id)
+                const d = {
+                  ...tagData,
+                  team_id: offenseTeamId,
+                  player_id: offensivePlayer.id,
+                  action_result_id: r.id
+                };
+                if (r.name === KEY_PASS) taggingState([{ ...d, action_id: 2, }])
               }}
             >
               <ListItemText primary={r.name} />
@@ -105,15 +112,15 @@ export default function ShortPass({
             <ListItemButton key={r.id}
               selected={result?.id === r.id}
               onClick={() => {
-                setResult(r) 
+                setResult(r)
                 const d = {
                   ...tagData,
                   team_id: offenseTeamId,
                   player_id: offensivePlayer.id,
                   action_result_id: r.id
                 };
-                if(r.name === SUCCESSFUL) taggingState([{...d, action_id: 2,}])
-                if(r.name === BAD_PASS) taggingState([{...d, action_id: 10,}])
+                if (r.name === SUCCESSFUL) taggingState([{ ...d, action_id: 2, }])
+                if (r.name === BAD_PASS) taggingState([{ ...d, action_id: 10, }])
               }}
             >
               <ListItemText primary={r.name} />

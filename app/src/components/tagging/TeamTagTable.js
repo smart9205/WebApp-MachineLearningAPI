@@ -13,7 +13,7 @@ import GameService from '../../services/game.service';
 import TCellTimeEdit from './TCellTimeEdit';
 import CircularProgress from '@mui/material/CircularProgress';
 
-export default function StickyHeadTable({rows, updateTagList, handleRowClick}) {
+export default function StickyHeadTable({ rows, updateTagList, handleRowClick }) {
   const [selectedRowId, setSelectedRowId] = React.useState(rows[0]?.id);
   const [loading, setLoading] = React.useState(false)
   React.useEffect(() => {
@@ -21,10 +21,10 @@ export default function StickyHeadTable({rows, updateTagList, handleRowClick}) {
   }, [rows])
 
   React.useEffect(() => {
-    handleRowClick(selectedRowId); 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    handleRowClick(selectedRowId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRowId])
-  
+
   const deleteTag = (id) => {
     setLoading(true)
     GameService.deleteTeamTag(id).then(res => {
@@ -48,11 +48,12 @@ export default function StickyHeadTable({rows, updateTagList, handleRowClick}) {
   return (
     <Box sx={{ width: '100%', p: 1 }}>
       <Paper sx={{ width: '100%', overflow: 'hidden', p: 0.5 }}>
-        <h5 style={{textAlign: 'center'}}>Team Tag</h5>
+        <h5 style={{ textAlign: 'center' }}>Team Tag</h5>
         <TableContainer style={{ height: "calc(60vh - 30px)" }}>
           <Table stickyHeader aria-label="sticky table" size={'small'}>
             <TableHead>
               <TableRow>
+                <TableCell align="center">Period</TableCell>
                 <TableCell align="center">Offensive Team</TableCell>
                 <TableCell align="center">Defensive Team</TableCell>
                 <TableCell align="center">Start Time</TableCell>
@@ -61,25 +62,30 @@ export default function StickyHeadTable({rows, updateTagList, handleRowClick}) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {loading ? 
+              {loading ?
                 <TableRow>
                   <TableCell colSpan={5} align="center">
-                    <CircularProgress/>
+                    <CircularProgress />
                   </TableCell>
-                </TableRow> 
+                </TableRow>
                 :
                 <>
-                {rows.map((row) => {
+                  {rows.map((row) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={row.id}
                         selected={row.id === selectedRowId}
                         onClick={() => setSelectedRowId(row.id)}
-                        >
+                      >
+                        <TableCell align="center">
+                          {row.period === 1 && "1st Half"}
+                          {row.period === 2 && "2st Half"}
+                          {row.period === 3 && "Overtime"}
+                        </TableCell>
                         <TableCell align="center">{row.offensive_team_name}</TableCell>
                         <TableCell align="center">{row.defensive_team_name}</TableCell>
-                        <TCellTimeEdit value={row.start_time} update={v => update({...row, start_time: v})} />
-                        <TCellTimeEdit value={row.end_time} update={v => update({...row, end_time: v})} />
-                        <TableCell align="center" sx={{p:0 , m:0}}>
+                        <TCellTimeEdit value={row.start_time} update={v => update({ ...row, start_time: v })} />
+                        <TCellTimeEdit value={row.end_time} update={v => update({ ...row, end_time: v })} />
+                        <TableCell align="center" sx={{ p: 0, m: 0 }}>
                           <IconButton size="small" onClick={() => deleteTag(row.id)}>
                             <DeleteIcon />
                           </IconButton>
