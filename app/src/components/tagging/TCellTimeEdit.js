@@ -27,14 +27,8 @@ export default function TCellEdit({ value, update }) {
 
     const [temp, setTemp] = React.useState(value)
       
-    
-    const handleChange = (event) => {
-        setTemp(event.target.value)
-    }
-
     const updateValue = () => {
         setEditable(false)
-        console.log("TIME STAMP", temp)
         update(temp)
     }
 
@@ -57,7 +51,7 @@ export default function TCellEdit({ value, update }) {
                             updateValue()
                         }
                     }}
-                    onChange={handleChange}
+                    onChange={e => setTemp(e.target.value)}
                     inputComponent={TextMaskCustom}
                 />
                 : <>{value}</>

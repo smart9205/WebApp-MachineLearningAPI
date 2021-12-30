@@ -32,8 +32,19 @@ export default function StickyHeadTable({
   const update = (data) => {
     setLoading(true)
     GameService.updatePlayerTag(data).then(res => {
-      console.log("UPdated Player tag", res)
       updateTagList()
+      setLoading(false)
+    }).catch(() => {
+      setLoading(false)
+    })
+  }
+
+  const deletePlayerTag = (id) => {
+    setLoading(true)
+    GameService.deletePlayerTag(id).then(res => {
+      updateTagList()
+      setLoading(false)
+    }).catch(() => {
       setLoading(false)
     })
   }
@@ -95,7 +106,7 @@ export default function StickyHeadTable({
                         update={v => update({...row, end_time: v})}
                       />
                       <TableCell align="center" sx={{p:0 , m:0}}>
-                          <IconButton size="small" onClick={() => {}}>
+                          <IconButton size="small" onClick={() => deletePlayerTag(row.id)}>
                             <DeleteIcon />
                           </IconButton>
                         </TableCell>
