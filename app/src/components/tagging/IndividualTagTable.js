@@ -25,8 +25,6 @@ export default function StickyHeadTable({
   defenseTeam,
   updateTagList,
 }) {
-  console.log("Player Tag", rows)  
-
   const [loading, setLoading] = React.useState(false)
 
   const update = (data) => {
