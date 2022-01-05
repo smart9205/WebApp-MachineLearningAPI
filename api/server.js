@@ -61,75 +61,86 @@ app.listen(PORT, () => {
 });
 
 function initial() {
-  Role.destroy({
+
+  Role.findAll({
     where: {},
-  }).then(() => {
-    Role.create({ id: 1, name: "admin" });
-    Role.create({ id: 2, name: "tagger" });
-    Role.create({ id: 3, name: "coach" });
-    Role.create({ id: 4, name: "player" });
+  }).then(res => {
+    if (!res.length) {
+      Role.create({ id: 1, name: "admin" });
+      Role.create({ id: 2, name: "tagger" });
+      Role.create({ id: 3, name: "coach" });
+      Role.create({ id: 4, name: "player" });
+    }
   });
 
-  Subscription.destroy({
+  Subscription.findAll({
     where: {},
-  }).then(() => {
-    Subscription.create({ id: 1, name: "tagger" })
-    Subscription.create({ id: 2, name: "coach" })
-    Subscription.create({ id: 3, name: "player" })
+  }).then(res => {
+    if (!res.length) {
+      Subscription.create({ id: 1, name: "tagger" })
+      Subscription.create({ id: 2, name: "coach" })
+      Subscription.create({ id: 3, name: "player" })
+    }
   })
 
-  Action.destroy({
+  Action.findAll({
     where: {},
-  }).then(() => {
-    Action.create({ id: 1, name: "Shot" })
-    Action.create({ id: 2, name: "Pass" })
-    Action.create({ id: 3, name: "Cross" })
-    Action.create({ id: 4, name: "Penalty" })
-    Action.create({ id: 5, name: "Corner" })
-    Action.create({ id: 6, name: "Free Kick" })
-    Action.create({ id: 7, name: "Dribble" })
-    Action.create({ id: 8, name: "Foul" })
-    Action.create({ id: 9, name: "Draw Foul" })
-    Action.create({ id: 10, name: "Turnover" })
-    Action.create({ id: 11, name: "Goal" })
-    Action.create({ id: 12, name: "Saved" })
-    Action.create({ id: 13, name: "Assist" })
-    Action.create({ id: 14, name: "Interception" })
-    Action.create({ id: 15, name: "Clearance" })
-    Action.create({ id: 16, name: "Tackle" })
-    Action.create({ id: 17, name: "Free Kick" })
-    Action.create({ id: 18, name: "Yellow Card" })
-    Action.create({ id: 19, name: "Red Card" })
+  }).then(res => {
+    if (!res.length) {
+      Action.create({ id: 1, name: "Shot" })
+      Action.create({ id: 2, name: "Pass" })
+      Action.create({ id: 3, name: "Cross" })
+      Action.create({ id: 4, name: "Penalty" })
+      Action.create({ id: 5, name: "Corner" })
+      Action.create({ id: 6, name: "Free Kick" })
+      Action.create({ id: 7, name: "Dribble" })
+      Action.create({ id: 8, name: "Foul" })
+      Action.create({ id: 9, name: "Draw Foul" })
+      Action.create({ id: 10, name: "Turnover" })
+      Action.create({ id: 11, name: "Goal" })
+      Action.create({ id: 12, name: "Saved" })
+      Action.create({ id: 13, name: "Assist" })
+      Action.create({ id: 14, name: "Interception" })
+      Action.create({ id: 15, name: "Clearance" })
+      Action.create({ id: 16, name: "Tackle" })
+      Action.create({ id: 17, name: "Free Kick" })
+      Action.create({ id: 18, name: "Yellow Card" })
+      Action.create({ id: 19, name: "Red Card" })
+    }
   })
 
-  Action_Type.destroy({
+  Action_Type.findAll({
     where: {},
-  }).then(() => {
-    Action_Type.create({ id: 1, name: "Right" })
-    Action_Type.create({ id: 2, name: "Left" })
-    Action_Type.create({ id: 3, name: "Header" })
-    Action_Type.create({ id: 4, name: "Short Pass" })
-    Action_Type.create({ id: 5, name: "Long Pass" })
-    Action_Type.create({ id: 6, name: "Through Pass" })
-    Action_Type.create({ id: 7, name: "Key Pass" })
+  }).then(res => {
+    if (!res.length) {
+      Action_Type.create({ id: 1, name: "Right" })
+      Action_Type.create({ id: 2, name: "Left" })
+      Action_Type.create({ id: 3, name: "Header" })
+      Action_Type.create({ id: 4, name: "Short Pass" })
+      Action_Type.create({ id: 5, name: "Long Pass" })
+      Action_Type.create({ id: 6, name: "Through Pass" })
+      Action_Type.create({ id: 7, name: "Key Pass" })
+    }
   })
 
-  Action_Result.destroy({
+  Action_Result.findAll({
     where: {},
-  }).then(() => {
-    Action_Result.create({ id: 1, name: "On Target" })
-    Action_Result.create({ id: 2, name: "Off Target" })
-    Action_Result.create({ id: 3, name: "Goal" })
-    Action_Result.create({ id: 4, name: "Successful", end_possession: false })
-    Action_Result.create({ id: 5, name: "Turnover" })
-    Action_Result.create({ id: 6, name: "Saved" })
-    Action_Result.create({ id: 7, name: "Blocked" })
-    Action_Result.create({ id: 8, name: "Cleared" })
-    Action_Result.create({ id: 9, name: "Goalkeeper Saved" })
-    Action_Result.create({ id: 10, name: "Unsuccessful" })
-    Action_Result.create({ id: 11, name: "Bad Pass" })
-    Action_Result.create({ id: 12, name: "Bad Dribble" })
-    Action_Result.create({ id: 13, name: "Free Kick" })
-    Action_Result.create({ id: 14, name: "Penalty" })
+  }).then(res => {
+    if (!res.length) {
+      Action_Result.create({ id: 1, name: "On Target" })
+      Action_Result.create({ id: 2, name: "Off Target" })
+      Action_Result.create({ id: 3, name: "Goal" })
+      Action_Result.create({ id: 4, name: "Successful", end_possession: false })
+      Action_Result.create({ id: 5, name: "Turnover" })
+      Action_Result.create({ id: 6, name: "Saved" })
+      Action_Result.create({ id: 7, name: "Blocked" })
+      Action_Result.create({ id: 8, name: "Cleared" })
+      Action_Result.create({ id: 9, name: "Goalkeeper Saved" })
+      Action_Result.create({ id: 10, name: "Unsuccessful" })
+      Action_Result.create({ id: 11, name: "Bad Pass" })
+      Action_Result.create({ id: 12, name: "Bad Dribble" })
+      Action_Result.create({ id: 13, name: "Free Kick" })
+      Action_Result.create({ id: 14, name: "Penalty" })
+    }
   })
 }

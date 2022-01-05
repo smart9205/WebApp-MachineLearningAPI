@@ -59,18 +59,6 @@ db.user.belongsToMany(db.role, {
   otherKey: "roleId"
 });
 
-db.subscription.belongsToMany(db.user, {
-  through: "User_Subscriptions",
-  foreignKey: "subscription_id",
-  otherKey: "user_id"
-});
-
-db.user.belongsToMany(db.subscription, {
-  through: "User_Subscriptions",
-  foreignKey: "user_id",
-  otherKey: "subscription_id"
-})
-
 db.ROLES = ["admin", "tagger", "coach", "player"];
 
 module.exports = db;

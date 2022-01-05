@@ -27,45 +27,45 @@ import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import { getUser, parseJwt } from './common/utilities'
 
-const PrivateRoute = ({component: Component, rememberPath=true, ...rest}) => {
-  if(rememberPath) localStorage.setItem("path", rest.location.pathname);
+const PrivateRoute = ({ component: Component, rememberPath = true, ...rest }) => {
+  if (rememberPath) localStorage.setItem("path", rest.location.pathname);
   const { user: currentUser } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}
-      render={(props) => currentUser && currentUser.subscription && currentUser.subscription.available
+      render={(props) => currentUser && currentUser.subscription.length > 0
         ? <Component {...props} />
-        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+        : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />}
     />
   )
 }
 
-const AdminRoute = ({component: Component, rememberPath=true, ...rest}) => {
-  if(rememberPath) localStorage.setItem("path", rest.location.pathname);
+const AdminRoute = ({ component: Component, rememberPath = true, ...rest }) => {
+  if (rememberPath) localStorage.setItem("path", rest.location.pathname);
   const { user: currentUser } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}
-      render={(props) => currentUser && currentUser.subscription && currentUser.subscription.available && currentUser.roles.includes("ROLE_ADMIN")
+      render={(props) => currentUser && currentUser.subscription.length > 0 && currentUser.roles.includes("ROLE_ADMIN")
         ? <Component {...props} />
-        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+        : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />}
     />
   )
-} 
+}
 
-const App = () => {  
+const App = () => {
   const { user: currentUser } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const logOut = useCallback(() => {
     dispatch(logout());
   }, [dispatch]);
-  
+
   const user = getUser();
   console.log(user)
   if (user) {
     const decodedJwt = parseJwt(user.accessToken);
-    
+
     console.log("JWT expire at : ", (new Date(decodedJwt.exp * 1000)).toUTCString());
     if (decodedJwt.exp * 1000 < Date.now()) {
       logOut();
@@ -94,7 +94,7 @@ const App = () => {
   const handleOnIdle = event => {
     // console.log('user is idle', event)
     console.log('last active', getLastActiveTime())
-      logOut();
+    logOut();
   }
 
   const handleOnActive = event => {
@@ -137,7 +137,7 @@ const App = () => {
           </Switch>
         </div>
 
-        <AuthVerify logOut={logOut}/>
+        <AuthVerify logOut={logOut} />
       </div>
     </Router>
   );

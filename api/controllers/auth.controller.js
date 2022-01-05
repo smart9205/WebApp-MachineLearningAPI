@@ -8,6 +8,7 @@ const User = db.user;
 const VerificationToken = db.verificationToken;
 const User_Config = db.user_config;
 const Email_Queue = db.email_queue
+const Sequelize = db.sequelize;
 
 
 const Op = db.Sequelize.Op;
@@ -55,23 +56,27 @@ sendSigninSuccessInfo = async (res, user) => {
     expiresIn: 86400 // 24 hours
   });
 
-  var authorities = [];
+  let authorities = [];
+  let validSubs = [];
 
   const roles = await user.getRoles();
   for (let i = 0; i < roles.length; i++) {
     authorities.push("ROLE_" + roles[i].name.toUpperCase());
   }
 
-  let subscription = await user.getSubscriptions();
-  console.log("user", subscription);
+  let subscriptions = (await Sequelize.query(`
+      SELECT public."User_Subscriptions".*, public."Subscriptions".name
+      FROM public."User_Subscriptions" 
+      JOIN public."Subscriptions" on public."User_Subscriptions".subscription_id = public."Subscriptions".id
+      where public."User_Subscriptions".user_id = ${user.id}
+     `))[0];
 
-  // if (subscription !== null) {
-  //   const type = await subscription.getName();
-  //   console.log("name", type.name);
-  //   subscription = {
-  //     ...subscription.dataValues, name: type.name, available: Date.now() < subscription.end_date
-  //   }
-  // }
+  console.log("user", subscriptions);
+
+  for (let i = 0; i < subscriptions.length; i++) {
+    if (Date.now() < subscriptions[i].end_date)
+      validSubs.push("SUB_" + subscriptions[i].name.toUpperCase());
+  }
 
   userConf = await User_Config.findOne({
     where: {
@@ -87,8 +92,8 @@ sendSigninSuccessInfo = async (res, user) => {
     country: user.country,
     phone: user.phone_number,
     roles: authorities,
-    accessToken: token,
-    subscription: subscription,
+    accessToken: validSubs.length > 0 && token,
+    subscription: validSubs,
     user_config: userConf
   });
 }

@@ -48,7 +48,7 @@ const Register = () => {
       );
     }
   };
-  
+
   const validEmail = (value) => {
     if (!isEmail(value)) {
       return (
@@ -58,7 +58,7 @@ const Register = () => {
       );
     }
   };
-  
+
   const vfirstname = (value) => {
     if (value.length < 1 || value.length > 30) {
       return (
@@ -68,7 +68,7 @@ const Register = () => {
       );
     }
   };
-  
+
   const vlastname = (value) => {
     if (value.length < 1 || value.length > 30) {
       return (
@@ -78,7 +78,7 @@ const Register = () => {
       );
     }
   };
-  
+
   const vphonenumber = (value) => {
     if (value.length < 1 || value.length > 30) {
       return (
@@ -88,7 +88,7 @@ const Register = () => {
       );
     }
   };
-  
+
   const vcountry = (value) => {
     if (value.length < 1 || value.length > 30) {
       return (
@@ -119,14 +119,14 @@ const Register = () => {
   };
 
   const verifyCaptcha = (res) => {
-    if(res) {
+    if (res) {
       setHuman(true);
     }
   }
   // ReCAPTCHA Expired
   const expireCaptcha = () => {
     setHuman(false);
-  }  
+  }
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -139,7 +139,7 @@ const Register = () => {
       dispatch(register(email, firstname, lastname, phonenumber, country))
         .then(() => {
           setSuccessful(true);
-         })
+        })
         .catch(() => {
           setSuccessful(false);
         });
@@ -158,7 +158,7 @@ const Register = () => {
         <Form onSubmit={handleRegister} ref={form}>
           {!successful && (
             <div>
-              
+
               <div className="form-group">
                 <label htmlFor="email">Email</label>
                 <Input
@@ -216,7 +216,7 @@ const Register = () => {
                   validations={[required, vcountry]}
                 />
               </div>
-              
+
               <div>
                 <ReCAPTCHA
                   // size="invisible"
@@ -225,10 +225,10 @@ const Register = () => {
                   onExpired={expireCaptcha}
                 />
               </div>
-              
+
               <div className="form-group">
-                <button 
-                  className="btn btn-primary btn-block" 
+                <button
+                  className="btn btn-primary btn-block"
                   disabled={!human}
                 >
                   Sign Up
@@ -239,7 +239,7 @@ const Register = () => {
 
           {message && (
             <div className="form-group">
-              <div className={ successful ? "alert alert-success" : "alert alert-danger" } role="alert">
+              <div className={successful ? "alert alert-success" : "alert alert-danger"} role="alert">
                 {message}
               </div>
             </div>

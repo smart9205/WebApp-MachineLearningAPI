@@ -32,10 +32,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   paper: {
-    // backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#FFF",
     border: '2px solid #000',
+    zIndex: 100,
     // boxShadow: theme.shadows[5],
-    // padding: theme.spacing(2, 4, 3),
+    padding: 10,
     textAlign: 'center'
   },
 }));
@@ -67,18 +68,18 @@ const Login = (props) => {
 
   const [cookies, setCookie] = useCookies(['data']);
 
-  if(!Object.keys(cookies).length){
-    const data = {device : randomString.generate(16), createDate: new Date()}
+  if (!Object.keys(cookies).length) {
+    const data = { device: randomString.generate(16), createDate: new Date() }
     setCookie('data', CryptoJS.AES.encrypt(JSON.stringify(data), SECRET).toString());
   }
-    
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
 
-  const { isLoggedIn, user:currentUser } = useSelector(state => state.auth);
+  const { isLoggedIn, user: currentUser } = useSelector(state => state.auth);
   const { message } = useSelector(state => state.message);
 
   const dispatch = useDispatch();
@@ -119,14 +120,14 @@ const Login = (props) => {
     if (checkBtn.current.context._errors.length === 0) {
 
       let device = null;
-      try{
+      try {
         device = JSON.parse(CryptoJS.AES.decrypt(cookies.data, SECRET).toString(CryptoJS.enc.Utf8)).device;
       }
       catch {
         console.log("JSON Parse error!");
         // make a new string and store in cookie
         device = randomString.generate(16);
-        const data = {device : device, createDate: new Date()}
+        const data = { device: device, createDate: new Date() }
         setCookie('data', CryptoJS.AES.encrypt(JSON.stringify(data), SECRET).toString());
       }
 
@@ -161,16 +162,16 @@ const Login = (props) => {
 
   if (isLoggedIn) {
     const path = localStorage.getItem("path");
-    if (currentUser.subscription !== null && currentUser.subscription.available) {
-      if(!currentUser.roles.includes("ROLE_ADMIN") && path === '/game'){
-        if(!adminOpen) setAdminOpen(true);
+    if (currentUser.subscription.length) {
+      if (!currentUser.roles.includes("ROLE_ADMIN") && path === '/game') {
+        if (!adminOpen) setAdminOpen(true);
       }
       else {
         console.log("Redirect after login", path);
         return <Redirect to={path ? path : '/tagging'} />;
       }
     }
-    if(!open) handleOpen();
+    if (!open) handleOpen();
   }
   const adminDialogClose = () => {
     localStorage.removeItem("path");
@@ -195,7 +196,7 @@ const Login = (props) => {
           <div className={classes.paper}>
             <h2 id="transition-modal-title">Subscription expired</h2>
             <p id="transition-modal-description">Please purchase subscrition.</p>
-            <Button variant="contained" className={classes.button} onClick={()=>handleClose()}>
+            <Button variant="contained" className={classes.button} onClick={() => handleClose()}>
               OK
             </Button>
           </div>
