@@ -4,7 +4,7 @@ const Player_Tag = db.player_tag;
 const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
 
-exports.create =  (req, res) => {
+exports.create = (req, res) => {
   console.log("req", req.body)
 
   Team_Tag.create({
@@ -24,7 +24,7 @@ exports.create =  (req, res) => {
           err.message || "Some error occurred while creating the Team_Tag."
       });
     });
- 
+
 };
 
 exports.findAll = (req, res) => {
@@ -71,7 +71,7 @@ exports.getByGameId = (req, res) => {
     JOIN public."Teams" as offenseTeam on public."Team_Tags".offensive_team_id = offenseTeam.id
     JOIN public."Teams" as defenseTeam on public."Team_Tags".defensive_team_id = defenseTeam.id
     WHERE public."Team_Tags".game_id = ${id}
-    order by public."Team_Tags".start_time desc
+    order by public."Team_Tags".start_time desc, public."Team_Tags".id desc
   `)
     .then(data => {
       res.send(data[0]);

@@ -20,6 +20,7 @@ const BAD_PASS = "Bad Pass"
 const LONG_PASS = "Long Pass"
 const THROUGH_PASS = "Through Pass"
 const KEY_PASS = "Key Pass"
+const SHORT_PASS = "Short Pass"
 
 export default function ShortPass({
   defenseTeam,
@@ -73,11 +74,12 @@ export default function ShortPass({
       </SubBox>
 
       <SubBox>
-        <List header="Action Type">
+        <List header="Type">
           {[
             { id: 5, name: LONG_PASS },
             { id: 6, name: THROUGH_PASS },
             { id: 7, name: KEY_PASS },
+            { id: 4, name: SHORT_PASS },
           ].map((r, i) => (
             <ListItemButton key={r.id}
               selected={actionTypeId === r.id}
@@ -87,9 +89,9 @@ export default function ShortPass({
                   ...tagData,
                   team_id: offenseTeamId,
                   player_id: offensivePlayer.id,
-                  action_result_id: r.id
+                  action_type_id: r.id,
                 };
-                if (r.name === KEY_PASS) taggingState([{ ...d, action_id: 2, }])
+                if (r.name === KEY_PASS) taggingState([{ ...d, action_id: 2, action_result_id: 4, }])
               }}
             >
               <ListItemText primary={r.name} />

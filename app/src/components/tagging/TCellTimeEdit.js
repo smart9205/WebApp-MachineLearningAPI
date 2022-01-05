@@ -30,6 +30,7 @@ export default function TCellEdit({ value, update, start, end }) {
     const updateValue = () => {
         if ((end && end.length > 0 && end < temp) || (start && start.length > 0 && start > temp)) {
             setEditable(false)
+            setTemp(value)
             return
         }
         update(temp)
