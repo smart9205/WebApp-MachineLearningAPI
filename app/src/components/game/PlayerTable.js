@@ -7,7 +7,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
@@ -167,8 +166,7 @@ function EnhancedTable({ jerseyUpdatedCallBack, rows, deletePlayerCallBack }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(15);
+
 
   const [openEdit, setOpenEdit] = React.useState(0);
   const [editJersey, setEditJersey] = React.useState(0);
@@ -188,20 +186,7 @@ function EnhancedTable({ jerseyUpdatedCallBack, rows, deletePlayerCallBack }) {
     setSelected([]);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const updateJersey = () => {
     setOpenEdit(0)
@@ -215,7 +200,7 @@ function EnhancedTable({ jerseyUpdatedCallBack, rows, deletePlayerCallBack }) {
       <Paper sx={{ width: '100%', height: "100%" }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer
-          style={{ height: "calc(90vh - 400px)" }}
+          style={{ height: "calc(90vh - 330px)" }}
         >
           <Table
             stickyHeader
@@ -235,7 +220,6 @@ function EnhancedTable({ jerseyUpdatedCallBack, rows, deletePlayerCallBack }) {
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
               {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   return (
@@ -280,28 +264,9 @@ function EnhancedTable({ jerseyUpdatedCallBack, rows, deletePlayerCallBack }) {
                     </TableRow>
                   );
                 })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 53 * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 15, 20]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          labelRowsPerPage="Pages"
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
       </Paper>
     </Box>
   );
