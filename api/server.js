@@ -128,17 +128,17 @@ function initial() {
   }).then(res => {
     if (!res.length) {
       Action_Result.create({ id: 1, name: "On Target" })
-      Action_Result.create({ id: 2, name: "Off Target" })
-      Action_Result.create({ id: 3, name: "Goal" })
+      Action_Result.create({ id: 2, name: "Off Target", change_possession: true })
+      Action_Result.create({ id: 3, name: "Goal", change_possession: true })
       Action_Result.create({ id: 4, name: "Successful", end_possession: false })
-      Action_Result.create({ id: 5, name: "Turnover" })
+      Action_Result.create({ id: 5, name: "Turnover", change_possession: true })
       Action_Result.create({ id: 6, name: "Saved" })
       Action_Result.create({ id: 7, name: "Blocked" })
       Action_Result.create({ id: 8, name: "Cleared" })
       Action_Result.create({ id: 9, name: "Goalkeeper Saved" })
-      Action_Result.create({ id: 10, name: "Unsuccessful" })
-      Action_Result.create({ id: 11, name: "Bad Pass" })
-      Action_Result.create({ id: 12, name: "Bad Dribble" })
+      Action_Result.create({ id: 10, name: "Unsuccessful", change_possession: true })
+      Action_Result.create({ id: 11, name: "Bad Pass", change_possession: true })
+      Action_Result.create({ id: 12, name: "Bad Dribble", change_possession: true })
       Action_Result.create({ id: 13, name: "Free Kick" })
       Action_Result.create({ id: 14, name: "Penalty" })
     }

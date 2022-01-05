@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Action_Result.init({
     name: DataTypes.STRING,
     end_possession: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
+    change_possession: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
   }, {
     sequelize,
     modelName: 'Action_Result',
