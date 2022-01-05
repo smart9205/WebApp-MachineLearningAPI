@@ -250,7 +250,18 @@ export default function Tagging() {
 
   const addPlayerTag = async (PTag) => await GameService.addPlayerTag(PTag)
 
-  const setTaggingState = (e) => setTempPlayerTagList([...temp_playerTag_list, ...e])
+  const setTaggingState = (e) => {
+    setTempPlayerTagList([
+      ...temp_playerTag_list,
+      ...(e.map(tag => {
+        return {
+          ...tag,
+          start_time: playerTag.start_time,
+          end_time: playerTag.end_time
+        };
+      }))
+    ])
+  }
 
   React.useEffect(() => {
     GameService.updateTaggerConfig(config).then(res => {
@@ -274,12 +285,7 @@ export default function Tagging() {
         const tTag = await addTeamTag()
         console.log("save Team: ", tTag);
         for (const pTag of temp_playerTag_list) {
-          await addPlayerTag({
-            ...pTag,
-            team_tag_id: tTag.id,
-            start_time: playerTag.start_time,
-            end_time: playerTag.end_time
-          })
+          await addPlayerTag({ ...pTag, team_tag_id: tTag.id })
         }
         setTempPlayerTagList([])
         dispPlayerTags(tTag.id)
