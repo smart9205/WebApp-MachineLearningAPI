@@ -16,6 +16,7 @@ const SubBox = styled(Box)`
 const SUCCESSFUL = "Successful"
 const STOLE_BY = "Stole By"
 const BAD_PASS = "Bad Pass"
+const OFFSIDE = "Offside"
 
 const LONG_PASS = "Long Pass"
 const THROUGH_PASS = "Through Pass"
@@ -110,6 +111,7 @@ export default function ShortPass({
             { id: 4, name: SUCCESSFUL },
             { id: 5, name: STOLE_BY },
             { id: 11, name: BAD_PASS },
+            { id: 15, name: OFFSIDE },
           ].map((r, i) => (
             <ListItemButton key={r.id}
               selected={result?.id === r.id}

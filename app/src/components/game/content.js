@@ -312,7 +312,6 @@ export default function Content({ gameListUpdated, actionType, editData }) {
           </div>
           <div style={{ display: 'flex' }}>
             <Autocomplete
-              disablePortal
               sx={{ m: 0.8 }}
               id="combo-box-demo"
               options={positionList}
