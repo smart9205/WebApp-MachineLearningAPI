@@ -21,6 +21,8 @@ const LONG_PASS = "Long Pass"
 const THROUGH_PASS = "Through Pass"
 const KEY_PASS = "Key Pass"
 const SHORT_PASS = "Short Pass"
+const OUT_OF_BOUND = "Out Of Bound"
+const FREE_KICK = "Free Kick"
 
 export default function ShortPass({
   defenseTeam,
@@ -80,6 +82,8 @@ export default function ShortPass({
             { id: 6, name: THROUGH_PASS },
             { id: 7, name: KEY_PASS },
             { id: 4, name: SHORT_PASS },
+            { id: 14, name: OUT_OF_BOUND },
+            { id: 11, name: FREE_KICK },
           ].map((r, i) => (
             <ListItemButton key={r.id}
               selected={actionTypeId === r.id}

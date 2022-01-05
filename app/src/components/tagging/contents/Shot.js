@@ -57,7 +57,9 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
           {[
             { id: 1, name: "Right" },
             { id: 2, name: "Left" },
-            { id: 3, name: "Header" }
+            { id: 3, name: "Header" },
+            { id: 11, name: "Free Kick" },
+            { id: 13, name: "Penalty" }
           ].map((type, i) => (
             <ListItemButton key={i}
               selected={actionTypeId === type.id}

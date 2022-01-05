@@ -337,15 +337,6 @@ export default function Tagging() {
               taggingState={setTaggingState}
             />
           }
-          {modalContent === "Penalty" &&
-            <Penalty
-              offenseTeamId={offenseTeamId}
-              defenseTeamId={defenseTeamId}
-              offenseTeam={offenseTeam}
-              defenseTeam={defenseTeam}
-              taggingState={setTaggingState}
-            />
-          }
         </Box>
       </Modal>
       <CssBaseline />
@@ -480,19 +471,16 @@ export default function Tagging() {
               </Box>
             </Box>
 
-            <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 400 }}>
+            <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 300 }}>
               {[
                 { id: 2, title: "Short Pass" },
                 { id: 2, title: "Pass" },
-                { id: 6, title: "Free Kick" },
                 { id: 1, title: "Shot" },
                 { id: 3, title: "Cross" },
-                { id: 4, title: "Penalty" },
-                { id: 5, title: "Corner" },
                 { id: 7, title: "Dribble" },
                 { id: 8, title: "Foul" },
               ].map((action, i) => (
-                <Grid key={i} item xs={6} md={4} onClick={() => taggingButtonClicked(action)}>
+                <Grid key={i} item xs={6} onClick={() => taggingButtonClicked(action)}>
                   <TagButton>{action.title}</TagButton>
                 </Grid>
               ))}

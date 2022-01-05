@@ -17,6 +17,7 @@ const RESULT_LIST = [
   { id: 4, name: "Successful" },
   { id: 7, name: "Blocked" },
   { id: 8, name: "Cleared" },
+  { id: 15, name: "Offside" },
 ]
 
 export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseTeamId, defenseTeamId }) {
@@ -29,7 +30,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
   return (
     <>
       <SubBox>
-        <List header="List of Players">
+        <List header="Offensive Player List">
           {
             offenseTeam.map((player, i) => (
               <ListItemButton key={i}
@@ -48,6 +49,8 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
           {[
             { id: 1, name: "Right" },
             { id: 2, name: "Left" },
+            { id: 11, name: "Free Kick" },
+            { id: 12, name: "Corner" },
           ].map((type, i) => (
             <ListItemButton key={i}
               selected={actionTypeId === type.id}
@@ -81,56 +84,72 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
           ))}
         </List>
       </SubBox>
-      {result.name !== "Successful" && <SubBox>
-        <List header="Defensive Player List">
-          {
-            defenseTeam.map((player, i) => (
-              <ListItemButton key={i}
-                selected={defensivePlayer === player}
-                onClick={() => {
-                  setDefensivePlayer(player)
-                  if (result.name === "Blocked")
-                    taggingState([
-                      {
-                        action_type_id: actionTypeId,
-                        team_id: offenseTeamId,
-                        player_id: offensivePlayer.id,
-                        action_id: 3, //cross
-                        action_result_id: result.id
-                      },
-                      {
-                        action_type_id: actionTypeId,
-                        team_id: defenseTeamId,
-                        player_id: player.id,
-                        action_id: 14, //interception 
-                        action_result_id: result.id
-                      },
-                    ])
-                  if (result.name === "Cleared")
-                    taggingState([
-                      {
-                        action_type_id: actionTypeId,
-                        team_id: offenseTeamId,
-                        player_id: offensivePlayer.id,
-                        action_id: 3, //cross
-                        action_result_id: result.id
-                      },
-                      {
-                        action_type_id: actionTypeId,
-                        team_id: defenseTeamId,
-                        player_id: player.id,
-                        action_id: 15, //clearance
-                        action_result_id: result.id
-                      },
-                    ])
-                }}
-              >
-                <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
-              </ListItemButton>
-            ))
-          }
-        </List>
-      </SubBox>}
+      {result.name === "Offside" ?
+        <SubBox>
+          <List header="Offensive Player List">
+            {
+              offenseTeam.map((player, i) => (
+                <ListItemButton key={i}
+                  selected={offensivePlayer === player}
+                  onClick={() => setOffensivePlayer(player)}
+                >
+                  <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
+                </ListItemButton>
+              ))
+            }
+          </List>
+        </SubBox> :
+        result.name !== "Successful" &&
+        <SubBox>
+          <List header="Defensive Player List">
+            {
+              defenseTeam.map((player, i) => (
+                <ListItemButton key={i}
+                  selected={defensivePlayer === player}
+                  onClick={() => {
+                    setDefensivePlayer(player)
+                    if (result.name === "Blocked")
+                      taggingState([
+                        {
+                          action_type_id: actionTypeId,
+                          team_id: offenseTeamId,
+                          player_id: offensivePlayer.id,
+                          action_id: 3, //cross
+                          action_result_id: result.id
+                        },
+                        {
+                          action_type_id: actionTypeId,
+                          team_id: defenseTeamId,
+                          player_id: player.id,
+                          action_id: 14, //interception 
+                          action_result_id: result.id
+                        },
+                      ])
+                    if (result.name === "Cleared")
+                      taggingState([
+                        {
+                          action_type_id: actionTypeId,
+                          team_id: offenseTeamId,
+                          player_id: offensivePlayer.id,
+                          action_id: 3, //cross
+                          action_result_id: result.id
+                        },
+                        {
+                          action_type_id: actionTypeId,
+                          team_id: defenseTeamId,
+                          player_id: player.id,
+                          action_id: 15, //clearance
+                          action_result_id: result.id
+                        },
+                      ])
+                  }}
+                >
+                  <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
+                </ListItemButton>
+              ))
+            }
+          </List>
+        </SubBox>}
     </>
   );
 }
