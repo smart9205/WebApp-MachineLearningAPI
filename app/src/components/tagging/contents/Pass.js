@@ -53,7 +53,7 @@ export default function ShortPass({
       ...tagData,
       player_id: offensivePlayer.id,
       team_id: offenseTeamId,
-      action_id: 2,
+      action_id: 10,
       action_result_id: 11
     }])
   }
