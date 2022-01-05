@@ -363,7 +363,7 @@ export default function Tagging() {
           updateTagList={updateTagList}
           handleRowClick={row => {
             dispPlayerTags(row?.id)
-            player.current.seekTo(toSecond(row.start_time))
+            player.current.seekTo(toSecond(row?.start_time))
           }}
         />
         <IndividualTagTable

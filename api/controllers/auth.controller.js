@@ -92,7 +92,7 @@ sendSigninSuccessInfo = async (res, user) => {
     country: user.country,
     phone: user.phone_number,
     roles: authorities,
-    accessToken: validSubs.length > 0 && token,
+    accessToken: (validSubs.length > 0 || authorities.includes("ROLE_ADMIN")) && token,
     subscription: validSubs,
     user_config: userConf
   });
