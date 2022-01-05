@@ -27,7 +27,7 @@ import Shot from './contents/Shot';
 import ShortPass from './contents/ShortPass';
 import Pass from './contents/Pass';
 import Cross from './contents/Cross';
-import Penalty from './contents/Penalty';
+import Foul from './contents/Foul';
 import "./CSS/Player.css";
 
 const drawerWidth = "30%";
@@ -330,6 +330,15 @@ export default function Tagging() {
           }
           {modalContent === "Cross" &&
             <Cross
+              offenseTeamId={offenseTeamId}
+              defenseTeamId={defenseTeamId}
+              offenseTeam={offenseTeam}
+              defenseTeam={defenseTeam}
+              taggingState={setTaggingState}
+            />
+          }
+          {modalContent === "Foul" &&
+            <Foul
               offenseTeamId={offenseTeamId}
               defenseTeamId={defenseTeamId}
               offenseTeam={offenseTeam}
