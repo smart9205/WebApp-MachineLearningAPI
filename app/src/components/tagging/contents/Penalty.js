@@ -84,32 +84,34 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
       {result === 9 && <SubBox>
         <List header="GoalKeepers">
           {
-            defenseTeam.filter(player => player.position === "Goalkeeper").map((player, i) => (
-              <ListItemButton key={i}
-                selected={defensivePlayer === player}
-                onClick={() => {
-                  setDefensivePlayer(player)
-                  taggingState([
-                    {
-                      action_type_id: actionTypeId,
-                      team_id: offenseTeamId,
-                      player_id: offensivePlayer.id,
-                      action_id: 4,
-                      action_result_id: result
-                    },
-                    {
-                      action_type_id: actionTypeId,
-                      team_id: defenseTeamId,
-                      player_id: player.id,
-                      action_id: 4,
-                      action_result_id: result
-                    },
-                  ])
-                }}
-              >
-                <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
-              </ListItemButton>
-            ))
+            defenseTeam
+              // .filter(player => player.position === "Goalkeeper")
+              .map((player, i) => (
+                <ListItemButton key={i}
+                  selected={defensivePlayer === player}
+                  onClick={() => {
+                    setDefensivePlayer(player)
+                    taggingState([
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: offenseTeamId,
+                        player_id: offensivePlayer.id,
+                        action_id: 4,
+                        action_result_id: result
+                      },
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: defenseTeamId,
+                        player_id: player.id,
+                        action_id: 4,
+                        action_result_id: result
+                      },
+                    ])
+                  }}
+                >
+                  <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
+                </ListItemButton>
+              ))
           }
         </List>
       </SubBox>}
