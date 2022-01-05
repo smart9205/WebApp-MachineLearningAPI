@@ -83,8 +83,8 @@ export default function StickyHeadTable({ rows, updateTagList, handleRowClick })
                         </TableCell>
                         <TableCell align="center">{row.offensive_team_name}</TableCell>
                         <TableCell align="center">{row.defensive_team_name}</TableCell>
-                        <TCellTimeEdit value={row.start_time} update={v => update({ ...row, start_time: v })} />
-                        <TCellTimeEdit value={row.end_time} update={v => update({ ...row, end_time: v })} />
+                        <TCellTimeEdit value={row.start_time} update={v => update({ ...row, start_time: v })} end={row.end_time} />
+                        <TCellTimeEdit value={row.end_time} update={v => update({ ...row, end_time: v })} start={row.start_time} />
                         <TableCell align="center" sx={{ p: 0, m: 0 }}>
                           <IconButton size="small" onClick={() => deleteTag(row.id)}>
                             <DeleteIcon />

@@ -8,27 +8,30 @@ import { IMaskInput } from 'react-imask';
 const TextMaskCustom = React.forwardRef(function TextMaskCustom(props, ref) {
     const { onChange, ...other } = props;
     return (
-      <IMaskInput
-        {...other}
-        mask="00:00:00"
-        definitions={{
-          '#': /[1-9]/,
-        }}
-        inputRef={ref}
-        onAccept={(value) => onChange({ target: { name: props.name, value } })}
-        overwrite
-      />
+        <IMaskInput
+            {...other}
+            mask="00:00:00"
+            definitions={{
+                '#': /[1-9]/,
+            }}
+            inputRef={ref}
+            onAccept={(value) => onChange({ target: { name: props.name, value } })}
+            overwrite
+        />
     );
-  });
+});
 
-export default function TCellEdit({ value, update }) {
+export default function TCellEdit({ value, update, start, end }) {
 
     const [editable, setEditable] = React.useState(false)
 
     const [temp, setTemp] = React.useState(value)
-      
+
     const updateValue = () => {
-        setEditable(false)
+        if ((end && end.length > 0 && end < temp) || (start && start.length > 0 && start > temp)) {
+            setEditable(false)
+            return
+        }
         update(temp)
     }
 

@@ -15,10 +15,10 @@ import GameService from '../../services/game.service';
 import CircularProgress from '@mui/material/CircularProgress';
 import "./CSS/table.css";
 
-export default function StickyHeadTable({ 
-  rows, 
-  actions, 
-  actionTypes, 
+export default function StickyHeadTable({
+  rows,
+  actions,
+  actionTypes,
   actionResults,
   offenseTeamId,
   offenseTeam,
@@ -46,11 +46,11 @@ export default function StickyHeadTable({
       setLoading(false)
     })
   }
-  
+
   return (
     <Box sx={{ width: '100%', p: 1 }}>
       <Paper sx={{ width: '100%', overflow: 'hidden', p: 0.5 }}>
-        <h5 style={{textAlign: 'center'}}>Player Tag</h5>
+        <h5 style={{ textAlign: 'center' }}>Player Tag</h5>
         <TableContainer style={{ height: "30vh" }}>
           <Table stickyHeader aria-label="sticky table" size={'small'}>
             <TableHead>
@@ -65,53 +65,55 @@ export default function StickyHeadTable({
               </TableRow>
             </TableHead>
             <TableBody>
-              {loading ? 
+              {loading ?
                 <TableRow>
                   <TableCell colSpan={7} align="center">
-                    <CircularProgress/>
+                    <CircularProgress />
                   </TableCell>
-                </TableRow> : 
-              <>
-              {rows.map((row) => {
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      <TCellSelectEdit 
-                        rows={actions} 
-                        value={{id: row.action_id, name:row.action_name}} 
-                        update={v => update({...row, action_id: v})}
-                      />
-                      <TCellSelectEdit 
-                        rows={actionTypes} 
-                        value={{id: row.action_type_id, name:row.action_type_name}}
-                        update={v => update({...row, action_type_id: v})} 
-                      />
-                      <TCellSelectEdit 
-                        rows={actionResults} 
-                        value={{id: row.action_result_id, name:row.action_result_name}} 
-                        update={v => update({...row, action_result_id: v})}
-                      />
-                      <TCellSelectEdit 
-                        rows={row.team_id === offenseTeamId ? offenseTeam : defenseTeam} 
-                        value={{id: row.player_id, name: `${row.player_fname} ${row.player_lname}`}} 
-                        update={v => update({...row, player_id: v})}
-                      />
-                      <TCellTimeEdit 
-                        value={row.start_time} 
-                        update={v => update({...row, start_time: v})}
-                      />
-                      <TCellTimeEdit 
-                        value={row.end_time} 
-                        update={v => update({...row, end_time: v})}
-                      />
-                      <TableCell align="center" sx={{p:0 , m:0}}>
+                </TableRow> :
+                <>
+                  {rows.map((row) => {
+                    return (
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                        <TCellSelectEdit
+                          rows={actions}
+                          value={{ id: row.action_id, name: row.action_name }}
+                          update={v => update({ ...row, action_id: v })}
+                        />
+                        <TCellSelectEdit
+                          rows={actionTypes}
+                          value={{ id: row.action_type_id, name: row.action_type_name }}
+                          update={v => update({ ...row, action_type_id: v })}
+                        />
+                        <TCellSelectEdit
+                          rows={actionResults}
+                          value={{ id: row.action_result_id, name: row.action_result_name }}
+                          update={v => update({ ...row, action_result_id: v })}
+                        />
+                        <TCellSelectEdit
+                          rows={row.team_id === offenseTeamId ? offenseTeam : defenseTeam}
+                          value={{ id: row.player_id, name: `${row.player_fname} ${row.player_lname}` }}
+                          update={v => update({ ...row, player_id: v })}
+                        />
+                        <TCellTimeEdit
+                          value={row.start_time}
+                          update={v => update({ ...row, start_time: v })}
+                          end={row.end_time}
+                        />
+                        <TCellTimeEdit
+                          value={row.end_time}
+                          update={v => update({ ...row, end_time: v })}
+                          start={row.start_time}
+                        />
+                        <TableCell align="center" sx={{ p: 0, m: 0 }}>
                           <IconButton size="small" onClick={() => deletePlayerTag(row.id)}>
                             <DeleteIcon />
                           </IconButton>
                         </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </>}
+                      </TableRow>
+                    );
+                  })}
+                </>}
             </TableBody>
           </Table>
         </TableContainer>
