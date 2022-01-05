@@ -115,14 +115,14 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
                         action_type_id: actionTypeId,
                         team_id: offenseTeamId,
                         player_id: offensivePlayer.id,
-                        action_id: 11,
+                        action_id: 1,
                         action_result_id: 3
                       },
                       {
                         action_type_id: actionTypeId,
                         team_id: offenseTeamId,
                         player_id: player.id,
-                        action_id: 13,
+                        action_id: 9,
                         action_result_id: 3
                       }
                     ])
