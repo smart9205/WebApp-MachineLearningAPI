@@ -114,7 +114,6 @@ function initial() {
       Action_Type.create({ id: 5, name: "Long Pass" })
       Action_Type.create({ id: 6, name: "Through Pass" })
       Action_Type.create({ id: 7, name: "Key Pass" })
-
       Action_Type.create({ id: 8, name: "Regular" })
       Action_Type.create({ id: 9, name: "Yellow Card" })
       Action_Type.create({ id: 10, name: "Red Card" })
