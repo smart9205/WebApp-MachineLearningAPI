@@ -487,7 +487,7 @@ export default function Tagging() {
                 { id: 6, title: "Free Kick" },
                 { id: 1, title: "Shot" },
                 { id: 3, title: "Cross" },
-                { id: 4, title: "Penality" },
+                { id: 4, title: "Penalty" },
                 { id: 5, title: "Corner" },
                 { id: 7, title: "Dribble" },
                 { id: 8, title: "Foul" },
