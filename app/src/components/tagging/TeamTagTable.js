@@ -16,9 +16,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 export default function StickyHeadTable({ rows, updateTagList, handleRowClick }) {
   const [selectedRow, setSelectedRow] = React.useState(rows[0]);
   const [loading, setLoading] = React.useState(false)
-  React.useEffect(() => {
-    setSelectedRow(rows[0])
-  }, [rows])
 
   React.useEffect(() => {
     handleRowClick(selectedRow);
