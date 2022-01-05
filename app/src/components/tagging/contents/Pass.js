@@ -47,13 +47,13 @@ export default function ShortPass({
       ...tagData,
       team_id: defenseTeamId,
       player_id: player.id,
-      action_id: 14,
+      action_id: 2,
       action_result_id: 11
     }, {
       ...tagData,
       player_id: offensivePlayer.id,
       team_id: offenseTeamId,
-      action_id: 10,
+      action_id: 2,
       action_result_id: 11
     }])
   }
