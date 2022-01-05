@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./models");
 const Role = db.role;
 const Subscription = db.subscription;
+const Player_Position = db.player_position;
 const Action = db.action;
 const Action_Type = db.action_type;
 const Action_Result = db.action_result;
@@ -90,22 +91,15 @@ function initial() {
       Action.create({ id: 1, name: "Shot" })
       Action.create({ id: 2, name: "Pass" })
       Action.create({ id: 3, name: "Cross" })
-      Action.create({ id: 4, name: "Penalty" })
-      Action.create({ id: 5, name: "Corner" })
-      Action.create({ id: 6, name: "Free Kick" })
-      Action.create({ id: 7, name: "Dribble" })
-      Action.create({ id: 8, name: "Foul" })
-      Action.create({ id: 9, name: "Draw Foul" })
-      Action.create({ id: 10, name: "Turnover" })
-      Action.create({ id: 11, name: "Goal" })
-      Action.create({ id: 12, name: "Saved" })
-      Action.create({ id: 13, name: "Assist" })
-      Action.create({ id: 14, name: "Interception" })
-      Action.create({ id: 15, name: "Clearance" })
-      Action.create({ id: 16, name: "Tackle" })
-      Action.create({ id: 17, name: "Free Kick" })
-      Action.create({ id: 18, name: "Yellow Card" })
-      Action.create({ id: 19, name: "Red Card" })
+      Action.create({ id: 4, name: "Dribble" })
+      Action.create({ id: 5, name: "Foul" })
+      Action.create({ id: 6, name: "Draw Foul" })
+      Action.create({ id: 7, name: "Turnover" })
+      Action.create({ id: 8, name: "Saved" })
+      Action.create({ id: 9, name: "Assist" })
+      Action.create({ id: 10, name: "Interception" })
+      Action.create({ id: 11, name: "Clearance" })
+      Action.create({ id: 12, name: "Tackle" })
     }
   })
 
@@ -120,6 +114,14 @@ function initial() {
       Action_Type.create({ id: 5, name: "Long Pass" })
       Action_Type.create({ id: 6, name: "Through Pass" })
       Action_Type.create({ id: 7, name: "Key Pass" })
+
+      Action_Type.create({ id: 8, name: "Regular" })
+      Action_Type.create({ id: 9, name: "Yellow Card" })
+      Action_Type.create({ id: 10, name: "Red Card" })
+      Action_Type.create({ id: 11, name: "Free Kick" })
+      Action_Type.create({ id: 12, name: "Corner" })
+      Action_Type.create({ id: 13, name: "Penalty" })
+      Action_Type.create({ id: 14, name: "Out Of Bound" })
     }
   })
 
@@ -135,12 +137,31 @@ function initial() {
       Action_Result.create({ id: 6, name: "Saved" })
       Action_Result.create({ id: 7, name: "Blocked" })
       Action_Result.create({ id: 8, name: "Cleared" })
-      Action_Result.create({ id: 9, name: "Goalkeeper Saved" })
+      Action_Result.create({ id: 9, name: "Goal Saved" })
       Action_Result.create({ id: 10, name: "Unsuccessful", change_possession: true })
       Action_Result.create({ id: 11, name: "Bad Pass", change_possession: true })
       Action_Result.create({ id: 12, name: "Bad Dribble", change_possession: true })
       Action_Result.create({ id: 13, name: "Free Kick" })
       Action_Result.create({ id: 14, name: "Penalty" })
+      Action_Result.create({ id: 15, name: "Offside", change_possession: true })
+    }
+  })
+
+  Player_Position.findAll({
+    where: {},
+  }).then(res => {
+    if (!res.length) {
+      Player_Position.create({ id: 1, name: "Goalkeeper" })
+      Player_Position.create({ id: 2, name: "Right Back" })
+      Player_Position.create({ id: 3, name: "Center Back" })
+      Player_Position.create({ id: 4, name: "Left Back" })
+      Player_Position.create({ id: 5, name: "Defensive Midfielder" })
+      Player_Position.create({ id: 6, name: "Central Midfielder" })
+      Player_Position.create({ id: 7, name: "Attacking Midfielder" })
+      Player_Position.create({ id: 8, name: "Right Winger" })
+      Player_Position.create({ id: 9, name: "Left Winger" })
+      Player_Position.create({ id: 10, name: "Striker" })
+      Player_Position.create({ id: 11, name: "Second Striker" })
     }
   })
 }

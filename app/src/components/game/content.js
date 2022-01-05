@@ -54,9 +54,10 @@ export default function Content({ gameListUpdated, actionType, editData }) {
   const [awayTeam, setAwayTeam] = React.useState(false);
   const [playerOpen, setPlayerOpen] = React.useState(false);
   const [alertType, setAlertType] = React.useState("success");
+  const [positionList, setPositionList] = React.useState([]);
 
   const [videoUrl, setVideoUrl] = React.useState("");
- 
+
   const [error, setError] = React.useState({
     f_name: false,
     l_name: false,
@@ -73,6 +74,13 @@ export default function Content({ gameListUpdated, actionType, editData }) {
   });
 
   React.useEffect(() => {
+    GameService.getAllPositions().then(res => {
+      console.log("POSITIONLIST:", res)
+      setPositionList(res.map(p => p.name))
+    })
+  }, [])
+
+  React.useEffect(() => {
     GameService.getAllSeasons().then((res) => {
       setSeasonList(res);
       setSeason(res[0]);
@@ -85,7 +93,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
   }, [count]);
 
   React.useEffect(() => {
-    if(actionType !== "Edit" || !leagueList.length || !seasonList.length) return;
+    if (actionType !== "Edit" || !leagueList.length || !seasonList.length) return;
     // setSeason(seasonList.find(s => s.id === editData.season_id));
     const editSeason = seasonList.find(s => s.id === editData.season_id);
     const editLeague = leagueList.find(s => s.id === editData.league_id);
@@ -119,12 +127,12 @@ export default function Content({ gameListUpdated, actionType, editData }) {
   const handleChange = name => event => {
     setPlayerData({ ...playerData, [name]: event.target.value });
   };
-  
+
   React.useEffect(() => {
     setError({
       f_name: playerData.f_name.length === 0,
       l_name: playerData.l_name.length === 0,
-      position: playerData.position.length === 0,
+      position: !playerData.position ? true : playerData.position.length === 0,
       jersey_number: Number(playerData.jersey_number) <= 0
     })
   }, [playerData])
@@ -150,7 +158,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
     GameService.addTeam({ name: teamName }).then(
       (res) => {
         console.log("NewTeam", res);
-        if(res.status === "success") {
+        if (res.status === "success") {
           getTeamList();
           OpenAlert(`${teamName} is successfully added!`);
         } else {
@@ -164,11 +172,11 @@ export default function Content({ gameListUpdated, actionType, editData }) {
   };
   const handlePlayerClose = (result) => {
     setPlayerOpen(false);
-    
-    if(!result) return;
-    
+
+    if (!result) return;
+
     GameService.addPlayer(playerData).then((res) => {
-      if(res.status === "success") {
+      if (res.status === "success") {
         getPlayerList();
         OpenAlert(`${res.f_name} ${res.l_name} is successfully added!`);
       } else {
@@ -188,7 +196,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
       return;
     }
 
-    if(actionType === "Add") {
+    if (actionType === "Add") {
       GameService.addGame({
         season_id: season.id,
         league_id: league.id,
@@ -198,11 +206,11 @@ export default function Content({ gameListUpdated, actionType, editData }) {
         video_url: videoUrl
       }).then((res) => {
         console.log("Add Game Result", res);
-  
+
         gameListUpdated();
         OpenAlert("Added a new game");
       })
-    } else if(actionType === "Edit") {
+    } else if (actionType === "Edit") {
       GameService.updateGame({
         id: editData.id,
         season_id: season.id,
@@ -213,7 +221,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
         video_url: videoUrl
       }).then((res) => {
         console.log("Edit Game Result", res);
-  
+
         gameListUpdated();
         OpenAlert("Game is edited");
       })
@@ -246,7 +254,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
 
   return (
     <Box>
-      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical : "top", horizontal :"center"}}>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
         <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
           {alert}
         </Alert>
@@ -282,7 +290,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
           <div style={{ display: 'flex' }}>
             <TextField
               autoFocus
-              sx={{m:0.8}}
+              sx={{ m: 0.8 }}
               value={playerData.f_name}
               onChange={handleChange("f_name")}
               helperText={error.f_name ? "First Name cannot be empty" : ""}
@@ -292,7 +300,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
               variant="outlined"
             />
             <TextField
-              sx={{m:0.8}}
+              sx={{ m: 0.8 }}
               value={playerData.l_name}
               onChange={handleChange("l_name")}
               helperText={error.l_name ? "Last Name cannot be empty" : ""}
@@ -303,15 +311,26 @@ export default function Content({ gameListUpdated, actionType, editData }) {
             />
           </div>
           <div style={{ display: 'flex' }}>
-            <TextField
-            sx={{m:0.8}}
-              value={playerData.position}
-              onChange={handleChange("position")}
-              helperText={error.position ? "Position cannot be empty" : ""}
-              error={error.position}
-              label="Position"
+            <Autocomplete
+              disablePortal
+              sx={{ m: 0.8 }}
+              id="combo-box-demo"
+              options={positionList}
               fullWidth
-              variant="outlined"
+              value={playerData.position}
+              onChange={(event, newValue) => {
+                setPlayerData({ ...playerData, position: newValue })
+              }}
+              getOptionLabel={
+                (option) => !option ? "" : option
+              }
+              renderInput={(params) =>
+                <TextField
+                  {...params}
+                  label="Position"
+                  helperText={error.position ? "Position cannot be empty" : ""}
+                  error={error.position}
+                />}
             />
             <LocalizationProvider dateAdapter={AdapterDateFns} >
               <DatePicker
@@ -320,7 +339,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
                 onChange={handleChange("date_of_birth")}
                 renderInput={(params) =>
                   <TextField
-                  sx={{m:0.8}}
+                    sx={{ m: 0.8 }}
                     {...params}
                     className={classes.input}
                   />
@@ -329,7 +348,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
             </LocalizationProvider>
           </div>
           <TextField
-          sx={{m:0.8}}
+            sx={{ m: 0.8 }}
             label="Jercey Number"
             type="number"
             value={playerData.jersey_number}
@@ -382,8 +401,8 @@ export default function Content({ gameListUpdated, actionType, editData }) {
         </Grid>
         <Grid item xs={4} className={classes.central}>
           <div style={{ textAlign: "center" }}>
-            <Button 
-              sx={{width:120}}              
+            <Button
+              sx={{ width: 120 }}
               variant="outlined"
               onClick={() => handleClickTeamOpen()}
               startIcon={<AddIcon />}
@@ -393,7 +412,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
           </div>
           <div style={{ textAlign: "center" }}>
             <Button
-              sx={{width:120}}      
+              sx={{ width: 120 }}
               variant="outlined"
               onClick={e => handleClickPlayerOpen()}
               startIcon={<AddIcon />}
@@ -408,7 +427,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
               onChange={(newValue) => {
                 setGameDate(newValue);
               }}
-              renderInput={(params) => <TextField {...params} fullWidth sx={{my:2}}/>}
+              renderInput={(params) => <TextField {...params} fullWidth sx={{ my: 2 }} />}
             />
           </LocalizationProvider>
           <Autocomplete
@@ -426,7 +445,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
                 </li>
               );
             }}
-            renderInput={(params) => <TextField {...params} label="Season" sx={{my:1}} />}
+            renderInput={(params) => <TextField {...params} label="Season" sx={{ my: 1 }} />}
             onChange={(event, newValue) => {
               setSeason(newValue);
             }}
@@ -448,7 +467,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
                   </li>
                 );
               }}
-              renderInput={(params) => <TextField {...params} label="League" sx={{my:1}}/>}
+              renderInput={(params) => <TextField {...params} label="League" sx={{ my: 1 }} />}
               onChange={(event, newValue) => {
                 setLeague(newValue);
               }}
@@ -463,7 +482,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
             placeholder="Video URL"
             multiline
             fullWidth
-            sx={{my:1}}
+            sx={{ my: 1 }}
             value={videoUrl}
             onChange={e => setVideoUrl(e.target.value)}
           />

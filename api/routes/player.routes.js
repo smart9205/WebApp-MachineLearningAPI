@@ -1,24 +1,29 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/player.controller");
 module.exports = app => {
-  app.use(function(req, res, next) {
-    res.header(
-      "Access-Control-Allow-Headers",
-      "x-access-token, Origin, Content-Type, Accept"
-    );
-    next();
-  });
-  app.use([authJwt.verifyToken]);
+	app.use(function (req, res, next) {
+		res.header(
+			"Access-Control-Allow-Headers",
+			"x-access-token, Origin, Content-Type, Accept"
+		);
+		next();
+	});
+	app.use([authJwt.verifyToken]);
 
 	app.post(
 		"/player",
 		[authJwt.isAdmin],
 		controller.create
 	);
-	
+
 	app.get(
-		"/player", 
+		"/player",
 		controller.findAll
+	);
+
+	app.get(
+		"/player/position",
+		controller.findAllPosition
 	);
 
 	app.get(
@@ -39,14 +44,13 @@ module.exports = app => {
 	);
 
 	app.delete(
-		"/player", 
+		"/player",
 		[authJwt.isAdmin],
 		controller.deleteAll
 	);
 
 	app.post(
-		"/user/updateConfig", 
+		"/user/updateConfig",
 		controller.updateTaggerConfig
 	);
 };
-  

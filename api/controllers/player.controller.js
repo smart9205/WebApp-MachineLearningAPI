@@ -1,22 +1,23 @@
 const db = require("../models");
 const Player = db.player;
+const Player_Position = db.player_position;
 const User_Config = db.user_config;
 const Op = db.Sequelize.Op;
 
 exports.updateTaggerConfig = async (req, res) => {
 
-  if(!req.body.sec_before || !req.body.sec_after) return res.send({status: "fail"});
-  
-  await User_Config.findOrCreate({where: {user_id: req.userId}})
-  
+  if (!req.body.sec_before || !req.body.sec_after) return res.send({ status: "fail" });
+
+  await User_Config.findOrCreate({ where: { user_id: req.userId } })
+
   const updated = await User_Config.update({
-    sec_before : req.body.sec_before,
-    sec_after : req.body.sec_after
-  },{
-    where: {user_id: req.userId}
+    sec_before: req.body.sec_before,
+    sec_after: req.body.sec_after
+  }, {
+    where: { user_id: req.userId }
   })
 
-  return res.send({status: "success",updated});
+  return res.send({ status: "success", updated });
 };
 
 exports.create = async (req, res) => {
@@ -27,21 +28,23 @@ exports.create = async (req, res) => {
     });
     return;
   }
-  const checkPlayer = await Player.findOne({ where: {
-    f_name: req.body.f_name,
-    l_name: req.body.l_name,
-    date_of_birth: req.body.date_of_birth,
-    position: req.body.position,
-    jersey_number: req.body.jersey_number
-  }});
-  
-  if(checkPlayer !== null) {
-    return res.send({status: "error", data: "Player already exists"});
+  const checkPlayer = await Player.findOne({
+    where: {
+      f_name: req.body.f_name,
+      l_name: req.body.l_name,
+      date_of_birth: req.body.date_of_birth,
+      position: req.body.position,
+      jersey_number: req.body.jersey_number
+    }
+  });
+
+  if (checkPlayer !== null) {
+    return res.send({ status: "error", data: "Player already exists" });
   }
 
   Player.create(req.body)
     .then(data => {
-      res.send({status:"success",data});
+      res.send({ status: "success", data });
     })
     .catch(err => {
       res.status(500).send({
@@ -49,7 +52,7 @@ exports.create = async (req, res) => {
           err.message || "Some error occurred while creating the Player."
       });
     });
- 
+
 };
 
 exports.findAll = (req, res) => {
@@ -64,10 +67,25 @@ exports.findAll = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving seasons."
+          err.message || "Some error occurred while retrieving players."
       });
     });
 };
+
+exports.findAllPosition = (req, res) => {
+
+  Player_Position.findAll()
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving player_positions."
+      });
+    });
+};
+
 
 exports.findOne = (req, res) => {
   const id = req.params.id;
