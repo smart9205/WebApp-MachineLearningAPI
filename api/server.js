@@ -120,7 +120,7 @@ function initial() {
       Action_Type.create({ id: 11, name: "Free Kick" })
       Action_Type.create({ id: 12, name: "Corner" })
       Action_Type.create({ id: 13, name: "Penalty" })
-      Action_Type.create({ id: 14, name: "Out Of Bound" })
+      Action_Type.create({ id: 14, name: "Throw-In" })
     }
   })
 

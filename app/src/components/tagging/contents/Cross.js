@@ -23,6 +23,7 @@ const RESULT_LIST = [
 export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseTeamId, defenseTeamId }) {
 
   const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
+  const [offsidePlayer, setOffsidePlayer] = React.useState(offenseTeam[0]);
   const [defensivePlayer, setDefensivePlayer] = React.useState(defenseTeam[0]);
   const [actionTypeId, setActionTypeId] = React.useState(1);
   const [result, setResult] = React.useState(RESULT_LIST[0]);
@@ -86,12 +87,30 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
       </SubBox>
       {result.name === "Offside" ?
         <SubBox>
-          <List header="Offensive Player List">
+          <List header="Offside Player List">
             {
               offenseTeam.map((player, i) => (
                 <ListItemButton key={i}
-                  selected={offensivePlayer === player}
-                  onClick={() => setOffensivePlayer(player)}
+                  selected={offsidePlayer === player}
+                  onClick={() => {
+                    setOffsidePlayer(player)
+                    taggingState([
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: offenseTeamId,
+                        player_id: offensivePlayer.id,
+                        action_id: 3, //cross
+                        action_result_id: result.id
+                      },
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: defenseTeamId,
+                        player_id: player.id,
+                        action_id: 7, //Turnover
+                        action_result_id: result.id
+                      },
+                    ])
+                  }}
                 >
                   <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
                 </ListItemButton>
