@@ -13,12 +13,18 @@ const SubBox = styled(Box)`
   }
   `;
 
+const RESULT_LIST = [
+  { id: 4, name: "Successful" },
+  { id: 7, name: "Blocked" },
+  { id: 8, name: "Cleared" },
+]
+
 export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseTeamId, defenseTeamId }) {
 
   const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
   const [defensivePlayer, setDefensivePlayer] = React.useState(defenseTeam[0]);
   const [actionTypeId, setActionTypeId] = React.useState(1);
-  const [result, setResult] = React.useState(4);
+  const [result, setResult] = React.useState(RESULT_LIST[0]);
 
   return (
     <>
@@ -54,15 +60,11 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
       </SubBox>
       <SubBox>
         <List header="Result">
-          {[
-            { id: 4, name: "Successful" },
-            { id: 7, name: "Blocked" },
-            { id: 8, name: "Cleared" },
-          ].map((r, i) => (
+          {RESULT_LIST.map((r, i) => (
             <ListItemButton key={r.id}
-              selected={result === r.id}
+              selected={result === r}
               onClick={() => {
-                setResult(r.id)
+                setResult(r)
                 if (r.name === "Successful") {
                   taggingState([{
                     action_type_id: actionTypeId,
@@ -79,7 +81,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
           ))}
         </List>
       </SubBox>
-      {result !== 4 && <SubBox>
+      {result.name !== "Successful" && <SubBox>
         <List header="Defensive Player List">
           {
             defenseTeam.map((player, i) => (
@@ -87,22 +89,40 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                 selected={defensivePlayer === player}
                 onClick={() => {
                   setDefensivePlayer(player)
-                  taggingState([
-                    {
-                      action_type_id: actionTypeId,
-                      team_id: offenseTeamId,
-                      player_id: offensivePlayer.id,
-                      action_id: 3,
-                      action_result_id: result
-                    },
-                    {
-                      action_type_id: actionTypeId,
-                      team_id: defenseTeamId,
-                      player_id: player.id,
-                      action_id: 3,
-                      action_result_id: result
-                    },
-                  ])
+                  if (result.name === "Blocked")
+                    taggingState([
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: offenseTeamId,
+                        player_id: offensivePlayer.id,
+                        action_id: 3, //cross
+                        action_result_id: result.id
+                      },
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: defenseTeamId,
+                        player_id: player.id,
+                        action_id: 14, //interception 
+                        action_result_id: result.id
+                      },
+                    ])
+                  if (result.name === "Cleared")
+                    taggingState([
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: offenseTeamId,
+                        player_id: offensivePlayer.id,
+                        action_id: 3, //cross
+                        action_result_id: result.id
+                      },
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: defenseTeamId,
+                        player_id: player.id,
+                        action_id: 15, //clearance
+                        action_result_id: result.id
+                      },
+                    ])
                 }}
               >
                 <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
