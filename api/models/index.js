@@ -59,14 +59,17 @@ db.user.belongsToMany(db.role, {
   otherKey: "roleId"
 });
 
-db.user.hasOne(db.user_subscription, {
-  as: 'Subscription',
-  foreignKey: "user_id",
-})
-db.user_subscription.belongsTo(db.subscription, { 
-  as: "Name",
-  foreignKey: "subscription_id"
+db.subscription.belongsToMany(db.user, {
+  through: "User_Subscriptions",
+  foreignKey: "subscription_id",
+  otherKey: "user_id"
 });
+
+db.user.belongsToMany(db.subscription, {
+  through: "User_Subscriptions",
+  foreignKey: "user_id",
+  otherKey: "subscription_id"
+})
 
 db.ROLES = ["admin", "tagger", "coach", "player"];
 

@@ -42,12 +42,12 @@ sendEmail = async (to, subject, html) => {
     .send(msg)
     .then((resp) => {
       console.log('Email sent\n', resp)
-      Email_Queue.update({success: true}, {where: {id: email_queue.id}})
+      Email_Queue.update({ success: true }, { where: { id: email_queue.id } })
     })
     .catch((error) => {
       console.error(error)
-      Email_Queue.update({success: false}, {where: {id: email_queue.id}})
-  })
+      Email_Queue.update({ success: false }, { where: { id: email_queue.id } })
+    })
 };
 
 sendSigninSuccessInfo = async (res, user) => {
@@ -62,20 +62,22 @@ sendSigninSuccessInfo = async (res, user) => {
     authorities.push("ROLE_" + roles[i].name.toUpperCase());
   }
 
-  let subscription = await user.getSubscription();
-  console.log("user",subscription);
+  let subscription = await user.getSubscriptions();
+  console.log("user", subscription);
 
-  if (subscription !== null) {
-    const type = await subscription.getName();
-    console.log("name", type.name);
-    subscription = {
-      ...subscription.dataValues, name: type.name, available: Date.now() < subscription.end_date
-    }    
-  }
+  // if (subscription !== null) {
+  //   const type = await subscription.getName();
+  //   console.log("name", type.name);
+  //   subscription = {
+  //     ...subscription.dataValues, name: type.name, available: Date.now() < subscription.end_date
+  //   }
+  // }
 
-  userConf = await User_Config.findOne({where: {
-    user_id: user.id
-  }})
+  userConf = await User_Config.findOne({
+    where: {
+      user_id: user.id
+    }
+  })
 
   res.status(200).send({
     id: user.id,
@@ -87,7 +89,7 @@ sendSigninSuccessInfo = async (res, user) => {
     roles: authorities,
     accessToken: token,
     subscription: subscription,
-    user_config: userConf 
+    user_config: userConf
   });
 }
 
@@ -125,11 +127,11 @@ exports.signup = (req, res) => {
           const data = {
             token: result.token,
             to: user.email,
-          };        
+          };
           //encrypt data
           const ciphertext = encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify(data), config.secret).toString());
           const url = `https://soccer.s4upro.com/verification/${ciphertext}`;
-        
+
           var html = `<!DOCTYPE html>
             <html>
               <head>
@@ -142,13 +144,13 @@ exports.signup = (req, res) => {
                 <h4>Your Password: ${password}</h4>
               </body>
             </html>`;
-            
+
           sendEmail(user, "Verify Your Email", html);
-          res.status(200).send({ message: `Registered successfully, Please verify your email.`});
+          res.status(200).send({ message: `Registered successfully, Please verify your email.` });
         })
-        .catch((error) => {
-          res.status(500).json(error);
-        });
+          .catch((error) => {
+            res.status(500).json(error);
+          });
       });
     })
     .catch(err => {
@@ -166,7 +168,7 @@ exports.signin = async (req, res) => {
   }
 
   if (user.is_verified) {
-    
+
     var passwordIsValid = bcrypt.compareSync(
       req.body.password,
       user.password
@@ -179,16 +181,16 @@ exports.signin = async (req, res) => {
         message: "Invalid Password!"
       });
     }
-    
+
     sendSigninSuccessInfo(res, user);
   } else {
-    return res.status(401).send({ message: "Please Verify your Eamil"});
+    return res.status(401).send({ message: "Please Verify your Eamil" });
   }
-    
+
 };
 
 exports.firstVerify = (req, res) => {
-  var bytes  = CryptoJS.AES.decrypt(decodeURIComponent(req.body.verificationCode), config.secret);
+  var bytes = CryptoJS.AES.decrypt(decodeURIComponent(req.body.verificationCode), config.secret);
   var data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
   console.log("Verification data", data);
@@ -207,14 +209,16 @@ exports.firstVerify = (req, res) => {
         sendSigninSuccessInfo(res, user);
       } else {
         return VerificationToken.findOne({
-          where: { [Op.and]: [
-            { user_id: user.id },
-            { token: data.token }
-          ]}
+          where: {
+            [Op.and]: [
+              { user_id: user.id },
+              { token: data.token }
+            ]
+          }
         })
           .then((foundToken) => {
             if (foundToken) {
-              VerificationToken.update({token: ""}, {where:{user_id: user.id}});
+              VerificationToken.update({ token: "" }, { where: { user_id: user.id } });
               return user
                 .update({ is_verified: true })
                 .then(updatedUser => {
@@ -224,13 +228,13 @@ exports.firstVerify = (req, res) => {
                   return res.status(403).json(`Verification failed`);
                 });
             } else {
-              return res.status(404).json(`Token expired` );
+              return res.status(404).json(`Token expired`);
             }
           })
           .catch(reason => {
             return res.status(404).json(`Token expired`);
           });
-        }
+      }
     })
     .catch(err => {
       res.status(500).send({ message: err.message });
@@ -238,27 +242,27 @@ exports.firstVerify = (req, res) => {
 };
 
 exports.forgetpassword = async (req, res) => {
-  const user = await User.findOne({ where: {email: req.body.email}});
+  const user = await User.findOne({ where: { email: req.body.email } });
 
   if (!user) {
-    return res.status(401).send({ message: "Unregisterd User"});
+    return res.status(401).send({ message: "Unregisterd User" });
   }
 
-  let verificationToken = await VerificationToken.findOrCreate({ where: { user_id: user.id }});
+  let verificationToken = await VerificationToken.findOrCreate({ where: { user_id: user.id } });
 
   await VerificationToken.update({
-      token: randomstring.generate(16)
-    },{
-      where: { user_id: user.id }
-    })
-  verificationToken = await VerificationToken.findOne({ where: { user_id: user.id }});
+    token: randomstring.generate(16)
+  }, {
+    where: { user_id: user.id }
+  })
+  verificationToken = await VerificationToken.findOne({ where: { user_id: user.id } });
 
   const data = {
     token: verificationToken.token,
     to: user.email
-  };       
+  };
 
-  console.log("ver: " , data)
+  console.log("ver: ", data)
   //encrypt data
   const ciphertext = encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify(data), config.forgetpwdkey).toString());
   const url = `${req.get("origin")}/resetPwdVerify/${ciphertext}`;
@@ -273,13 +277,13 @@ exports.forgetpassword = async (req, res) => {
         Click on this link to verify your email <a href="${url}"> ${url} </a>
       </body>
     </html>`;
-    
+
   sendEmail(user, "Forget Password", html);
-  res.status(200).send({ message: `Email sent, Please verify your email.`}); 
+  res.status(200).send({ message: `Email sent, Please verify your email.` });
 };
 
 exports.resetPwdVerify = (req, res) => {
-  var bytes  = CryptoJS.AES.decrypt(decodeURIComponent(req.body.verificationCode), config.forgetpwdkey);
+  var bytes = CryptoJS.AES.decrypt(decodeURIComponent(req.body.verificationCode), config.forgetpwdkey);
   var data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
   User.findOne({
@@ -292,10 +296,12 @@ exports.resetPwdVerify = (req, res) => {
         return res.status(404).send({ message: "User Not found." });
       }
       VerificationToken.findOne({
-        where: { [Op.and]: [
-          { user_id: user.id },
-          { token: data.token }
-        ]}
+        where: {
+          [Op.and]: [
+            { user_id: user.id },
+            { token: data.token }
+          ]
+        }
       })
         .then((result) => {
           if (result) {
@@ -303,9 +309,9 @@ exports.resetPwdVerify = (req, res) => {
               id: user.id,
               email: user.email,
               token: result.token
-            });              
+            });
           } else {
-            return res.status(404).json(`Token expired` );
+            return res.status(404).json(`Token expired`);
           }
         })
         .catch(reason => {
@@ -319,21 +325,23 @@ exports.resetPwdVerify = (req, res) => {
 
 exports.resetPassword = (req, res) => {
   VerificationToken.findOne({
-    where: { [Op.and]: [
-      { user_id: req.body.id },
-      { token: req.body.token }
-    ]}
+    where: {
+      [Op.and]: [
+        { user_id: req.body.id },
+        { token: req.body.token }
+      ]
+    }
   })
     .then((result) => {
       if (result) {
-        User.update({password:bcrypt.hashSync(req.body.password, 8)},
-          { where :{ id: result.user_id }})
-          .then((num)=>{
-            VerificationToken.update({token: ""}, {where:{user_id: result.user_id}});
-            return res.status(200).send({ message: `Reset Password Success`}); 
+        User.update({ password: bcrypt.hashSync(req.body.password, 8) },
+          { where: { id: result.user_id } })
+          .then((num) => {
+            VerificationToken.update({ token: "" }, { where: { user_id: result.user_id } });
+            return res.status(200).send({ message: `Reset Password Success` });
           });
       } else {
-        return res.status(404).json(`Token expired` );
+        return res.status(404).json(`Token expired`);
       }
     })
     .catch(reason => {
@@ -362,17 +370,17 @@ exports.updateProfile = async (req, res) => {
     });
   }
 
-  User.update({ 
+  User.update({
     password: bcrypt.hashSync(req.body.new_password, 8),
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     country: req.body.country,
     phone_number: req.body.phone_number,
-  },{where: { id: req.userId }}
+  }, { where: { id: req.userId } }
   ).then(user => {
-    res.status(200).send({ message: `Profile is updated successfully!`});
+    res.status(200).send({ message: `Profile is updated successfully!` });
   })
-  .catch(err => {
-    res.status(500).send({ message: err.message });
-  });
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
 };

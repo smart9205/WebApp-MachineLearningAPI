@@ -21,10 +21,15 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./models");
 const Role = db.role;
 const Subscription = db.subscription;
+const Action = db.action;
+const Action_Type = db.action_type;
+const Action_Result = db.action_result;
 
-db.sequelize.sync();
+db.sequelize.sync().then(() => {
+  initial();
+});
 // force: true will drop the table if it already exists
-// db.sequelize.sync({force: true}).then(() => {
+// db.sequelize.sync({ force: false }).then(() => {
 //   console.log('Drop and Resync Database with { force: true }');
 //   initial();
 // });
@@ -38,7 +43,6 @@ app.get("/", (req, res) => {
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 require('./routes/whatsapp.routes')(app);
-
 require('./routes/season.routes')(app);
 require('./routes/league.routes')(app);
 require('./routes/action.routes')(app);
@@ -57,37 +61,75 @@ app.listen(PORT, () => {
 });
 
 function initial() {
-  Role.create({
-    id: 1,
-    name: "admin"
+  Role.destroy({
+    where: {},
+  }).then(() => {
+    Role.create({ id: 1, name: "admin" });
+    Role.create({ id: 2, name: "tagger" });
+    Role.create({ id: 3, name: "coach" });
+    Role.create({ id: 4, name: "player" });
   });
 
-  Role.create({
-    id: 2,
-    name: "tagger"
-  });
-
-  Role.create({
-    id: 3,
-    name: "coach"
-  });
-
-  Role.create({
-    id: 4,
-    name: "player"
-  });
-
-  Subscription.create({
-    id: 1,
-    name: "tagger"
-  })
-  Subscription.create({
-    id: 2,
-    name: "coach"
-  })
-  Subscription.create({
-    id: 3,
-    name: "player"
+  Subscription.destroy({
+    where: {},
+  }).then(() => {
+    Subscription.create({ id: 1, name: "tagger" })
+    Subscription.create({ id: 2, name: "coach" })
+    Subscription.create({ id: 3, name: "player" })
   })
 
+  Action.destroy({
+    where: {},
+  }).then(() => {
+    Action.create({ id: 1, name: "Shot" })
+    Action.create({ id: 2, name: "Pass" })
+    Action.create({ id: 3, name: "Cross" })
+    Action.create({ id: 4, name: "Penalty" })
+    Action.create({ id: 5, name: "Corner" })
+    Action.create({ id: 6, name: "Free Kick" })
+    Action.create({ id: 7, name: "Dribble" })
+    Action.create({ id: 8, name: "Foul" })
+    Action.create({ id: 9, name: "Draw Foul" })
+    Action.create({ id: 10, name: "Turnover" })
+    Action.create({ id: 11, name: "Goal" })
+    Action.create({ id: 12, name: "Saved" })
+    Action.create({ id: 13, name: "Assist" })
+    Action.create({ id: 14, name: "Interception" })
+    Action.create({ id: 15, name: "Clearance" })
+    Action.create({ id: 16, name: "Tackle" })
+    Action.create({ id: 17, name: "Free Kick" })
+    Action.create({ id: 18, name: "Yellow Card" })
+    Action.create({ id: 19, name: "Red Card" })
+  })
+
+  Action_Type.destroy({
+    where: {},
+  }).then(() => {
+    Action_Type.create({ id: 1, name: "Right" })
+    Action_Type.create({ id: 2, name: "Left" })
+    Action_Type.create({ id: 3, name: "Header" })
+    Action_Type.create({ id: 4, name: "Short Pass" })
+    Action_Type.create({ id: 5, name: "Long Pass" })
+    Action_Type.create({ id: 6, name: "Through Pass" })
+    Action_Type.create({ id: 7, name: "Key Pass" })
+  })
+
+  Action_Result.destroy({
+    where: {},
+  }).then(() => {
+    Action_Result.create({ id: 1, name: "On Target" })
+    Action_Result.create({ id: 2, name: "Off Target" })
+    Action_Result.create({ id: 3, name: "Goal" })
+    Action_Result.create({ id: 4, name: "Successful", end_possession: false })
+    Action_Result.create({ id: 5, name: "Turnover" })
+    Action_Result.create({ id: 6, name: "Saved" })
+    Action_Result.create({ id: 7, name: "Blocked" })
+    Action_Result.create({ id: 8, name: "Cleared" })
+    Action_Result.create({ id: 9, name: "Goalkeeper Saved" })
+    Action_Result.create({ id: 10, name: "Unsuccessful" })
+    Action_Result.create({ id: 11, name: "Bad Pass" })
+    Action_Result.create({ id: 12, name: "Bad Dribble" })
+    Action_Result.create({ id: 13, name: "Free Kick" })
+    Action_Result.create({ id: 14, name: "Penalty" })
+  })
 }
