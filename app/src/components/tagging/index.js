@@ -337,7 +337,7 @@ export default function Tagging() {
               taggingState={setTaggingState}
             />
           }
-          {modalContent === "Penality" &&
+          {modalContent === "Penalty" &&
             <Penalty
               offenseTeamId={offenseTeamId}
               defenseTeamId={defenseTeamId}
