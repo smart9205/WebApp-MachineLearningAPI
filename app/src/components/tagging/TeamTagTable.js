@@ -14,16 +14,16 @@ import TCellTimeEdit from './TCellTimeEdit';
 import CircularProgress from '@mui/material/CircularProgress';
 
 export default function StickyHeadTable({ rows, updateTagList, handleRowClick }) {
-  const [selectedRowId, setSelectedRowId] = React.useState(rows[0]?.id);
+  const [selectedRow, setSelectedRow] = React.useState(rows[0]);
   const [loading, setLoading] = React.useState(false)
   React.useEffect(() => {
-    setSelectedRowId(rows[0]?.id)
+    setSelectedRow(rows[0])
   }, [rows])
 
   React.useEffect(() => {
-    handleRowClick(selectedRowId);
+    handleRowClick(selectedRow);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedRowId])
+  }, [selectedRow])
 
   const deleteTag = (id) => {
     setLoading(true)
@@ -73,8 +73,8 @@ export default function StickyHeadTable({ rows, updateTagList, handleRowClick })
                   {rows.map((row) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={row.id}
-                        selected={row.id === selectedRowId}
-                        onClick={() => setSelectedRowId(row.id)}
+                        selected={row === selectedRow}
+                        onClick={() => setSelectedRow(row)}
                       >
                         <TableCell align="center">
                           {row.period === 1 && "1st Half"}

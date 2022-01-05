@@ -22,7 +22,7 @@ import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { toHHMMSS, getUser, setUser } from "../../common/utilities"
+import { toHHMMSS, toSecond, getUser, setUser } from "../../common/utilities"
 import Shot from './contents/Shot';
 import ShortPass from './contents/ShortPass';
 import Pass from './contents/Pass';
@@ -116,8 +116,8 @@ export default function Tagging() {
   })
 
   const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
-    sec_before: getUser()?.user_config ? getUser()?.user_config.sec_before : 3,
-    sec_after: getUser()?.user_config ? getUser()?.user_config.sec_after : 10,
+    sec_before: getUser()?.user_config ? getUser()?.user_config.sec_before : 10,
+    sec_after: getUser()?.user_config ? getUser()?.user_config.sec_after : 3,
   })
 
   const [videoState, setVideoState] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -361,8 +361,10 @@ export default function Tagging() {
         <TeamTagTable
           rows={teamTagList}
           updateTagList={updateTagList}
-          handleRowClick={id => dispPlayerTags(id)}
-
+          handleRowClick={row => {
+            dispPlayerTags(row?.id)
+            player.current.seekTo(toSecond(row.start_time))
+          }}
         />
         <IndividualTagTable
           rows={playerTagList}
