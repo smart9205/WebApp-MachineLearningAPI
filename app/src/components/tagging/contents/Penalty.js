@@ -103,7 +103,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                         action_type_id: actionTypeId,
                         team_id: defenseTeamId,
                         player_id: player.id,
-                        action_id: 4,
+                        action_id: 12,
                         action_result_id: result
                       },
                     ])
