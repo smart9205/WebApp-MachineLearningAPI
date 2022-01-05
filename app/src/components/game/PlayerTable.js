@@ -64,6 +64,12 @@ const headCells = [
     label: 'NAME',
   },
   {
+    id: 'position',
+    numeric: true,
+    disablePadding: true,
+    label: 'Position',
+  },
+  {
     id: 'delete',
     numeric: true,
     disablePadding: true,
@@ -157,7 +163,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-function EnhancedTable({jerseyUpdatedCallBack, rows, deletePlayerCallBack}) {
+function EnhancedTable({ jerseyUpdatedCallBack, rows, deletePlayerCallBack }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -199,20 +205,20 @@ function EnhancedTable({jerseyUpdatedCallBack, rows, deletePlayerCallBack}) {
 
   const updateJersey = () => {
     setOpenEdit(0)
-    GameService.updateJersey({id: openEdit, jersey_number: Number(editJersey)}).then((data) => {
+    GameService.updateJersey({ id: openEdit, jersey_number: Number(editJersey) }).then((data) => {
       jerseyUpdatedCallBack();
     });
   }
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', height: "100%"}}>
+      <Paper sx={{ width: '100%', height: "100%" }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer
           style={{ height: "calc(90vh - 400px)" }}
         >
-          <Table 
-            stickyHeader 
+          <Table
+            stickyHeader
             // sx={{ minWidth: 450 }}
             aria-labelledby="tableTitle"
             size={'small'}
@@ -243,13 +249,13 @@ function EnhancedTable({jerseyUpdatedCallBack, rows, deletePlayerCallBack}) {
                     >
                       <TableCell align="center" >
                         {
-                          openEdit === row.id ? 
-                            <Input 
-                              sx={{maxWidth:60}}
-                              type="number" 
+                          openEdit === row.id ?
+                            <Input
+                              sx={{ maxWidth: 60 }}
+                              type="number"
                               value={editJersey}
                               onChange={e => setEditJersey(e.target.value)}
-                              onBlur={e => updateJersey()} 
+                              onBlur={e => updateJersey()}
                               onKeyPress={(ev) => {
                                 if (ev.key === 'Enter') {
                                   ev.preventDefault();
@@ -257,19 +263,20 @@ function EnhancedTable({jerseyUpdatedCallBack, rows, deletePlayerCallBack}) {
                                 }
                               }}
                             />
-                          :
-                          <div onClick={e => {setOpenEdit(row.id); setEditJersey(row.jersey_number)}}>
-                            {row.jersey_number}
-                          </div>
+                            :
+                            <div onClick={e => { setOpenEdit(row.id); setEditJersey(row.jersey_number) }}>
+                              {row.jersey_number}
+                            </div>
                         }
                       </TableCell>
                       <TableCell align="center">{`${row.f_name} ${row.l_name}`}</TableCell>
+                      <TableCell align="center">{row.position}</TableCell>
                       <TableCell align="center">
-                        <IconButton  onClick={() => deletePlayerCallBack(row.id)} sx={{padding: 0}}>
-                          <DeleteIcon/>
+                        <IconButton onClick={() => deletePlayerCallBack(row.id)} sx={{ padding: 0 }}>
+                          <DeleteIcon />
                         </IconButton>
                       </TableCell>
-                     
+
                     </TableRow>
                   );
                 })}
