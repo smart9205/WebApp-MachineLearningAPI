@@ -122,7 +122,7 @@ export default function ShortPass({
                   action_result_id: r.id
                 };
                 if (r.name === SUCCESSFUL) taggingState([{ ...d, action_id: 2, }])
-                if (r.name === BAD_PASS) taggingState([{ ...d, action_id: 10, }])
+                if (r.name === BAD_PASS) taggingState([{ ...d, action_id: 2, }])
               }}
             >
               <ListItemText primary={r.name} />
