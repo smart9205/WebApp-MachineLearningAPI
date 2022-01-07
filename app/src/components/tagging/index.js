@@ -237,6 +237,7 @@ export default function Tagging() {
   useHotkeys('c', () => taggingButtonClicked("Cross"));
   useHotkeys('d', () => taggingButtonClicked("Dribble"));
   useHotkeys('f', () => taggingButtonClicked("Foul"));
+  useHotkeys('q', () => { });
 
   const taggingButtonClicked = (action) => {
     setModalOpen(true)
@@ -434,111 +435,114 @@ export default function Tagging() {
           </Tooltip>
         </div>
         <Box>
-          <div>
-            <div style={{ maxWidth: 1200, margin: 'auto' }} >
-              <div className="player-wrapper">
-                <ReactPlayer
-                  className="react-player"
-                  url={state.url}
-                  ref={player}
-                  onPlay={() => setVideoState({ play: true })}
-                  onPause={() => setVideoState({ play: false })}
-                  playing={videoState.play}
-                  playbackRate={PLAYBACK_RATE[videoState.playbackRate].rate}
-                  controls={true}
-                  width='100%'
-                  height='100%'
-                />
-              </div>
+          <div style={{ maxWidth: "88%", margin: 'auto' }} >
+            <div className="player-wrapper">
+              <ReactPlayer
+                className="react-player"
+                url={state.url}
+                ref={player}
+                onPlay={() => setVideoState({ play: true })}
+                onPause={() => setVideoState({ play: false })}
+                playing={videoState.play}
+                playbackRate={PLAYBACK_RATE[videoState.playbackRate].rate}
+                controls={true}
+                width='100%'
+                height='100%'
+              />
             </div>
-            <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
-
-              {[-10, -5, -3, -1].map(t => <ControlButton key={t} onClick={() => seekTo(t)}>{t}s</ControlButton>)}
-
-              <ControlButton onClick={() => changePlayRate(false)}>slow</ControlButton>
-
-              {videoState.play ?
-                <ControlButton style={{ width: 100 }} startIcon={<PauseCircleOutlineIcon />} onClick={() => setVideoState({ play: false })}>
-                  Pause
-                </ControlButton>
-                :
-                <ControlButton style={{ width: 100 }} startIcon={<PlayCircleOutlineIcon />} onClick={() => setVideoState({ play: true })}>
-                  Play
-                </ControlButton>
-              }
-
-              <label style={{ width: "40px" }}>{PLAYBACK_RATE[videoState.playbackRate].label}</label>
-
-              <ControlButton onClick={() => changePlayRate(true)}>fast</ControlButton>
-
-              {[1, 3, 5, 10].map(t => <ControlButton key={t} onClick={() => seekTo(t)}>{t}s</ControlButton>)}
-            </Box>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Box sx={{ mx: 2, textAlign: 'center' }}>
-              <IconButton sx={{ my: 1 }} onClick={() => setCount(count + 1)}><RefreshIcon /></IconButton><br />
-              <TextField
-                label="sec. before"
-                sx={{ m: 1, width: 100 }}
-                inputProps={{ min: 0, style: { textAlign: 'center' } }}
-                type="number"
-                value={config.sec_before}
-                onChange={e => setConfig({ sec_before: e.target.value })}
-              />
-              <TextField
-                label="sec. after"
-                sx={{ m: 1, width: 100 }}
-                inputProps={{ min: 0, style: { textAlign: 'center' } }}
-                type="number"
-                value={config.sec_after}
-                onChange={e => setConfig({ sec_after: e.target.value })}
-              />
-            </Box>
-            <Box sx={{ textAlign: "center", mt: 2 }}>
-              {["home", "away"].map(t =>
-                <ControlButton
-                  key={t}
-                  fullWidth
-                  style={{ backgroundColor: t === state.offense && "darkblue", color: t === state.offense && "white" }}
-                  onClick={() => offensiveTeamClicked(t)}
-                >
-                  {state[`${t}_team_name`]}
-                </ControlButton>
-              )}
-              <Box style={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-around", marginLeft: 20 }}>
-                Start Time : {state.start_time} <ControlButton sx={{ mr: 0 }} >C.P.</ControlButton>
+          {
+            open &&
+            <>
+              <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
+
+                {[-10, -5, -3, -1].map(t => <ControlButton key={t} onClick={() => seekTo(t)}>{t}s</ControlButton>)}
+
+                <ControlButton onClick={() => changePlayRate(false)}>slow</ControlButton>
+
+                {videoState.play ?
+                  <ControlButton style={{ width: 100 }} startIcon={<PauseCircleOutlineIcon />} onClick={() => setVideoState({ play: false })}>
+                    Pause
+                  </ControlButton>
+                  :
+                  <ControlButton style={{ width: 100 }} startIcon={<PlayCircleOutlineIcon />} onClick={() => setVideoState({ play: true })}>
+                    Play
+                  </ControlButton>
+                }
+
+                <label style={{ width: "40px" }}>{PLAYBACK_RATE[videoState.playbackRate].label}</label>
+
+                <ControlButton onClick={() => changePlayRate(true)}>fast</ControlButton>
+
+                {[1, 3, 5, 10].map(t => <ControlButton key={t} onClick={() => seekTo(t)}>{t}s</ControlButton>)}
               </Box>
-            </Box>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Box sx={{ mx: 2, textAlign: 'center' }}>
+                  <IconButton sx={{ my: 1 }} onClick={() => setCount(count + 1)}><RefreshIcon /></IconButton><br />
+                  <TextField
+                    label="sec. before"
+                    sx={{ m: 1, width: 100 }}
+                    inputProps={{ min: 0, style: { textAlign: 'center' } }}
+                    type="number"
+                    value={config.sec_before}
+                    onChange={e => setConfig({ sec_before: e.target.value })}
+                  />
+                  <TextField
+                    label="sec. after"
+                    sx={{ m: 1, width: 100 }}
+                    inputProps={{ min: 0, style: { textAlign: 'center' } }}
+                    type="number"
+                    value={config.sec_after}
+                    onChange={e => setConfig({ sec_after: e.target.value })}
+                  />
+                </Box>
+                <Box sx={{ textAlign: "center", mt: 2 }}>
+                  {["home", "away"].map(t =>
+                    <ControlButton
+                      key={t}
+                      fullWidth
+                      style={{ backgroundColor: t === state.offense && "darkblue", color: t === state.offense && "white" }}
+                      onClick={() => offensiveTeamClicked(t)}
+                    >
+                      {state[`${t}_team_name`]}
+                    </ControlButton>
+                  )}
+                  <Box style={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-around", marginLeft: 20 }}>
+                    Start Time : {state.start_time} <ControlButton sx={{ mr: 0 }} >C.P.</ControlButton>
+                  </Box>
+                </Box>
 
-            <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 300 }}>
-              {[
-                { id: 2, title: "Short Pass (a)", value: "Short Pass" },
-                { id: 2, title: "Pass (p)", value: "Pass" },
-                { id: 1, title: "Shot (s)", value: "Shot" },
-                { id: 3, title: "Cross (c)", value: "Cross" },
-                { id: 7, title: "Dribble (d)", value: "Dribble" },
-                { id: 8, title: "Foul (f)", value: "Foul" },
-              ].map((action, i) => (
-                <Grid key={i} item xs={6} onClick={() => taggingButtonClicked(action.value)}>
-                  <TagButton style={{ textTransform: 'none' }}>{action.title}</TagButton>
+                <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 300 }}>
+                  {[
+                    { id: 2, title: "Short Pass (a)", value: "Short Pass" },
+                    { id: 2, title: "Pass (p)", value: "Pass" },
+                    { id: 1, title: "Shot (s)", value: "Shot" },
+                    { id: 3, title: "Cross (c)", value: "Cross" },
+                    { id: 7, title: "Dribble (d)", value: "Dribble" },
+                    { id: 8, title: "Foul (f)", value: "Foul" },
+                  ].map((action, i) => (
+                    <Grid key={i} item xs={6} onClick={() => taggingButtonClicked(action.value)}>
+                      <TagButton style={{ textTransform: 'none' }}>{action.title}</TagButton>
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
-            </Grid>
 
-            <RadioGroup
-              sx={{ my: 0, mx: 2 }}
-              aria-label="firstsecond"
-              name="row-radio-buttons-group"
-              value={teamTag.period}
-              onChange={e => setTeamTag({ period: e.target.value })}
-            >
-              <FormControlLabel value="1" control={<Radio />} label="1st half" />
-              <FormControlLabel value="2" control={<Radio />} label="2nd half" />
-              <FormControlLabel value="3" control={<Radio />} label="Overtime" />
-            </RadioGroup>
-          </div>
+                <RadioGroup
+                  sx={{ my: 0, mx: 2 }}
+                  aria-label="firstsecond"
+                  name="row-radio-buttons-group"
+                  value={teamTag.period}
+                  onChange={e => setTeamTag({ period: e.target.value })}
+                >
+                  <FormControlLabel value="1" control={<Radio />} label="1st half" />
+                  <FormControlLabel value="2" control={<Radio />} label="2nd half" />
+                  <FormControlLabel value="3" control={<Radio />} label="Overtime" />
+                </RadioGroup>
+              </div>
+            </>
+          }
         </Box>
-      </Main>
-    </Box>
+      </Main >
+    </Box >
   );
 }
