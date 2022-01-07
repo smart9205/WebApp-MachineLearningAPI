@@ -19,6 +19,10 @@ const RESULT_LIST = [
   { id: 16, name: "Draw Foul" },
 ]
 
+const FOUL_RESULT_LIST = [
+  { id: 13, name: "Free Kick" },
+  { id: 14, name: "Penalty" },
+]
 
 export default function Dribble({ defenseTeam, offenseTeam, taggingState, offenseTeamId, defenseTeamId }) {
 
@@ -26,7 +30,9 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
   const [offsidePlayer, setOffsidePlayer] = React.useState(offenseTeam[0]);
   const [defensivePlayer, setDefensivePlayer] = React.useState(defenseTeam[0]);
   const [actionTypeId, setActionTypeId] = React.useState(1);
+  const [foulTypeId, setFoulTypeId] = React.useState(8);
   const [result, setResult] = React.useState(RESULT_LIST[0]);
+  const [foulResult, setFoulResult] = React.useState(FOUL_RESULT_LIST[0]);
 
   return (
     <>
@@ -86,6 +92,41 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
       </SubBox>
       {
         result.name === "Draw Foul" &&
+        <>
+          <SubBox>
+            <List header="Foul Type">
+              {[
+                { id: 8, name: "Regular" },
+                { id: 9, name: "Yellow Card" },
+                { id: 10, name: "Red Card" },
+              ].map((type, i) => (
+                <ListItemButton key={i}
+                  selected={foulTypeId === type.id}
+                  onClick={() => setFoulTypeId(type.id)}
+                >
+                  <ListItemText primary={type.name} />
+                </ListItemButton>
+              ))}
+            </List>
+          </SubBox>
+          <SubBox>
+            <List header="Foul Result">
+              {FOUL_RESULT_LIST.map((r, i) => (
+                <ListItemButton key={r.id}
+                  selected={foulResult === r}
+                  onClick={() => {
+                    setFoulResult(r)
+                  }}
+                >
+                  <ListItemText primary={r.name} />
+                </ListItemButton>
+              ))}
+            </List>
+          </SubBox>
+        </>
+      }
+      {
+        result.name === "Draw Foul" &&
         <SubBox>
           <List header="Defensive Player List">
             {
@@ -100,6 +141,13 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                         team_id: offenseTeamId,
                         player_id: offensivePlayer.id,
                         action_id: 4, //Dribble
+                        action_result_id: result.id
+                      },
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: offenseTeamId,
+                        player_id: offensivePlayer.id,
+                        action_id: 6, //Draw Foul
                         action_result_id: result.id
                       },
                       {

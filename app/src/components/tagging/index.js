@@ -231,13 +231,12 @@ export default function Tagging() {
   useHotkeys('up', () => offensiveTeamClicked("home"));
   useHotkeys('down', () => offensiveTeamClicked("away"));
 
-  useHotkeys('a', () => taggingButtonClicked("Short Pass"));
-  useHotkeys('p', () => taggingButtonClicked("Pass"));
-  useHotkeys('s', () => taggingButtonClicked("Shot"));
-  useHotkeys('c', () => taggingButtonClicked("Cross"));
-  useHotkeys('d', () => taggingButtonClicked("Dribble"));
-  useHotkeys('f', () => taggingButtonClicked("Foul"));
-  useHotkeys('q', () => { });
+  useHotkeys('q', () => taggingButtonClicked("Short Pass"));
+  useHotkeys('w', () => taggingButtonClicked("Pass"));
+  useHotkeys('a', () => taggingButtonClicked("Shot"));
+  useHotkeys('s', () => taggingButtonClicked("Cross"));
+  useHotkeys('z', () => taggingButtonClicked("Dribble"));
+  useHotkeys('x', () => taggingButtonClicked("Foul"));
 
   const taggingButtonClicked = (action) => {
     setModalOpen(true)
@@ -311,6 +310,7 @@ export default function Tagging() {
       saveTags()
     }
     setModalOpen(false)
+    setVideoState({ play: true })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [temp_playerTag_list])
 
@@ -514,12 +514,12 @@ export default function Tagging() {
 
                 <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 300 }}>
                   {[
-                    { id: 2, title: "Short Pass (a)", value: "Short Pass" },
-                    { id: 2, title: "Pass (p)", value: "Pass" },
-                    { id: 1, title: "Shot (s)", value: "Shot" },
-                    { id: 3, title: "Cross (c)", value: "Cross" },
-                    { id: 7, title: "Dribble (d)", value: "Dribble" },
-                    { id: 8, title: "Foul (f)", value: "Foul" },
+                    { id: 2, title: "Short Pass (q)", value: "Short Pass" },
+                    { id: 2, title: "Pass (w)", value: "Pass" },
+                    { id: 1, title: "Shot (a)", value: "Shot" },
+                    { id: 3, title: "Cross (s)", value: "Cross" },
+                    { id: 7, title: "Dribble (z)", value: "Dribble" },
+                    { id: 8, title: "Foul (x)", value: "Foul" },
                   ].map((action, i) => (
                     <Grid key={i} item xs={6} onClick={() => taggingButtonClicked(action.value)}>
                       <TagButton style={{ textTransform: 'none' }}>{action.title}</TagButton>

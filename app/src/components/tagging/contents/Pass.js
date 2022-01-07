@@ -22,7 +22,7 @@ const LONG_PASS = "Long Pass"
 const THROUGH_PASS = "Through Pass"
 const KEY_PASS = "Key Pass"
 const SHORT_PASS = "Short Pass"
-const OUT_OF_BOUND = "Out Of Bound"
+const THROW_IN = "Throw-In"
 const FREE_KICK = "Free Kick"
 
 export default function ShortPass({
@@ -35,6 +35,7 @@ export default function ShortPass({
 
   const [result, setResult] = React.useState({ id: 4, name: SUCCESSFUL })
   const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
+  const [offsidePlayer, setOffsidePlayer] = React.useState({});
   const [defensivePlayer, setDefensivePlayer] = React.useState({});
   const [actionTypeId, setActionTypeId] = React.useState(5);
 
@@ -83,7 +84,7 @@ export default function ShortPass({
             { id: 6, name: THROUGH_PASS },
             { id: 7, name: KEY_PASS },
             { id: 4, name: SHORT_PASS },
-            { id: 14, name: OUT_OF_BOUND },
+            { id: 14, name: THROW_IN },
             { id: 11, name: FREE_KICK },
           ].map((r, i) => (
             <ListItemButton key={r.id}
@@ -132,7 +133,7 @@ export default function ShortPass({
           ))}
         </List>
       </SubBox>
-      {(result.name === STOLE_BY || result.name === OFFSIDE) && <SubBox>
+      {(result.name === STOLE_BY) && <SubBox>
         <List header="Defensive Player List">
           {
             defenseTeam.map((player, i) => (
@@ -146,6 +147,39 @@ export default function ShortPass({
           }
         </List>
       </SubBox>}
+      {
+        result.name === OFFSIDE &&
+        <SubBox>
+          <List header="Offensive Player List">
+            {
+              offenseTeam.map((player, i) => (
+                <ListItemButton key={i}
+                  selected={offsidePlayer === player}
+                  onClick={() => {
+                    setOffsidePlayer(player)
+                    taggingState([{
+                      ...tagData,
+                      team_id: offenseTeamId,
+                      player_id: offensivePlayer.id,
+                      action_id: 2,
+                      action_result_id: 15
+                    }, {
+                      ...tagData,
+                      team_id: offenseTeamId,
+                      player_id: player.id,
+                      action_id: 7,
+                      action_result_id: 15
+                    }])
+                  }}
+                >
+                  <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
+                </ListItemButton>
+              ))
+            }
+          </List>
+        </SubBox>
+      }
+
     </>
   );
 } 
