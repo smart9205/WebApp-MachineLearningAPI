@@ -132,7 +132,7 @@ export default function ShortPass({
           ))}
         </List>
       </SubBox>
-      {result.name === STOLE_BY && <SubBox>
+      {(result.name === STOLE_BY || result.name === OFFSIDE) && <SubBox>
         <List header="Defensive Player List">
           {
             defenseTeam.map((player, i) => (

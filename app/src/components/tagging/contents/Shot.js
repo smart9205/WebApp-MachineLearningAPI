@@ -92,7 +92,20 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
               ["Yes", "No"].map((g, i) => (
                 <ListItemButton key={i}
                   selected={goal === g}
-                  onClick={() => setGoal(g)}
+                  onClick={() => {
+                    setGoal(g)
+                    if (g === "Yes") {
+                      taggingState([
+                        {
+                          action_type_id: actionTypeId,
+                          team_id: offenseTeamId,
+                          player_id: offensivePlayer.id,
+                          action_id: 1,
+                          action_result_id: 3
+                        }
+                      ])
+                    }
+                  }}
                 >
                   <ListItemText primary={g} />
                 </ListItemButton>
@@ -101,7 +114,7 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
           </List>
         </SubBox>
       }
-      {
+      {/* {
         onTarget === "Yes" && goal === "Yes" &&
         <SubBox>
           <List header="Assist">
@@ -134,7 +147,7 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
             }
           </List>
         </SubBox>
-      }
+      } */}
       {
         goal === "No" &&
         <SubBox>

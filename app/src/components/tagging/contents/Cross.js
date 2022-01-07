@@ -140,7 +140,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                           action_type_id: actionTypeId,
                           team_id: defenseTeamId,
                           player_id: player.id,
-                          action_id: 14, //interception 
+                          action_id: 10, //interception 
                           action_result_id: result.id
                         },
                       ])
@@ -157,7 +157,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                           action_type_id: actionTypeId,
                           team_id: defenseTeamId,
                           player_id: player.id,
-                          action_id: 15, //clearance
+                          action_id: 11, //clearance
                           action_result_id: result.id
                         },
                       ])

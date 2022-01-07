@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useHotkeys } from 'react-hotkeys-hook'
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
@@ -28,6 +29,7 @@ import ShortPass from './contents/ShortPass';
 import Pass from './contents/Pass';
 import Cross from './contents/Cross';
 import Foul from './contents/Foul';
+import Dribble from './contents/Dribble';
 import "./CSS/Player.css";
 
 const drawerWidth = "30%";
@@ -219,9 +221,26 @@ export default function Tagging() {
     })
   }, [offenseTeamId, defenseTeamId, state.start_time, game_id])
 
+  useHotkeys('left', () => seekTo(-3));
+  useHotkeys('ctrl+left', () => seekTo(-5));
+  useHotkeys('shift+left', () => seekTo(10));
+  useHotkeys('right', () => seekTo(3));
+  useHotkeys('ctrl+right', () => seekTo(5));
+  useHotkeys('shift+right', () => seekTo(10));
+
+  useHotkeys('up', () => offensiveTeamClicked("home"));
+  useHotkeys('down', () => offensiveTeamClicked("away"));
+
+  useHotkeys('a', () => taggingButtonClicked("Short Pass"));
+  useHotkeys('p', () => taggingButtonClicked("Pass"));
+  useHotkeys('s', () => taggingButtonClicked("Shot"));
+  useHotkeys('c', () => taggingButtonClicked("Cross"));
+  useHotkeys('d', () => taggingButtonClicked("Dribble"));
+  useHotkeys('f', () => taggingButtonClicked("Foul"));
+
   const taggingButtonClicked = (action) => {
     setModalOpen(true)
-    setModalContent(action.title)
+    setModalContent(action)
 
     setVideoState({ play: false })
 
@@ -294,9 +313,15 @@ export default function Tagging() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [temp_playerTag_list])
 
+  const offensiveTeamClicked = (team) => {
+    const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
+    setState({ offense: team, start_time: st })
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
       <Modal
+        disableAutoFocus
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         aria-labelledby="modal-modal-title"
@@ -339,6 +364,15 @@ export default function Tagging() {
           }
           {modalContent === "Foul" &&
             <Foul
+              offenseTeamId={offenseTeamId}
+              defenseTeamId={defenseTeamId}
+              offenseTeam={offenseTeam}
+              defenseTeam={defenseTeam}
+              taggingState={setTaggingState}
+            />
+          }
+          {modalContent === "Dribble" &&
+            <Dribble
               offenseTeamId={offenseTeamId}
               defenseTeamId={defenseTeamId}
               offenseTeam={offenseTeam}
@@ -466,11 +500,7 @@ export default function Tagging() {
                   key={t}
                   fullWidth
                   style={{ backgroundColor: t === state.offense && "darkblue", color: t === state.offense && "white" }}
-                  onClick={() => {
-                    const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
-                    setState({ offense: t, start_time: st })
-                  }
-                  }
+                  onClick={() => offensiveTeamClicked(t)}
                 >
                   {state[`${t}_team_name`]}
                 </ControlButton>
@@ -482,15 +512,15 @@ export default function Tagging() {
 
             <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 300 }}>
               {[
-                { id: 2, title: "Short Pass" },
-                { id: 2, title: "Pass" },
-                { id: 1, title: "Shot" },
-                { id: 3, title: "Cross" },
-                { id: 7, title: "Dribble" },
-                { id: 8, title: "Foul" },
+                { id: 2, title: "Short Pass (a)", value: "Short Pass" },
+                { id: 2, title: "Pass (p)", value: "Pass" },
+                { id: 1, title: "Shot (s)", value: "Shot" },
+                { id: 3, title: "Cross (c)", value: "Cross" },
+                { id: 7, title: "Dribble (d)", value: "Dribble" },
+                { id: 8, title: "Foul (f)", value: "Foul" },
               ].map((action, i) => (
-                <Grid key={i} item xs={6} onClick={() => taggingButtonClicked(action)}>
-                  <TagButton>{action.title}</TagButton>
+                <Grid key={i} item xs={6} onClick={() => taggingButtonClicked(action.value)}>
+                  <TagButton style={{ textTransform: 'none' }}>{action.title}</TagButton>
                 </Grid>
               ))}
             </Grid>
