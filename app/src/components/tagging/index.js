@@ -239,6 +239,8 @@ export default function Tagging() {
   useHotkeys('z', () => taggingButtonClicked("Dribble"));
   useHotkeys('x', () => taggingButtonClicked("Foul"));
 
+  useHotkeys('space', () => { console.log("SPACE !"); setVideoState({ play: !videoState.play }) });
+
   const taggingButtonClicked = (action) => {
     setModalOpen(true)
     setModalContent(action)
@@ -426,7 +428,7 @@ export default function Tagging() {
         />
       </Drawer>
 
-      <Main open={open}>
+      <Main open={open} onkeyup="event.preventDefault()">
         <div style={{ width: 50 }}>
           <Tooltip title={`${open ? "Close" : "Open"} Tags`}>
             <IconButton
@@ -441,7 +443,7 @@ export default function Tagging() {
           </Tooltip>
         </div>
         <Box>
-          <div style={{ maxWidth: "88%", margin: 'auto' }} >
+          <div style={{ maxWidth: "88%", margin: 'auto' }} onBlur={() => setVideoState({ play: false })}>
             <div className="player-wrapper">
               <ReactPlayer
                 className="react-player"
