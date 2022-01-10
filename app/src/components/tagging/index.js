@@ -293,11 +293,11 @@ export default function Tagging() {
   }, [config]);
 
   React.useEffect(() => {
-    const data = temp_playerTag_list.slice(-1)[0]
+    const last = temp_playerTag_list.slice(-1)[0]
 
-    console.log("temp_playerTag_list", temp_playerTag_list, data?.action_result_id)
+    console.log("temp_playerTag_list", temp_playerTag_list, last?.action_result_id)
 
-    if (ALL_ACTION_RESULTS.find(f => f.id === data?.action_result_id)?.end_possession) {
+    if (ALL_ACTION_RESULTS.find(f => f.id === last?.action_result_id)?.end_possession) {
       const saveTags = async () => {
         const tTag = await addTeamTag()
         console.log("save Team: ", tTag);
@@ -308,6 +308,11 @@ export default function Tagging() {
         dispPlayerTags(tTag.id)
       }
       saveTags()
+
+      if (ALL_ACTION_RESULTS.find(f => f.change_possession).length > 0) {
+        offensiveTeamClicked(state.offense === "home" ? "away" : "home")
+        seekTo(-5)
+      }
     }
     setModalOpen(false)
     setVideoState({ play: true })

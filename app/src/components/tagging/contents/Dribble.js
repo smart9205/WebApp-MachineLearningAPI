@@ -137,11 +137,11 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                     setDefensivePlayer(player)
                     taggingState([
                       {
-                        action_type_id: foulTypeId,
+                        action_type_id: actionTypeId,
                         team_id: offenseTeamId,
                         player_id: offensivePlayer.id,
                         action_id: 4, //Dribble
-                        action_result_id: foulResult.id
+                        action_result_id: result.id
                       },
                       {
                         action_type_id: foulTypeId,
