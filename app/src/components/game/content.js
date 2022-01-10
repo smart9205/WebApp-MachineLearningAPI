@@ -99,6 +99,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
     const editLeague = leagueList.find(s => s.id === editData.league_id);
     editSeason && setSeason(editSeason);
     editLeague && setLeague(editLeague);
+    setGameDate(editData.date)
     setVideoUrl(editData.video_url);
   }, [editData, seasonList, leagueList, actionType])
 
