@@ -312,7 +312,7 @@ export default function Tagging() {
 
       if (temp_playerTag_list.find(t => ALL_ACTION_RESULTS.find(f => f.id === t?.action_result_id)?.change_possession)) {
         offensiveTeamClicked(state.offense === "home" ? "away" : "home")
-        seekTo(-5)
+        setTeamTag({ start_time: teamTag.start_time - 5 })
       }
     }
     setModalOpen(false)
