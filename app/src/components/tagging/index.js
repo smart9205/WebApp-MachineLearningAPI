@@ -163,6 +163,7 @@ export default function Tagging() {
     });
     GameService.getAllActionResults().then((res) => {
       ALL_ACTION_RESULTS = res;
+      console.log("ACTION RESULT", res)
     });
   }, [])
 
@@ -309,7 +310,7 @@ export default function Tagging() {
       }
       saveTags()
 
-      if (ALL_ACTION_RESULTS.find(f => f.change_possession).length > 0) {
+      if (temp_playerTag_list.find(t => ALL_ACTION_RESULTS.find(f => f.id === t?.action_result_id)?.change_possession)) {
         offensiveTeamClicked(state.offense === "home" ? "away" : "home")
         seekTo(-5)
       }
