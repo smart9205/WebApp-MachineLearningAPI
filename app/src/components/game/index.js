@@ -23,6 +23,7 @@ export default function Game() {
 
   const handleClickOpen = () => () => {
     setOpen(true);
+    setEditData({})
   };
 
   const handleClose = () => {
@@ -44,8 +45,8 @@ export default function Game() {
     gameService.getAllGames().then((response) => {
       setGameList(response);
     },
-    (error) => {
-    });
+      (error) => {
+      });
   }, [count]);
 
   const gameListUpdated = React.useCallback(() => {
@@ -64,27 +65,27 @@ export default function Game() {
     <div>
       <Button onClick={handleClickOpen()} variant="outlined">Add a new Game</Button>
       <Dialog
-        open={open} 
-        classes={{ paper: classes.paper}}
+        open={open}
+        classes={{ paper: classes.paper }}
         onClose={handleClose}
         scroll="paper"
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">{actionType} Game</DialogTitle>
-        <DialogContent 
+        <DialogContent
           dividers={true}
-          style={{height:'90vh'}}
+          style={{ height: '90vh' }}
           ref={descriptionElementRef}
-          >
-            <Content gameListUpdated={gameListUpdated} actionType={actionType} editData={editData}/>
+        >
+          <Content gameListUpdated={gameListUpdated} actionType={actionType} editData={editData} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
 
-      <GameTable rows={gameList} gameListUpdated={gameListUpdated} editCallBack={editCallBack}/>
+      <GameTable rows={gameList} gameListUpdated={gameListUpdated} editCallBack={editCallBack} />
     </div>
   );
 }
