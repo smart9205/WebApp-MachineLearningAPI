@@ -125,8 +125,9 @@ export default function Content({ gameListUpdated, actionType, editData }) {
     getPlayerList();
   }
 
-  const handleChange = name => event => {
-    setPlayerData({ ...playerData, [name]: event.target.value });
+  const handleChange = (name, value) => {
+    console.log(name, value)
+    setPlayerData({ ...playerData, [name]: value });
   };
 
   React.useEffect(() => {
@@ -179,7 +180,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
     GameService.addPlayer(playerData).then((res) => {
       if (res.status === "success") {
         getPlayerList();
-        OpenAlert(`${res.f_name} ${res.l_name} is successfully added!`);
+        OpenAlert(`${res.data.f_name} ${res.data.l_name} is successfully added!`);
       } else {
         OpenAlert(res.data, "error");
       }
@@ -293,7 +294,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
               autoFocus
               sx={{ m: 0.8 }}
               value={playerData.f_name}
-              onChange={handleChange("f_name")}
+              onChange={e => handleChange("f_name", e.target.value)}
               helperText={error.f_name ? "First Name cannot be empty" : ""}
               error={error.f_name}
               label="First Name"
@@ -303,7 +304,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
             <TextField
               sx={{ m: 0.8 }}
               value={playerData.l_name}
-              onChange={handleChange("l_name")}
+              onChange={e => handleChange("l_name", e.target.value)}
               helperText={error.l_name ? "Last Name cannot be empty" : ""}
               error={error.l_name}
               label="Last  Name"
@@ -336,7 +337,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
               <DatePicker
                 label="Date of Birth"
                 value={playerData.date_of_birth}
-                onChange={handleChange("date_of_birth")}
+                onChange={v => handleChange("date_of_birth", v)}
                 renderInput={(params) =>
                   <TextField
                     sx={{ m: 0.8 }}
@@ -352,7 +353,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
             label="Jercey Number"
             type="number"
             value={playerData.jersey_number}
-            onChange={handleChange("jersey_number")}
+            onChange={e => handleChange("jersey_number", e.target.value)}
             helperText={error.jersey_number ? "Jersey Number cannot be less than 0" : ""}
             error={error.jersey_number}
             variant="outlined"

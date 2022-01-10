@@ -28,6 +28,7 @@ exports.create = async (req, res) => {
     });
     return;
   }
+
   const checkPlayer = await Player.findOne({
     where: {
       f_name: req.body.f_name,
