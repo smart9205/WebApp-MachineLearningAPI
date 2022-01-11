@@ -96,6 +96,7 @@ const TAGGING = {
   dribble: { id: 7, hotkey: "q", value: "Dribble" },
   foul: { id: 8, hotkey: "e", value: "Foul" },
 };
+const HOTKEY_OPTION = { enableOnContentEditable: true }
 
 export default function Tagging() {
   const { id } = useParams();
@@ -235,26 +236,26 @@ export default function Tagging() {
     })
   }, [offenseTeamId, defenseTeamId, state.start_time, game_id])
 
-  useHotkeys('left', () => seekTo(-3));
-  useHotkeys('ctrl+left', () => seekTo(-5));
-  useHotkeys('shift+left', () => seekTo(10));
-  useHotkeys('right', () => seekTo(3));
-  useHotkeys('ctrl+right', () => seekTo(5));
-  useHotkeys('shift+right', () => seekTo(10));
+  useHotkeys('left', () => seekTo(-3), HOTKEY_OPTION);
+  useHotkeys('ctrl+left', () => seekTo(-5), HOTKEY_OPTION);
+  useHotkeys('shift+left', () => seekTo(10), HOTKEY_OPTION);
+  useHotkeys('right', () => seekTo(3), HOTKEY_OPTION);
+  useHotkeys('ctrl+right', () => seekTo(5), HOTKEY_OPTION);
+  useHotkeys('shift+right', () => seekTo(10), HOTKEY_OPTION);
 
-  useHotkeys('esc', () => setModalOpen(false));
+  useHotkeys('esc', () => setModalOpen(false), HOTKEY_OPTION);
 
-  useHotkeys('up', () => offensiveTeamClicked("home"));
-  useHotkeys('down', () => offensiveTeamClicked("away"));
+  useHotkeys('up', () => offensiveTeamClicked("home"), HOTKEY_OPTION);
+  useHotkeys('down', () => offensiveTeamClicked("away"), HOTKEY_OPTION);
 
-  useHotkeys(TAGGING.short_pass.hotkey, () => taggingButtonClicked(TAGGING.short_pass.value));
-  useHotkeys(TAGGING.pass.hotkey, () => taggingButtonClicked(TAGGING.pass.value));
-  useHotkeys(TAGGING.shot.hotkey, () => taggingButtonClicked(TAGGING.shot.value));
-  useHotkeys(TAGGING.dribble.hotkey, () => taggingButtonClicked(TAGGING.dribble.value));
+  useHotkeys(TAGGING.short_pass.hotkey, () => taggingButtonClicked(TAGGING.short_pass.value), HOTKEY_OPTION);
+  useHotkeys(TAGGING.pass.hotkey, () => taggingButtonClicked(TAGGING.pass.value), HOTKEY_OPTION);
+  useHotkeys(TAGGING.shot.hotkey, () => taggingButtonClicked(TAGGING.shot.value), HOTKEY_OPTION);
+  useHotkeys(TAGGING.dribble.hotkey, () => taggingButtonClicked(TAGGING.dribble.value), HOTKEY_OPTION);
   useHotkeys(TAGGING.foul.hotkey, () => taggingButtonClicked(TAGGING.foul.value));
-  useHotkeys(TAGGING.cross.hotkey, () => taggingButtonClicked(TAGGING.cross.value));
+  useHotkeys(TAGGING.cross.hotkey, () => taggingButtonClicked(TAGGING.cross.value), HOTKEY_OPTION);
 
-  useHotkeys('return', () => setPlay(v => !v));
+  useHotkeys('return', () => setPlay(v => !v), HOTKEY_OPTION);
 
   const taggingButtonClicked = (action) => {
     setModalOpen(true)
