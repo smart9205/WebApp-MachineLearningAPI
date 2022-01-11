@@ -88,6 +88,15 @@ let ALL_ACTION_RESULTS = [];
 let ALL_ACTIONS = [];
 let ALL_ACTION_TYPES = [];
 
+const TAGGING = {
+  short_pass: { id: 2, hotkey: "s", value: "Short Pass" },
+  pass: { id: 2, hotkey: "w", value: "Pass" },
+  shot: { id: 1, hotkey: "a", value: "Shot" },
+  cross: { id: 3, hotkey: "c", value: "Cross" },
+  dribble: { id: 7, hotkey: "q", value: "Dribble" },
+  foul: { id: 8, hotkey: "e", value: "Foul" },
+};
+
 export default function Tagging() {
   const { id } = useParams();
   const game_id = Number(atob(id).slice(3, -3))
@@ -237,12 +246,12 @@ export default function Tagging() {
   useHotkeys('up', () => offensiveTeamClicked("home"));
   useHotkeys('down', () => offensiveTeamClicked("away"));
 
-  useHotkeys('q', () => taggingButtonClicked("Short Pass"));
-  useHotkeys('w', () => taggingButtonClicked("Pass"));
-  useHotkeys('a', () => taggingButtonClicked("Shot"));
-  useHotkeys('s', () => taggingButtonClicked("Cross"));
-  useHotkeys('z', () => taggingButtonClicked("Dribble"));
-  useHotkeys('x', () => taggingButtonClicked("Foul"));
+  useHotkeys(TAGGING.short_pass.hotkey, () => taggingButtonClicked(TAGGING.short_pass.value));
+  useHotkeys(TAGGING.pass.hotkey, () => taggingButtonClicked(TAGGING.pass.value));
+  useHotkeys(TAGGING.shot.hotkey, () => taggingButtonClicked(TAGGING.shot.value));
+  useHotkeys(TAGGING.dribble.hotkey, () => taggingButtonClicked(TAGGING.dribble.value));
+  useHotkeys(TAGGING.foul.hotkey, () => taggingButtonClicked(TAGGING.foul.value));
+  useHotkeys(TAGGING.cross.hotkey, () => taggingButtonClicked(TAGGING.cross.value));
 
   useHotkeys('return', () => setPlay(v => !v));
 
@@ -341,7 +350,7 @@ export default function Tagging() {
         aria-describedby="modal-modal-description"
       >
         <Box style={style}>
-          {modalContent === "Shot" &&
+          {modalContent === TAGGING.shot.value &&
             <Shot
               offenseTeamId={offenseTeamId}
               defenseTeamId={defenseTeamId}
@@ -350,14 +359,14 @@ export default function Tagging() {
               taggingState={setTaggingState}
             />
           }
-          {modalContent === "Short Pass" &&
+          {modalContent === TAGGING.short_pass.value &&
             <ShortPass
               offenseTeam={offenseTeam}
               taggingState={setTaggingState}
               offenseTeamId={offenseTeamId}
             />
           }
-          {modalContent === "Pass" &&
+          {modalContent === TAGGING.pass.value &&
             <Pass
               offenseTeam={offenseTeam}
               defenseTeam={defenseTeam}
@@ -366,7 +375,7 @@ export default function Tagging() {
               defenseTeamId={defenseTeamId}
             />
           }
-          {modalContent === "Cross" &&
+          {modalContent === TAGGING.cross.value &&
             <Cross
               offenseTeamId={offenseTeamId}
               defenseTeamId={defenseTeamId}
@@ -375,7 +384,7 @@ export default function Tagging() {
               taggingState={setTaggingState}
             />
           }
-          {modalContent === "Foul" &&
+          {modalContent === TAGGING.foul.value &&
             <Foul
               offenseTeamId={offenseTeamId}
               defenseTeamId={defenseTeamId}
@@ -384,7 +393,7 @@ export default function Tagging() {
               taggingState={setTaggingState}
             />
           }
-          {modalContent === "Dribble" &&
+          {modalContent === TAGGING.dribble.value &&
             <Dribble
               offenseTeamId={offenseTeamId}
               defenseTeamId={defenseTeamId}
@@ -526,16 +535,9 @@ export default function Tagging() {
                 </Box>
 
                 <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 300 }}>
-                  {[
-                    { id: 2, title: "Short Pass (q)", value: "Short Pass" },
-                    { id: 2, title: "Pass (w)", value: "Pass" },
-                    { id: 1, title: "Shot (a)", value: "Shot" },
-                    { id: 3, title: "Cross (s)", value: "Cross" },
-                    { id: 7, title: "Dribble (z)", value: "Dribble" },
-                    { id: 8, title: "Foul (x)", value: "Foul" },
-                  ].map((action, i) => (
-                    <Grid key={i} item xs={6} onClick={() => taggingButtonClicked(action.value)}>
-                      <TagButton style={{ textTransform: 'none' }}>{action.title}</TagButton>
+                  {Object.keys(TAGGING).map((key, i) => (
+                    <Grid key={i} item xs={6} onClick={() => taggingButtonClicked(TAGGING[key].value)}>
+                      <TagButton style={{ textTransform: 'none' }}>{TAGGING[key].value} ({TAGGING[key].hotkey})</TagButton>
                     </Grid>
                   ))}
                 </Grid>
