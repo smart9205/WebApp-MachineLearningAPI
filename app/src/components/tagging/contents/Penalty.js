@@ -32,7 +32,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                 selected={offensivePlayer === player}
                 onClick={() => setOffensivePlayer(player)}
               >
-                <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
+                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position})`} />
               </ListItemButton>
             ))
           }
@@ -109,7 +109,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                     ])
                   }}
                 >
-                  <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
+                  <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position})`} />
                 </ListItemButton>
               ))
           }

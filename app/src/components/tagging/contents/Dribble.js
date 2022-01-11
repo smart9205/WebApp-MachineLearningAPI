@@ -44,7 +44,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                 selected={offensivePlayer === player}
                 onClick={() => setOffensivePlayer(player)}
               >
-                <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
+                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position})`} />
               </ListItemButton>
             ))
           }
@@ -118,7 +118,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                     ])
                   }}
                 >
-                  <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
+                  <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position})`} />
                 </ListItemButton>
               ))
             }
@@ -195,7 +195,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                     ])
                   }}
                 >
-                  <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
+                  <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position})`} />
                 </ListItemButton>
               ))
             }
