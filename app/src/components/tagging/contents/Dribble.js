@@ -80,7 +80,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                       team_id: offenseTeamId,
                       player_id: offensivePlayer.id,
                       action_id: 4, //Dribble
-                      action_result_id: result.id
+                      action_result_id: r.id
                     },
                   ])
               }}

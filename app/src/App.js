@@ -17,6 +17,7 @@ import Home from "./components/Home";
 import Profile from "./components/auth/Profile";
 import Game from "./components/game";
 import Tagging from "./components/tagging";
+import Players from "./components/players";
 
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
@@ -132,6 +133,7 @@ const App = () => {
             <Route exact path="/profile" component={Profile} />
 
             <PrivateRoute path='/tagging/:id' component={Tagging} />
+            <PrivateRoute path='/players' component={Players} />
 
             <AdminRoute path='/game' component={Game} />
           </Switch>
