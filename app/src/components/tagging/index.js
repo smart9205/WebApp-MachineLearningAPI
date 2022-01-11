@@ -532,7 +532,10 @@ export default function Tagging() {
                   )}
                   <Box style={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-around", marginLeft: 20 }}>
                     Start Time : {state.start_time}
-                    <ControlButton sx={{ mr: 0 }} onClick={() => saveTags()}>C.P.</ControlButton>
+                    <ControlButton sx={{ mr: 0 }} onClick={() => {
+                      setTeamTag({ end_time: toHHMMSS(`${player.current.getCurrentTime()}`) })
+                      saveTags()
+                    }}>C.P.</ControlButton>
                   </Box>
                 </Box>
 
