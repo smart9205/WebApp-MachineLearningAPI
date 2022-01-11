@@ -307,23 +307,23 @@ export default function Tagging() {
     })
   }, [config]);
 
+  const saveTags = async () => {
+    const tTag = await addTeamTag()
+    console.log("save Team: ", tTag);
+    for (const pTag of temp_playerTag_list) {
+      await addPlayerTag({ ...pTag, team_tag_id: tTag.id })
+    }
+    setTempPlayerTagList([])
+    dispPlayerTags(tTag.id)
+  }
+
   React.useEffect(() => {
     const last = temp_playerTag_list.slice(-1)[0]
 
     console.log("temp_playerTag_list", temp_playerTag_list, last?.action_result_id)
 
     if (ALL_ACTION_RESULTS.find(f => f.id === last?.action_result_id)?.end_possession) {
-      const saveTags = async () => {
-        const tTag = await addTeamTag()
-        console.log("save Team: ", tTag);
-        for (const pTag of temp_playerTag_list) {
-          await addPlayerTag({ ...pTag, team_tag_id: tTag.id })
-        }
-        setTempPlayerTagList([])
-        dispPlayerTags(tTag.id)
-      }
       saveTags()
-
       if (temp_playerTag_list.find(t => ALL_ACTION_RESULTS.find(f => f.id === t?.action_result_id)?.change_possession)) {
         offensiveTeamClicked(state.offense === "home" ? "away" : "home")
         setTeamTag({ start_time: teamTag.start_time - 5 })
@@ -340,7 +340,7 @@ export default function Tagging() {
   }
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' }} >
       <Modal
         disableAutoFocus
         open={modalOpen}
@@ -441,7 +441,7 @@ export default function Tagging() {
         />
       </Drawer>
 
-      <Main open={open} onKeyUp={e => e.preventDefault()}>
+      <Main open={open} >
         <div style={{ width: 50 }}>
           <Tooltip title={`${open ? "Close" : "Open"} Tags`}>
             <IconButton
@@ -455,8 +455,8 @@ export default function Tagging() {
             </IconButton>
           </Tooltip>
         </div>
-        <Box>
-          <div style={{ maxWidth: "88%", margin: 'auto' }} onBlur={() => setPlay(false)}>
+        <Box onBlur={() => { console.log("blur"); setPlay(false) }}>
+          <div style={{ maxWidth: "88%", margin: 'auto' }}>
             <div className="player-wrapper">
               <ReactPlayer
                 className="react-player"
@@ -529,7 +529,8 @@ export default function Tagging() {
                     </ControlButton>
                   )}
                   <Box style={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-around", marginLeft: 20 }}>
-                    Start Time : {state.start_time} <ControlButton sx={{ mr: 0 }} >C.P.</ControlButton>
+                    Start Time : {state.start_time}
+                    <ControlButton sx={{ mr: 0 }} onClick={() => saveTags()}>C.P.</ControlButton>
                   </Box>
                 </Box>
 
