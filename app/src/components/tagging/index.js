@@ -197,15 +197,14 @@ export default function Tagging() {
   React.useEffect(() => {
     if (game_id <= 0) return;
 
-    console.log("INIT PLAYER TAG and TEAM")
     GameService.getAllTeamTagsByGame(game_id).then(res => {
+      setTeamTagList(res)
       if (!res.length) {
         setPlayerTagList([]);
         return
       }
       setState({ curTeamTagId: res[0].id })
       dispPlayerTags(res[0].id)
-      setTeamTagList(res)
     })
   }, [game_id, tagCnt])
 

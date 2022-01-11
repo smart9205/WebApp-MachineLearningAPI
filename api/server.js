@@ -144,6 +144,7 @@ function initial() {
       Action_Result.create({ id: 14, name: "Penalty" })
       Action_Result.create({ id: 15, name: "Offside", change_possession: true })
       Action_Result.create({ id: 16, name: "Draw Foul" })
+      Action_Result.create({ id: 17, name: "Stolen By" })
     }
   })
 

@@ -17,6 +17,7 @@ const RESULT_LIST = [
   { id: 4, name: "Successful" },
   { id: 10, name: "Unsuccessful" },
   { id: 16, name: "Draw Foul" },
+  { id: 17, name: "Stolen By" },
 ]
 
 const FOUL_RESULT_LIST = [
@@ -72,7 +73,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
               selected={result === r}
               onClick={() => {
                 setResult(r)
-                if (r.name !== "Draw Foul")
+                if (r.name !== "Draw Foul" && r.name !== "Stolen By")
                   taggingState([
                     {
                       action_type_id: actionTypeId,
@@ -89,6 +90,41 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
           ))}
         </List>
       </SubBox>
+      {
+        result.name === "Stolen By" &&
+        <SubBox>
+          <List header="Defensive Player List">
+            {
+              defenseTeam.map((player, i) => (
+                <ListItemButton key={i}
+                  selected={defensivePlayer === player}
+                  onClick={() => {
+                    setDefensivePlayer(player)
+                    taggingState([
+                      {
+                        action_type_id: actionTypeId,
+                        team_id: offenseTeamId,
+                        player_id: offensivePlayer.id,
+                        action_id: 4, // Dribble
+                        action_result_id: result.id
+                      },
+                      {
+                        action_type_id: foulTypeId,
+                        team_id: offenseTeamId,
+                        player_id: player.id,
+                        action_id: 10, // Interception
+                        action_result_id: result.id
+                      },
+                    ])
+                  }}
+                >
+                  <ListItemText primary={`${player.f_name} ${player.l_name}  #${player.jersey_number}  (${player.position})`} />
+                </ListItemButton>
+              ))
+            }
+          </List>
+        </SubBox>
+      }
       {
         result.name === "Draw Foul" &&
         <>
