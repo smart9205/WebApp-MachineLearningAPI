@@ -97,6 +97,12 @@ const deleteTeamTag = (id) => {
   });
 }
 
+const deleteGame = (id) => {
+  return axios.delete(API_URL + `game/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+    return response.data;
+  });
+}
+
 const deletePlayerTag = (id) => {
   return axios.delete(API_URL + `player_tag/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
     return response.data;
@@ -126,11 +132,6 @@ const getAllPositions = () => {
   });
 }
 
-const deleteGames = (req) => {
-  return axios.post(API_URL + "game/deletegames", req, { headers: authHeader() }).then((response) => {
-    return response.data;
-  });
-}
 
 const updatePlayerTag = (req) => {
   return axios.put(API_URL + `player_tag/${req.id}`, req, { headers: authHeader(), data: { id: req.id } }).then((response) => {
@@ -210,7 +211,7 @@ const gameService = {
 
   deletePlayersInTeam,
 
-  deleteGames,
+  deleteGame,
   deleteTeamTag,
   deletePlayerTag
 };

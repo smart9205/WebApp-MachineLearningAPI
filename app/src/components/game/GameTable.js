@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,17 +13,17 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 import EditIcon from '@mui/icons-material/Edit';
 import TagIcon from '@mui/icons-material/Tag';
 import { visuallyHidden } from '@mui/utils';
@@ -103,7 +102,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { order, orderBy, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -112,17 +111,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -144,117 +132,50 @@ function EnhancedTableHead(props) {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell> </TableCell>
+        <TableCell> </TableCell>
+        <TableCell> </TableCell>
       </TableRow>
     </TableHead>
   );
 }
 
 EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, deleteButtonClicked } = props;
-
   return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Games
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton onClick={deleteButtonClicked}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+    <Toolbar>
+      <Typography
+        sx={{ flex: '1 1 100%' }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        Games
+      </Typography>
     </Toolbar>
   );
 };
 
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
-export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
+export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loading, setLoading }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
+  const [selected, setSelected] = React.useState({});
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
-
+  const [open, setOpen] = React.useState(false);
+  const [alertContent, setAlertContent] = React.useState("");
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -271,29 +192,37 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
 
     if (!result) return;
 
-    GameService.deleteGames({ games: selected }).then(
-      (response) => {
-        gameListUpdated();
+    setLoading(true)
+    GameService.deleteGame(selected.id).then(
+      (res) => {
+        if (res.result === "success")
+          gameListUpdated();
+        else {
+          setOpen(true)
+          setAlertContent(res.message)
+          setLoading(false)
+        }
       },
       (error) => {
+        setOpen(true)
+        setAlertContent(error)
+        setLoading(false)
       }
     );
   };
 
-  const deleteButtonClicked = () => {
-    console.log("deletebuttonClicked", selected);
-    setDeleteOpen(true);
-
-  }
-
-  const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
   return (
     <Box sx={{ width: '100%' }}>
+      <Snackbar
+        open={open}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        autoHideDuration={2000}
+        onClose={() => setOpen(false)}
+      >
+        <Alert onClose={() => setOpen(false)} severity="warning" sx={{ width: '100%' }}>
+          {alertContent}
+        </Alert>
+      </Snackbar>
       <Dialog open={deleteOpen} onClose={e => handleDeleteClose(false)}>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
@@ -307,7 +236,7 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
         </DialogActions>
       </Dialog>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} deleteButtonClicked={deleteButtonClicked} />
+        <EnhancedTableToolbar />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -315,92 +244,87 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack }) {
             size={'small'}
           >
             <EnhancedTableHead
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
             <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          onClick={(event) => handleClick(event, row.id)}
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        align="center"
-                      >
-                        {row.season_name}
-                      </TableCell>
-                      <TableCell align="center">{row.league_name}</TableCell>
-                      <TableCell align="center">{row.home_team_name}</TableCell>
-                      <TableCell align="center">{row.away_team_name}</TableCell>
-                      <TableCell align="center" >{row.date.slice(0, 10)}</TableCell>
-                      <TableCell align="center" sx={{ width: 40 }}>
-                        <a href={row.video_url} target="_blank" rel="noreferrer">
-                          <Paper style={{ display: "flex", justifyContent: "center", alignItems: "center" }} elevation={3}>
-                            <img src={VIDEO_ICON} style={{ width: 40, height: 40, borderRadius: 5 }} alt="video" />
-                          </Paper>
-                        </a>
-                      </TableCell>
-                      <TableCell align="center" sx={{ width: 100 }}>
-                        <Button
-                          variant="outlined"
-                          onClick={() => editCallBack(row)}
-                          startIcon={<EditIcon />}
-                        >
-                          Edit
-                        </Button>
-                      </TableCell>
-                      <TableCell align="center" sx={{ width: 100 }}>
-                        <Link variant="outlined" to={`/tagging/${btoa(randomString.generate(3)+row.id+randomString.generate(3))}`} target="_blank" rel="noopener noreferrer">
-                          <Button
-                            variant="outlined"
-                            startIcon={<TagIcon />}
-                          >
-                            Tag
-                          </Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
+              {loading ?
+                <TableRow >
+                  <TableCell colSpan={9} align="center">
+                    <CircularProgress sx={{ my: "30vh" }} />
+                  </TableCell>
                 </TableRow>
-              )}
+                :
+                <>
+                  {stableSort(rows, getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      const labelId = `enhanced-table-checkbox-${index}`;
+
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={row.id}
+                        >
+
+                          <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                            padding="none"
+                            align="center"
+                          >
+                            {row.season_name}
+                          </TableCell>
+                          <TableCell align="center">{row.league_name}</TableCell>
+                          <TableCell align="center">{row.home_team_name}</TableCell>
+                          <TableCell align="center">{row.away_team_name}</TableCell>
+                          <TableCell align="center" >{row.date.slice(0, 10)}</TableCell>
+                          <TableCell align="center" sx={{ width: 40 }}>
+                            <a href={row.video_url} target="_blank" rel="noreferrer">
+                              <Paper style={{ display: "flex", justifyContent: "center", alignItems: "center" }} elevation={3}>
+                                <img src={VIDEO_ICON} style={{ width: 40, height: 40, borderRadius: 5 }} alt="video" />
+                              </Paper>
+                            </a>
+                          </TableCell>
+                          <TableCell align="center" sx={{ width: 100 }}>
+                            <Button
+                              variant="outlined"
+                              onClick={() => editCallBack(row)}
+                              startIcon={<EditIcon />}
+                            >
+                              Edit
+                            </Button>
+                          </TableCell>
+                          <TableCell align="center" sx={{ width: 100 }}>
+                            <Link variant="outlined" to={`/tagging/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`} target="_blank" rel="noopener noreferrer">
+                              <Button
+                                variant="outlined"
+                                startIcon={<TagIcon />}
+                              >
+                                Tag
+                              </Button>
+                            </Link>
+                          </TableCell>
+                          <TableCell align="center" sx={{ width: 70 }}>
+                            <IconButton
+                              onClick={() => {
+                                setDeleteOpen(true)
+                                setSelected(row)
+                              }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </>
+              }
             </TableBody>
           </Table>
         </TableContainer>

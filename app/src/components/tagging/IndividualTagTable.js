@@ -13,9 +13,10 @@ import TCellTimeEdit from './TCellTimeEdit';
 import TCellSelectEdit from './TCellSelectEdit';
 import GameService from '../../services/game.service';
 import CircularProgress from '@mui/material/CircularProgress';
+import DeleteConfirmDialog from './DeleteConfirmDialog';
 import "./CSS/table.css";
 
-export default function StickyHeadTable({
+export default function IndividualTagTable({
   rows,
   actions,
   actionTypes,
@@ -26,6 +27,16 @@ export default function StickyHeadTable({
   updateTagList,
 }) {
   const [loading, setLoading] = React.useState(false)
+  const [deleteOpen, setDeleteOpen] = React.useState(false)
+  const [selectedRow, setSelectedRow] = React.useState({})
+
+  const handleDeleteClose = (result) => {
+    setDeleteOpen(false);
+
+    if (!result) return;
+
+    deletePlayerTag(selectedRow.id)
+  };
 
   const update = (data) => {
     setLoading(true)
@@ -49,6 +60,7 @@ export default function StickyHeadTable({
 
   return (
     <Box sx={{ width: '100%', p: 1 }}>
+      <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
       <Paper sx={{ width: '100%', overflow: 'hidden', p: 0.5 }}>
         <h5 style={{ textAlign: 'center' }}>Player Tag</h5>
         <TableContainer style={{ height: "30vh" }}>
@@ -106,7 +118,7 @@ export default function StickyHeadTable({
                           start={row.start_time}
                         />
                         <TableCell align="center" sx={{ p: 0, m: 0 }}>
-                          <IconButton size="small" onClick={() => deletePlayerTag(row.id)}>
+                          <IconButton size="small" onClick={() => { setDeleteOpen(true); setSelectedRow(row) }}>
                             <DeleteIcon />
                           </IconButton>
                         </TableCell>

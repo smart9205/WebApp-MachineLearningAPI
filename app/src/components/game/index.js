@@ -20,6 +20,7 @@ export default function Game() {
   const [gameList, setGameList] = React.useState([]);
   const [count, setCount] = React.useState(0);
   const [editData, setEditData] = React.useState({});
+  const [loading, setLoading] = React.useState(true)
 
   const handleClickOpen = () => () => {
     setOpen(true);
@@ -44,6 +45,7 @@ export default function Game() {
   React.useEffect(() => {
     gameService.getAllGames().then((response) => {
       setGameList(response);
+      setLoading(false)
     },
       (error) => {
       });
@@ -85,7 +87,13 @@ export default function Game() {
         </DialogActions>
       </Dialog>
 
-      <GameTable rows={gameList} gameListUpdated={gameListUpdated} editCallBack={editCallBack} />
+      <GameTable
+        rows={gameList}
+        gameListUpdated={gameListUpdated}
+        editCallBack={editCallBack}
+        loading={loading}
+        setLoading={(v) => setLoading(v)}
+      />
     </div>
   );
 }

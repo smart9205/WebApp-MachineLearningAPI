@@ -2,8 +2,9 @@ const db = require("../models");
 const Game = db.game;
 const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
+const Team_Tag = db.team_tag
 
-exports.create =  (req, res) => {
+exports.create = (req, res) => {
   // Validate request
   // if (!req.body.name) {
   //   res.status(400).send({
@@ -21,17 +22,10 @@ exports.create =  (req, res) => {
           err.message || "Some error occurred while creating the Game."
       });
     });
- 
+
 };
 
-exports.deleteGames =  (req, res) => {
-  // Validate request
-  // if (!req.body.name) {
-  //   res.status(400).send({
-  //     message: "Name can not be empty!"
-  //   });
-  //   return;
-  // }
+exports.deleteGames = (req, res) => {
   Sequelize.query(`
     DELETE FROM public."Games" WHERE id IN (${req.body.games.map((id) => id)})
   `)
@@ -126,8 +120,19 @@ exports.update = (req, res) => {
     });
 };
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
+
+  const teamTag = await Team_Tag.findAll({
+    where: { game_id: id }
+  })
+
+  if (teamTag !== null) {
+    return res.send({
+      result: "fail",
+      message: "Game can not be deleted as have tags"
+    });
+  }
 
   Game.destroy({
     where: { id: id }
@@ -135,10 +140,12 @@ exports.delete = (req, res) => {
     .then(num => {
       if (num == 1) {
         res.send({
+          result: "success",
           message: "Game was deleted successfully!"
         });
       } else {
         res.send({
+          result: "success",
           message: `Cannot delete Game with id=${id}. Maybe Game was not found!`
         });
       }

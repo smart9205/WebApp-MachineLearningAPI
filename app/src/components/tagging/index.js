@@ -239,7 +239,7 @@ export default function Tagging() {
   useHotkeys('z', () => taggingButtonClicked("Dribble"));
   useHotkeys('x', () => taggingButtonClicked("Foul"));
 
-  useHotkeys('space', () => { console.log("SPACE !"); setVideoState({ play: !videoState.play }) });
+  useHotkeys('return', () => { console.log("return !"); setVideoState({ play: !videoState.play }) });
 
   const taggingButtonClicked = (action) => {
     setModalOpen(true)
