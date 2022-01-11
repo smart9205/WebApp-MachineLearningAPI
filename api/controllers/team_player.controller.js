@@ -5,24 +5,26 @@ const Game = db.game;
 const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
 
-exports.create =  async (req, res) => {
+exports.create = async (req, res) => {
 
   console.log("TeamPlayer ", req.body)
 
-  const checkTeamPlayer = await Team_Player.findOne({ where: {
-    season_id: req.body.season_id,
-    league_id: req.body.league_id,
-    team_id: req.body.team_id,
-    player_id: req.body.player_id,
-  }});
-  
-  if(checkTeamPlayer !== null) {
-    return res.send({status: "error", data: "Player already exists in the Team"});
+  const checkTeamPlayer = await Team_Player.findOne({
+    where: {
+      season_id: req.body.season_id,
+      league_id: req.body.league_id,
+      team_id: req.body.team_id,
+      player_id: req.body.player_id,
+    }
+  });
+
+  if (checkTeamPlayer !== null) {
+    return res.send({ status: "error", data: "Player already exists in the Team" });
   }
 
   Team_Player.create(req.body)
     .then(data => {
-      res.send({status: "success", data});
+      res.send({ status: "success", data });
     })
     .catch(err => {
       res.status(500).send({
@@ -33,11 +35,11 @@ exports.create =  async (req, res) => {
 };
 exports.getPlayersByGameTeam = async (req, res) => {
   let game;
-  try{
+  try {
     game = await Game.findByPk(req.body.game_id);
-    if(!game) return res.status(500).send({message: "Game not found!"});
-  }catch(e) {
-    return res.status(500).send({message: "Game not found!"});
+    if (!game) return res.status(500).send({ message: "Game not found!" });
+  } catch (e) {
+    return res.status(500).send({ message: "Game not found!" });
   }
   let home_team, away_team;
   try {
@@ -52,8 +54,9 @@ exports.getPlayersByGameTeam = async (req, res) => {
         season_id = ${game.season_id} and 
         league_id = ${game.league_id} and 
         team_id = ${game.home_team_id} 
+      order by public."Players".jersey_number
     `);
-      
+
     away_team = await Sequelize.query(`
       SELECT *, 
         public."Players".id as id,
@@ -65,13 +68,14 @@ exports.getPlayersByGameTeam = async (req, res) => {
         season_id = ${game.season_id} and 
         league_id = ${game.league_id} and 
         team_id = ${game.away_team_id} 
+      order by public."Players".jersey_number
     `);
-  }catch(e) {
-  } 
-  res.send({home_team: home_team[0], away_team:away_team[0]});
+  } catch (e) {
+  }
+  res.send({ home_team: home_team[0], away_team: away_team[0] });
 }
 exports.findAll = (req, res) => {
-  console.log("req team_player",req.body);
+  console.log("req team_player", req.body);
   Sequelize.query(`
   SELECT * 
     FROM public."Players" 
@@ -81,6 +85,7 @@ exports.findAll = (req, res) => {
     season_id = ${req.body.season_id} and 
     league_id = ${req.body.league_id} and 
     team_id = ${req.body.team_id} 
+  order by public."Players".jersey_number
   `)
     .then(data => {
       res.send(data[0]);
@@ -140,7 +145,7 @@ exports.updateJersey = async (req, res) => {
   player.jersey_number = req.body.jersey_number;
 
   await player.save();
- 
+
   res.send({
     message: "Player Jersey updated"
   });
