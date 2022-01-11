@@ -16,23 +16,16 @@ import TCellTimeEdit from './TCellTimeEdit';
 import CircularProgress from '@mui/material/CircularProgress';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 
-export default function StickyHeadTable({ rows, updateTagList, handleRowClick }) {
-  const [selectedRow, setSelectedRow] = React.useState(rows[0]);
+export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId }) {
   const [loading, setLoading] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
-
-  React.useEffect(() => {
-    handleRowClick(selectedRow);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedRow])
-
 
   const handleDeleteClose = (result) => {
     setDeleteOpen(false);
 
     if (!result) return;
 
-    deleteTag(selectedRow.id)
+    deleteTag(selectedId)
   };
 
   const deleteTag = (id) => {
@@ -84,8 +77,8 @@ export default function StickyHeadTable({ rows, updateTagList, handleRowClick })
                   {rows.map((row) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={row.id}
-                        selected={row === selectedRow}
-                        onClick={() => setSelectedRow(row)}
+                        selected={row.id === selectedId}
+                        onClick={() => handleRowClick(row)}
                       >
                         <TableCell align="center">
                           {row.period === 1 && "1st Half"}

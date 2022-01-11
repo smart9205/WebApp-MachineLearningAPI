@@ -104,6 +104,8 @@ export default function Tagging() {
   const [playerTagList, setPlayerTagList] = React.useState([])
   const [tagCnt, setTagCnt] = React.useState(0)
   const [temp_playerTag_list, setTempPlayerTagList] = React.useState([])
+  const [play, setPlay] = React.useState(false)
+  const [playRate, setPlayRate] = React.useState(3)
 
   const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
     url: "",
@@ -120,11 +122,6 @@ export default function Tagging() {
   const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
     sec_before: getUser()?.user_config ? getUser()?.user_config.sec_before : 10,
     sec_after: getUser()?.user_config ? getUser()?.user_config.sec_after : 3,
-  })
-
-  const [videoState, setVideoState] = React.useReducer((old, action) => ({ ...old, ...action }), {
-    play: false,
-    playbackRate: 3
   })
 
   const [teamTag, setTeamTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -190,14 +187,21 @@ export default function Tagging() {
 
   React.useEffect(() => {
     if (game_id <= 0) return;
+
+    console.log("INIT PLAYER TAG and TEAM")
     GameService.getAllTeamTagsByGame(game_id).then(res => {
-      setTeamTagList(res)
-      if (!res.length)
+      if (!res.length) {
         setPlayerTagList([]);
+        return
+      }
+      setState({ curTeamTagId: res[0].id })
+      dispPlayerTags(res[0].id)
+      setTeamTagList(res)
     })
   }, [game_id, tagCnt])
 
   const dispPlayerTags = (id) => {
+    if (!id) return
     setState({ curTeamTagId: id })
 
     GameService.getAllPlayerTagsByTeamTag(id).then(res => {
@@ -206,10 +210,11 @@ export default function Tagging() {
   }
 
   const changePlayRate = (flag) => {
-    let newRate = flag ? (videoState.playbackRate + 1) : (videoState.playbackRate - 1);
+    let newRate = flag ? (playRate + 1) : (playRate - 1);
     if (newRate < 0) newRate = 0;
     if (newRate > PLAYBACK_RATE.length - 1) newRate = PLAYBACK_RATE.length - 1;
-    setVideoState({ playbackRate: newRate, play: true })
+    setPlayRate(newRate)
+    setPlay(true)
     console.log("rate", PLAYBACK_RATE[newRate])
   }
 
@@ -239,13 +244,13 @@ export default function Tagging() {
   useHotkeys('z', () => taggingButtonClicked("Dribble"));
   useHotkeys('x', () => taggingButtonClicked("Foul"));
 
-  useHotkeys('return', () => { console.log("return !"); setVideoState({ play: !videoState.play }) });
+  useHotkeys('return', () => setPlay(v => !v));
 
   const taggingButtonClicked = (action) => {
     setModalOpen(true)
     setModalContent(action)
 
-    setVideoState({ play: false })
+    setPlay(false)
 
     const curTime = player.current.getCurrentTime()
     console.log("current Time", curTime, config.sec_after);
@@ -285,7 +290,6 @@ export default function Tagging() {
 
   React.useEffect(() => {
     GameService.updateTaggerConfig(config).then(res => {
-      console.log("data", res);
       setUser({
         ...getUser(), user_config: {
           sec_before: config.sec_before,
@@ -318,7 +322,7 @@ export default function Tagging() {
       }
     }
     setModalOpen(false)
-    setVideoState({ play: true })
+    setPlay(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [temp_playerTag_list])
 
@@ -412,6 +416,7 @@ export default function Tagging() {
             dispPlayerTags(row?.id)
             player.current.seekTo(toSecond(row?.start_time))
           }}
+          selectedId={state.curTeamTagId}
         />
         <IndividualTagTable
           rows={playerTagList}
@@ -428,7 +433,7 @@ export default function Tagging() {
         />
       </Drawer>
 
-      <Main open={open} onkeyup="event.preventDefault()">
+      <Main open={open} onKeyUp={e => e.preventDefault()}>
         <div style={{ width: 50 }}>
           <Tooltip title={`${open ? "Close" : "Open"} Tags`}>
             <IconButton
@@ -443,16 +448,16 @@ export default function Tagging() {
           </Tooltip>
         </div>
         <Box>
-          <div style={{ maxWidth: "88%", margin: 'auto' }} onBlur={() => setVideoState({ play: false })}>
+          <div style={{ maxWidth: "88%", margin: 'auto' }} onBlur={() => setPlay(false)}>
             <div className="player-wrapper">
               <ReactPlayer
                 className="react-player"
                 url={state.url}
                 ref={player}
-                onPlay={() => setVideoState({ play: true })}
-                onPause={() => setVideoState({ play: false })}
-                playing={videoState.play}
-                playbackRate={PLAYBACK_RATE[videoState.playbackRate].rate}
+                onPlay={() => setPlay(true)}
+                onPause={() => setPlay(false)}
+                playing={play}
+                playbackRate={PLAYBACK_RATE[playRate].rate}
                 controls={true}
                 width='100%'
                 height='100%'
@@ -468,17 +473,17 @@ export default function Tagging() {
 
                 <ControlButton onClick={() => changePlayRate(false)}>slow</ControlButton>
 
-                {videoState.play ?
-                  <ControlButton style={{ width: 100 }} startIcon={<PauseCircleOutlineIcon />} onClick={() => setVideoState({ play: false })}>
+                {play ?
+                  <ControlButton style={{ width: 100 }} startIcon={<PauseCircleOutlineIcon />} onClick={() => setPlay(false)}>
                     Pause
                   </ControlButton>
                   :
-                  <ControlButton style={{ width: 100 }} startIcon={<PlayCircleOutlineIcon />} onClick={() => setVideoState({ play: true })}>
+                  <ControlButton style={{ width: 100 }} startIcon={<PlayCircleOutlineIcon />} onClick={() => setPlay(true)}>
                     Play
                   </ControlButton>
                 }
 
-                <label style={{ width: "40px" }}>{PLAYBACK_RATE[videoState.playbackRate].label}</label>
+                <label style={{ width: "40px" }}>{PLAYBACK_RATE[playRate].label}</label>
 
                 <ControlButton onClick={() => changePlayRate(true)}>fast</ControlButton>
 
