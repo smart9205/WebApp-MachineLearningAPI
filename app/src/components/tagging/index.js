@@ -242,6 +242,8 @@ export default function Tagging() {
   useHotkeys('ctrl+right', () => seekTo(5));
   useHotkeys('shift+right', () => seekTo(10));
 
+  useHotkeys('esc', () => setModalOpen(false));
+
   useHotkeys('up', () => offensiveTeamClicked("home"));
   useHotkeys('down', () => offensiveTeamClicked("away"));
 
