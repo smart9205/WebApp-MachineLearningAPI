@@ -16,7 +16,6 @@ const SubBox = styled(Box)`
 export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTeamId, defenseTeamId }) {
 
   const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
-  const [assistPlayer, setAssistPlayer] = React.useState(offenseTeam[0]);
   const [actionTypeId, setActionTypeId] = React.useState(1);
   const [onTarget, setOnTarget] = React.useState("Yes");
   const [goal, setGoal] = React.useState("No");

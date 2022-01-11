@@ -123,10 +123,11 @@ exports.update = (req, res) => {
 exports.delete = async (req, res) => {
   const id = req.params.id;
 
-  const teamTag = await Team_Tag.findAll({
+  const teamTag = await Team_Tag.findOne({
     where: { game_id: id }
   })
 
+  console.log("TeamTag finded", teamTag)
   if (teamTag !== null) {
     return res.send({
       result: "fail",

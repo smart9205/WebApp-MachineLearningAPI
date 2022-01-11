@@ -22,7 +22,6 @@ const RESULT_LIST = [
 export default function Foul({ defenseTeam, offenseTeam, taggingState, offenseTeamId, defenseTeamId }) {
 
   const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
-  const [offsidePlayer, setOffsidePlayer] = React.useState(offenseTeam[0]);
   const [defensivePlayer, setDefensivePlayer] = React.useState(defenseTeam[0]);
   const [actionTypeId, setActionTypeId] = React.useState(8);
   const [result, setResult] = React.useState(RESULT_LIST[0]);

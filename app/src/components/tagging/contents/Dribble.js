@@ -27,7 +27,6 @@ const FOUL_RESULT_LIST = [
 export default function Dribble({ defenseTeam, offenseTeam, taggingState, offenseTeamId, defenseTeamId }) {
 
   const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
-  const [offsidePlayer, setOffsidePlayer] = React.useState(offenseTeam[0]);
   const [defensivePlayer, setDefensivePlayer] = React.useState(defenseTeam[0]);
   const [actionTypeId, setActionTypeId] = React.useState(1);
   const [foulTypeId, setFoulTypeId] = React.useState(8);
