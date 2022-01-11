@@ -274,9 +274,12 @@ export default function Tagging() {
     })
   }
 
-  const addTeamTag = async () => {
+  const addTeamTag = async (isCP) => {
     try {
-      const res = await GameService.addTeamTag(teamTag)
+      const res = await GameService.addTeamTag({
+        ...teamTag,
+        end_time: isCP ? toHHMMSS(player.current.getCurrentTime()) : teamTag.end_time
+      })
       setModalOpen(false)
       setTeamTag({ id: res.id })
       setTagCnt(tagCnt + 1)
@@ -310,8 +313,8 @@ export default function Tagging() {
     })
   }, [config]);
 
-  const saveTags = async () => {
-    const tTag = await addTeamTag()
+  const saveTags = async (isCP = false) => {
+    const tTag = await addTeamTag(isCP)
     console.log("save Team: ", tTag);
     for (const pTag of temp_playerTag_list) {
       await addPlayerTag({ ...pTag, team_tag_id: tTag.id })
@@ -534,8 +537,7 @@ export default function Tagging() {
                   <Box style={{ mt: 2, display: "flex", alignItems: "center", justifyContent: "space-around", marginLeft: 20 }}>
                     Start Time : {state.start_time}
                     <ControlButton sx={{ mr: 0 }} onClick={() => {
-                      setTeamTag({ end_time: toHHMMSS(`${player.current.getCurrentTime()}`) })
-                      saveTags()
+                      saveTags(true)
                     }}>C.P.</ControlButton>
                   </Box>
                 </Box>
