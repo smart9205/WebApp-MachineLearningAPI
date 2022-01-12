@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import GameService from "../../services/game.service";
 import { toHHMMSS, toSecond } from "../../common/utilities"
-import VIDEO from '../../assets/1.mp4';
 
 const styles = {
     action: {
@@ -74,8 +73,7 @@ export default function TagVideo({ playerId, game }) {
             <div className="player-wrapper">
                 <ReactPlayer
                     className="react-player"
-                    // url={game.video_url}
-                    url={VIDEO}
+                    url={game.video_url}
                     ref={player}
                     onPlay={() => setPlay(true)}
                     onPause={() => setPlay(false)}
