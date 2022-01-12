@@ -82,7 +82,7 @@ export default function Team() {
                   <Grid item xs={4} key={player.id}
                     onClick={() => {
                       console.log("player clicked")
-                      history.push(`/player/${player.id}`);
+                      history.push(`/player/${player.player_id}`);
                     }}
                   >
                     <PlayerCard player={player} />
