@@ -208,6 +208,11 @@ const getAllGamesByPlayer = (id) => {
   });
 }
 
+const getAllPlayerTagsByPlayer = (playerId, gameId) => {
+  return axios.get(API_URL + `player_tag/getbyplayer/${playerId}/${gameId}`, { headers: authHeader(), data: { playerId, gameId } }).then((response) => {
+    return response.data;
+  });
+}
 
 const gameService = {
   addTeamPlayer,
@@ -239,6 +244,7 @@ const gameService = {
   getAllActionResults,
   getAllPositions,
   getAllGamesByPlayer,
+  getAllPlayerTagsByPlayer,
 
   updateJersey,
   updateGame,
