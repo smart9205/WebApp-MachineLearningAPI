@@ -24,18 +24,19 @@ const styles = {
 
 export default function Players() {
   const { id } = useParams();
+  const playerId = Number(atob(id).slice(3, -3))
   const [loading, setLoading] = useState(true)
   const [games, setGames] = useState([])
 
   useEffect(() => {
-    console.log("PlayerID", id)
+    console.log("PlayerID", playerId)
     setLoading(true)
-    GameService.getAllGamesByPlayer(id).then((res) => {
+    GameService.getAllGamesByPlayer(playerId).then((res) => {
       console.log("games", res)
       setGames(res)
       setLoading(false)
     }).catch(() => { setLoading(false) })
-  }, [id])
+  }, [playerId])
 
   return (
     <>

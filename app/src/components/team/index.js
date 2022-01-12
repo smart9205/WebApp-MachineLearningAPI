@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import GameService from "../../services/game.service";
-
+import randomString from 'randomstring'
 import COURT from "../../assets/court.png";
 import PlayerCard from './PlayerCard';
 
@@ -81,7 +81,7 @@ export default function Team() {
                   <Grid item xs={4} key={player.id}
                     onClick={() => {
                       console.log("player clicked")
-                      history.push(`/player/${player.player_id}`);
+                      history.push(`/player/${btoa(randomString.generate(3) + player.player_id + randomString.generate(3))}`);
                     }}
                   >
                     <PlayerCard player={player} />
