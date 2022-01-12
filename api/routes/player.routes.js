@@ -31,6 +31,11 @@ module.exports = app => {
 		controller.findOne
 	);
 
+	app.get(
+		"/player/gameByPlayerId/:id",
+		controller.gameByPlayerId
+	);
+
 	app.put(
 		"/player/:id",
 		[authJwt.isAdmin],

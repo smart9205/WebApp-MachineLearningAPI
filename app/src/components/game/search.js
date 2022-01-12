@@ -11,7 +11,6 @@ import {
 
 import PlayerTable from "./PlayerTable"
 import GameService from "../../services/game.service";
-import gameService from '../../services/game.service';
 
 export default function SearchComponent({
   selectedTeamCallBack,
@@ -35,7 +34,7 @@ export default function SearchComponent({
   const [count, setCount] = React.useState(0);
 
   React.useEffect(() => {
-    if(!teamList.length) return;
+    if (!teamList.length) return;
     // setSeason(seasonList.find(s => s.id === editData.season_id));
     const editTeam = teamList.find(s => s.id === defaultTeamId);
     editTeam && setSelectedTeam(editTeam);
@@ -70,7 +69,7 @@ export default function SearchComponent({
   }
 
   const deletePlayerCallBack = (id) => {
-    gameService.deletePlayersInTeam(id).then((res) => {
+    GameService.deletePlayersInTeam(id).then((res) => {
       setCount(count + 1);
     })
   };
@@ -84,19 +83,19 @@ export default function SearchComponent({
   };
 
   const addTeamPlayer = () => {
-    if(!selectedPlayer) {openAlert("Please select player", "warning"); return;}
-    if(!selectedTeam) {openAlert("Please select Team", "warning"); return;}
-    if(!season) {openAlert("Please select Season", "warning"); return;}
-    if(!league) {openAlert("Please select League", "warning"); return;}
-    
-    gameService.addTeamPlayer({
+    if (!selectedPlayer) { openAlert("Please select player", "warning"); return; }
+    if (!selectedTeam) { openAlert("Please select Team", "warning"); return; }
+    if (!season) { openAlert("Please select Season", "warning"); return; }
+    if (!league) { openAlert("Please select League", "warning"); return; }
+
+    GameService.addTeamPlayer({
       season_id: season.id,
       league_id: league.id,
       team_id: selectedTeam.id,
       player_id: selectedPlayer.id
     }).then((res) => {
       console.log("addTeamPlayer", res)
-      if(res.status === "success") {
+      if (res.status === "success") {
         setCount(count + 1);
         openAlert(`Player is successfully added!`);
       } else {
@@ -105,7 +104,7 @@ export default function SearchComponent({
     })
   }
 
-  const openAlert = (text, type="success") => {
+  const openAlert = (text, type = "success") => {
     setAlert(text);
     setOpen(true);
     setAlertType(type);
@@ -113,10 +112,10 @@ export default function SearchComponent({
 
   return (
     <div>
-      <Snackbar 
-        open={open} 
-        anchorOrigin={{vertical : "top", horizontal :"center"}}
-        autoHideDuration={2000} 
+      <Snackbar
+        open={open}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        autoHideDuration={2000}
         onClose={handleClose}
       >
         <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>

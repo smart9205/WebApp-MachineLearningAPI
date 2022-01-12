@@ -14,18 +14,20 @@ exports.create = async (req, res) => {
   const team = {
     name: req.body.name,
   };
-  
-  const checkTeam = await Team.findOne({ where: {
-    name: req.body.name
-  }});
-  
-  if(checkTeam !== null) {
-    return res.send({status: "error", data: "Same Name of Team already exist"});
+
+  const checkTeam = await Team.findOne({
+    where: {
+      name: req.body.name
+    }
+  });
+
+  if (checkTeam !== null) {
+    return res.send({ status: "error", data: "Same Name of Team already exist" });
   }
 
   Team.create(team)
     .then(data => {
-      res.send({status: "success", data});
+      res.send({ status: "success", data });
     })
     .catch(err => {
       res.status(500).send({
@@ -33,7 +35,7 @@ exports.create = async (req, res) => {
           err.message || "Some error occurred while creating the Team."
       });
     });
- 
+
 };
 
 exports.findAll = (req, res) => {

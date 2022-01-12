@@ -2,6 +2,7 @@ const db = require("../models");
 const Player = db.player;
 const Player_Position = db.player_position;
 const User_Config = db.user_config;
+const Sequelize = db.sequelize;
 const Op = db.Sequelize.Op;
 
 exports.updateTaggerConfig = async (req, res) => {
@@ -98,6 +99,39 @@ exports.findOne = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message: "Error retrieving Player with id=" + id
+      });
+    });
+};
+
+exports.gameByPlayerId = (req, res) => {
+  const id = req.params.id;
+
+  Sequelize.query(`
+    SELECT 
+      public."Games".*,
+      public."Team_Players".*,
+      HomeTeam.name as home_team_name,
+      AwayTeam.name as away_team_name
+    FROM public."Team_Players" 
+    JOIN public."Games" 
+    on 
+      public."Games".season_id = public."Team_Players".season_id and
+        public."Games".league_id = public."Team_Players".league_id and
+      (
+        public."Games".home_team_id = public."Team_Players".team_id or
+        public."Games".away_team_id = public."Team_Players".team_id
+      )
+    JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id
+    JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
+    where public."Team_Players".player_id = ${id} 
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
       });
     });
 };
