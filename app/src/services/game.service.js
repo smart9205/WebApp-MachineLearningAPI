@@ -196,6 +196,12 @@ const getLeagueById = (id) => {
   });
 }
 
+const getPlayerById = (id) => {
+  return axios.get(API_URL + `player/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+    return response.data;
+  });
+}
+
 const getAllGamesByPlayer = (id) => {
   return axios.get(API_URL + `player/gameByPlayerId/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
     return response.data;
@@ -217,6 +223,7 @@ const gameService = {
   getTeamById,
   getSeasonById,
   getLeagueById,
+  getPlayerById,
 
   getGameTeamPlayers,
   getAllTeamPlayers,

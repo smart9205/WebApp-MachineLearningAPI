@@ -108,6 +108,7 @@ exports.gameByPlayerId = (req, res) => {
 
   Sequelize.query(`
     SELECT 
+      public."Games".id as game_id, 
       public."Games".*,
       public."Team_Players".*,
       HomeTeam.name as home_team_name,
