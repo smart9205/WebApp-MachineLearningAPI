@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import {
   Grid,
   Paper,
@@ -34,12 +34,11 @@ const styles = {
 };
 
 export default function Team() {
-  const search = useLocation().search;
-  const params = new URLSearchParams(search)
-  const history = useHistory();
-  const teamId = params.get('teamid');
-  const seasonId = params.get('seasonid');
-  const leagueId = params.get('leagueid');
+  const history = useHistory()
+  const { data } = useParams()
+  const teamId = atob(data).split('|')[0]
+  const seasonId = atob(data).split('|')[1]
+  const leagueId = atob(data).split('|')[2]
 
   const [loading, setLoading] = useState(true)
   const [team, setTeam] = useState(null)

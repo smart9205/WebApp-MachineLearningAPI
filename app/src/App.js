@@ -134,7 +134,7 @@ const App = () => {
             <Route exact path="/profile" component={Profile} />
 
             <PrivateRoute path='/tagging/:id' component={Tagging} />
-            <PrivateRoute path='/team' component={Team} />
+            <PrivateRoute path='/team/:data' component={Team} />
             <PrivateRoute path='/player/:id' component={Player} />
 
             <AdminRoute path='/game' component={Game} />

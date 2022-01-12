@@ -172,6 +172,8 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
   const [open, setOpen] = React.useState(false);
   const [alertContent, setAlertContent] = React.useState("");
 
+  console.log("data", rows)
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -281,8 +283,27 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                             {row.season_name}
                           </TableCell>
                           <TableCell align="center">{row.league_name}</TableCell>
-                          <TableCell align="center">{row.home_team_name}</TableCell>
-                          <TableCell align="center">{row.away_team_name}</TableCell>
+                          <TableCell align="center">
+                            <Link
+                              variant="outlined"
+                              to={`/team/${btoa(`${row.home_team_id}|${row.season_id}|${row.league_id}`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {row.home_team_name}
+                            </Link>
+
+                          </TableCell>
+                          <TableCell align="center">
+                            <Link
+                              variant="outlined"
+                              to={`/team/${btoa(`${row.away_team_id}|${row.season_id}|${row.league_id}`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {row.away_team_name}
+                            </Link>
+                          </TableCell>
                           <TableCell align="center" >{row.date.slice(0, 10)}</TableCell>
                           <TableCell align="center" sx={{ width: 40 }}>
                             <a href={row.video_url} target="_blank" rel="noreferrer">
@@ -301,7 +322,11 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                             </Button>
                           </TableCell>
                           <TableCell align="center" sx={{ width: 100 }}>
-                            <Link variant="outlined" to={`/tagging/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`} target="_blank" rel="noopener noreferrer">
+                            <Link
+                              variant="outlined"
+                              to={`/tagging/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`}
+                              target="_blank"
+                              rel="noopener noreferrer">
                               <Button
                                 variant="outlined"
                                 startIcon={<TagIcon />}
@@ -338,6 +363,6 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-    </Box>
+    </Box >
   );
 }
