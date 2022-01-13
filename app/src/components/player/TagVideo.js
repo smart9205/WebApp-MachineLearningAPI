@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-import GameService from "../../services/game.service";
-import { toHHMMSS, toSecond } from "../../common/utilities"
+import { toSecond } from "../../common/utilities"
 
 const styles = {
     action: {
@@ -15,20 +14,11 @@ const styles = {
         padding: 10
     }
 }
-export default function TagVideo({ playerId, game }) {
+export default function TagVideo({ tagList, url }) {
     const player = useRef(null)
     const [play, setPlay] = useState(false)
-    const [tagList, setTagList] = useState([])
     const [ready, setReady] = useState(false)
     const [curIdx, setCurIdx] = useState(0);
-
-    useEffect(() => {
-        GameService.getAllPlayerTagsByPlayer(playerId, game.game_id).then((res) => {
-            console.log("Player Tag Result", res)
-            setTagList(res)
-            setCurIdx(0)
-        })
-    }, [playerId, game])
 
     useEffect(() => {
         console.log("HHEEE", tagList, ready)
@@ -73,7 +63,7 @@ export default function TagVideo({ playerId, game }) {
             <div className="player-wrapper">
                 <ReactPlayer
                     className="react-player"
-                    url={game.video_url}
+                    url={url}
                     ref={player}
                     onPlay={() => setPlay(true)}
                     onPause={() => setPlay(false)}

@@ -113,40 +113,6 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
           </List>
         </SubBox>
       }
-      {/* {
-        onTarget === "Yes" && goal === "Yes" &&
-        <SubBox>
-          <List header="Assist">
-            {
-              offenseTeam.map((player, i) => (
-                <ListItemButton key={i} selected={assistPlayer === player}
-                  onClick={() => {
-                    setAssistPlayer(player)
-                    taggingState([
-                      {
-                        action_type_id: actionTypeId,
-                        team_id: offenseTeamId,
-                        player_id: offensivePlayer.id,
-                        action_id: 1,
-                        action_result_id: 3
-                      },
-                      {
-                        action_type_id: actionTypeId,
-                        team_id: offenseTeamId,
-                        player_id: player.id,
-                        action_id: 9,
-                        action_result_id: 3
-                      }
-                    ])
-                  }}
-                >
-                  <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position})`} />
-                </ListItemButton>
-              ))
-            }
-          </List>
-        </SubBox>
-      } */}
       {
         goal === "No" &&
         <SubBox>

@@ -13,7 +13,6 @@ import VIDEO_ICON from '../../assets/video_icon.jpg';
 import PlayerDetailCard from './PlayerDetailCard';
 import GameDetailTab from './GameDetailTab';
 
-
 const styles = {
   loader: {
     position: 'fixed',
@@ -96,7 +95,7 @@ export default function Players() {
                 }
               </>
                 :
-                <GameDetailTab />
+                <GameDetailTab game={curGame} playerId={playerId} />
               }
             </Box>
           }

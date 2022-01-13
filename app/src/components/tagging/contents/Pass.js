@@ -50,13 +50,13 @@ export default function ShortPass({
       team_id: defenseTeamId,
       player_id: player.id,
       action_id: 10,
-      action_result_id: 11
+      action_result_id: 11 //Bad Pass
     }, {
       ...tagData,
       player_id: offensivePlayer.id,
       team_id: offenseTeamId,
       action_id: 2,
-      action_result_id: 11
+      action_result_id: 11 //Bad Pass
     }])
   }
 
@@ -162,13 +162,13 @@ export default function ShortPass({
                       team_id: offenseTeamId,
                       player_id: offensivePlayer.id,
                       action_id: 2,
-                      action_result_id: 15
+                      action_result_id: 15 // offside
                     }, {
                       ...tagData,
                       team_id: offenseTeamId,
                       player_id: player.id,
                       action_id: 7,
-                      action_result_id: 15
+                      action_result_id: 15 //offside
                     }])
                   }}
                 >
