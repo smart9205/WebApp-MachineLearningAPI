@@ -94,9 +94,16 @@ export default function StatisticTab({ tagList }) {
                                 <TableRow>
                                     <StyledTableCell></StyledTableCell>
                                     {
-                                        DEMO[key].cols.map((title, i) => (
-                                            <StyledTableCell align="center" key={i}>{title}</StyledTableCell>
-                                        ))
+                                        key === "Shot" ?
+                                            <>
+                                                <StyledTableCell align="center">On Target</StyledTableCell>
+                                                <StyledTableCell align="center">Off Target</StyledTableCell>
+                                            </>
+                                            :
+                                            <>
+                                                <StyledTableCell align="center">Successful</StyledTableCell>
+                                                <StyledTableCell align="center">Unsuccessful</StyledTableCell>
+                                            </>
                                     }
                                 </TableRow>
                             </TableHead>
@@ -106,7 +113,7 @@ export default function StatisticTab({ tagList }) {
                                         <StyledTableCell align="center">
                                             {type}
                                         </StyledTableCell>
-                                        <StyledTableCell align="center">{data[key][type]?.success.length ?? 0}</StyledTableCell>
+                                        <StyledTableCell align="center" onClick={() => { }}>{data[key][type]?.success.length ?? 0}</StyledTableCell>
                                         <StyledTableCell align="center">{data[key][type]?.unsuccess.length ?? 0}</StyledTableCell>
                                     </StyledTableRow>
                                 )}
