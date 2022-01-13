@@ -4,7 +4,7 @@ import {
     Paper,
     TableCell,
     TableRow,
-    TableContainer,
+    CircularProgress,
     Table,
     TableHead,
     TableBody
@@ -12,14 +12,13 @@ import {
 import { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 
-import { ACTION_DEMO } from '../../../common/staticData'
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     // [`&.${tableCellClasses.head}`]: {
     //     backgroundColor: theme.palette.common.black,
     //     color: theme.palette.common.white,
     // },
     [`&.${tableCellClasses.body}`]: {
+        width: "33%",
         fontSize: 14,
     },
 }));
@@ -57,8 +56,10 @@ const DEMO = {
 }
 export default function StatisticTab({ tagList }) {
     const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true)
         let actions = {}
         tagList.forEach(tag => {
             const actionKey = tag.action_name
@@ -82,10 +83,11 @@ export default function StatisticTab({ tagList }) {
         })
         console.log("actions", actions)
         setData(actions)
+        setLoading(false)
     }, [tagList])
     return (
         <Box>
-            {
+            {loading ? <CircularProgress /> :
                 data && Object.keys(data).map((key, idx) =>
                     <Paper key={idx} sx={{ my: 1 }}>
                         <h6 style={{ textAlign: 'center' }}>{key}</h6>
