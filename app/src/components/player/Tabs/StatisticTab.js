@@ -13,10 +13,10 @@ import { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    // [`&.${tableCellClasses.head}`]: {
-    //     backgroundColor: theme.palette.common.black,
-    //     color: theme.palette.common.white,
-    // },
+    [`&.${tableCellClasses.head}`]: {
+        // backgroundColor: theme.palette.common.black,
+        // color: theme.palette.common.white,
+    },
     [`&.${tableCellClasses.body}`]: {
         width: "33%",
         fontSize: 14,
@@ -54,7 +54,7 @@ const DEMO = {
         cols: ["Successful", "Unsuccessful"]
     }
 }
-export default function StatisticTab({ tagList }) {
+export default function StatisticTab({ tagList, playTags }) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -95,30 +95,33 @@ export default function StatisticTab({ tagList }) {
                             <TableHead>
                                 <TableRow>
                                     <StyledTableCell></StyledTableCell>
-                                    {
-                                        key === "Shot" ?
-                                            <>
-                                                <StyledTableCell align="center">On Target</StyledTableCell>
-                                                <StyledTableCell align="center">Off Target</StyledTableCell>
-                                            </>
-                                            :
-                                            <>
-                                                <StyledTableCell align="center">Successful</StyledTableCell>
-                                                <StyledTableCell align="center">Unsuccessful</StyledTableCell>
-                                            </>
+                                    {key === "Shot" ?
+                                        <>
+                                            <StyledTableCell align="center">On Target</StyledTableCell>
+                                            <StyledTableCell align="center">Off Target</StyledTableCell>
+                                        </>
+                                        :
+                                        <>
+                                            <StyledTableCell align="center">Successful</StyledTableCell>
+                                            <StyledTableCell align="center">Unsuccessful</StyledTableCell>
+                                        </>
                                     }
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {Object.keys(data[key]).map((type, i) =>
-                                    <StyledTableRow key={i}>
-                                        <StyledTableCell align="center">
-                                            {type}
-                                        </StyledTableCell>
-                                        <StyledTableCell align="center" onClick={() => { }}>{data[key][type]?.success.length ?? 0}</StyledTableCell>
-                                        <StyledTableCell align="center">{data[key][type]?.unsuccess.length ?? 0}</StyledTableCell>
-                                    </StyledTableRow>
-                                )}
+                                {Object.keys(data[key]).map((type, i) => {
+                                    const success = data[key][type]?.success
+                                    const unsuccess = data[key][type]?.unsuccess
+                                    return (
+                                        <StyledTableRow key={i}>
+                                            <StyledTableCell align="center">
+                                                {type}
+                                            </StyledTableCell>
+                                            <StyledTableCell align="center" onClick={() => { !!success.length && playTags(success) }}>{success.length}</StyledTableCell>
+                                            <StyledTableCell align="center" onClick={() => { !!unsuccess.length && playTags(unsuccess) }}>{unsuccess.length}</StyledTableCell>
+                                        </StyledTableRow>
+                                    )
+                                })}
                             </TableBody>
                         </Table>
                     </Paper>

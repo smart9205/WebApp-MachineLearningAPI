@@ -1,5 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
+import {
+    IconButton,
+    Button
+} from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { toSecond } from "../../common/utilities"
 
 const styles = {
@@ -12,11 +18,23 @@ const styles = {
         color: "white",
         fontSize: 12,
         padding: 10
+    },
+    next: {
+        position: "absolute",
+        zIndex: 100,
+        top: "calc(50% - 20px)",
+        right: 5,
+    },
+    prev: {
+        position: "absolute",
+        zIndex: 100,
+        top: "calc(50% - 20px)",
+        left: 5
     }
 }
 export default function TagVideo({ tagList, url }) {
     const player = useRef(null)
-    const [play, setPlay] = useState(false)
+    const [play, setPlay] = useState(true)
     const [ready, setReady] = useState(false)
     const [curIdx, setCurIdx] = useState(0);
 
@@ -34,11 +52,11 @@ export default function TagVideo({ tagList, url }) {
 
     const onProgress = (currentTime) => {
         // console.log("Progress", currentTime)
-        const startTime = toSecond(tagList[curIdx].start_time);
-        const endTime = toSecond(tagList[curIdx].end_time);
+        const startTime = toSecond(tagList[curIdx]?.start_time);
+        const endTime = toSecond(tagList[curIdx]?.end_time);
 
         if (currentTime < startTime) {
-            // seekTo(startTime)
+            seekTo(startTime)
         }
 
         if (currentTime > endTime) {
@@ -61,6 +79,8 @@ export default function TagVideo({ tagList, url }) {
                 </div>
             }
             <div className="player-wrapper">
+                <IconButton style={styles.prev}><ArrowBackIosNewIcon /></IconButton>
+                <IconButton style={styles.next}><ArrowForwardIosIcon /></IconButton>
                 <ReactPlayer
                     className="react-player"
                     url={url}
@@ -75,6 +95,7 @@ export default function TagVideo({ tagList, url }) {
                     height='100%'
                 />
             </div>
+
         </>
     )
 }

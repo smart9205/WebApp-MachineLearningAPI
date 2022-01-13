@@ -120,6 +120,34 @@ exports.getByPlayer = (req, res) => {
     });
 };
 
+exports.getByTeam = (req, res) => {
+  const teamId = req.params.team;
+  const gameId = req.params.game;
+
+  Sequelize.query(`
+    SELECT 
+      public."Player_Tags".*,
+      public."Actions".name as action_name,
+      public."Action_Types".name as action_type_name,
+      public."Action_Results".name as action_result_name
+      FROM public."Player_Tags"
+      JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+    JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
+    JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
+    JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
+        WHERE public."Player_Tags".team_id = ${teamId} and public."Team_Tags".game_id = ${gameId}
+        order by public."Player_Tags".start_time 
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+};
 
 exports.update = (req, res) => {
   const id = req.params.id;

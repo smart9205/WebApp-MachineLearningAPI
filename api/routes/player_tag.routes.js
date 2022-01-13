@@ -36,6 +36,11 @@ module.exports = app => {
 		controller.getByPlayer
 	);
 
+	app.get(
+		"/player_tag/getbyteam/:team/:game",
+		controller.getByTeam
+	);
+
 	app.put(
 		"/player_tag/:id",
 		controller.update

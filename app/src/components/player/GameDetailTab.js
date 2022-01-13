@@ -51,6 +51,7 @@ export default function GameDetailTab({ game, playerId }) {
     const [value, setValue] = useState(0);
     const [open, setOpen] = useState(false);
     const [tagList, setTagList] = useState([])
+    const [playTags, setPlayTags] = useState([])
 
     useEffect(() => {
         GameService.getAllPlayerTagsByPlayer(playerId, game?.game_id).then((res) => {
@@ -71,7 +72,7 @@ export default function GameDetailTab({ game, playerId }) {
                 onClose={e => setOpen(false)}
             >
                 <DialogContent sx={{ padding: 0.5 }}>
-                    <TagVideo tagList={tagList} url={game?.video_url} />
+                    <TagVideo tagList={playTags} url={game?.video_url} />
                 </DialogContent>
             </Dialog>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -84,7 +85,7 @@ export default function GameDetailTab({ game, playerId }) {
                 <SkillTab />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <StatisticTab tagList={tagList} />
+                <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
             </TabPanel>
         </Box>
     );
