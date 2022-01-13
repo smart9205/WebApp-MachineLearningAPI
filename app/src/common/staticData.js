@@ -1,4 +1,4 @@
-export const actions = {
+export const ACTION_DEMO = {
     Shot: {
         type: [
             { id: 1, name: "Right" },
@@ -7,13 +7,10 @@ export const actions = {
             { id: 11, name: "Free Kick" },
             { id: 13, name: "Penalty" },
         ],
-        result: [
-            { id: 1, name: "On Target" },
-            { id: 2, name: "Off Target" },
-        ],
+        success: ["On Target", "Goal"],
         calc: [
-            { title: "On Target", count: 0 },
-            { title: "Off Target", count: 0 }
+            { title: "On Target", values: [] },
+            { title: "Off Target", values: [] }
         ]
     },
     Pass: {
@@ -25,15 +22,10 @@ export const actions = {
             { id: 14, name: "Throw-In" },
             { id: 11, name: "Free Kick" },
         ],
-        result: [
-            { id: 4, name: "Successful" },
-            { id: 17, name: "Stolen By" },
-            { id: 11, name: "Bad Pass" },
-            { id: 15, name: "Offside" },
-        ],
+        success: ["Successful"],
         calc: [
-            { title: "Successful", count: 0 },
-            { title: "Unsuccessful", count: 0 }
+            { title: "Successful", values: [] },
+            { title: "Unsuccessful", values: [] }
         ]
     },
     Cross: {
@@ -43,15 +35,10 @@ export const actions = {
             { id: 11, name: "Free Kick" },
             { id: 12, name: "Corner" },
         ],
-        result: [
-            { id: 4, name: "Successful" },
-            { id: 7, name: "Blocked" },
-            { id: 8, name: "Cleared" },
-            { id: 15, name: "Offside" },
-        ],
+        success: ["Successful"],
         calc: [
-            { title: "Successful", count: 0 },
-            { title: "Unsuccessful", count: 0 }
+            { title: "Successful", values: [] },
+            { title: "Unsuccessful", values: [] }
         ]
     },
     Dribble: {
@@ -59,15 +46,10 @@ export const actions = {
             { id: 1, name: "Right" },
             { id: 2, name: "Left" },
         ],
-        result: [
-            { id: 4, name: "Successful" },
-            { id: 10, name: "Unsuccessful" },
-            { id: 16, name: "Draw Foul" },
-            { id: 17, name: "Stolen By" },
-        ],
+        success: ["Successful"],
         calc: [
-            { title: "Successful", count: 0 },
-            { title: "Unsuccessful", count: 0 }
+            { title: "Successful", values: [] },
+            { title: "Unsuccessful", values: [] }
         ]
     },
     Foul: {
@@ -76,13 +58,10 @@ export const actions = {
             { id: 9, name: "Yellow Card" },
             { id: 10, name: "Red Card" },
         ],
-        result: [
-            { id: 13, name: "Free Kick" },
-            { id: 14, name: "Penalty" }
-        ],
+        success: ["Free Kick"],
         calc: [
-            { title: "Successful", count: 0 },
-            { title: "Unsuccessful", count: 0 }
+            { title: "Successful", values: [], },
+            { title: "Unsuccessful", values: [] }
         ]
     }
 }

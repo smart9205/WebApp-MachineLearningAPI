@@ -4,7 +4,6 @@ import {
     Box,
     CardMedia,
 } from '@mui/material';
-import VIDEO_ICON from '../../assets/video_icon.jpg';
 import moment from 'moment'
 
 export default function PlayerDatailCard({ player }) {
@@ -14,7 +13,7 @@ export default function PlayerDatailCard({ player }) {
             <CardMedia
                 sx={{ width: 150, marginRight: 2 }}
                 component="img"
-                image={VIDEO_ICON}
+                image="https://s3.amazonaws.com/s4usitesimages/images/anon-avatar.png"
                 alt="photo"
             />
             <Box style={{ display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
