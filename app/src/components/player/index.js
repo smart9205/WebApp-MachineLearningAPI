@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, createContext, useMemo, useReducer } from 'react';
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -31,32 +31,45 @@ const styles = {
   }
 };
 
+
+export const PlayerContext = createContext({
+  context: {
+    player: null,
+    game: null
+  },
+  setContext: () => { }
+});
+
 export default function Players() {
 
   const { id } = useParams();
   const playerId = Number(atob(id).slice(3, -3))
   const [loading, setLoading] = useState(true)
   const [games, setGames] = useState([])
-  const [playerData, setPlayerData] = useState(null)
-  const [curGame, setCurGame] = useState(null);
+
+  const [context, setContext] = useReducer((old, action) => ({ ...old, ...action }), {})
+
+  const value = useMemo(
+    () => ({ context, setContext }),
+    [context]
+  );
 
   useEffect(() => {
-    console.log("PlayerID", playerId)
     setLoading(true)
     GameService.getAllGamesByPlayer(playerId).then((res) => {
-      console.log("games", res)
       setGames(res)
       setLoading(false)
     }).catch(() => { setLoading(false) })
 
     GameService.getPlayerById(playerId).then((res) => {
-      console.log("player", res)
-      setPlayerData(res)
+      setContext({ player: res })
     }).catch(() => { })
   }, [playerId])
 
+  const { player: playerData, game: curGame } = context
+
   return (
-    <>{
+    <PlayerContext.Provider value={value}>{
       loading ?
         <div style={styles.loader}>
           <CircularProgress />
@@ -66,7 +79,7 @@ export default function Players() {
             <Box>
               {
                 !!curGame &&
-                <IconButton style={styles.back} onClick={() => setCurGame(null)}>
+                <IconButton style={styles.back} onClick={() => setContext({ game: null })}>
                   <ArrowBackSharpIcon />
                 </IconButton>
               }
@@ -79,7 +92,7 @@ export default function Players() {
                       sx={{ my: 1 }}
                       style={{ display: "flex" }}
                       onClick={() => {
-                        setCurGame(game)
+                        setContext({ game })
                       }}
                     >
                       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: 60, margin: "0 15px" }} >
@@ -95,11 +108,11 @@ export default function Players() {
                 }
               </>
                 :
-                <GameDetailTab game={curGame} playerId={playerId} />
+                <GameDetailTab />
               }
             </Box>
           }
         </>)
-    }</>
+    }</PlayerContext.Provider>
   )
 }

@@ -64,18 +64,15 @@ const App = () => {
   }, [dispatch]);
 
   const user = getUser();
-  console.log(user)
   if (user) {
     const decodedJwt = parseJwt(user.accessToken);
 
-    console.log("JWT expire at : ", (new Date(decodedJwt.exp * 1000)).toUTCString());
     if (decodedJwt.exp * 1000 < Date.now()) {
       logOut();
     }
   }
 
   useEffect(() => {
-    console.log("Header Effect");
     history.listen((location) => {
       dispatch(clearMessage()); // clear message when changing location
     });
@@ -94,7 +91,6 @@ const App = () => {
   }, [currentUser, logOut]);
 
   const handleOnIdle = event => {
-    // console.log('user is idle', event)
     console.log('last active', getLastActiveTime())
     logOut();
   }

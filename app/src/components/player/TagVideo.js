@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import {
     IconButton,
-    Button
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -42,13 +41,16 @@ export default function TagVideo({ tagList, url }) {
         console.log("HHEEE", tagList, ready)
         if (!ready) return
 
-        if (!tagList.length) { }
+        if (!tagList.length) return
 
-        // seekTo(tagList[0].start_time)
+        playTagByIdx(0)
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tagList, ready])
 
     const seekTo = (sec) => player.current.seekTo(sec)
+
+    const playTagByIdx = (i) => seekTo(toSecond(tagList[i]?.start_time))
 
     const onProgress = (currentTime) => {
         // console.log("Progress", currentTime)

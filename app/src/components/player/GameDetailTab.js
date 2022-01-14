@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -10,6 +10,7 @@ import TagVideo from './TagVideo';
 import GameService from "../../services/game.service";
 import SkillTab from './Tabs/SkillTab';
 import StatisticTab from './Tabs/StatisticTab';
+import { PlayerContext } from './index'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -46,12 +47,18 @@ function a11yProps(index) {
 const useStyles = makeStyles(() => ({
     paper: { minWidth: "98%" },
 }));
-export default function GameDetailTab({ game, playerId }) {
+export default function GameDetailTab() {
     const classes = useStyles();
+    const { context } = useContext(PlayerContext)
+
+    const playerId = context.player.id
+    const game = context.game
+
     const [value, setValue] = useState(0);
     const [open, setOpen] = useState(false);
     const [tagList, setTagList] = useState([])
     const [playTags, setPlayTags] = useState([])
+
 
     useEffect(() => {
         GameService.getAllPlayerTagsByPlayer(playerId, game?.game_id).then((res) => {
