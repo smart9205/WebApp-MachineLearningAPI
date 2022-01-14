@@ -39,7 +39,7 @@ export default function TagVideo({ tagList, url }) {
 
     useEffect(() => {
         console.log("HHEEE", tagList, ready)
-        if (!ready) return
+        if (!ready) return;
 
         if (!tagList.length) return
 
