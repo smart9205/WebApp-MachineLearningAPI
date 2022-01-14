@@ -1,5 +1,6 @@
 import CryptoJS from 'crypto-js'
 import { SECRET } from "../config/settings"
+import { DEMO } from "./staticData"
 
 export function toHHMMSS(data) {
   if (!data || data === "") return "00:00:00"
@@ -48,3 +49,28 @@ export function parseJwt(token) {
     return null;
   }
 };
+
+export function divideTags(tagList) {
+  let actions = {}
+  tagList.forEach(tag => {
+    const actionKey = tag.action_name
+    const typeKey = tag.action_type_name
+    let success = actions?.[actionKey]?.[typeKey]?.success ?? []
+    let unsuccess = actions?.[actionKey]?.[typeKey]?.unsuccess ?? []
+
+    if (DEMO?.[actionKey]?.success.includes(tag.action_result_name)) {
+      success = [...success, tag]
+    } else {
+      unsuccess = [...unsuccess, tag]
+    }
+
+    actions = {
+      ...actions,
+      [actionKey]: {
+        ...actions?.[actionKey],
+        [typeKey]: { success, unsuccess }
+      }
+    }
+  })
+  return actions
+}

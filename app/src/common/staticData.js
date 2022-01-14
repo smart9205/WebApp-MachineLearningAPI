@@ -1,3 +1,25 @@
+export const DEMO = {
+    Shot: {
+        success: ["On Target", "Goal"],
+        cols: ["On Target", "Off Target"]
+    },
+    Pass: {
+        success: ["Successful"],
+        cols: ["Successful", "Unsuccessful"]
+    },
+    Cross: {
+        success: ["Successful"],
+        cols: ["Successful", "Unsuccessful"]
+    },
+    Dribble: {
+        success: ["Successful"],
+        cols: ["Successful", "Unsuccessful"]
+    },
+    Foul: {
+        success: ["Free Kick"],
+        cols: ["Successful", "Unsuccessful"]
+    }
+}
 export const ACTION_DEMO = {
     Shot: {
         type: [
