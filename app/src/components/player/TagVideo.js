@@ -71,18 +71,43 @@ export default function TagVideo({ tagList, url }) {
         }
     }
 
+    const PlayVideo = (num) => {
+        let index;
+        if (curIdx + num >= tagList.length) { index = 0 }
+        else if (curIdx + num < 0) { index = tagList.length - 1 }
+        else index = curIdx + num
+
+        playTagByIdx(index)
+        setPlay(true)
+        setCurIdx(index)
+    }
+
     return (
         <>
-            {ready && tagList[curIdx] &&
+            {tagList[curIdx] &&
                 <div style={styles.action}>
-                    <div>Action: {tagList[curIdx].action_name}</div>
+
+                    <div>Action {curIdx + 1}: {tagList[curIdx].action_name}</div>
                     <div>Action Type: {tagList[curIdx].action_type_name}</div>
                     <div>Action Result: {tagList[curIdx].action_result_name}</div>
+                    <div>{tagList[curIdx].start_time} : {tagList[curIdx].end_time}</div>
                 </div>
             }
             <div className="player-wrapper">
-                <IconButton style={styles.prev}><ArrowBackIosNewIcon /></IconButton>
-                <IconButton style={styles.next}><ArrowForwardIosIcon /></IconButton>
+                {ready && <>
+                    <IconButton
+                        style={styles.prev}
+                        onClick={() => PlayVideo(-1)}
+                    >
+                        <ArrowBackIosNewIcon />
+                    </IconButton>
+                    <IconButton
+                        style={styles.next}
+                        onClick={() => PlayVideo(1)}
+                    >
+                        <ArrowForwardIosIcon />
+                    </IconButton>
+                </>}
                 <ReactPlayer
                     className="react-player"
                     url={url}

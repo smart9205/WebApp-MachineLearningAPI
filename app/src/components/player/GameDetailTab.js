@@ -89,7 +89,7 @@ export default function GameDetailTab() {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <SkillTab />
+                <SkillTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />

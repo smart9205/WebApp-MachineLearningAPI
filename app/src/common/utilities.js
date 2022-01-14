@@ -74,3 +74,60 @@ export function divideTags(tagList) {
   })
   return actions
 }
+
+export function filterSuccessTags(tagList) {
+  let actions = {}
+  tagList.forEach(tag => {
+    const actionKey = tag.action_name
+    let success = actions?.[actionKey] ?? []
+
+    if (DEMO?.[actionKey]?.success.includes(tag.action_result_name)) {
+      success = [...success, tag]
+      actions = {
+        ...actions,
+        [actionKey]: [success]
+      }
+    }
+  })
+  return actions
+}
+
+export function getPercent(value, max) {
+  return value * 100 / max;
+}
+
+export function filterAllTags(tagList, playerId) {
+  let actions = {}
+  tagList.forEach(tag => {
+    const actionKey = tag.action_name
+
+    actions = {
+      ...actions,
+      [actionKey]: !actions?.[actionKey] ?
+        {
+          total: 1,
+          success: []
+        } : {
+          ...actions?.[actionKey],
+          total: actions?.[actionKey].total + 1
+        }
+    }
+
+    let success = actions?.[actionKey]?.success ?? []
+
+    if (tag.player_id === playerId && DEMO?.[actionKey]?.success.includes(tag.action_result_name)) {
+      success = [...success, tag]
+      actions = {
+        ...actions,
+        [actionKey]: {
+          ...actions?.[actionKey],
+          success
+        }
+      }
+    }
+  })
+
+  // then sort by success length
+
+  return Object.keys(actions).map(key => { return { ...actions[key], action: key } }).sort((a, b) => b.total - a.total)
+}
