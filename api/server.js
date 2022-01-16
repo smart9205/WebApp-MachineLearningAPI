@@ -1,8 +1,6 @@
 const express = require("express");
 // const bodyParser = require("body-parser");
 const cors = require("cors");
-const nocache = require('nocache');
-
 
 const app = express();
 
@@ -11,8 +9,6 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(nocache());
-app.set('etag', false)
 
 // parse requests of content-type - application/json
 app.use(express.json());
