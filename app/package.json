@@ -28,6 +28,7 @@
     "react-dom": "^17.0.2",
     "react-export-excel": "^0.5.3",
     "react-google-recaptcha": "^2.1.0",
+    "react-hook-screen-orientation": "^1.0.3",
     "react-hotkeys-hook": "^3.4.4",
     "react-idle-timer": "^4.6.4",
     "react-imask": "^6.2.2",

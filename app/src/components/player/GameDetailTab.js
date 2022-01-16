@@ -11,6 +11,7 @@ import GameService from "../../services/game.service";
 import SkillTab from './Tabs/SkillTab';
 import StatisticTab from './Tabs/StatisticTab';
 import { PlayerContext } from './index'
+import useScreenOrientation from 'react-hook-screen-orientation'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -45,11 +46,15 @@ function a11yProps(index) {
     };
 }
 const useStyles = makeStyles(() => ({
-    paper: { minWidth: "98%" },
+    paper: { minWidth: "98%", backgroundColor: "transparent" },
+    landPaper: { minWidth: "80%", maxHeight: "100%", backgroundColor: "transparent" }
 }));
 export default function GameDetailTab() {
     const classes = useStyles();
     const { context } = useContext(PlayerContext)
+
+    const screenOrientation = useScreenOrientation()
+    const isLandscape = screenOrientation.split('-')[0] === "landscape"
 
     const playerId = context.player.id
     const game = context.game
@@ -73,11 +78,11 @@ export default function GameDetailTab() {
     return (
         <Box sx={{ width: '100%' }}>
             <Dialog
-                classes={{ paper: classes.paper }}
+                classes={{ paper: isLandscape ? classes.landPaper : classes.paper }}
                 open={open}
                 onClose={e => setOpen(false)}
             >
-                <DialogContent sx={{ padding: 0.5 }}>
+                <DialogContent sx={{ p: 0, }}>
                     <TagVideo tagList={playTags} url={game?.video_url} />
                 </DialogContent>
             </Dialog>

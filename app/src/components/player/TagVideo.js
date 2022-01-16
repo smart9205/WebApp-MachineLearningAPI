@@ -3,10 +3,10 @@ import ReactPlayer from 'react-player';
 import {
     IconButton,
 } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import PlayCircleOutlineOutlinedIcon from '@mui/icons-material/PlayCircleOutlineOutlined';
-import PauseCircleOutlineOutlinedIcon from '@mui/icons-material/PauseCircleOutlineOutlined';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
+import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import { toSecond } from "../../common/utilities"
 import gameService from '../../services/game.service';
 
@@ -22,9 +22,12 @@ const styles = {
         padding: 10
     },
     buttonBox: {
+        position: "absolute",
+        bottom: 0,
+        width: "100%",
         display: 'flex',
         justifyContent: 'space-evenly'
-    }
+    },
 }
 export default function TagVideo({ tagList, url }) {
     const player = useRef(null)
@@ -103,17 +106,17 @@ export default function TagVideo({ tagList, url }) {
                     height='100%'
                 />
             </div>
-            <div style={styles.buttonBox}>
-                <IconButton onClick={() => PlayVideo(-1)}>
-                    <ArrowBackIosNewIcon />
+            <div style={styles.buttonBox} >
+                <IconButton onClick={() => PlayVideo(-1)} style={{ color: "white" }}>
+                    <SkipPreviousSharpIcon color="white" />
                 </IconButton>
 
-                <IconButton onClick={() => setPlay(p => !p)}>
-                    {play ? <PauseCircleOutlineOutlinedIcon /> : <PlayCircleOutlineOutlinedIcon />}
+                <IconButton onClick={() => setPlay(p => !p)} style={{ color: "white" }}>
+                    {play ? <PauseIcon /> : <PlayArrowIcon />}
                 </IconButton>
 
-                <IconButton onClick={() => PlayVideo(1)}>
-                    <ArrowForwardIosIcon />
+                <IconButton onClick={() => PlayVideo(1)} style={{ color: "white" }}>
+                    <SkipNextSharpIcon />
                 </IconButton>
             </div>
         </div >
