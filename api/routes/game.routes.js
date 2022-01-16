@@ -20,6 +20,10 @@ module.exports = app => {
 		[authJwt.isAdmin],
 		controller.deleteGames
 	);
+	app.post(
+		"/game/getnewstream",
+		controller.getNewStreamURL
+	);
 
 	app.get(
 		"/game",

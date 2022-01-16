@@ -184,6 +184,12 @@ export default function Tagging() {
         home_team_name: res.home_team_name,
         away_team_name: res.away_team_name
       });
+      if (res.video_url.includes("youtube")) {
+        GameService.getNewStreamURL(res.video_url).then((res) => {
+          console.log("RES VIDEO", res)
+          setState({ url: res.url })
+        })
+      }
     });
 
     GameService.getGameTeamPlayers({ game_id }).then((res) => {
@@ -191,15 +197,6 @@ export default function Tagging() {
       setState({ homePlayers: res.home_team, awayPlayers: res.away_team })
     })
   }, [count, game_id])
-
-  React.useEffect(() => {
-    if (state.url.includes("youtube")) {
-      GameService.getNewStreamURL(state.url).then((res) => {
-        console.log("RES VIDEO", res)
-        setState({ url: res.url })
-      })
-    }
-  }, [state.url])
 
   const updateTagList = () => setTagCnt(tagCnt + 1)
   const handleDrawerOpen = () => setOpen(!open)

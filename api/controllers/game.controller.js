@@ -1,4 +1,5 @@
 const db = require("../models");
+const axios = require("axios");
 const Game = db.game;
 const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
@@ -23,6 +24,15 @@ exports.create = (req, res) => {
       });
     });
 
+};
+
+exports.getNewStreamURL = async (req, res) => {
+  console.log("NewStream Req", req.body)
+  try {
+    const response = await axios.post("https://api.newstream.ai/api/video/v1/youtube_download_link", req.body);
+    return res.send(response?.data);
+
+  } catch (e) { console.log("NewStream Error", e); return res.send("error occured") }
 };
 
 exports.deleteGames = (req, res) => {
