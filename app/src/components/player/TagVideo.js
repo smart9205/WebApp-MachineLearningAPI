@@ -8,6 +8,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import PlayCircleOutlineOutlinedIcon from '@mui/icons-material/PlayCircleOutlineOutlined';
 import PauseCircleOutlineOutlinedIcon from '@mui/icons-material/PauseCircleOutlineOutlined';
 import { toSecond } from "../../common/utilities"
+import gameService from '../../services/game.service';
 
 const styles = {
     action: {
@@ -30,6 +31,18 @@ export default function TagVideo({ tagList, url }) {
     const [play, setPlay] = useState(true)
     const [ready, setReady] = useState(false)
     const [curIdx, setCurIdx] = useState(0);
+    const [videoURL, setVideoURL] = useState("")
+
+    useEffect(() => {
+        if (url.includes("youtube")) {
+            gameService.getNewStreamURL(url).then((res) => {
+                console.log("newStreamURL", res)
+                setVideoURL(res.url)
+            })
+        } else (
+            setVideoURL(url)
+        )
+    }, [url])
 
     useEffect(() => {
         if (!ready) return;
@@ -77,11 +90,10 @@ export default function TagVideo({ tagList, url }) {
 
     return (
         <div>
-
             <div className="player-wrapper">
                 <ReactPlayer
                     className="react-player"
-                    url={url}
+                    url={videoURL}
                     ref={player}
                     onPlay={() => setPlay(true)}
                     onPause={() => setPlay(false)}

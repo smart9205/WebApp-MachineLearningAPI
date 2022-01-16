@@ -220,6 +220,14 @@ const getAllPlayerTagsByTeam = (teamId, gameId) => {
   });
 }
 
+// NEW STREAM URL
+const getNewStreamURL = (url) => {
+  return axios.post("https://api.newstream.ai/api/video/v1/youtube_download_link", { video_url: url }).then((response) => {
+    return response.data;
+  });
+}
+
+
 const gameService = {
   addTeamPlayer,
   addTeam,
@@ -252,6 +260,8 @@ const gameService = {
   getAllGamesByPlayer,
   getAllPlayerTagsByPlayer,
   getAllPlayerTagsByTeam,
+
+  getNewStreamURL,
 
   updateJersey,
   updateGame,

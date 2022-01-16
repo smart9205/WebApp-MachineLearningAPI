@@ -192,6 +192,15 @@ export default function Tagging() {
     })
   }, [count, game_id])
 
+  React.useEffect(() => {
+    if (state.url.includes("youtube")) {
+      GameService.getNewStreamURL(state.url).then((res) => {
+        console.log("RES VIDEO", res)
+        setState({ url: res.url })
+      })
+    }
+  }, [state.url])
+
   const updateTagList = () => setTagCnt(tagCnt + 1)
   const handleDrawerOpen = () => setOpen(!open)
 
