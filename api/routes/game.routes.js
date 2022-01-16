@@ -8,16 +8,15 @@ module.exports = app => {
 		);
 		next();
 	});
-	app.use([authJwt.verifyToken]);
 
 	app.post(
 		"/game",
-		[authJwt.isAdmin],
+		[authJwt.verifyToken, authJwt.isAdmin],
 		controller.create
 	);
 	app.post(
 		"/game/deleteGames",
-		[authJwt.isAdmin],
+		[authJwt.verifyToken, authJwt.isAdmin],
 		controller.deleteGames
 	);
 	app.post(
@@ -37,19 +36,19 @@ module.exports = app => {
 
 	app.put(
 		"/game/:id",
-		[authJwt.isAdmin],
+		[authJwt.verifyToken, authJwt.isAdmin],
 		controller.update
 	);
 
 	app.delete(
 		"/game/:id",
-		[authJwt.isAdmin],
+		[authJwt.verifyToken, authJwt.isAdmin],
 		controller.delete
 	);
 
 	app.delete(
 		"/game",
-		[authJwt.isAdmin],
+		[authJwt.verifyToken, authJwt.isAdmin],
 		controller.deleteAll
 	);
 };

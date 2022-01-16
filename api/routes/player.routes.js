@@ -8,11 +8,10 @@ module.exports = app => {
 		);
 		next();
 	});
-	app.use([authJwt.verifyToken]);
 
 	app.post(
 		"/player",
-		[authJwt.isAdmin],
+		[authJwt.verifyToken, authJwt.isAdmin],
 		controller.create
 	);
 
@@ -38,13 +37,13 @@ module.exports = app => {
 
 	app.put(
 		"/player/:id",
-		[authJwt.isAdmin],
+		[authJwt.verifyToken, authJwt.isAdmin],
 		controller.update
 	);
 
 	app.delete(
 		"/player/:id",
-		[authJwt.isAdmin],
+		[authJwt.verifyToken, authJwt.isAdmin],
 		controller.delete
 	);
 
