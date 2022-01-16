@@ -37,7 +37,7 @@ export default function TagVideo({ tagList, url }) {
     const [videoURL, setVideoURL] = useState("")
 
     useEffect(() => {
-        if (url.includes("youtube")) {
+        if (url.startsWith("https://www.youtube.com")) {
             gameService.getNewStreamURL(url).then((res) => {
                 setVideoURL(res.url)
             })

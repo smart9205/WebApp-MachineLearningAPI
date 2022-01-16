@@ -181,7 +181,7 @@ export default function Tagging() {
         home_team_name: res.home_team_name,
         away_team_name: res.away_team_name
       });
-      if (res.video_url.includes("youtube")) {
+      if (res.video_url.startsWith("https://www.youtube.com")) {
         GameService.getNewStreamURL(res.video_url).then((res) => {
           setState({ url: res.url })
         })
