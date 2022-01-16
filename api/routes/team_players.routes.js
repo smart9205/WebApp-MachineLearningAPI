@@ -9,11 +9,6 @@ module.exports = app => {
 		next();
 	});
 
-	app.post(
-		"/team_player/create",
-		[authJwt.verifyToken, authJwt.isAdmin],
-		controller.create
-	);
 
 	app.post(
 		"/team_player/findall",
@@ -29,6 +24,13 @@ module.exports = app => {
 		"/team_player/:id",
 		controller.findOne
 	);
+
+	app.post(
+		"/team_player/create",
+		[authJwt.verifyToken, authJwt.isAdmin],
+		controller.create
+	);
+
 
 	app.put(
 		"/team_player/:id",
