@@ -38,7 +38,6 @@ export default function StatisticTab({ tagList, playTags }) {
 
     useEffect(() => {
         const actions = divideTags(tagList)
-        console.log("actions", actions)
         setData(actions)
     }, [tagList])
     return (

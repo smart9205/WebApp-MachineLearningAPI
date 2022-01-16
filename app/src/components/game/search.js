@@ -94,7 +94,6 @@ export default function SearchComponent({
       team_id: selectedTeam.id,
       player_id: selectedPlayer.id
     }).then((res) => {
-      console.log("addTeamPlayer", res)
       if (res.status === "success") {
         setCount(count + 1);
         openAlert(`Player is successfully added!`);

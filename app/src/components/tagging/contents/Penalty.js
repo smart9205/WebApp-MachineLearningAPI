@@ -20,8 +20,6 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
   const [actionTypeId, setActionTypeId] = React.useState(1);
   const [result, setResult] = React.useState(3);
 
-  console.log("defensiveTeam", defenseTeam)
-
   return (
     <>
       <SubBox>

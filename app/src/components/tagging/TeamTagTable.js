@@ -31,7 +31,6 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
   const deleteTag = (id) => {
     setLoading(true)
     GameService.deleteTeamTag(id).then(res => {
-      console.log("delete result", res)
       updateTagList()
       setLoading(false)
     }).catch(() => {

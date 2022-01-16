@@ -96,13 +96,10 @@ const App = () => {
   }
 
   const handleOnActive = event => {
-    // console.log('user is active', event)
     console.log('time remaining', getRemainingTime())
   }
 
-  const handleOnAction = event => {
-    // console.log('user did something', event)
-  }
+  const handleOnAction = event => { }
 
   const { getRemainingTime, getLastActiveTime } = useIdleTimer({
     timeout: 1000 * 60 * 60,

@@ -57,7 +57,6 @@ export default function Game() {
   }, [count]);
 
   const editCallBack = React.useCallback((param) => {
-    console.log("edit param", param)
     setEditData(param)
     setActionType("Edit")
     setOpen(true)

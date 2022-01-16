@@ -62,7 +62,6 @@ export default function GameDetailTab() {
 
     useEffect(() => {
         GameService.getAllPlayerTagsByPlayer(playerId, game?.game_id).then((res) => {
-            console.log("Player Tag Result", res)
             setTagList(res)
         })
     }, [playerId, game])

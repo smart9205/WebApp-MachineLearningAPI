@@ -46,13 +46,11 @@ export default function Team() {
 
   useEffect(() => {
     setLoading(true)
-    console.log("render", teamId, seasonId, leagueId)
     GameService.getAllTeamPlayers({
       season_id: seasonId,
       league_id: leagueId,
       team_id: teamId
     }).then((res) => {
-      console.log("result", res)
       setPlayers(res)
       setLoading(false)
     }).catch(() => {
@@ -80,7 +78,6 @@ export default function Team() {
                 players.map((player) =>
                   <Grid item xs={4} key={player.id}
                     onClick={() => {
-                      console.log("player clicked")
                       history.push(`/player/${btoa(randomString.generate(3) + player.player_id + randomString.generate(3))}`);
                     }}
                   >

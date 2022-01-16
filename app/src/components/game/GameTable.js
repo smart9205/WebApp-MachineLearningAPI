@@ -171,8 +171,6 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
   const [open, setOpen] = React.useState(false);
   const [alertContent, setAlertContent] = React.useState("");
 
-  console.log("data", rows)
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');

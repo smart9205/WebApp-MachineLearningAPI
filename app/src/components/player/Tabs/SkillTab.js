@@ -48,7 +48,6 @@ export default function SkillTab({ playTags }) {
     useEffect(() => {
         GameService.getAllPlayerTagsByTeam(teamId, gameId).then((res) => {
             setSkills(filterAllTags(res, playerId))
-            console.log(filterAllTags(res, playerId))
             setLoading(false)
         })
     }, [teamId, gameId, playerId])

@@ -170,15 +170,12 @@ export default function Tagging() {
     });
     GameService.getAllActionResults().then((res) => {
       ALL_ACTION_RESULTS = res;
-      console.log("ACTION RESULT", res)
     });
   }, [])
 
   React.useEffect(() => {
     GameService.getGame(game_id).then((res) => {
-      console.log("game Data", res);
       setState({
-        url: res.video_url,
         home_team_id: res.home_team_id,
         away_team_id: res.away_team_id,
         home_team_name: res.home_team_name,
@@ -186,14 +183,14 @@ export default function Tagging() {
       });
       if (res.video_url.includes("youtube")) {
         GameService.getNewStreamURL(res.video_url).then((res) => {
-          console.log("RES VIDEO", res)
           setState({ url: res.url })
         })
+      } else {
+        setState({ url: res.video_url })
       }
     });
 
     GameService.getGameTeamPlayers({ game_id }).then((res) => {
-      console.log("team players", res)
       setState({ homePlayers: res.home_team, awayPlayers: res.away_team })
     })
   }, [count, game_id])
@@ -230,7 +227,6 @@ export default function Tagging() {
     if (newRate > PLAYBACK_RATE.length - 1) newRate = PLAYBACK_RATE.length - 1;
     setPlayRate(newRate)
     setPlay(true)
-    console.log("rate", PLAYBACK_RATE[newRate])
   }
 
   React.useEffect(() => {
@@ -270,7 +266,6 @@ export default function Tagging() {
     setPlay(false)
 
     const curTime = player.current.getCurrentTime()
-    console.log("current Time", curTime, config.sec_after);
     setTeamTag({ end_time: toHHMMSS(`${curTime + config.sec_after}`) })
     setPlayerTag({
       team_id: offenseTeamId,
@@ -321,7 +316,6 @@ export default function Tagging() {
 
   const saveTags = async (isCP = false) => {
     const tTag = await addTeamTag(isCP)
-    console.log("save Team: ", tTag);
     for (const pTag of temp_playerTag_list) {
       await addPlayerTag({ ...pTag, team_tag_id: tTag.id })
     }
@@ -331,8 +325,6 @@ export default function Tagging() {
 
   React.useEffect(() => {
     const last = temp_playerTag_list.slice(-1)[0]
-
-    console.log("temp_playerTag_list", temp_playerTag_list, last?.action_result_id)
 
     if (ALL_ACTION_RESULTS.find(f => f.id === last?.action_result_id)?.end_possession) {
       saveTags()
@@ -447,7 +439,6 @@ export default function Tagging() {
           offenseTeam={offenseTeam}
           defenseTeam={defenseTeam}
           updateTagList={() => {
-            console.log("update PlayerTag", state.curTeamTagId)
             dispPlayerTags(state.curTeamTagId)
           }}
         />
@@ -467,7 +458,7 @@ export default function Tagging() {
             </IconButton>
           </Tooltip>
         </div>
-        <Box onBlur={() => { console.log("blur"); setPlay(false) }}>
+        <Box onBlur={() => { setPlay(false) }}>
           <div style={{ maxWidth: "88%", margin: 'auto' }}>
             <div className="player-wrapper">
               <ReactPlayer

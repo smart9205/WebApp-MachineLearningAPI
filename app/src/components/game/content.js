@@ -75,7 +75,6 @@ export default function Content({ gameListUpdated, actionType, editData }) {
 
   React.useEffect(() => {
     GameService.getAllPositions().then(res => {
-      console.log("POSITIONLIST:", res)
       setPositionList(res.map(p => p.name))
     })
   }, [])
@@ -88,7 +87,6 @@ export default function Content({ gameListUpdated, actionType, editData }) {
     GameService.getAllLeagues().then((res) => {
       setLeagueList(res);
       setLeague(res[0]);
-      console.log(res[0])
     })
   }, [count]);
 
@@ -126,7 +124,6 @@ export default function Content({ gameListUpdated, actionType, editData }) {
   }
 
   const handleChange = (name, value) => {
-    console.log(name, value)
     setPlayerData({ ...playerData, [name]: value });
   };
 
@@ -159,7 +156,6 @@ export default function Content({ gameListUpdated, actionType, editData }) {
     if (!result) return;
     GameService.addTeam({ name: teamName }).then(
       (res) => {
-        console.log("NewTeam", res);
         if (res.status === "success") {
           getTeamList();
           OpenAlert(`${teamName} is successfully added!`);
@@ -207,8 +203,6 @@ export default function Content({ gameListUpdated, actionType, editData }) {
         date: gameDate,
         video_url: videoUrl
       }).then((res) => {
-        console.log("Add Game Result", res);
-
         gameListUpdated();
         OpenAlert("Added a new game");
       })
@@ -222,8 +216,6 @@ export default function Content({ gameListUpdated, actionType, editData }) {
         date: gameDate,
         video_url: videoUrl
       }).then((res) => {
-        console.log("Edit Game Result", res);
-
         gameListUpdated();
         OpenAlert("Game is edited");
       })
@@ -231,12 +223,10 @@ export default function Content({ gameListUpdated, actionType, editData }) {
   }
 
   const homeTeamCallBack = React.useCallback((param) => {
-    console.log("hometeamcallbak")
     setHomeTeam(param);
   }, []);
 
   const awayTeamCallBack = React.useCallback((param) => {
-    console.log("awayteamcallbak")
     setAwayTeam(param);
   }, []);
 

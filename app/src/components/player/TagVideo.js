@@ -36,7 +36,6 @@ export default function TagVideo({ tagList, url }) {
     useEffect(() => {
         if (url.includes("youtube")) {
             gameService.getNewStreamURL(url).then((res) => {
-                console.log("newStreamURL", res)
                 setVideoURL(res.url)
             })
         } else (
@@ -59,7 +58,6 @@ export default function TagVideo({ tagList, url }) {
     const playTagByIdx = (i) => seekTo(toSecond(tagList[i]?.start_time))
 
     const onProgress = (currentTime) => {
-        // console.log("Progress", currentTime)
         const startTime = toSecond(tagList[curIdx]?.start_time);
         const endTime = toSecond(tagList[curIdx]?.end_time);
 
