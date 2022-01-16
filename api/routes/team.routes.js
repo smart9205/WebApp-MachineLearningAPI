@@ -1,5 +1,7 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/team.controller");
+var routeCache = require('route-cache');
+
 module.exports = app => {
 	app.use(function (req, res, next) {
 		res.header(
@@ -9,6 +11,12 @@ module.exports = app => {
 		next();
 	});
 
+	app.post(
+		"/team",
+		[authJwt.verifyToken, authJwt.isAdmin],
+		controller.create
+	);
+
 	app.get(
 		"/team",
 		controller.findAll
@@ -16,13 +24,8 @@ module.exports = app => {
 
 	app.get(
 		"/team/:id",
+		routeCache.cacheSeconds(20),
 		controller.findOne
-	);
-
-	app.post(
-		"/team",
-		[authJwt.verifyToken, authJwt.isAdmin],
-		controller.create
 	);
 
 	app.put(

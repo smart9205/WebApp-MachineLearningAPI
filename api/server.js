@@ -1,6 +1,8 @@
 const express = require("express");
 // const bodyParser = require("body-parser");
 const cors = require("cors");
+const nocache = require('nocache');
+
 
 const app = express();
 
@@ -9,6 +11,8 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(nocache());
+app.set('etag', false)
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -42,6 +46,12 @@ app.get("/", (req, res) => {
 
 // routes
 require('./routes/auth.routes')(app);
+require('./routes/team.routes')(app);
+require('./routes/team_players.routes')(app);
+require('./routes/player.routes')(app);
+require('./routes/player_tag.routes')(app);
+require('./routes/game.routes')(app);
+
 require('./routes/user.routes')(app);
 require('./routes/whatsapp.routes')(app);
 require('./routes/season.routes')(app);
@@ -49,12 +59,7 @@ require('./routes/league.routes')(app);
 require('./routes/action.routes')(app);
 require('./routes/action_type.routes')(app);
 require('./routes/action_result.routes')(app);
-require('./routes/game.routes')(app);
-require('./routes/player.routes')(app);
-require('./routes/player_tag.routes')(app);
-require('./routes/team.routes')(app);
 require('./routes/team_tag.routes')(app);
-require('./routes/team_players.routes')(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
