@@ -6,6 +6,10 @@ import {
     Box,
 } from '@mui/material';
 
+import TeamTab from "./TeamTab"
+import PlayerTab from "./PlayerTab"
+import LeagueTab from "./LeagueTab"
+
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -54,10 +58,13 @@ export default function Admin() {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
+                <TeamTab />
             </TabPanel>
             <TabPanel value={value} index={1}>
+                <PlayerTab />
             </TabPanel>
             <TabPanel value={value} index={2}>
+                <LeagueTab />
             </TabPanel>
         </div>
     )
