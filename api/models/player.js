@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     l_name: DataTypes.STRING,
     position: DataTypes.STRING,
     date_of_birth: DataTypes.DATE,
-    jersey_number: DataTypes.INTEGER
+    jersey_number: DataTypes.INTEGER,
+    image: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Player',

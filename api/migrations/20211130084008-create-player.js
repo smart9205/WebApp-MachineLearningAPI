@@ -23,6 +23,9 @@ module.exports = {
       jersey_number: {
         type: Sequelize.INTEGER
       },
+      image: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

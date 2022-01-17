@@ -19,6 +19,7 @@ import Game from "./components/game";
 import Tagging from "./components/tagging";
 import Team from "./components/team";
 import Player from "./components/player";
+import Admin from "./components/admin"
 
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
@@ -131,6 +132,7 @@ const App = () => {
             <Route path='/player/:id' component={Player} />
 
             <AdminRoute path='/game' component={Game} />
+            <AdminRoute path='/admin' component={Admin} />
           </Switch>
         </div>
 
