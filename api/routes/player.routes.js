@@ -55,6 +55,7 @@ module.exports = app => {
 
 	app.post(
 		"/user/updateConfig",
+		[authJwt.verifyToken],
 		controller.updateTaggerConfig
 	);
 };
