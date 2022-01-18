@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import GameService from "../../services/game.service"
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -22,6 +22,9 @@ import { visuallyHidden } from '@mui/utils';
 import { CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import Input from '@mui/material/Input';
+import Upload from '../../common/upload';
+import { TEAM_ICON_DEFAULT } from '../../common/staticData';
 const styles = {
     loader: {
         position: 'absolute',
@@ -116,7 +119,10 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-
+const initials = {
+    image: "",
+    name: ""
+}
 export default function TeamTab() {
     const [rows, setRows] = useState([])
     const [loading, setLoading] = useState(true)
@@ -124,17 +130,23 @@ export default function TeamTab() {
     const [orderBy, setOrderBy] = useState('calories');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(15);
-    const [editOpen, setEditOpen] = useState(false);
-    const [selected, setSelected] = useState(null);
+    const [formOpen, setFormOpen] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
 
-    useEffect(() => {
+    const [formData, setFormData] = useReducer((old, action) => ({ ...old, ...action }), initials)
+
+    const init = () => {
         setLoading(true)
-        setEditOpen(false)
+        setFormOpen(false)
         GameService.getAllTeams().then((res) => {
             console.log("All Teams", res)
             setRows(res)
             setLoading(false)
         }).catch(() => { setLoading(false) })
+    }
+
+    useEffect(() => {
+        init()
     }, [])
 
     const handleRequestSort = (event, property) => {
@@ -155,22 +167,50 @@ export default function TeamTab() {
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     const handleEditClose = (result) => {
-
+        if (isEdit) {
+            console.log("edit", formData)
+            GameService.updateTeam(formData).then((res) => {
+                console.log("Update result", res)
+                init()
+            })
+        } else {
+            GameService.addTeam({ name: formData.name, image: formData.image }).then((res) => {
+                console.log("add team", res)
+                init()
+            })
+        }
+        setFormOpen(false)
     }
 
     return (
         <Box sx={{ width: '100%' }}>
-            <Dialog open={editOpen} onClose={e => handleEditClose(false)}>
-                <DialogTitle>Edit</DialogTitle>
+            <Dialog open={formOpen} onClose={e => handleEditClose(false)}>
+                <DialogTitle>{isEdit ? "Edit" : "New"} Team</DialogTitle>
                 <DialogContent>
-                    {selected?.name}
+                    <Upload dirName={process.env.REACT_APP_DIR_TEAM} img={formData.image} />
+                    <Input
+                        fullWidth
+                        sx={{ mt: 1 }}
+                        placeholder='Team name'
+                        value={formData.name}
+                        onChange={(e) => setFormData({ name: e.target.value })}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={e => handleEditClose(false)}>Cancel</Button>
                     <Button onClick={e => handleEditClose(true)}>Done</Button>
                 </DialogActions>
             </Dialog>
-            <div style={{ textAlign: "right" }}><IconButton><AddIcon /></IconButton></div>
+            <div style={{ textAlign: "right" }}>
+                <IconButton
+                    onClick={() => {
+                        setFormOpen(true)
+                        setIsEdit(false)
+                        setFormData(initials)
+                    }}>
+                    <AddIcon />
+                </IconButton>
+            </div>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <TableContainer>
                     <Table>
@@ -180,9 +220,13 @@ export default function TeamTab() {
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
                         />
-                        <>{loading ? <div style={styles.loader}>
-                            <CircularProgress />
-                        </div> :
+                        <>{loading ? <TableBody style={styles.loader}>
+                            <TableRow>
+                                <TableCell colSpan={4}>
+                                    <CircularProgress />
+                                </TableCell>
+                            </TableRow>
+                        </TableBody> :
                             <TableBody>
                                 {stableSort(rows, getComparator(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -190,10 +234,17 @@ export default function TeamTab() {
                                         return (
                                             <TableRow hover key={row.id} >
                                                 <TableCell align="center">
-                                                    <img width={40} src={row.image ?? "https://s3.amazonaws.com/s4usitesimages/images/JustSmallLogo.png"} alt='Team' /></TableCell>
+                                                    <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='Team' /></TableCell>
                                                 <TableCell align="center">{row.name}</TableCell>
                                                 <TableCell align="center" sx={{ width: 50 }}>
-                                                    <IconButton onClick={() => { setEditOpen(true); setSelected(row) }}><EditIcon /></IconButton>
+                                                    <IconButton
+                                                        onClick={() => {
+                                                            setFormOpen(true);
+                                                            setIsEdit(true)
+                                                            setFormData(row)
+                                                        }}>
+                                                        <EditIcon />
+                                                    </IconButton>
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ width: 50 }}><IconButton><DeleteIcon /></IconButton></TableCell>
                                             </TableRow>

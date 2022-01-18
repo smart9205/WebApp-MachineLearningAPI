@@ -154,7 +154,7 @@ export default function Content({ gameListUpdated, actionType, editData }) {
     setTeamOpen(false);
 
     if (!result) return;
-    GameService.addTeam({ name: teamName }).then(
+    GameService.addTeam({ name: teamName, image: "" }).then(
       (res) => {
         if (res.status === "success") {
           getTeamList();

@@ -1,3 +1,6 @@
+export const TEAM_ICON_DEFAULT = "https://s3.amazonaws.com/s4usitesimages/images/JustSmallLogo.png";
+export const PLAYER_ICON_DEFAULT = "https://s3.amazonaws.com/s4usitesimages/images/anon-avatar.png";
+
 export const DEMO = {
     Shot: {
         success: ["On Target", "Goal"],

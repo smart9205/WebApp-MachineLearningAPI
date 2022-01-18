@@ -47,6 +47,12 @@ const updateGame = (req) => {
   });
 }
 
+const updateTeam = (req) => {
+  return axios.put(API_URL + `team/${req.id}`, req, { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+}
+
 const getAllSeasons = () => {
   return axios.get(API_URL + "season", { headers: authHeader() }).then((response) => {
     return response.data;
@@ -99,6 +105,12 @@ const deleteTeamTag = (id) => {
 
 const deleteGame = (id) => {
   return axios.delete(API_URL + `game/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+    return response.data;
+  });
+}
+
+const deleteTeam = (id) => {
+  return axios.delete(API_URL + `team/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
     return response.data;
   });
 }
@@ -265,6 +277,7 @@ const gameService = {
 
   updateJersey,
   updateGame,
+  updateTeam,
   updateTaggerConfig,
   updatePlayerTag,
   updateTeamTag,
@@ -273,7 +286,8 @@ const gameService = {
 
   deleteGame,
   deleteTeamTag,
-  deletePlayerTag
+  deletePlayerTag,
+  deleteTeam
 };
 
 export default gameService;

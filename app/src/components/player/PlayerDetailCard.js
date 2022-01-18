@@ -5,6 +5,7 @@ import {
     CardMedia,
 } from '@mui/material';
 import moment from 'moment'
+import { PLAYER_ICON_DEFAULT } from '../../common/staticData';
 
 export default function PlayerDatailCard({ player }) {
 
@@ -13,7 +14,7 @@ export default function PlayerDatailCard({ player }) {
             <CardMedia
                 sx={{ width: 150, marginRight: 2 }}
                 component="img"
-                image="https://s3.amazonaws.com/s4usitesimages/images/anon-avatar.png"
+                image={PLAYER_ICON_DEFAULT}
                 alt="photo"
             />
             <Box style={{ display: "flex", flexDirection: "column", justifyContent: "space-around" }}>

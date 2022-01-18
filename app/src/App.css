@@ -9,6 +9,15 @@
     }
 }
 
+.MuiDropzoneArea-textContainer {
+    display: none;
+}
+.MuiDropzonePreviewList-removeButton {
+    bottom: 40px;
+    right: -200px !important;
+    top: auto !important;
+}
+
 .card {
     background-color: #f7f7f7;
     padding: 20px 25px 30px;

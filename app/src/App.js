@@ -64,6 +64,7 @@ const App = () => {
     dispatch(logout());
   }, [dispatch]);
 
+
   const user = getUser();
   if (user) {
     const decodedJwt = parseJwt(user.accessToken);
