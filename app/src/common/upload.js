@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Upload({ dirName, img }) {
+function Upload({ dirName, img, onURL }) {
     const classes = useStyles();
 
     const [image, setImage] = useState(img)
@@ -48,7 +48,8 @@ function Upload({ dirName, img }) {
             console.log(data);
             if (data.status === 204) {
                 console.log("success");
-                setImage("")
+                setImage(data.location)
+                onURL(data.location)
             } else {
                 console.log("fail");
             }
@@ -73,7 +74,8 @@ function Upload({ dirName, img }) {
                 dropzoneText={"Upload image"}
                 onChange={(files) => handleUpload(files[0])}
             />
-            <Input value={image} placeholder="Image URL" fullWidth multiline />
+            {image}
+            {/* <Input value={image} placeholder="Image URL" fullWidth multiline /> */}
         </div>
     );
 }

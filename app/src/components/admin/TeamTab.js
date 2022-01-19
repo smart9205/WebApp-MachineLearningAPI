@@ -187,7 +187,11 @@ export default function TeamTab() {
             <Dialog open={formOpen} onClose={e => handleEditClose(false)}>
                 <DialogTitle>{isEdit ? "Edit" : "New"} Team</DialogTitle>
                 <DialogContent>
-                    <Upload dirName={process.env.REACT_APP_DIR_TEAM} img={formData.image} />
+                    <Upload
+                        dirName={process.env.REACT_APP_DIR_TEAM}
+                        img={formData.image}
+                        onURL={url => setFormData({ image: url })}
+                    />
                     <Input
                         fullWidth
                         sx={{ mt: 1 }}
