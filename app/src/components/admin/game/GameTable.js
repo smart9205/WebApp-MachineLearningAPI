@@ -28,8 +28,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import TagIcon from '@mui/icons-material/Tag';
 import { visuallyHidden } from '@mui/utils';
 import randomString from 'randomstring'
-import GameService from "../../services/game.service";
-import VIDEO_ICON from '../../assets/video_icon.jpg';
+import GameService from "../../../services/game.service";
+import VIDEO_ICON from '../../../assets/video_icon.jpg';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {

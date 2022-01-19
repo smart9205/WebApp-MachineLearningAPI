@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import GameTable from './GameTable'
 import Content from './content'
-import gameService from '../../services/game.service';
+import gameService from '../../../services/game.service';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({

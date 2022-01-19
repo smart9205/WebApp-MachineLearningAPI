@@ -9,6 +9,7 @@ import {
 import TeamTab from "./TeamTab"
 import PlayerTab from "./PlayerTab"
 import LeagueTab from "./LeagueTab"
+import GameTab from "./game"
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -55,6 +56,7 @@ export default function Admin() {
                     <Tab label="Team" {...a11yProps(0)} />
                     <Tab label="Player" {...a11yProps(1)} />
                     <Tab label="League" {...a11yProps(2)} />
+                    <Tab label="Game" {...a11yProps(3)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
@@ -65,6 +67,9 @@ export default function Admin() {
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <LeagueTab />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+                <GameTab />
             </TabPanel>
         </div>
     )

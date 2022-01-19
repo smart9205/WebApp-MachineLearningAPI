@@ -15,7 +15,6 @@ import Signup from "./components/auth/Signup";
 import Signin from "./components/auth/Signin";
 import Home from "./components/Home";
 import Profile from "./components/auth/Profile";
-import Game from "./components/game";
 import Tagging from "./components/tagging";
 import Team from "./components/team";
 import Field from "./components/team/Field";
@@ -133,7 +132,6 @@ const App = () => {
             <Route path='/team/:data' component={Field} />
             <Route path='/player/:id' component={Player} />
 
-            <AdminRoute path='/game' component={Game} />
             <AdminRoute path='/admin' component={Admin} />
           </Switch>
         </div>

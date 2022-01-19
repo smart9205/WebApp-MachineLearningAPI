@@ -10,7 +10,7 @@ import {
 
 
 import PlayerTable from "./PlayerTable"
-import GameService from "../../services/game.service";
+import GameService from "../../../services/game.service";
 
 export default function SearchComponent({
   selectedTeamCallBack,

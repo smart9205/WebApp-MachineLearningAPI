@@ -20,7 +20,8 @@ import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import Search from './search'
-import GameService from "../../services/game.service";
+import GameService from "../../../services/game.service";
+import PlayerFormDialog from './PlayerFormDialog';
 
 const useStyles = makeStyles((theme) => ({
   central: {
@@ -54,30 +55,8 @@ export default function Content({ gameListUpdated, actionType, editData }) {
   const [awayTeam, setAwayTeam] = React.useState(false);
   const [playerOpen, setPlayerOpen] = React.useState(false);
   const [alertType, setAlertType] = React.useState("success");
-  const [positionList, setPositionList] = React.useState([]);
 
   const [videoUrl, setVideoUrl] = React.useState("");
-
-  const [error, setError] = React.useState({
-    f_name: false,
-    l_name: false,
-    position: false,
-    jersey_number: false
-  });
-
-  const [playerData, setPlayerData] = React.useState({
-    f_name: "",
-    l_name: "",
-    date_of_birth: new Date(),
-    position: "",
-    jersey_number: 1
-  });
-
-  React.useEffect(() => {
-    GameService.getAllPositions().then(res => {
-      setPositionList(res.map(p => p.name))
-    })
-  }, [])
 
   React.useEffect(() => {
     GameService.getAllSeasons().then((res) => {
@@ -123,24 +102,6 @@ export default function Content({ gameListUpdated, actionType, editData }) {
     getPlayerList();
   }
 
-  const handleChange = (name, value) => {
-    setPlayerData({ ...playerData, [name]: value });
-  };
-
-  React.useEffect(() => {
-    setError({
-      f_name: playerData.f_name.length === 0,
-      l_name: playerData.l_name.length === 0,
-      position: !playerData.position ? true : playerData.position.length === 0,
-      jersey_number: Number(playerData.jersey_number) <= 0
-    })
-  }, [playerData])
-
-  const checkErrorPlayer = () => {
-    return !(Object.keys(error).find(key => error[key]));
-  }
-
-
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -167,20 +128,6 @@ export default function Content({ gameListUpdated, actionType, editData }) {
         console.log("ERROR", error);
       }
     );
-  };
-  const handlePlayerClose = (result) => {
-    setPlayerOpen(false);
-
-    if (!result) return;
-
-    GameService.addPlayer(playerData).then((res) => {
-      if (res.status === "success") {
-        getPlayerList();
-        OpenAlert(`${res.data.f_name} ${res.data.l_name} is successfully added!`);
-      } else {
-        OpenAlert(res.data, "error");
-      }
-    });
   };
 
   const OpenAlert = (msg, type = "success") => {
@@ -273,87 +220,17 @@ export default function Content({ gameListUpdated, actionType, editData }) {
           <Button onClick={e => handleTeamClose(true)}>Add</Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={playerOpen} onClose={e => handlePlayerClose(false)}>
-        <DialogTitle>Add New Player</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            To add new Player, please input Player details
-          </DialogContentText>
-          <div style={{ display: 'flex' }}>
-            <TextField
-              autoFocus
-              sx={{ m: 0.8 }}
-              value={playerData.f_name}
-              onChange={e => handleChange("f_name", e.target.value)}
-              helperText={error.f_name ? "First Name cannot be empty" : ""}
-              error={error.f_name}
-              label="First Name"
-              fullWidth
-              variant="outlined"
-            />
-            <TextField
-              sx={{ m: 0.8 }}
-              value={playerData.l_name}
-              onChange={e => handleChange("l_name", e.target.value)}
-              helperText={error.l_name ? "Last Name cannot be empty" : ""}
-              error={error.l_name}
-              label="Last  Name"
-              fullWidth
-              variant="outlined"
-            />
-          </div>
-          <div style={{ display: 'flex' }}>
-            <Autocomplete
-              sx={{ m: 0.8 }}
-              id="combo-box-demo"
-              options={positionList}
-              fullWidth
-              value={playerData.position}
-              onChange={(event, newValue) => {
-                setPlayerData({ ...playerData, position: newValue })
-              }}
-              getOptionLabel={
-                (option) => !option ? "" : option
-              }
-              renderInput={(params) =>
-                <TextField
-                  {...params}
-                  label="Position"
-                  helperText={error.position ? "Position cannot be empty" : ""}
-                  error={error.position}
-                />}
-            />
-            <LocalizationProvider dateAdapter={AdapterDateFns} >
-              <DatePicker
-                label="Date of Birth"
-                value={playerData.date_of_birth}
-                onChange={v => handleChange("date_of_birth", v)}
-                renderInput={(params) =>
-                  <TextField
-                    sx={{ m: 0.8 }}
-                    {...params}
-                    className={classes.input}
-                  />
-                }
-              />
-            </LocalizationProvider>
-          </div>
-          <TextField
-            sx={{ m: 0.8 }}
-            label="Jercey Number"
-            type="number"
-            value={playerData.jersey_number}
-            onChange={e => handleChange("jersey_number", e.target.value)}
-            helperText={error.jersey_number ? "Jersey Number cannot be less than 0" : ""}
-            error={error.jersey_number}
-            variant="outlined"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={e => handlePlayerClose(false)}>Cancel</Button>
-          <Button onClick={e => checkErrorPlayer() && handlePlayerClose(true)}>Add</Button>
-        </DialogActions>
-      </Dialog>
+      <PlayerFormDialog
+        open={playerOpen}
+        onResult={(res) => {
+          setPlayerOpen(res.data);
+          if (!!res?.msg) {
+            OpenAlert(res.msg, res.result)
+          }
+          if (res?.type === "success") {
+            getPlayerList();
+          }
+        }} />
       <Dialog open={leagueOpen} onClose={e => handleLeagueClose(false)}>
         <DialogTitle>Add New League</DialogTitle>
         <DialogContent>

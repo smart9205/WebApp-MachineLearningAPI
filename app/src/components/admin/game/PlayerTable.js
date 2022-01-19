@@ -17,7 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 
 import { visuallyHidden } from '@mui/utils';
-import GameService from "../../services/game.service";
+import GameService from "../../../services/game.service";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {

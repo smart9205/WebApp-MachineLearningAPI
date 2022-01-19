@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Player_Position.init({
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    short: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Player_Position',
