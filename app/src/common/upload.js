@@ -34,14 +34,15 @@ function Upload({ dirName, img }) {
     const handleUpload = (file) => {
         if (!file) return
         let newFileName = file?.name.replace(/\..+$/, "");
-        console.log("filename", dirName)
         const config = {
             bucketName: process.env.REACT_APP_BUCKET_NAME,
             dirName,
             region: process.env.REACT_APP_REGION,
             accessKeyId: process.env.REACT_APP_ACCESS_ID,
             secretAccessKey: process.env.REACT_APP_ACCESS_KEY,
+            s3Url: process.env.REACT_APP_S3_URI
         };
+        console.log("S3 config", config)
         const ReactS3Client = new S3(config);
         ReactS3Client.uploadFile(file, newFileName).then((data) => {
             console.log(data);

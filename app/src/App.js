@@ -18,6 +18,7 @@ import Profile from "./components/auth/Profile";
 import Game from "./components/game";
 import Tagging from "./components/tagging";
 import Team from "./components/team";
+import Field from "./components/team/Field";
 import Player from "./components/player";
 import Admin from "./components/admin"
 
@@ -129,7 +130,7 @@ const App = () => {
             <Route exact path="/profile" component={Profile} />
 
             <PrivateRoute path='/tagging/:id' component={Tagging} />
-            <Route path='/team/:data' component={Team} />
+            <Route path='/team/:data' component={Field} />
             <Route path='/player/:id' component={Player} />
 
             <AdminRoute path='/game' component={Game} />
