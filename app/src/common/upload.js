@@ -2,8 +2,23 @@ import React, { useState } from "react";
 import S3 from "react-aws-s3";
 import { DropzoneArea } from 'material-ui-dropzone';
 import { makeStyles } from '@mui/styles';
+import { CircularProgress } from '@mui/material';
+
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import Input from '@mui/material/Input';
+// import Input from '@mui/material/Input';
+const styles = {
+    loader: {
+        position: 'absolute',
+        left: '0px',
+        top: '0px',
+        width: '100%',
+        height: '100%',
+        zIndex: 9999,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+};
 
 const useStyles = makeStyles((theme) => ({
     textContainer: {
@@ -30,6 +45,7 @@ function Upload({ dirName, img, onURL }) {
     const classes = useStyles();
 
     const [image, setImage] = useState(img)
+    const [loading, setLoading] = useState(false)
 
     const handleUpload = (file) => {
         if (!file) return
@@ -44,6 +60,7 @@ function Upload({ dirName, img, onURL }) {
         };
         console.log("S3 config", config)
         const ReactS3Client = new S3(config);
+        setLoading(true)
         ReactS3Client.uploadFile(file, newFileName).then((data) => {
             console.log(data);
             if (data.status === 204) {
@@ -53,7 +70,11 @@ function Upload({ dirName, img, onURL }) {
             } else {
                 console.log("fail");
             }
-        }).catch((e) => console.log("Uploading Error", e));
+            setLoading(false)
+        }).catch((e) => {
+            console.log("Uploading Error", e)
+            setLoading(false)
+        });
     };
     return (
         <div style={{ width: 300 }}>
@@ -74,7 +95,13 @@ function Upload({ dirName, img, onURL }) {
                 dropzoneText={"Upload image"}
                 onChange={(files) => handleUpload(files[0])}
             />
-            {image}
+            {
+                loading ?
+                    <div style={styles.loader}>
+                        <CircularProgress />
+                    </div>
+                    : <div> {image} </div>
+            }
             {/* <Input value={image} placeholder="Image URL" fullWidth multiline /> */}
         </div>
     );
