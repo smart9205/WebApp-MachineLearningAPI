@@ -81,13 +81,10 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
             else {
                 GameService.updatePlayer({ ...playerData, position: playerData.position.id }).then((res) => {
                     console.log("Updated", res)
-                    if (res.status === "success") {
-                        const msg = `${res.data.f_name} ${res.data.l_name} is successfully updated!`
-                        onResult({ open: false, msg, result: "success" });
-                    } else {
-                        onResult({ open: false, msg: res.data, result: "error" });
-                    }
-                }).catch((e) => console.log("PLAYER ERROR", e));
+
+                    onResult({ open: false, msg: res, result: "success" });
+
+                }).catch((e) => { onResult({ open: false }); console.log("PLAYER ERROR", e) });
             }
         }
 
@@ -102,6 +99,7 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
                     dirName={process.env.REACT_APP_DIR_PLAYER}
                     img={playerData.image}
                     onURL={url => setPlayerData({ image: url })}
+                    fimeName={""}
                 />
                 <div style={{ display: 'flex' }}>
                     <TextField

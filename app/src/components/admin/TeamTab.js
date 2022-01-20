@@ -130,7 +130,7 @@ export default function TeamTab() {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(15);
+    const [rowsPerPage, setRowsPerPage] = useState(25);
     const [formOpen, setFormOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false)
@@ -219,17 +219,27 @@ export default function TeamTab() {
                     <Button onClick={e => handleEditClose(true)}>Done</Button>
                 </DialogActions>
             </Dialog>
-            <div style={{ textAlign: "right" }}>
-                <IconButton
-                    onClick={() => {
-                        setFormOpen(true)
-                        setIsEdit(false)
-                        setSelected(initials)
-                    }}>
-                    <AddIcon />
-                </IconButton>
-            </div>
             <Paper sx={{ width: '100%', mb: 2 }}>
+                <div style={{ position: "absolute", zIndex: 10, padding: 10 }}>
+                    <Button
+                        onClick={() => {
+                            setFormOpen(true)
+                            setIsEdit(false)
+                            setSelected(initials)
+                        }}>
+                        <AddIcon />
+                        Add Team
+                    </Button>
+                </div>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 15, 25]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
                 <TableContainer>
                     <Table>
                         <EnhancedTableHead

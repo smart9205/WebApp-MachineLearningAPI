@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import { CircularProgress } from '@mui/material';
@@ -134,7 +135,7 @@ export default function PlayerTab() {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(25);
     const [playerOpen, setPlayerOpen] = useState(false);
     const [selected, setSelected] = useState(null);
     const [deleteOpen, setDeleteOpen] = React.useState(false)
@@ -195,20 +196,31 @@ export default function PlayerTab() {
                         // OpenAlert(res.msg, res.result)
                     }
                     if (res?.result === "success") {
-                        setRows([...rows, res.data])
+                        init()
                     }
                 }}
             />
-            <div style={{ textAlign: "right" }}>
-                <IconButton
-                    onClick={() => {
-                        setSelected(null)
-                        setPlayerOpen(true)
-                    }}>
-                    <AddIcon />
-                </IconButton>
-            </div>
+
             <Paper sx={{ width: '100%', mb: 2 }}>
+                <div style={{ position: "absolute", zIndex: 10, padding: 10 }}>
+                    <Button
+                        onClick={() => {
+                            setSelected(null)
+                            setPlayerOpen(true)
+                        }}>
+                        <AddIcon />
+                        Add Player
+                    </Button>
+                </div>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 15, 25]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
                 <TableContainer>
                     <Table>
                         <EnhancedTableHead

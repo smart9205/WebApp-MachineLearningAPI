@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Upload({ dirName, img, onURL }) {
+function Upload({ dirName, img, onURL, fileName }) {
     const classes = useStyles();
 
     const [image, setImage] = useState(img)
@@ -49,7 +49,6 @@ function Upload({ dirName, img, onURL }) {
 
     const handleUpload = (file) => {
         if (!file) return
-        let newFileName = file?.name.replace(/\..+$/, "");
         const config = {
             bucketName: process.env.REACT_APP_BUCKET_NAME,
             dirName,
@@ -61,7 +60,7 @@ function Upload({ dirName, img, onURL }) {
         console.log("S3 config", config)
         const ReactS3Client = new S3(config);
         setLoading(true)
-        ReactS3Client.uploadFile(file, newFileName).then((data) => {
+        ReactS3Client.uploadFile(file, fileName).then((data) => {
             console.log(data);
             if (data.status === 204) {
                 console.log("success");
