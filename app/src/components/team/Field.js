@@ -51,7 +51,7 @@ export default function Field() {
                         fPlayers.map((fp => (
                           <div className="pl" key={fp.id} style={{ backgroundImage: `url(${fp.image ?? PLAYER_ICON_DEFAULT})` }}>
                             <Link
-                              to={`/ player / ${btoa(randomString.generate(3) + fp.player_id + randomString.generate(3))}`}
+                              to={`/player/${btoa(randomString.generate(3) + fp.player_id + randomString.generate(3))}`}
                               className="name"
                             >
                               {fp.f_name}
