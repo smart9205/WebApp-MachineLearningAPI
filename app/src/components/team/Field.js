@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import randomString from 'randomstring'
-import './Field.css'
+// import './Field.css'
 import GameService from "../../services/game.service";
 
 const FIELD_LIST = ["LF", "CF", "RF", "LW", "AM", "RW", "LM", "CM", "RM", "LMD", "DM", "RMD", "LD", "CD", "RD", "GK"]

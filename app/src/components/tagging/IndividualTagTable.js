@@ -14,7 +14,6 @@ import TCellSelectEdit from './TCellSelectEdit';
 import GameService from '../../services/game.service';
 import CircularProgress from '@mui/material/CircularProgress';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
-import "./CSS/table.css";
 
 export default function IndividualTagTable({
   rows,

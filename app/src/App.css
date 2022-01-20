@@ -8,7 +8,20 @@
         padding: 8px !important;
     }
 }
-
+.MuiListItemButton-root.Mui-selected {
+    color: white;
+    background-color: darkblue !important;
+    border-radius: 5px;
+}
+.player-wrapper {
+    position: relative;
+    padding-top: 56.25%;
+}
+.react-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 .MuiDropzoneArea-textContainer {
     display: none;
 }
@@ -16,6 +29,14 @@
     bottom: 40px;
     right: -200px !important;
     top: auto !important;
+}
+
+.MuiTableCell-root {
+    padding: 2px !important;
+    font-size: 12px !important;
+}
+.MuiTablePagination-root p {
+    margin: 0px !important;
 }
 
 .card {

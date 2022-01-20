@@ -74,6 +74,9 @@ exports.findAll = (req, res) => {
       FROM public."Players" 
       LEFT JOIN 
         public."Player_Positions" on public."Players".position = public."Player_Positions".id
+      ORDER BY
+        public."Players".f_name, 
+        public."Players".l_name
     `).then(data => {
     res.send(data[0]);
   })

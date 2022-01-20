@@ -30,7 +30,6 @@ import Pass from './contents/Pass';
 import Cross from './contents/Cross';
 import Foul from './contents/Foul';
 import Dribble from './contents/Dribble';
-import "./CSS/Player.css";
 
 const drawerWidth = "30%";
 
