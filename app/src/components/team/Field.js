@@ -36,7 +36,7 @@ export default function Field() {
   }, [teamId, seasonId, leagueId])
 
   return (
-    <>
+    <div class="team-field-container">
       <h1 className='text-center'>Barcelona</h1>
       <div className="containerr">
         <div className="content">
@@ -67,6 +67,6 @@ export default function Field() {
           </div>
         </div>
       </div >
-    </>
+    </div>
   )
 }

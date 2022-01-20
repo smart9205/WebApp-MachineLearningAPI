@@ -1,3 +1,12 @@
+.team-field-container {
+    background-color: #222;
+    background-image: url("http://wallpapersafari.com/download/qxHlTK/");
+    background-color: #cccccc;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* background-size: cover; */
+    position: relative;
+}
 .containerr {
     display: flex;
     flex-wrap: nowrap;
@@ -6,14 +15,14 @@
     width: 100vw;
     height: 100vh;
     margin: 0 auto;
-    background-image: url("http://wallpapersafari.com/download/qxHlTK/");
+    /* background-image: url("http://wallpapersafari.com/download/qxHlTK/");
     background-color: #cccccc;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    position: relative;
+    position: relative; */
 }
-h1 {
+.teamHeading h1 {
     position: absolute;
     text-align: center;
     color: #fff;
@@ -24,13 +33,15 @@ h1 {
     font-family: "Pacifico", cursive;
     color: #f2a11c;
     text-transform: uppercase;
+    top: 12%;
     margin-left: 50%;
-    transform: translate(-50%, 0);
-    -webkit-transform: translate(-50%, 0);
-    -moz-transform: translate(-50%, 0);
-    -ms-transform: translate(-50%, 0);
-    -o-transform: translate(-50%, 0);
+    transform: translate(-50%, -12%);
+    -webkit-transform: translate(-50%, -12%);
+    -moz-transform: translate(-50%, -12%);
+    -ms-transform: translate(-50%, -12%);
+    -o-transform: translate(-50%, -12%);
 }
+
 .containerr .content {
     /* background: rgba(0, 0, 255, 0.25); */
     flex-grow: 1;
@@ -49,8 +60,8 @@ h1 {
     width: 100%;
 }
 .field-container .f-field {
-    width: 90%;
-    /* height: 100vmin; */
+    width: 100%;
+    height: 100%;
     background: url(https://image.ibb.co/fOXX8w/field.png);
     background-size: 100% 100%;
     transform-style: preserve-3d;
@@ -61,7 +72,7 @@ h1 {
     grid-template-columns: 24% 50% 24%;
     color: #444;
     box-sizing: border-box;
-    padding: 7% 2%;
+    padding: 4% 2%;
     margin: 0 auto;
 }
 .field-container .f-field > div {
@@ -81,40 +92,50 @@ h1 {
 }
 .field-container .f-field > div .pl {
     position: relative;
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/215059/bm-neuer.jpg);
     border-radius: 50%;
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     position: absolute;
-    top: 50%;
+    top: 18%;
     left: 50%;
     transform-style: preserve-3d;
-    transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -18%, 0);
     color: white;
     font-size: 16px;
     font-family: arial;
-    line-height: 15px;
+    line-height: 40px;
     font-weight: 700;
     transition: all 0.2s ease-out;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
+    -webkit-transform: translate3d(-50%, -18%, 0);
+    -moz-transform: translate3d(-50%, -18%, 0);
+    -ms-transform: translate3d(-50%, -18%, 0);
+    -o-transform: translate3d(-50%, -18%, 0);
+    -webkit-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    -ms-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
 }
 .field-container .f-field > div .pl .name {
     position: absolute;
-    top: 90%;
+    top: 80%;
     left: 50%;
     transform: translatex(-50%);
-    color: white;
-    font-size: 14px;
-    text-shadow: 1px 0 0 black, 1px 1px 0 black, -1px 0 0 black,
-        1px -1px 0 black, -1px 1px 0 black, -1px -1px 0 black;
+    color: #000;
+    font-size: 17px;
+    /* text-shadow: 1px 0 0 black, 1px 1px 0 black, -1px 0 0 black, 1px -1px 0 black, -1px 1px 0 black, -1px -1px 0 black; */
     transition: all 0.2s ease-out;
     opacity: 0;
+}
+.field-container .f-field > div .pl a {
+    text-decoration: none !important;
 }
 .field-container .f-field > div .pl:after {
     position: absolute;
@@ -132,13 +153,13 @@ h1 {
 }
 .field-container .f-field > div.gk .pl {
     background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/215059/bm-neuer.jpg);
-    /* color: #fff; */
+    color: #fff;
 }
 .field-container .f-field > div.p2 .pl {
-    left: 30%;
+    left: 33.33333%;
 }
 .field-container .f-field > div.p2 .pl:last-child {
-    left: 70%;
+    left: 66.66667%;
 }
 .field-container .f-field > div.p3 .pl:first-child {
     left: 25%;

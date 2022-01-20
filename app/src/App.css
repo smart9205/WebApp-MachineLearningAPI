@@ -5,7 +5,7 @@
 
 @media only screen and (max-width: 600px) {
     .container-fluid {
-        padding: 8px !important;
+        padding: 0px !important;
     }
 }
 .MuiListItemButton-root.Mui-selected {
