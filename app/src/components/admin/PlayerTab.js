@@ -9,6 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import Input from '@mui/material/Input';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
@@ -133,12 +134,13 @@ export default function PlayerTab() {
     const [rows, setRows] = useState([])
     const [loading, setLoading] = useState(true)
     const [order, setOrder] = useState('asc');
+    const [search, setSearch] = useState("");
     const [orderBy, setOrderBy] = useState('calories');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(15);
     const [playerOpen, setPlayerOpen] = useState(false);
     const [selected, setSelected] = useState(null);
-    const [deleteOpen, setDeleteOpen] = React.useState(false)
+    const [deleteOpen, setDeleteOpen] = useState(false)
 
     const handleDeleteClose = (result) => {
         setDeleteOpen(false);
@@ -202,7 +204,7 @@ export default function PlayerTab() {
             />
 
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <div style={{ position: "absolute", zIndex: 10, padding: 10 }}>
+                <div style={{ position: "absolute", zIndex: 10, padding: 10, display: "flex" }}>
                     <Button
                         onClick={() => {
                             setSelected(null)
@@ -211,6 +213,12 @@ export default function PlayerTab() {
                         <AddIcon />
                         Add Player
                     </Button>
+                    <Input
+                        sx={{ mx: 10 }}
+                        placeholder='Search'
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
                 </div>
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 15, 25]}
@@ -237,36 +245,40 @@ export default function PlayerTab() {
                             </TableRow>
                         </TableBody> :
                             <TableBody>
-                                {stableSort(rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-                                    getComparator(order, orderBy)
+                                {stableSort(rows.filter(r =>
+                                    r.name.toLowerCase().includes(search.toLowerCase())
+                                    || r.position_name.toLowerCase().includes(search.toLowerCase())
+                                    || r.date_of_birth.toLowerCase().includes(search.toLowerCase())
+                                    || r.jersey_number.toLowerCase().includes(search.toLowerCase())
                                 )
-                                    .map((row, index) => {
-                                        return (
-                                            <TableRow hover key={row.id} >
-                                                <TableCell align="center">
-                                                    <img width={40} src={row.image?.length > 0 ? row.image : PLAYER_ICON_DEFAULT} alt='Player' /></TableCell>
-                                                <TableCell align="center">{row.name}</TableCell>
-                                                <TableCell align="center">{row.jersey_number}</TableCell>
-                                                <TableCell align="center">{row.position_name}</TableCell>
-                                                <TableCell align="center">{moment(row.date_of_birth).format('DD MMM, YYYY')}</TableCell>
-                                                <TableCell align="center" sx={{ width: 50 }}>
-                                                    <IconButton
-                                                        onClick={() => {
-                                                            setSelected(row)
-                                                            setPlayerOpen(true);
-                                                        }}>
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                </TableCell>
-                                                <TableCell align="center" sx={{ width: 50 }}>
-                                                    <IconButton onClick={() => {
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage), getComparator(order, orderBy)
+                                ).map((row, index) => {
+                                    return (
+                                        <TableRow hover key={row.id} >
+                                            <TableCell align="center">
+                                                <img width={40} src={row.image?.length > 0 ? row.image : PLAYER_ICON_DEFAULT} alt='Player' /></TableCell>
+                                            <TableCell align="center">{row.name}</TableCell>
+                                            <TableCell align="center">{row.jersey_number}</TableCell>
+                                            <TableCell align="center">{row.position_name}</TableCell>
+                                            <TableCell align="center">{moment(row.date_of_birth).format('DD MMM, YYYY')}</TableCell>
+                                            <TableCell align="center" sx={{ width: 50 }}>
+                                                <IconButton
+                                                    onClick={() => {
                                                         setSelected(row)
-                                                        setDeleteOpen(true)
-                                                    }}><DeleteIcon /></IconButton>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
+                                                        setPlayerOpen(true);
+                                                    }}>
+                                                    <EditIcon />
+                                                </IconButton>
+                                            </TableCell>
+                                            <TableCell align="center" sx={{ width: 50 }}>
+                                                <IconButton onClick={() => {
+                                                    setSelected(row)
+                                                    setDeleteOpen(true)
+                                                }}><DeleteIcon /></IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
                                 {emptyRows > 0 && (
                                     <TableRow
                                         style={{

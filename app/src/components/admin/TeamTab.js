@@ -134,6 +134,7 @@ export default function TeamTab() {
     const [formOpen, setFormOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false)
+    const [search, setSearch] = useState("")
 
     const handleDeleteClose = (result) => {
         setDeleteOpen(false);
@@ -220,8 +221,9 @@ export default function TeamTab() {
                 </DialogActions>
             </Dialog>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <div style={{ position: "absolute", zIndex: 10, padding: 10 }}>
+                <div style={{ position: "absolute", zIndex: 10, padding: 10, display: "flex" }}>
                     <Button
+                        sx={{ minWidth: 120 }}
                         onClick={() => {
                             setFormOpen(true)
                             setIsEdit(false)
@@ -230,6 +232,12 @@ export default function TeamTab() {
                         <AddIcon />
                         Add Team
                     </Button>
+                    <Input
+                        sx={{ mx: 10 }}
+                        placeholder='Search'
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
                 </div>
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 15, 25]}
@@ -256,7 +264,7 @@ export default function TeamTab() {
                             </TableRow>
                         </TableBody> :
                             <TableBody>
-                                {stableSort(rows, getComparator(order, orderBy))
+                                {stableSort(rows.filter(r => r.name.toLowerCase().includes(search.toLowerCase())), getComparator(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row, index) => {
                                         return (
@@ -303,6 +311,6 @@ export default function TeamTab() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-        </Box>
+        </Box >
     );
 }
