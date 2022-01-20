@@ -457,7 +457,7 @@ export default function Tagging() {
             </IconButton>
           </Tooltip>
         </div>
-        <Box onBlur={() => { setPlay(false) }}>
+        <Box>
           <div style={{ maxWidth: "88%", margin: 'auto' }}>
             <div className="player-wrapper">
               <ReactPlayer
@@ -479,7 +479,7 @@ export default function Tagging() {
             <>
               <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
 
-                {[-10, -5, -3, -1].map(t => <ControlButton key={t} onClick={() => seekTo(t)}>{t}s</ControlButton>)}
+                {[-10, -5, -3, -1].map(t => <ControlButton key={t} onClick={() => { seekTo(t); }}>{t}s</ControlButton>)}
 
                 <ControlButton onClick={() => changePlayRate(false)}>slow</ControlButton>
 

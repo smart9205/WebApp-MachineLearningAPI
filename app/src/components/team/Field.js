@@ -37,7 +37,7 @@ export default function Field() {
 
   return (
     <div class="team-field-container">
-      <h1 className='text-center'>Barcelona</h1>
+      <h1 className='text-center'>{team.name}</h1>
       <div className="containerr">
         <div className="content">
           <div className="field-container">
