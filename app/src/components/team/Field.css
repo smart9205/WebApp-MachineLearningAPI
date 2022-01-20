@@ -81,8 +81,8 @@ h1 {
 }
 .field-container .f-field > div .pl {
     position: relative;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/215059/bm-neuer.jpg);
     border-radius: 50%;
     background-size: cover;
@@ -106,7 +106,7 @@ h1 {
 }
 .field-container .f-field > div .pl .name {
     position: absolute;
-    top: 80%;
+    top: 90%;
     left: 50%;
     transform: translatex(-50%);
     color: white;
@@ -132,13 +132,13 @@ h1 {
 }
 .field-container .f-field > div.gk .pl {
     background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/215059/bm-neuer.jpg);
-    color: #fff;
+    /* color: #fff; */
 }
 .field-container .f-field > div.p2 .pl {
-    left: 33.33333%;
+    left: 30%;
 }
 .field-container .f-field > div.p2 .pl:last-child {
-    left: 66.66667%;
+    left: 70%;
 }
 .field-container .f-field > div.p3 .pl:first-child {
     left: 25%;

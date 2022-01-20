@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import randomString from 'randomstring'
 import './Field.css'
 import GameService from "../../services/game.service";
+import { PLAYER_ICON_DEFAULT } from '../../common/staticData';
 
 const FIELD_LIST = ["LF", "CF", "RF", "LW", "AM", "RW", "LM", "CM", "RM", "LMD", "DM", "RMD", "LD", "CD", "RD", "GK"]
 
@@ -48,9 +49,9 @@ export default function Field() {
                     <div className={`${field.toLowerCase()} p${fPlayers.length}`} key={field}>{field}
                       {
                         fPlayers.map((fp => (
-                          <div className="pl" key={fp.id}>
+                          <div className="pl" key={fp.id} style={{ backgroundImage: `url(${fp.image ?? PLAYER_ICON_DEFAULT})` }}>
                             <Link
-                              to={`/player/${btoa(randomString.generate(3) + fp.player_id + randomString.generate(3))}`}
+                              to={`/ player / ${btoa(randomString.generate(3) + fp.player_id + randomString.generate(3))}`}
                               className="name"
                             >
                               {fp.f_name}
@@ -65,7 +66,7 @@ export default function Field() {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   )
 }
