@@ -69,29 +69,29 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
         if (result) {
             if (!edit) {
                 GameService.addPlayer({ ...playerData, position: playerData.position.id }).then((res) => {
-                    console.log("REsult", res)
+                    console.log("Added", res)
                     if (res.status === "success") {
                         const msg = `${res.data.f_name} ${res.data.l_name} is successfully added!`
-                        onResult({ data: false, msg, result: "success" });
+                        onResult({ open: false, msg, result: "success", data: res.data });
                     } else {
-                        onResult({ data: false, msg: res.data, result: "error" });
+                        onResult({ open: false, msg: res.data, result: "error" });
                     }
                 }).catch((e) => console.log("PLAYER ERROR", e));
             }
             else {
                 GameService.updatePlayer({ ...playerData, position: playerData.position.id }).then((res) => {
-                    console.log("REsult", res)
+                    console.log("Updated", res)
                     if (res.status === "success") {
-                        const msg = `${res.data.f_name} ${res.data.l_name} is successfully added!`
-                        onResult({ data: false, msg, result: "success" });
+                        const msg = `${res.data.f_name} ${res.data.l_name} is successfully updated!`
+                        onResult({ open: false, msg, result: "success" });
                     } else {
-                        onResult({ data: false, msg: res.data, result: "error" });
+                        onResult({ open: false, msg: res.data, result: "error" });
                     }
                 }).catch((e) => console.log("PLAYER ERROR", e));
             }
         }
 
-        onResult({ data: false });
+        onResult({ open: false });
     };
 
     return (

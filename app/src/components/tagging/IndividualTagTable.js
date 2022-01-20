@@ -13,7 +13,7 @@ import TCellTimeEdit from './TCellTimeEdit';
 import TCellSelectEdit from './TCellSelectEdit';
 import GameService from '../../services/game.service';
 import CircularProgress from '@mui/material/CircularProgress';
-import DeleteConfirmDialog from './DeleteConfirmDialog';
+import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
 
 export default function IndividualTagTable({
   rows,

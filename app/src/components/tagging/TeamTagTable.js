@@ -14,7 +14,7 @@ import GameService from '../../services/game.service';
 import TCellTimeEdit from './TCellTimeEdit';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import DeleteConfirmDialog from './DeleteConfirmDialog';
+import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
 
 export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId }) {
   const [loading, setLoading] = React.useState(false)

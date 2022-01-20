@@ -20,6 +20,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import moment from 'moment'
 import PlayerFormDialog from './game/PlayerFormDialog';
 import { PLAYER_ICON_DEFAULT } from '../../common/staticData';
+import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
+
 const styles = {
     loader: {
         position: 'absolute',
@@ -135,8 +137,21 @@ export default function PlayerTab() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [playerOpen, setPlayerOpen] = useState(false);
     const [selected, setSelected] = useState(null);
+    const [deleteOpen, setDeleteOpen] = React.useState(false)
+
+    const handleDeleteClose = (result) => {
+        setDeleteOpen(false);
+
+        if (!result) return;
+
+        GameService.deletePlayer(selected?.id).then((res) => {
+            console.log(res)
+            init()
+        }).catch((e) => { })
+    };
 
     const init = () => {
+        console.log("PlayerPage Init")
         setLoading(true)
         setPlayerOpen(false)
         GameService.getAllPlayers().then((res) => {
@@ -169,17 +184,18 @@ export default function PlayerTab() {
 
     return (
         <Box sx={{ width: '100%' }}>
+            <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
             <PlayerFormDialog
                 open={playerOpen}
                 edit={selected}
                 onResult={(res) => {
-                    setPlayerOpen(res.data);
+                    setPlayerOpen(res.open);
                     if (!!res?.msg) {
                         console.log("MESSAGE", res.msg, res.result)
                         // OpenAlert(res.msg, res.result)
                     }
-                    if (res?.type === "success") {
-                        init()
+                    if (res?.result === "success") {
+                        setRows([...rows, res.data])
                     }
                 }}
             />
@@ -230,7 +246,12 @@ export default function PlayerTab() {
                                                         <EditIcon />
                                                     </IconButton>
                                                 </TableCell>
-                                                <TableCell align="center" sx={{ width: 50 }}><IconButton><DeleteIcon /></IconButton></TableCell>
+                                                <TableCell align="center" sx={{ width: 50 }}>
+                                                    <IconButton onClick={() => {
+                                                        setSelected(row)
+                                                        setDeleteOpen(true)
+                                                    }}><DeleteIcon /></IconButton>
+                                                </TableCell>
                                             </TableRow>
                                         );
                                     })}
