@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from "react-router-dom";
 import randomString from 'randomstring'
-// import './Field.css'
+import './Field.css'
 import GameService from "../../services/game.service";
 
 const FIELD_LIST = ["LF", "CF", "RF", "LW", "AM", "RW", "LM", "CM", "RM", "LMD", "DM", "RMD", "LD", "CD", "RD", "GK"]
@@ -43,7 +43,7 @@ export default function Field() {
             <div className="f-field">
               {
                 FIELD_LIST.map((field) => {
-                  const fPlayers = players.filter(fp => fp.position === field)
+                  const fPlayers = players.filter(fp => fp.position_short === field)
                   return (
                     <div className={`${field.toLowerCase()} p${fPlayers.length}`} key={field}>{field}
                       {
@@ -53,7 +53,7 @@ export default function Field() {
                               to={`/player/${btoa(randomString.generate(3) + fp.player_id + randomString.generate(3))}`}
                               className="name"
                             >
-                              {fp.f_name} {fp.l_name}
+                              {fp.f_name}
                             </Link>
                           </div>
                         )))

@@ -77,10 +77,15 @@ exports.getPlayersByGameTeam = async (req, res) => {
 exports.findAll = (req, res) => {
   console.log("req team_player", req.body);
   Sequelize.query(`
-  SELECT * 
-    FROM public."Players" 
+  SELECT public."Players".*,
+    public."Player_Positions".name as position_name,
+    public."Player_Positions".short as position_short,
+    CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
+  FROM public."Players" 
     JOIN 
       public."Team_Players" on public."Players".id = public."Team_Players".player_id
+    LEFT JOIN 
+      public."Player_Positions" on public."Players".position = public."Player_Positions".id
   WHERE
     season_id = ${req.body.season_id} and 
     league_id = ${req.body.league_id} and 
