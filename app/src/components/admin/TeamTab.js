@@ -24,6 +24,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import Input from '@mui/material/Input';
 import Upload from '../../common/upload';
+import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
 import { TEAM_ICON_DEFAULT } from '../../common/staticData';
 const styles = {
     loader: {
@@ -132,8 +133,20 @@ export default function TeamTab() {
     const [rowsPerPage, setRowsPerPage] = useState(15);
     const [formOpen, setFormOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false)
 
-    const [formData, setFormData] = useReducer((old, action) => ({ ...old, ...action }), initials)
+    const handleDeleteClose = (result) => {
+        setDeleteOpen(false);
+
+        if (!result || !selected) return;
+
+        GameService.deleteTeam(selected?.id).then((res) => {
+            console.log(res)
+            init()
+        }).catch((e) => { })
+    };
+
+    const [selected, setSelected] = useReducer((old, action) => ({ ...old, ...action }), initials)
 
     const init = () => {
         setLoading(true)
@@ -168,13 +181,13 @@ export default function TeamTab() {
 
     const handleEditClose = (result) => {
         if (isEdit) {
-            console.log("edit", formData)
-            GameService.updateTeam(formData).then((res) => {
+            console.log("edit", selected)
+            GameService.updateTeam(selected).then((res) => {
                 console.log("Update result", res)
                 init()
             })
         } else {
-            GameService.addTeam({ name: formData.name, image: formData.image }).then((res) => {
+            GameService.addTeam({ name: selected.name, image: selected.image }).then((res) => {
                 console.log("add team", res)
                 init()
             })
@@ -184,20 +197,21 @@ export default function TeamTab() {
 
     return (
         <Box sx={{ width: '100%' }}>
+            <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
             <Dialog open={formOpen} onClose={e => handleEditClose(false)}>
                 <DialogTitle>{isEdit ? "Edit" : "New"} Team</DialogTitle>
                 <DialogContent>
                     <Upload
                         dirName={process.env.REACT_APP_DIR_TEAM}
-                        img={formData.image}
-                        onURL={url => setFormData({ image: url })}
+                        img={selected.image}
+                        onURL={url => setSelected({ image: url })}
                     />
                     <Input
                         fullWidth
                         sx={{ mt: 1 }}
                         placeholder='Team name'
-                        value={formData.name}
-                        onChange={(e) => setFormData({ name: e.target.value })}
+                        value={selected.name}
+                        onChange={(e) => setSelected({ name: e.target.value })}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -210,7 +224,7 @@ export default function TeamTab() {
                     onClick={() => {
                         setFormOpen(true)
                         setIsEdit(false)
-                        setFormData(initials)
+                        setSelected(initials)
                     }}>
                     <AddIcon />
                 </IconButton>
@@ -245,12 +259,14 @@ export default function TeamTab() {
                                                         onClick={() => {
                                                             setFormOpen(true);
                                                             setIsEdit(true)
-                                                            setFormData(row)
+                                                            setSelected(row)
                                                         }}>
                                                         <EditIcon />
                                                     </IconButton>
                                                 </TableCell>
-                                                <TableCell align="center" sx={{ width: 50 }}><IconButton><DeleteIcon /></IconButton></TableCell>
+                                                <TableCell align="center" sx={{ width: 50 }}>
+                                                    <IconButton onClick={() => { setSelected(row); setDeleteOpen(true) }}><DeleteIcon /></IconButton>
+                                                </TableCell>
                                             </TableRow>
                                         );
                                     })}

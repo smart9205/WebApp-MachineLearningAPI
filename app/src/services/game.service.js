@@ -300,7 +300,7 @@ const gameService = {
   deleteTeamTag,
   deletePlayerTag,
   deleteTeam,
-  deletePlayer
+  deletePlayer,
 };
 
 export default gameService;
