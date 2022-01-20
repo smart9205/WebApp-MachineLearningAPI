@@ -135,7 +135,7 @@ export default function PlayerTab() {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(25);
+    const [rowsPerPage, setRowsPerPage] = useState(15);
     const [playerOpen, setPlayerOpen] = useState(false);
     const [selected, setSelected] = useState(null);
     const [deleteOpen, setDeleteOpen] = React.useState(false)
