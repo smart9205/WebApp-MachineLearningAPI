@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 import GameService from "../../services/game.service"
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -11,20 +11,15 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import { CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import Input from '@mui/material/Input';
-import Upload from '../../common/upload';
-import { TEAM_ICON_DEFAULT } from '../../common/staticData';
+import moment from 'moment'
+import PlayerFormDialog from './game/PlayerFormDialog';
+import { PLAYER_ICON_DEFAULT } from '../../common/staticData';
 const styles = {
     loader: {
         position: 'absolute',
@@ -73,8 +68,20 @@ const headCells = [
         label: 'Image',
     },
     {
-        id: 'f_name',
+        id: 'name',
         label: 'Name',
+    },
+    {
+        id: 'jersey_number',
+        label: 'Jersey',
+    },
+    {
+        id: 'position_name',
+        label: 'position',
+    },
+    {
+        id: 'day_of_birth',
+        label: 'Birth',
     },
 ];
 
@@ -119,25 +126,19 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-const initials = {
-    image: "",
-    name: ""
-}
 export default function PlayerTab() {
     const [rows, setRows] = useState([])
     const [loading, setLoading] = useState(true)
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(15);
-    const [formOpen, setFormOpen] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
-
-    const [formData, setFormData] = useReducer((old, action) => ({ ...old, ...action }), initials)
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [playerOpen, setPlayerOpen] = useState(false);
+    const [selected, setSelected] = useState(null);
 
     const init = () => {
         setLoading(true)
-        setFormOpen(false)
+        setPlayerOpen(false)
         GameService.getAllPlayers().then((res) => {
             console.log("All Players", res)
             setRows(res)
@@ -166,47 +167,27 @@ export default function PlayerTab() {
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const handleEditClose = (result) => {
-        if (isEdit) {
-            console.log("edit", formData)
-            GameService.updateTeam(formData).then((res) => {
-                console.log("Update result", res)
-                init()
-            })
-        } else {
-            GameService.addTeam({ name: formData.name, image: formData.image }).then((res) => {
-                console.log("add team", res)
-                init()
-            })
-        }
-        setFormOpen(false)
-    }
-
     return (
         <Box sx={{ width: '100%' }}>
-            <Dialog open={formOpen} onClose={e => handleEditClose(false)}>
-                <DialogTitle>{isEdit ? "Edit" : "New"} Team</DialogTitle>
-                <DialogContent>
-                    <Upload dirName={process.env.REACT_APP_DIR_TEAM} img={formData.image} />
-                    <Input
-                        fullWidth
-                        sx={{ mt: 1 }}
-                        placeholder='Team name'
-                        value={formData.name}
-                        onChange={(e) => setFormData({ name: e.target.value })}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={e => handleEditClose(false)}>Cancel</Button>
-                    <Button onClick={e => handleEditClose(true)}>Done</Button>
-                </DialogActions>
-            </Dialog>
+            <PlayerFormDialog
+                open={playerOpen}
+                edit={selected}
+                onResult={(res) => {
+                    setPlayerOpen(res.data);
+                    if (!!res?.msg) {
+                        console.log("MESSAGE", res.msg, res.result)
+                        // OpenAlert(res.msg, res.result)
+                    }
+                    if (res?.type === "success") {
+                        init()
+                    }
+                }}
+            />
             <div style={{ textAlign: "right" }}>
                 <IconButton
                     onClick={() => {
-                        setFormOpen(true)
-                        setIsEdit(false)
-                        setFormData(initials)
+                        setSelected(null)
+                        setPlayerOpen(true)
                     }}>
                     <AddIcon />
                 </IconButton>
@@ -235,14 +216,16 @@ export default function PlayerTab() {
                                         return (
                                             <TableRow hover key={row.id} >
                                                 <TableCell align="center">
-                                                    <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='Team' /></TableCell>
-                                                <TableCell align="center">{row.f_name} {row.l_name}</TableCell>
+                                                    <img width={40} src={row.image?.length > 0 ? row.image : PLAYER_ICON_DEFAULT} alt='Player' /></TableCell>
+                                                <TableCell align="center">{row.name}</TableCell>
+                                                <TableCell align="center">{row.jersey_number}</TableCell>
+                                                <TableCell align="center">{row.position_name}</TableCell>
+                                                <TableCell align="center">{moment(row.date_of_birth).format('DD MMM, YYYY')}</TableCell>
                                                 <TableCell align="center" sx={{ width: 50 }}>
                                                     <IconButton
                                                         onClick={() => {
-                                                            setFormOpen(true);
-                                                            setIsEdit(true)
-                                                            setFormData(row)
+                                                            setSelected(row)
+                                                            setPlayerOpen(true);
                                                         }}>
                                                         <EditIcon />
                                                     </IconButton>

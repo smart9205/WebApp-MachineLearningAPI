@@ -30,13 +30,20 @@ exports.create = async (req, res) => {
     return;
   }
 
+  const newPlayer = {
+    f_name: req.body.f_name,
+    l_name: req.body.l_name,
+    date_of_birth: req.body.date_of_birth,
+    position: req.body.position,
+    jersey_number: req.body.jersey_number,
+    image: req.body.image
+  }
+
   const checkPlayer = await Player.findOne({
     where: {
       f_name: req.body.f_name,
       l_name: req.body.l_name,
       date_of_birth: req.body.date_of_birth,
-      position: req.body.position,
-      jersey_number: req.body.jersey_number
     }
   });
 
@@ -44,7 +51,7 @@ exports.create = async (req, res) => {
     return res.send({ status: "error", data: "Player already exists" });
   }
 
-  Player.create(req.body)
+  Player.create(newPlayer)
     .then(data => {
       res.send({ status: "success", data });
     })
@@ -58,20 +65,24 @@ exports.create = async (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  console.log("getSeason", req.body);
-  const name = req.query.name;
-  var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
-
-  Player.findAll({ where: condition })
-    .then(data => {
-      res.send(data);
-    })
+  Sequelize.query(`
+      SELECT *, 
+        public."Players".id as id,
+        public."Player_Positions".name as position_name,
+        public."Player_Positions".short as position_short,
+        CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
+      FROM public."Players" 
+      LEFT JOIN 
+        public."Player_Positions" on public."Players".position = public."Player_Positions".id
+    `).then(data => {
+    res.send(data[0]);
+  })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving players."
+          err.message || "Some error occurred while retrieving games."
       });
-    });
+    });;
 };
 
 exports.findAllPosition = (req, res) => {

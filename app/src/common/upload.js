@@ -77,7 +77,7 @@ function Upload({ dirName, img, onURL }) {
         });
     };
     return (
-        <div style={{ width: 300 }}>
+        <div style={{ width: 300, margin: "auto", marginBottom: 10 }}>
             <CloudUploadIcon /> Upload Image
             <DropzoneArea
                 acceptedFiles={['image/*']}

@@ -3,7 +3,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import DialogContentText from '@mui/material/DialogContentText';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -11,16 +10,19 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker';
 import Button from '@mui/material/Button';
 import GameService from '../../../services/game.service';
+import Upload from '../../../common/upload';
 
-export default function PlayerFormDialog({ open, onResult, init = null }) {
+export default function PlayerFormDialog({ open, onResult, edit = null }) {
     const [positionList, setPositionList] = useState([]);
 
     const [playerData, setPlayerData] = useReducer((old, action) => ({ ...old, ...action }), {
+        id: 0,
         f_name: "",
         l_name: "",
         date_of_birth: new Date(),
         position: null,
-        jersey_number: 1
+        jersey_number: 1,
+        image: "",
     })
 
     const [error, setError] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -29,6 +31,25 @@ export default function PlayerFormDialog({ open, onResult, init = null }) {
         position: false,
         jersey_number: false
     });
+
+    useEffect(() => {
+        GameService.getAllPositions().then(res => {
+            setPositionList(res)
+        })
+    }, [])
+
+    useEffect(() => {
+        if (!edit) return
+        setPlayerData({
+            id: edit?.id,
+            f_name: edit?.f_name,
+            l_name: edit?.l_name,
+            date_of_birth: edit?.date_of_birth,
+            position: positionList.find(p => p.id === edit?.position),
+            jersey_number: edit?.jersey_number,
+            image: edit?.image,
+        })
+    }, [edit, positionList])
 
     useEffect(() => {
         setError({
@@ -43,23 +64,31 @@ export default function PlayerFormDialog({ open, onResult, init = null }) {
         return !(Object.keys(error).find(key => error[key]));
     }
 
-    useEffect(() => {
-        GameService.getAllPositions().then(res => {
-            setPositionList(res)
-        })
-    }, [])
-
     const handlePlayerClose = (result) => {
 
         if (result) {
-            GameService.addPlayer({ ...playerData, position: playerData.position.id }).then((res) => {
-                if (res.status === "success") {
-                    const msg = `${res.data.f_name} ${res.data.l_name} is successfully added!`
-                    onResult({ data: false, msg, result: "success" });
-                } else {
-                    onResult({ data: false, msg: res.data, result: "error" });
-                }
-            });
+            if (!edit) {
+                GameService.addPlayer({ ...playerData, position: playerData.position.id }).then((res) => {
+                    console.log("REsult", res)
+                    if (res.status === "success") {
+                        const msg = `${res.data.f_name} ${res.data.l_name} is successfully added!`
+                        onResult({ data: false, msg, result: "success" });
+                    } else {
+                        onResult({ data: false, msg: res.data, result: "error" });
+                    }
+                }).catch((e) => console.log("PLAYER ERROR", e));
+            }
+            else {
+                GameService.updatePlayer({ ...playerData, position: playerData.position.id }).then((res) => {
+                    console.log("REsult", res)
+                    if (res.status === "success") {
+                        const msg = `${res.data.f_name} ${res.data.l_name} is successfully added!`
+                        onResult({ data: false, msg, result: "success" });
+                    } else {
+                        onResult({ data: false, msg: res.data, result: "error" });
+                    }
+                }).catch((e) => console.log("PLAYER ERROR", e));
+            }
         }
 
         onResult({ data: false });
@@ -67,11 +96,13 @@ export default function PlayerFormDialog({ open, onResult, init = null }) {
 
     return (
         <Dialog open={open} onClose={e => handlePlayerClose(false)}>
-            <DialogTitle>Add New Player</DialogTitle>
+            <DialogTitle>{!edit ? "Add New " : "Edit "}Player</DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    To add new Player, please TextField Player details
-                </DialogContentText>
+                <Upload
+                    dirName={process.env.REACT_APP_DIR_PLAYER}
+                    img={playerData.image}
+                    onURL={url => setPlayerData({ image: url })}
+                />
                 <div style={{ display: 'flex' }}>
                     <TextField
                         autoFocus
@@ -150,7 +181,7 @@ export default function PlayerFormDialog({ open, onResult, init = null }) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={e => handlePlayerClose(false)}>Cancel</Button>
-                <Button onClick={e => checkErrorPlayer() && handlePlayerClose(true)}>Add</Button>
+                <Button onClick={e => checkErrorPlayer() && handlePlayerClose(true)}>Done</Button>
             </DialogActions>
         </Dialog>
     )

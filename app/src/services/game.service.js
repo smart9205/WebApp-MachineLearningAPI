@@ -151,6 +151,12 @@ const updatePlayerTag = (req) => {
   });
 }
 
+const updatePlayer = (req) => {
+  return axios.put(API_URL + `player/${req.id}`, req, { headers: authHeader(), data: { id: req.id } }).then((response) => {
+    return response.data;
+  });
+}
+
 const updateTeamTag = (req) => {
   return axios.put(API_URL + `team_tag/${req.id}`, req, { headers: authHeader(), data: { id: req.id } }).then((response) => {
     return response.data;
@@ -281,6 +287,7 @@ const gameService = {
   updateTaggerConfig,
   updatePlayerTag,
   updateTeamTag,
+  updatePlayer,
 
   deletePlayersInTeam,
 
