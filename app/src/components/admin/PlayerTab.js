@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
 import GameService from "../../services/game.service"
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -19,6 +20,7 @@ import { visuallyHidden } from '@mui/utils';
 import { CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import randomString from 'randomstring'
 import moment from 'moment'
 import PlayerFormDialog from './game/PlayerFormDialog';
 import { PLAYER_ICON_DEFAULT } from '../../common/staticData';
@@ -257,7 +259,14 @@ export default function PlayerTab() {
                                         <TableRow hover key={row.id} >
                                             <TableCell align="center">
                                                 <img width={40} src={row.image?.length > 0 ? row.image : PLAYER_ICON_DEFAULT} alt='Player' /></TableCell>
-                                            <TableCell align="center">{row.name}</TableCell>
+                                            <TableCell align="center">
+                                                <Link
+                                                    to={`/player/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`}
+                                                    className="name"
+                                                >
+                                                    {row.name}
+                                                </Link>
+                                            </TableCell>
                                             <TableCell align="center">{row.jersey_number}</TableCell>
                                             <TableCell align="center">{row.position_name}</TableCell>
                                             <TableCell align="center">{moment(row.date_of_birth).format('DD MMM, YYYY')}</TableCell>

@@ -7,19 +7,16 @@ import { Col } from 'react-bootstrap'
 export default function PlayerDatailCard({ player }) {
 
     return (
-        <>
-            <Col xs={6}>
-                <div className='profileimg'>
-                    <img src={player?.image ?? PLAYER_ICON_DEFAULT} alt="" />
-                </div>
-            </Col>
-            <Col xs={6}>
-                <div className='profileInfo'>
-                    <p>{player?.name}</p>
-                    <p>Jersy : {player?.jersey_number}</p>
-                    <p>{player?.position_name}</p>
-                </div>
-            </Col>
-        </>
+        <div className="player-detail-card">
+            <div className='profileimg' style={{ backgroundImage: `url(${player?.image ?? PLAYER_ICON_DEFAULT})` }}>
+                {/* <img src={player?.image ?? PLAYER_ICON_DEFAULT} alt="" /> */}
+            </div>
+
+            <div className='profileInfo'>
+                <p>{player?.name}</p>
+                <p>Jersy : {player?.jersey_number}</p>
+                <p>{player?.position_name}</p>
+            </div>
+        </div>
     )
 }

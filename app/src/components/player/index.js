@@ -82,40 +82,38 @@ export default function Players() {
           {
             <section className='profileSection'>
               <Container>
-                <Row>
+                {
+                  !!curGame &&
+                  <IconButton style={styles.back} onClick={() => setContext({ game: null })}>
+                    <ArrowBackSharpIcon />
+                  </IconButton>
+                }
+                {playerData && <PlayerDetailCard player={playerData} />}
+                {!curGame ? <>
                   {
-                    !!curGame &&
-                    <IconButton style={styles.back} onClick={() => setContext({ game: null })}>
-                      <ArrowBackSharpIcon />
-                    </IconButton>
-                  }
-                  {playerData && <PlayerDetailCard player={playerData} />}
-                  {!curGame ? <>
-                    {
-                      games.map((game) =>
-                        <div
-                          key={game.id}
-                          style={{ display: "flex" }}
-                          onClick={() => {
-                            setContext({ game })
-                          }}
-                        >
-                          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: 60, margin: "0 15px" }} >
-                            <img src={VIDEO_ICON} style={{ width: 60, height: 60, borderRadius: 5 }} alt="video" />
-                          </div>
-                          <div>
-                            <div>{moment(game.date).format('DD MMM, YYYY hh:mm')}</div>
-                            <div>{game.home_team_name}</div>
-                            <div>{game.away_team_name}</div>
-                          </div>
+                    games.map((game) =>
+                      <div
+                        key={game.id}
+                        style={{ display: "flex" }}
+                        onClick={() => {
+                          setContext({ game })
+                        }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: 60, margin: "0 15px" }} >
+                          <img src={VIDEO_ICON} style={{ width: 60, height: 60, borderRadius: 5 }} alt="video" />
                         </div>
-                      )
-                    }
-                  </>
-                    :
-                    <GameDetailTab />
+                        <div>
+                          <div>{moment(game.date).format('DD MMM, YYYY hh:mm')}</div>
+                          <div>{game.home_team_name}</div>
+                          <div>{game.away_team_name}</div>
+                        </div>
+                      </div>
+                    )
                   }
-                </Row>
+                </>
+                  :
+                  <GameDetailTab />
+                }
               </Container>
             </section>
           }

@@ -31,23 +31,28 @@
 }
 .profileInfo {
     padding: 20px;
-}
-div.profileimg {
-    display: flex;
-    justify-content: center;
+    margin: auto;
 }
 .profileSection .player_name {
     color: #fff;
     font-size: 18px;
     font-weight: 600;
 }
-.profileSection .profileimg img {
-    width: 250px;
-    border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
+div.player-detail-card {
+    display: flex;
+}
+div.profileimg {
+    width: 150px;
+    height: 150px;
+    -webkit-border-radius: 80px;
+    -webkit-background-clip: padding-box;
+    -moz-border-radius: 80px;
+    -moz-background-clip: padding;
+    border-radius: 80px;
+    background-clip: padding-box;
+    float: left;
+    background-size: cover;
+    background-position: center center;
 }
 .profileInfo p {
     color: #fff;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useReducer } from 'react';
 import GameService from "../../services/game.service"
+import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -271,7 +272,17 @@ export default function TeamTab() {
                                             <TableRow hover key={row.id} >
                                                 <TableCell align="center">
                                                     <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='Team' /></TableCell>
-                                                <TableCell align="center">{row.name}</TableCell>
+                                                <TableCell align="center">
+                                                    {row.name}
+                                                    {/* <Link
+                                                        variant="outlined"
+                                                        to={`/team/${btoa(`${row.away_team_id}|${row.season_id}|${row.league_id}`)}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        {row.away_team_name}
+                                                    </Link> */}
+                                                </TableCell>
                                                 <TableCell align="center" sx={{ width: 50 }}>
                                                     <IconButton
                                                         onClick={() => {
