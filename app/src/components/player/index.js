@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, useMemo, useReducer } from 'react';
 import { useParams } from "react-router-dom";
+import { Col, Container, ProgressBar, Row, Tab, Table, Tabs } from 'react-bootstrap'
 import {
   Box,
   IconButton,
@@ -12,6 +13,7 @@ import VIDEO_ICON from '../../assets/video_icon.jpg';
 
 import PlayerDetailCard from './PlayerDetailCard';
 import GameDetailTab from './GameDetailTab';
+import "./Profile.css"
 
 const styles = {
   loader: {
@@ -27,7 +29,9 @@ const styles = {
   },
   back: {
     position: "absolute",
-    right: "10px"
+    right: "10px",
+    color: "white",
+    zIndex: 30
   }
 };
 
@@ -76,41 +80,44 @@ export default function Players() {
         </div> :
         (<>
           {
-            <Box>
-              {
-                !!curGame &&
-                <IconButton style={styles.back} onClick={() => setContext({ game: null })}>
-                  <ArrowBackSharpIcon />
-                </IconButton>
-              }
-              {playerData && <PlayerDetailCard player={playerData} />}
-              {!curGame ? <>
-                {
-                  games.map((game) =>
-                    <Box
-                      key={game.id}
-                      sx={{ my: 1 }}
-                      style={{ display: "flex" }}
-                      onClick={() => {
-                        setContext({ game })
-                      }}
-                    >
-                      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: 60, margin: "0 15px" }} >
-                        <img src={VIDEO_ICON} style={{ width: 60, height: 60, borderRadius: 5 }} alt="video" />
-                      </div>
-                      <Box>
-                        <div>{moment(game.date).format('DD MMM, YYYY hh:mm')}</div>
-                        <div>{game.home_team_name}</div>
-                        <div>{game.away_team_name}</div>
-                      </Box>
-                    </Box>
-                  )
-                }
-              </>
-                :
-                <GameDetailTab />
-              }
-            </Box>
+            <section className='profileSection'>
+              <Container>
+                <Row>
+                  {
+                    !!curGame &&
+                    <IconButton style={styles.back} onClick={() => setContext({ game: null })}>
+                      <ArrowBackSharpIcon />
+                    </IconButton>
+                  }
+                  {playerData && <PlayerDetailCard player={playerData} />}
+                  {!curGame ? <>
+                    {
+                      games.map((game) =>
+                        <div
+                          key={game.id}
+                          style={{ display: "flex" }}
+                          onClick={() => {
+                            setContext({ game })
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: 60, margin: "0 15px" }} >
+                            <img src={VIDEO_ICON} style={{ width: 60, height: 60, borderRadius: 5 }} alt="video" />
+                          </div>
+                          <div>
+                            <div>{moment(game.date).format('DD MMM, YYYY hh:mm')}</div>
+                            <div>{game.home_team_name}</div>
+                            <div>{game.away_team_name}</div>
+                          </div>
+                        </div>
+                      )
+                    }
+                  </>
+                    :
+                    <GameDetailTab />
+                  }
+                </Row>
+              </Container>
+            </section>
           }
         </>)
     }</PlayerContext.Provider>

@@ -1,0 +1,109 @@
+/* .profile-container {
+    width: 100%;
+    height: 100vh;
+    background-image: url("http://wallpapersafari.com/download/qxHlTK/");
+    background-color: #cccccc;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+} */
+.action-row {
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.action-row .skilltab-action-title {
+    width: 25%;
+}
+.action-row .skilltab-play-button {
+    color: white;
+}
+.action-row p {
+    margin-bottom: 0px !important;
+}
+.profileSection {
+    padding-top: 10px;
+    background-color: #0b0a22;
+    color: white;
+    min-height: 100vh;
+}
+.profileInfo {
+    padding: 20px;
+}
+div.profileimg {
+    display: flex;
+    justify-content: center;
+}
+.profileSection .player_name {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+}
+.profileSection .profileimg img {
+    width: 250px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+.profileInfo p {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+}
+ul.nav.nav-tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+.tableBorder .shots,
+.tableBorder .passes,
+.tableBorder .crosses {
+    border: 2px solid #111010;
+    border-radius: 8px !important;
+    -webkit-border-radius: 8px !important;
+    -moz-border-radius: 8px !important;
+    -ms-border-radius: 8px !important;
+    -o-border-radius: 8px !important;
+}
+.shots p {
+    margin: 0px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+}
+.passes span {
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+}
+.crosses span {
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.dividedColumn {
+    margin: 0 auto;
+    display: flex;
+}
+
+.column {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+}
+
+.column {
+    text-align: center;
+}
+.dividedColumn p {
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+}

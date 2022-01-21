@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
+import { Col, Container, ProgressBar, Row, Tab, Table, Tabs } from 'react-bootstrap'
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { makeStyles } from '@mui/styles';
@@ -13,38 +10,6 @@ import StatisticTab from './Tabs/StatisticTab';
 import { PlayerContext } from './index'
 import useScreenOrientation from 'react-hook-screen-orientation'
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 1 }}>
-                    {children}
-                </Box>
-            )}
-        </div>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
 const useStyles = makeStyles(() => ({
     paper: { minWidth: "98%", backgroundColor: "transparent" },
     landPaper: { minWidth: "80%", maxHeight: "100%", backgroundColor: "transparent" }
@@ -76,7 +41,7 @@ export default function GameDetailTab() {
     };
 
     return (
-        <Box sx={{ width: '100%' }}>
+        <>
             <Dialog
                 classes={{ paper: isLandscape ? classes.landPaper : classes.paper }}
                 open={open}
@@ -86,18 +51,18 @@ export default function GameDetailTab() {
                     <TagVideo tagList={playTags} url={game?.video_url} />
                 </DialogContent>
             </Dialog>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
-                    <Tab label="Skills" {...a11yProps(0)} />
-                    <Tab label="Statistics" {...a11yProps(1)} />
-                </Tabs>
-            </Box>
-            <TabPanel value={value} index={0}>
-                <SkillTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
-            </TabPanel>
-        </Box>
+            <Col md={12}>
+                <div className='skillsTab'>
+                    <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" className="mt-1 mb-3">
+                        <Tab eventKey="home" title="SKILLS">
+                            <SkillTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
+                        </Tab>
+                        <Tab eventKey="profile" title="STATISTICS" className='tableBorder'>
+                            <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
+                        </Tab>
+                    </Tabs>
+                </div>
+            </Col>
+        </>
     );
 }

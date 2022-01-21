@@ -106,15 +106,29 @@ exports.findAllPosition = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Player.findByPk(id)
-    .then(data => {
-      res.send(data);
-    })
+  Sequelize.query(`
+      SELECT *, 
+        public."Players".id as id,
+        public."Player_Positions".name as position_name,
+        public."Player_Positions".short as position_short,
+        CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
+      FROM public."Players" 
+      LEFT JOIN 
+        public."Player_Positions" on public."Players".position = public."Player_Positions".id
+      WHERE public."Players".id = ${id}
+      ORDER BY
+        public."Players".f_name, 
+        public."Players".l_name
+      
+    `).then(data => {
+    res.send(data[0][0]);
+  })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Player with id=" + id
+        message:
+          err.message || "Some error occurred while retrieving games."
       });
-    });
+    });;
 };
 
 exports.gameByPlayerId = (req, res) => {

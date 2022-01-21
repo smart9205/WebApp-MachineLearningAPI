@@ -14,11 +14,9 @@ import Register from "./components/auth/Register";
 import Signup from "./components/auth/Signup";
 import Signin from "./components/auth/Signin";
 import Home from "./components/Home";
-import Profile from "./components/auth/Profile";
 import Tagging from "./components/tagging";
-import Team from "./components/team";
 import Field from "./components/team/Field";
-import Player from "./components/player";
+import Profile from "./components/player";
 import Admin from "./components/admin"
 
 import { logout } from "./actions/auth";
@@ -130,7 +128,7 @@ const App = () => {
 
             <PrivateRoute path='/tagging/:id' component={Tagging} />
             <Route path='/team/:data' component={Field} />
-            <Route path='/player/:id' component={Player} />
+            <Route path='/player/:id' component={Profile} />
 
             <AdminRoute path='/admin' component={Admin} />
           </Switch>
