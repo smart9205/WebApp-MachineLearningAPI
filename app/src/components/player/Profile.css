@@ -15,10 +15,10 @@
     align-items: center;
 }
 .action-row .skilltab-action-title {
-    width: 25%;
+    width: 40%;
 }
 .action-row .skilltab-play-button {
-    color: white;
+    color: grey;
 }
 .action-row p {
     margin-bottom: 0px !important;

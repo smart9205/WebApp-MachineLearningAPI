@@ -249,7 +249,7 @@ export default function PlayerTab() {
                                     r.name.toLowerCase().includes(search.toLowerCase())
                                     || r.position_name.toLowerCase().includes(search.toLowerCase())
                                     || r.date_of_birth.toLowerCase().includes(search.toLowerCase())
-                                    || r.jersey_number.toLowerCase().includes(search.toLowerCase())
+                                    || r.jersey_number.toString().toLowerCase().includes(search.toLowerCase())
                                 )
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage), getComparator(order, orderBy)
                                 ).map((row, index) => {

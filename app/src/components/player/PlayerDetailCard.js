@@ -17,7 +17,7 @@ export default function PlayerDatailCard({ player }) {
                 <div className='profileInfo'>
                     <p>{player?.name}</p>
                     <p>Jersy : {player?.jersey_number}</p>
-                    <p>Position : {player?.position_name}</p>
+                    <p>{player?.position_name}</p>
                 </div>
             </Col>
         </>

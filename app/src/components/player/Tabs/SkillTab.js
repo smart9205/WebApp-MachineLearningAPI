@@ -27,12 +27,8 @@ export default function SkillTab({ playTags }) {
 
     return (
         <>
-            <div className='dividedColumn'>
-                <div className="column"><p>Player</p></div>
-                <div className="column"><p>TEAM</p></div>
-            </div>
             {skills.map((skill, i) => (
-                <div key={i} onClick={() => { !!skill.success.length && playTags(skill.success) }} className='action-row'>
+                <div key={i} className='action-row'>
                     <div className="skilltab-action-title">
                         <p>{skill.action}</p>
                     </div>
@@ -40,7 +36,11 @@ export default function SkillTab({ playTags }) {
                         <ProgressBar variant="success" now={getPercent(skill.success.length, skill.total)} label={`${skill.success.length}`} />
                     </div>
                     <div ><p>{skill.total}</p></div>
-                    <IconButton className="skilltab-play-button"><PlayArrowIcon /></IconButton>
+                    <IconButton
+                        className="skilltab-play-button"
+                        onClick={() => { !!skill.success.length && playTags(skill.success) }}>
+                        <PlayArrowIcon />
+                    </IconButton>
                 </div>
             ))
             }
