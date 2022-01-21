@@ -39,6 +39,7 @@
     font-weight: 600;
 }
 div.player-detail-card {
+    margin-top: 10px;
     display: flex;
 }
 div.profileimg {

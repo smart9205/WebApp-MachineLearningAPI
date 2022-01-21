@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, useContext, useReducer } from 'react';
-import { Col, Container, ProgressBar, Row, Tab, Table, Tabs } from 'react-bootstrap'
+import { ProgressBar } from "react-step-progress-bar";
+import "react-step-progress-bar/styles.css";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import {
     IconButton,
@@ -27,22 +28,33 @@ export default function SkillTab({ playTags }) {
 
     return (
         <>
-            {skills.map((skill, i) => (
-                <div key={i} className='action-row'>
-                    <div className="skilltab-action-title">
-                        <p>{skill.action}</p>
+            {skills.map((skill, i) => {
+                const percent = getPercent(skill.success.length, skill.total)
+                return (
+                    <div key={i} className='action-row'>
+                        <div className="skilltab-action-title">
+                            <p>{skill.action}</p>
+                        </div>
+                        <div style={{ width: "100%", marginRight: 10 }}>
+                            <div>
+                                <ProgressBar
+                                    height={20}
+                                    filledBackground={`linear-gradient(to right, 
+                                    ${percent < 50 ? "#fefb72, #f0bb31" : "#98ffae, #00851e"})`}
+                                    percent={percent}
+                                    text={skill.success.length}
+                                />
+                            </div>
+                        </div>
+                        <div ><p>{skill.total}</p></div>
+                        <IconButton
+                            className="skilltab-play-button"
+                            onClick={() => { !!skill.success.length && playTags(skill.success) }}>
+                            <PlayArrowIcon />
+                        </IconButton>
                     </div>
-                    <div style={{ width: "100%", marginRight: 10 }}>
-                        <ProgressBar variant="success" now={getPercent(skill.success.length, skill.total)} label={`${skill.success.length}`} />
-                    </div>
-                    <div ><p>{skill.total}</p></div>
-                    <IconButton
-                        className="skilltab-play-button"
-                        onClick={() => { !!skill.success.length && playTags(skill.success) }}>
-                        <PlayArrowIcon />
-                    </IconButton>
-                </div>
-            ))
+                )
+            })
             }
         </>
     )
