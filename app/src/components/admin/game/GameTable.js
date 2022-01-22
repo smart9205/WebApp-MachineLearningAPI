@@ -161,7 +161,7 @@ const EnhancedTableToolbar = (props) => {
   );
 };
 
-export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loading, setLoading }) {
+export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loading, setLoading, search }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState({});
@@ -235,7 +235,15 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
         </DialogActions>
       </Dialog>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar />
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -257,7 +265,13 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                 </TableRow>
                 :
                 <>
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {stableSort(rows.filter(r =>
+                    r.season_name.toLowerCase().includes(search.toLowerCase())
+                    || r.league_name.toLowerCase().includes(search.toLowerCase())
+                    || r.away_team_name.toLowerCase().includes(search.toLowerCase())
+                    || r.home_team_name.toLowerCase().includes(search.toLowerCase())
+                    || r.date.slice(0, 10).toString().toLowerCase().includes(search.toLowerCase())
+                  ), getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;

@@ -4,6 +4,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import Input from '@mui/material/Input';
+import AddIcon from '@mui/icons-material/Add';
 import GameTable from './GameTable'
 import Content from './content'
 import gameService from '../../../services/game.service';
@@ -21,6 +23,7 @@ export default function Game() {
   const [count, setCount] = React.useState(0);
   const [editData, setEditData] = React.useState({});
   const [loading, setLoading] = React.useState(true)
+  const [search, setSearch] = React.useState("")
 
   const handleClickOpen = () => () => {
     setOpen(true);
@@ -64,7 +67,15 @@ export default function Game() {
 
   return (
     <div>
-      <Button onClick={handleClickOpen()} variant="outlined">Add a new Game</Button>
+      <div style={{ position: "absolute", zIndex: 10, padding: 10, display: "flex" }}>
+        <Button onClick={handleClickOpen()} variant="outlined"><AddIcon />Add Game</Button>
+        <Input
+          sx={{ mx: 10 }}
+          placeholder='Search'
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
       <Dialog
         open={open}
         classes={{ paper: classes.paper }}
@@ -90,6 +101,7 @@ export default function Game() {
         rows={gameList}
         gameListUpdated={gameListUpdated}
         editCallBack={editCallBack}
+        search={search}
         loading={loading}
         setLoading={(v) => setLoading(v)}
       />

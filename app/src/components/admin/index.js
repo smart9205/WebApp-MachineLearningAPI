@@ -53,23 +53,23 @@ export default function Admin() {
         <div>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
-                    <Tab label="Team" {...a11yProps(0)} />
-                    <Tab label="Player" {...a11yProps(1)} />
-                    <Tab label="League" {...a11yProps(2)} />
-                    <Tab label="Game" {...a11yProps(3)} />
+                    <Tab label="Game" {...a11yProps(0)} />
+                    <Tab label="Team" {...a11yProps(1)} />
+                    <Tab label="Player" {...a11yProps(2)} />
+                    <Tab label="League" {...a11yProps(3)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <TeamTab />
+                <GameTab />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <PlayerTab />
+                <TeamTab />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <LeagueTab />
+                <PlayerTab />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <GameTab />
+                <LeagueTab />
             </TabPanel>
         </div>
     )

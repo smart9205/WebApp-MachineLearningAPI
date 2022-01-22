@@ -208,6 +208,7 @@ export default function PlayerTab() {
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <div style={{ position: "absolute", zIndex: 10, padding: 10, display: "flex" }}>
                     <Button
+                        variant="outlined"
                         onClick={() => {
                             setSelected(null)
                             setPlayerOpen(true)
