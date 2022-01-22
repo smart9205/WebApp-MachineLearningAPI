@@ -8,8 +8,9 @@ export default function PlayerDatailCard({ player }) {
 
     return (
         <div className="player-detail-card">
-            <div className='profileimg' style={{ backgroundImage: `url(${player?.image ?? PLAYER_ICON_DEFAULT})` }}>
-                {/* <img src={player?.image ?? PLAYER_ICON_DEFAULT} alt="" /> */}
+            <div className="profileImg-wrapper">
+                <div className='profileimg' style={{ backgroundImage: `url(${player?.image ?? PLAYER_ICON_DEFAULT})` }}>
+                </div>
             </div>
 
             <div className='profileInfo'>

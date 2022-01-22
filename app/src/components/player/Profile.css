@@ -15,7 +15,7 @@
     align-items: center;
 }
 .action-row .skilltab-action-title {
-    width: 40%;
+    min-width: 90px;
 }
 .action-row .skilltab-play-button {
     color: grey;
@@ -30,8 +30,12 @@
     min-height: 100vh;
 }
 .profileInfo {
-    padding: 20px;
+    padding: 10px;
     margin: auto;
+}
+.RSPBprogressBar .RSPBprogressBarText {
+    font-size: 16px;
+    font-weight: 600;
 }
 .profileSection .player_name {
     color: #fff;
@@ -40,7 +44,14 @@
 }
 div.player-detail-card {
     margin-top: 10px;
+    margin-bottom: 20px;
     display: flex;
+}
+div.profileImg-wrapper {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 div.profileimg {
     width: 150px;
