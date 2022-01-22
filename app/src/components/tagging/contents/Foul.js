@@ -36,7 +36,7 @@ export default function Foul({ defenseTeam, offenseTeam, taggingState, offenseTe
                 selected={offensivePlayer === player}
                 onClick={() => setOffensivePlayer(player)}
               >
-                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position})`} />
+                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
               </ListItemButton>
             ))
           }
@@ -97,7 +97,7 @@ export default function Foul({ defenseTeam, offenseTeam, taggingState, offenseTe
                   ])
                 }}
               >
-                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position})`} />
+                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
               </ListItemButton>
             ))
           }

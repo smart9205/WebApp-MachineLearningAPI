@@ -70,7 +70,7 @@ export default function ShortPass({
                 selected={offensivePlayer === player}
                 onClick={() => setOffensivePlayer(player)}
               >
-                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position})`} />
+                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
               </ListItemButton>
             ))
           }
@@ -141,7 +141,7 @@ export default function ShortPass({
                 selected={defensivePlayer === player}
                 onClick={() => defensivePlayerClicked(player)}
               >
-                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position})`} />
+                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
               </ListItemButton>
             ))
           }
@@ -172,7 +172,7 @@ export default function ShortPass({
                     }])
                   }}
                 >
-                  <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position})`} />
+                  <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
                 </ListItemButton>
               ))
             }

@@ -15,6 +15,13 @@ import TCellTimeEdit from './TCellTimeEdit';
 
 import CircularProgress from '@mui/material/CircularProgress';
 import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
+import TCellSelectEdit from './TCellSelectEdit';
+
+const PERIOD = [
+  { id: 1, name: "1st Half" },
+  { id: 2, name: "2nd Half" },
+  { id: 3, name: "Overtime" },
+]
 
 export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId }) {
   const [loading, setLoading] = React.useState(false)
@@ -80,11 +87,11 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
                         selected={row.id === selectedId}
                         onClick={() => handleRowClick(row)}
                       >
-                        <TableCell align="center">
-                          {row.period === 1 && "1st Half"}
-                          {row.period === 2 && "2st Half"}
-                          {row.period === 3 && "Overtime"}
-                        </TableCell>
+                        <TCellSelectEdit
+                          rows={PERIOD}
+                          value={PERIOD.find(p => p.id === row.period)}
+                          update={v => { update({ ...row, period: v }) }}
+                        />
                         <TableCell align="center">{row.offensive_team_name}</TableCell>
                         <TableCell align="center">{row.defensive_team_name}</TableCell>
                         <TCellTimeEdit value={row.start_time} update={v => update({ ...row, start_time: v })} end={row.end_time} />

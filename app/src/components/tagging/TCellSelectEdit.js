@@ -6,7 +6,7 @@ import {
     Input,
 } from '@mui/material';
 
-export default function TCellAutoCompleteEdit({ value, rows, update }) {
+export default function TCellSelectEdit({ value, rows, update }) {
 
     const [editable, setEditable] = React.useState(false)
 
@@ -28,9 +28,9 @@ export default function TCellAutoCompleteEdit({ value, rows, update }) {
                     sx={{ fontSize: 14 }}
                     value={temp}
                     onChange={e => updateValue(e.target.value)}
-                    input={<Input autoFocus onBlur={() => updateValue()}/>}
+                    input={<Input autoFocus onBlur={() => updateValue()} />}
                 >
-                    {rows.map(row => 
+                    {rows.map(row =>
                         <MenuItem sx={{ fontSize: 14 }} key={row.id} value={row.id}>{row.name}</MenuItem>
                     )}
                 </Select>

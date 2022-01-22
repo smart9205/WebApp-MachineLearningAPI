@@ -46,10 +46,14 @@ exports.getPlayersByGameTeam = async (req, res) => {
     home_team = await Sequelize.query(`
       SELECT *, 
         public."Players".id as id,
+        public."Player_Positions".name as position_name,
+        public."Player_Positions".short as position_short,
         CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
         FROM public."Players" 
         JOIN 
           public."Team_Players" on public."Players".id = public."Team_Players".player_id
+        LEFT JOIN 
+          public."Player_Positions" on public."Players".position = public."Player_Positions".id
       WHERE
         season_id = ${game.season_id} and 
         league_id = ${game.league_id} and 
@@ -60,10 +64,14 @@ exports.getPlayersByGameTeam = async (req, res) => {
     away_team = await Sequelize.query(`
       SELECT *, 
         public."Players".id as id,
+        public."Player_Positions".name as position_name,
+        public."Player_Positions".short as position_short,
         CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
         FROM public."Players" 
         JOIN 
           public."Team_Players" on public."Players".id = public."Team_Players".player_id
+        LEFT JOIN 
+          public."Player_Positions" on public."Players".position = public."Player_Positions".id
       WHERE
         season_id = ${game.season_id} and 
         league_id = ${game.league_id} and 
