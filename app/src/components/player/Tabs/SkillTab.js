@@ -39,6 +39,11 @@ export default function SkillTab({ playTags }) {
                             <div className="skilltab-action-title">
                                 <p>{skill.title}</p>
                             </div>
+                            <IconButton
+                                className="skilltab-play-button"
+                                onClick={() => { !!skill.success.length && playTags(skill.success) }}>
+                                <PlayArrowIcon />
+                            </IconButton>
                             <div style={{ width: "100%", marginRight: 10 }}>
                                 <div>
                                     <ProgressBar
@@ -51,11 +56,6 @@ export default function SkillTab({ playTags }) {
                                 </div>
                             </div>
                             <div ><p>{skill.total}</p></div>
-                            <IconButton
-                                className="skilltab-play-button"
-                                onClick={() => { !!skill.success.length && playTags(skill.success) }}>
-                                <PlayArrowIcon />
-                            </IconButton>
                         </div>
                     )
                 })
