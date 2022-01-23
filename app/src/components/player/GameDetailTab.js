@@ -51,18 +51,16 @@ export default function GameDetailTab() {
                     <TagVideo tagList={playTags} url={game?.video_url} />
                 </DialogContent>
             </Dialog>
-            <Col md={12}>
-                <div className='skillsTab'>
-                    <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" className="mt-1 mb-3">
-                        <Tab eventKey="home" title="SKILLS">
-                            <SkillTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
-                        </Tab>
-                        <Tab eventKey="profile" title="STATISTICS" className='tableBorder'>
-                            <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
-                        </Tab>
-                    </Tabs>
-                </div>
-            </Col>
+            <div className='skillsTab'>
+                <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" className="mt-1 mb-3">
+                    <Tab eventKey="home" title="SKILLS">
+                        <SkillTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
+                    </Tab>
+                    <Tab eventKey="profile" title="STATISTICS" className='tableBorder'>
+                        <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
+                    </Tab>
+                </Tabs>
+            </div>
         </>
     );
 }

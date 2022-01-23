@@ -101,16 +101,16 @@ const filterData = [
     title: "Goal", action: 1, action_type: null, action_result: [3],
   },
   {
-    title: "Assist", action: 9, action_type: null, action_result: [3],
+    title: "Assist", action: 9, action_type: null, action_result: [],
   },
   {
-    title: "Shot", action: 1, action_type: null, action_result: [3],
+    title: "Shot", action: 1, action_type: null, action_result: [1],
   },
   {
-    title: "Cross", action: 3, action_type: null, action_result: [],
+    title: "Cross", action: 3, action_type: null, action_result: [4],
   },
   {
-    title: "Dribble", action: 3, action_type: null, action_result: [1],
+    title: "Dribble", action: 3, action_type: null, action_result: [4],
   },
   {
     title: "Through Pass", action: 2, action_type: 6, action_result: [4],

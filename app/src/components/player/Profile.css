@@ -78,6 +78,13 @@ ul.nav.nav-tabs {
     flex-wrap: wrap;
     padding: 10px;
 }
+.skillsTab li {
+    margin-right: 2px;
+    margin-left: 2px;
+}
+.tableBorder {
+    margin-left: 4px;
+}
 .tableBorder .shots,
 .tableBorder .passes,
 .tableBorder .crosses {
