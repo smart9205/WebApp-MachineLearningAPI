@@ -96,6 +96,63 @@ export function getPercent(value, max) {
   return value * 100 / max;
 }
 
+const filterData = [
+  {
+    title: "Goal", action: 1, action_type: null, action_result: [3],
+  },
+  {
+    title: "Assist", action: 9, action_type: null, action_result: [3],
+  },
+  {
+    title: "Shot", action: 1, action_type: null, action_result: [3],
+  },
+  {
+    title: "Cross", action: 3, action_type: null, action_result: [],
+  },
+  {
+    title: "Dribble", action: 3, action_type: null, action_result: [1],
+  },
+  {
+    title: "Through Pass", action: 2, action_type: 6, action_result: [4],
+  },
+  {
+    title: "Short Pass", action: 2, action_type: 4, action_result: [4],
+  },
+  {
+    title: "Long Pass", action: 2, action_type: 5, action_result: [4],
+  },
+  {
+    title: "Key Pass", action: 2, action_type: 7, action_result: [4],
+  },
+  {
+    title: "Header Pass", action: 2, action_type: 3, action_result: [4],
+  },
+  {
+    title: "Draw Foul", action: 6, action_type: null, action_result: [13, 14],
+  },
+  {
+    title: "Interception", action: 10, action_type: null, action_result: [],
+  },
+  {
+    title: "Clearence", action: 11, action_type: null, action_result: [],
+  },
+  {
+    title: "Saved", action: 8, action_type: null, action_result: [],
+  },
+]
+export function manualFilterForTags(tagList, playerId) {
+  return filterData.map(f => {
+    const total = tagList.filter(tag => tag.action_id === f.action &&
+      (f.action_type === null ? true : tag.action_type_id === f.action_type) &&
+      f.action_result.includes(tag.action_result_id)
+    )
+    return {
+      title: f.title,
+      success: total.filter(f => f.player_id === playerId),
+      total: total.length
+    }
+  }).filter(f => f.success.length > 0)
+}
 export function filterAllTags(tagList, playerId) {
   let actions = {}
   tagList.forEach(tag => {
