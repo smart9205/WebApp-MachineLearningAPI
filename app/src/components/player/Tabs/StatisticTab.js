@@ -16,7 +16,7 @@ export default function StatisticTab({ tagList, playTags }) {
                     <tbody className='text-center'>
                         <tr>
                             <td></td>
-                            <td colSpan={2}><p className='text-center'>{key}</p></td>
+                            <td colSpan={2} className='shots-title'>{key}</td>
                         </tr>
                         <tr>
                             <td></td>

@@ -25,7 +25,7 @@
 }
 .profileSection {
     padding-top: 10px;
-    background-color: #0b0a22;
+    background-color: #3e3636;
     color: white;
     min-height: 100vh;
 }
@@ -92,7 +92,12 @@ ul.nav.nav-tabs {
     margin: 0px;
     color: #fff;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 14px !important;
+}
+.shots-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
 }
 .passes span {
     color: #fff;
@@ -123,4 +128,46 @@ ul.nav.nav-tabs {
     color: #fff;
     font-weight: 700;
     font-size: 15px;
+}
+.dividedColumn h2 {
+    color: #fff;
+    font-weight: 700;
+    font-size: 28px !important;
+}
+
+.nav-link {
+    color: #222 !important;
+    font-weight: 700;
+    background-color: #fcefee !important;
+    margin-left: 2px !important;
+}
+
+.nav-link.active {
+    background-color: #e3c4a8 !important;
+    color: #222 !important;
+}
+
+.progress {
+    margin-left: 10px;
+}
+
+.heading {
+    font-size: 28px !important;
+}
+
+td h5,
+p,
+span {
+    font-size: 18px !important;
+    color: whitesmoke !important;
+}
+
+.tableBorder .shots,
+.tableBorder .passes,
+.tableBorder .crosses {
+    border: 1px solid whitesmoke !important;
+}
+th,
+td {
+    padding: 10px 5px 20px 5px !important;
 }
