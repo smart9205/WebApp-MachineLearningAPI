@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useParams } from "react-router-dom";
 import {
     Tabs,
     Tab,
@@ -43,8 +44,17 @@ function a11yProps(index) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
+
+const tablist = {
+    game: 0,
+    team: 1,
+    player: 2,
+    league: 3
+}
 export default function Admin() {
-    const [value, setValue] = useState(0);
+    const { tab } = useParams();
+    console.log("tab", tab)
+    const [value, setValue] = useState(tablist[tab] ?? 0);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };

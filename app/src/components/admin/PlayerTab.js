@@ -139,7 +139,7 @@ export default function PlayerTab() {
     const [search, setSearch] = useState("");
     const [orderBy, setOrderBy] = useState('calories');
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(15);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [playerOpen, setPlayerOpen] = useState(false);
     const [selected, setSelected] = useState(null);
     const [deleteOpen, setDeleteOpen] = useState(false)

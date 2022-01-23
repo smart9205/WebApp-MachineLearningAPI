@@ -18,7 +18,7 @@
     min-width: 90px;
 }
 .action-row .skilltab-play-button {
-    color: grey;
+    color: red;
 }
 .action-row p {
     margin-bottom: 0px !important;

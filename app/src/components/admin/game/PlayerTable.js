@@ -252,7 +252,7 @@ function EnhancedTable({ jerseyUpdatedCallBack, rows, deletePlayerCallBack }) {
                         }
                       </TableCell>
                       <TableCell align="center">{`${row.f_name} ${row.l_name}`}</TableCell>
-                      <TableCell align="center">{row.position}</TableCell>
+                      <TableCell align="center">{row.position_name}</TableCell>
                       <TableCell align="center">
                         <IconButton onClick={() => deletePlayerCallBack(row.id)} sx={{ padding: 0 }}>
                           <DeleteIcon />

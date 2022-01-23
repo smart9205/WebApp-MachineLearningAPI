@@ -131,6 +131,7 @@ const App = () => {
             <Route path='/player/:id' component={Profile} />
 
             <AdminRoute path='/admin' component={Admin} />
+            <AdminRoute path='/admin/:tab' component={Admin} />
           </Switch>
         </div>
 
