@@ -54,7 +54,7 @@ export default function Field() {
                               to={`/player/${btoa(randomString.generate(3) + fp.id + randomString.generate(3))}`}
                               className="name"
                             >
-                              {fp.f_name}
+                              {fp.l_name}
                             </Link>
                           </div>
                         )))

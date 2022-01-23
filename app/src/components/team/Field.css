@@ -7,6 +7,9 @@
     /* background-size: cover; */
     position: relative;
 }
+.container-fluid {
+    padding: 0 !important;
+}
 .containerr {
     display: flex;
     flex-wrap: nowrap;
