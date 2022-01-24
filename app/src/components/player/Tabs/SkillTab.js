@@ -3,6 +3,8 @@ import { ProgressBar } from "react-step-progress-bar";
 import "react-step-progress-bar/styles.css";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import {
+    Snackbar,
+    Alert,
     IconButton,
     CircularProgress
 } from '@mui/material';
@@ -10,6 +12,7 @@ import { manualFilterForTags, getPercent } from '../../../common/utilities';
 import GameService from '../../../services/game.service';
 import { PlayerContext } from '../index';
 import PlayButton from "../../../assets/Play_button.png"
+import StarButton from "../../../assets/Stars.png"
 
 const styles = {
     loader: {
@@ -32,6 +35,7 @@ export default function SkillTab({ playTags }) {
     const playerId = context.player.id
 
     const [skills, setSkills] = useState([])
+    const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -44,12 +48,30 @@ export default function SkillTab({ playTags }) {
 
     return (
         <>
+            <Snackbar
+                open={open}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                autoHideDuration={2000}
+                onClose={() => setOpen(false)}
+            >
+                <Alert onClose={() => setOpen(false)} severity="warning" sx={{ width: '100%' }}>
+                    Highlights Feature Coming Soon
+                </Alert>
+            </Snackbar>
             {loading ?
                 <div style={styles.loader}>
                     <CircularProgress />
                 </div> : (
                     <>
                         <div className="skilltab-action-header">
+                            <div>
+                                <IconButton
+                                    style={{ padding: 0 }}
+                                    className="skilltab-play-button"
+                                    onClick={() => { setOpen(true) }}>
+                                    <img src={StarButton} alt="icon" width={70} />
+                                </IconButton>
+                            </div>
                             <div className="skilltab-action-header-player"><p>PLAYER</p></div>
                             <p>TEAM</p>
                         </div>

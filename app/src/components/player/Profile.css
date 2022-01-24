@@ -19,8 +19,9 @@
 }
 .skilltab-action-header {
     display: flex;
-    margin-left: 130px;
+    margin-left: 50px;
     justify-content: space-between;
+    align-items: center;
 }
 .skilltab-action-header-player {
     width: 100%;

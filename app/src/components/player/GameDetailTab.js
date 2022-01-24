@@ -47,7 +47,7 @@ export default function GameDetailTab() {
                 </DialogContent>
             </Dialog>
             <div className='skillsTab'>
-                <Tabs defaultActiveKey="skill" id="uncontrolled-tab-example" className="mt-1 mb-3">
+                <Tabs defaultActiveKey="skill" id="uncontrolled-tab-example" className="mt-1 mb-1">
                     <Tab eventKey="skill" title="SKILLS">
                         <SkillTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </Tab>
