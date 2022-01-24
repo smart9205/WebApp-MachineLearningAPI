@@ -61,6 +61,7 @@ export default function SkillTab({ playTags }) {
                                                 <p>{skill.title}</p>
                                             </div>
                                             <IconButton
+                                                disabled={skill.success.length === 0}
                                                 className="skilltab-play-button"
                                                 onClick={() => { !!skill.success.length && playTags(skill.success) }}>
                                                 <PlayArrowIcon />
@@ -70,7 +71,8 @@ export default function SkillTab({ playTags }) {
                                                     <ProgressBar
                                                         height={20}
                                                         filledBackground={`linear-gradient(to right, 
-                                    ${skill.total / 4 > skill.success.length ? "#fefb72, #f0bb31" : "#98ffae, #00851e"})`}
+                                                                ${skill.total / 4 > skill.success.length ?
+                                                                "#fefb72, #f0bb31" : "#98ffae, #00851e"})`}
                                                         percent={percent}
                                                         text={skill.success.length}
                                                     />

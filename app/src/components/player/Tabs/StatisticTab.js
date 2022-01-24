@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Container, ProgressBar, Row, Tab, Table, Tabs } from 'react-bootstrap'
+import { Table, } from 'react-bootstrap'
 import { divideTags } from '../../../common/utilities';
 
 export default function StatisticTab({ tagList, playTags }) {

@@ -19,7 +19,7 @@ export const DEMO = {
         cols: ["Successful", "Unsuccessful"]
     },
     Foul: {
-        success: ["Free Kick"],
+        success: ["Free Kick", "Penalty"],
         cols: ["Successful", "Unsuccessful"]
     }
 }

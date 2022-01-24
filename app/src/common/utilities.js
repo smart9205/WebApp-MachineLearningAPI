@@ -110,7 +110,7 @@ const filterData = [
     title: "Cross", action: 3, action_type: null, action_result: [4],
   },
   {
-    title: "Dribble", action: 3, action_type: null, action_result: [4],
+    title: "Dribble", action: 4, action_type: null, action_result: [4],
   },
   {
     title: "Through Pass", action: 2, action_type: 6, action_result: [4],
