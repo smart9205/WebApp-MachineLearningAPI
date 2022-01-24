@@ -30,7 +30,8 @@
     margin-bottom: 0 !important;
 }
 .action-row .skilltab-play-button {
-    color: red;
+    color: yellow;
+    padding: 0;
 }
 .action-row p {
     margin-bottom: 0px !important;

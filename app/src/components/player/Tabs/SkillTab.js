@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useContext, useReducer } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { ProgressBar } from "react-step-progress-bar";
 import "react-step-progress-bar/styles.css";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -6,9 +6,10 @@ import {
     IconButton,
     CircularProgress
 } from '@mui/material';
-import { filterAllTags, manualFilterForTags, getPercent } from '../../../common/utilities';
+import { manualFilterForTags, getPercent } from '../../../common/utilities';
 import GameService from '../../../services/game.service';
 import { PlayerContext } from '../index';
+import PlayButton from "../../../assets/Play_button.png"
 
 const styles = {
     loader: {
@@ -43,7 +44,6 @@ export default function SkillTab({ playTags }) {
 
     return (
         <>
-
             {loading ?
                 <div style={styles.loader}>
                     <CircularProgress />
@@ -68,7 +68,7 @@ export default function SkillTab({ playTags }) {
                                                 disabled={skill.success.length === 0}
                                                 className="skilltab-play-button"
                                                 onClick={() => { !!skill.success.length && playTags(skill.success) }}>
-                                                <PlayArrowIcon />
+                                                <img src={PlayButton} alt="play button" width="40" />
                                             </IconButton>
                                             <div style={{ width: "100%", marginRight: 10 }}>
                                                 <div>
