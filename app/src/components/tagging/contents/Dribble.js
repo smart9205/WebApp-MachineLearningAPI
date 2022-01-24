@@ -109,7 +109,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                         action_result_id: result.id
                       },
                       {
-                        action_type_id: foulTypeId,
+                        action_type_id: actionTypeId,
                         team_id: defenseTeamId,
                         player_id: player.id,
                         action_id: 10, // Interception
