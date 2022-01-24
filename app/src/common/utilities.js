@@ -101,7 +101,7 @@ const filterData = [
     title: "Goal", action: 1, action_type: null, action_result: [3],
   },
   {
-    title: "Assist", action: 9, action_type: null, action_result: [],
+    title: "Assist", action: 9, action_type: null, action_result: null,
   },
   {
     title: "Shot", action: 1, action_type: null, action_result: [1],
@@ -131,20 +131,20 @@ const filterData = [
     title: "Draw Foul", action: 6, action_type: null, action_result: [13, 14],
   },
   {
-    title: "Interception", action: 10, action_type: null, action_result: [],
+    title: "Interception", action: 10, action_type: null, action_result: null,
   },
   {
-    title: "Clearence", action: 11, action_type: null, action_result: [],
+    title: "Clearence", action: 11, action_type: null, action_result: null,
   },
   {
-    title: "Saved", action: 8, action_type: null, action_result: [],
+    title: "Saved", action: 8, action_type: null, action_result: null,
   },
 ]
 export function manualFilterForTags(tagList, playerId) {
   return filterData.map(f => {
     const total = tagList.filter(tag => tag.action_id === f.action &&
       (f.action_type === null ? true : tag.action_type_id === f.action_type) &&
-      f.action_result.includes(tag.action_result_id)
+      (f.action_result === null ? true : f.action_result.includes(tag.action_result_id))
     )
     return {
       title: f.title,
