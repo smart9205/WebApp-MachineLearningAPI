@@ -62,7 +62,7 @@ function Upload({ dirName, img, onURL, fileName, defaultImg }) {
                     Upload
                 </Button>
             </label><br />
-            <img src={image.length > 0 ? image : defaultImg} width="200" alt="img" style={{ border: "1px black solid" }}></img>
+            <img src={image && image.length > 0 ? image : defaultImg} width="200" alt="img" style={{ border: "1px black solid" }}></img>
             {
                 loading &&
                 <div style={styles.loader}>
