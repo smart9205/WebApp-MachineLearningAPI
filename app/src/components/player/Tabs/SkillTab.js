@@ -50,7 +50,7 @@ export default function SkillTab({ playTags }) {
                 </div> : (
                     <>
                         <div className="skilltab-action-header">
-                            <p>PLAYER</p>
+                            <div className="skilltab-action-header-player"><p>PLAYER</p></div>
                             <p>TEAM</p>
                         </div>
                         {

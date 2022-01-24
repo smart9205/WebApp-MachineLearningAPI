@@ -22,6 +22,10 @@
     margin-left: 130px;
     justify-content: space-between;
 }
+.skilltab-action-header-player {
+    width: 100%;
+    text-align: center;
+}
 .skilltab-action-header p {
     margin-bottom: 0 !important;
 }
