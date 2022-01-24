@@ -52,11 +52,11 @@ export default function GameDetailTab() {
                 </DialogContent>
             </Dialog>
             <div className='skillsTab'>
-                <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" className="mt-1 mb-3">
-                    <Tab eventKey="home" title="SKILLS">
+                <Tabs defaultActiveKey="skill" id="uncontrolled-tab-example" className="mt-1 mb-3">
+                    <Tab eventKey="skill" title="SKILLS">
                         <SkillTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </Tab>
-                    <Tab eventKey="profile" title="STATISTICS" className='tableBorder'>
+                    <Tab eventKey="statistic" title="STATISTICS" className='tableBorder'>
                         <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </Tab>
                 </Tabs>

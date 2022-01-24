@@ -23,6 +23,10 @@
 .action-row p {
     margin-bottom: 0px !important;
 }
+.skilltab-total {
+    width: 50px;
+    text-align: center;
+}
 .profileSection {
     padding-top: 10px;
     background-color: #0b0a22;
@@ -162,19 +166,19 @@ ul.nav.nav-tabs {
     font-size: 28px !important;
 }
 
-td h5,
-p,
-span {
+div.profileSection td h5,
+div.profileSection p,
+div.profileSection span {
     font-size: 18px !important;
     color: whitesmoke !important;
 }
 
-.tableBorder .shots,
-.tableBorder .passes,
-.tableBorder .crosses {
+div.profileSection .tableBorder .shots,
+div.profileSection .tableBorder .passes,
+div.profileSection .tableBorder .crosses {
     border: 1px solid whitesmoke !important;
 }
-th,
-td {
+div.profileSection th,
+div.profileSection td {
     padding: 10px 5px 20px 5px !important;
 }

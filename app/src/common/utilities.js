@@ -151,7 +151,8 @@ export function manualFilterForTags(tagList, playerId) {
       success: total.filter(f => f.player_id === playerId),
       total: total.length
     }
-  }).filter(f => f.success.length > 0)
+  })
+  // .filter(f => f.success.length > 0)
 }
 export function filterAllTags(tagList, playerId) {
   let actions = {}
