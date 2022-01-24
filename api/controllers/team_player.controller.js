@@ -86,6 +86,7 @@ exports.findAll = (req, res) => {
   console.log("req team_player", req.body);
   Sequelize.query(`
   SELECT public."Players".*,
+    public."Team_Players".id as team_player_id,
     public."Player_Positions".name as position_name,
     public."Player_Positions".short as position_short,
     CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
