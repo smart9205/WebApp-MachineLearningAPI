@@ -24,7 +24,6 @@ export default function GameDetailTab() {
     const playerId = context.player.id
     const game = context.game
 
-    const [value, setValue] = useState(0);
     const [open, setOpen] = useState(false);
     const [tagList, setTagList] = useState([])
     const [playTags, setPlayTags] = useState([])
@@ -35,10 +34,6 @@ export default function GameDetailTab() {
             setTagList(res)
         })
     }, [playerId, game])
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
 
     return (
         <>

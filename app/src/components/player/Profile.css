@@ -15,7 +15,7 @@
     align-items: center;
 }
 .action-row .skilltab-action-title {
-    min-width: 96px;
+    min-width: 100px;
 }
 .action-row .skilltab-play-button {
     color: red;
@@ -72,7 +72,7 @@ div.profileimg {
 }
 .profileInfo p {
     color: #fff;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
 }
 ul.nav.nav-tabs {
