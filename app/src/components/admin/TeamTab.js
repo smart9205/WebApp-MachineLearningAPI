@@ -200,21 +200,24 @@ export default function TeamTab() {
     return (
         <Box sx={{ width: '100%' }}>
             <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
-            <Dialog open={formOpen} onClose={e => handleEditClose(false)}>
+            <Dialog open={formOpen} onClose={e => handleEditClose(false)} maxWidth="lg">
                 <DialogTitle>{isEdit ? "Edit" : "New"} Team</DialogTitle>
-                <DialogContent>
+                <DialogContent style={{ display: "flex" }}>
                     <Upload
                         dirName={process.env.REACT_APP_DIR_TEAM}
                         img={selected.image}
                         onURL={url => setSelected({ image: url })}
+                        defaultImg={TEAM_ICON_DEFAULT}
                     />
-                    <Input
-                        fullWidth
-                        sx={{ mt: 1 }}
-                        placeholder='Team name'
-                        value={selected.name}
-                        onChange={(e) => setSelected({ name: e.target.value })}
-                    />
+                    <Box style={{ minWidth: 300, margin: 10 }}>
+                        <Input
+                            fullWidth
+                            sx={{ mt: 1 }}
+                            placeholder='Team name'
+                            value={selected.name}
+                            onChange={(e) => setSelected({ name: e.target.value })}
+                        />
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={e => handleEditClose(false)}>Cancel</Button>

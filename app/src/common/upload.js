@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import S3 from "react-aws-s3";
-import { DropzoneArea } from 'material-ui-dropzone';
-import { makeStyles } from '@mui/styles';
-import { CircularProgress } from '@mui/material';
+import { styled } from '@mui/styles';
 
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-// import Input from '@mui/material/Input';
+import { CircularProgress, Button } from '@mui/material';
+
 const styles = {
     loader: {
         position: 'absolute',
@@ -20,34 +18,16 @@ const styles = {
     },
 };
 
-const useStyles = makeStyles((theme) => ({
-    textContainer: {
-        display: "none"
-    },
-    dropZone: {
-        height: "100%",
-        width: "100%",
-        display: 'flex',
-        alignItems: 'center'
-    },
-    previewImg: {
-        width: 300
-    },
-    preview: {
-        width: '100%',
-        height: '100%',
-        item: 'true',
-        xs: '12',
-    },
-}));
-
-function Upload({ dirName, img, onURL, fileName }) {
-    const classes = useStyles();
-
+const Input = styled('input')({
+    display: 'none',
+});
+function Upload({ dirName, img, onURL, fileName, defaultImg }) {
+    const fileInput = useRef();
     const [image, setImage] = useState(img)
     const [loading, setLoading] = useState(false)
 
-    const handleUpload = (file) => {
+    const handleUpload = () => {
+        const file = fileInput.current.files[0];
         if (!file) return
         const config = {
             bucketName: process.env.REACT_APP_BUCKET_NAME,
@@ -57,7 +37,6 @@ function Upload({ dirName, img, onURL, fileName }) {
             secretAccessKey: process.env.REACT_APP_ACCESS_KEY,
             s3Url: process.env.REACT_APP_S3_URI
         };
-        console.log("S3 config", config)
         const ReactS3Client = new S3(config);
         setLoading(true)
         ReactS3Client.uploadFile(file, fileName).then((data) => {
@@ -76,33 +55,21 @@ function Upload({ dirName, img, onURL, fileName }) {
         });
     };
     return (
-        <div style={{ width: 300, margin: "auto", marginBottom: 10 }}>
-            <CloudUploadIcon /> Upload Image
-            <DropzoneArea
-                acceptedFiles={['image/*']}
-                filesLimit={1}
-                dropzoneClass={classes.dropZone}
-                previewGridClasses={{
-                    item: classes.preview,
-                }}
-                getPreviewIcon={(file) => {
-                    if (file.file.type.split('/')[0] === 'image')
-                        return (
-                            <img className={classes.previewImg} alt="img" role="presentation" src={file.data} />
-                        );
-                }}
-                dropzoneText={"Upload image"}
-                onChange={(files) => handleUpload(files[0])}
-            />
+        <div style={{ textAlign: "center", width: 200 }}>
+            <label htmlFor="contained-button-file">
+                <Input accept="image/*" id="contained-button-file" type="file" ref={fileInput} onChange={(e) => handleUpload()} />
+                <Button variant="contained" component="span">
+                    Upload
+                </Button>
+            </label><br />
+            <img src={image.length > 0 ? image : defaultImg} width="200" alt="img" style={{ border: "1px black solid" }}></img>
             {
-                loading ?
-                    <div style={styles.loader}>
-                        <CircularProgress />
-                    </div>
-                    : <div> {image} </div>
+                loading &&
+                <div style={styles.loader}>
+                    <CircularProgress />
+                </div>
             }
-            {/* <Input value={image} placeholder="Image URL" fullWidth multiline /> */}
-        </div>
+        </div >
     );
 }
 
