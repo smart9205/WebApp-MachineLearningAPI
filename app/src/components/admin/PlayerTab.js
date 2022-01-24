@@ -263,6 +263,7 @@ export default function PlayerTab() {
                                             <TableCell align="center">
                                                 <Link
                                                     to={`/player/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`}
+                                                    target="_blank" rel="noopener noreferrer"
                                                     className="name"
                                                 >
                                                     {row.name}
