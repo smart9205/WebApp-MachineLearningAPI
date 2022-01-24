@@ -17,6 +17,14 @@
 .action-row .skilltab-action-title {
     min-width: 100px;
 }
+.skilltab-action-header {
+    display: flex;
+    margin-left: 130px;
+    justify-content: space-between;
+}
+.skilltab-action-header p {
+    margin-bottom: 0 !important;
+}
 .action-row .skilltab-play-button {
     color: red;
 }

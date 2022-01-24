@@ -49,6 +49,10 @@ export default function SkillTab({ playTags }) {
                     <CircularProgress />
                 </div> : (
                     <>
+                        <div className="skilltab-action-header">
+                            <p>PLAYER</p>
+                            <p>TEAM</p>
+                        </div>
                         {
                             skills
                                 .map((skill, i) => {
