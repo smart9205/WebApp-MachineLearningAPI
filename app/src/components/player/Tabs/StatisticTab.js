@@ -111,9 +111,19 @@ export default function StatisticTab({ tagList, playTags }) {
                         {
                             !!rule?.successful && <tr>
                                 <td></td>
-                                <td><p>Successful</p></td>
-                                <td><p>Unsuccessful</p></td>
+                                {rule.title === "Shot" ?
+                                    <>
+                                        <td><p>On Target</p></td>
+                                        <td><p>Off Target</p></td>
+                                    </>
+                                    :
+                                    <>
+                                        <td><p>Successful</p></td>
+                                        <td><p>Unsuccessful</p></td>
+                                    </>
+                                }
                             </tr>
+
                         }
                         {rule.row.map((type, i) => {
                             const data = tagList.filter(t =>
