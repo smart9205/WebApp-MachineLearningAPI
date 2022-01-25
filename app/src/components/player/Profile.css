@@ -126,7 +126,7 @@ ul.nav.nav-tabs {
 .shots p {
     margin: 0px;
     color: #fff;
-    font-weight: 700;
+    /* font-weight: 700; */
     font-size: 14px !important;
 }
 .shots-title {
