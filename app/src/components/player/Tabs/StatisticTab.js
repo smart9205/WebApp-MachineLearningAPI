@@ -55,7 +55,7 @@ const RULE = [
             { action_id: 6, action_type_id: [10], title: "Red Card" }]
     },
     {
-        title: "Intereption",
+        title: "Interception",
         row: [
             { action_id: 10, action_type_id: [1, 2], title: "Dribble" },
             { action_id: 10, action_type_id: [7], title: "Key Pass" },
