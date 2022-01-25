@@ -141,7 +141,7 @@ export default function StatisticTab({ tagList, playTags }) {
                                     {
                                         !!rule?.successful &&
                                         <td onClick={() => { !!unsuccess.length && playTags(unsuccess) }}>
-                                            <p className={success.length > 0 ? "statistic-clickable-unsuccess" : ""}>{unsuccess.length}</p>
+                                            <p className={unsuccess.length > 0 ? "statistic-clickable-unsuccess" : ""}>{unsuccess.length}</p>
                                         </td>
                                     }
                                 </tr>
