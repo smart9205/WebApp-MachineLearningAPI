@@ -52,7 +52,8 @@ export default function Field() {
                           <div className="pl" key={fp.id} style={{ backgroundImage: `url(${fp.image ?? PLAYER_ICON_DEFAULT})` }}>
                             <Link
                               to={`/player/${btoa(randomString.generate(3) + fp.id + randomString.generate(3))}`}
-                              target="_blank" rel="noopener noreferrer"
+                              target="_blank"
+                              rel="noopener noreferrer"
                               className="name"
                             >
                               {fp.l_name}

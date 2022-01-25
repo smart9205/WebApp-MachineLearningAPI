@@ -124,7 +124,6 @@ const App = () => {
             <Route exact path="/register" component={Register} />
             <Route exact path="/signin" component={Signin} />
             <Route exact path="/signup" component={Signup} />
-            <Route exact path="/profile" component={Profile} />
 
             <PrivateRoute path='/tagging/:id' component={Tagging} />
             <Route path='/team/:data' component={Field} />
