@@ -134,13 +134,13 @@ export default function StatisticTab({ tagList, playTags }) {
                             const unsuccess = data.filter(f => !rule?.unsuccessful ? true : rule?.unsuccessful.includes(f.action_result_id))
                             return (
                                 <tr key={i}>
-                                    <td width={120}><p>{type.title}</p></td>
-                                    <td onClick={() => { !!success.length && playTags(success) }}>
+                                    <td style={{ width: "20%", minWidth: 120 }}><p>{type.title}</p></td>
+                                    <td width="40%" onClick={() => { !!success.length && playTags(success) }}>
                                         <p className={success.length > 0 ? "statistic-clickable-success" : ""}>{success.length}</p>
                                     </td>
                                     {
                                         !!rule?.successful &&
-                                        <td onClick={() => { !!unsuccess.length && playTags(unsuccess) }}>
+                                        <td width="40%" onClick={() => { !!unsuccess.length && playTags(unsuccess) }}>
                                             <p className={unsuccess.length > 0 ? "statistic-clickable-unsuccess" : ""}>{unsuccess.length}</p>
                                         </td>
                                     }
