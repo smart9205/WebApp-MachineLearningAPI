@@ -123,6 +123,14 @@ ul.nav.nav-tabs {
     -ms-border-radius: 8px !important;
     -o-border-radius: 8px !important;
 }
+.statistic-clickable-success {
+    text-decoration: underline;
+    color: lime !important;
+}
+.statistic-clickable-unsuccess {
+    text-decoration: underline;
+    color: red !important;
+}
 .shots p {
     margin: 0px;
     color: #fff;

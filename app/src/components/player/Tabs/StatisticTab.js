@@ -125,10 +125,14 @@ export default function StatisticTab({ tagList, playTags }) {
                             return (
                                 <tr key={i}>
                                     <td width={120}><p>{type.title}</p></td>
-                                    <td onClick={() => { !!success.length && playTags(success) }}><p>{success.length}</p></td>
+                                    <td onClick={() => { !!success.length && playTags(success) }}>
+                                        <p className={success.length > 0 ? "statistic-clickable-success" : ""}>{success.length}</p>
+                                    </td>
                                     {
                                         !!rule?.successful &&
-                                        <td onClick={() => { !!unsuccess.length && playTags(unsuccess) }}><p >{unsuccess.length}</p></td>
+                                        <td onClick={() => { !!unsuccess.length && playTags(unsuccess) }}>
+                                            <p className={success.length > 0 ? "statistic-clickable-unsuccess" : ""}>{unsuccess.length}</p>
+                                        </td>
                                     }
                                 </tr>
                             )
