@@ -101,11 +101,13 @@ export default function StatisticTab({ tagList, playTags }) {
     return (
         <>
             {RULE.map((rule, idx) =>
-                <Table responsive="sm" striped borderless hover size="sm" className='shots' key={idx}>
-                    <tbody className='text-center'>
-                        <tr>
-                            <td colSpan={3} className='shots-title'>{rule.title}</td>
-                        </tr>
+                <Table responsive="sm" striped borderless hover size="sm" className='shots text-uppercase' key={idx}>
+                    <thead>
+                        <th colSpan={3} className='shots-title text-center'>
+                            {rule.title}
+                        </th>
+                    </thead>
+                    <tbody className='text-center statistic-table-body'>
                         {
                             !!rule?.successful && <tr>
                                 <td></td>
@@ -123,7 +125,7 @@ export default function StatisticTab({ tagList, playTags }) {
                             const unsuccess = data.filter(f => !rule?.unsuccessful ? true : rule?.unsuccessful.includes(f.action_result_id))
                             return (
                                 <tr key={i}>
-                                    <td width={100}><p>{type.title}</p></td>
+                                    <td width={120}><p>{type.title}</p></td>
                                     <td onClick={() => { !!success.length && playTags(success) }}><p>{success.length}</p></td>
                                     {
                                         !!rule?.successful &&

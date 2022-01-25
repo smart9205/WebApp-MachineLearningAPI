@@ -34,6 +34,12 @@
     color: wheat !important;
     font-size: 16px !important;
 }
+.statistic-table-body {
+    background-color: #3e3636;
+}
+.statistic-table-body td {
+    border-right: 1px #d6e7e8 solid;
+}
 .action-row .skilltab-play-button {
     color: yellow;
     padding: 0;
@@ -110,7 +116,7 @@ ul.nav.nav-tabs {
 .tableBorder .shots,
 .tableBorder .passes,
 .tableBorder .crosses {
-    border: 2px solid #111010;
+    border: 1px #d6e7e8 solid;
     border-radius: 8px !important;
     -webkit-border-radius: 8px !important;
     -moz-border-radius: 8px !important;
@@ -124,9 +130,10 @@ ul.nav.nav-tabs {
     font-size: 14px !important;
 }
 .shots-title {
-    color: #fff;
+    color: black;
     font-weight: 700;
     font-size: 16px;
+    background-color: #d6e7e8;
 }
 .passes span {
     color: #fff;
