@@ -83,7 +83,7 @@ const RULE = [
         row: [
             { action_id: 2, action_type_id: [11], title: "Bad Pass" },
             { action_id: 4, action_type_id: [10, 12], title: "Bad Dribble" },
-            { action_id: 7, action_type_id: [15], title: "Offside" },
+            { action_id: 7, action_result_id: 15, title: "Offside" },
         ]
     },
     {
@@ -128,7 +128,8 @@ export default function StatisticTab({ tagList, playTags }) {
                         {rule.row.map((type, i) => {
                             const data = tagList.filter(t =>
                                 t.action_id === type.action_id &&
-                                type.action_type_id.includes(t.action_type_id)
+                                (!type?.action_result_id ? true : t.action_result_id === type.action_result_id) &&
+                                (!type?.action_type_id ? true : type.action_type_id.includes(t.action_type_id))
                             )
                             const success = data.filter(f => !rule?.successful ? true : rule?.successful.includes(f.action_result_id))
                             const unsuccess = data.filter(f => !rule?.unsuccessful ? true : rule?.unsuccessful.includes(f.action_result_id))
