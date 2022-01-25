@@ -118,8 +118,7 @@ export default function StatisticTab({ tagList, playTags }) {
                         {rule.row.map((type, i) => {
                             const data = tagList.filter(t =>
                                 t.action_id === type.action_id &&
-                                type.action_type_id.includes(t.action_type_id) &&
-                                (!rule?.successful ? true : rule?.successful.includes(t.action_result_id))
+                                type.action_type_id.includes(t.action_type_id)
                             )
                             const success = data.filter(f => !rule?.successful ? true : rule?.successful.includes(f.action_result_id))
                             const unsuccess = data.filter(f => !rule?.unsuccessful ? true : rule?.unsuccessful.includes(f.action_result_id))
