@@ -140,6 +140,9 @@ const filterData = [
   {
     title: "Saved", action: 8, action_type: null, action_result: null,
   },
+  {
+    title: "Throw-In", action: 2, action_type: 14, action_result: [4],
+  },
 ]
 export function manualFilterForTags(tagList, playerId) {
   console.log("playerid", playerId)

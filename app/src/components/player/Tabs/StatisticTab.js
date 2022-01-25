@@ -104,8 +104,7 @@ export default function StatisticTab({ tagList, playTags }) {
                 <Table responsive="sm" striped borderless hover size="sm" className='shots' key={idx}>
                     <tbody className='text-center'>
                         <tr>
-                            <td></td>
-                            <td colSpan={2} className='shots-title'>{rule.title}</td>
+                            <td colSpan={3} className='shots-title'>{rule.title}</td>
                         </tr>
                         {
                             !!rule?.successful && <tr>
