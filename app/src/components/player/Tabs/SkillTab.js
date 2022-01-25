@@ -67,9 +67,9 @@ export default function SkillTab({ playTags }) {
                             <div>
                                 <IconButton
                                     style={{ padding: 0 }}
-                                    className="skilltab-play-button"
+                                    className="skilltab-highlight-button"
                                     onClick={() => { setOpen(true) }}>
-                                    <img src={StarButton} alt="icon" width={70} />
+                                    <img src={StarButton} alt="icon" width={70} />CREATE HIGHLIGHT
                                 </IconButton>
                             </div>
                             <div className="skilltab-action-header-player"><p>PLAYER</p></div>
