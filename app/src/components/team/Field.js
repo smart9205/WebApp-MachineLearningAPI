@@ -37,7 +37,7 @@ export default function Field() {
 
   return (
     <div class="team-field-container">
-      <h1 className='text-center'>{team?.name}</h1>
+      <div className='teamHeading'><h1 className='text-center'>{team?.name}</h1></div>
       <div className="containerr">
         <div className="content">
           <div className="field-container">
@@ -46,19 +46,20 @@ export default function Field() {
                 FIELD_LIST.map((field) => {
                   const fPlayers = players.filter(fp => fp.position_short === field)
                   return (
-                    <div className={`${field.toLowerCase()} p${fPlayers.length}`} key={field}>{field}
+                    <div className={`${field.toLowerCase()} p${fPlayers.length}`} key={field}>
                       {
                         fPlayers.map((fp => (
-                          <div className="pl" key={fp.id} style={{ backgroundImage: `url(${fp.image ?? PLAYER_ICON_DEFAULT})` }}>
-                            <Link
-                              to={`/player/${btoa(randomString.generate(3) + fp.id + randomString.generate(3))}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="name"
-                            >
+                          <Link
+                            to={`/player/${btoa(randomString.generate(3) + fp.id + randomString.generate(3))}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="pl"
+                            style={{ backgroundImage: `url(${fp.image ?? PLAYER_ICON_DEFAULT})` }}
+                          >
+                            <div className="name" key={fp.id} >
                               {fp.l_name}
-                            </Link>
-                          </div>
+                            </div>
+                          </Link>
                         )))
                       }
                     </div>

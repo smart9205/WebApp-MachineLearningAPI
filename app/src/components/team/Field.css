@@ -36,13 +36,12 @@
     font-family: "Pacifico", cursive;
     color: #f2a11c;
     text-transform: uppercase;
-    top: 12%;
     margin-left: 50%;
-    transform: translate(-50%, -12%);
-    -webkit-transform: translate(-50%, -12%);
-    -moz-transform: translate(-50%, -12%);
-    -ms-transform: translate(-50%, -12%);
-    -o-transform: translate(-50%, -12%);
+    transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
+    -moz-transform: translate(-50%, 0);
+    -ms-transform: translate(-50%, 0);
+    -o-transform: translate(-50%, 0);
 }
 
 .containerr .content {
@@ -69,7 +68,7 @@
     background-size: 100% 100%;
     transform-style: preserve-3d;
     transform-origin: center bottom;
-    transform: translatey(-20%) rotatex(35deg) scale(0.9);
+    transform: translatey(-10%) rotatex(35deg) scale(1);
     display: grid;
     grid-gap: 5px;
     grid-template-columns: 24% 50% 24%;
@@ -77,17 +76,20 @@
     box-sizing: border-box;
     padding: 4% 2%;
     margin: 0 auto;
+    -webkit-transform: translatey(-10%) rotatex(35deg) scale(1);
+    -moz-transform: translatey(-10%) rotatex(35deg) scale(1);
+    -ms-transform: translatey(-10%) rotatex(35deg) scale(1);
+    -o-transform: translatey(-10%) rotatex(35deg) scale(1);
 }
 .field-container .f-field > div {
     position: relative;
-    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5),
-        inset 0 0 32px 0 rgba(255, 255, 255, 0.75);
-    background: rgba(0, 0, 255, 0.25);
+    /* box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5), inset 0 0 32px 0 rgba(255, 255, 255, 0.75);
+    background: rgba(0, 0, 255, 0.25); */
     color: #fff;
     border-radius: 8px;
     padding: 20px;
     font-size: 150%;
-    text-align: center;
+    /* text-align: center; */
     transition: all 0.1s ease-in-out;
     transform-style: preserve-3d;
     perspective: 600px;
@@ -95,8 +97,8 @@
 }
 .field-container .f-field > div .pl {
     position: relative;
-    width: 70px;
-    height: 70px;
+    width: 110px;
+    height: 110px;
     background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/215059/bm-neuer.jpg);
     border-radius: 50%;
     background-size: cover;
@@ -106,38 +108,54 @@
     top: 18%;
     left: 50%;
     transform-style: preserve-3d;
-    transform: translate3d(-50%, -18%, 0);
     color: white;
     font-size: 16px;
     font-family: arial;
-    line-height: 40px;
+    /* line-height: 40px; */
     font-weight: 700;
     transition: all 0.2s ease-out;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
-    -webkit-transform: translate3d(-50%, -18%, 0);
-    -moz-transform: translate3d(-50%, -18%, 0);
-    -ms-transform: translate3d(-50%, -18%, 0);
-    -o-transform: translate3d(-50%, -18%, 0);
-    -webkit-transition: all 0.2s ease-out;
-    -moz-transition: all 0.2s ease-out;
-    -ms-transition: all 0.2s ease-out;
-    -o-transition: all 0.2s ease-out;
+    transform: translateZ(35px) rotateX(-25deg) translateX(-50%);
+    -webkit-transform: translateZ(35px) rotateX(-25deg) translateX(-50%);
+    -moz-transform: translateZ(35px) rotateX(-25deg) translateX(-50%);
+    -ms-transform: translateZ(35px) rotateX(-25deg) translateX(-50%);
+    -o-transform: translateZ(35px) rotateX(-25deg) translateX(-50%);
 }
+
+.field-container .f-field > div .pl:hover {
+    border: 3px solid whitesmoke;
+    z-index: 999999;
+}
+
 .field-container .f-field > div .pl .name {
-    position: absolute;
-    top: 80%;
-    left: 50%;
+    position: relative;
+    top: 90%;
+    /* left: 50%; */
     transform: translatex(-50%);
-    color: #000;
+    color: #fff;
     font-size: 17px;
     /* text-shadow: 1px 0 0 black, 1px 1px 0 black, -1px 0 0 black, 1px -1px 0 black, -1px 1px 0 black, -1px -1px 0 black; */
     transition: all 0.2s ease-out;
     opacity: 0;
 }
-.field-container .f-field > div .pl a {
+.field-container .f-field > div .pl .name {
+    text-decoration: none !important;
+    background-color: rgba(0, 0, 0, 0.808);
+    padding: 3px 12px;
+    text-align: center;
+    border-radius: 25px;
+    color: #fff;
+    left: 50%;
+    transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
+    -moz-transform: translate(-50%, 0);
+    -ms-transform: translate(-50%, 0);
+    -o-transform: translate(-50%, 0);
+}
+.field-container .f-field > div .pl {
     text-decoration: none !important;
 }
 .field-container .f-field > div .pl:after {
@@ -146,13 +164,14 @@
     left: 0;
     bottom: 0;
     right: 0;
-    background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/215059/bm-neuer.jpg);
+    /* background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/215059/bm-neuer.jpg); */
     background-size: cover;
     background-position: center center;
     content: "";
     transition: all 0.2s ease-out;
     transform: translate3d(0, 0, -1px);
     transform-origin: center bottom;
+    transform-style: preserve-3d;
 }
 .field-container .f-field > div.gk .pl {
     background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/215059/bm-neuer.jpg);
@@ -173,14 +192,14 @@
 .field-container .f-field > div:hover,
 .field-container .f-field > div.active {
     transform: translatez(20px);
-    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 0, 0.25);
+
+    /* box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 0, 0.25); */
     cursor: pointer;
 }
-.field-container .f-field > div:hover .pl,
-.field-container .f-field > div.active .pl {
-    transform: translate3d(-50%, -70%, 20px);
-}
+/* .field-container .f-field > div:hover .pl, .field-container .f-field > div.active .pl {
+    transform: translatey(0%) rotatex(-25deg) scale(1);
+} */
 .field-container .f-field > div .pl .name,
 .field-container .f-field > div.active .pl .name {
     opacity: 1;
@@ -188,7 +207,7 @@
 .field-container .f-field > div:hover .pl:after,
 .field-container .f-field > div.active .pl:after {
     transform: translate3d(0%, 30%, -50px) scaley(0.75);
-    opacity: 0.35;
+    opacity: 0;
 }
 .field-container .f-field .lf {
     grid-column: 1;
@@ -245,4 +264,30 @@
 .field-container .f-field .gk {
     grid-column: 2/2;
     grid-row: 6;
+}
+@media only screen and (max-width: 980px) {
+    .field-container .f-field > div .pl {
+        width: 75px;
+        height: 75px;
+    }
+
+    .field-container .f-field > div .pl .name {
+        font-size: 12px;
+        padding: 2px 0px;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .field-container .f-field > div .pl {
+        width: 60px;
+        height: 60px;
+    }
+    .field-container .f-field {
+        transform: translatey(-20%) rotatex(35deg) scale(1);
+        -webkit-transform: translatey(-20%) rotatex(35deg) scale(1);
+        -moz-transform: translatey(-20%) rotatex(35deg) scale(1);
+        -ms-transform: translatey(-20%) rotatex(35deg) scale(1);
+        -o-transform: translatey(-20%) rotatex(35deg) scale(1);
+    }
 }
