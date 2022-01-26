@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   League.init({
     name: DataTypes.STRING,
+    image: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'League',

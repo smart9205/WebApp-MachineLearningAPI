@@ -152,8 +152,8 @@ export default function LeagueTab() {
     const init = () => {
         setLoading(true)
         setFormOpen(false)
-        GameService.getAllTeams().then((res) => {
-            console.log("All Teams", res)
+        GameService.getAllLeagues().then((res) => {
+            console.log("All Leagues", res)
             setRows(res)
             setLoading(false)
         }).catch(() => { setLoading(false) })
@@ -202,6 +202,12 @@ export default function LeagueTab() {
             <Dialog open={formOpen} onClose={e => handleEditClose(false)}>
                 <DialogTitle>{isEdit ? "Edit" : "New"} League</DialogTitle>
                 <DialogContent>
+                    <Upload
+                        dirName={process.env.REACT_APP_DIR_LEAGUE}
+                        img={selected.image}
+                        onURL={url => setSelected({ image: url })}
+                        defaultImg={TEAM_ICON_DEFAULT}
+                    />
                     <Input
                         fullWidth
                         sx={{ mt: 1 }}
@@ -226,7 +232,7 @@ export default function LeagueTab() {
                             setSelected(initials)
                         }}>
                         <AddIcon />
-                        Add Team
+                        Add League
                     </Button>
                     <Input
                         sx={{ mx: 10 }}

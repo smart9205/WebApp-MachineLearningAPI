@@ -2,7 +2,7 @@ const db = require("../models");
 const League = db.league;
 const Op = db.Sequelize.Op;
 
-exports.create =  (req, res) => {
+exports.create = (req, res) => {
   // Validate request
   if (!req.body.name) {
     res.status(400).send({
@@ -13,6 +13,7 @@ exports.create =  (req, res) => {
 
   const league = {
     name: req.body.name,
+    image: req.body.image
   };
 
   League.create(league)
@@ -25,7 +26,7 @@ exports.create =  (req, res) => {
           err.message || "Some error occurred while creating the League."
       });
     });
- 
+
 };
 
 exports.findAll = (req, res) => {

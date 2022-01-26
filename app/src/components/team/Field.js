@@ -49,8 +49,8 @@ export default function Field() {
                     <div className={`${field.toLowerCase()} p${fPlayers.length}`} key={field}>
                       {
                         fPlayers.map((fp => (
-                          <Link
-                            to={`/player/${btoa(randomString.generate(3) + fp.id + randomString.generate(3))}`}
+                          <a
+                            href={`/player/${btoa(randomString.generate(3) + fp.id + randomString.generate(3))}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="pl"
@@ -59,7 +59,7 @@ export default function Field() {
                             <div className="name" key={fp.id} >
                               {fp.l_name}
                             </div>
-                          </Link>
+                          </a>
                         )))
                       }
                     </div>
