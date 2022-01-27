@@ -1,22 +1,24 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import { makeStyles } from '@mui/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Input from '@mui/material/Input';
+import TextField from '@mui/material/TextField';
 import GameService from '../../../services/game.service';
-import Upload from '../../../common/upload';
 import CircularProgress from '@mui/material/CircularProgress';
-import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
+import { Autocomplete } from '@mui/material';
 
 const init = {
-    id: 0,
-    name: "",
-    image: "",
+    season: null,
+    league: null,
+    team: null,
+    coach: null,
 }
-
+const useStyles = makeStyles((theme) => ({
+    paper: { minWidth: "80%" },
+}));
 const styles = {
     loader: {
         position: 'fixed',
@@ -30,17 +32,39 @@ const styles = {
         alignItems: "center"
     }
 };
-export default function TeamFormDialog({ open, onResult, edit = null }) {
+export default function CoachFormDialog({ open, onResult, edit = null }) {
+    const classes = useStyles();
 
     const [data, setData] = useReducer((old, action) => ({ ...old, ...action }), init)
+    const { season, league, team, coach } = data
     const [loading, setLoading] = useState(false)
+    const [seasonList, setSeasonList] = useState([])
+    const [leagueList, setLeagueList] = useState([])
+    const [teamList, setTeamList] = useState([])
+    const [coachList, setCoachList] = useState([])
+
+    useEffect(() => {
+        GameService.getAllSeasons().then((res) => {
+            setSeasonList(res);
+        });
+        GameService.getAllLeagues().then((res) => {
+            setLeagueList(res);
+        })
+        GameService.getAllTeams().then((res) => {
+            setTeamList(res);
+        })
+        GameService.getAllCoach().then((res) => {
+            setCoachList(res);
+        })
+    }, []);
 
     useEffect(() => {
         if (!edit) return
         setData({
-            id: edit?.id,
-            name: edit?.name,
-            image: edit?.image,
+            coach: coachList.find(c => c.id === edit?.user_id),
+            season: seasonList.find(c => c.id === edit?.season_id),
+            league: leagueList.find(c => c.id === edit?.league_id),
+            team: teamList.find(c => c.id === edit?.team_id),
         })
     }, [edit])
 
@@ -48,15 +72,22 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
         setLoading(true)
 
         if (result) {
+            const req = {
+                id: edit?.id,
+                user_id: coach?.id,
+                season_id: season?.id,
+                league_id: league?.id,
+                team_id: team?.id,
+            }
             if (!edit) {
-                GameService.addTeam(data).then((res) => {
+                GameService.addCoachTeam(req).then((res) => {
                     onResult(true)
                     setData(init)
                     setLoading(false)
                 }).catch((e) => { onResult(false); setData(init); setLoading(false) });
             }
             else {
-                GameService.updateTeam(data).then((res) => {
+                GameService.updateCoachTeam(req).then((res) => {
                     onResult(true)
                     setData(init)
                     setLoading(false)
@@ -66,29 +97,98 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
     };
 
     return (
-        <Dialog open={open} onClose={e => onResult(false)} maxWidth="lg">
+        <Dialog
+            open={open}
+            onClose={e => onResult(false)}
+            classes={{ paper: classes.paper }}
+        >
             {loading &&
                 <div style={styles.loader}>
                     <CircularProgress />
                 </div>
             }
-            <DialogTitle>{!edit ? "Add" : "Edit"} Team</DialogTitle>
-            <DialogContent style={{ display: "flex" }}>
-                <Upload
-                    dirName={process.env.REACT_APP_DIR_TEAM}
-                    img={data.image}
-                    onURL={url => setData({ image: url })}
-                    defaultImg={TEAM_ICON_DEFAULT}
+            <DialogTitle>{!edit ? "Add" : "Edit"} Coach</DialogTitle>
+            <DialogContent >
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={seasonList}
+                    value={season}
+                    isOptionEqualToValue={(option, value) => option && option.name}
+                    getOptionLabel={
+                        (option) => !option.name ? "" : option.name
+                    }
+                    renderOption={(props, option) => {
+                        return (
+                            <li {...props} key={option.id}>
+                                {option.name}
+                            </li>
+                        );
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Season" sx={{ my: 1 }} />}
+                    onChange={(event, newValue) => {
+                        setData({ season: newValue });
+                    }}
                 />
-                <Box style={{ minWidth: 300, margin: 10 }}>
-                    <Input
-                        fullWidth
-                        sx={{ mt: 1 }}
-                        placeholder='Team name'
-                        value={data.name}
-                        onChange={(e) => setData({ name: e.target.value })}
-                    />
-                </Box>
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={leagueList}
+                    value={league}
+                    isOptionEqualToValue={(option, value) => option && option.name}
+                    getOptionLabel={
+                        (option) => !option.name ? "" : option.name
+                    }
+                    renderOption={(props, option) => {
+                        return (
+                            <li {...props} key={option.id}>
+                                {option.name}
+                            </li>
+                        );
+                    }}
+                    renderInput={(params) => <TextField {...params} label="League" sx={{ my: 1 }} />}
+                    onChange={(event, newValue) => {
+                        setData({ league: newValue });
+                    }}
+                />
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={teamList}
+                    value={team}
+                    isOptionEqualToValue={(option, value) => option && option.name}
+                    getOptionLabel={
+                        (option) => !option.name ? "" : option.name
+                    }
+                    renderOption={(props, option) => {
+                        return (
+                            <li {...props} key={option.id}>
+                                {option.name}
+                            </li>
+                        );
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Team" sx={{ my: 1 }} />}
+                    onChange={(event, newValue) => {
+                        setData({ team: newValue });
+                    }}
+                />
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={coachList}
+                    value={coach}
+                    isOptionEqualToValue={(option, value) => option && option.first_name}
+                    getOptionLabel={
+                        (option) => !option.first_name ? "" : option.first_name + " " + option.last_name
+                    }
+                    renderOption={(props, option) => {
+                        return (
+                            <li {...props} key={option.id}>
+                                {option.first_name} {option.last_name}
+                            </li>
+                        );
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Coach" sx={{ my: 1 }} />}
+                    onChange={(event, newValue) => {
+                        setData({ coach: newValue });
+                    }}
+                />
             </DialogContent>
             <DialogActions>
                 <Button onClick={e => onResult(false)}>Cancel</Button>

@@ -20,6 +20,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import Input from '@mui/material/Input';
 import DeleteConfirmDialog from '../../../common/DeleteConfirmDialog';
+import CoachFormDialog from './CoachFormDialog';
 
 const styles = {
     loader: {
@@ -65,7 +66,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'name',
+        id: 'coach_name',
         label: 'Name',
     },
     {
@@ -140,7 +141,7 @@ export default function CoachTab() {
 
         if (!result || !selected) return;
 
-        GameService.deleteTeam(selected?.id).then((res) => {
+        GameService.deleteCoachTeam(selected?.id).then((res) => {
             console.log(res)
             init()
         }).catch((e) => { })
@@ -180,6 +181,13 @@ export default function CoachTab() {
     return (
         <Box sx={{ width: '100%' }}>
             <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
+            <CoachFormDialog
+                open={formOpen}
+                onResult={res => {
+                    setFormOpen(false)
+                    if (res) init()
+                }}
+                edit={selected} />
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <div style={{ position: "absolute", zIndex: 10, padding: 10, display: "flex" }}>
                     <Button
@@ -230,9 +238,9 @@ export default function CoachTab() {
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row, index) => {
                                         return (
-                                            <TableRow hover key={row.id} >
+                                            <TableRow hover key={index} >
                                                 <TableCell align="center">
-                                                    {row.first_name} {row.last_name}
+                                                    {row.coach_name}
                                                 </TableCell>
                                                 <TableCell align="center">{row.season_name}</TableCell>
                                                 <TableCell align="center">{row.league_name}</TableCell>

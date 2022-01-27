@@ -28,6 +28,7 @@ const addTeam = (req) => {
   });
 };
 
+
 const getAllTeams = () => {
   return axios.get(API_URL + "team", { headers: authHeader() }).then((response) => {
     return response.data;
@@ -36,6 +37,21 @@ const getAllTeams = () => {
 
 const getAllCoachTeam = () => {
   return axios.get(API_URL + "coach_team", { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+}
+const addCoachTeam = (req) => {
+  return axios.post(API_URL + "coach_team", req, { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+};
+const updateCoachTeam = (req) => {
+  return axios.put(API_URL + `coach_team/${req.id}`, req, { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+}
+const deleteCoachTeam = (id) => {
+  return axios.delete(API_URL + `coach_team/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
     return response.data;
   });
 }
@@ -281,6 +297,7 @@ const gameService = {
   addPlayer,
   addTeamTag,
   addPlayerTag,
+  addCoachTeam,
 
   getGame,
 
@@ -318,6 +335,7 @@ const gameService = {
   updatePlayerTag,
   updateTeamTag,
   updatePlayer,
+  updateCoachTeam,
 
   deletePlayersInTeam,
 
@@ -327,6 +345,7 @@ const gameService = {
   deleteTeam,
   deleteLeague,
   deletePlayer,
+  deleteCoachTeam
 };
 
 export default gameService;

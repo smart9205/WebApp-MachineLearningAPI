@@ -5,15 +5,11 @@ const Sequelize = db.sequelize;
 
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.name) {
-    res.status(400).send({
-      message: "Name can not be empty!"
-    });
-    return;
-  }
-
   const coach_team = {
-    name: req.body.name,
+    user_id: req.body.user_id,
+    season_id: req.body.season_id,
+    league_id: req.body.league_id,
+    team_id: req.body.team_id,
   };
 
   Coach_Team.create(coach_team)
@@ -33,8 +29,8 @@ exports.findAll = (req, res) => {
 
   Sequelize.query(`
     SELECT 
-      public."Coach_Teams".*, public."Coach_Teams".id as id,
-      public."Users".*,
+      public."Coach_Teams".*,
+      CONCAT (public."Users".first_name,' ', public."Users".last_name) as coach_name,
       public."Seasons".name as season_name,
       public."Leagues".name as league_name,
       public."Teams".name as team_name
