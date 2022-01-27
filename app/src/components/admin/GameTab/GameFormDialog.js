@@ -348,7 +348,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
             <Upload
               dirName={process.env.REACT_APP_DIR_TEAM}
               onURL={url => setImage(url)}
-              defaultImg={TEAM_ICON_DEFAULT}
+              defaultImg={editData?.image?.length > 0 ? editData?.image : TEAM_ICON_DEFAULT}
             />
           </Grid>
           <Grid item xs={4}>
