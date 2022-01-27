@@ -55,7 +55,7 @@ export default function Field() {
                             rel="noopener noreferrer"
                             className="pl"
                             key={i}
-                            style={{ backgroundImage: `url(${fp.image ?? PLAYER_ICON_DEFAULT})` }}
+                            style={{ backgroundImage: `url(${fp?.image?.length > 0 ? fp.image : PLAYER_ICON_DEFAULT})` }}
                           >
                             <div className="name" key={fp.id} >
                               {fp.l_name}
