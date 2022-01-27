@@ -28,6 +28,7 @@ import { visuallyHidden } from '@mui/utils';
 import randomString from 'randomstring'
 import GameService from "../../../services/game.service";
 import VIDEO_ICON from '../../../assets/video_icon.jpg';
+import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -60,6 +61,12 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
+  {
+    id: 'image',
+    numeric: false,
+    disablePadding: true,
+    label: 'Image',
+  },
   {
     id: 'season_name',
     numeric: false,
@@ -266,7 +273,6 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                           tabIndex={-1}
                           key={row.id}
                         >
-
                           <TableCell
                             component="th"
                             id={labelId}
@@ -274,8 +280,9 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                             padding="none"
                             align="center"
                           >
-                            {row.season_name}
+                            <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='Team' />
                           </TableCell>
+                          <TableCell align="center">{row.season_name}</TableCell>
                           <TableCell align="center">{row.league_name}</TableCell>
                           <TableCell align="center">
                             <Link
@@ -286,7 +293,6 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                             >
                               {row.home_team_name}
                             </Link>
-
                           </TableCell>
                           <TableCell align="center">
                             <Link

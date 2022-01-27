@@ -21,7 +21,7 @@ const styles = {
 const Input = styled('input')({
     display: 'none',
 });
-function Upload({ dirName, img, onURL, fileName, defaultImg }) {
+function Upload({ dirName, img, onURL, fileName, defaultImg = "" }) {
     const fileInput = useRef();
     const [image, setImage] = useState(img)
     const [loading, setLoading] = useState(false)
@@ -55,7 +55,7 @@ function Upload({ dirName, img, onURL, fileName, defaultImg }) {
         });
     };
     return (
-        <div style={{ textAlign: "center", width: 200 }}>
+        <div style={{ textAlign: "center", width: 200, margin: "auto" }}>
             <label htmlFor="contained-button-file">
                 <Input accept="image/*" id="contained-button-file" type="file" ref={fileInput} onChange={(e) => handleUpload()} />
                 <Button variant="contained" component="span">

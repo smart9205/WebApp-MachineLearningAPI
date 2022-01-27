@@ -1,51 +1,26 @@
-import * as React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import Input from '@mui/material/Input';
 import AddIcon from '@mui/icons-material/Add';
 import GameTable from './GameTable'
-import Content from './content'
+import GameFormDialog from './GameFormDialog'
 import gameService from '../../../services/game.service';
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles(() => ({
-  paper: { minWidth: "90%" },
-}));
 
 export default function Game() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const [actionType, setActionType] = React.useState("Add");
-  const [gameList, setGameList] = React.useState([]);
-  const [count, setCount] = React.useState(0);
-  const [editData, setEditData] = React.useState({});
-  const [loading, setLoading] = React.useState(true)
-  const [search, setSearch] = React.useState("")
+  const [open, setOpen] = useState(false);
+  const [actionType, setActionType] = useState("Add");
+  const [gameList, setGameList] = useState([]);
+  const [count, setCount] = useState(0);
+  const [editData, setEditData] = useState({});
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState("")
 
   const handleClickOpen = () => () => {
     setOpen(true);
     setEditData({})
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const descriptionElementRef = React.useRef(null);
-
-  React.useEffect(() => {
-    if (open) {
-      const { current: descriptionElement } = descriptionElementRef;
-      if (descriptionElement !== null) {
-        descriptionElement.focus();
-      }
-    }
-  }, [open]);
-
-  React.useEffect(() => {
+  useEffect(() => {
     gameService.getAllGames().then((response) => {
       setGameList(response);
       setLoading(false)
@@ -54,12 +29,12 @@ export default function Game() {
       });
   }, [count]);
 
-  const gameListUpdated = React.useCallback(() => {
+  const gameListUpdated = useCallback(() => {
     setCount(count + 1);
     setOpen(false);
   }, [count]);
 
-  const editCallBack = React.useCallback((param) => {
+  const editCallBack = useCallback((param) => {
     setEditData(param)
     setActionType("Edit")
     setOpen(true)
@@ -76,27 +51,7 @@ export default function Game() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      <Dialog
-        open={open}
-        classes={{ paper: classes.paper }}
-        onClose={handleClose}
-        scroll="paper"
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-      >
-        <DialogTitle id="scroll-dialog-title">{actionType} Game</DialogTitle>
-        <DialogContent
-          dividers={true}
-          style={{ height: '90vh' }}
-          ref={descriptionElementRef}
-        >
-          <Content gameListUpdated={gameListUpdated} actionType={actionType} editData={editData} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
-        </DialogActions>
-      </Dialog>
-
+      <GameFormDialog open={open} setOpen={res => setOpen(res)} gameListUpdated={gameListUpdated} actionType={actionType} editData={editData} />
       <GameTable
         rows={gameList}
         gameListUpdated={gameListUpdated}

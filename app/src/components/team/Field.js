@@ -25,7 +25,6 @@ export default function Field() {
       team_id: teamId
     }).then((res) => {
       setPlayers(res)
-      console.log("players", res)
       setLoading(false)
     }).catch(() => {
       setLoading(false)
@@ -38,7 +37,7 @@ export default function Field() {
   if (loading) { }
 
   return (
-    <div class="team-field-container">
+    <div className="team-field-container">
       <div className='teamHeading'><h1 className='text-center'>{team?.name}</h1></div>
       <div className="containerr">
         <div className="content">
@@ -50,12 +49,13 @@ export default function Field() {
                   return (
                     <div className={`${field.toLowerCase()} p${fPlayers.length}`} key={field}>
                       {
-                        fPlayers.map((fp => (
+                        fPlayers.map(((fp, i) => (
                           <a
                             href={`/player/${btoa(randomString.generate(3) + fp.id + randomString.generate(3))}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="pl"
+                            key={i}
                             style={{ backgroundImage: `url(${fp.image ?? PLAYER_ICON_DEFAULT})` }}
                           >
                             <div className="name" key={fp.id} >

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 import GameService from "../../services/game.service"
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -11,10 +11,6 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -23,9 +19,9 @@ import { CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import Input from '@mui/material/Input';
-import Upload from '../../common/upload';
 import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
 import { TEAM_ICON_DEFAULT } from '../../common/staticData';
+import TeamFormDialog from './game/TeamFormDialog';
 const styles = {
     loader: {
         position: 'absolute',
@@ -120,10 +116,6 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-const initials = {
-    image: "",
-    name: ""
-}
 export default function TeamTab() {
     const [rows, setRows] = useState([])
     const [loading, setLoading] = useState(true)
@@ -132,9 +124,9 @@ export default function TeamTab() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [formOpen, setFormOpen] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [search, setSearch] = useState("")
+    const [selected, setSelected] = useState(null)
 
     const handleDeleteClose = (result) => {
         setDeleteOpen(false);
@@ -146,8 +138,6 @@ export default function TeamTab() {
             init()
         }).catch((e) => { })
     };
-
-    const [selected, setSelected] = useReducer((old, action) => ({ ...old, ...action }), initials)
 
     const init = () => {
         setLoading(true)
@@ -180,49 +170,16 @@ export default function TeamTab() {
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const handleEditClose = (result) => {
-        if (isEdit) {
-            console.log("edit", selected)
-            GameService.updateTeam(selected).then((res) => {
-                console.log("Update result", res)
-                init()
-            })
-        } else {
-            GameService.addTeam({ name: selected.name, image: selected.image }).then((res) => {
-                console.log("add team", res)
-                init()
-            })
-        }
-        setFormOpen(false)
-    }
-
     return (
         <Box sx={{ width: '100%' }}>
             <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
-            <Dialog open={formOpen} onClose={e => handleEditClose(false)} maxWidth="lg">
-                <DialogTitle>{isEdit ? "Edit" : "New"} Team</DialogTitle>
-                <DialogContent style={{ display: "flex" }}>
-                    <Upload
-                        dirName={process.env.REACT_APP_DIR_TEAM}
-                        img={selected.image}
-                        onURL={url => setSelected({ image: url })}
-                        defaultImg={TEAM_ICON_DEFAULT}
-                    />
-                    <Box style={{ minWidth: 300, margin: 10 }}>
-                        <Input
-                            fullWidth
-                            sx={{ mt: 1 }}
-                            placeholder='Team name'
-                            value={selected.name}
-                            onChange={(e) => setSelected({ name: e.target.value })}
-                        />
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={e => handleEditClose(false)}>Cancel</Button>
-                    <Button onClick={e => handleEditClose(true)}>Done</Button>
-                </DialogActions>
-            </Dialog>
+            <TeamFormDialog
+                open={formOpen}
+                onResult={res => {
+                    setFormOpen(false)
+                    if (res) init()
+                }}
+                edit={selected} />
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <div style={{ position: "absolute", zIndex: 10, padding: 10, display: "flex" }}>
                     <Button
@@ -230,8 +187,7 @@ export default function TeamTab() {
                         sx={{ minWidth: 120 }}
                         onClick={() => {
                             setFormOpen(true)
-                            setIsEdit(false)
-                            setSelected(initials)
+                            setSelected(null)
                         }}>
                         <AddIcon />
                         Add Team
@@ -277,20 +233,11 @@ export default function TeamTab() {
                                                     <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='Team' /></TableCell>
                                                 <TableCell align="center">
                                                     {row.name}
-                                                    {/* <Link
-                                                        variant="outlined"
-                                                        to={`/team/${btoa(`${row.away_team_id}|${row.season_id}|${row.league_id}`)}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        {row.away_team_name}
-                                                    </Link> */}
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ width: 50 }}>
                                                     <IconButton
                                                         onClick={() => {
                                                             setFormOpen(true);
-                                                            setIsEdit(true)
                                                             setSelected(row)
                                                         }}>
                                                         <EditIcon />
