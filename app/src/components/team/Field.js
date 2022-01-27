@@ -50,7 +50,7 @@ export default function Field() {
                       {
                         fPlayers.map(((fp, i) => (
                           <a
-                            href={`/player/${fp.id}`}
+                            href={`/player/${btoa(fp.id)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="pl"
