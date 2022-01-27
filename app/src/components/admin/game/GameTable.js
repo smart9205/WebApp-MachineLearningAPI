@@ -10,8 +10,6 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -144,21 +142,6 @@ EnhancedTableHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
-};
-
-const EnhancedTableToolbar = (props) => {
-  return (
-    <Toolbar>
-      <Typography
-        sx={{ flex: '1 1 100%' }}
-        variant="h6"
-        id="tableTitle"
-        component="div"
-      >
-        Games
-      </Typography>
-    </Toolbar>
-  );
 };
 
 export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loading, setLoading, search }) {

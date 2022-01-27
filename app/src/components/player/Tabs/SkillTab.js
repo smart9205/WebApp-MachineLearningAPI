@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ProgressBar } from "react-step-progress-bar";
 import "react-step-progress-bar/styles.css";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import {
     Snackbar,
     Alert,

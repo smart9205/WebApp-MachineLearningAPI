@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Col, Container, ProgressBar, Row, Tab, Table, Tabs } from 'react-bootstrap'
+import { Tab, Tabs } from 'react-bootstrap'
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { makeStyles } from '@mui/styles';
@@ -48,10 +48,13 @@ export default function GameDetailTab() {
             </Dialog>
             <div className='skillsTab'>
                 <Tabs defaultActiveKey="skill" id="uncontrolled-tab-example" className="mt-1 mb-1">
-                    <Tab eventKey="skill" title="SKILLS">
+                    <Tab eventKey="skill" title="Skills">
                         <SkillTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </Tab>
-                    <Tab eventKey="statistic" title="STATISTICS" className='tableBorder'>
+                    <Tab eventKey="statistic" title="Statistics" className='tableBorder'>
+                        <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
+                    </Tab>
+                    <Tab eventKey="highlight" title="My HighLights" className='tableBorder'>
                         <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </Tab>
                 </Tabs>

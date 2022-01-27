@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import randomString from 'randomstring'
 import './Field.css'
 import GameService from "../../services/game.service";
@@ -34,6 +34,8 @@ export default function Field() {
       setTeam(res)
     }).catch(() => { })
   }, [teamId, seasonId, leagueId])
+
+  if (loading) { }
 
   return (
     <div class="team-field-container">

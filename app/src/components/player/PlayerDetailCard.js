@@ -1,8 +1,5 @@
 import React from 'react';
-
-import moment from 'moment'
 import { PLAYER_ICON_DEFAULT } from '../../common/staticData';
-import { Col } from 'react-bootstrap'
 
 export default function PlayerDatailCard({ player }) {
 

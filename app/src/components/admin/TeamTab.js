@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useReducer } from 'react';
 import GameService from "../../services/game.service"
-import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
