@@ -66,7 +66,7 @@ export default function CoachFormDialog({ open, onResult, edit = null }) {
             league: leagueList.find(c => c.id === edit?.league_id),
             team: teamList.find(c => c.id === edit?.team_id),
         })
-    }, [edit])
+    }, [edit, coachList, seasonList, leagueList, teamList])
 
     const handleClose = (result) => {
         setLoading(true)

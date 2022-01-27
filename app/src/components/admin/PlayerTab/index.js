@@ -20,7 +20,6 @@ import { visuallyHidden } from '@mui/utils';
 import { CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import randomString from 'randomstring'
 import moment from 'moment'
 import PlayerFormDialog from './PlayerFormDialog';
 import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
@@ -262,7 +261,7 @@ export default function PlayerTab() {
                                                 <img width={40} src={row.image?.length > 0 ? row.image : PLAYER_ICON_DEFAULT} alt='Player' /></TableCell>
                                             <TableCell align="center">
                                                 <Link
-                                                    to={`/player/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`}
+                                                    to={`/player/${btoa(row.id)}`}
                                                     target="_blank" rel="noopener noreferrer"
                                                     className="name"
                                                 >

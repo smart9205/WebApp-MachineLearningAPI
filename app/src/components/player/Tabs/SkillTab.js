@@ -39,11 +39,21 @@ export default function SkillTab({ playTags }) {
 
     useEffect(() => {
         GameService.getAllPlayerTagsByTeam(teamId, gameId).then((res) => {
-            console.log(res, gameId)
             setSkills(manualFilterForTags(res, playerId))
             setLoading(false)
-        })
+        }).catch(() => setLoading(false))
     }, [teamId, gameId, playerId])
+
+    const saveHighlight = () => {
+        setLoading(true)
+        GameService.addHighlight({
+            player_id: playerId,
+            game_id: gameId
+        }).then((res) => {
+            if (!res[1]) setOpen(true)
+            setLoading(false)
+        }).catch(() => setLoading(false))
+    }
 
     return (
         <>
@@ -54,7 +64,7 @@ export default function SkillTab({ playTags }) {
                 onClose={() => setOpen(false)}
             >
                 <Alert onClose={() => setOpen(false)} severity="warning" sx={{ width: '100%' }}>
-                    Highlights Feature Coming Soon
+                    Already have a highlight!
                 </Alert>
             </Snackbar>
             {loading ?
@@ -67,7 +77,7 @@ export default function SkillTab({ playTags }) {
                                 <IconButton
                                     style={{ padding: 0 }}
                                     className="skilltab-highlight-button"
-                                    onClick={() => { setOpen(true) }}>
+                                    onClick={() => saveHighlight()}>
                                     <img src={StarButton} alt="icon" width={70} />CREATE HIGHLIGHT
                                 </IconButton>
                             </div>

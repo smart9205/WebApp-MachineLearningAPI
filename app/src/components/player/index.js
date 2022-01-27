@@ -46,7 +46,7 @@ export const PlayerContext = createContext({
 export default function Players() {
 
   const { id } = useParams();
-  const playerId = Number(atob(id).slice(3, -3))
+  const playerId = Number(atob(id))
   const [loading, setLoading] = useState(true)
   const [games, setGames] = useState([])
 
@@ -61,6 +61,7 @@ export default function Players() {
     setLoading(true)
     GameService.getAllGamesByPlayer(playerId).then((res) => {
       setGames(res)
+      console.log("games", res)
       setLoading(false)
     }).catch(() => { setLoading(false) })
 
@@ -99,7 +100,7 @@ export default function Players() {
                         }}
                       >
                         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: 60, margin: "0 15px" }} >
-                          <img src={VIDEO_ICON} style={{ width: 60, height: 60, borderRadius: 5 }} alt="video" />
+                          <img src={game.image?.length > 0 ? game.image : VIDEO_ICON} style={{ width: 60, height: 60, borderRadius: 5 }} alt="video" />
                         </div>
                         <div>
                           <div>{moment(game.date).format('DD MMM, YYYY hh:mm')}</div>

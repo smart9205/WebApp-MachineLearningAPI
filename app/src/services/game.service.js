@@ -227,6 +227,12 @@ const addPlayerTag = (req) => {
   });
 }
 
+const addHighlight = (req) => {
+  return axios.post(API_URL + "player/highlight", req, { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+}
+
 const getAllTeamTagsByGame = (id) => {
   return axios.get(API_URL + `team_tag/getbygame/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
     return response.data;
@@ -262,7 +268,11 @@ const getPlayerById = (id) => {
     return response.data;
   });
 }
-
+const getAllHighlightByPlayerId = (id) => {
+  return axios.get(API_URL + `player/highlight/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+    return response.data;
+  });
+}
 const getAllGamesByPlayer = (id) => {
   return axios.get(API_URL + `player/gameByPlayerId/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
     return response.data;
@@ -298,6 +308,7 @@ const gameService = {
   addTeamTag,
   addPlayerTag,
   addCoachTeam,
+  addHighlight,
 
   getGame,
 
@@ -324,6 +335,7 @@ const gameService = {
   getAllPlayerTagsByTeam,
   getAllCoach,
   getAllCoachTeam,
+  getAllHighlightByPlayerId,
 
   getNewStreamURL,
 

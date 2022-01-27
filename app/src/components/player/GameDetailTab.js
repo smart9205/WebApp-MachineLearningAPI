@@ -7,6 +7,7 @@ import TagVideo from './TagVideo';
 import GameService from "../../services/game.service";
 import SkillTab from './Tabs/SkillTab';
 import StatisticTab from './Tabs/StatisticTab';
+import HighlightTab from './Tabs/HighlightTab';
 import { PlayerContext } from './index'
 import useScreenOrientation from 'react-hook-screen-orientation'
 
@@ -55,7 +56,7 @@ export default function GameDetailTab() {
                         <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </Tab>
                     <Tab eventKey="highlight" title="My HighLights" className='tableBorder'>
-                        <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
+                        <HighlightTab />
                     </Tab>
                 </Tabs>
             </div>

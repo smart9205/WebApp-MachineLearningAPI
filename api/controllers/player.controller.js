@@ -2,6 +2,7 @@ const db = require("../models");
 const Player = db.player;
 const Player_Position = db.player_position;
 const User_Config = db.user_config;
+const Highlight = db.highlight;
 const Sequelize = db.sequelize;
 const Op = db.Sequelize.Op;
 
@@ -225,6 +226,71 @@ exports.deleteAll = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while removing all Seasons."
+      });
+    });
+};
+
+exports.addHighlight = (req, res) => {
+  Highlight.findOrCreate({
+    where: {
+      [Op.and]: [
+        { player_id: req.body.player_id },
+        { game_id: req.body.game_id },
+      ]
+    },
+    defaults: {
+      player_id: req.body.player_id,
+      game_id: req.body.game_id,
+      status: 1
+    }
+  })
+    .then(data => res.send(data))
+};
+
+exports.getAllHighlightByPlayerId = (req, res) => {
+  const id = req.params.id;
+  //   SELECT 
+  //   public."Player_Tags".*,
+  //   public."Actions".name as action_name,
+  //   public."Action_Types".name as action_type_name,
+  //   public."Action_Results".name as action_result_name
+  //   FROM public."Player_Tags"
+  // LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+  // LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
+  // LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
+  // LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
+  //     WHERE public."Player_Tags".player_id = ${playerId} and public."Team_Tags".game_id = ${gameId}
+  //     order by public."Player_Tags".start_time 
+  Sequelize.query(`
+    SELECT DISTINCT ON (public."Highlights".id)
+       public."Games".*, 
+       public."Highlights".status,
+       public."Players".*
+    FROM public."Highlights" 
+    JOIN public."Games" on public."Games".id = public."Highlights".game_id 
+    JOIN public."Players" on public."Players".id = public."Highlights".player_id 
+    INNER JOIN (
+      SELECT 
+        public."Player_Tags".*,
+        public."Actions".name as action_name,
+        public."Action_Types".name as action_type_name,
+        public."Action_Results".name as action_result_name,
+        public."Team_Tags".*
+        FROM public."Player_Tags"
+      LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+      LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
+      LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
+      LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
+    ) as Tag on Tag.player_id = public."Highlights".player_id and Tag.game_id = public."Highlights".game_id
+    where public."Highlights".player_id = ${id} 
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
       });
     });
 };

@@ -96,7 +96,6 @@ const RULE = [
 ]
 
 export default function StatisticTab({ tagList, playTags }) {
-    console.log("playlist", tagList)
     return (
         <>
             {RULE.map((rule, idx) =>

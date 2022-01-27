@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
-import randomString from 'randomstring'
 import './Field.css'
 import GameService from "../../services/game.service";
 import { PLAYER_ICON_DEFAULT } from '../../common/staticData';
@@ -51,7 +50,7 @@ export default function Field() {
                       {
                         fPlayers.map(((fp, i) => (
                           <a
-                            href={`/player/${btoa(randomString.generate(3) + fp.id + randomString.generate(3))}`}
+                            href={`/player/${fp.id}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="pl"
@@ -72,6 +71,6 @@ export default function Field() {
           </div>
         </div>
       </div >
-    </div>
+    </div >
   )
 }

@@ -20,6 +20,16 @@ module.exports = app => {
 		controller.findAll
 	);
 
+	app.post(
+		"/player/highlight",
+		controller.addHighlight
+	);
+
+	app.get(
+		"/player/highlight/:id",
+		controller.getAllHighlightByPlayerId
+	);
+
 	app.get(
 		"/player/position",
 		controller.findAllPosition

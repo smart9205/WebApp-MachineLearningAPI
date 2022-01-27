@@ -151,7 +151,6 @@ export default function CoachTab() {
         setLoading(true)
         setFormOpen(false)
         GameService.getAllCoachTeam().then((res) => {
-            console.log("All Coach", res)
             setRows(res)
             setLoading(false)
         }).catch(() => { setLoading(false) })

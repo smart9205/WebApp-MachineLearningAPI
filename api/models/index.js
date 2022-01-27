@@ -49,6 +49,7 @@ db.team_tag = require("../models/team_tag.js")(sequelize, Sequelize);
 db.action = require("../models/action.js")(sequelize, Sequelize);
 db.action_type = require("../models/action_type.js")(sequelize, Sequelize);
 db.action_result = require("../models/action_result.js")(sequelize, Sequelize);
+db.highlight = require("../models/highlight.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: "User_Roles",
