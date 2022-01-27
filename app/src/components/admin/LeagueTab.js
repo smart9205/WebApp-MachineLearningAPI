@@ -141,7 +141,7 @@ export default function LeagueTab() {
 
         if (!result || !selected) return;
 
-        GameService.deleteTeam(selected?.id).then((res) => {
+        GameService.deleteLeague(selected?.id).then((res) => {
             console.log(res)
             init()
         }).catch((e) => { })
@@ -183,13 +183,13 @@ export default function LeagueTab() {
     const handleEditClose = (result) => {
         if (isEdit) {
             console.log("edit", selected)
-            GameService.updateTeam(selected).then((res) => {
+            GameService.updateLeague(selected).then((res) => {
                 console.log("Update result", res)
                 init()
             })
         } else {
-            GameService.addTeam({ name: selected.name, image: selected.image }).then((res) => {
-                console.log("add team", res)
+            GameService.addLeague({ name: selected.name, image: selected.image }).then((res) => {
+                console.log("add League", res)
                 init()
             })
         }
@@ -272,17 +272,9 @@ export default function LeagueTab() {
                                         return (
                                             <TableRow hover key={row.id} >
                                                 <TableCell align="center">
-                                                    <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='Team' /></TableCell>
+                                                    <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='League' /></TableCell>
                                                 <TableCell align="center">
                                                     {row.name}
-                                                    {/* <Link
-                                                        variant="outlined"
-                                                        to={`/team/${btoa(`${row.away_team_id}|${row.season_id}|${row.league_id}`)}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        {row.away_team_name}
-                                                    </Link> */}
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ width: 50 }}>
                                                     <IconButton

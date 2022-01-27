@@ -52,6 +52,11 @@ const updateTeam = (req) => {
     return response.data;
   });
 }
+const updateLeague = (req) => {
+  return axios.put(API_URL + `league/${req.id}`, req, { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+}
 
 const getAllSeasons = () => {
   return axios.get(API_URL + "season", { headers: authHeader() }).then((response) => {
@@ -111,6 +116,11 @@ const deleteGame = (id) => {
 
 const deleteTeam = (id) => {
   return axios.delete(API_URL + `team/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+    return response.data;
+  });
+}
+const deleteLeague = (id) => {
+  return axios.delete(API_URL + `league/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
     return response.data;
   });
 }
@@ -289,6 +299,7 @@ const gameService = {
   updateJersey,
   updateGame,
   updateTeam,
+  updateLeague,
   updateTaggerConfig,
   updatePlayerTag,
   updateTeamTag,
@@ -300,6 +311,7 @@ const gameService = {
   deleteTeamTag,
   deletePlayerTag,
   deleteTeam,
+  deleteLeague,
   deletePlayer,
 };
 
