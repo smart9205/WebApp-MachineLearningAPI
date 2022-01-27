@@ -41,6 +41,7 @@ db.email_queue = require("../models/email_queue.js")(sequelize, Sequelize);
 db.player = require("../models/player.js")(sequelize, Sequelize);
 db.player_position = require("../models/player_position.js")(sequelize, Sequelize);
 db.team_player = require("../models/team_players.js")(sequelize, Sequelize);
+db.coach_team = require("../models/coach_team.js")(sequelize, Sequelize);
 db.player_tag = require("../models/player_tag.js")(sequelize, Sequelize);
 db.team = require("../models/team.js")(sequelize, Sequelize);
 db.team_tag = require("../models/team_tag.js")(sequelize, Sequelize);

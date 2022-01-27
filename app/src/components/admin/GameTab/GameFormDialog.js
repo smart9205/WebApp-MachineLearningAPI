@@ -23,8 +23,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Search from './search'
 import GameService from "../../../services/game.service";
 import Upload from '../../../common/upload';
-import PlayerFormDialog from './PlayerFormDialog';
-import TeamFormDialog from './TeamFormDialog';
+import PlayerFormDialog from '../PlayerTab/PlayerFormDialog';
+import TeamFormDialog from '../TeamTab/TeamFormDialog';
 
 const useStyles = makeStyles((theme) => ({
   paper: { minWidth: "90%" },

@@ -56,6 +56,7 @@ require('./routes/action.routes')(app);
 require('./routes/action_type.routes')(app);
 require('./routes/action_result.routes')(app);
 require('./routes/team_tag.routes')(app);
+require('./routes/coach_team.routes')(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

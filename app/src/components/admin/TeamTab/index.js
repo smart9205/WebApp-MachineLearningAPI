@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useReducer } from 'react';
-import GameService from "../../services/game.service"
+import React, { useEffect, useState } from 'react';
+import GameService from "../../../services/game.service"
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -11,10 +11,6 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -23,9 +19,9 @@ import { CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import Input from '@mui/material/Input';
-import Upload from '../../common/upload';
-import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
-import { TEAM_ICON_DEFAULT } from '../../common/staticData';
+import DeleteConfirmDialog from '../../../common/DeleteConfirmDialog';
+import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
+import TeamFormDialog from './TeamFormDialog';
 const styles = {
     loader: {
         position: 'absolute',
@@ -120,11 +116,7 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-const initials = {
-    image: "",
-    name: ""
-}
-export default function LeagueTab() {
+export default function TeamTab() {
     const [rows, setRows] = useState([])
     const [loading, setLoading] = useState(true)
     const [order, setOrder] = useState('asc');
@@ -132,28 +124,26 @@ export default function LeagueTab() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [formOpen, setFormOpen] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [search, setSearch] = useState("")
+    const [selected, setSelected] = useState(null)
 
     const handleDeleteClose = (result) => {
         setDeleteOpen(false);
 
         if (!result || !selected) return;
 
-        GameService.deleteLeague(selected?.id).then((res) => {
+        GameService.deleteTeam(selected?.id).then((res) => {
             console.log(res)
             init()
         }).catch((e) => { })
     };
 
-    const [selected, setSelected] = useReducer((old, action) => ({ ...old, ...action }), initials)
-
     const init = () => {
         setLoading(true)
         setFormOpen(false)
-        GameService.getAllLeagues().then((res) => {
-            console.log("All Leagues", res)
+        GameService.getAllTeams().then((res) => {
+            console.log("All Teams", res)
             setRows(res)
             setLoading(false)
         }).catch(() => { setLoading(false) })
@@ -180,47 +170,16 @@ export default function LeagueTab() {
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const handleEditClose = (result) => {
-        if (isEdit) {
-            console.log("edit", selected)
-            GameService.updateLeague(selected).then((res) => {
-                console.log("Update result", res)
-                init()
-            })
-        } else {
-            GameService.addLeague({ name: selected.name, image: selected.image }).then((res) => {
-                console.log("add League", res)
-                init()
-            })
-        }
-        setFormOpen(false)
-    }
-
     return (
         <Box sx={{ width: '100%' }}>
             <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
-            <Dialog open={formOpen} onClose={e => handleEditClose(false)}>
-                <DialogTitle>{isEdit ? "Edit" : "New"} League</DialogTitle>
-                <DialogContent>
-                    <Upload
-                        dirName={process.env.REACT_APP_DIR_LEAGUE}
-                        img={selected.image}
-                        onURL={url => setSelected({ image: url })}
-                        defaultImg={TEAM_ICON_DEFAULT}
-                    />
-                    <Input
-                        fullWidth
-                        sx={{ mt: 1 }}
-                        placeholder='League name'
-                        value={selected.name}
-                        onChange={(e) => setSelected({ name: e.target.value })}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={e => handleEditClose(false)}>Cancel</Button>
-                    <Button onClick={e => handleEditClose(true)}>Done</Button>
-                </DialogActions>
-            </Dialog>
+            <TeamFormDialog
+                open={formOpen}
+                onResult={res => {
+                    setFormOpen(false)
+                    if (res) init()
+                }}
+                edit={selected} />
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <div style={{ position: "absolute", zIndex: 10, padding: 10, display: "flex" }}>
                     <Button
@@ -228,11 +187,10 @@ export default function LeagueTab() {
                         sx={{ minWidth: 120 }}
                         onClick={() => {
                             setFormOpen(true)
-                            setIsEdit(false)
-                            setSelected(initials)
+                            setSelected(null)
                         }}>
                         <AddIcon />
-                        Add League
+                        Add Team
                     </Button>
                     <Input
                         sx={{ mx: 10 }}
@@ -272,7 +230,7 @@ export default function LeagueTab() {
                                         return (
                                             <TableRow hover key={row.id} >
                                                 <TableCell align="center">
-                                                    <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='League' /></TableCell>
+                                                    <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='Team' /></TableCell>
                                                 <TableCell align="center">
                                                     {row.name}
                                                 </TableCell>
@@ -280,7 +238,6 @@ export default function LeagueTab() {
                                                     <IconButton
                                                         onClick={() => {
                                                             setFormOpen(true);
-                                                            setIsEdit(true)
                                                             setSelected(row)
                                                         }}>
                                                         <EditIcon />

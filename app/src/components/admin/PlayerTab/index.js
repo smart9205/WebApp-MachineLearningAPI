@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import GameService from "../../services/game.service"
+import { Link } from "react-router-dom";
+import GameService from "../../../services/game.service"
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -9,6 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import Input from '@mui/material/Input';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
@@ -18,10 +20,12 @@ import { visuallyHidden } from '@mui/utils';
 import { CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import Input from '@mui/material/Input';
-import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
-import { TEAM_ICON_DEFAULT } from '../../common/staticData';
-import TeamFormDialog from './game/TeamFormDialog';
+import randomString from 'randomstring'
+import moment from 'moment'
+import PlayerFormDialog from './PlayerFormDialog';
+import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
+import DeleteConfirmDialog from '../../../common/DeleteConfirmDialog';
+
 const styles = {
     loader: {
         position: 'absolute',
@@ -73,6 +77,18 @@ const headCells = [
         id: 'name',
         label: 'Name',
     },
+    {
+        id: 'jersey_number',
+        label: 'Jersey',
+    },
+    {
+        id: 'position_name',
+        label: 'position',
+    },
+    {
+        id: 'day_of_birth',
+        label: 'Birth',
+    },
 ];
 
 function EnhancedTableHead(props) {
@@ -116,34 +132,35 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-export default function TeamTab() {
+export default function PlayerTab() {
     const [rows, setRows] = useState([])
     const [loading, setLoading] = useState(true)
     const [order, setOrder] = useState('asc');
+    const [search, setSearch] = useState("");
     const [orderBy, setOrderBy] = useState('calories');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [formOpen, setFormOpen] = useState(false);
+    const [playerOpen, setPlayerOpen] = useState(false);
+    const [selected, setSelected] = useState(null);
     const [deleteOpen, setDeleteOpen] = useState(false)
-    const [search, setSearch] = useState("")
-    const [selected, setSelected] = useState(null)
 
     const handleDeleteClose = (result) => {
         setDeleteOpen(false);
 
-        if (!result || !selected) return;
+        if (!result) return;
 
-        GameService.deleteTeam(selected?.id).then((res) => {
+        GameService.deletePlayer(selected?.id).then((res) => {
             console.log(res)
             init()
         }).catch((e) => { })
     };
 
     const init = () => {
+        console.log("PlayerPage Init")
         setLoading(true)
-        setFormOpen(false)
-        GameService.getAllTeams().then((res) => {
-            console.log("All Teams", res)
+        setPlayerOpen(false)
+        GameService.getAllPlayers().then((res) => {
+            console.log("All Players", res)
             setRows(res)
             setLoading(false)
         }).catch(() => { setLoading(false) })
@@ -173,24 +190,31 @@ export default function TeamTab() {
     return (
         <Box sx={{ width: '100%' }}>
             <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
-            <TeamFormDialog
-                open={formOpen}
-                onResult={res => {
-                    setFormOpen(false)
-                    if (res) init()
+            <PlayerFormDialog
+                open={playerOpen}
+                edit={selected}
+                onResult={(res) => {
+                    setPlayerOpen(res.open);
+                    if (!!res?.msg) {
+                        console.log("MESSAGE", res.msg, res.result)
+                        // OpenAlert(res.msg, res.result)
+                    }
+                    if (res?.result === "success") {
+                        init()
+                    }
                 }}
-                edit={selected} />
+            />
+
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <div style={{ position: "absolute", zIndex: 10, padding: 10, display: "flex" }}>
                     <Button
                         variant="outlined"
-                        sx={{ minWidth: 120 }}
                         onClick={() => {
-                            setFormOpen(true)
                             setSelected(null)
+                            setPlayerOpen(true)
                         }}>
                         <AddIcon />
-                        Add Team
+                        Add Player
                     </Button>
                     <Input
                         sx={{ mx: 10 }}
@@ -224,31 +248,48 @@ export default function TeamTab() {
                             </TableRow>
                         </TableBody> :
                             <TableBody>
-                                {stableSort(rows.filter(r => r.name.toLowerCase().includes(search.toLowerCase())), getComparator(order, orderBy))
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row, index) => {
-                                        return (
-                                            <TableRow hover key={row.id} >
-                                                <TableCell align="center">
-                                                    <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='Team' /></TableCell>
-                                                <TableCell align="center">
+                                {stableSort(rows.filter(r =>
+                                    r.name.toLowerCase().includes(search.toLowerCase())
+                                    || r.position_name.toLowerCase().includes(search.toLowerCase())
+                                    || r.date_of_birth.toLowerCase().includes(search.toLowerCase())
+                                    || r.jersey_number.toString().toLowerCase().includes(search.toLowerCase())
+                                )
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage), getComparator(order, orderBy)
+                                ).map((row, index) => {
+                                    return (
+                                        <TableRow hover key={row.id} >
+                                            <TableCell align="center">
+                                                <img width={40} src={row.image?.length > 0 ? row.image : PLAYER_ICON_DEFAULT} alt='Player' /></TableCell>
+                                            <TableCell align="center">
+                                                <Link
+                                                    to={`/player/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`}
+                                                    target="_blank" rel="noopener noreferrer"
+                                                    className="name"
+                                                >
                                                     {row.name}
-                                                </TableCell>
-                                                <TableCell align="center" sx={{ width: 50 }}>
-                                                    <IconButton
-                                                        onClick={() => {
-                                                            setFormOpen(true);
-                                                            setSelected(row)
-                                                        }}>
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                </TableCell>
-                                                <TableCell align="center" sx={{ width: 50 }}>
-                                                    <IconButton onClick={() => { setSelected(row); setDeleteOpen(true) }}><DeleteIcon /></IconButton>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell align="center">{row.jersey_number}</TableCell>
+                                            <TableCell align="center">{row.position_name}</TableCell>
+                                            <TableCell align="center">{moment(row.date_of_birth).format('DD MMM, YYYY')}</TableCell>
+                                            <TableCell align="center" sx={{ width: 50 }}>
+                                                <IconButton
+                                                    onClick={() => {
+                                                        setSelected(row)
+                                                        setPlayerOpen(true);
+                                                    }}>
+                                                    <EditIcon />
+                                                </IconButton>
+                                            </TableCell>
+                                            <TableCell align="center" sx={{ width: 50 }}>
+                                                <IconButton onClick={() => {
+                                                    setSelected(row)
+                                                    setDeleteOpen(true)
+                                                }}><DeleteIcon /></IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
                                 {emptyRows > 0 && (
                                     <TableRow
                                         style={{
@@ -272,6 +313,6 @@ export default function TeamTab() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-        </Box >
+        </Box>
     );
 }
