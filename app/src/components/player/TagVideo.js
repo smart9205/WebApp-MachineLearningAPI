@@ -9,7 +9,6 @@ import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import { toSecond } from "../../common/utilities"
 import gameService from '../../services/game.service';
-import vid from "../../assets/1.mp4";
 
 const styles = {
     action: {
