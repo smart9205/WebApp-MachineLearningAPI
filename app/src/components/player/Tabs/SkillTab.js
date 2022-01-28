@@ -26,7 +26,7 @@ const styles = {
         alignItems: "center"
     },
 }
-export default function SkillTab({ playTags }) {
+export default function SkillTab({ playTags, onHighlight }) {
     const { context, setContext } = useContext(PlayerContext)
 
     const teamId = context.game.team_id
@@ -35,6 +35,7 @@ export default function SkillTab({ playTags }) {
 
     const [skills, setSkills] = useState([])
     const [open, setOpen] = useState(false)
+    const [msg, setMsg] = useState("")
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -50,9 +51,11 @@ export default function SkillTab({ playTags }) {
             player_id: playerId,
             game_id: gameId
         }).then((res) => {
-            if (!res[1]) setOpen(true)
+            setOpen(true)
+            setMsg(res.msg)
             setLoading(false)
             setContext({ update_cnt: context.update_cnt + 1 })
+            onHighlight()
         }).catch(() => setLoading(false))
     }
 
@@ -65,7 +68,7 @@ export default function SkillTab({ playTags }) {
                 onClose={() => setOpen(false)}
             >
                 <Alert onClose={() => setOpen(false)} severity="warning" sx={{ width: '100%' }}>
-                    Already have a highlight!
+                    {msg}
                 </Alert>
             </Snackbar>
             {loading ?

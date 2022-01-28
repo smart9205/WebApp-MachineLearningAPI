@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Table, ProgressBar } from 'react-bootstrap'
 import {
+    Snackbar,
+    Alert,
     IconButton,
     CircularProgress
 } from '@mui/material';
@@ -30,6 +32,7 @@ export default function HighlightTab({ playTags }) {
     const playerId = context.player.id
     const update_cnt = context.update_cnt
     const [rows, setRows] = useState([])
+    const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -46,6 +49,16 @@ export default function HighlightTab({ playTags }) {
             <div style={styles.loader}>
                 <CircularProgress />
             </div>}
+        <Snackbar
+            open={open}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            autoHideDuration={2000}
+            onClose={() => setOpen(false)}
+        >
+            <Alert onClose={() => setOpen(false)} severity="success" sx={{ width: '100%' }}>
+                Video URL copied successfully!
+            </Alert>
+        </Snackbar>
         <Table responsive="sm" striped borderless size="sm" className='text-uppercase text-white highlight-table' >
             <thead>
                 <th className='text-center'>Game</th>
@@ -72,7 +85,7 @@ export default function HighlightTab({ playTags }) {
                             </IconButton>
                         </td>
                         <td style={{ padding: 0 }}>
-                            <CopyToClipboard text={"TEST_LINK_COPY"}>
+                            <CopyToClipboard text={"TEST_LINK_COPY"} onCopy={() => setOpen(true)}>
                                 <IconButton sx={{ color: "white", p: 0 }}>
                                     <ShareIcon />
                                 </IconButton>

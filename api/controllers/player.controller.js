@@ -244,14 +244,19 @@ exports.addHighlight = async (req, res) => {
       status: 1
     }
   })
-  if (highlight[0].status === 1) {
-    const updated = await Highlight.update({
-      ...highlight[0], status: 2
-    }, {
-      where: { id: highlight[0].id }
-    })
+  if (highlight[1]) {
+    return res.send({ result: "success", msg: "Highlight is created successfully!" })
+  } else {
+    if (highlight[0].status === 1) {
+      const updated = await Highlight.update({
+        ...highlight[0], status: 2
+      }, {
+        where: { id: highlight[0].id }
+      })
+      return res.send({ result: "success", msg: "Highlight status is updated to progressing" })
+    }
+    return res.send({ result: "success", msg: "Highlight is in progressing status!" })
   }
-  return res.send(highlight)
 };
 
 exports.getAllHighlightByPlayerId = (req, res) => {
@@ -262,6 +267,7 @@ exports.getAllHighlightByPlayerId = (req, res) => {
       public."Games".*, 
       public."Games".image as game_image,
       public."Highlights".status,
+      public."Highlights".video_url as highlight_video_url,
       public."Players".*,
       (
       SELECT json_agg(json_build_object(

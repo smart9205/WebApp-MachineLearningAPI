@@ -29,6 +29,8 @@ export default function GameDetailTab() {
     const [tagList, setTagList] = useState([])
     const [playTags, setPlayTags] = useState([])
 
+    const [tab, setTab] = useState(1);
+
 
     useEffect(() => {
         GameService.getAllPlayerTagsByPlayer(playerId, game?.game_id).then((res) => {
@@ -48,14 +50,18 @@ export default function GameDetailTab() {
                 </DialogContent>
             </Dialog>
             <div className='skillsTab'>
-                <Tabs defaultActiveKey="skill" id="uncontrolled-tab-example" className="mt-1 mb-1">
-                    <Tab eventKey="skill" title="Skills">
-                        <SkillTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
+                <Tabs defaultActiveKey={1} activeKey={tab} id="uncontrolled-tab-example" className="mt-1 mb-1">
+                    <Tab eventKey={1} title="Skills">
+                        <SkillTab
+                            tagList={tagList}
+                            playTags={tags => { setPlayTags(tags); setOpen(true) }}
+                            onHighlight={() => setTab(3)}
+                        />
                     </Tab>
-                    <Tab eventKey="statistic" title="Statistics" className='tableBorder'>
+                    <Tab eventKey={2} title="Statistics" className='tableBorder'>
                         <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </Tab>
-                    <Tab eventKey="highlight" title="My HighLights" className='tableBorder'>
+                    <Tab eventKey={3} title="My HighLights" className='tableBorder'>
                         <HighlightTab playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </Tab>
                 </Tabs>
