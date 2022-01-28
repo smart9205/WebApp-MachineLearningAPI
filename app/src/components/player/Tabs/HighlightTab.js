@@ -85,8 +85,10 @@ export default function HighlightTab({ playTags }) {
                             </IconButton>
                         </td>
                         <td style={{ padding: 0 }}>
-                            <CopyToClipboard text={"TEST_LINK_COPY"} onCopy={() => setOpen(true)}>
-                                <IconButton sx={{ color: "white", p: 0 }}>
+                            <CopyToClipboard
+                                text={process.env.REACT_APP_S3_URI + "/" + process.env.REACT_APP_DIR_HIGHLIGHT + "/" + row.highlight_video_url}
+                                onCopy={() => setOpen(true)}>
+                                <IconButton sx={{ color: "white", p: 0 }} disabled={row.status !== 3}>
                                     <ShareIcon />
                                 </IconButton>
                             </CopyToClipboard>

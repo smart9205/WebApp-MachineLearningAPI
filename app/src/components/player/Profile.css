@@ -214,6 +214,10 @@ div.profileSection td {
 .highlight-table td {
     vertical-align: middle;
 }
+.highlight-table .Mui-disabled {
+    color: white !important;
+    opacity: 0.5;
+}
 .highlight-progressbar {
     min-width: 120px;
 }

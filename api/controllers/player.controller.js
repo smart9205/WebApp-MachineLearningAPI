@@ -241,7 +241,8 @@ exports.addHighlight = async (req, res) => {
     defaults: {
       player_id: req.body.player_id,
       game_id: req.body.game_id,
-      status: 1
+      status: 1,
+      video_url: btoa(new Date()) + ".mp4"
     }
   })
   if (highlight[1]) {
