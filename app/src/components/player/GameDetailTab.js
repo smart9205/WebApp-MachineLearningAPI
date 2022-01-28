@@ -56,7 +56,7 @@ export default function GameDetailTab() {
                         <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </Tab>
                     <Tab eventKey="highlight" title="My HighLights" className='tableBorder'>
-                        <HighlightTab />
+                        <HighlightTab playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </Tab>
                 </Tabs>
             </div>

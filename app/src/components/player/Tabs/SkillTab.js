@@ -27,7 +27,7 @@ const styles = {
     },
 }
 export default function SkillTab({ playTags }) {
-    const { context } = useContext(PlayerContext)
+    const { context, setContext } = useContext(PlayerContext)
 
     const teamId = context.game.team_id
     const gameId = context.game.game_id
@@ -52,6 +52,7 @@ export default function SkillTab({ playTags }) {
         }).then((res) => {
             if (!res[1]) setOpen(true)
             setLoading(false)
+            setContext({ update_cnt: context.update_cnt + 1 })
         }).catch(() => setLoading(false))
     }
 

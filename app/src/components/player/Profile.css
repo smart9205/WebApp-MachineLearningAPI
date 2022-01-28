@@ -104,7 +104,7 @@ ul.nav.nav-tabs {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    padding: 10px;
+    padding: 10px 0;
 }
 .skillsTab li {
     margin-right: 2px;
@@ -214,4 +214,7 @@ div.profileSection .tableBorder .crosses {
 div.profileSection th,
 div.profileSection td {
     padding: 10px 5px 20px 5px !important;
+}
+.highlight-table td {
+    vertical-align: middle;
 }

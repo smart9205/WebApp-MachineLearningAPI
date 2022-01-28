@@ -346,7 +346,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
               onChange={e => setVideoUrl(e.target.value)}
             />
             <Upload
-              dirName={process.env.REACT_APP_DIR_TEAM}
+              dirName={process.env.REACT_APP_DIR_GAME}
               onURL={url => setImage(url)}
               defaultImg={editData?.image?.length > 0 ? editData?.image : TEAM_ICON_DEFAULT}
             />

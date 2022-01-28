@@ -38,7 +38,8 @@ const styles = {
 export const PlayerContext = createContext({
   context: {
     player: null,
-    game: null
+    game: null,
+    update_cnt: 0,
   },
   setContext: () => { }
 });

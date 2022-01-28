@@ -249,39 +249,44 @@ exports.addHighlight = (req, res) => {
 
 exports.getAllHighlightByPlayerId = (req, res) => {
   const id = req.params.id;
-  //   SELECT 
-  //   public."Player_Tags".*,
-  //   public."Actions".name as action_name,
-  //   public."Action_Types".name as action_type_name,
-  //   public."Action_Results".name as action_result_name
-  //   FROM public."Player_Tags"
-  // LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
-  // LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
-  // LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
-  // LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
-  //     WHERE public."Player_Tags".player_id = ${playerId} and public."Team_Tags".game_id = ${gameId}
-  //     order by public."Player_Tags".start_time 
+
   Sequelize.query(`
-    SELECT DISTINCT ON (public."Highlights".id)
-       public."Games".*, 
-       public."Highlights".status,
-       public."Players".*
-    FROM public."Highlights" 
-    JOIN public."Games" on public."Games".id = public."Highlights".game_id 
-    JOIN public."Players" on public."Players".id = public."Highlights".player_id 
-    INNER JOIN (
-      SELECT 
-        public."Player_Tags".*,
-        public."Actions".name as action_name,
+    SELECT 
+      public."Games".*, 
+      public."Games".image as game_image,
+      public."Highlights".status,
+      public."Players".*,
+      (
+      SELECT json_agg(json_build_object(
+        'action_name', temptag.action_name,
+        'action_type_name', temptag.action_type_name,
+        'action_result_name', temptag.action_result_name,
+        'action_id', temptag.action_id,
+        'action_type_id', temptag.action_type_id,
+        'action_result_id', temptag.action_result_id,
+        'start_time', temptag.start_time,
+        'end_time', temptag.end_time
+      )) AS player_tag
+    from (
+        SELECT public."Actions".name as action_name,
         public."Action_Types".name as action_type_name,
         public."Action_Results".name as action_result_name,
-        public."Team_Tags".*
-        FROM public."Player_Tags"
-      LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
-      LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
-      LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
-      LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
-    ) as Tag on Tag.player_id = public."Highlights".player_id and Tag.game_id = public."Highlights".game_id
+        public."Actions".id as action_id,
+        public."Action_Types".id as action_type_id,
+        public."Action_Results".id as action_result_id,
+        public."Player_Tags".start_time as start_time,
+        public."Player_Tags".end_time as end_time
+    FROM public."Player_Tags"
+    LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+    LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
+    LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
+    LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
+    where public."Player_Tags".player_id = public."Highlights".player_id and public."Team_Tags".game_id = public."Highlights".game_id
+    order by public."Player_Tags".start_time) as temptag
+  ) as tags
+  FROM public."Highlights" 
+  JOIN public."Games" on public."Games".id = public."Highlights".game_id 
+  JOIN public."Players" on public."Players".id = public."Highlights".player_id 
     where public."Highlights".player_id = ${id} 
   `)
     .then(data => {
