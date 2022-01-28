@@ -4,6 +4,7 @@ import {
     IconButton,
     CircularProgress
 } from '@mui/material';
+import ShareIcon from '@mui/icons-material/Share';
 import gameService from '../../../services/game.service';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 import { PlayerContext } from '../index';
@@ -77,6 +78,11 @@ export default function HighlightTab({ playTags }) {
                                 className="skilltab-play-button"
                                 onClick={() => { playTags(row.tags) }}>
                                 <img src={PlayButton} alt="icon" width={40} />
+                            </IconButton>
+                        </td>
+                        <td>
+                            <IconButton sx={{ color: "white" }}>
+                                <ShareIcon />
                             </IconButton>
                         </td>
                     </tr>
