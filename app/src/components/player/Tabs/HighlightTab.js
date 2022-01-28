@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Table, } from 'react-bootstrap'
+import { Table, ProgressBar } from 'react-bootstrap'
 import {
     IconButton,
     CircularProgress
@@ -7,7 +7,6 @@ import {
 import gameService from '../../../services/game.service';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 import { PlayerContext } from '../index';
-import { ProgressBar } from "react-step-progress-bar";
 import PlayButton from "../../../assets/Play_button.png"
 const styles = {
     loader: {
@@ -55,15 +54,23 @@ export default function HighlightTab({ playTags }) {
                     <tr key={i}>
                         <td><img width={50} src={row.game_image?.length > 0 ? row.game_image : TEAM_ICON_DEFAULT} alt='Team' /></td>
                         <td><span>{row.date.slice(0, 10)}</span></td>
-                        <td><ProgressBar
-                            height={20}
-                            filledBackground={`linear-gradient(to right, 
+                        <td>
+                            <ProgressBar
+                                animated
+                                variant={row.status === 3 ? "success" : row.status === 2 ? "warning" : "danger"}
+                                now={100 / 3 * row.status}
+                            />
+
+                            {/* <ProgressBar
+                                height={20}
+                                filledBackground={`linear-gradient(to right, 
                                 ${row.status === 1 ? "rgb(255 151 151), rgb(255 0 0)" :
-                                    row.status === 2 ? "#fefb72, #f0bb31" :
-                                        row.status === 3 ? "#98ffae, #00851e" : "#98ffae, #00851e"
-                                })`}
-                            percent={100 / 3 * row.status}
-                        /></td>
+                                        row.status === 2 ? "#fefb72, #f0bb31" :
+                                            row.status === 3 ? "#98ffae, #00851e" : "#98ffae, #00851e"
+                                    })`}
+                                percent={100 / 3 * row.status}
+                            /> */}
+                        </td>
                         <td>
                             <IconButton
                                 style={{ padding: 0 }}
