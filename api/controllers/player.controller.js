@@ -248,15 +248,15 @@ exports.addHighlight = async (req, res) => {
   if (highlight[1]) {
     return res.send({ result: "success", msg: "Highlight is created successfully!" })
   } else {
-    if (highlight[0].status === 1) {
-      const updated = await Highlight.update({
-        ...highlight[0], status: 2
-      }, {
-        where: { id: highlight[0].id }
-      })
-      return res.send({ result: "success", msg: "Highlight status is updated to progressing" })
-    }
-    return res.send({ result: "success", msg: "Highlight is in progressing status!" })
+    // if (highlight[0].status === 1) {
+    //   const updated = await Highlight.update({
+    //     ...highlight[0], status: 2
+    //   }, {
+    //     where: { id: highlight[0].id }
+    //   })
+    //   return res.send({ result: "success", msg: "Highlight status is updated to progressing" })
+    // }
+    return res.send({ result: "success", msg: "Highlight is already created!" })
   }
 };
 
