@@ -230,8 +230,8 @@ exports.deleteAll = (req, res) => {
     });
 };
 
-exports.addHighlight = (req, res) => {
-  Highlight.findOrCreate({
+exports.addHighlight = async (req, res) => {
+  const highlight = await Highlight.findOrCreate({
     where: {
       [Op.and]: [
         { player_id: req.body.player_id },
@@ -244,7 +244,14 @@ exports.addHighlight = (req, res) => {
       status: 1
     }
   })
-    .then(data => res.send(data))
+  if (highlight[0].status === 1) {
+    const updated = await Highlight.update({
+      ...highlight[0], status: 2
+    }, {
+      where: { id: highlight[0].id }
+    })
+  }
+  return res.send(highlight)
 };
 
 exports.getAllHighlightByPlayerId = (req, res) => {

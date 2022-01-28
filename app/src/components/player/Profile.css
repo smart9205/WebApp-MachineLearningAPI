@@ -191,10 +191,6 @@ ul.nav.nav-tabs {
     color: #222 !important;
 }
 
-.progress {
-    margin-left: 10px;
-}
-
 .heading {
     font-size: 28px !important;
 }
@@ -217,4 +213,7 @@ div.profileSection td {
 }
 .highlight-table td {
     vertical-align: middle;
+}
+.highlight-progressbar {
+    min-width: 120px;
 }

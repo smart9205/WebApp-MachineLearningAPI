@@ -9,6 +9,8 @@ import gameService from '../../../services/game.service';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 import { PlayerContext } from '../index';
 import PlayButton from "../../../assets/Play_button.png"
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 const styles = {
     loader: {
         position: 'fixed',
@@ -55,24 +57,13 @@ export default function HighlightTab({ playTags }) {
                     <tr key={i}>
                         <td><img width={50} src={row.game_image?.length > 0 ? row.game_image : TEAM_ICON_DEFAULT} alt='Team' /></td>
                         <td><span>{row.date.slice(0, 10)}</span></td>
-                        <td>
-                            <ProgressBar
-                                animated
-                                variant={row.status === 3 ? "success" : row.status === 2 ? "warning" : "danger"}
-                                now={100 / 3 * row.status}
-                            />
-
-                            {/* <ProgressBar
-                                height={20}
-                                filledBackground={`linear-gradient(to right, 
-                                ${row.status === 1 ? "rgb(255 151 151), rgb(255 0 0)" :
-                                        row.status === 2 ? "#fefb72, #f0bb31" :
-                                            row.status === 3 ? "#98ffae, #00851e" : "#98ffae, #00851e"
-                                    })`}
-                                percent={100 / 3 * row.status}
-                            /> */}
+                        <td className='highlight-progressbar'>
+                            {row.status === 3 ? <ProgressBar animated variant="success" now={100} label="Done" /> :
+                                row.status === 2 ? <ProgressBar animated variant="warning" now={70} label="Processing" /> :
+                                    row.status === 1 ? <ProgressBar animated variant="danger" now={50} label="Pending" /> : <></>
+                            }
                         </td>
-                        <td>
+                        <td style={{ padding: 0 }}>
                             <IconButton
                                 style={{ padding: 0 }}
                                 className="skilltab-play-button"
@@ -80,10 +71,13 @@ export default function HighlightTab({ playTags }) {
                                 <img src={PlayButton} alt="icon" width={40} />
                             </IconButton>
                         </td>
-                        <td>
-                            <IconButton sx={{ color: "white" }}>
-                                <ShareIcon />
-                            </IconButton>
+                        <td style={{ padding: 0 }}>
+                            <CopyToClipboard text={"TEST_LINK_COPY"}>
+                                <IconButton sx={{ color: "white", p: 0 }}>
+                                    <ShareIcon />
+                                </IconButton>
+                            </CopyToClipboard>
+
                         </td>
                     </tr>
                 ))}

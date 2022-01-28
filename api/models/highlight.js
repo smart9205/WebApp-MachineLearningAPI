@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   Highlight.init({
     player_id: DataTypes.INTEGER,
     game_id: DataTypes.INTEGER,
-    status: DataTypes.INTEGER
+    status: DataTypes.INTEGER,
+    video_url: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Highlight',
