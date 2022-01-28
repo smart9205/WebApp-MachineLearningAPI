@@ -100,9 +100,13 @@ export default function Players() {
                           setContext({ game })
                         }}
                       >
-                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: 60, margin: "0 15px" }} >
-                          <img src={game.image?.length > 0 ? game.image : VIDEO_ICON} style={{ width: 60, borderRadius: 6 }} alt="video" />
+                        <div
+                          className='gameImage'
+                          style={{ backgroundImage: `url(${game.image})` }}>
                         </div>
+                        {/* <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: 80, margin: "0 15px" }} >
+                          <img src={game.image?.length > 0 ? game.image : VIDEO_ICON} style={{ width: 80, borderRadius: 6 }} alt="video" />
+                        </div> */}
                         <div>
                           <div>{moment(game.date).format('DD MMM, YYYY hh:mm')}</div>
                           <div>{game.home_team_name}</div>

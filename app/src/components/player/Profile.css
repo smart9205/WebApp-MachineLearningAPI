@@ -94,6 +94,21 @@ div.profileimg {
     background-size: cover;
     background-position: center center;
 }
+
+div.gameImage {
+    margin: 5px 10px;
+    width: 100px;
+    height: 70px;
+    -webkit-border-radius: 10px;
+    -webkit-background-clip: padding-box;
+    -moz-border-radius: 10px;
+    -moz-background-clip: padding;
+    border-radius: 10px;
+    background-clip: padding-box;
+    float: left;
+    background-size: cover;
+    background-position: center center;
+}
 .profileInfo p {
     color: #fff;
     font-size: 20px;

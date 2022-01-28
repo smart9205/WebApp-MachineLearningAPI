@@ -70,7 +70,14 @@ export default function HighlightTab({ playTags }) {
             <tbody className='text-center'>
                 {rows.map((row, i) => (
                     <tr key={i}>
-                        <td><img width={50} src={row.game_image?.length > 0 ? row.game_image : TEAM_ICON_DEFAULT} alt='Team' /></td>
+                        <td>
+                            <img
+                                width={50}
+                                src={row.game_image?.length > 0 ? row.game_image : TEAM_ICON_DEFAULT}
+                                alt='Team'
+                                style={{ borderRadius: 6 }}
+                            />
+                        </td>
                         <td><span>{row.date.slice(0, 10)}</span></td>
                         <td className='highlight-progressbar'>
                             {row.status === 3 ? <ProgressBar animated variant="success" now={100} label="Done" /> :
