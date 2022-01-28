@@ -128,7 +128,7 @@ export default function TagVideo({ tagList, url }) {
                     padding: "5px 10px",
                     borderRadius: 5
                 }}>
-                    #{tagList[curIdx]?.jersey}{" "}{tagList[curIdx]?.player_fname}{" "}{tagList[curIdx]?.player_lname}
+                    #{tagList[curIdx]?.jersey}{" "}{tagList[curIdx]?.player_lname}{" "}{tagList[curIdx]?.player_fname.slice(0, 1)}.
                 </div>
             </div>}
             <div style={styles.buttonBox} >
