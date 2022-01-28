@@ -100,12 +100,12 @@ export default function StatisticTab({ tagList, playTags }) {
         <>
             {RULE.map((rule, idx) =>
                 <Table responsive="sm" striped borderless hover size="sm" className='shots text-uppercase' key={idx}>
-                    <thead>
-                        <th colSpan={3} className='shots-title text-center'>
-                            {rule.title}
-                        </th>
-                    </thead>
                     <tbody className='text-center statistic-table-body'>
+                        <tr>
+                            <td colSpan={3} className='shots-title text-center'>
+                                {rule.title}
+                            </td>
+                        </tr>
                         {
                             !!rule?.successful && <tr>
                                 <td></td>

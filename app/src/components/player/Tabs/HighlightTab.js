@@ -61,9 +61,11 @@ export default function HighlightTab({ playTags }) {
         </Snackbar>
         <Table responsive="sm" striped borderless size="sm" className='text-uppercase text-white highlight-table' >
             <thead>
-                <th className='text-center'>Game</th>
-                <th className='text-center'>Date</th>
-                <th className='text-center'>Status</th>
+                <tr>
+                    <th className='text-center'>Game</th>
+                    <th className='text-center'>Date</th>
+                    <th className='text-center'>Status</th>
+                </tr>
             </thead>
             <tbody className='text-center'>
                 {rows.map((row, i) => (
