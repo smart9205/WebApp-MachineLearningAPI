@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
 import gameService from '../../../services/game.service';
-import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
+import VIDEO_ICON from '../../../assets/video_icon.jpg';
 import { PlayerContext } from '../index';
 import PlayButton from "../../../assets/Play_button.png"
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -71,12 +71,10 @@ export default function HighlightTab({ playTags }) {
                 {rows.map((row, i) => (
                     <tr key={i}>
                         <td>
-                            <img
-                                width={50}
-                                src={row.game_image?.length > 0 ? row.game_image : TEAM_ICON_DEFAULT}
-                                alt='Team'
-                                style={{ borderRadius: 6 }}
-                            />
+                            <div
+                                className='gameImage'
+                                style={{ backgroundImage: `url(${row?.game_image?.length > 0 ? row.game_image : VIDEO_ICON})`, width: 50, height: 35 }}>
+                            </div>
                         </td>
                         <td><span>{row.date.slice(0, 10)}</span></td>
                         <td className='highlight-progressbar'>
