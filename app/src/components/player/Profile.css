@@ -221,3 +221,6 @@ div.profileSection td {
 .highlight-progressbar {
     min-width: 120px;
 }
+.highlight-progressbar .progress {
+    border-radius: 2.25rem !important;
+}
