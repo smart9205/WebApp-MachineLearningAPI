@@ -13,18 +13,19 @@ import gameService from '../../services/game.service';
 const styles = {
     action: {
         position: "absolute",
-        left: 20,
-        bottom: 20,
+        left: "3%",
+        bottom: 10,
         zIndex: 100,
         color: "white",
         fontSize: 14,
-        display: "flex"
+        display: "flex",
+        width: "50%",
     },
     buttonBox: {
         position: "absolute",
         bottom: 5,
         right: 0,
-        width: "50%",
+        width: "45%",
         display: 'flex',
         justifyContent: 'space-evenly'
     },
@@ -111,12 +112,25 @@ export default function TagVideo({ tagList, url }) {
                     height='100%'
                 />
             </div>
-            <div style={styles.action}>
-                <div style={{ backgroundColor: "#3e3e3eba", padding: 5, borderRadius: 5 }}>{tagList[curIdx].action_name}</div>
-                <div style={{ backgroundColor: "hsl(22deg 99% 50%)", padding: 5, borderRadius: 5 }}>
-                    #{tagList[curIdx].jersey}{" "}{tagList[curIdx].player_fname}{tagList[curIdx].player_lname}
+            {!!tagList[curIdx] && <div style={styles.action}>
+                <div style={{
+                    backgroundColor: "rgb(62 62 62 / 62%)",
+                    padding: 5,
+                    borderRadius: 5,
+                    width: "40%",
+                    maxWidth: 120,
+                    textAlign: "center"
+                }}>
+                    {tagList[curIdx]?.action_name}
                 </div>
-            </div>
+                <div style={{
+                    backgroundColor: "rgb(254 124 1 / 69%)",
+                    padding: "5px 10px",
+                    borderRadius: 5
+                }}>
+                    #{tagList[curIdx]?.jersey}{" "}{tagList[curIdx]?.player_fname}{" "}{tagList[curIdx]?.player_lname}
+                </div>
+            </div>}
             <div style={styles.buttonBox} >
                 <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
                     <SkipPreviousSharpIcon color="white" />
