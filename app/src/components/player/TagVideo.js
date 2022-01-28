@@ -9,27 +9,33 @@ import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import { toSecond } from "../../common/utilities"
 import gameService from '../../services/game.service';
+import vid from "../../assets/1.mp4";
 
 const styles = {
     action: {
         position: "absolute",
-        left: "20px",
-        top: "20px",
+        left: 20,
+        bottom: 20,
         zIndex: 100,
-        backgroundColor: "#3e3e3eba",
         color: "white",
-        fontSize: 12,
-        padding: 10
+        fontSize: 14,
+        display: "flex"
     },
     buttonBox: {
         position: "absolute",
-        bottom: 0,
-        width: "100%",
+        bottom: 5,
+        right: 0,
+        width: "50%",
         display: 'flex',
         justifyContent: 'space-evenly'
     },
+    button: {
+        color: "white", backgroundColor: "#80808069"
+    }
 }
 export default function TagVideo({ tagList, url }) {
+
+    console.log("TAGLIST", tagList)
     const player = useRef(null)
     const [play, setPlay] = useState(true)
     const [ready, setReady] = useState(false)
@@ -106,16 +112,22 @@ export default function TagVideo({ tagList, url }) {
                     height='100%'
                 />
             </div>
+            <div style={styles.action}>
+                <div style={{ backgroundColor: "#3e3e3eba", padding: 5, borderRadius: 5 }}>{tagList[curIdx].action_name}</div>
+                <div style={{ backgroundColor: "hsl(22deg 99% 50%)", padding: 5, borderRadius: 5 }}>
+                    #{tagList[curIdx].jersey}{" "}{tagList[curIdx].player_fname}{tagList[curIdx].player_lname}
+                </div>
+            </div>
             <div style={styles.buttonBox} >
-                <IconButton onClick={() => PlayVideo(-1)} style={{ color: "white" }}>
+                <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
                     <SkipPreviousSharpIcon color="white" />
                 </IconButton>
 
-                <IconButton onClick={() => setPlay(p => !p)} style={{ color: "white" }}>
+                <IconButton onClick={() => setPlay(p => !p)} style={styles.button}>
                     {play ? <PauseIcon /> : <PlayArrowIcon />}
                 </IconButton>
 
-                <IconButton onClick={() => PlayVideo(1)} style={{ color: "white" }}>
+                <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
                     <SkipNextSharpIcon />
                 </IconButton>
             </div>

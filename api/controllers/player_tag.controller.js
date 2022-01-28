@@ -70,7 +70,8 @@ exports.getByTeamTag = (req, res) => {
       public."Action_Results".name as action_result_name,
       public."Teams".name as team_name,
       public."Players".f_name as player_fname,
-      public."Players".l_name as player_lname
+      public."Players".l_name as player_lname,
+      public."Players".jersey_number as jersey
     FROM public."Player_Tags"
     JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
     JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
@@ -100,14 +101,18 @@ exports.getByPlayer = (req, res) => {
       public."Player_Tags".*,
       public."Actions".name as action_name,
       public."Action_Types".name as action_type_name,
-      public."Action_Results".name as action_result_name
-      FROM public."Player_Tags"
-    LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
-    LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
-    LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
-    LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
-        WHERE public."Player_Tags".player_id = ${playerId} and public."Team_Tags".game_id = ${gameId}
-        order by public."Player_Tags".start_time 
+      public."Action_Results".name as action_result_name,
+      public."Players".f_name as player_fname,
+      public."Players".l_name as player_lname,
+      public."Players".jersey_number as jersey
+    FROM public."Player_Tags"
+      LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+      LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
+      LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
+      LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
+      LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
+    WHERE public."Player_Tags".player_id = ${playerId} and public."Team_Tags".game_id = ${gameId}
+      order by public."Player_Tags".start_time 
   `)
     .then(data => {
       res.send(data[0]);
@@ -129,12 +134,16 @@ exports.getByTeam = (req, res) => {
       public."Player_Tags".*,
       public."Actions".name as action_name,
       public."Action_Types".name as action_type_name,
-      public."Action_Results".name as action_result_name
-      FROM public."Player_Tags"
+      public."Action_Results".name as action_result_name,
+      public."Players".f_name as player_fname,
+      public."Players".l_name as player_lname,
+      public."Players".jersey_number as jersey
+    FROM public."Player_Tags"
     LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
     LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
     LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
     LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
+    LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
         WHERE public."Player_Tags".team_id = ${teamId} and public."Team_Tags".game_id = ${gameId}
         order by public."Player_Tags".start_time 
   `)

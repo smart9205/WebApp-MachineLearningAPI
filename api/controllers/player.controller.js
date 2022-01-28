@@ -279,7 +279,10 @@ exports.getAllHighlightByPlayerId = (req, res) => {
         'action_type_id', temptag.action_type_id,
         'action_result_id', temptag.action_result_id,
         'start_time', temptag.start_time,
-        'end_time', temptag.end_time
+        'end_time', temptag.end_time,
+        'player_fname', temptag.player_fname,
+        'player_lname', temptag.player_lname,
+        'jersey', temptag.jersey
       )) AS player_tag
     from (
         SELECT public."Actions".name as action_name,
@@ -289,12 +292,16 @@ exports.getAllHighlightByPlayerId = (req, res) => {
         public."Action_Types".id as action_type_id,
         public."Action_Results".id as action_result_id,
         public."Player_Tags".start_time as start_time,
-        public."Player_Tags".end_time as end_time
+        public."Player_Tags".end_time as end_time,
+        public."Players".f_name as player_fname,
+        public."Players".l_name as player_lname,
+        public."Players".jersey_number as jersey
     FROM public."Player_Tags"
     LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
     LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
     LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
     LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
+    LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
     where public."Player_Tags".player_id = public."Highlights".player_id and public."Team_Tags".game_id = public."Highlights".game_id
     order by public."Player_Tags".start_time) as temptag
   ) as tags
