@@ -51,4 +51,10 @@ module.exports = app => {
 		[authJwt.verifyToken, authJwt.isAdmin],
 		controller.deleteAll
 	);
+
+	app.get(
+		"/game/getbyteam/:season/:league/:team",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getbyTeam
+	);
 };

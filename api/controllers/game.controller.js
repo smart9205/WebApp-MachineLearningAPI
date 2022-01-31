@@ -35,6 +35,38 @@ exports.getNewStreamURL = async (req, res) => {
   } catch (e) { console.log("NewStream Error", e); return res.send("error occured") }
 };
 
+exports.getbyTeam = (req, res) => {
+  const seasonId = req.params.season;
+  const leagueId = req.params.league;
+  const teamId = req.params.team;
+
+  Sequelize.query(`
+    SELECT 
+      public."Games".*,
+      public."Seasons".name as season_name,
+      public."Leagues".name as league_name,
+      HomeTeam.name as home_team_name,
+      AwayTeam.name as away_team_name
+    FROM public."Games" 
+    JOIN public."Seasons" on public."Games".season_id = public."Seasons".id
+    JOIN public."Leagues" on public."Games".league_id = public."Leagues".id
+    JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id
+    JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
+    WHERE (public."Games".home_team_id = ${teamId} OR public."Games".away_team_id = ${teamId})  
+      AND public."Games".season_id = ${seasonId} AND public."Games".league_id = ${leagueId}
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+};
+
+
 exports.deleteGames = (req, res) => {
   Sequelize.query(`
     DELETE FROM public."Games" WHERE id IN (${req.body.games.map((id) => id)})

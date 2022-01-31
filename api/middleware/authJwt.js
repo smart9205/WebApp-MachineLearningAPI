@@ -59,6 +59,23 @@ isLogger = (req, res, next) => {
   });
 };
 
+isCoach = (req, res, next) => {
+  User.findByPk(req.userId).then(user => {
+    user.getRoles().then(roles => {
+      for (let i = 0; i < roles.length; i++) {
+        if (roles[i].name === "coach") {
+          next();
+          return;
+        }
+      }
+
+      res.status(403).send({
+        message: "Require Coach Role!"
+      });
+    });
+  });
+};
+
 isLoggerOrAdmin = (req, res, next) => {
   User.findByPk(req.userId).then(user => {
     user.getRoles().then(roles => {
@@ -84,6 +101,7 @@ isLoggerOrAdmin = (req, res, next) => {
 const authJwt = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
+  isCoach: isCoach,
   isLogger: isLogger,
   isLoggerOrAdmin: isLoggerOrAdmin
 };

@@ -132,7 +132,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
     setAlertType(type);
   }
   const gameClicked = () => {
-    if (!homeTeam || !awayTeam || !season || !league || !videoUrl.length) {
+    if (!homeTeam || !awayTeam || !season || !league || !videoUrl?.length) {
       OpenAlert("Input enough data to add a new game!", "warning");
       return;
     }
@@ -188,7 +188,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
     <Dialog
       open={open}
       classes={{ paper: classes.paper }}
-      onClose={handleClose}
+      onClose={() => setOpen(false)}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
@@ -253,7 +253,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
               league={league}
               teamList={teamList}
               playerList={playerList}
-              defaultTeamId={editData.home_team_id}
+              defaultTeamId={editData?.home_team_id}
               updatePlayerListCallBack={updatePlayerListCallBack}
             />
           </Grid>
@@ -359,7 +359,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
               league={league}
               teamList={teamList}
               playerList={playerList}
-              defaultTeamId={editData.away_team_id}
+              defaultTeamId={editData?.away_team_id}
               updatePlayerListCallBack={updatePlayerListCallBack}
             />
           </Grid>

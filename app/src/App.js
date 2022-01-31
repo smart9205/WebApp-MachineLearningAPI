@@ -27,6 +27,7 @@ import { history } from "./helpers/history";
 import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import { getUser, parseJwt } from './common/utilities'
+import Coach from "./components/coach";
 
 const PrivateRoute = ({ component: Component, rememberPath = true, ...rest }) => {
   if (rememberPath) localStorage.setItem("path", rest.location.pathname);
@@ -53,6 +54,20 @@ const AdminRoute = ({ component: Component, rememberPath = true, ...rest }) => {
     />
   )
 }
+
+const CoachRoute = ({ component: Component, rememberPath = true, ...rest }) => {
+  if (rememberPath) localStorage.setItem("path", rest.location.pathname);
+  const { user: currentUser } = useSelector((state) => state.auth);
+  return (
+    <Route
+      {...rest}
+      render={(props) => currentUser && currentUser.roles.includes("ROLE_COACH")
+        ? <Component {...props} />
+        : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />}
+    />
+  )
+}
+
 
 const App = () => {
   const { user: currentUser } = useSelector((state) => state.auth);
@@ -128,6 +143,8 @@ const App = () => {
             <PrivateRoute path='/tagging/:id' component={Tagging} />
             <Route path='/team/:data' component={Field} />
             <Route path='/player/:id' component={Profile} />
+
+            <CoachRoute path='/coach' component={Coach} />
 
             <AdminRoute path='/admin' component={Admin} />
             <AdminRoute path='/admin/:tab' component={Admin} />

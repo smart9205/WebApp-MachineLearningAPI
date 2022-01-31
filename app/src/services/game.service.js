@@ -298,6 +298,11 @@ const getNewStreamURL = (url) => {
   });
 }
 
+const getAllGamesByTeam = (season, league, team) => {
+  return axios.get(API_URL + `game/getbyteam/${season}/${league}/${team}`, { headers: authHeader(), data: { season, league, team } }).then((response) => {
+    return response.data;
+  });
+}
 
 const gameService = {
   addTeamPlayer,
@@ -336,6 +341,7 @@ const gameService = {
   getAllCoach,
   getAllCoachTeam,
   getAllHighlightByPlayerId,
+  getAllGamesByTeam,
 
   getNewStreamURL,
 

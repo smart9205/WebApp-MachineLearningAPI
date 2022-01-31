@@ -23,7 +23,7 @@ const PERIOD = [
   { id: 3, name: "Overtime" },
 ]
 
-export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId }) {
+export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId, ...params }) {
   const [loading, setLoading] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
 
@@ -56,11 +56,11 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
   }
 
   return (
-    <Box sx={{ width: '100%', p: 1 }}>
+    <Box {...params}>
       <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
-      <Paper sx={{ width: '100%', overflow: 'hidden', p: 0.5 }}>
+      <Paper sx={{ width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
         <h5 style={{ textAlign: 'center' }}>Team Tag</h5>
-        <TableContainer style={{ height: "calc(60vh - 30px)" }}>
+        <TableContainer style={{ height: "100%" }}>
           <Table stickyHeader aria-label="sticky table" size={'small'}>
             <TableHead>
               <TableRow>

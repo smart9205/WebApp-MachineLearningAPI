@@ -11,13 +11,13 @@ export default function Game() {
   const [actionType, setActionType] = useState("Add");
   const [gameList, setGameList] = useState([]);
   const [count, setCount] = useState(0);
-  const [editData, setEditData] = useState({});
+  const [editData, setEditData] = useState(null);
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
 
   const handleClickOpen = () => () => {
     setOpen(true);
-    setEditData({})
+    setEditData(null)
   };
 
   useEffect(() => {
@@ -51,7 +51,16 @@ export default function Game() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      <GameFormDialog open={open} setOpen={res => setOpen(res)} gameListUpdated={gameListUpdated} actionType={actionType} editData={editData} />
+      <GameFormDialog
+        open={open}
+        setOpen={res => {
+          setOpen(res)
+          if (!res) setEditData(false)
+        }}
+        gameListUpdated={gameListUpdated}
+        actionType={actionType}
+        editData={editData}
+      />
       <GameTable
         rows={gameList}
         gameListUpdated={gameListUpdated}

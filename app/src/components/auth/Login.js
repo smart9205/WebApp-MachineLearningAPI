@@ -117,20 +117,7 @@ const Login = (props) => {
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
-
-      let device = null;
-      try {
-        device = JSON.parse(CryptoJS.AES.decrypt(cookies.data, SECRET).toString(CryptoJS.enc.Utf8)).device;
-      }
-      catch {
-        console.log("JSON Parse error!");
-        // make a new string and store in cookie
-        device = randomString.generate(16);
-        const data = { device: device, createDate: new Date() }
-        setCookie('data', CryptoJS.AES.encrypt(JSON.stringify(data), SECRET).toString());
-      }
-
-      dispatch(login(email, password, device))
+      dispatch(login(email, password, ""))
         .then(() => {
           // props.history.push("/profile");
           // window.location.reload();

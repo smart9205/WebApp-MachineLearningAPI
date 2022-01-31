@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,17 +17,30 @@ import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
 
 export default function IndividualTagTable({
   rows,
-  actions,
-  actionTypes,
-  actionResults,
   offenseTeamId,
   offenseTeam,
-  defenseTeam,
   updateTagList,
+  defenseTeam = null,
+  ...params
 }) {
-  const [loading, setLoading] = React.useState(false)
-  const [deleteOpen, setDeleteOpen] = React.useState(false)
-  const [selectedRow, setSelectedRow] = React.useState({})
+  const [loading, setLoading] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [selectedRow, setSelectedRow] = useState({})
+  const [actions, setActions] = useState([])
+  const [actionTypes, setActionTypes] = useState([])
+  const [actionResults, setActionResults] = useState([])
+
+  useEffect(() => {
+    GameService.getAllActions().then((res) => {
+      setActions(res)
+    });
+    GameService.getAllActionTypes().then((res) => {
+      setActionTypes(res)
+    });
+    GameService.getAllActionResults().then((res) => {
+      setActionResults(res)
+    });
+  }, [])
 
   const handleDeleteClose = (result) => {
     setDeleteOpen(false);
@@ -58,11 +71,11 @@ export default function IndividualTagTable({
   }
 
   return (
-    <Box sx={{ width: '100%', p: 1 }}>
+    <Box {...params}>
       <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
-      <Paper sx={{ width: '100%', overflow: 'hidden', p: 0.5 }}>
+      <Paper sx={{ width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
         <h5 style={{ textAlign: 'center' }}>Player Tag</h5>
-        <TableContainer style={{ height: "30vh" }}>
+        <TableContainer style={{ height: "100%" }}>
           <Table stickyHeader aria-label="sticky table" size={'small'}>
             <TableHead>
               <TableRow>

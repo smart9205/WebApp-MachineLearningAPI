@@ -84,8 +84,6 @@ const TagButton = styled(({ color, ...otherProps }) => <Button {...otherProps} v
   width: 100%
 `;
 let ALL_ACTION_RESULTS = [];
-let ALL_ACTIONS = [];
-let ALL_ACTION_TYPES = [];
 
 const TAGGING = {
   short_pass: { id: 2, hotkey: "s", value: "Short Pass" },
@@ -161,12 +159,6 @@ export default function Tagging() {
   const defenseTeamId = state.offense === "away" ? state.home_team_id : state.away_team_id
 
   React.useEffect(() => {
-    GameService.getAllActions().then((res) => {
-      ALL_ACTIONS = res;
-    });
-    GameService.getAllActionTypes().then((res) => {
-      ALL_ACTION_TYPES = res;
-    });
     GameService.getAllActionResults().then((res) => {
       ALL_ACTION_RESULTS = res;
     });
@@ -422,6 +414,7 @@ export default function Tagging() {
       >
         <TeamTagTable
           rows={teamTagList}
+          sx={{ height: "60%", p: 1, width: "100%" }}
           updateTagList={updateTagList}
           handleRowClick={row => {
             dispPlayerTags(row?.id)
@@ -430,10 +423,8 @@ export default function Tagging() {
           selectedId={state.curTeamTagId}
         />
         <IndividualTagTable
+          sx={{ height: "40%", p: 1, width: "100%" }}
           rows={playerTagList}
-          actions={ALL_ACTIONS}
-          actionTypes={ALL_ACTION_TYPES}
-          actionResults={ALL_ACTION_RESULTS}
           offenseTeamId={offenseTeamId}
           offenseTeam={offenseTeam}
           defenseTeam={defenseTeam}
