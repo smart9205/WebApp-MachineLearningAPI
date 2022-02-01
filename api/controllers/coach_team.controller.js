@@ -52,6 +52,35 @@ exports.findAll = (req, res) => {
 
 };
 
+
+exports.findAllMine = (req, res) => {
+  console.log("My id", req)
+
+  Sequelize.query(`
+    SELECT 
+      public."Coach_Teams".*,
+      CONCAT (public."Users".first_name,' ', public."Users".last_name) as coach_name,
+      public."Seasons".name as season_name,
+      public."Leagues".name as league_name,
+      public."Teams".name as team_name
+    FROM public."Coach_Teams" 
+    JOIN public."Users" on public."Users".id = public."Coach_Teams".user_id
+    JOIN public."Teams" on public."Teams".id = public."Coach_Teams".team_id
+    JOIN public."Seasons" on public."Seasons".id = public."Coach_Teams".season_id
+    JOIN public."Leagues" on public."Leagues".id = public."Coach_Teams".league_id
+    WHERE public."Coach_Teams".user_id = ${req.userId}
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+
+};
 exports.findOne = (req, res) => {
   const id = req.params.id;
 

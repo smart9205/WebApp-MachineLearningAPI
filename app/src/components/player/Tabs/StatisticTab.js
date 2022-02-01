@@ -1,99 +1,7 @@
 import React from 'react';
 import { Table, } from 'react-bootstrap'
+import { RULE } from '../../../common/staticData';
 
-const RULE = [
-    {
-        title: "Shot",
-        successful: [1, 3],
-        unsuccessful: [2],
-        row: [
-            { action_id: 1, action_type_id: [1], title: "Right" },
-            { action_id: 1, action_type_id: [2], title: "Left" },
-            { action_id: 1, action_type_id: [3], title: "Header" },
-            { action_id: 1, action_type_id: [11], title: "Free-Kick" },
-            { action_id: 1, action_type_id: [13], title: "Penalty" }
-        ]
-    },
-    {
-        title: "Pass",
-        successful: [4],
-        unsuccessful: [11, 15],
-        row: [
-            { action_id: 2, action_type_id: [7], title: "Key Pass" },
-            { action_id: 2, action_type_id: [6], title: "Through Pass" },
-            { action_id: 2, action_type_id: [5], title: "Long Pass" },
-            { action_id: 2, action_type_id: [4], title: "Short Pass" },
-            { action_id: 2, action_type_id: [14], title: "Throw-In" },
-            { action_id: 2, action_type_id: [11], title: "Free Kick" }]
-    },
-    {
-        title: "Dribble",
-        successful: [4],
-        unsuccessful: [10, 17],
-        row: [
-            { action_id: 4, action_type_id: [1], title: "Right" },
-            { action_id: 4, action_type_id: [2], title: "Left" }
-        ]
-    },
-    {
-        title: "Cross",
-        successful: [4],
-        unsuccessful: [7, 8, 15],
-        row: [
-            { action_id: 3, action_type_id: [1], title: "Right" },
-            { action_id: 3, action_type_id: [2], title: "Left" },
-            { action_id: 3, action_type_id: [11], title: "Free Kick" },
-            { action_id: 3, action_type_id: [12], title: "Corner" }
-        ]
-    },
-    {
-        title: "Draw Foul",
-        row: [
-            { action_id: 6, action_type_id: [8], title: "Regular" },
-            { action_id: 6, action_type_id: [9], title: "Yellow Card" },
-            { action_id: 6, action_type_id: [10], title: "Red Card" }]
-    },
-    {
-        title: "Interception",
-        row: [
-            { action_id: 10, action_type_id: [1, 2], title: "Dribble" },
-            { action_id: 10, action_type_id: [7], title: "Key Pass" },
-            { action_id: 10, action_type_id: [6], title: "Through Pass" },
-            { action_id: 10, action_type_id: [5], title: "Long Pass" },
-            { action_id: 10, action_type_id: [4], title: "Short Pass" },
-            { action_id: 10, action_type_id: [14], title: "Throw-In" }]
-    },
-    {
-        title: "Saved",
-        row: [
-            { action_id: 8, action_type_id: [1, 2], title: "Foot" },
-            { action_id: 8, action_type_id: [3], title: "Header" }
-        ]
-    },
-    {
-        title: "Clearance",
-        row: [
-            { action_id: 11, action_type_id: [1, 2], title: "Foot" },
-            { action_id: 11, action_type_id: [3], title: "Header" }
-        ]
-    },
-    {
-        title: "Turnover",
-        row: [
-            { action_id: 2, action_type_id: [11], title: "Bad Pass" },
-            { action_id: 4, action_type_id: [10, 12], title: "Bad Dribble" },
-            { action_id: 7, action_result_id: 15, title: "Offside" },
-        ]
-    },
-    {
-        title: "Foul",
-        row: [
-            { action_id: 5, action_type_id: [8], title: "Regular" },
-            { action_id: 5, action_type_id: [9], title: "Yellow Card" },
-            { action_id: 5, action_type_id: [10], title: "Red Card" }
-        ]
-    },
-]
 
 export default function StatisticTab({ tagList, playTags }) {
     return (
@@ -148,8 +56,7 @@ export default function StatisticTab({ tagList, playTags }) {
                         })}
                     </tbody>
                 </Table>
-            )
-            }
+            )}
         </>
     )
 }

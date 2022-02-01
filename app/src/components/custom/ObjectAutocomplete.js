@@ -3,9 +3,10 @@ import {
     Autocomplete,
     TextField
 } from '@mui/material'
-export default function ObjectAutocomplete({ label, list, onResult, value }) {
+export default function ObjectAutocomplete({ label, list, onResult, value, ...rest }) {
     return (
         <Autocomplete
+            {...rest}
             options={list}
             value={value}
             isOptionEqualToValue={(option, value) => option && option.name}

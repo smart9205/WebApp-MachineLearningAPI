@@ -40,6 +40,13 @@ const getAllCoachTeam = () => {
     return response.data;
   });
 }
+
+const getAllMyCoachTeam = () => {
+  return axios.get(API_URL + "coach_team/mine", { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+}
+
 const addCoachTeam = (req) => {
   return axios.post(API_URL + "coach_team", req, { headers: authHeader() }).then((response) => {
     return response.data;
@@ -340,6 +347,7 @@ const gameService = {
   getAllPlayerTagsByTeam,
   getAllCoach,
   getAllCoachTeam,
+  getAllMyCoachTeam,
   getAllHighlightByPlayerId,
   getAllGamesByTeam,
 

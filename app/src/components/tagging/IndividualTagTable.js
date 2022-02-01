@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import Paper from '@mui/material/Paper';
 import TCellTimeEdit from './TCellTimeEdit';
 import TCellSelectEdit from './TCellSelectEdit';
@@ -21,6 +22,7 @@ export default function IndividualTagTable({
   offenseTeam,
   updateTagList,
   defenseTeam = null,
+  del = true,
   ...params
 }) {
   const [loading, setLoading] = useState(false)
@@ -85,7 +87,7 @@ export default function IndividualTagTable({
                 <TableCell align="center">Player</TableCell>
                 <TableCell align="center">Start Time</TableCell>
                 <TableCell align="center">End Time</TableCell>
-                <TableCell align="center"></TableCell>
+                {del && <TableCell align="center"></TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -98,7 +100,7 @@ export default function IndividualTagTable({
                 <>
                   {rows.map((row) => {
                     return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.id} >
                         <TCellSelectEdit
                           rows={actions}
                           value={{ id: row.action_id, name: row.action_name }}
@@ -129,10 +131,17 @@ export default function IndividualTagTable({
                           update={v => update({ ...row, end_time: v })}
                           start={row.start_time}
                         />
+
                         <TableCell align="center" sx={{ p: 0, m: 0 }}>
-                          <IconButton size="small" onClick={() => { setDeleteOpen(true); setSelectedRow(row) }}>
-                            <DeleteIcon />
-                          </IconButton>
+                          {del ?
+                            < IconButton size="small" onClick={() => { setDeleteOpen(true); setSelectedRow(row) }}>
+                              <DeleteIcon />
+                            </IconButton> :
+                            <IconButton size="small" onClick={() => { }}>
+                              <PlayCircleIcon />
+                            </IconButton>
+                          }
+
                         </TableCell>
                       </TableRow>
                     );
@@ -142,6 +151,6 @@ export default function IndividualTagTable({
           </Table>
         </TableContainer>
       </Paper>
-    </Box>
+    </Box >
   );
 }

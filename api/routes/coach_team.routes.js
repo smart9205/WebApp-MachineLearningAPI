@@ -22,6 +22,12 @@ module.exports = app => {
 	);
 
 	app.get(
+		"/coach_team/mine",
+		[authJwt.isCoach],
+		controller.findAllMine
+	);
+
+	app.get(
 		"/coach_team/:id",
 		controller.findOne
 	);

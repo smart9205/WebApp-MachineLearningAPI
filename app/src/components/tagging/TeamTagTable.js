@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import Box from '@mui/material/Box';
 import GameService from '../../services/game.service';
 import TCellTimeEdit from './TCellTimeEdit';
@@ -23,7 +24,7 @@ const PERIOD = [
   { id: 3, name: "Overtime" },
 ]
 
-export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId, ...params }) {
+export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId, del = true, ...params }) {
   const [loading, setLoading] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
 
@@ -97,9 +98,14 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
                         <TCellTimeEdit value={row.start_time} update={v => update({ ...row, start_time: v })} end={row.end_time} />
                         <TCellTimeEdit value={row.end_time} update={v => update({ ...row, end_time: v })} start={row.start_time} />
                         <TableCell align="center" sx={{ p: 0, m: 0 }}>
-                          <IconButton size="small" onClick={() => setDeleteOpen(true)}>
-                            <DeleteIcon />
-                          </IconButton>
+                          {del ?
+                            <IconButton size="small" onClick={() => setDeleteOpen(true)}>
+                              <DeleteIcon />
+                            </IconButton> :
+                            <IconButton size="small" onClick={() => { }}>
+                              <PlayCircleIcon />
+                            </IconButton>
+                          }
                         </TableCell>
                       </TableRow>
                     );

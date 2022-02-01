@@ -1,20 +1,32 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import moment from 'moment'
-import { Grid, TextField, Paper, Box } from '@mui/material'
+import { Grid, TextField, Paper, Box, IconButton, Autocomplete, CircularProgress } from '@mui/material'
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import VIDEO_ICON from '../../assets/video_icon.jpg';
 import gameService from '../../services/game.service'
-import ObjectAutocomplete from '../custom/ObjectAutocomplete'
 import TeamTagTable from '../tagging/TeamTagTable';
 import IndividualTagTable from '../tagging/IndividualTagTable';
+import TeamAccordion from './TeamAccordion';
+import ReactPlayer from 'react-player';
 
+const styles = {
+    loader: {
+        position: 'fixed',
+        left: '0px',
+        top: '0px',
+        width: '100%',
+        height: '100%',
+        zIndex: 9999,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    }
+};
 export default function Coach() {
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        seasonList: [],
-        leagueList: [],
         teamList: [],
-        season: null,
-        league: null,
         team: null,
         search: "",
 
@@ -22,40 +34,68 @@ export default function Coach() {
         game: null,
         teamTagList: [],
         playerTagList: [],
+        allTagList: [],
         teamTagId: 0,
     })
-    const { seasonList, leagueList, teamList, season, league, team, search, gameList, game, teamTagList, playerTagList, teamTagId } = state
-    useEffect(() => {
-        gameService.getAllSeasons().then((res) => setState({ seasonList: res, season: res[0] }))
-        gameService.getAllLeagues().then((res) => setState({ leagueList: res, league: res[0] }))
-        gameService.getAllTeams().then((res) => setState({ teamList: res, team: res[0] }))
-    }, [])
+    const { teamList, team, search, gameList, game, teamTagList, playerTagList, allTagList, teamTagId } = state
+
+    const [drawOpen, setDrawOpen] = useState(true)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (season === null || league === null || team === null) return
-        gameService.getAllGamesByTeam(season.id, league.id, team.id).then((res) => {
-            setState({ gameList: res, game: res[0] })
-            console.log("gameList", res)
+        setLoading(true)
+        gameService.getAllMyCoachTeam().then((res) => {
+            setState({ teamList: res, team: res[0] })
+            setLoading(false)
         })
-    }, [season, league, team])
+    }, [])
+    console.log("game", game)
+    useEffect(() => {
+        if (!team) return
+        setLoading(true)
+        gameService.getAllGamesByTeam(team.season_id, team.league_id, team.team_id).then((res) => {
+            setState({ gameList: res, game: res[0] })
+            setDrawOpen(true)
+            setLoading(false)
+        })
+    }, [team])
+
+    useEffect(() => {
+        if (!!team && !!game) {
+            setLoading(true)
+            gameService.getAllPlayerTagsByTeam(team.team_id, game?.id).then((res) => {
+                console.log("res", res)
+                setState({ allTagList: res })
+                setLoading(false)
+            })
+        } else {
+            setState({ allTagList: [] })
+        }
+
+    }, [team, game])
 
     const dispTeamTags = () => {
-        if (!game) return
-        gameService.getAllTeamTagsByGame(game?.id).then(res => {
-            setState({ teamTagList: res, teamTagId: res[0]?.id })
-            if (!res.length) {
-                setState({ playerTagList: [] })
-                return
-            }
-            dispPlayerTags(res[0].id)
-        })
+        if (!!game) {
+            gameService.getAllTeamTagsByGame(game?.id).then(res => {
+                setState({ teamTagList: res, teamTagId: res[0]?.id })
+                if (!res.length) {
+                    setState({ playerTagList: [] })
+                    return
+                }
+                dispPlayerTags(res[0].id)
+            })
+        } else {
+            setState({ teamTagList: [], playerTagList: [] })
+        }
     }
 
     useEffect(() => { dispTeamTags() }, [game])
 
-
     const dispPlayerTags = (id) => {
-        if (!id) return
+        if (!id) {
+            setState({ playerTagList: [] });
+            return
+        }
         setState({ teamTagId: id })
 
         gameService.getAllPlayerTagsByTeamTag(id).then(res => {
@@ -63,68 +103,83 @@ export default function Coach() {
         }).catch(() => { })
     }
 
-    return (
+    if (loading)
+        return (
+            <div style={styles.loader}>
+                <CircularProgress />
+            </div>
+        )
+    else return (
         <>
-            <Grid container spacing={2} sx={{ px: 1 }}>
-                <Grid item xs={6} md={3}>
-                    <ObjectAutocomplete
-                        label="Season"
-                        value={season}
-                        list={seasonList}
-                        onResult={res => setState({ season: res })} />
-                </Grid>
-                <Grid item xs={6} md={3}>
-                    <ObjectAutocomplete
-                        label="League"
-                        value={league}
-                        list={leagueList}
-                        onResult={res => setState({ league: res })} />
-                </Grid>
-                <Grid item xs={6} md={3}>
-                    <ObjectAutocomplete
-                        label="Team"
-                        value={team}
-                        list={teamList}
-                        onResult={res => setState({ team: res })} />
-                </Grid>
-                <Grid item xs={6} md={3}>
-                    <TextField
-                        label="Search"
-                        fullWidth
-                        sx={{ my: 1 }}
-                        value={search}
-                        onChange={(e) => setState({ search: e.target.value })} />
-                </Grid>
-            </Grid>
+            <Box sx={{ mx: 1, mt: 1 }} >
+                <Autocomplete
+                    options={teamList}
+                    value={team}
+                    isOptionEqualToValue={(option, value) => option && option.game_name}
+                    disableClearable
+                    getOptionLabel={(t) => `${t.season_name} - ${t.league_name} - ${t.team_name}`}
+                    renderInput={(params) => (
+                        <TextField {...params} label="My Team" />
+                    )}
+                    onChange={(event, newValue) => {
+                        setState({ team: newValue });
+                    }}
+                />
+            </Box>
+            <Paper sx={{ m: 1 }}>
+                <Box sx={{ px: 1, display: drawOpen ? "flex" : "none", height: 200, overflowY: 'auto' }}>
+                    {gameList.length === 0 ?
+                        <Box sx={{
+                            width: "100%", height: "100%", display: "flex",
+                            justifyContent: "center", alignItems: "center"
+                        }}>No Game</Box> :
+                        <Grid container spacing={2} >
+                            {gameList.map((g) => (
+                                <Grid item xs={6} md={3} key={g.id} >
+                                    <div
+                                        style={game !== g ? { opacity: 0.5 } : {}}
+                                        onClick={() => { setState({ game: g }) }}
+                                    >
+                                        <div
+                                            className='gameImage'
+                                            style={{ backgroundImage: `url(${g?.image?.length > 0 ? g.image : VIDEO_ICON})`, width: 100, height: 70 }}>
+                                        </div>
+                                        <div>
+                                            <div>{moment(g.date).format('DD MMM, YYYY hh:mm')}</div>
+                                            <div>{g.home_team_name}</div>
+                                            <div>{g.away_team_name}</div>
+                                        </div>
+                                    </div>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    }
+                </Box>
+                <Box sx={{ textAlign: "center", borderTop: "1px #80808038 solid", m: '0 10px' }}>
+                    <IconButton onClick={() => setDrawOpen((v) => !v)} sx={{ background: '#8080804d' }}>
+                        {
+                            drawOpen ?
+                                <ArrowDropUpIcon /> :
+                                <ArrowDropDownIcon />
+                        }
+                    </IconButton>
+                </Box>
+            </Paper>
 
-            <Grid container spacing={2} sx={{ px: 1 }}>
-                {gameList.map((g) => (
-                    <Grid item xs={6} md={3} key={g.id} >
-                        <div
-                            style={game !== g ? { opacity: 0.5 } : {}}
-                            onClick={() => { setState({ game: g }) }}
-                        >
-                            <div
-                                className='gameImage'
-                                style={{ backgroundImage: `url(${g?.image?.length > 0 ? g.image : VIDEO_ICON})`, width: 100, height: 70 }}>
-                            </div>
-                            <div>
-                                <div>{moment(g.date).format('DD MMM, YYYY hh:mm')}</div>
-                                <div>{g.home_team_name}</div>
-                                <div>{g.away_team_name}</div>
-                            </div>
-                        </div>
-                    </Grid>
-                ))}
-            </Grid>
-            <Box style={{ display: "flex", height: "80vh" }}>
-                <Paper style={{ height: "100%" }}>
+            <Box style={{ display: "flex", height: `calc(95vh - ${drawOpen ? 300 : 100}px)` }}>
+                <TeamAccordion
+                    style={{ minWidth: 300, overflowY: "auto" }}
+                    tagList={allTagList}
+                    playTags={(res) => { }}
+                />
+                <Paper style={{ height: "100%", minWidth: 500 }}>
                     <TeamTagTable
                         sx={{ height: "60%", p: 1, width: "100%" }}
                         rows={teamTagList}
                         updateTagList={() => dispTeamTags()}
                         handleRowClick={row => dispPlayerTags(row?.id)}
                         selectedId={state.curTeamTagId}
+                        del={false}
                     />
                     <IndividualTagTable
                         sx={{ height: "40%", p: 1, width: "100%" }}
@@ -132,8 +187,25 @@ export default function Coach() {
                         offenseTeamId={team?.id}
                         offenseTeam={team}
                         updateTagList={() => dispPlayerTags(state.curTeamTagId)}
+                        del={false}
                     />
                 </Paper>
+                <div style={{ width: "100%", margin: 'auto' }}>
+                    <div className="player-wrapper">
+                        <ReactPlayer
+                            className="react-player"
+                            url={game?.video_url ?? ""}
+                            // ref={player}
+                            // onPlay={() => setPlay(true)}
+                            // onPause={() => setPlay(false)}
+                            // playing={play}
+                            // playbackRate={PLAYBACK_RATE[playRate].rate}
+                            controls={true}
+                            width='100%'
+                            height='100%'
+                        />
+                    </div>
+                </div>
             </Box>
         </>
     )
