@@ -34,8 +34,9 @@ export default function Coach() {
         teamTagList: [],
         playerTagList: [],
         allTagList: [],
+        curTeamTagId: 0
     })
-    const { teamList, team, gameList, game, teamTagList, playerTagList, allTagList } = state
+    const { teamList, team, gameList, game, teamTagList, playerTagList, allTagList, curTeamTagId } = state
 
     const [drawOpen, setDrawOpen] = useState(true)
     const [loading, setLoading] = useState(true)
@@ -77,7 +78,9 @@ export default function Coach() {
         }
     }, [team, game])
     useEffect(() => {
-        setFilteredTeamTagList(teamTagList.filter(f => filterTeamTags.includes(f.id)))
+        const filtered = teamTagList.filter(f => filterTeamTags.includes(f.id))
+        setFilteredTeamTagList(filtered)
+        setState({ curTeamTagId: filtered[0]?.id });
     }, [filterTeamTags, teamTagList])
 
     const dispTeamTags = () => {
@@ -185,8 +188,8 @@ export default function Coach() {
                         sx={{ height: "60%", p: 1, width: "100%" }}
                         rows={filteredTeamTagList}
                         updateTagList={() => dispTeamTags()}
-                        handleRowClick={row => dispPlayerTags(row?.id)}
-                        selectedId={state.curTeamTagId}
+                        handleRowClick={row => { dispPlayerTags(row?.id); setState({ curTeamTagId: row?.id }) }}
+                        selectedId={curTeamTagId}
                         del={false}
                         onPlay={(row) => setVideodata({
                             start_time: row.start_time,
@@ -199,7 +202,7 @@ export default function Coach() {
                         rows={playerTagList}
                         offenseTeamId={team?.id}
                         offenseTeam={team}
-                        updateTagList={() => dispPlayerTags(state.curTeamTagId)}
+                        updateTagList={() => dispPlayerTags(curTeamTagId)}
                         del={false}
                         onPlay={(row) => setVideodata({
                             start_time: row.start_time,

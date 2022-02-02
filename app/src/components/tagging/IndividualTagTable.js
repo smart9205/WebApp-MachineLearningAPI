@@ -28,7 +28,7 @@ export default function IndividualTagTable({
 }) {
   const [loading, setLoading] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
-  const [selectedRow, setSelectedRow] = useState({})
+  const [selectedRow, setSelectedRow] = useState(rows[0])
   const [actions, setActions] = useState([])
   const [actionTypes, setActionTypes] = useState([])
   const [actionResults, setActionResults] = useState([])
@@ -44,6 +44,10 @@ export default function IndividualTagTable({
       setActionResults(res)
     });
   }, [])
+
+  useEffect(() => {
+    setSelectedRow(rows[0])
+  }, [rows])
 
   const handleDeleteClose = (result) => {
     setDeleteOpen(false);
@@ -101,7 +105,13 @@ export default function IndividualTagTable({
                 <>
                   {rows.map((row) => {
                     return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={row.id} >
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={selectedRow?.id === row.id}
+                      >
                         <TCellSelectEdit
                           rows={actions}
                           value={{ id: row.action_id, name: row.action_name }}
@@ -138,7 +148,7 @@ export default function IndividualTagTable({
                             < IconButton size="small" onClick={() => { setDeleteOpen(true); setSelectedRow(row) }}>
                               <DeleteIcon />
                             </IconButton> :
-                            <IconButton size="small" onClick={() => { onPlay(row) }}>
+                            <IconButton size="small" onClick={() => { onPlay(row); setSelectedRow(row) }}>
                               <PlayCircleIcon />
                             </IconButton>
                           }
