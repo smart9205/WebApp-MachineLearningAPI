@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -8,15 +8,26 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Table, } from 'react-bootstrap'
 import { RULE } from '../../common/staticData';
 
-export default function TeamAccordion({ playTags, tagList = [], ...params }) {
-  console.log("taglist", tagList)
+export default function TeamAccordion({ playTags, tagList = [], onActionSelected, ...params }) {
   const [expand, setExpand] = useState(0)
+
+  useEffect(() => {
+    const actionTags = tagList.filter(t => !!RULE[expand].row.find(a => a.action_id === t.action_id));
+    console.log("actiontags", actionTags)
+    onActionSelected(actionTags)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expand, tagList])
+
   return (
     <Box {...params}>
       {RULE.map((rule, idx) => (
         <Accordion
           key={idx}
-          onChange={(event, expanded) => { console.log("Accordion changed", expanded); setExpand(idx) }}
+          onChange={(event, expanded) => {
+            if (expanded) {
+              setExpand(idx)
+            }
+          }}
           expanded={expand === idx}
         >
           <AccordionSummary
