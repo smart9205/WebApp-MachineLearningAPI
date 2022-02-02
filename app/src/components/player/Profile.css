@@ -237,3 +237,8 @@ div.profileSection td {
 .highlight-progressbar .progress {
     border-radius: 2.25rem !important;
 }
+.coach-actionlist-table p,
+.coach-actionlist-table td {
+    margin: 0px !important;
+    font-size: 14px;
+}

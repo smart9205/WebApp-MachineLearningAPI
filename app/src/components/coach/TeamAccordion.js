@@ -23,8 +23,8 @@ export default function TeamAccordion({ playTags, tagList = [], ...params }) {
             <Typography >{rule.title}</Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ p: 0 }}>
-            <Table responsive="sm" striped borderless hover size="sm" className='shots text-uppercase'>
-              <tbody className='text-center statistic-table-body' style={{ background: "black", m: 0 }}>
+            <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
+              <tbody className='text-center' style={{ m: 0 }}>
                 {
                   !!rule?.successful && <tr>
                     <td></td>
