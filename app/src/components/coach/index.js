@@ -9,6 +9,7 @@ import TeamTagTable from '../tagging/TeamTagTable';
 import IndividualTagTable from '../tagging/IndividualTagTable';
 import TeamAccordion from './TeamAccordion';
 import ReactPlayer from 'react-player';
+import TagVideo from '../player/TagVideo';
 
 const styles = {
     loader: {
@@ -170,7 +171,7 @@ export default function Coach() {
                 display: "flex", height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
             }}>
                 <TeamAccordion
-                    style={{ minWidth: 350, overflowY: "auto" }}
+                    style={{ minWidth: 350, overflowY: "scroll" }}
                     tagList={allTagList}
                     playTags={(res) => { }}
                 />
@@ -192,23 +193,9 @@ export default function Coach() {
                         del={false}
                     />
                 </Paper>
-                <div style={{ width: "100%", margin: 'auto' }}>
-                    <div style={{ width: "98%", margin: 'auto' }}>
-                        <div className="player-wrapper">
-                            <ReactPlayer
-                                className="react-player"
-                                url={game?.video_url ?? ""}
-                                // ref={player}
-                                // onPlay={() => setPlay(true)}
-                                // onPause={() => setPlay(false)}
-                                // playing={play}
-                                // playbackRate={PLAYBACK_RATE[playRate].rate}
-                                controls={true}
-                                width='100%'
-                                height='100%'
-                            />
-                        </div>
-                    </div>
+                <div>
+
+                    <TagVideo tagList={[]} url={game?.video_url} />
                 </div>
             </Box>
         </>

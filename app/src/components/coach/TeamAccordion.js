@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -10,10 +10,15 @@ import { RULE } from '../../common/staticData';
 
 export default function TeamAccordion({ playTags, tagList = [], ...params }) {
   console.log("taglist", tagList)
+  const [expand, setExpand] = useState(0)
   return (
     <Box {...params}>
       {RULE.map((rule, idx) => (
-        <Accordion key={idx}>
+        <Accordion
+          key={idx}
+          onChange={(event, expanded) => { console.log("Accordion changed", expanded); setExpand(idx) }}
+          expanded={expand === idx}
+        >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             sx={{ textAlign: "center" }}
