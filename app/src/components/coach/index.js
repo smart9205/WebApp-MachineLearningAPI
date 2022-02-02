@@ -127,7 +127,7 @@ export default function Coach() {
                 />
             </Box>
             <Paper sx={{ m: 1 }}>
-                <Box sx={{ px: 1, display: drawOpen ? "flex" : "none", height: 200, overflowY: 'auto' }}>
+                <Box sx={{ px: 1, display: drawOpen ? "flex" : "none", minHeight: 50, maxHeight: 350, overflowY: 'auto' }}>
                     {gameList.length === 0 ?
                         <Box sx={{
                             width: "100%", height: "100%", display: "flex",
@@ -166,9 +166,11 @@ export default function Coach() {
                 </Box>
             </Paper>
 
-            <Box style={{ display: "flex", height: `calc(95vh - ${drawOpen ? 300 : 100}px)` }}>
+            <Box style={{
+                display: "flex", height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
+            }}>
                 <TeamAccordion
-                    style={{ minWidth: 300, overflowY: "auto" }}
+                    style={{ minWidth: 350, overflowY: "auto" }}
                     tagList={allTagList}
                     playTags={(res) => { }}
                 />
@@ -191,19 +193,21 @@ export default function Coach() {
                     />
                 </Paper>
                 <div style={{ width: "100%", margin: 'auto' }}>
-                    <div className="player-wrapper">
-                        <ReactPlayer
-                            className="react-player"
-                            url={game?.video_url ?? ""}
-                            // ref={player}
-                            // onPlay={() => setPlay(true)}
-                            // onPause={() => setPlay(false)}
-                            // playing={play}
-                            // playbackRate={PLAYBACK_RATE[playRate].rate}
-                            controls={true}
-                            width='100%'
-                            height='100%'
-                        />
+                    <div style={{ width: "98%", margin: 'auto' }}>
+                        <div className="player-wrapper">
+                            <ReactPlayer
+                                className="react-player"
+                                url={game?.video_url ?? ""}
+                                // ref={player}
+                                // onPlay={() => setPlay(true)}
+                                // onPause={() => setPlay(false)}
+                                // playing={play}
+                                // playbackRate={PLAYBACK_RATE[playRate].rate}
+                                controls={true}
+                                width='100%'
+                                height='100%'
+                            />
+                        </div>
                     </div>
                 </div>
             </Box>
