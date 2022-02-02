@@ -38,7 +38,7 @@ const styles = {
         color: "white", backgroundColor: "#80808069"
     }
 }
-export default function VideoPlayer({ videoData, url }) {
+export default function VideoPlayer({ videoData, url, onChangeClip }) {
     const { tagList, autoPlay, start_time } = videoData
 
     const player = useRef(null)
@@ -73,6 +73,12 @@ export default function VideoPlayer({ videoData, url }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tagList, ready])
 
+    useEffect(() => {
+        onChangeClip(tagList[curIdx]?.id ?? 0)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [curIdx, tagList])
+
     const seekTo = (sec) => player.current.seekTo(sec)
 
     const playTagByIdx = (i) => seekTo(toSecond(tagList[i]?.start_time))
@@ -89,7 +95,7 @@ export default function VideoPlayer({ videoData, url }) {
             if (tagList.length <= curIdx) {// last tag
                 setPlay(false)
             }
-            else if (canNext) {
+            else if (canNext) { // is auto play, next clip
                 setCurIdx(c => c + 1)
             } else {
                 setPlay(false)
@@ -121,7 +127,7 @@ export default function VideoPlayer({ videoData, url }) {
                         onReady={() => setReady(true)}
                         onProgress={(p) => onProgress(p.playedSeconds)}
                         playing={play}
-                        controls={false}
+                        controls={true}
                         width='100%'
                         height='100%'
                     />

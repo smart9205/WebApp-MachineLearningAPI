@@ -214,6 +214,7 @@ export default function Coach() {
                 <VideoPlayer
                     videoData={videoData}
                     url={game?.video_url ?? ""}
+                    onChangeClip={(id) => setState({ curTeamTagId: id })}
                 />
             </Box>
         </>
