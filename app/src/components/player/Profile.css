@@ -139,10 +139,12 @@ ul.nav.nav-tabs {
 .statistic-clickable-success {
     text-decoration: underline;
     color: lime !important;
+    cursor: pointer;
 }
 .statistic-clickable-unsuccess {
     text-decoration: underline;
     color: red !important;
+    cursor: pointer;
 }
 .shots p {
     margin: 0px;
