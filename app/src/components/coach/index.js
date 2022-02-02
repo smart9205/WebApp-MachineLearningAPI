@@ -40,6 +40,13 @@ export default function Coach() {
     const [drawOpen, setDrawOpen] = useState(true)
     const [loading, setLoading] = useState(true)
     const [filterTeamTags, setFilterTeamTags] = useState([])
+    const [filteredTeamTagList, setFilteredTeamTagList] = useState([])
+
+    const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
+        start_time: "00:00:00",
+        autoPlay: true,
+        tagList: []
+    })
 
     useEffect(() => {
         setLoading(true)
@@ -57,7 +64,6 @@ export default function Coach() {
             setLoading(false)
         })
     }, [team])
-
     useEffect(() => {
         if (!!team && !!game) {
             setLoading(true)
@@ -69,13 +75,15 @@ export default function Coach() {
         } else {
             setState({ allTagList: [] })
         }
-
     }, [team, game])
+    useEffect(() => {
+        setFilteredTeamTagList(teamTagList.filter(f => filterTeamTags.includes(f.id)))
+    }, [filterTeamTags, teamTagList])
 
     const dispTeamTags = () => {
         if (!!game) {
             gameService.getAllTeamTagsByGame(game?.id).then(res => {
-                setState({ teamTagList: res, teamTagId: res[0]?.id })
+                setState({ teamTagList: res })
                 if (!res.length) {
                     setState({ playerTagList: [] })
                     return
@@ -95,8 +103,6 @@ export default function Coach() {
             setState({ playerTagList: [] });
             return
         }
-        setState({ teamTagId: id })
-
         gameService.getAllPlayerTagsByTeamTag(id).then(res => {
             setState({ playerTagList: res });
         }).catch(() => { })
@@ -177,11 +183,16 @@ export default function Coach() {
                 <Paper style={{ height: "100%", minWidth: 500 }}>
                     <TeamTagTable
                         sx={{ height: "60%", p: 1, width: "100%" }}
-                        rows={teamTagList.filter(f => filterTeamTags.includes(f.id))}
+                        rows={filteredTeamTagList}
                         updateTagList={() => dispTeamTags()}
                         handleRowClick={row => dispPlayerTags(row?.id)}
                         selectedId={state.curTeamTagId}
                         del={false}
+                        onPlay={(row) => setVideodata({
+                            start_time: row.start_time,
+                            autoPlay: true,
+                            tagList: filteredTeamTagList,
+                        })}
                     />
                     <IndividualTagTable
                         sx={{ height: "40%", p: 1, width: "100%" }}
@@ -190,30 +201,17 @@ export default function Coach() {
                         offenseTeam={team}
                         updateTagList={() => dispPlayerTags(state.curTeamTagId)}
                         del={false}
+                        onPlay={(row) => setVideodata({
+                            start_time: row.start_time,
+                            autoPlay: false,
+                            tagList: [row],
+                        })}
                     />
                 </Paper>
                 <VideoPlayer
-                    tagList={[]}
+                    videoData={videoData}
                     url={game?.video_url ?? ""}
                 />
-                {/* <div style={{ width: "100%", margin: 'auto' }}>
-                    <div style={{ width: "98%", margin: 'auto' }}>
-                        <div className="player-wrapper">
-                            <ReactPlayer
-                                className="react-player"
-                                url={game?.video_url ?? ""}
-                                // ref={player}
-                                // onPlay={() => setPlay(true)}
-                                // onPause={() => setPlay(false)}
-                                // playing={play}
-                                // playbackRate={PLAYBACK_RATE[playRate].rate}
-                                controls={true}
-                                width='100%'
-                                height='100%'
-                            />
-                        </div>
-                    </div>
-                </div> */}
             </Box>
         </>
     )

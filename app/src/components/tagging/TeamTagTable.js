@@ -24,7 +24,7 @@ const PERIOD = [
   { id: 3, name: "Overtime" },
 ]
 
-export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId, del = true, ...params }) {
+export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId, onPlay, del = true, ...params }) {
   const [loading, setLoading] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
 
@@ -62,7 +62,7 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
       <Paper sx={{ width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
         <h5 style={{ textAlign: 'center' }}>Team Tag</h5>
         <TableContainer style={{ height: "100%" }}>
-          <Table stickyHeader aria-label="sticky table" size={'small'}>
+          <Table stickyHeader aria-label="sticky table" size={'small'} sx={{ pb: 4 }}>
             <TableHead>
               <TableRow>
                 <TableCell align="center">Period</TableCell>
@@ -102,7 +102,7 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
                             <IconButton size="small" onClick={() => setDeleteOpen(true)}>
                               <DeleteIcon />
                             </IconButton> :
-                            <IconButton size="small" onClick={() => { }}>
+                            <IconButton size="small" onClick={() => { onPlay(row) }}>
                               <PlayCircleIcon />
                             </IconButton>
                           }

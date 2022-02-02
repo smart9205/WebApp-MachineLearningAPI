@@ -2,11 +2,15 @@ import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import {
     IconButton,
+    Switch,
+    FormControlLabel
 } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
 import { toSecond } from "../../common/utilities"
 import gameService from '../../services/game.service';
 
@@ -24,8 +28,9 @@ const styles = {
     buttonBox: {
         position: "absolute",
         bottom: 5,
-        right: 0,
-        width: "45%",
+        left: 0,
+        width: "50%",
+        minWidth: 300,
         display: 'flex',
         justifyContent: 'space-evenly'
     },
@@ -33,13 +38,20 @@ const styles = {
         color: "white", backgroundColor: "#80808069"
     }
 }
-export default function VideoPlayer({ tagList, url, type }) {
+export default function VideoPlayer({ videoData, url }) {
+    const { tagList, autoPlay, start_time } = videoData
 
     const player = useRef(null)
     const [play, setPlay] = useState(true)
     const [ready, setReady] = useState(false)
     const [curIdx, setCurIdx] = useState(0);
     const [videoURL, setVideoURL] = useState("")
+    const [canNext, setCanNext] = useState(true)
+
+    useEffect(() => {
+        seekTo(toSecond(start_time))
+    }, [start_time])
+
 
     useEffect(() => {
         if (url?.startsWith("https://www.youtube.com")) {
@@ -77,8 +89,10 @@ export default function VideoPlayer({ tagList, url, type }) {
             if (tagList.length <= curIdx) {// last tag
                 setPlay(false)
             }
-            else {
+            else if (canNext) {
                 setCurIdx(c => c + 1)
+            } else {
+                setPlay(false)
             }
         }
     }
@@ -95,7 +109,7 @@ export default function VideoPlayer({ tagList, url, type }) {
     }
 
     return (
-        <div style={{ width: "100%", margin: 'auto' }}>
+        <div style={{ width: "100%", margin: 'auto', minWidth: 500, position: "relative" }}>
             <div style={{ width: "98%", margin: 'auto' }}>
                 <div className="player-wrapper">
                     <ReactPlayer
@@ -107,31 +121,12 @@ export default function VideoPlayer({ tagList, url, type }) {
                         onReady={() => setReady(true)}
                         onProgress={(p) => onProgress(p.playedSeconds)}
                         playing={play}
-                        controls={false}
+                        controls={true}
                         width='100%'
                         height='100%'
                     />
                 </div>
             </div>
-            {!!tagList[curIdx] && <div style={styles.action}>
-                <div style={{
-                    backgroundColor: "rgb(62 62 62 / 62%)",
-                    padding: 5,
-                    borderRadius: 5,
-                    width: "40%",
-                    maxWidth: 120,
-                    textAlign: "center"
-                }}>
-                    {tagList[curIdx]?.action_name}
-                </div>
-                <div style={{
-                    backgroundColor: "rgb(254 124 1 / 69%)",
-                    padding: "5px 10px",
-                    borderRadius: 5
-                }}>
-                    #{tagList[curIdx]?.jersey}{" "}{tagList[curIdx]?.player_lname}{" "}{tagList[curIdx]?.player_fname.slice(0, 1)}.
-                </div>
-            </div>}
             <div style={styles.buttonBox} >
                 <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
                     <SkipPreviousSharpIcon color="white" />
@@ -144,6 +139,14 @@ export default function VideoPlayer({ tagList, url, type }) {
                 <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
                     <SkipNextSharpIcon />
                 </IconButton>
+
+                {autoPlay &&
+                    <FormControlLabel
+                        control={<Switch defaultChecked onChange={(e) => setCanNext(e.target.checked)} />}
+                        label="Auto Play"
+                        sx={{ color: "white" }}
+                    />
+                }
             </div>
         </div >
     )

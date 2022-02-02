@@ -23,6 +23,7 @@ export default function IndividualTagTable({
   updateTagList,
   defenseTeam = null,
   del = true,
+  onPlay,
   ...params
 }) {
   const [loading, setLoading] = useState(false)
@@ -78,7 +79,7 @@ export default function IndividualTagTable({
       <Paper sx={{ width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
         <h5 style={{ textAlign: 'center' }}>Player Tag</h5>
         <TableContainer style={{ height: "100%" }}>
-          <Table stickyHeader aria-label="sticky table" size={'small'}>
+          <Table stickyHeader aria-label="sticky table" size={'small'} sx={{ pb: 4 }}>
             <TableHead>
               <TableRow>
                 <TableCell align="center">Action</TableCell>
@@ -137,7 +138,7 @@ export default function IndividualTagTable({
                             < IconButton size="small" onClick={() => { setDeleteOpen(true); setSelectedRow(row) }}>
                               <DeleteIcon />
                             </IconButton> :
-                            <IconButton size="small" onClick={() => { }}>
+                            <IconButton size="small" onClick={() => { onPlay(row) }}>
                               <PlayCircleIcon />
                             </IconButton>
                           }
