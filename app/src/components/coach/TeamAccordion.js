@@ -12,12 +12,12 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
   const [expand, setExpand] = useState(0)
 
   useEffect(() => {
-    const actionTags = tagList.filter(t => !!RULE[expand].row.find(a =>
+    const actionTags = tagList?.filter(t => !!RULE[expand].row.find(a =>
       a.action_id === t.action_id &&
-      a.action_type_id.includes(t.action_type_id) &&
+      a.action_type_id?.includes(t.action_type_id) &&
       (
-        (!a?.susuccessful ? true : a?.susuccessful.includes(t.action_result_id)) ||
-        (!a?.unsusuccessful ? true : a?.unsusuccessful.includes(t.action_result_id))
+        (!a?.susuccessful ? true : a?.susuccessful?.includes(t.action_result_id)) ||
+        (!a?.unsusuccessful ? true : a?.unsusuccessful?.includes(t.action_result_id))
       )
     ));
     onActionSelected(actionTags)
