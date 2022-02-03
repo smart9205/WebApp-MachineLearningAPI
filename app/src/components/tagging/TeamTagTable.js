@@ -86,15 +86,14 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={row.id}
                         selected={row.id === selectedId}
-                        onClick={() => handleRowClick(row)}
                       >
                         <TCellSelectEdit
                           rows={PERIOD}
                           value={PERIOD.find(p => p.id === row.period)}
                           update={v => { update({ ...row, period: v }) }}
                         />
-                        <TableCell align="center">{row.offensive_team_name}</TableCell>
-                        <TableCell align="center">{row.defensive_team_name}</TableCell>
+                        <TableCell align="center" onClick={() => handleRowClick({ row, idx })}>{row.offensive_team_name}</TableCell>
+                        <TableCell align="center" onClick={() => handleRowClick({ row, idx })}>{row.defensive_team_name}</TableCell>
                         <TCellTimeEdit value={row.start_time} update={v => update({ ...row, start_time: v })} end={row.end_time} />
                         <TCellTimeEdit value={row.end_time} update={v => update({ ...row, end_time: v })} start={row.start_time} />
                         <TableCell align="center" sx={{ p: 0, m: 0 }}>

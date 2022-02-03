@@ -77,11 +77,6 @@ export default function Coach() {
             setState({ allTagList: [] })
         }
     }, [team, game])
-    useEffect(() => {
-        const filtered = teamTagList.filter(f => filterTeamTags.includes(f.id))
-        setFilteredTeamTagList(filtered)
-        setState({ curTeamTagId: filtered[0]?.id });
-    }, [filterTeamTags, teamTagList])
 
     const dispTeamTags = () => {
         if (!!game) {
@@ -110,7 +105,8 @@ export default function Coach() {
             return
         }
         gameService.getAllPlayerTagsByTeamTag(id).then(res => {
-            setState({ playerTagList: res });
+            const filterdata = filterTeamTags.map(t => t.action_id)
+            setState({ playerTagList: res.filter(p => filterdata.includes(p.action_id)) });
         }).catch(() => { })
     }
 
@@ -184,14 +180,35 @@ export default function Coach() {
                     style={{ minWidth: 350, overflowY: "scroll" }}
                     tagList={allTagList}
                     playTags={(res) => { }}
-                    onActionSelected={(res) => { setFilterTeamTags(res.map(t => t.team_tag_id)) }}
+                    onActionSelected={(res) => {
+                        setFilterTeamTags(res);
+                        const filterdata = res.map(t => t.team_tag_id)
+                        const filtered = teamTagList.filter(f => filterdata.includes(f.id))
+                        setFilteredTeamTagList(filtered)
+                        setState({ curTeamTagId: filtered[0]?.id });
+                        setVideodata({
+                            idx: 0,
+                            autoPlay: true,
+                            tagList: filtered,
+                            videoPlay: false,
+                        })
+                    }}
                 />
                 <Paper style={{ height: "100%", minWidth: 500 }}>
                     <TeamTagTable
                         sx={{ height: "60%", p: 1, width: "100%" }}
                         rows={filteredTeamTagList}
                         updateTagList={() => dispTeamTags()}
-                        handleRowClick={row => setState({ curTeamTagId: row?.id })}
+                        handleRowClick={({ row, idx }) => {
+                            setState({ curTeamTagId: row?.id })
+                            setVideodata({
+                                idx,
+                                autoPlay: true,
+                                tagList: filteredTeamTagList,
+                                videoPlay: false,
+                            })
+                        }
+                        }
                         selectedId={curTeamTagId}
                         del={false}
                         onPlay={({ row, idx }) => {
