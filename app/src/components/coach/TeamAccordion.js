@@ -71,7 +71,7 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
                       <td style={{ width: "20%", minWidth: 120 }}><p>{type.title}</p></td>
                       <td
                         width="40%"
-                      // onClick={() => { !!success.length && playTags(success) }}
+                        onClick={() => { !!success.length && onActionSelected(success) }}
                       >
                         <p className={success.length > 0 ? "statistic-clickable-success" : ""}>{success.length}</p>
                       </td>
@@ -79,7 +79,7 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
                         !!rule?.successful &&
                         <td
                           width="40%"
-                        // onClick={() => { !!unsuccess.length && playTags(unsuccess) }}
+                          onClick={() => { !!unsuccess.length && onActionSelected(unsuccess) }}
                         >
                           <p className={unsuccess.length > 0 ? "statistic-clickable-unsuccess" : ""}>{unsuccess.length}</p>
                         </td>
