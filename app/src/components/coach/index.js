@@ -44,9 +44,10 @@ export default function Coach() {
     const [filteredTeamTagList, setFilteredTeamTagList] = useState([])
 
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
-        start_time: "00:00:00",
+        idx: 0,
         autoPlay: true,
-        tagList: []
+        tagList: [],
+        videoPlay: false,
     })
 
     useEffect(() => {
@@ -191,11 +192,16 @@ export default function Coach() {
                         handleRowClick={row => { dispPlayerTags(row?.id); setState({ curTeamTagId: row?.id }) }}
                         selectedId={curTeamTagId}
                         del={false}
-                        onPlay={(row) => setVideodata({
-                            start_time: row.start_time,
-                            autoPlay: true,
-                            tagList: filteredTeamTagList,
-                        })}
+                        onPlay={({ row, idx }) => {
+                            console.log("team tag row", row)
+                            setVideodata({
+                                idx,
+                                autoPlay: true,
+                                tagList: filteredTeamTagList,
+                                videoPlay: true,
+                            })
+                            setState({ curTeamTagId: row.id })
+                        }}
                     />
                     <IndividualTagTable
                         sx={{ height: "40%", p: 1, width: "100%" }}
@@ -205,9 +211,10 @@ export default function Coach() {
                         updateTagList={() => dispPlayerTags(curTeamTagId)}
                         del={false}
                         onPlay={(row) => setVideodata({
-                            start_time: row.start_time,
+                            idx: 0,
                             autoPlay: false,
                             tagList: [row],
+                            videoPlay: true
                         })}
                     />
                 </Paper>

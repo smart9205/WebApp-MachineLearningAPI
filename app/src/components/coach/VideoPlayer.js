@@ -13,6 +13,7 @@ import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import { toSecond } from "../../common/utilities"
 import gameService from '../../services/game.service';
+import VIDEO from '../../assets/1.mp4'
 
 const styles = {
     action: {
@@ -39,7 +40,7 @@ const styles = {
     }
 }
 export default function VideoPlayer({ videoData, url, onChangeClip }) {
-    const { tagList, autoPlay, start_time } = videoData
+    const { tagList, autoPlay, idx, videoPlay } = videoData
 
     const player = useRef(null)
     const [play, setPlay] = useState(true)
@@ -47,11 +48,6 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
     const [curIdx, setCurIdx] = useState(0);
     const [videoURL, setVideoURL] = useState("")
     const [canNext, setCanNext] = useState(true)
-
-    useEffect(() => {
-        seekTo(toSecond(start_time))
-    }, [start_time])
-
 
     useEffect(() => {
         if (url?.startsWith("https://www.youtube.com")) {
@@ -68,10 +64,12 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
 
         if (!tagList.length) return
 
-        playTagByIdx(0)
+        playTagByIdx(idx)
+        setCurIdx(idx)
+        setPlay(videoPlay)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tagList, ready])
+    }, [tagList, idx, videoPlay, ready])
 
     useEffect(() => {
         onChangeClip(tagList[curIdx]?.id ?? 0)
@@ -79,7 +77,7 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [curIdx, tagList])
 
-    const seekTo = (sec) => player.current.seekTo(sec)
+    const seekTo = (sec) => player.current && player.current.seekTo(sec)
 
     const playTagByIdx = (i) => seekTo(toSecond(tagList[i]?.start_time))
 
@@ -120,7 +118,7 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
                 <div className="player-wrapper">
                     <ReactPlayer
                         className="react-player"
-                        url={videoURL}
+                        url={VIDEO}
                         ref={player}
                         onPlay={() => setPlay(true)}
                         onPause={() => setPlay(false)}

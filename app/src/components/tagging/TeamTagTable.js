@@ -82,7 +82,7 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
                 </TableRow>
                 :
                 <>
-                  {rows.map((row) => {
+                  {rows.map((row, idx) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={row.id}
                         selected={row.id === selectedId}
@@ -102,7 +102,7 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
                             <IconButton size="small" onClick={() => setDeleteOpen(true)}>
                               <DeleteIcon />
                             </IconButton> :
-                            <IconButton size="small" onClick={() => { onPlay(row) }}>
+                            <IconButton size="small" onClick={() => { onPlay({ row, idx }) }}>
                               <PlayCircleIcon />
                             </IconButton>
                           }
