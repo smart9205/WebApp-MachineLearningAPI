@@ -142,7 +142,6 @@ export default function LeagueTab() {
         if (!result || !selected) return;
 
         GameService.deleteLeague(selected?.id).then((res) => {
-            console.log(res)
             init()
         }).catch((e) => { })
     };
@@ -153,7 +152,6 @@ export default function LeagueTab() {
         setLoading(true)
         setFormOpen(false)
         GameService.getAllLeagues().then((res) => {
-            console.log("All Leagues", res)
             setRows(res)
             setLoading(false)
         }).catch(() => { setLoading(false) })
@@ -182,14 +180,11 @@ export default function LeagueTab() {
 
     const handleEditClose = (result) => {
         if (isEdit) {
-            console.log("edit", selected)
             GameService.updateLeague(selected).then((res) => {
-                console.log("Update result", res)
                 init()
             })
         } else {
             GameService.addLeague({ name: selected.name, image: selected.image }).then((res) => {
-                console.log("add League", res)
                 init()
             })
         }

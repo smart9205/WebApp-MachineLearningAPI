@@ -134,7 +134,6 @@ export default function TeamTab() {
         if (!result || !selected) return;
 
         GameService.deleteTeam(selected?.id).then((res) => {
-            console.log(res)
             init()
         }).catch((e) => { })
     };
@@ -143,7 +142,6 @@ export default function TeamTab() {
         setLoading(true)
         setFormOpen(false)
         GameService.getAllTeams().then((res) => {
-            console.log("All Teams", res)
             setRows(res)
             setLoading(false)
         }).catch(() => { setLoading(false) })

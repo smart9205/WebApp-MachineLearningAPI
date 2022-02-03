@@ -48,7 +48,6 @@ export default function SearchComponent({
         league_id: league.id,
         team_id: selectedTeam.id
       }).then((res) => {
-        console.log("teamPlayerList", res)
         setTeamPlayerList(res);
       })
     } catch (e) {
@@ -70,9 +69,7 @@ export default function SearchComponent({
   }
 
   const deletePlayerCallBack = (id) => {
-    console.log("deletePlayerCallBack", id)
     GameService.deletePlayersInTeam(id).then((res) => {
-      console.log("delete playerfrom team res", res)
       setCount(count + 1);
     })
   };

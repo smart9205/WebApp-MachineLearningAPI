@@ -72,7 +72,6 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
         if (result) {
             if (!edit) {
                 GameService.addPlayer({ ...playerData, position: playerData.position.id }).then((res) => {
-                    console.log("Added", res)
                     if (res.status === "success") {
                         const msg = `${res.data.f_name} ${res.data.l_name} is successfully added!`
                         onResult({ open: false, msg, result: "success", data: res.data });
@@ -83,10 +82,7 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
             }
             else {
                 GameService.updatePlayer({ ...playerData, position: playerData.position.id }).then((res) => {
-                    console.log("Updated", res)
-
                     onResult({ open: false, msg: res, result: "success" });
-
                 }).catch((e) => { onResult({ open: false }); console.log("PLAYER ERROR", e) });
             }
         }

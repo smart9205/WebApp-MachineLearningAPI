@@ -149,17 +149,14 @@ export default function PlayerTab() {
         if (!result) return;
 
         GameService.deletePlayer(selected?.id).then((res) => {
-            console.log(res)
             init()
         }).catch((e) => { })
     };
 
     const init = () => {
-        console.log("PlayerPage Init")
         setLoading(true)
         setPlayerOpen(false)
         GameService.getAllPlayers().then((res) => {
-            console.log("All Players", res)
             setRows(res)
             setLoading(false)
         }).catch(() => { setLoading(false) })
@@ -195,7 +192,6 @@ export default function PlayerTab() {
                 onResult={(res) => {
                     setPlayerOpen(res.open);
                     if (!!res?.msg) {
-                        console.log("MESSAGE", res.msg, res.result)
                         // OpenAlert(res.msg, res.result)
                     }
                     if (res?.result === "success") {

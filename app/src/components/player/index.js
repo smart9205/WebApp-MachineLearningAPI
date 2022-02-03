@@ -62,7 +62,6 @@ export default function Players() {
     setLoading(true)
     GameService.getAllGamesByPlayer(playerId).then((res) => {
       setGames(res)
-      console.log("games", res)
       setLoading(false)
     }).catch(() => { setLoading(false) })
 

@@ -54,7 +54,6 @@ const tablist = {
 }
 export default function Admin() {
     const { tab } = useParams();
-    console.log("tab", tab)
     const [value, setValue] = useState(tablist[tab] ?? 0);
     const handleChange = (event, newValue) => {
         setValue(newValue);

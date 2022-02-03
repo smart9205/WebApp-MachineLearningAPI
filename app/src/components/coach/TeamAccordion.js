@@ -20,7 +20,6 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
         (!a?.unsusuccessful ? true : a?.unsusuccessful.includes(t.action_result_id))
       )
     ));
-    console.log("actiontags", actionTags)
     onActionSelected(actionTags)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expand, tagList])

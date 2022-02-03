@@ -52,7 +52,6 @@ export function parseJwt(token) {
 
 export function divideTags(tagList) {
   let actions = {}
-  console.log("taglist", tagList)
   tagList.forEach(tag => {
     const actionKey = tag.action_name
     const typeKey = tag.action_type_name
@@ -145,7 +144,6 @@ const filterData = [
   },
 ]
 export function manualFilterForTags(tagList, playerId) {
-  console.log("playerid", playerId)
   return filterData.map(f => {
     const total = tagList.filter(tag => tag.action_id === f.action &&
       (f.action_type === null ? true : tag.action_type_id === f.action_type) &&

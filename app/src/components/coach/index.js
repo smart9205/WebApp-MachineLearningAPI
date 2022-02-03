@@ -70,7 +70,6 @@ export default function Coach() {
         if (!!team && !!game) {
             setLoading(true)
             gameService.getAllPlayerTagsByTeam(team.team_id, game?.id).then((res) => {
-                console.log("res", res)
                 setState({ allTagList: res })
                 setLoading(false)
             })
@@ -196,7 +195,6 @@ export default function Coach() {
                         selectedId={curTeamTagId}
                         del={false}
                         onPlay={({ row, idx }) => {
-                            console.log("team tag row", row)
                             setVideodata({
                                 idx,
                                 autoPlay: true,

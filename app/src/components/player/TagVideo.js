@@ -35,7 +35,6 @@ const styles = {
 }
 export default function TagVideo({ tagList, url }) {
 
-    console.log("TAGLIST", tagList)
     const player = useRef(null)
     const [play, setPlay] = useState(true)
     const [ready, setReady] = useState(false)

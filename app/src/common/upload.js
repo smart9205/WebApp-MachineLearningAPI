@@ -40,9 +40,7 @@ function Upload({ dirName, img, onURL, fileName, defaultImg = "" }) {
         const ReactS3Client = new S3(config);
         setLoading(true)
         ReactS3Client.uploadFile(file, fileName).then((data) => {
-            console.log(data);
             if (data.status === 204) {
-                console.log("success");
                 setImage(data.location)
                 onURL(data.location)
             } else {
@@ -50,7 +48,6 @@ function Upload({ dirName, img, onURL, fileName, defaultImg = "" }) {
             }
             setLoading(false)
         }).catch((e) => {
-            console.log("Uploading Error", e)
             setLoading(false)
         });
     };

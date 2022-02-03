@@ -38,7 +38,6 @@ export default function HighlightTab({ playTags }) {
     useEffect(() => {
         setLoading(true)
         gameService.getAllHighlightByPlayerId(playerId).then((res) => {
-            console.log("highlight res", res)
             setRows(res)
             setLoading(false)
         }).catch((e) => setLoading(false))

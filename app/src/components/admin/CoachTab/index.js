@@ -142,7 +142,6 @@ export default function CoachTab() {
         if (!result || !selected) return;
 
         GameService.deleteCoachTeam(selected?.id).then((res) => {
-            console.log(res)
             init()
         }).catch((e) => { })
     };
