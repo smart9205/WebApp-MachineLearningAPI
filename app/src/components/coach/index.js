@@ -92,7 +92,6 @@ export default function Coach() {
                     setState({ playerTagList: [] })
                     return
                 }
-                dispPlayerTags(res[0].id)
             })
         } else {
             setState({ teamTagList: [], playerTagList: [] })
@@ -101,6 +100,10 @@ export default function Coach() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => { dispTeamTags() }, [game])
+
+    useEffect(() => {
+        dispPlayerTags(curTeamTagId)
+    }, [curTeamTagId])
 
     const dispPlayerTags = (id) => {
         if (!id) {
@@ -189,7 +192,7 @@ export default function Coach() {
                         sx={{ height: "60%", p: 1, width: "100%" }}
                         rows={filteredTeamTagList}
                         updateTagList={() => dispTeamTags()}
-                        handleRowClick={row => { dispPlayerTags(row?.id); setState({ curTeamTagId: row?.id }) }}
+                        handleRowClick={row => setState({ curTeamTagId: row?.id })}
                         selectedId={curTeamTagId}
                         del={false}
                         onPlay={({ row, idx }) => {

@@ -92,7 +92,7 @@ export default function IndividualTagTable({
                 <TableCell align="center">Player</TableCell>
                 <TableCell align="center">Start Time</TableCell>
                 <TableCell align="center">End Time</TableCell>
-                {del && <TableCell align="center"></TableCell>}
+                <TableCell align="center"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
