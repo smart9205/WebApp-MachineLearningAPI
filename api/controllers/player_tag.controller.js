@@ -137,15 +137,22 @@ exports.getByTeam = (req, res) => {
       public."Action_Results".name as action_result_name,
       public."Players".f_name as player_fname,
       public."Players".l_name as player_lname,
-      public."Players".jersey_number as jersey
+      public."Players".jersey_number as jersey,
+      public."Team_Tags".period,
+      public."Team_Tags".start_time as t_start_time,
+      public."Team_Tags".end_time as t_end_time,
+      offenseTeam.name as offensive_team_name,
+      defenseTeam.name as defensive_team_name
     FROM public."Player_Tags"
-    LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
-    LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
-    LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
-    LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
-    LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
-        WHERE public."Player_Tags".team_id = ${teamId} and public."Team_Tags".game_id = ${gameId}
-        order by public."Player_Tags".start_time 
+      LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+      LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
+      LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
+      LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
+      LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
+      JOIN public."Teams" as offenseTeam on public."Team_Tags".offensive_team_id = offenseTeam.id
+      JOIN public."Teams" as defenseTeam on public."Team_Tags".defensive_team_id = defenseTeam.id
+    WHERE public."Player_Tags".team_id = ${teamId} and public."Team_Tags".game_id = ${gameId}
+    ORDER BY public."Team_Tags".start_time, public."Player_Tags".start_time 
   `)
     .then(data => {
       res.send(data[0]);
