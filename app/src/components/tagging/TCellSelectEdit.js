@@ -10,11 +10,12 @@ export default function TCellSelectEdit({ value, rows, update }) {
 
     const [editable, setEditable] = React.useState(false)
 
-    const [temp, setTemp] = React.useState(value.id)
+    const [temp, setTemp] = React.useState(value?.id)
 
     const updateValue = (v) => {
-        setTemp(v)
         setEditable(false)
+        if (v === undefined || v === value?.id) return
+        setTemp(v)
         update(v)
     }
 
@@ -34,7 +35,7 @@ export default function TCellSelectEdit({ value, rows, update }) {
                         <MenuItem sx={{ fontSize: 14 }} key={row.id} value={row.id}>{row.name}</MenuItem>
                     )}
                 </Select>
-                : <>{value.name}</>
+                : <>{value?.name}</>
             }
         </TableCell>
     );

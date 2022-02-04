@@ -63,16 +63,16 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
 
         playTagByIdx(idx)
         setCurIdx(idx)
+
         setPlay(videoPlay)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tagList, idx, videoPlay, ready])
 
     useEffect(() => {
-        onChangeClip(tagList[curIdx]?.id ?? 0)
-
+        onChangeClip(curIdx)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [curIdx, tagList])
+    }, [curIdx])
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec)
 

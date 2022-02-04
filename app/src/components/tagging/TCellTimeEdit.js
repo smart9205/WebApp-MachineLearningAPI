@@ -28,7 +28,7 @@ export default function TCellEdit({ value, update, start, end }) {
     const [temp, setTemp] = React.useState(value)
 
     const updateValue = () => {
-        if ((end && end.length > 0 && end < temp) || (start && start.length > 0 && start > temp)) {
+        if ((end && end.length > 0 && end < temp) || (start && start.length > 0 && start > temp) || temp === value) {
             setEditable(false)
             setTemp(value)
             return

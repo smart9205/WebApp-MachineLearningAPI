@@ -12,6 +12,11 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
   const [expand, setExpand] = useState(0)
 
   useEffect(() => {
+    handleActionTags();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expand, tagList])
+
+  const handleActionTags = () => {
     const actionTags = tagList?.filter(t => !!RULE[expand].row.find(a =>
       a.action_id === t.action_id &&
       a.action_type_id?.includes(t.action_type_id) &&
@@ -21,9 +26,7 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
       )
     ));
     onActionSelected(actionTags)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expand, tagList])
-
+  }
   return (
     <Box {...params}>
       {RULE.map((rule, idx) => (
@@ -41,6 +44,7 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
             sx={{ textAlign: "center" }}
             aria-controls="panel1a-content"
             id="panel1a-header"
+            onClick={() => { handleActionTags() }}
           >
             <Typography >{rule.title}</Typography>
           </AccordionSummary>
