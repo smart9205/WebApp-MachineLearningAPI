@@ -111,38 +111,40 @@ export default function TagVideo({ tagList, url }) {
                     height='100%'
                 />
             </div>
-            {!!tagList[curIdx] && <div style={styles.action}>
-                <div style={{
-                    backgroundColor: "rgb(62 62 62 / 62%)",
-                    padding: 5,
-                    borderRadius: 5,
-                    width: "40%",
-                    maxWidth: 120,
-                    textAlign: "center"
-                }}>
-                    {tagList[curIdx]?.action_name}
-                </div>
-                <div style={{
-                    backgroundColor: "rgb(254 124 1 / 69%)",
-                    padding: "5px 10px",
-                    borderRadius: 5
-                }}>
-                    #{tagList[curIdx]?.jersey}{" "}{tagList[curIdx]?.player_lname}{" "}{tagList[curIdx]?.player_fname.slice(0, 1)}.
-                </div>
-            </div>}
-            <div style={styles.buttonBox} >
-                <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
-                    <SkipPreviousSharpIcon color="white" />
-                </IconButton>
+            {ready && <>
+                {!!tagList[curIdx] && <div style={styles.action}>
+                    <div style={{
+                        backgroundColor: "rgb(62 62 62 / 62%)",
+                        padding: 5,
+                        borderRadius: 5,
+                        width: "40%",
+                        maxWidth: 120,
+                        textAlign: "center"
+                    }}>
+                        {tagList[curIdx]?.action_name}
+                    </div>
+                    <div style={{
+                        backgroundColor: "rgb(254 124 1 / 69%)",
+                        padding: "5px 10px",
+                        borderRadius: 5
+                    }}>
+                        #{tagList[curIdx]?.jersey}{" "}{tagList[curIdx]?.player_lname}{" "}{tagList[curIdx]?.player_fname.slice(0, 1)}.
+                    </div>
+                </div>}
+                <div style={styles.buttonBox} >
+                    <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
+                        <SkipPreviousSharpIcon color="white" />
+                    </IconButton>
 
-                <IconButton onClick={() => setPlay(p => !p)} style={styles.button}>
-                    {play ? <PauseIcon /> : <PlayArrowIcon />}
-                </IconButton>
+                    <IconButton onClick={() => setPlay(p => !p)} style={styles.button}>
+                        {play ? <PauseIcon /> : <PlayArrowIcon />}
+                    </IconButton>
 
-                <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
-                    <SkipNextSharpIcon />
-                </IconButton>
-            </div>
+                    <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
+                        <SkipNextSharpIcon />
+                    </IconButton>
+                </div>
+            </>}
         </div >
     )
 }

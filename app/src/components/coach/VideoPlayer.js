@@ -122,7 +122,7 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
                         onReady={() => setReady(true)}
                         onProgress={(p) => onProgress(p.playedSeconds)}
                         playing={play}
-                        controls={true}
+                        controls={false}
                         width='100%'
                         height='100%'
                     />

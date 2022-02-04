@@ -77,7 +77,7 @@ export default function HighlightTab({ playTags }) {
                         </td>
                         <td><span>{row.date.slice(0, 10)}</span></td>
                         <td className='highlight-progressbar'>
-                            {row.status === 3 ? <ProgressBar animated variant="success" now={100} label="Ready" /> :
+                            {row.status === 3 ? <ProgressBar animated variant="success" now={100} label="Ready for share" /> :
                                 row.status === 2 ? <ProgressBar animated variant="warning" now={70} label="Processing" /> :
                                     row.status === 1 ? <ProgressBar animated variant="danger" now={50} label="Pending" /> : <></>
                             }
