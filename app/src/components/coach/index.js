@@ -194,7 +194,7 @@ export default function Coach() {
                         })
                     }}
                 />
-                <Paper style={{ height: "100%", minWidth: 500 }}>
+                <Paper style={{ height: "100%", minWidth: 500 }} className="coach-tag-table">
                     <TeamTagTable
                         sx={{ height: "60%", p: 1, width: "100%" }}
                         rows={filteredTeamTagList}

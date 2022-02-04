@@ -244,3 +244,6 @@ div.profileSection td {
     margin: 0px !important;
     font-size: 14px;
 }
+.coach-tag-table .Mui-selected {
+    background-color: rgba(25, 118, 210, 0.38) !important;
+}
