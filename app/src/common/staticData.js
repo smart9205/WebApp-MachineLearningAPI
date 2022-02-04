@@ -29,7 +29,7 @@ export const RULE = [
     {
         title: "Dribble",
         successful: [4],
-        unsuccessful: [10, 17],
+        unsuccessful: [12, 17],
         row: [
             { action_id: 4, action_type_id: [1], title: "Right" },
             { action_id: 4, action_type_id: [2], title: "Left" }
@@ -80,9 +80,9 @@ export const RULE = [
     {
         title: "Turnover",
         row: [
-            { action_id: 2, action_type_id: [11], title: "Bad Pass" },
-            { action_id: 4, action_type_id: [10, 12], title: "Bad Dribble" },
-            { action_id: 7, action_result_id: 15, title: "Offside" },
+            { action_id: 2, action_result_id: [11], title: "Bad Pass" },
+            { action_id: 4, action_result_id: [10, 12], title: "Bad Dribble" },
+            { action_id: 7, action_result_id: [15], title: "Offside" },
         ]
     },
     {

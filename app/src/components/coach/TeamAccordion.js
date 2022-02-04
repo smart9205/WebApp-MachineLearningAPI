@@ -71,9 +71,9 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
                 {rule.row.map((type, i) => {
                   const data = tagList.filter(t =>
                     t.action_id === type.action_id &&
-                    (!type?.action_result_id ? true : t.action_result_id === type.action_result_id) &&
-                    (!type?.action_type_id ? true : type.action_type_id.includes(t.action_type_id))
-                  )
+                    (!type?.action_result_id ? true : type.action_result_id.includes(t.action_result_id) &&
+                      (!type?.action_type_id ? true : type.action_type_id.includes(t.action_type_id))
+                    ))
                   const success = data.filter(f => !rule?.successful ? true : rule?.successful.includes(f.action_result_id))
                   const unsuccess = data.filter(f => !rule?.unsuccessful ? true : rule?.unsuccessful.includes(f.action_result_id))
                   return (
