@@ -153,7 +153,7 @@ const App = () => {
           rel="stylesheet"
         />
         <Navbar />
-        <div style={{ marginTop: 60 }}>
+        <div style={{ marginTop: 90 }}>
           <Switch>
             <Route exact path={["/", "/home"]} component={Home} />
             <Route exact path="/login" component={Login} />

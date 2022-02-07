@@ -147,6 +147,27 @@ class Navbar extends Component {
                                         News
                                     </AnchorLink>
                                 </li>
+
+                                <li className="nav-item">
+                                    <Link
+                                        onClick={this.toggleNavbar}
+                                        offset={() => -1}
+                                        className="nav-link"
+                                        to="/coach"
+                                    >
+                                        Coach
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link
+                                        onClick={this.toggleNavbar}
+                                        offset={() => -1}
+                                        className="nav-link"
+                                        to="/admin"
+                                    >
+                                        Admin
+                                    </Link>
+                                </li>
                                 <li className="nav-item">
                                     <Link
                                         onClick={this.toggleNavbar}
