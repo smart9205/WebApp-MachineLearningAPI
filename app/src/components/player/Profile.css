@@ -194,7 +194,7 @@ ul.nav.nav-tabs {
     font-size: 28px !important;
 }
 
-.nav-link {
+/* .nav-link {
     color: #222 !important;
     font-weight: 700;
     background-color: #fcefee !important;
@@ -204,7 +204,7 @@ ul.nav.nav-tabs {
 .nav-link.active {
     background-color: #e3c4a8 !important;
     color: #222 !important;
-}
+} */
 
 .heading {
     font-size: 28px !important;
