@@ -37,7 +37,8 @@ import { getUser, parseJwt } from './common/utilities'
 import Coach from "./components/coach";
 import Navbar from "./components/Layout/Navbar";
 import Footer from "./components/Layout/Footer";
-import { requirePropFactory } from "@mui/material";
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const PrivateRoute = ({ component: Component, rememberPath = true, ...rest }) => {
   if (rememberPath) localStorage.setItem("path", rest.location.pathname);
@@ -131,33 +132,50 @@ const App = () => {
     debounce: 500
   })
 
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? 'dark' : 'dark',
+        },
+      }),
+    [prefersDarkMode],
+  );
+
   return (
-    <Router history={history}>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-      />
-      <Navbar />
-      <Switch>
-        <Route exact path={["/", "/home"]} component={Home} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/logout" component={Logout} />
-        <Route exact path="/forgetpassword" component={ForgetPassword} />
-        <Route path="/resetPwdVerify/:code" component={ForgetPassword} />
-        <Route path="/verification/:code" component={Login} />
-        <Route exact path="/register" component={Register} />
-        <PrivateRoute path='/tagging/:id' component={Tagging} />
-        <Route path='/team/:data' component={Field} />
-        <Route path='/player/:id' component={Profile} />
+    <ThemeProvider theme={theme}>
 
-        <CoachRoute path='/coach' component={Coach} />
+      <Router history={history}>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <Navbar />
+        <div style={{ marginTop: 60 }}>
+          <Switch>
+            <Route exact path={["/", "/home"]} component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/logout" component={Logout} />
+            <Route exact path="/forgetpassword" component={ForgetPassword} />
+            <Route path="/resetPwdVerify/:code" component={ForgetPassword} />
+            <Route path="/verification/:code" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <PrivateRoute path='/tagging/:id' component={Tagging} />
+            <Route path='/team/:data' component={Field} />
+            <Route path='/player/:id' component={Profile} />
 
-        <AdminRoute path='/admin' component={Admin} />
-        <AdminRoute path='/admin/:tab' component={Admin} />
-      </Switch>
-      <Footer />
-      <AuthVerify logOut={logOut} />
-    </Router>
+            <CoachRoute path='/coach' component={Coach} />
+
+            <AdminRoute path='/admin' component={Admin} />
+            <AdminRoute path='/admin/:tab' component={Admin} />
+          </Switch>
+        </div>
+        <Footer />
+        <AuthVerify logOut={logOut} />
+      </Router>
+    </ThemeProvider>
   );
 };
 
