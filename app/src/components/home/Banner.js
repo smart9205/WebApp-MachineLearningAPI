@@ -8,8 +8,8 @@ const Banner = () => {
                 <div className="d-table-cell">
                     <div className="container-fluid">
                         <div className="main-banner-content">
-                            <span className="sub-title">Lionel</span>
-                            <h1>Mason</h1>
+                            <span className="sub-title">Scouting4U</span>
+                            <h1>Soccer</h1>
                         </div>
                     </div>
                 </div>
@@ -19,7 +19,7 @@ const Banner = () => {
                 <div className="container-fluid">
                     <div className="row align-items-center">
                         <div className="col-lg-6 col-sm-6">
-                            <span className="email-link">hello@lionelmason.com</span>
+                            <span className="email-link">gutt@scouting4u.com</span>
                         </div>
 
                         <div className="col-lg-6 col-sm-6">
