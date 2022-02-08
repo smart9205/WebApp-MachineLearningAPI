@@ -35,8 +35,7 @@ import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import { getUser, parseJwt } from './common/utilities'
 import Coach from "./components/coach";
-import Navbar from "./components/Layout/Navbar";
-import Footer from "./components/Layout/Footer";
+import Layout from "./components/Layout";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -146,14 +145,12 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-
+      <link
+        href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
       <Router history={history}>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-        <Navbar />
-        <div style={{ marginTop: 90 }}>
+        <Layout>
           <Switch>
             <Route exact path={["/", "/home"]} component={Home} />
             <Route exact path="/login" component={Login} />
@@ -162,18 +159,17 @@ const App = () => {
             <Route path="/resetPwdVerify/:code" component={ForgetPassword} />
             <Route path="/verification/:code" component={Login} />
             <Route exact path="/register" component={Register} />
-            <PrivateRoute path='/tagging/:id' component={Tagging} />
             <Route path='/team/:data' component={Field} />
             <Route path='/player/:id' component={Profile} />
 
+            <PrivateRoute path='/tagging/:id' component={Tagging} />
             <CoachRoute path='/coach' component={Coach} />
 
             <AdminRoute path='/admin' component={Admin} />
             <AdminRoute path='/admin/:tab' component={Admin} />
           </Switch>
-        </div>
-        <Footer />
-        <AuthVerify logOut={logOut} />
+          <AuthVerify logOut={logOut} />
+        </Layout>
       </Router>
     </ThemeProvider>
   );

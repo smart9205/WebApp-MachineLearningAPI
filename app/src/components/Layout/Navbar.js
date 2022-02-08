@@ -150,8 +150,6 @@ class Navbar extends Component {
 
                                 <li className="nav-item">
                                     <Link
-                                        onClick={this.toggleNavbar}
-                                        offset={() => -1}
                                         className="nav-link"
                                         to="/coach"
                                     >
@@ -160,8 +158,6 @@ class Navbar extends Component {
                                 </li>
                                 <li className="nav-item">
                                     <Link
-                                        onClick={this.toggleNavbar}
-                                        offset={() => -1}
                                         className="nav-link"
                                         to="/admin"
                                     >
@@ -170,8 +166,6 @@ class Navbar extends Component {
                                 </li>
                                 <li className="nav-item">
                                     <Link
-                                        onClick={this.toggleNavbar}
-                                        offset={() => -1}
                                         className="nav-link"
                                         to="/login"
                                     >

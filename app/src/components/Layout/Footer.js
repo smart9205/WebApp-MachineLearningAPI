@@ -15,23 +15,23 @@ const Footer = () => {
                     <div className="col-lg-4 col-md-12">
                         <ul className="social">
                             <li>
-                                <Link href="#" target="_blank"><i className="flaticon-facebook-logo"></i>
+                                <Link to="#" target="_blank"><i className="flaticon-facebook-logo"></i>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" target="_blank"><i className="flaticon-twitter"></i>
+                                <Link to="#" target="_blank"><i className="flaticon-twitter"></i>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" target="_blank"><i className="flaticon-instagram"></i>
+                                <Link to="#" target="_blank"><i className="flaticon-instagram"></i>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" target="_blank"><i className="flaticon-linkedin"></i>
+                                <Link to="#" target="_blank"><i className="flaticon-linkedin"></i>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" target="_blank"><i className="flaticon-youtube"></i>
+                                <Link to="#" target="_blank"><i className="flaticon-youtube"></i>
                                 </Link>
                             </li>
                         </ul>
@@ -39,8 +39,8 @@ const Footer = () => {
 
                     <div className="col-lg-4 col-md-12">
                         <ul className="info-link">
-                            <li><Link href="#"><a>Privacy Policy</a></Link></li>
-                            <li><Link href="#"><a>Terms & Conditions</a></Link></li>
+                            <li><Link to="#">Privacy Policy</Link></li>
+                            <li><Link to="#">Terms & Conditions</Link></li>
                         </ul>
                     </div>
                 </div>

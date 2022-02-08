@@ -209,7 +209,7 @@ const Login = (props) => {
         </DialogActions>
       </Dialog>
 
-      <div className="card card-container">
+      <div className="card card-container bg-dark">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
           alt="profile-img"
@@ -257,9 +257,12 @@ const Login = (props) => {
               </div>
             </div>
           )}
-          <div className="form-group">
-            <Link to={"/forgetpassword"} className="nav-link">
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Link to={"/forgetpassword"}>
               Forgot password?
+            </Link>
+            <Link to={"/register"}>
+              Register
             </Link>
           </div>
           <CheckButton style={{ display: "none" }} ref={checkBtn} />

@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: "#5d6e81",
       cursor: 'pointer'
-   },
+    },
   }
 }));
 const required = (value) => {
@@ -91,7 +91,7 @@ const SendEmail = (props) => {
         .catch(() => {
           setSuccessful(false);
         });
-    } 
+    }
   };
 
   return (
@@ -117,7 +117,7 @@ const SendEmail = (props) => {
 
       {message && (
         <div className="form-group">
-          <div className={ successful ? "alert alert-success" : "alert alert-danger" } role="alert">
+          <div className={successful ? "alert alert-success" : "alert alert-danger"} role="alert">
             {message}
           </div>
         </div>
@@ -173,7 +173,7 @@ const ResetPWD = (props) => {
         .catch(() => {
           setSuccessful(false);
         });
-    } 
+    }
   };
 
   return (
@@ -210,7 +210,7 @@ const ResetPWD = (props) => {
 
       {message && (
         <div className="form-group">
-          <div className={ successful ? "alert alert-success" : "alert alert-danger" } role="alert">
+          <div className={successful ? "alert alert-success" : "alert alert-danger"} role="alert">
             {message}
           </div>
         </div>
@@ -245,7 +245,7 @@ const ForgetPassword = (props) => {
 
   return (
     <div className="col-md-12">
-      <div className="card card-container">
+      <div className="card card-container bg-dark">
         {!verifySuccess ? (
           <SendEmail />
         ) : (

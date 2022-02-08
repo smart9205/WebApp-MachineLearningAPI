@@ -15,7 +15,7 @@ const BlogPost = () => {
                         <div className="single-blog-post">
                             <div className="post-image">
                                 <img src={require("../../assets/images/football/blog/footb-blog1.jpg").default} alt="img" />
-                                <Link href="/football-single-blog" target="_blank" className="link-btn">
+                                <Link to="/football-single-blog" target="_blank" className="link-btn">
                                 </Link>
                             </div>
 
@@ -26,13 +26,13 @@ const BlogPost = () => {
                                 </ul>
 
                                 <h3>
-                                    <Link href="/football-single-blog" target="_blank">Ogbonna blasts 'lax' virus response
+                                    <Link to="/football-single-blog" target="_blank">Ogbonna blasts 'lax' virus response
                                     </Link>
                                 </h3>
 
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
-                                <Link href="/football-single-blog" className="read-more-btn">Read More
+                                <Link to="/football-single-blog" className="read-more-btn">Read More
                                 </Link>
                             </div>
                         </div>
@@ -42,7 +42,7 @@ const BlogPost = () => {
                         <div className="single-blog-post">
                             <div className="post-image">
                                 <img src={require("../../assets/images/football/blog/footb-blog2.jpg").default} alt="img" />
-                                <Link href="/football-single-blog" target="_blank" className="link-btn">
+                                <Link to="/football-single-blog" target="_blank" className="link-btn">
                                 </Link>
                             </div>
 
@@ -53,13 +53,13 @@ const BlogPost = () => {
                                 </ul>
 
                                 <h3>
-                                    <Link href="/football-single-blog" target="_blank">Liverpool title will be special
+                                    <Link to="/football-single-blog" target="_blank">Liverpool title will be special
                                     </Link>
                                 </h3>
 
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
-                                <Link href="/football-single-blog" target="_blank" className="read-more-btn">Read More
+                                <Link to="/football-single-blog" target="_blank" className="read-more-btn">Read More
                                 </Link>
                             </div>
                         </div>
@@ -69,7 +69,7 @@ const BlogPost = () => {
                         <div className="single-blog-post">
                             <div className="post-image">
                                 <img src={require("../../assets/images/football/blog/footb-blog3.jpg").default} alt="img" />
-                                <Link href="/football-single-blog" target="_blank" className="link-btn">
+                                <Link to="/football-single-blog" target="_blank" className="link-btn">
                                 </Link>
                             </div>
 
@@ -80,13 +80,13 @@ const BlogPost = () => {
                                 </ul>
 
                                 <h3>
-                                    <Link href="/football-single-blog" target="_blank">Moyes self-isolating as precaution
+                                    <Link to="/football-single-blog" target="_blank">Moyes self-isolating as precaution
                                     </Link>
                                 </h3>
 
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
-                                <Link href="/football-single-blog" target="_blank" className="read-more-btn">Read More
+                                <Link to="/football-single-blog" target="_blank" className="read-more-btn">Read More
                                 </Link>
                             </div>
                         </div>

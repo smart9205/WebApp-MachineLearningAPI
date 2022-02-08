@@ -1,0 +1,28 @@
+import React from 'react';
+import { useLocation } from 'react-router-dom'
+import Navbar from './Navbar';
+import Footer from './Footer';
+import GoTop from './Shared/GoTop';
+
+const NO_NAV_Routes = [
+    "/tagging",
+]
+
+const Layout = ({ children }) => {
+    const location = useLocation();
+    if (!!NO_NAV_Routes.find(r => location.pathname.startsWith(r))) return <>{children}</>
+    else return (
+        <div style={{ marginTop: 90, minHeight: "calc(100vh - 200px)" }}>
+
+            <Navbar />
+
+            {children}
+
+            <Footer />
+
+            <GoTop scrollStepInPx="100" delayInMs="10.50" />
+        </div>
+    );
+}
+
+export default Layout;
