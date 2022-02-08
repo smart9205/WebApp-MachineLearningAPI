@@ -12,6 +12,9 @@ body > iframe {
     background-color: darkblue !important;
     border-radius: 5px;
 }
+.css-qoi9-MuiPaper-root-MuiAccordion-root.Mui-expanded {
+    margin: 4px 0 !important;
+}
 .player-wrapper {
     position: relative;
     padding-top: 56.25%;

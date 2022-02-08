@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom'
+
 import Navbar from './Navbar';
 import Footer from './Footer';
 import GoTop from './Shared/GoTop';
@@ -10,6 +11,7 @@ const NO_NAV_Routes = [
 ]
 
 const Layout = ({ children }) => {
+
     const location = useLocation();
     if (!!NO_NAV_Routes.find(r => location.pathname.startsWith(r))) return <>{children}</>
     else return (
