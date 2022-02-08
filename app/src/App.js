@@ -167,6 +167,8 @@ const App = () => {
 
             <AdminRoute path='/admin' component={Admin} />
             <AdminRoute path='/admin/:tab' component={Admin} />
+
+            <Redirect to="/" />
           </Switch>
           <AuthVerify logOut={logOut} />
         </Layout>
