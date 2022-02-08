@@ -6,6 +6,7 @@ import GoTop from './Shared/GoTop';
 
 const NO_NAV_Routes = [
     "/tagging",
+    "/coach"
 ]
 
 const Layout = ({ children }) => {
