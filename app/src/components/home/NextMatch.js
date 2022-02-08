@@ -14,7 +14,7 @@ const NextMatch = () => {
     }, [])
 
     const commingSoonTime = () => {
-        let endTime = new Date("August 23, 2022 17:00:00 PDT");
+        let endTime = new Date("March 1, 2022 17:00:00 PDT");
         let endTimeParse = (Date.parse(endTime)) / 1000;
         let now = new Date();
         let nowParse = (Date.parse(now) / 1000);
@@ -41,8 +41,8 @@ const NextMatch = () => {
                             <div className="content">
                                 <div className="row align-items-center">
                                     <div className="col-lg-5 col-md-5">
-                                        <h2>Next Match</h2>
-                                        <span className="sub-title">Champions League - 20 April, 2020</span>
+                                        <h2>New Features</h2>
+                                        <span className="sub-title">Next Releases - 1 March, 2022</span>
                                     </div>
 
                                     <div className="col-lg-7 col-md-7">
