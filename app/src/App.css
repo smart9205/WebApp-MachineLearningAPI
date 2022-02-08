@@ -3,6 +3,10 @@
     padding: 30px 30px;
 }
 
+body > iframe {
+    display: none;
+}
+
 .MuiListItemButton-root.Mui-selected {
     color: white;
     background-color: darkblue !important;
