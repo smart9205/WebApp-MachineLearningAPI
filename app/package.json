@@ -23,6 +23,7 @@
         "moment": "^2.29.1",
         "randomstring": "^1.2.1",
         "react": "^17.0.2",
+        "react-anchor-link-smooth-scroll": "^1.0.12",
         "react-aws-s3": "^1.5.0",
         "react-bootstrap": "^2.1.1",
         "react-cookie": "^4.1.1",
