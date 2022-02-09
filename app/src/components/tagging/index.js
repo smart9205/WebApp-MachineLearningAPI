@@ -492,7 +492,14 @@ export default function Tagging() {
               </Box>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Box sx={{ mx: 2, textAlign: 'center' }}>
-                  <IconButton sx={{ my: 1 }} onClick={() => setCount(count + 1)}><RefreshIcon /></IconButton><br />
+                  <IconButton sx={{ my: 1 }}
+                    onClick={() => {
+                      setCount(count + 1)
+                      player.current.seekTo(0)
+                    }}
+                  >
+                    <RefreshIcon />
+                  </IconButton><br />
                   <TextField
                     label="sec. before"
                     sx={{ m: 1, width: 100 }}
