@@ -11,6 +11,7 @@ import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import { toSecond } from "../../common/utilities"
 import gameService from '../../services/game.service';
+import VIDEO from '../../assets/1.mp4'
 
 const styles = {
     action: {
@@ -115,14 +116,15 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
                 <div className="player-wrapper">
                     <ReactPlayer
                         className="react-player"
-                        url={videoURL}
+                        // url={videoURL}
+                        url={VIDEO}
                         ref={player}
                         onPlay={() => setPlay(true)}
                         onPause={() => setPlay(false)}
                         onReady={() => setReady(true)}
                         onProgress={(p) => onProgress(p.playedSeconds)}
                         playing={play}
-                        controls={false}
+                        controls={true}
                         width='100%'
                         height='100%'
                     />

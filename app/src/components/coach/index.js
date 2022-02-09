@@ -176,6 +176,7 @@ export default function Coach() {
                             setCurTeamTagIdx(idx)
                             setVideodata({
                                 idx,
+                                tagList: teamTagList,
                                 autoPlay: true,
                                 videoPlay: false,
                             })
@@ -184,10 +185,11 @@ export default function Coach() {
                         }
                         selected={curTeamTagIdx}
                         onPlay={({ row, idx }) => {
-                            console.log("onplay")
+                            console.log("onplay", row, idx)
                             setCurTeamTagIdx(idx)
                             setVideodata({
                                 idx,
+                                tagList: teamTagList,
                                 autoPlay: true,
                                 videoPlay: true,
                             })
@@ -199,12 +201,15 @@ export default function Coach() {
                         offenseTeamId={team?.id}
                         offenseTeam={team}
                         updateTagList={() => { }}
-                        onPlay={(row) => setVideodata({
-                            idx: 0,
-                            autoPlay: false,
-                            tagList: [row],
-                            videoPlay: true
-                        })}
+                        onPlay={(row) => {
+                            console.log("play", row)
+                            setVideodata({
+                                idx: 0,
+                                autoPlay: false,
+                                tagList: [row],
+                                videoPlay: true
+                            })
+                        }}
                     />
                 </Paper>
                 <VideoPlayer
