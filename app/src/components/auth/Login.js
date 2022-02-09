@@ -147,19 +147,14 @@ const Login = (props) => {
   };
 
   if (isLoggedIn) {
-    const path = localStorage.getItem("path");
     if (currentUser.subscription.length || currentUser.roles.includes("ROLE_ADMIN")) {
-      if (!currentUser.roles.includes("ROLE_ADMIN") && path === '/game') {
-        if (!adminOpen) setAdminOpen(true);
-      }
-      else {
-        return <Redirect to={path ? path : '/tagging'} />;
-      }
+      if (currentUser.roles.includes("ROLE_ADMIN")) return <Redirect to="/admin" />;
+      else if (currentUser.roles.includes("ROLE_ADMIN")) return <Redirect to="/coach" />;
+      else return <Redirect to="/" />;
     }
     if (!open) handleOpen();
   }
   const adminDialogClose = () => {
-    localStorage.removeItem("path");
     setAdminOpen(false);
   }
 

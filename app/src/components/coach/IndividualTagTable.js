@@ -89,30 +89,9 @@ export default function IndividualTagTable({
                         key={row.id}
                         selected={selectedRow?.id === row.id}
                       >
-                        <TCellSelectEdit
-                          rows={actions}
-                          value={{ id: row.action_id, name: row.action_name }}
-                          update={v => {
-                            update({ ...row, action_id: v })
-                            row.action_id = v
-                          }}
-                        />
-                        <TCellSelectEdit
-                          rows={actionTypes}
-                          value={{ id: row.action_type_id, name: row.action_type_name }}
-                          update={v => {
-                            update({ ...row, action_type_id: v })
-                            row.action_type_id = v
-                          }}
-                        />
-                        <TCellSelectEdit
-                          rows={actionResults}
-                          value={{ id: row.action_result_id, name: row.action_result_name }}
-                          update={v => {
-                            update({ ...row, action_result_id: v })
-                            row.action_result_id = v
-                          }}
-                        />
+                        <TableCell align="center">{row.action_name}</TableCell>
+                        <TableCell align="center">{row.action_type_name}</TableCell>
+                        <TableCell align="center">{row.action_result_name}</TableCell>
                         <TCellSelectEdit
                           rows={row.team_id === offenseTeamId ? offenseTeam : defenseTeam}
                           value={{ id: row.player_id, name: `${row.player_fname} ${row.player_lname}` }}

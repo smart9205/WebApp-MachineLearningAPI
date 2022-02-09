@@ -142,17 +142,10 @@ export default function IndividualTagTable({
                           update={v => update({ ...row, end_time: v })}
                           start={row.start_time}
                         />
-
                         <TableCell align="center" sx={{ p: 0, m: 0 }}>
-                          {del ?
-                            < IconButton size="small" onClick={() => { setDeleteOpen(true); setSelectedRow(row) }}>
-                              <DeleteIcon />
-                            </IconButton> :
-                            <IconButton size="small" onClick={() => { onPlay(row); setSelectedRow(row) }}>
-                              <PlayCircleIcon />
-                            </IconButton>
-                          }
-
+                          < IconButton size="small" onClick={() => { setDeleteOpen(true); setSelectedRow(row) }}>
+                            <DeleteIcon />
+                          </IconButton>
                         </TableCell>
                       </TableRow>
                     );

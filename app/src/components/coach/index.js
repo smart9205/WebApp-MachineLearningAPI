@@ -68,7 +68,6 @@ export default function Coach() {
         if (!!team && !!game) {
             setLoading(true)
             gameService.getAllPlayerTagsByTeam(team.team_id, game?.id).then((res) => {
-                console.log("all taglist", res)
                 setState({ allTagList: res })
                 setLoading(false)
             })

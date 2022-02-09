@@ -40,40 +40,37 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const PrivateRoute = ({ component: Component, rememberPath = true, ...rest }) => {
-  if (rememberPath) localStorage.setItem("path", rest.location.pathname);
   const { user: currentUser } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}
       render={(props) => currentUser && (currentUser.subscription.length > 0 || currentUser.roles.includes("ROLE_ADMIN"))
         ? <Component {...props} />
-        : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />}
+        : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
     />
   )
 }
 
 const AdminRoute = ({ component: Component, rememberPath = true, ...rest }) => {
-  if (rememberPath) localStorage.setItem("path", rest.location.pathname);
   const { user: currentUser } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}
       render={(props) => currentUser && currentUser.roles.includes("ROLE_ADMIN")
         ? <Component {...props} />
-        : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />}
+        : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
     />
   )
 }
 
 const CoachRoute = ({ component: Component, rememberPath = true, ...rest }) => {
-  if (rememberPath) localStorage.setItem("path", rest.location.pathname);
   const { user: currentUser } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}
       render={(props) => currentUser && currentUser.roles.includes("ROLE_COACH")
         ? <Component {...props} />
-        : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />}
+        : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
     />
   )
 }

@@ -30,7 +30,7 @@ import Pass from './contents/Pass';
 import Cross from './contents/Cross';
 import Foul from './contents/Foul';
 import Dribble from './contents/Dribble';
-
+// import VIDEO from "../../assets/1.mp4"
 const drawerWidth = "30%";
 
 const PLAYBACK_RATE = [
@@ -230,10 +230,10 @@ export default function Tagging() {
   }, [offenseTeamId, defenseTeamId, state.start_time, game_id])
 
   useHotkeys('left', () => seekTo(-3), HOTKEY_OPTION);
-  useHotkeys('ctrl+left', () => seekTo(-5), HOTKEY_OPTION);
+  useHotkeys('b', () => seekTo(-5), HOTKEY_OPTION);
   useHotkeys('shift+left', () => seekTo(10), HOTKEY_OPTION);
   useHotkeys('right', () => seekTo(3), HOTKEY_OPTION);
-  useHotkeys('ctrl+right', () => seekTo(5), HOTKEY_OPTION);
+  useHotkeys('m', () => seekTo(5), HOTKEY_OPTION);
   useHotkeys('shift+right', () => seekTo(10), HOTKEY_OPTION);
 
   useHotkeys('esc', () => setModalOpen(false), HOTKEY_OPTION);
@@ -416,7 +416,7 @@ export default function Tagging() {
           rows={teamTagList}
           sx={{ height: "60%", p: 1, width: "100%" }}
           updateTagList={updateTagList}
-          handleRowClick={row => {
+          handleRowClick={(row) => {
             dispPlayerTags(row?.id)
             player.current.seekTo(toSecond(row?.start_time))
           }}

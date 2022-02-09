@@ -9,7 +9,6 @@ export default function Navbar() {
     const dispatch = useDispatch();
     const [collapsed, setCallapsed] = useState(true)
     const { user: currentUser } = useSelector((state) => state.auth);
-    console.log("current user", currentUser)
 
     useEffect(() => {
         let elementId = document.getElementById("navbar");
@@ -37,8 +36,8 @@ export default function Navbar() {
                     let section = document.querySelector(link.hash);
 
                     if (
-                        section.offsetTop <= fromTop &&
-                        section.offsetTop + section.offsetHeight > fromTop
+                        section?.offsetTop <= fromTop &&
+                        section?.offsetTop + section?.offsetHeight > fromTop
                     ) {
                         link.classList.add("active");
                     } else {
@@ -74,76 +73,89 @@ export default function Navbar() {
 
                     <div className={classOne} id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto">
-                            <li className="nav-item">
-                                <AnchorLink
-                                    onClick={toggleNavbar}
-                                    offset={() => 100}
-                                    className="nav-link active"
-                                    href="#home"
-                                >
-                                    Home
-                                </AnchorLink>
-                            </li>
-                            <li className="nav-item">
-                                <AnchorLink
-                                    onClick={toggleNavbar}
-                                    offset={() => -1}
-                                    className="nav-link"
-                                    href="#matches"
-                                >
-                                    Matches
-                                </AnchorLink>
-                            </li>
-                            <li className="nav-item">
-                                <AnchorLink
-                                    onClick={toggleNavbar}
-                                    offset={() => -1}
-                                    className="nav-link"
-                                    href="#highlights"
-                                >
-                                    Highlights
-                                </AnchorLink>
-                            </li>
-                            <li className="nav-item">
-                                <AnchorLink
-                                    onClick={toggleNavbar}
-                                    offset={() => -1}
-                                    className="nav-link"
-                                    href="#shop"
-                                >
-                                    Shop
-                                </AnchorLink>
-                            </li>
-                            <li className="nav-item">
-                                <AnchorLink
-                                    onClick={toggleNavbar}
-                                    offset={() => -1}
-                                    className="nav-link"
-                                    href="#partners"
-                                >
-                                    Partners
-                                </AnchorLink>
-                            </li>
-                            <li className="nav-item">
-                                <AnchorLink
-                                    onClick={toggleNavbar}
-                                    offset={() => -1}
-                                    className="nav-link"
-                                    href="#gallery"
-                                >
-                                    Gallery
-                                </AnchorLink>
-                            </li>
-                            <li className="nav-item">
-                                <AnchorLink
-                                    onClick={toggleNavbar}
-                                    offset={() => -1}
-                                    className="nav-link"
-                                    href="#news"
-                                >
-                                    News
-                                </AnchorLink>
-                            </li>
+
+                            {!!currentUser ?
+                                <li className="nav-item">
+                                    <Link
+                                        className="nav-link"
+                                        to="/"
+                                    >
+                                        Home
+                                    </Link>
+                                </li> :
+                                <>
+                                    <li className="nav-item">
+                                        <AnchorLink
+                                            onClick={toggleNavbar}
+                                            offset={() => 100}
+                                            className="nav-link active"
+                                            href="#home"
+                                        >
+                                            Home
+                                        </AnchorLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <AnchorLink
+                                            onClick={toggleNavbar}
+                                            offset={() => -1}
+                                            className="nav-link"
+                                            href="#matches"
+                                        >
+                                            Matches
+                                        </AnchorLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <AnchorLink
+                                            onClick={toggleNavbar}
+                                            offset={() => -1}
+                                            className="nav-link"
+                                            href="#highlights"
+                                        >
+                                            Highlights
+                                        </AnchorLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <AnchorLink
+                                            onClick={toggleNavbar}
+                                            offset={() => -1}
+                                            className="nav-link"
+                                            href="#shop"
+                                        >
+                                            Shop
+                                        </AnchorLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <AnchorLink
+                                            onClick={toggleNavbar}
+                                            offset={() => -1}
+                                            className="nav-link"
+                                            href="#partners"
+                                        >
+                                            Partners
+                                        </AnchorLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <AnchorLink
+                                            onClick={toggleNavbar}
+                                            offset={() => -1}
+                                            className="nav-link"
+                                            href="#gallery"
+                                        >
+                                            Gallery
+                                        </AnchorLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <AnchorLink
+                                            onClick={toggleNavbar}
+                                            offset={() => -1}
+                                            className="nav-link"
+                                            href="#news"
+                                        >
+                                            News
+                                        </AnchorLink>
+                                    </li>
+                                </>
+                            }
 
                             {currentUser && currentUser?.roles.includes("ROLE_COACH") &&
                                 <li className="nav-item">

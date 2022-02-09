@@ -24,7 +24,7 @@ const PERIOD = [
   { id: 3, name: "Overtime" },
 ]
 
-export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId, onPlay, del = true, ...params }) {
+export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId, onPlay, ...params }) {
   const [loading, setLoading] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
 
@@ -92,19 +92,14 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
                           value={PERIOD.find(p => p.id === row.period)}
                           update={v => { update({ ...row, period: v }) }}
                         />
-                        <TableCell align="center" onClick={() => handleRowClick({ row, idx })}>{row.offensive_team_name}</TableCell>
-                        <TableCell align="center" onClick={() => handleRowClick({ row, idx })}>{row.defensive_team_name}</TableCell>
+                        <TableCell align="center" onClick={() => handleRowClick(row)}>{row.offensive_team_name}</TableCell>
+                        <TableCell align="center" onClick={() => handleRowClick(row)}>{row.defensive_team_name}</TableCell>
                         <TCellTimeEdit value={row.start_time} update={v => update({ ...row, start_time: v })} end={row.end_time} />
                         <TCellTimeEdit value={row.end_time} update={v => update({ ...row, end_time: v })} start={row.start_time} />
                         <TableCell align="center" sx={{ p: 0, m: 0 }}>
-                          {del ?
-                            <IconButton size="small" onClick={() => setDeleteOpen(true)}>
-                              <DeleteIcon />
-                            </IconButton> :
-                            <IconButton size="small" onClick={() => { onPlay({ row, idx }) }}>
-                              <PlayCircleIcon />
-                            </IconButton>
-                          }
+                          <IconButton size="small" onClick={() => setDeleteOpen(true)}>
+                            <DeleteIcon />
+                          </IconButton>
                         </TableCell>
                       </TableRow>
                     );
