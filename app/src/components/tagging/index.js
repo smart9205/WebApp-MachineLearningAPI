@@ -249,6 +249,7 @@ export default function Tagging() {
   useHotkeys(TAGGING.cross.hotkey, () => taggingButtonClicked(TAGGING.cross.value), HOTKEY_OPTION);
 
   useHotkeys('return', () => setPlay(v => !v), HOTKEY_OPTION);
+  useHotkeys('n', () => setPlay(v => !v), HOTKEY_OPTION);
 
   const taggingButtonClicked = (action) => {
     setModalOpen(true)

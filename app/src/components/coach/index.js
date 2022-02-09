@@ -35,8 +35,9 @@ export default function Coach() {
         teamTagList: [],
         actionTagList: [],
         allTagList: [],
+        playerList: [],
     })
-    const { teamList, team, gameList, game, teamTagList, actionTagList, allTagList } = state
+    const { teamList, team, gameList, game, teamTagList, actionTagList, allTagList, playerList } = state
 
     const [drawOpen, setDrawOpen] = useState(true)
     const [loading, setLoading] = useState(true)
@@ -70,6 +71,9 @@ export default function Coach() {
             gameService.getAllPlayerTagsByTeam(team.team_id, game?.id).then((res) => {
                 setState({ allTagList: res })
                 setLoading(false)
+            })
+            gameService.getGameTeamPlayersByTeam(team.team_id, game?.id).then((res) => {
+                setState({ playerList: res })
             })
         } else {
             setState({ allTagList: [] })
@@ -189,6 +193,7 @@ export default function Coach() {
                             setVideodata({
                                 idx,
                                 tagList: teamTagList,
+                                cnt: new Date(),
                                 autoPlay: true,
                                 videoPlay: true,
                             })
@@ -197,8 +202,7 @@ export default function Coach() {
                     <IndividualTagTable
                         sx={{ height: "30%", p: 1, width: "100%" }}
                         rows={actionTagList.filter(tag => tag.team_tag_id === teamTagList[curTeamTagIdx]?.team_tag_id)}
-                        offenseTeamId={team?.id}
-                        offenseTeam={team}
+                        offenseTeam={playerList}
                         updateTagList={() => { }}
                         onPlay={(row) => {
                             console.log("play", row)

@@ -17,12 +17,17 @@ module.exports = app => {
 
 	app.post(
 		"/team_player/playersbygameteam",
-		controller.getPlayersByGameTeam
+		controller.getPlayersByGame
 	);
 
 	app.get(
 		"/team_player/:id",
 		controller.findOne
+	);
+
+	app.get(
+		"/team_player/playersbyteam/:team/:game",
+		controller.getPlayersByTeam
 	);
 
 	app.post(

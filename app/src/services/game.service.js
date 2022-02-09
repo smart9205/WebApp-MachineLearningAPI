@@ -15,7 +15,12 @@ const getGameTeamPlayers = (req) => {
     return response.data;
   });
 }
-
+const getGameTeamPlayersByTeam = (teamId, gameId) => {
+  return axios.get(API_URL + `team_player/playersbyteam/${teamId}/${gameId}`,
+    { headers: authHeader(), data: { teamId, gameId } }).then((response) => {
+      return response.data;
+    });
+}
 const addTeamPlayer = (req) => {
   return axios.post(API_URL + "team_player/create", req, { headers: authHeader() }).then((response) => {
     return response.data;
@@ -350,6 +355,7 @@ const gameService = {
   getAllMyCoachTeam,
   getAllHighlightByPlayerId,
   getAllGamesByTeam,
+  getGameTeamPlayersByTeam,
 
   getNewStreamURL,
 

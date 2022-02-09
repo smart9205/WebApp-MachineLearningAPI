@@ -16,30 +16,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export default function IndividualTagTable({
   rows,
-  offenseTeamId,
   offenseTeam,
   updateTagList,
-  defenseTeam = null,
   onPlay,
   ...params
 }) {
   const [loading, setLoading] = useState(false)
   const [selectedRow, setSelectedRow] = useState(rows[0])
-  const [actions, setActions] = useState([])
-  const [actionTypes, setActionTypes] = useState([])
-  const [actionResults, setActionResults] = useState([])
-
-  useEffect(() => {
-    GameService.getAllActions().then((res) => {
-      setActions(res)
-    });
-    GameService.getAllActionTypes().then((res) => {
-      setActionTypes(res)
-    });
-    GameService.getAllActionResults().then((res) => {
-      setActionResults(res)
-    });
-  }, [])
 
   useEffect(() => {
     setSelectedRow(rows[0])
@@ -93,11 +76,14 @@ export default function IndividualTagTable({
                         <TableCell align="center">{row.action_type_name}</TableCell>
                         <TableCell align="center">{row.action_result_name}</TableCell>
                         <TCellSelectEdit
-                          rows={row.team_id === offenseTeamId ? offenseTeam : defenseTeam}
+                          rows={offenseTeam}
                           value={{ id: row.player_id, name: `${row.player_fname} ${row.player_lname}` }}
                           update={v => {
+                            const player = offenseTeam.find(p => p.player_id === v)
                             update({ ...row, player_id: v })
                             row.player_id = v
+                            row.player_fname = player.f_name
+                            row.player_lname = player.l_name
                           }}
                         />
                         <TCellTimeEdit

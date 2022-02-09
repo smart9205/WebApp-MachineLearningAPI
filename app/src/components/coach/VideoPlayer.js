@@ -38,7 +38,8 @@ const styles = {
     }
 }
 export default function VideoPlayer({ videoData, url, onChangeClip }) {
-    const { tagList, autoPlay, idx, videoPlay } = videoData
+    const { tagList, autoPlay, idx, videoPlay, cnt = null } = videoData
+
 
     const player = useRef(null)
     const [play, setPlay] = useState(true)
@@ -61,14 +62,14 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
         if (!ready) return;
 
         if (!tagList.length) return
+        console.log("VideoData", videoData)
 
         playTagByIdx(idx)
         setCurIdx(idx)
 
         setPlay(videoPlay)
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tagList, idx, videoPlay, ready])
+    }, [tagList, idx, videoPlay, ready, cnt])
 
     useEffect(() => {
         if (autoPlay)

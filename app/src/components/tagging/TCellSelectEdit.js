@@ -31,7 +31,7 @@ export default function TCellSelectEdit({ value, rows, update }) {
                     onChange={e => updateValue(e.target.value)}
                     input={<Input autoFocus onBlur={() => updateValue()} />}
                 >
-                    {rows.map(row =>
+                    {rows && rows.map(row =>
                         <MenuItem sx={{ fontSize: 14 }} key={row.id} value={row.id}>
                             {!!row?.jersey_number && `#${row?.jersey_number}`} {row.name}
                         </MenuItem>
