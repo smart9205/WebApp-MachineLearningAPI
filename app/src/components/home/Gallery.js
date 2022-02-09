@@ -60,7 +60,7 @@ const Gallery = () => {
                         {...options}
                     >
                         <div className="single-gallery-item">
-                            <img src={require("../../assets/images/football/gallery/footb-gallery1.jpg").default} alt="img" />
+                            <img src={require("../../assets/images/football/gallery/footb-gallery1.jpg")} alt="img" />
                             <Link href="#popup">
                                 <a
                                     className="link-btn popup-btn"
@@ -70,7 +70,7 @@ const Gallery = () => {
                         </div>
 
                         <div className="single-gallery-item">
-                            <img src={require("../../assets/images/football/gallery/footb-gallery2.jpg").default} alt="img" />
+                            <img src={require("../../assets/images/football/gallery/footb-gallery2.jpg")} alt="img" />
 
                             <Link to="#">
                                 <a
@@ -81,7 +81,7 @@ const Gallery = () => {
                         </div>
 
                         <div className="single-gallery-item">
-                            <img src={require("../../assets/images/football/gallery/footb-gallery3.jpg").default} alt="img" />
+                            <img src={require("../../assets/images/football/gallery/footb-gallery3.jpg")} alt="img" />
 
                             <Link to="#">
                                 <a
@@ -92,7 +92,7 @@ const Gallery = () => {
                         </div>
 
                         <div className="single-gallery-item">
-                            <img src={require("../../assets/images/football/gallery/footb-gallery4.jpg").default} alt="img" />
+                            <img src={require("../../assets/images/football/gallery/footb-gallery4.jpg")} alt="img" />
 
                             <Link to="#">
                                 <a
@@ -105,7 +105,7 @@ const Gallery = () => {
                 </div>
 
                 <div className="gallery-shape1">
-                    <img src={require("../../assets/images/football/footb-player2.png").default} alt="img" />
+                    <img src={require("../../assets/images/football/footb-player2.png")} alt="img" />
                 </div>
 
                 {/* Lightbox */}

@@ -65,14 +65,14 @@ const NextMatch = () => {
                             </div>
 
                             <div className="shape1">
-                                <img src={require("../../assets/images/football/footb-playing.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/footb-playing.png")} alt="img" />
                             </div>
                         </div>
                     </div>
 
                     <div className="col-lg-6 col-md-12">
                         <div className="next-match-image">
-                            <img src={require("../../assets/images/football/footb-field.jpg").default} alt="img" />
+                            <img src={require("../../assets/images/football/footb-field.jpg")} alt="img" />
                         </div>
                     </div>
                 </div>

@@ -29,10 +29,10 @@ const Subscribe = () => {
                     </form>
 
                     <div className="subscribe-shape1">
-                        <img src={require("../../assets/images/football/football1.png").default} alt="img" />
+                        <img src={require("../../assets/images/football/football1.png")} alt="img" />
                     </div>
                     <div className="subscribe-shape2">
-                        <img src={require("../../assets/images/football/football2.png").default} alt="img" />
+                        <img src={require("../../assets/images/football/football2.png")} alt="img" />
                     </div>
                 </div>
             </div >

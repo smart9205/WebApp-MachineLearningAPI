@@ -59,19 +59,19 @@ const SingleBlogContent = () => {
                                     <ul className="wp-block-gallery columns-3">
                                         <li className="blocks-gallery-item">
                                             <figure>
-                                                <img src={require("../../assets/images/football/blog/footb-blog1.jpg").default} alt="img" />
+                                                <img src={require("../../assets/images/football/blog/footb-blog1.jpg")} alt="img" />
                                             </figure>
                                         </li>
 
                                         <li className="blocks-gallery-item">
                                             <figure>
-                                                <img src={require("../../assets/images/football/blog/footb-blog2.jpg").default} alt="img" />
+                                                <img src={require("../../assets/images/football/blog/footb-blog2.jpg")} alt="img" />
                                             </figure>
                                         </li>
 
                                         <li className="blocks-gallery-item">
                                             <figure>
-                                                <img src={require("../../assets/images/football/blog/footb-blog3.jpg").default} alt="img" />
+                                                <img src={require("../../assets/images/football/blog/footb-blog3.jpg")} alt="img" />
                                             </figure>
                                         </li>
                                     </ul>
@@ -106,7 +106,7 @@ const SingleBlogContent = () => {
                                             <Link to="#">
                                                 <a>
                                                     <span className="image-prev">
-                                                        <img src={require("../../assets/images/football/blog/footb-blog1.jpg").default} alt="img" />
+                                                        <img src={require("../../assets/images/football/blog/footb-blog1.jpg")} alt="img" />
                                                         <span className="post-nav-title">Prev</span>
                                                     </span>
                                                     <span className="prev-link-info-wrapper">
@@ -131,7 +131,7 @@ const SingleBlogContent = () => {
                                                         </span>
                                                     </span>
                                                     <span className="image-next">
-                                                        <img src={require("../../assets/images/football/blog/footb-blog2.jpg").default} alt="img" />
+                                                        <img src={require("../../assets/images/football/blog/footb-blog2.jpg")} alt="img" />
                                                         <span className="post-nav-title">Next</span>
                                                     </span>
                                                 </a>

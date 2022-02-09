@@ -14,7 +14,7 @@ const BlogPost = () => {
                     <div className="col-lg-4 col-md-6">
                         <div className="single-blog-post">
                             <div className="post-image">
-                                <img src={require("../../assets/images/football/blog/footb-blog1.jpg").default} alt="img" />
+                                <img src={require("../../assets/images/football/blog/footb-blog1.jpg")} alt="img" />
                                 <Link to="/football-single-blog" target="_blank" className="link-btn">
                                 </Link>
                             </div>
@@ -41,7 +41,7 @@ const BlogPost = () => {
                     <div className="col-lg-4 col-md-6">
                         <div className="single-blog-post">
                             <div className="post-image">
-                                <img src={require("../../assets/images/football/blog/footb-blog2.jpg").default} alt="img" />
+                                <img src={require("../../assets/images/football/blog/footb-blog2.jpg")} alt="img" />
                                 <Link to="/football-single-blog" target="_blank" className="link-btn">
                                 </Link>
                             </div>
@@ -68,7 +68,7 @@ const BlogPost = () => {
                     <div className="col-lg-4 col-md-6 offset-lg-0 offset-md-3">
                         <div className="single-blog-post">
                             <div className="post-image">
-                                <img src={require("../../assets/images/football/blog/footb-blog3.jpg").default} alt="img" />
+                                <img src={require("../../assets/images/football/blog/footb-blog3.jpg")} alt="img" />
                                 <Link to="/football-single-blog" target="_blank" className="link-btn">
                                 </Link>
                             </div>

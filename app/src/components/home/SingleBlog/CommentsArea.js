@@ -11,7 +11,7 @@ const CommentsArea = () => {
                     <article className="comment-body">
                         <footer className="comment-meta">
                             <div className="comment-author vcard">
-                                <img src={require("../../assets/images/football/footb-user1.jpg").default} className="avatar" alt="img" />
+                                <img src={require("../../assets/images/football/footb-user1.jpg")} className="avatar" alt="img" />
                                 <b className="fn">John Jones</b>
                                 <span className="says">says:</span>
                             </div>
@@ -36,7 +36,7 @@ const CommentsArea = () => {
                             <article className="comment-body">
                                 <footer className="comment-meta">
                                     <div className="comment-author vcard">
-                                        <img src={require("../../assets/images/football/footb-user2.jpg").default} className="avatar" alt="img" />
+                                        <img src={require("../../assets/images/football/footb-user2.jpg")} className="avatar" alt="img" />
                                         <b className="fn">Steven Smith</b>
                                         <span className="says">says:</span>
                                     </div>
@@ -61,7 +61,7 @@ const CommentsArea = () => {
                                     <article className="comment-body">
                                         <footer className="comment-meta">
                                             <div className="comment-author vcard">
-                                                <img src={require("../../assets/images/football/footb-user3.jpg").default} className="avatar" alt="img" />
+                                                <img src={require("../../assets/images/football/footb-user3.jpg")} className="avatar" alt="img" />
                                                 <b className="fn">Sarah Taylor</b>
                                                 <span className="says">says:</span>
                                             </div>
@@ -90,7 +90,7 @@ const CommentsArea = () => {
                     <article className="comment-body">
                         <footer className="comment-meta">
                             <div className="comment-author vcard">
-                                <img src={require("../../assets/images/football/footb-user4.jpg").default} className="avatar" alt="img" />
+                                <img src={require("../../assets/images/football/footb-user4.jpg")} className="avatar" alt="img" />
                                 <b className="fn">John Doe</b>
                                 <span className="says">says:</span>
                             </div>
@@ -115,7 +115,7 @@ const CommentsArea = () => {
                             <article className="comment-body">
                                 <footer className="comment-meta">
                                     <div className="comment-author vcard">
-                                        <img src={require("../../assets/images/football/footb-user1.jpg").default} className="avatar" alt="img" />
+                                        <img src={require("../../assets/images/football/footb-user1.jpg")} className="avatar" alt="img" />
                                         <b className="fn">James Anderson</b>
                                         <span className="says">says:</span>
                                     </div>

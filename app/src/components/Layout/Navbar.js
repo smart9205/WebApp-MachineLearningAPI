@@ -56,7 +56,7 @@ export default function Navbar() {
             <nav id="navbar" className="navbar navbar-expand-lg navbar-light bg-light">
                 <div className="container-fluid">
                     <Link to="/" className="navbar-brand">
-                        <img src={require("../../assets/LogoforLightBackground.png").default} alt="logo" />
+                        <img src={require("../../assets/LogoforLightBackground.png")} alt="logo" />
                     </Link>
 
                     <button

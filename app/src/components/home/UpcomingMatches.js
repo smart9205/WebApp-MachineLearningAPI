@@ -60,11 +60,11 @@ class UpcomingMatches extends Component {
                             <span className="sub-title">Champions League</span>
 
                             <div className="vs-matches">
-                                <img src={require("../../assets/images/football/footb-team1.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/footb-team1.png")} alt="img" />
                                 <h4>Napoli</h4>
                                 <span>VS</span>
                                 <h4>Barcelona</h4>
-                                <img src={require("../../assets/images/football/footb-team2.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/footb-team2.png")} alt="img" />
                             </div>
 
                             <Link to="#">
@@ -80,11 +80,11 @@ class UpcomingMatches extends Component {
                             <span className="sub-title">Champions League</span>
 
                             <div className="vs-matches">
-                                <img src={require("../../assets/images/football/footb-team1.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/footb-team1.png")} alt="img" />
                                 <h4>Real Madrid</h4>
                                 <span>VS</span>
                                 <h4>Barcelona</h4>
-                                <img src={require("../../assets/images/football/footb-team2.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/footb-team2.png")} alt="img" />
                             </div>
 
                             <Link to="#">
@@ -100,11 +100,11 @@ class UpcomingMatches extends Component {
                             <span className="sub-title">La Liga</span>
 
                             <div className="vs-matches">
-                                <img src={require("../../assets/images/football/footb-team1.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/footb-team1.png")} alt="img" />
                                 <h4>Sevilla</h4>
                                 <span>VS</span>
                                 <h4>Barcelona</h4>
-                                <img src={require("../../assets/images/football/footb-team2.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/footb-team2.png")} alt="img" />
                             </div>
 
                             <Link to="#">
@@ -115,7 +115,7 @@ class UpcomingMatches extends Component {
                 </div>
 
                 <div className="upcoming-matches-shape1">
-                    <img src={require("../../assets/images/football/footb-player1.png").default} alt="img" />
+                    <img src={require("../../assets/images/football/footb-player1.png")} alt="img" />
                 </div>
             </section>
         );

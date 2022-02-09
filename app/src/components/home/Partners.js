@@ -14,7 +14,7 @@ const Partners = () => {
                     <div className="col-lg-3 col-sm-4 col-md-4 col-6">
                         <div className="single-partners-box">
                             <Link to="#">
-                                <img src={require("../../assets/images/football/partner/footb-partner1.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/partner/footb-partner1.png")} alt="img" />
                             </Link>
                         </div>
                     </div>
@@ -22,7 +22,7 @@ const Partners = () => {
                     <div className="col-lg-3 col-sm-4 col-md-4 col-6">
                         <div className="single-partners-box">
                             <Link to="#">
-                                <img src={require("../../assets/images/football/partner/footb-partner2.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/partner/footb-partner2.png")} alt="img" />
                             </Link>
                         </div>
                     </div>
@@ -30,7 +30,7 @@ const Partners = () => {
                     <div className="col-lg-3 col-sm-4 col-md-4 col-6">
                         <div className="single-partners-box">
                             <Link to="#">
-                                <img src={require("../../assets/images/football/partner/footb-partner3.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/partner/footb-partner3.png")} alt="img" />
                             </Link>
                         </div>
                     </div>
@@ -38,7 +38,7 @@ const Partners = () => {
                     <div className="col-lg-3 col-sm-4 col-md-4 col-6">
                         <div className="single-partners-box">
                             <Link to="#">
-                                <img src={require("../../assets/images/football/partner/footb-partner4.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/partner/footb-partner4.png")} alt="img" />
                             </Link>
                         </div>
                     </div >
@@ -46,7 +46,7 @@ const Partners = () => {
                     <div className="col-lg-3 col-sm-4 col-md-4 col-6">
                         <div className="single-partners-box">
                             <Link to="#">
-                                <img src={require("../../assets/images/football/partner/footb-partner5.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/partner/footb-partner5.png")} alt="img" />
                             </Link>
                         </div>
                     </div >
@@ -54,7 +54,7 @@ const Partners = () => {
                     <div className="col-lg-3 col-sm-4 col-md-4 col-6">
                         <div className="single-partners-box">
                             <Link to="#">
-                                <img src={require("../../assets/images/football/partner/footb-partner6.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/partner/footb-partner6.png")} alt="img" />
                             </Link>
                         </div>
                     </div >
@@ -62,7 +62,7 @@ const Partners = () => {
                     <div className="col-lg-3 col-sm-4 col-md-4 col-6">
                         <div className="single-partners-box">
                             <Link to="#">
-                                <img src={require("../../assets/images/football/partner/footb-partner7.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/partner/footb-partner7.png")} alt="img" />
                             </Link>
                         </div>
                     </div >
@@ -70,7 +70,7 @@ const Partners = () => {
                     <div className="col-lg-3 col-sm-4 col-md-4 col-6">
                         <div className="single-partners-box">
                             <Link to="#">
-                                <img src={require("../../assets/images/football/partner/footb-partner8.png").default} alt="img" />
+                                <img src={require("../../assets/images/football/partner/footb-partner8.png")} alt="img" />
                             </Link>
                         </div>
                     </div >
