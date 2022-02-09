@@ -24,6 +24,7 @@ const KEY_PASS = "Key Pass"
 const SHORT_PASS = "Short Pass"
 const THROW_IN = "Throw-In"
 const FREE_KICK = "Free Kick"
+const ASSIST = "Assist"
 
 export default function ShortPass({
   defenseTeam,
@@ -98,6 +99,7 @@ export default function ShortPass({
                   action_type_id: r.id,
                 };
                 if (r.name === KEY_PASS) taggingState([{ ...d, action_id: 2, action_result_id: 4, }])
+
               }}
             >
               <ListItemText primary={r.name} />
@@ -113,6 +115,7 @@ export default function ShortPass({
             { id: 5, name: STOLE_BY },
             { id: 11, name: BAD_PASS },
             { id: 15, name: OFFSIDE },
+            { id: 9, name: ASSIST }, //action, so id is action_id
           ].map((r, i) => (
             <ListItemButton key={r.id}
               selected={result?.id === r.id}
@@ -126,6 +129,7 @@ export default function ShortPass({
                 };
                 if (r.name === SUCCESSFUL) taggingState([{ ...d, action_id: 2, }])
                 if (r.name === BAD_PASS) taggingState([{ ...d, action_id: 2, }])
+                if (r.name === ASSIST) taggingState([{ ...d, action_id: r.id, action_result_id: 3, }])
               }}
             >
               <ListItemText primary={r.name} />
