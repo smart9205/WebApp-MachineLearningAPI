@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-// import OwlCarousel from 'react-owl-carousel3';
-import ModalVideo from 'react-modal-video';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
+
 const options = {
     loop: true,
     nav: true,
@@ -37,7 +38,7 @@ class MatcheHighlights extends Component {
         return (
             <>
                 <div id="highlights">
-                    {/* {this.state.display ? <OwlCarousel
+                    {this.state.display ? <Carousel
                         className="matches-highlights-slides owl-carousel owl-theme"
                         {...options}
                     >
@@ -53,14 +54,12 @@ class MatcheHighlights extends Component {
 
                                     <div className="col-lg-6 col-md-6">
                                         <div className="highlights-video">
-                                            <Link href="#play-video">
-                                                <a
-                                                    onClick={e => { e.preventDefault(); this.openModal() }}
-                                                    className="video-btn popup-youtube"
-                                                >
-                                                    <span>Play Video</span>
-                                                    <i className="flaticon-play-button"></i>
-                                                </a>
+                                            <Link href="#play-video"
+                                                onClick={e => { e.preventDefault(); this.openModal() }}
+                                                className="video-btn popup-youtube"
+                                            >
+                                                <span>Play Video</span>
+                                                <i className="flaticon-play-button"></i>
                                             </Link>
                                         </div>
                                     </div>
@@ -80,14 +79,12 @@ class MatcheHighlights extends Component {
 
                                     <div className="col-lg-6 col-md-6">
                                         <div className="highlights-video">
-                                            <Link href="#play-video">
-                                                <a
-                                                    onClick={e => { e.preventDefault(); this.openModal() }}
-                                                    className="video-btn popup-youtube"
-                                                >
-                                                    <span>Play Video</span>
-                                                    <i className="flaticon-play-button"></i>
-                                                </a>
+                                            <Link href="#play-video"
+                                                onClick={e => { e.preventDefault(); this.openModal() }}
+                                                className="video-btn popup-youtube"
+                                            >
+                                                <span>Play Video</span>
+                                                <i className="flaticon-play-button"></i>
                                             </Link>
                                         </div>
                                     </div>
@@ -107,14 +104,12 @@ class MatcheHighlights extends Component {
 
                                     <div className="col-lg-6 col-md-6">
                                         <div className="highlights-video">
-                                            <Link href="#play-video">
-                                                <a
-                                                    onClick={e => { e.preventDefault(); this.openModal() }}
-                                                    className="video-btn popup-youtube"
-                                                >
-                                                    <span>Play Video</span>
-                                                    <i className="flaticon-play-button"></i>
-                                                </a>
+                                            <Link href="#play-video"
+                                                onClick={e => { e.preventDefault(); this.openModal() }}
+                                                className="video-btn popup-youtube"
+                                            >
+                                                <span>Play Video</span>
+                                                <i className="flaticon-play-button"></i>
                                             </Link>
                                         </div>
                                     </div>
@@ -134,30 +129,28 @@ class MatcheHighlights extends Component {
 
                                     <div className="col-lg-6 col-md-6">
                                         <div className="highlights-video">
-                                            <Link href="#play-video">
-                                                <a
-                                                    onClick={e => { e.preventDefault(); this.openModal() }}
-                                                    className="video-btn popup-youtube"
-                                                >
-                                                    <span>Play Video</span>
-                                                    <i className="flaticon-play-button"></i>
-                                                </a>
+                                            <Link href="#play-video"
+                                                onClick={e => { e.preventDefault(); this.openModal() }}
+                                                className="video-btn popup-youtube"
+                                            >
+                                                <span>Play Video</span>
+                                                <i className="flaticon-play-button"></i>
                                             </Link>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </OwlCarousel> : ''} */}
+                    </Carousel> : ''}
                 </div>
 
                 {/* If you want to change the video need to update below videoID */}
-                <ModalVideo
+                {/* <ModalVideo
                     channel='youtube'
                     isOpen={this.state.isOpen}
                     videoId='2Le9TVyWpLY'
                     onClose={() => this.setState({ isOpen: false })}
-                />
+                /> */}
             </>
         );
     }

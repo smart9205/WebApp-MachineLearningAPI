@@ -11,7 +11,7 @@ import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import { toSecond } from "../../common/utilities"
 import gameService from '../../services/game.service';
-// import VIDEO from '../../assets/1.mp4'
+import VIDEO from '../../assets/1.mp4'
 
 const styles = {
     action: {
@@ -38,11 +38,10 @@ const styles = {
     }
 }
 export default function VideoPlayer({ videoData, url, onChangeClip }) {
-    const { tagList, autoPlay, idx, videoPlay, cnt = null } = videoData
-
+    const { tagList, autoPlay, idx, videoPlay, cnt = null, type } = videoData
 
     const player = useRef(null)
-    const [play, setPlay] = useState(true)
+    const [play, setPlay] = useState(false)
     const [ready, setReady] = useState(false)
     const [curIdx, setCurIdx] = useState(0);
     const [videoURL, setVideoURL] = useState("")
@@ -69,6 +68,7 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
 
         setPlay(videoPlay)
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tagList, idx, videoPlay, ready, cnt])
 
     useEffect(() => {
@@ -79,11 +79,11 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec)
 
-    const playTagByIdx = (i) => seekTo(toSecond(tagList[i]?.start_time))
+    const playTagByIdx = (i) => seekTo(toSecond(type === "TeamTag" ? tagList[i]?.t_start_time : tagList[i]?.start_time))
 
     const onProgress = (currentTime) => {
-        const startTime = toSecond(tagList[curIdx]?.start_time);
-        const endTime = toSecond(tagList[curIdx]?.end_time);
+        const startTime = toSecond(type === "TeamTag" ? tagList[curIdx]?.t_start_time : tagList[curIdx]?.start_time);
+        const endTime = toSecond(type === "TeamTag" ? tagList[curIdx]?.t_end_time : tagList[curIdx]?.end_time);
 
         if (currentTime < startTime) {
             seekTo(startTime)
@@ -118,7 +118,8 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
                 <div className="player-wrapper">
                     <ReactPlayer
                         className="react-player"
-                        url={videoURL}
+                        // url={videoURL}
+                        url={VIDEO}
                         ref={player}
                         onPlay={() => setPlay(true)}
                         onPause={() => setPlay(false)}

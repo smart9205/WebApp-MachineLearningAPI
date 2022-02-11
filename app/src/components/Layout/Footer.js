@@ -9,7 +9,7 @@ const Footer = () => {
             <div className="container">
                 <div className="row align-items-center">
                     <div className="col-lg-4 col-md-12">
-                        <p><i className="flaticon-copyright"></i> {currentYear} Plaon All Rights Reserved <a href="http://envytheme.com/" target="_blank">EnvyTheme</a></p>
+                        <p><i className="flaticon-copyright"></i> {currentYear} Plaon All Rights Reserved <a href="http://envytheme.com/" target="_blank" rel="noopener noreferrer" >EnvyTheme</a></p>
                     </div>
 
                     <div className="col-lg-4 col-md-12">

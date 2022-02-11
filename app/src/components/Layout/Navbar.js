@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
-import { requirePropFactory } from '@mui/material';
 import { logout } from "../../actions/auth";
 
 export default function Navbar() {

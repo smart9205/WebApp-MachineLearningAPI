@@ -44,6 +44,7 @@ export default function Coach() {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
+        type: "TeamTag",
         autoPlay: true,
         tagList: [],
         videoPlay: false,
@@ -179,6 +180,7 @@ export default function Coach() {
                             setCurTeamTagIdx(idx)
                             setVideodata({
                                 idx,
+                                type: "TeamTag",
                                 tagList: teamTagList,
                                 autoPlay: true,
                                 videoPlay: false,
@@ -192,6 +194,7 @@ export default function Coach() {
                             setCurTeamTagIdx(idx)
                             setVideodata({
                                 idx,
+                                type: "TeamTag",
                                 tagList: teamTagList,
                                 cnt: new Date(),
                                 autoPlay: true,
@@ -208,6 +211,7 @@ export default function Coach() {
                             console.log("play", row)
                             setVideodata({
                                 idx: 0,
+                                type: "PlayerTag",
                                 autoPlay: false,
                                 tagList: [row],
                                 videoPlay: true

@@ -9,7 +9,6 @@ import Paper from '@mui/material/Paper';
 
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import Box from '@mui/material/Box';
 import GameService from '../../services/game.service';
 import TCellTimeEdit from './TCellTimeEdit';

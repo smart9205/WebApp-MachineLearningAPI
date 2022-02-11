@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 class GoTop extends React.Component {
     _isMounted = false;
@@ -21,10 +21,10 @@ class GoTop extends React.Component {
         });
         window.scrollTo(0, 0);
     }
-    
+
     onScrollStep = () => {
         this._isMounted = true;
-        if (window.pageYOffset === 0){
+        if (window.pageYOffset === 0) {
             clearInterval(this.state.intervalId);
         }
         window.scroll(0, window.pageYOffset - this.props.scrollStepInPx);
@@ -41,7 +41,7 @@ class GoTop extends React.Component {
     }
 
     renderGoTopIcon = () => {
-        if (this.state.thePosition){
+        if (this.state.thePosition) {
             return (
                 <div className="go-top" onClick={this.scrollToTop}>
                     <i className='bx bxs-up-arrow-alt'></i>
@@ -50,7 +50,7 @@ class GoTop extends React.Component {
         }
     }
 
-    render(){
+    render() {
         return (
             <>
                 {this.renderGoTopIcon()}

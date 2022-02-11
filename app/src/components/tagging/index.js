@@ -30,7 +30,7 @@ import Pass from './contents/Pass';
 import Cross from './contents/Cross';
 import Foul from './contents/Foul';
 import Dribble from './contents/Dribble';
-// import VIDEO from "../../assets/1.mp4"
+import VIDEO from "../../assets/1.mp4"
 const drawerWidth = "30%";
 
 const PLAYBACK_RATE = [
@@ -454,7 +454,8 @@ export default function Tagging() {
             <div className="player-wrapper">
               <ReactPlayer
                 className="react-player"
-                url={state.url}
+                // url={state.url}
+                url={VIDEO}
                 ref={player}
                 onPlay={() => setPlay(true)}
                 onPause={() => setPlay(false)}
@@ -496,7 +497,6 @@ export default function Tagging() {
                   <IconButton sx={{ my: 1 }}
                     onClick={() => {
                       setCount(count + 1)
-                      player.current.seekTo(0)
                     }}
                   >
                     <RefreshIcon />

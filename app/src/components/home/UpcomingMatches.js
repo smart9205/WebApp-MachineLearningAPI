@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-// import OwlCarousel from 'react-owl-carousel3';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
+
 
 const options = {
     loop: true,
@@ -48,7 +50,7 @@ class UpcomingMatches extends Component {
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</p>
                     </div>
 
-                    {/* {this.state.display ? <OwlCarousel
+                    {this.state.display ? <Carousel
                         className="upcoming-matches-slides owl-carousel owl-theme"
                         {...options}
                     >
@@ -67,8 +69,7 @@ class UpcomingMatches extends Component {
                                 <img src={require("../../assets/images/football/footb-team2.png")} alt="img" />
                             </div>
 
-                            <Link to="#">
-                                <a className="default-btn">Buy Ticket</a>
+                            <Link to="#" className="default-btn">Buy Ticket
                             </Link>
                         </div>
 
@@ -87,8 +88,7 @@ class UpcomingMatches extends Component {
                                 <img src={require("../../assets/images/football/footb-team2.png")} alt="img" />
                             </div>
 
-                            <Link to="#">
-                                <a className="default-btn">Buy Ticket</a>
+                            <Link to="#" className="default-btn">Buy Ticket
                             </Link>
                         </div>
 
@@ -107,11 +107,9 @@ class UpcomingMatches extends Component {
                                 <img src={require("../../assets/images/football/footb-team2.png")} alt="img" />
                             </div>
 
-                            <Link to="#">
-                                <a className="default-btn">Buy Ticket</a>
-                            </Link>
+                            <Link to="#" className="default-btn">Buy Ticket</Link>
                         </div>
-                    </OwlCarousel> : ''} */}
+                    </Carousel> : ''}
                 </div>
 
                 <div className="upcoming-matches-shape1">

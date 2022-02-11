@@ -306,7 +306,7 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                           </TableCell>
                           <TableCell align="center" >{row.date.slice(0, 10)}</TableCell>
                           <TableCell align="center" sx={{ width: 40 }}>
-                            <a href={row.video_url} target="_blank" rel="noreferrer">
+                            <a href={row.video_url} target="_blank" rel="noopener noreferrer">
                               <Paper style={{ display: "flex", justifyContent: "center", alignItems: "center" }} elevation={3}>
                                 <img src={VIDEO_ICON} style={{ width: 40, height: 40, borderRadius: 5 }} alt="video" />
                               </Paper>

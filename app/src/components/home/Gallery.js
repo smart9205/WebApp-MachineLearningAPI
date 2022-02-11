@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-// import OwlCarousel from 'react-owl-carousel3';
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Lightbox from 'react-image-lightbox';
 
 const options = {
@@ -55,53 +56,48 @@ const Gallery = () => {
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</p>
                     </div>
 
-                    {/* {display ? <OwlCarousel
+                    {display ? <Carousel
                         className="gallery-slides owl-carousel owl-theme"
                         {...options}
                     >
                         <div className="single-gallery-item">
                             <img src={require("../../assets/images/football/gallery/footb-gallery1.jpg")} alt="img" />
-                            <Link href="#popup">
-                                <a
-                                    className="link-btn popup-btn"
-                                    onClick={e => { e.preventDefault(); setIsOpenImage(true); setPhotoIndex(0); }}
-                                ></a>
+                            <Link href="#popup"
+                                className="link-btn popup-btn"
+                                onClick={e => { e.preventDefault(); setIsOpenImage(true); setPhotoIndex(0); }}
+                            >
                             </Link>
                         </div>
 
                         <div className="single-gallery-item">
                             <img src={require("../../assets/images/football/gallery/footb-gallery2.jpg")} alt="img" />
 
-                            <Link to="#">
-                                <a
-                                    className="link-btn popup-btn"
-                                    onClick={e => { e.preventDefault(); setIsOpenImage(true); setPhotoIndex(1); }}
-                                ></a>
+                            <Link to="#"
+                                className="link-btn popup-btn"
+                                onClick={e => { e.preventDefault(); setIsOpenImage(true); setPhotoIndex(1); }}
+                            >
                             </Link>
                         </div>
 
                         <div className="single-gallery-item">
                             <img src={require("../../assets/images/football/gallery/footb-gallery3.jpg")} alt="img" />
 
-                            <Link to="#">
-                                <a
-                                    className="link-btn popup-btn"
-                                    onClick={e => { e.preventDefault(); setIsOpenImage(true); setPhotoIndex(2); }}
-                                ></a>
+                            <Link to="#"
+                                className="link-btn popup-btn"
+                                onClick={e => { e.preventDefault(); setIsOpenImage(true); setPhotoIndex(2); }}
+                            >
                             </Link>
                         </div>
 
                         <div className="single-gallery-item">
                             <img src={require("../../assets/images/football/gallery/footb-gallery4.jpg")} alt="img" />
 
-                            <Link to="#">
-                                <a
-                                    className="link-btn popup-btn"
-                                    onClick={e => { e.preventDefault(); setIsOpenImage(true); setPhotoIndex(3); }}
-                                ></a>
+                            <Link to="#"
+                                className="link-btn popup-btn"
+                                onClick={e => { e.preventDefault(); setIsOpenImage(true); setPhotoIndex(3); }}>
                             </Link>
                         </div>
-                    </OwlCarousel> : ''} */}
+                    </Carousel> : ''}
                 </div>
 
                 <div className="gallery-shape1">
