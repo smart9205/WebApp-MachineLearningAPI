@@ -4,6 +4,8 @@ import moment from 'moment'
 import { Grid, TextField, Paper, Box, IconButton, Autocomplete, CircularProgress } from '@mui/material'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import VIDEO_ICON from '../../assets/video_icon.jpg';
 import gameService from '../../services/game.service'
 import TeamTagTable from './TeamTagTable';
@@ -40,6 +42,7 @@ export default function Coach() {
     const { teamList, team, gameList, game, teamTagList, actionTagList, allTagList, playerList } = state
 
     const [drawOpen, setDrawOpen] = useState(true)
+    const [showAccordion, setShowAccordion] = useState(false)
     const [loading, setLoading] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -148,7 +151,7 @@ export default function Coach() {
                 display: "flex", height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
             }}>
                 <TeamAccordion
-                    style={{ minWidth: 300, overflowY: "scroll" }}
+                    style={{ minWidth: 300, overflowY: "scroll", display: showAccordion ? "" : "none" }}
                     tagList={allTagList}
                     playTags={(res) => { }}
                     onActionSelected={(res) => {
@@ -171,6 +174,13 @@ export default function Coach() {
                         })
                     }}
                 />
+                <IconButton onClick={() => setShowAccordion((v) => !v)} sx={{ background: '#8080804d', position: "absolute", left: showAccordion ? 310 : 10 }}>
+                    {
+                        showAccordion ?
+                            <ArrowLeftIcon /> :
+                            <ArrowRightIcon />
+                    }
+                </IconButton>
                 <Paper style={{ height: "100%", minWidth: 500 }} className="coach-tag-table">
                     <TeamTagTable
                         sx={{ height: "70%", p: 1, width: "100%" }}
