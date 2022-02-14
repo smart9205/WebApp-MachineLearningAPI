@@ -79,3 +79,7 @@ body > iframe {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+.ColorPicker-MuiInputBase-input {
+    color: white !important;
+}

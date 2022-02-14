@@ -12,7 +12,7 @@ import GameService from '../../../services/game.service';
 import Upload from '../../../common/upload';
 import CircularProgress from '@mui/material/CircularProgress';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
-
+import { ColorPicker } from 'material-ui-color';
 const init = {
     id: 0,
     name: "",
@@ -20,7 +20,8 @@ const init = {
     team_color: "",
     sponsor_logo: "",
     sponsor_url: "",
-    create_hightlights: false
+    show_sponsor: false,
+    create_highlights: false
 }
 
 const styles = {
@@ -50,7 +51,8 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
             team_color: edit?.team_color,
             sponsor_logo: edit?.sponsor_logo,
             sponsor_url: edit?.sponsor_url,
-            create_hightlights: edit?.create_hightlights,
+            create_highlights: edit?.create_highlights,
+            show_sponsor: edit?.show_sponsor
         })
     }, [edit])
 
@@ -85,6 +87,7 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
             <DialogTitle>{!edit ? "Add" : "Edit"} Team</DialogTitle>
             <DialogContent style={{ display: "flex" }}>
                 <Upload
+                    className="team-logo"
                     dirName={process.env.REACT_APP_DIR_TEAM}
                     img={data.image}
                     onURL={url => setData({ image: url })}
@@ -95,24 +98,23 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
                 <Box style={{ margin: 10 }}>
                     <TextField
                         fullWidth
-                        sx={{ mt: 1 }}
+                        sx={{ my: 2 }}
                         label='Team name'
                         value={data.name}
                         onChange={(e) => setData({ name: e.target.value })}
                     />
-                    <TextField
-                        fullWidth
-                        sx={{ mt: 1 }}
-                        label='Team Color'
+                    Team Color
+                    <ColorPicker
+                        defaultValue="transparent"
                         value={data.team_color}
-                        onChange={(e) => setData({ team_color: e.target.value })}
+                        onChange={(color) => setData({ team_color: color.value })}
                     />
                     <FormControlLabel
                         sx={{ mt: 1 }}
                         control={
                             <Checkbox
-                                checked={data.create_hightlights}
-                                onChange={() => setData({ create_hightlights: !data.create_hightlights })}
+                                checked={data.create_highlights}
+                                onChange={() => setData({ create_highlights: !data.create_highlights })}
                                 inputProps={{ 'aria-label': 'controlled' }}
                             />
                         }
@@ -123,21 +125,35 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
             <DialogContent style={{ display: "flex" }}>
 
                 <Upload
+                    className="sponsor-logo"
                     dirName={process.env.REACT_APP_DIR_TEAM}
                     img={data.sponsor_logo}
                     onURL={url => setData({ sponsor_logo: url })}
                     defaultImg={TEAM_ICON_DEFAULT}
                     btn_name="Sponsor Logo"
                 />
-                <TextField
-                    fullWidth
-                    style={{ margin: 10 }}
-                    sx={{ mt: 1 }}
-                    label='Sponsor URL'
-                    value={data.sponsor_url}
-                    onChange={(e) => setData({ sponsor_url: e.target.value })}
-                />
+                <Box style={{ margin: 10 }}>
 
+                    <TextField
+                        fullWidth
+                        style={{ margin: 10 }}
+                        sx={{ mt: 1 }}
+                        label='Sponsor URL'
+                        value={data.sponsor_url}
+                        onChange={(e) => setData({ sponsor_url: e.target.value })}
+                    />
+                    <FormControlLabel
+                        sx={{ mt: 1 }}
+                        control={
+                            <Checkbox
+                                checked={data.show_sponsor}
+                                onChange={() => setData({ show_sponsor: !data.show_sponsor })}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                        }
+                        label="Show Sponsor"
+                    />
+                </Box>
             </DialogContent>
             <DialogActions>
                 <Button onClick={e => onResult(false)}>Cancel</Button>
