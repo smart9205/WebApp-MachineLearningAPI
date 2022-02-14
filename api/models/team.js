@@ -16,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   Team.init({
     name: DataTypes.STRING,
     image: DataTypes.STRING,
-    Team_color: DataTypes.STRING,
-    Sponsor_logo: DataTypes.STRING,
-    Sponsor_url: DataTypes.STRING,
-    Create_highlights: DataTypes.BOOLEAN,
+    team_color: DataTypes.STRING,
+    sponsor_logo: DataTypes.STRING,
+    sponsor_url: DataTypes.STRING,
+    create_highlights: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'Team',

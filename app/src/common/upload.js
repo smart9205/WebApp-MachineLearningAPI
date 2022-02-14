@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import S3 from "react-aws-s3";
+import Box from '@mui/material/Box';
 import { styled } from '@mui/styles';
 
 import { CircularProgress, Button } from '@mui/material';
@@ -21,7 +22,7 @@ const styles = {
 const Input = styled('input')({
     display: 'none',
 });
-function Upload({ dirName, img, onURL, fileName, defaultImg = "" }) {
+function Upload({ dirName, img, onURL, fileName, defaultImg = "", btn_name = "Upload" }) {
     const fileInput = useRef();
     const [image, setImage] = useState(img)
     const [loading, setLoading] = useState(false)
@@ -52,21 +53,27 @@ function Upload({ dirName, img, onURL, fileName, defaultImg = "" }) {
         });
     };
     return (
-        <div style={{ textAlign: "center", width: 200, margin: "auto" }}>
+        <Box style={{ textAlign: "center", width: 200, margin: "auto" }}>
             <label htmlFor="contained-button-file">
                 <Input accept="image/*" id="contained-button-file" type="file" ref={fileInput} onChange={(e) => handleUpload()} />
                 <Button variant="contained" component="span">
-                    Upload
+                    {btn_name}
                 </Button>
             </label><br />
-            <img src={image && image.length > 0 ? image : defaultImg} width="200" alt="img" style={{ border: "1px black solid" }}></img>
+            <img
+                className="upload-image-preview"
+                src={image && image.length > 0 ? image : defaultImg}
+                width="200"
+                alt="img"
+                style={{ border: "1px black solid" }}>
+            </img>
             {
                 loading &&
                 <div style={styles.loader}>
                     <CircularProgress />
                 </div>
             }
-        </div >
+        </Box >
     );
 }
 

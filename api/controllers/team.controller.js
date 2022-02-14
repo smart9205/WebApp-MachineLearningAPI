@@ -13,7 +13,11 @@ exports.create = async (req, res) => {
 
   const team = {
     name: req.body.name,
-    image: req.body.image
+    image: req.body.image,
+    team_color: req.body.team_color,
+    sponsor_logo: req.body.sponsor_logo,
+    sponsor_url: req.body.sponsor_url,
+    create_highlights: req.body.create_highlights
   };
 
   const checkTeam = await Team.findOne({
