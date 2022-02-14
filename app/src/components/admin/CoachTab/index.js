@@ -231,8 +231,11 @@ export default function CoachTab() {
                         </TableBody> :
                             <TableBody>
                                 {stableSort(rows.filter(r =>
-                                    (r.first_name + " " + r.last_name).toLowerCase().includes(search.toLowerCase()) ||
-                                    r.email.toLowerCase().includes(search.toLowerCase())), getComparator(order, orderBy))
+                                    r.coach_name?.toLowerCase()?.includes(search.toLowerCase()) ||
+                                    r.season_name?.toLowerCase()?.includes(search.toLowerCase()) ||
+                                    r.league_name?.toLowerCase()?.includes(search.toLowerCase()) ||
+                                    r.team_name?.toLowerCase()?.includes(search.toLowerCase())
+                                ), getComparator(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row, index) => {
                                         return (
