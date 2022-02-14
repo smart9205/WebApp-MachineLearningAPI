@@ -42,7 +42,7 @@ export default function Coach() {
     const { teamList, team, gameList, game, teamTagList, actionTagList, allTagList, playerList } = state
 
     const [drawOpen, setDrawOpen] = useState(true)
-    const [showAccordion, setShowAccordion] = useState(false)
+    const [showAccordion, setShowAccordion] = useState(true)
     const [loading, setLoading] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
