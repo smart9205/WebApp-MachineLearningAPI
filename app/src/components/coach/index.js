@@ -89,7 +89,7 @@ export default function Coach() {
         )
     else return (
         <>
-            <Box sx={{ mx: 1, mt: 1 }} >
+            <Box sx={{ mx: 1, mt: 1, display: drawOpen ? "" : "none" }} >
                 <Autocomplete
                     options={teamList}
                     value={team}
@@ -148,7 +148,7 @@ export default function Coach() {
                 display: "flex", height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
             }}>
                 <TeamAccordion
-                    style={{ minWidth: 350, overflowY: "scroll" }}
+                    style={{ minWidth: 300, overflowY: "scroll" }}
                     tagList={allTagList}
                     playTags={(res) => { }}
                     onActionSelected={(res) => {
