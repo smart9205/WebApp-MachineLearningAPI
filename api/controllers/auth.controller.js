@@ -123,7 +123,8 @@ exports.signup = (req, res) => {
   })
     .then(user => {
       // user role = 2//tagger
-      user.setRoles([2]).then(() => {
+      // user role = 3//coach
+      user.setRoles([3]).then(() => {
         VerificationToken.create({
           user_id: user.id,
           token: randomstring.generate(16)
