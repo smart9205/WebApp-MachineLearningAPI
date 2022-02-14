@@ -1,35 +1,27 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
-
-const options = {
-    loop: true,
-    nav: true,
-    dots: false,
-    autoplayHoverPause: true,
-    autoplay: false,
-    margin: 30,
-    navText: [
-        "<i class='flaticon-right-arrow'></i>",
-        "<i class='flaticon-right-arrow'></i>"
-    ],
-    responsive: {
-        0: {
-            items: 1,
-        },
-        576: {
-            items: 2,
-        },
-        768: {
-            items: 2,
-        },
-        1200: {
-            items: 2,
-        }
+const responsive = {
+    superLargeDesktop: {
+        // the naming can be any, depends on you.
+        breakpoint: { max: 4000, min: 3000 },
+        items: 2
+    },
+    desktop: {
+        breakpoint: { max: 3000, min: 1024 },
+        items: 2
+    },
+    tablet: {
+        breakpoint: { max: 1024, min: 464 },
+        items: 2
+    },
+    mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 1
     }
-}
+};
 
 class UpcomingMatches extends Component {
 
@@ -52,7 +44,12 @@ class UpcomingMatches extends Component {
 
                     {this.state.display ? <Carousel
                         className="upcoming-matches-slides owl-carousel owl-theme"
-                        {...options}
+                        swipeable={false}
+                        draggable={true}
+                        showDots={false}
+                        infinite={true}
+                        responsive={responsive}
+                        itemClass="carousel-item-padding-40-px"
                     >
                         <div className="single-upcoming-matches-item">
                             <div className="date">

@@ -1,33 +1,27 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Lightbox from 'react-image-lightbox';
 
-const options = {
-    loop: true,
-    nav: true,
-    dots: false,
-    autoplayHoverPause: true,
-    autoplay: false,
-    margin: 30,
-    navText: [
-        "<i class='flaticon-right-arrow'></i>",
-        "<i class='flaticon-right-arrow'></i>"
-    ],
-    responsive: {
-        0: {
-            items: 1,
-        },
-        576: {
-            items: 2,
-        },
-        768: {
-            items: 2,
-        },
-        1200: {
-            items: 2,
-        }
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
+const responsive = {
+    superLargeDesktop: {
+        // the naming can be any, depends on you.
+        breakpoint: { max: 4000, min: 3000 },
+        items: 2
+    },
+    desktop: {
+        breakpoint: { max: 3000, min: 1024 },
+        items: 2
+    },
+    tablet: {
+        breakpoint: { max: 1024, min: 464 },
+        items: 2
+    },
+    mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 1
     }
 };
 
@@ -58,7 +52,11 @@ const Gallery = () => {
 
                     {display ? <Carousel
                         className="gallery-slides owl-carousel owl-theme"
-                        {...options}
+                        responsive={responsive}
+                        swipeable={false}
+                        draggable={true}
+                        showDots={false}
+                        infinite={true}
                     >
                         <div className="single-gallery-item">
                             <img src={require("../../assets/images/football/gallery/footb-gallery1.jpg")} alt="img" />

@@ -1,20 +1,28 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
-const options = {
-    loop: true,
-    nav: true,
-    dots: false,
-    autoplayHoverPause: true,
-    autoplay: false,
-    items: 1,
-    navText: [
-        "<i class='flaticon-left'></i>",
-        "<i class='flaticon-right'></i>"
-    ],
-}
+const responsive = {
+    superLargeDesktop: {
+        // the naming can be any, depends on you.
+        breakpoint: { max: 4000, min: 3000 },
+        items: 1
+    },
+    desktop: {
+        breakpoint: { max: 3000, min: 1024 },
+        items: 1
+    },
+    tablet: {
+        breakpoint: { max: 1024, min: 464 },
+        items: 1
+    },
+    mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 1
+    }
+};
 
 class MatcheHighlights extends Component {
     // Carousel
@@ -39,8 +47,12 @@ class MatcheHighlights extends Component {
             <>
                 <div id="highlights">
                     {this.state.display ? <Carousel
-                        className="matches-highlights-slides owl-carousel owl-theme"
-                        {...options}
+                        // className="matches-highlights-slides owl-carousel owl-theme"
+                        swipeable={false}
+                        draggable={true}
+                        showDots={false}
+                        infinite={true}
+                        responsive={responsive}
                     >
                         <div className="single-matches-highlights-item highlights-bg1">
                             <div className="container">
