@@ -30,6 +30,11 @@ module.exports = app => {
 		controller.getPlayersByTeam
 	);
 
+	app.get(
+		"/team_player/teambyplayergame/:playerid/:gameid",
+		controller.teambyplayergame
+	);
+
 	app.post(
 		"/team_player/create",
 		[authJwt.verifyToken, authJwt.isAdmin],

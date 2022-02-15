@@ -2,6 +2,7 @@ const db = require("../models");
 const Team_Player = db.team_player;
 const Player = db.player;
 const Game = db.game;
+const Team = db.team;
 const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
 
@@ -116,6 +117,31 @@ exports.getPlayersByTeam = async (req, res) => {
   }
   res.send(team[0]);
 }
+
+
+exports.teambyplayergame = async (req, res) => {
+  const playerId = req.params.playerid;
+  const gameId = req.params.gameid;
+
+  let game;
+  try {
+    game = await Game.findByPk(gameId);
+    if (!game) return res.status(500).send({ message: "Game not found!" });
+  } catch (e) {
+    return res.status(500).send({ message: "Game not found!" });
+  }
+  Team.findOne({
+    where: {
+      [Op.or]: [
+        { id: game.home_team_id },
+        { id: game.away_team_id }
+      ]
+    }
+  }).then((data) => {
+    res.send(data);
+  })
+}
+
 exports.findAll = (req, res) => {
   console.log("req team_player", req.body);
   Sequelize.query(`

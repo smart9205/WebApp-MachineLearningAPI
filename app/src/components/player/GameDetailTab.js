@@ -28,13 +28,16 @@ export default function GameDetailTab() {
     const [open, setOpen] = useState(false);
     const [tagList, setTagList] = useState([])
     const [playTags, setPlayTags] = useState([])
+    const [showHighlight, setShowHighlight] = useState(false)
 
     const [tab, setTab] = useState(1);
-
 
     useEffect(() => {
         GameService.getAllPlayerTagsByPlayer(playerId, game?.game_id).then((res) => {
             setTagList(res)
+        })
+        GameService.getTeamByPlayerGame(playerId, game?.game_id).then((res) => {
+            setShowHighlight(!!res.create_highlights)
         })
     }, [playerId, game])
 
@@ -61,14 +64,18 @@ export default function GameDetailTab() {
                             tagList={tagList}
                             playTags={tags => { setPlayTags(tags); setOpen(true) }}
                             onHighlight={() => setTab(3)}
+                            showHighlight={showHighlight}
                         />
                     </Tab>
                     <Tab eventKey={2} title="Statistics" className='tableBorder'>
                         <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </Tab>
-                    <Tab eventKey={3} title="My HighLights" className='tableBorder'>
-                        <HighlightTab playTags={tags => { setPlayTags(tags); setOpen(true) }} />
-                    </Tab>
+                    {
+                        showHighlight &&
+                        <Tab eventKey={3} title="My HighLights" className='tableBorder'>
+                            <HighlightTab playTags={tags => { setPlayTags(tags); setOpen(true) }} />
+                        </Tab>
+                    }
                 </Tabs>
             </div>
         </>

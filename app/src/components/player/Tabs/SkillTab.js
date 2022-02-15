@@ -26,7 +26,7 @@ const styles = {
         alignItems: "center"
     },
 }
-export default function SkillTab({ playTags, onHighlight }) {
+export default function SkillTab({ playTags, onHighlight, showHighlight }) {
     const { context, setContext } = useContext(PlayerContext)
 
     const teamId = context.game.team_id
@@ -78,12 +78,14 @@ export default function SkillTab({ playTags, onHighlight }) {
                     <>
                         <div className="skilltab-action-header">
                             <div>
-                                <IconButton
-                                    style={{ padding: 0 }}
-                                    className="skilltab-highlight-button"
-                                    onClick={() => saveHighlight()}>
-                                    <img src={StarButton} alt="icon" width={70} />CREATE HIGHLIGHT
-                                </IconButton>
+                                {showHighlight &&
+                                    <IconButton
+                                        style={{ padding: 0 }}
+                                        className="skilltab-highlight-button"
+                                        onClick={() => saveHighlight()}>
+                                        <img src={StarButton} alt="icon" width={70} />CREATE HIGHLIGHT
+                                    </IconButton>
+                                }
                             </div>
                             <div className="skilltab-action-header-player"><p>PLAYER</p></div>
                             <p>TEAM</p>
