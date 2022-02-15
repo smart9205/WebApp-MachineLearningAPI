@@ -33,6 +33,7 @@
         "react-date-range": "^1.4.0",
         "react-dom": "^17.0.2",
         "react-export-excel": "^0.5.3",
+        "react-full-screen": "^1.1.0",
         "react-google-recaptcha": "^2.1.0",
         "react-hook-screen-orientation": "^1.0.3",
         "react-hotkeys-hook": "^3.4.4",

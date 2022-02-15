@@ -6,11 +6,14 @@ import {
     FormControlLabel
 } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlined';
 import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import { toSecond } from "../../common/utilities"
 import gameService from '../../services/game.service';
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 // import VIDEO from '../../assets/1.mp4'
 
 const styles = {
@@ -38,6 +41,7 @@ const styles = {
     }
 }
 export default function VideoPlayer({ videoData, url, onChangeClip }) {
+    const handle = useFullScreenHandle();
     const { tagList, autoPlay, idx, videoPlay, cnt = null, type } = videoData
 
     const player = useRef(null)
@@ -114,45 +118,52 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
 
     return (
         <div style={{ width: "100%", margin: 'auto', minWidth: 500, position: "relative" }}>
-            <div style={{ width: "98%", margin: 'auto' }}>
-                <div className="player-wrapper">
-                    <ReactPlayer
-                        className="react-player"
-                        url={videoURL}
-                        // url={VIDEO}
-                        ref={player}
-                        onPlay={() => setPlay(true)}
-                        onPause={() => setPlay(false)}
-                        onReady={() => setReady(true)}
-                        onProgress={(p) => onProgress(p.playedSeconds)}
-                        playing={play}
-                        controls={false}
-                        width='100%'
-                        height='100%'
-                    />
+            <FullScreen handle={handle}>
+                <div style={{ width: "98%", margin: 'auto' }}>
+                    <div className="player-wrapper">
+                        <ReactPlayer
+                            className="react-player"
+                            url={videoURL}
+                            // url={VIDEO}
+                            ref={player}
+                            onPlay={() => setPlay(true)}
+                            onPause={() => setPlay(false)}
+                            onReady={() => setReady(true)}
+                            onProgress={(p) => onProgress(p.playedSeconds)}
+                            playing={play}
+                            controls={false}
+                            width='100%'
+                            height='100%'
+                        />
+                    </div>
                 </div>
-            </div>
-            <div style={styles.buttonBox} >
-                <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
-                    <SkipPreviousSharpIcon color="white" />
-                </IconButton>
 
-                <IconButton onClick={() => setPlay(p => !p)} style={styles.button}>
-                    {play ? <PauseIcon /> : <PlayArrowIcon />}
-                </IconButton>
+                <div style={styles.buttonBox} >
+                    <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
+                        <SkipPreviousSharpIcon color="white" />
+                    </IconButton>
 
-                <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
-                    <SkipNextSharpIcon />
-                </IconButton>
+                    <IconButton onClick={() => setPlay(p => !p)} style={styles.button}>
+                        {play ? <PauseIcon /> : <PlayArrowIcon />}
+                    </IconButton>
 
-                {autoPlay &&
-                    <FormControlLabel
-                        control={<Switch defaultChecked onChange={(e) => setCanNext(e.target.checked)} />}
-                        label="Auto Play"
-                        sx={{ color: "white" }}
-                    />
-                }
-            </div>
+                    <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
+                        <SkipNextSharpIcon />
+                    </IconButton>
+
+                    {autoPlay &&
+                        <FormControlLabel
+                            control={<Switch defaultChecked onChange={(e) => setCanNext(e.target.checked)} />}
+                            label="Auto Play"
+                            sx={{ color: "white" }}
+                        />
+                    }
+
+                    <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
+                        {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
+                    </IconButton>
+                </div>
+            </FullScreen>
         </div >
     )
 }

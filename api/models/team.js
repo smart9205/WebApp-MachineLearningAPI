@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     sponsor_logo: DataTypes.STRING,
     sponsor_url: DataTypes.STRING,
     create_highlights: DataTypes.BOOLEAN,
+    show_sponsor: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Team',
