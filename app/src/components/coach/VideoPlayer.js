@@ -42,7 +42,7 @@ const styles = {
 }
 export default function VideoPlayer({ videoData, url, onChangeClip }) {
     const handle = useFullScreenHandle();
-    const { tagList, autoPlay, idx, videoPlay, cnt = null, type } = videoData
+    const { tagList, autoPlay, idx, videoPlay, cnt = null } = videoData
 
     const player = useRef(null)
     const [play, setPlay] = useState(false)
@@ -83,11 +83,11 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec)
 
-    const playTagByIdx = (i) => seekTo(toSecond(type === "TeamTag" ? tagList[i]?.t_start_time : tagList[i]?.start_time))
+    const playTagByIdx = (i) => seekTo(toSecond(tagList[i]?.start_time))
 
     const onProgress = (currentTime) => {
-        const startTime = toSecond(type === "TeamTag" ? tagList[curIdx]?.t_start_time : tagList[curIdx]?.start_time);
-        const endTime = toSecond(type === "TeamTag" ? tagList[curIdx]?.t_end_time : tagList[curIdx]?.end_time);
+        const startTime = toSecond(tagList[curIdx]?.start_time);
+        const endTime = toSecond(tagList[curIdx]?.end_time);
 
         if (currentTime < startTime) {
             seekTo(startTime)

@@ -47,7 +47,6 @@ export default function Coach() {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
-        type: "TeamTag",
         autoPlay: true,
         tagList: [],
         videoPlay: false,
@@ -151,10 +150,11 @@ export default function Coach() {
                 display: "flex", height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
             }}>
                 <TeamAccordion
-                    style={{ minWidth: 300, overflowY: "scroll", display: showAccordion ? "" : "none" }}
+                    style={{ minWidth: 310, overflowY: "scroll", display: showAccordion ? "" : "none" }}
                     tagList={allTagList}
                     playTags={(res) => { }}
                     onActionSelected={(res) => {
+                        console.log("actionselected")
                         const teamTags = _.uniqBy(res, 'team_tag_id')
                         setState({
                             actionTagList: res,
@@ -190,12 +190,15 @@ export default function Coach() {
                             setCurTeamTagIdx(idx)
                             setVideodata({
                                 idx,
-                                type: "TeamTag",
-                                tagList: teamTagList,
+                                tagList: teamTagList.map(t => {
+                                    return {
+                                        start_time: t.t_start_time,
+                                        end_time: t.t_end_time
+                                    }
+                                }),
                                 autoPlay: true,
                                 videoPlay: false,
                             })
-                            console.log("handleRowClick", idx)
                         }
                         }
                         selected={curTeamTagIdx}
@@ -204,8 +207,12 @@ export default function Coach() {
                             setCurTeamTagIdx(idx)
                             setVideodata({
                                 idx,
-                                type: "TeamTag",
-                                tagList: teamTagList,
+                                tagList: teamTagList.map(t => {
+                                    return {
+                                        start_time: t.t_start_time,
+                                        end_time: t.t_end_time
+                                    }
+                                }),
                                 cnt: new Date(),
                                 autoPlay: true,
                                 videoPlay: true,
@@ -221,7 +228,6 @@ export default function Coach() {
                             console.log("play", row)
                             setVideodata({
                                 idx: 0,
-                                type: "PlayerTag",
                                 autoPlay: false,
                                 tagList: [row],
                                 videoPlay: true

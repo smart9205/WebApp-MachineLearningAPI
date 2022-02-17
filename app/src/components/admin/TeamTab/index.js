@@ -194,7 +194,7 @@ export default function TeamTab() {
                         sx={{ mx: 10 }}
                         placeholder='Search'
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={(e) => { setSearch(e.target.value); setPage(0); }}
                     />
                 </div>
                 <TablePagination

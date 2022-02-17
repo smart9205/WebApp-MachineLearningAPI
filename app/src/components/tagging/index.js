@@ -23,7 +23,7 @@ import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { toHHMMSS, toSecond, getUser, setUser } from "../../common/utilities"
+import { toHHMMSS, toSecond, addSecToHHMMSS, getUser, setUser } from "../../common/utilities"
 import Shot from './contents/Shot';
 import ShortPass from './contents/ShortPass';
 import Pass from './contents/Pass';
@@ -282,13 +282,16 @@ export default function Tagging() {
 
   const addPlayerTag = async (PTag) => await GameService.addPlayerTag(PTag)
 
-  const setTaggingState = (e) => {
+  const setTaggingState = (tags) => {
+    console.log("Saving Tags", tags)
     setTempPlayerTagList([
       ...temp_playerTag_list,
-      ...(e.map(tag => {
+      ...(tags.map(tag => {
         return {
           ...tag,
-          start_time: playerTag.start_time,
+          start_time: (tag.action_type_id === 4 || tag.action_type_id === 14)
+            ? addSecToHHMMSS(playerTag.start_time, -2)
+            : playerTag.start_time,
           end_time: playerTag.end_time
         };
       }))
