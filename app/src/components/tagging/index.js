@@ -180,7 +180,9 @@ export default function Tagging() {
         setState({ url: res.video_url })
       }
     });
+  }, [game_id])
 
+  React.useEffect(() => {
     GameService.getGameTeamPlayers({ game_id }).then((res) => {
       setState({ homePlayers: res.home_team, awayPlayers: res.away_team })
     })
