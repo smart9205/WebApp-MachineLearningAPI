@@ -19,18 +19,18 @@ const Banner = () => {
                 <div className="container-fluid">
                     <div className="row align-items-center">
                         <div className="col-lg-6 col-sm-6">
-                            <span className="email-link">gutt@scouting4u.com</span>
+                            <span className="email-link">support@scouting4u.comm</span>
                         </div>
 
                         <div className="col-lg-6 col-sm-6">
                             <ul className="social">
                                 <li>
-                                    <Link to="#" target="_blank">
+                                    <Link to="https://www.facebook.com/s4upro" target="_blank">
                                         <i className="flaticon-facebook"></i>
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="#" target="_blank">
+                                    <Link to="https://twitter.com/S4UPro" target="_blank">
                                         <i className="flaticon-twitter-1"></i>
                                     </Link>
                                 </li>
@@ -40,12 +40,12 @@ const Banner = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="#" target="_blank">
+                                    <Link to="https://www.linkedin.com/company/scouting4u" target="_blank">
                                         <i className="flaticon-linkedin-1"></i>
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="#" target="_blank">
+                                    <Link to="https://www.youtube.com/channel/UC3LeTV-zd6sGSvSayUF2E7g" target="_blank">
                                         <i className="flaticon-youtube-1"></i>
                                     </Link>
                                 </li>

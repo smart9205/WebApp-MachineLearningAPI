@@ -9,17 +9,17 @@ const Footer = () => {
             <div className="container">
                 <div className="row align-items-center">
                     <div className="col-lg-4 col-md-12">
-                        <p><i className="flaticon-copyright"></i> {currentYear} Plaon All Rights Reserved <a href="http://envytheme.com/" target="_blank" rel="noopener noreferrer" >EnvyTheme</a></p>
+                        <p><i className="flaticon-copyright"></i> {currentYear} All Rights Reserved <a href="http://www.Scouting4U.com/" target="_blank" rel="noopener noreferrer" >Scouting4U</a></p>
                     </div>
 
                     <div className="col-lg-4 col-md-12">
                         <ul className="social">
                             <li>
-                                <Link to="#" target="_blank"><i className="flaticon-facebook-logo"></i>
+                                <Link to="https://www.facebook.com/s4upro" target="_blank"><i className="flaticon-facebook-logo"></i>
                                 </Link>
                             </li>
                             <li>
-                                <Link to="#" target="_blank"><i className="flaticon-twitter"></i>
+                                <Link to="https://twitter.com/S4UPro" target="_blank"><i className="flaticon-twitter"></i>
                                 </Link>
                             </li>
                             <li>
@@ -27,11 +27,11 @@ const Footer = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="#" target="_blank"><i className="flaticon-linkedin"></i>
+                                <Link to="https://www.linkedin.com/company/scouting4u" target="_blank"><i className="flaticon-linkedin"></i>
                                 </Link>
                             </li>
                             <li>
-                                <Link to="#" target="_blank"><i className="flaticon-youtube"></i>
+                                <Link to="https://www.youtube.com/channel/UC3LeTV-zd6sGSvSayUF2E7g" target="_blank"><i className="flaticon-youtube"></i>
                                 </Link>
                             </li>
                         </ul>
