@@ -17,10 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     image: DataTypes.STRING,
     team_color: DataTypes.STRING,
+    second_color: DataTypes.STRING,
     sponsor_logo: DataTypes.STRING,
     sponsor_url: DataTypes.STRING,
     create_highlights: DataTypes.BOOLEAN,
-    show_sponsor: DataTypes.BOOLEAN
+    show_sponsor: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'Team',

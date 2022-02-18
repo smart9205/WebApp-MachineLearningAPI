@@ -107,7 +107,11 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
                     <ColorPicker
                         defaultValue="transparent"
                         value={data.team_color}
-                        onChange={(color) => setData({ team_color: color.value })}
+                        onChange={(color) => {
+                            console.log("color", color)
+                            setData({ team_color: "#" + color.hex })
+                        }
+                        }
                     />
                     <FormControlLabel
                         sx={{ mt: 1 }}

@@ -1,18 +1,17 @@
 import React, { useEffect, useState, createContext, useMemo, useReducer } from 'react';
 import { useParams } from "react-router-dom";
-import { Container, } from 'react-bootstrap'
 import {
   IconButton,
   CircularProgress
 } from '@mui/material';
 import ArrowBackSharpIcon from '@mui/icons-material/ArrowBackSharp';
-import moment from 'moment'
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import GameService from "../../services/game.service";
-import VIDEO_ICON from '../../assets/video_icon.jpg';
 
 import PlayerDetailCard from './PlayerDetailCard';
 import GameDetailTab from './GameDetailTab';
 import "./Profile.css"
+import { Table } from 'react-bootstrap';
 
 const styles = {
   loader: {
@@ -31,6 +30,9 @@ const styles = {
     right: "10px",
     color: "white",
     zIndex: 30
+  },
+  play: {
+    color: '#07863d'
   }
 };
 
@@ -81,41 +83,85 @@ export default function Players() {
         (<>
           {
             <section className='profileSection'>
-              <Container>
-                {
-                  !!curGame &&
-                  <IconButton style={styles.back} onClick={() => setContext({ game: null })}>
-                    <ArrowBackSharpIcon />
-                  </IconButton>
-                }
-                {playerData && <PlayerDetailCard player={playerData} />}
-                {!curGame ? <>
-                  {
-                    games.map((game) =>
-                      <div
-                        key={game.id}
-                        style={{ display: "flex" }}
-                        onClick={() => {
+              {
+                !!curGame &&
+                <IconButton style={styles.back} onClick={() => setContext({ game: null })}>
+                  <ArrowBackSharpIcon />
+                </IconButton>
+              }
+              {playerData && <PlayerDetailCard player={playerData} />}
+              {!curGame ? <Table borderless size="sm" className='profileSection_gametable'>
+                <tbody className='text-center'>
+                  <tr className="profileSection_gametable-head">
+                    <th></th>
+                    <th>G</th>
+                    <th>SH</th>
+                    <th>P</th>
+                    <th>I</th>
+                    <th>S</th>
+                    <th>C</th>
+                  </tr>
+                  {games.map((game) =>
+                    <tr>
+                      <td className='profileSection_opponent-team'>
+                        <IconButton style={styles.play} onClick={() => setContext({ game: null })}>
+                          <PlayCircleOutlineIcon />
+                        </IconButton>
+                        <div onClick={() => {
                           setContext({ game })
-                        }}
-                      >
-                        <div
-                          className='gameImage'
-                          style={{ backgroundImage: `url(${game?.image?.length > 0 ? game.image : VIDEO_ICON})`, width: 100, height: 70 }}>
+                        }}>
+                          {game.away_team_name}
+                          <div>
+                            2:0
+                          </div>
                         </div>
-                        <div>
-                          <div>{moment(game.date).format('DD MMM, YYYY hh:mm')}</div>
-                          <div>{game.home_team_name}</div>
-                          <div>{game.away_team_name}</div>
-                        </div>
-                      </div>
-                    )
-                  }
-                </>
-                  :
-                  <GameDetailTab />
-                }
-              </Container>
+                      </td>
+                      <td>1</td>
+                      <td>8</td>
+                      <td>10</td>
+                      <td>46</td>
+                      <td>46</td>
+                      <td>20</td>
+                    </tr>
+                  )}
+                </tbody>
+                <div className='profileSection_gametable-average'>
+                  <div>
+                    Average
+                    <p className='profileSection_gametable-average-period'>
+                      10.10~10.20
+                    </p>
+                  </div>
+                  <div>1</div>
+                  <div>8</div>
+                  <div>10</div>
+                  <div>46</div>
+                  <div>46</div>
+                  <div>20</div>
+                </div>
+              </Table> :
+                <GameDetailTab />
+              }
+              {/* {!curGame ? games.map((game) =>
+                <div
+                  key={game.id}
+                  style={{ display: "flex" }}
+                  onClick={() => {
+                    setContext({ game })
+                  }}
+                >
+                  <div
+                    className='gameImage'
+                    style={{ backgroundImage: `url(${game?.image?.length > 0 ? game.image : VIDEO_ICON})`, width: 100, height: 70 }}>
+                  </div>
+                  <div>
+                    <div>{moment(game.date).format('DD MMM, YYYY hh:mm')}</div>
+                    <div>{game.home_team_name}</div>
+                    <div>{game.away_team_name}</div>
+                  </div>
+                </div>
+              ) :
+              } */}
             </section>
           }
         </>)

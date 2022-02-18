@@ -58,7 +58,7 @@ export default function HighlightTab({ playTags }) {
                 Video URL copied successfully!
             </Alert>
         </Snackbar>
-        <Table responsive="sm" striped borderless size="sm" className='text-uppercase text-white highlight-table' >
+        <Table responsive="sm" borderless size="sm" className='text-uppercase text-black highlight-table' >
             <thead>
                 <tr>
                     <th className='text-center'>Game</th>
@@ -72,7 +72,10 @@ export default function HighlightTab({ playTags }) {
                         <td>
                             <div
                                 className='gameImage'
-                                style={{ backgroundImage: `url(${row?.game_image?.length > 0 ? row.game_image : VIDEO_ICON})`, width: 50, height: 35 }}>
+                                style={{
+                                    backgroundImage: `url(${row?.game_image?.length > 0 ? row.game_image : VIDEO_ICON})`,
+                                    width: 60, height: 45
+                                }}>
                             </div>
                         </td>
                         <td><span>{row.date.slice(0, 10)}</span></td>

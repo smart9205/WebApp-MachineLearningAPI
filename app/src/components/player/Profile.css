@@ -34,9 +34,7 @@
     color: wheat !important;
     font-size: 16px !important;
 }
-.statistic-table-body {
-    /* background-color: #3e3636; */
-}
+
 .statistic-table-body td {
     border-right: 1px #d6e7e8 solid;
 }
@@ -52,14 +50,63 @@
     text-align: center;
 }
 .profileSection {
-    padding-top: 10px;
-    background-color: #0b0a22;
-    color: white;
+    background-color: white;
+    color: black;
+    font-family: sans-serif;
     min-height: 100vh;
 }
+.profileSection td.profileSection_opponent-team {
+    display: flex;
+    font-size: 14px;
+}
+.profileSection .profileSection_gametable {
+    margin-bottom: 50px;
+}
+.profileSection tr.profileSection_gametable-head {
+    background-color: #e7f3e5;
+}
+.profileSection div.profileSection_gametable-average {
+    display: flex;
+    align-items: center;
+    background-color: #e7f3e5;
+    box-shadow: 0 0 3px grey;
+    border-bottom: 2px solid #058240;
+    position: fixed;
+    left: 0;
+    right: 0;
+    text-align: center;
+    bottom: 0;
+}
+.profileSection div.profileSection_gametable-average p {
+    font-size: 12px;
+}
+.profileSection div.profileSection_gametable-average div:first-child {
+    flex: 4;
+}
+.profileSection div.profileSection_gametable-average div:not(:first-child) {
+    flex: 1;
+}
+.profileSection .profileSection_gametable tr td:first-child {
+    width: 40%;
+}
+.profileSection .profileSection_gametable tr td:not(:first-child) {
+    width: 10%;
+}
+.profileSection tr.profileSection_gametable-head th {
+    padding: 10px 0;
+}
+.profileSection tr {
+    border-bottom: 1px solid #80808036;
+}
+.profileSection td {
+    vertical-align: middle;
+}
 .profileInfo {
-    padding: 10px;
+    padding: 5px 10px;
     margin: auto;
+}
+.RSPBprogressBar {
+    background-color: #495057ad;
 }
 .RSPBprogressBar .RSPBprogressBarText {
     font-size: 16px;
@@ -71,19 +118,21 @@
     font-weight: 600;
 }
 div.player-detail-card {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    display: flex;
+    background-color: #fff;
 }
 div.profileImg-wrapper {
-    width: 40%;
+    margin-left: 1rem;
+    margin-right: 1rem;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
-div.profileimg {
+div.player-detail-card div.profileimg {
     width: 150px;
     height: 150px;
+    border: 1px solid #f3f4f5;
+    box-shadow: 0px 0px 5px grey;
+    margin: 10px;
     -webkit-border-radius: 80px;
     -webkit-background-clip: padding-box;
     -moz-border-radius: 80px;
@@ -94,9 +143,33 @@ div.profileimg {
     background-size: cover;
     background-position: center center;
 }
+div.player-detail-card div.profileInfo {
+    background-color: #058240;
+    display: flex;
+    box-shadow: 0px 3px 5px grey;
+    justify-content: space-between;
+}
+div.player-detail-card div.profileInfo {
+    color: #fff;
+    font-family: sans-serif;
+}
+div.player-detail-card div.profileInfo div.player-detail-card_fullname {
+    font-size: 22px;
+    font-family: sans-serif;
+}
+div.player-detail-card div.profileInfo div.player-detail-card_jersey-pos {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+div.player-detail-card div.profileInfo div.player-detail-card_team {
+    font-size: 14px;
+    padding-left: 1rem;
+}
 
 div.gameImage {
-    margin: 5px 10px;
+    margin: 2px 4px;
     -webkit-border-radius: 8px;
     -webkit-background-clip: padding-box;
     -moz-border-radius: 8px;
@@ -107,21 +180,15 @@ div.gameImage {
     background-size: cover;
     background-position: center center;
 }
-.profileInfo p {
-    color: #fff;
-    font-size: 20px;
-    font-weight: 600;
-}
 ul.nav.nav-tabs {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    padding: 10px 0;
 }
-.skillsTab li {
-    margin-right: 2px;
-    margin-left: 2px;
+.skillsTab {
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
 }
 .tableBorder {
     margin-left: 4px;
@@ -194,18 +261,20 @@ ul.nav.nav-tabs {
     font-size: 28px !important;
 }
 
-/* .nav-link {
-    color: #222 !important;
+.profileSection .nav-link {
+    color: white !important;
     font-weight: 700;
-    background-color: #fcefee !important;
+    background-color: #058240 !important;
     margin-left: 2px !important;
 }
 
-.nav-link.active {
-    background-color: #e3c4a8 !important;
+.profileSection .nav-link.active {
+    background-color: #d9fce9 !important;
     color: #222 !important;
-} */
-
+}
+.profileSection p {
+    color: black;
+}
 .heading {
     font-size: 28px !important;
 }

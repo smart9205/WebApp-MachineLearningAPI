@@ -104,10 +104,10 @@ exports.findAllPosition = (req, res) => {
 };
 
 
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
   const id = req.params.id;
 
-  Sequelize.query(`
+  const player = await Sequelize.query(`
       SELECT *, 
         public."Players".id as id,
         public."Player_Positions".name as position_name,
@@ -120,16 +120,29 @@ exports.findOne = (req, res) => {
       ORDER BY
         public."Players".f_name, 
         public."Players".l_name
-      
-    `).then(data => {
-    res.send(data[0][0]);
-  })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
-      });
-    });;
+    `);
+  const team = await Sequelize.query(`
+    select 
+      team_id, 
+      name as team_name,
+      image as team_image,
+      team_color,
+      sponsor_logo,
+      sponsor_url,
+      create_highlights,
+      show_sponsor
+    from public."Teams" 
+    join (select team_id, date as game_date from public."Team_Players" 
+      join public."Games" on 
+        public."Team_Players".season_id = public."Games".season_id and
+        public."Team_Players".league_id = public."Games".league_id and
+        (public."Team_Players".team_id = public."Games".home_team_id or public."Team_Players".team_id = public."Games".away_team_id)
+      where player_id = ${id}
+      ORDER BY date desc limit 1
+    ) g on g.team_id = public."Teams".id
+  `);
+
+  res.send({ ...player[0][0], ...team[0][0] });
 };
 
 exports.gameByPlayerId = (req, res) => {
