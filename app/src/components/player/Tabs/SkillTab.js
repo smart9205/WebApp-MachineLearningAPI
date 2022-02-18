@@ -81,6 +81,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight }) {
                                 {showHighlight &&
                                     <IconButton
                                         style={{ padding: 0 }}
+                                        color="primary"
                                         className="skilltab-highlight-button"
                                         onClick={() => saveHighlight()}>
                                         <img src={StarButton} alt="icon" width={70} />CREATE HIGHLIGHT
@@ -99,7 +100,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight }) {
                                     return (
                                         <div key={i} className='action-row'>
                                             <div className="skilltab-action-title">
-                                                <p>{skill.title}</p>
+                                                {skill.title}
                                             </div>
                                             <IconButton color="primary"
                                                 onClick={() => { !!skill.success.length && playTags(skill.success) }}

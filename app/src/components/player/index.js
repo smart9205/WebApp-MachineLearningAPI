@@ -155,12 +155,7 @@ export default function Players() {
                       className='profileSection_gametable-average'
                       style={{ borderColor: theme.palette.primary.main, backgroundColor: theme.palette.secondary.main }}
                     >
-                      <div>
-                        Average
-                        <p className='profileSection_gametable-average-period'>
-                          10.10~10.20
-                        </p>
-                      </div>
+                      <div>Average</div>
                       <div>1</div>
                       <div>8</div>
                       <div>10</div>

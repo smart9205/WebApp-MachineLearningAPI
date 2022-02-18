@@ -24,11 +24,13 @@ export default function PlayerDatailCard({ player }) {
                     className='profileimg'
                     style={{ backgroundImage: `url(${player?.image?.length > 0 ? player?.image : PLAYER_ICON_DEFAULT})` }}>
                 </div>
-                {player.show_sponsor && <img width="100" src={player.sponsor_logo || TEAM_ICON_DEFAULT} alt="sponsor" />}
+                <div className='sponsorimg'>
+                    {player.show_sponsor && <img width="80" src={player.sponsor_logo || TEAM_ICON_DEFAULT} alt="sponsor" />}\
+                </div>
                 <div>
                     <img
                         className="profileImg-wrapper-teamlogo"
-                        width="80"
+                        width="60"
                         src={player.team_image || TEAM_ICON_DEFAULT}
                         alt="team"
                     />

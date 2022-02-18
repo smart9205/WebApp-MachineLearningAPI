@@ -16,6 +16,7 @@
 }
 .action-row .skilltab-action-title {
     min-width: 100px;
+    font-size: 13px;
 }
 .skilltab-action-header {
     display: flex;
@@ -31,7 +32,6 @@
     margin-bottom: 0 !important;
 }
 .skilltab-highlight-button {
-    color: #f0bb31 !important;
     font-size: 16px !important;
 }
 
@@ -68,10 +68,11 @@
 }
 .profileSection div.profileSection_gametable-average {
     display: flex;
+    padding: 0.5rem 0;
     align-items: center;
     background-color: #e7f3e5;
     box-shadow: 0 0 3px grey;
-    border-bottom: 2px solid #058240;
+    border-bottom: 3px solid #058240;
     position: fixed;
     left: 0;
     right: 0;
@@ -87,9 +88,7 @@
 .profileSection div.profileSection_gametable-average div:not(:first-child) {
     flex: 1;
 }
-.profileSection .profileSection_gametable tr td:first-child {
-    width: 40%;
-}
+
 .profileSection .profileSection_gametable tr td:not(:first-child) {
     width: 10%;
 }
@@ -126,12 +125,15 @@ div.profileImg-wrapper {
     margin-left: 1rem;
     margin-right: 1rem;
     display: flex;
-    align-items: center;
+    align-items: end;
     justify-content: space-between;
 }
+div.player-detail-card div.sponsorimg {
+    margin-bottom: 15px;
+}
 div.player-detail-card div.profileimg {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     border: 1px solid #f3f4f5;
     box-shadow: 0px 0px 5px grey;
     margin: 10px;

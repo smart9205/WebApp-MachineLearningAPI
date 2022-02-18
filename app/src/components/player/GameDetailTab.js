@@ -66,7 +66,9 @@ export default function GameDetailTab() {
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs" centered>
                         <Tab label="Skills" {...a11yProps(0)} />
                         <Tab label="Statistics" {...a11yProps(1)} />
-                        <Tab label="My HighLights" {...a11yProps(2)} />
+                        {showHighlight &&
+                            <Tab label="My HighLights" {...a11yProps(2)} />
+                        }
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
