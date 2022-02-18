@@ -89,7 +89,9 @@
 .profileSection div.profileSection_gametable-average div:not(:first-child) {
     flex: 1;
 }
-
+.profileSection .profileSection_gametable td {
+    font-size: 14px;
+}
 .profileSection .profileSection_gametable tr td:not(:first-child) {
     width: 10%;
 }
