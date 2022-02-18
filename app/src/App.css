@@ -97,3 +97,6 @@ div.team-theme-color {
 .css-sytnxd-MuiButtonBase-root-MuiIconButton-root {
     padding: 0 !important;
 }
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: transparent;
+}

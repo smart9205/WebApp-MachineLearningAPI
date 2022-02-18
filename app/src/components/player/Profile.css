@@ -30,9 +30,10 @@
 }
 .skilltab-action-header p {
     margin-bottom: 0 !important;
+    font-size: 14px;
 }
 .skilltab-highlight-button {
-    font-size: 16px !important;
+    font-size: 14px !important;
 }
 
 .statistic-table-body td {
@@ -176,7 +177,10 @@ div.player-detail-card div.profileInfo div.player-detail-card_team {
     font-size: 14px;
     padding-left: 1rem;
 }
-
+.highlight-table th,
+.highlight-table td {
+    font-size: 14px;
+}
 div.gameImage {
     margin: 2px 4px;
     -webkit-border-radius: 8px;
@@ -226,13 +230,13 @@ ul.nav.nav-tabs {
     margin: 0px;
     color: #fff;
     /* font-weight: 700; */
-    font-size: 14px !important;
+    font-size: 12px !important;
 }
 .shots-title {
     color: black;
     font-weight: 700;
-    font-size: 16px;
-    background-color: #d6e7e8;
+    font-size: 14px;
+    background-color: #dddddd !important;
 }
 .passes span {
     color: #fff;
