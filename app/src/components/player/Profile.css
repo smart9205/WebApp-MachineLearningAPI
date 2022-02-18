@@ -177,9 +177,11 @@ div.player-detail-card div.profileInfo div.player-detail-card_team {
     font-size: 14px;
     padding-left: 1rem;
 }
-.highlight-table th,
-.highlight-table td {
+.highlight-table th {
     font-size: 14px;
+}
+.highlight-table td {
+    font-size: 13px;
 }
 div.gameImage {
     margin: 2px 4px;
@@ -218,7 +220,7 @@ ul.nav.nav-tabs {
 }
 .statistic-clickable-success {
     text-decoration: underline;
-    color: lime !important;
+    color: #00c300 !important;
     cursor: pointer;
 }
 .statistic-clickable-unsuccess {

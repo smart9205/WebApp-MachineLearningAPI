@@ -77,7 +77,7 @@ export default function HighlightTab({ playTags }) {
                                 className='gameImage'
                                 style={{
                                     backgroundImage: `url(${row?.game_image?.length > 0 ? row.game_image : VIDEO_ICON})`,
-                                    width: 60, height: 45
+                                    width: 54, height: 40
                                 }}>
                             </div>
                         </td>
