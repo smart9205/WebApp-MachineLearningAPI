@@ -23,7 +23,7 @@ const Input = styled('input')({
     display: 'none',
 });
 
-function Upload({ dirName, img, onURL, fileName, defaultImg = "", btn_name = "Upload" }) {
+function UploadSponsor({ dirName, img, onSponsorURL, fileName, defaultImg = "", btn_name = "Upload" }) {
     const fileInput = useRef();
     const [image, setImage] = useState(img)
     const [loading, setLoading] = useState(false)
@@ -44,7 +44,7 @@ function Upload({ dirName, img, onURL, fileName, defaultImg = "", btn_name = "Up
         ReactS3Client.uploadFile(file, fileName).then((data) => {
             if (data.status === 204) {
                 setImage(data.location)
-                onURL(data.location)
+                onSponsorURL(data.location)
             } else {
                 console.log("fail");
             }
@@ -55,14 +55,14 @@ function Upload({ dirName, img, onURL, fileName, defaultImg = "", btn_name = "Up
     };
     return (
         <Box style={{ textAlign: "center", width: 200, margin: "auto" }} >
-            <label htmlFor="contained-button-file">
-                <Input accept="image/*" id="contained-button-file" type="file" ref={fileInput} onChange={(e) => handleUpload()} />
+            <label htmlFor="contained-button-file-sponsor">
+                <Input accept="image/*" id="contained-button-file-sponsor" type="file" ref={fileInput} onChange={(e) => handleUpload()} />
                 <Button variant="contained" component="span" >
                     {btn_name}
                 </Button>
             </label><br />
             <img
-                className="upload-image-preview"
+                className="upload-sponsor-preview"
                 src={image && image.length > 0 ? image : defaultImg}
                 width="200"
                 alt="img"
@@ -78,4 +78,4 @@ function Upload({ dirName, img, onURL, fileName, defaultImg = "", btn_name = "Up
     );
 }
 
-export default Upload;
+export default UploadSponsor;

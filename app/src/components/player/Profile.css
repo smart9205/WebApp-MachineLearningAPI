@@ -31,7 +31,7 @@
     margin-bottom: 0 !important;
 }
 .skilltab-highlight-button {
-    color: wheat !important;
+    color: #f0bb31 !important;
     font-size: 16px !important;
 }
 
@@ -64,6 +64,7 @@
 }
 .profileSection tr.profileSection_gametable-head {
     background-color: #e7f3e5;
+    border-top: 1px solid #80808061;
 }
 .profileSection div.profileSection_gametable-average {
     display: flex;

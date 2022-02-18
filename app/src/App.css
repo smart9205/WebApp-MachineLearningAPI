@@ -83,3 +83,10 @@ body > iframe {
 .ColorPicker-MuiInputBase-input {
     color: white !important;
 }
+
+div.team-theme-color {
+    width: 50px;
+    height: 30px;
+    border-radius: 6px;
+    margin: auto;
+}

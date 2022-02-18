@@ -13,11 +13,13 @@ import Upload from '../../../common/upload';
 import CircularProgress from '@mui/material/CircularProgress';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 import { ColorPicker } from 'material-ui-color';
+import UploadSponsor from '../../../common/uploadSponsor';
 const init = {
     id: 0,
     name: "",
     image: "",
     team_color: "",
+    second_color: "",
     sponsor_logo: "",
     sponsor_url: "",
     show_sponsor: false,
@@ -49,6 +51,7 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
             name: edit?.name,
             image: edit?.image,
             team_color: edit?.team_color,
+            second_color: edit?.second_color,
             sponsor_logo: edit?.sponsor_logo,
             sponsor_url: edit?.sponsor_url,
             create_highlights: edit?.create_highlights,
@@ -87,7 +90,6 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
             <DialogTitle>{!edit ? "Add" : "Edit"} Team</DialogTitle>
             <DialogContent style={{ display: "flex" }}>
                 <Upload
-                    className="team-logo"
                     dirName={process.env.REACT_APP_DIR_TEAM}
                     img={data.image}
                     onURL={url => setData({ image: url })}
@@ -107,11 +109,13 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
                     <ColorPicker
                         defaultValue="transparent"
                         value={data.team_color}
-                        onChange={(color) => {
-                            console.log("color", color)
-                            setData({ team_color: "#" + color.hex })
-                        }
-                        }
+                        onChange={(color) => setData({ team_color: "#" + color.hex })}
+                    />
+                    Second Color
+                    <ColorPicker
+                        defaultValue="transparent"
+                        value={data.second_color}
+                        onChange={(color) => setData({ second_color: "#" + color.hex })}
                     />
                     <FormControlLabel
                         sx={{ mt: 1 }}
@@ -128,11 +132,10 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
             </DialogContent>
             <DialogContent style={{ display: "flex" }}>
 
-                <Upload
-                    className="sponsor-logo"
+                <UploadSponsor
                     dirName={process.env.REACT_APP_DIR_TEAM}
                     img={data.sponsor_logo}
-                    onURL={url => setData({ sponsor_logo: url })}
+                    onSponsorURL={url => { console.log("sponser"); setData({ sponsor_logo: url }) }}
                     defaultImg={TEAM_ICON_DEFAULT}
                     btn_name="Sponsor Logo"
                 />

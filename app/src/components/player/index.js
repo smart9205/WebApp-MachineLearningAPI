@@ -103,13 +103,16 @@ export default function Players() {
                   </tr>
                   {games.map((game) =>
                     <tr>
-                      <td className='profileSection_opponent-team'>
+                      <td
+                        className='profileSection_opponent-team'
+                        onClick={() => {
+                          setContext({ game })
+                        }}
+                      >
                         <IconButton style={styles.play} onClick={() => setContext({ game: null })}>
                           <PlayCircleOutlineIcon />
                         </IconButton>
-                        <div onClick={() => {
-                          setContext({ game })
-                        }}>
+                        <div >
                           {game.away_team_name}
                           <div>
                             2:0

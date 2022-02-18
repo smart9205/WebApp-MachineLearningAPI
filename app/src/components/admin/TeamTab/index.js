@@ -10,6 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
+import CheckIcon from '@mui/icons-material/Check';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
@@ -33,7 +34,7 @@ const styles = {
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
-    },
+    }
 };
 
 function descendingComparator(a, b, orderBy) {
@@ -72,6 +73,30 @@ const headCells = [
     {
         id: 'name',
         label: 'Name',
+    },
+    {
+        id: 'team_color',
+        label: 'Team Color',
+    },
+    {
+        id: 'second_color',
+        label: 'Second Color',
+    },
+    {
+        id: 'create_highlights',
+        label: 'Create Highlights',
+    },
+    {
+        id: 'sponsor_logo',
+        label: 'Sponsor Logo',
+    },
+    {
+        id: 'sponsor_url',
+        label: 'Sponsor URL',
+    },
+    {
+        id: 'show_sponsor',
+        label: 'Show Sponsor',
     },
 ];
 
@@ -228,9 +253,34 @@ export default function TeamTab() {
                                         return (
                                             <TableRow hover key={row.id} >
                                                 <TableCell align="center">
-                                                    <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='Team' /></TableCell>
+                                                    <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='Team' />
+                                                </TableCell>
                                                 <TableCell align="center">
                                                     {row.name}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <div
+                                                        className="team-theme-color"
+                                                        style={{ backgroundColor: row.team_color }}
+                                                    ></div>
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <div
+                                                        className="team-theme-color"
+                                                        style={{ backgroundColor: row.second_color }}
+                                                    ></div>
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {row.create_highlights && <CheckIcon />}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <img width={40} src={row.sponsor_logo?.length > 0 ? row.sponsor_logo : TEAM_ICON_DEFAULT} alt='Team' />
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {row.sponsor_url}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {row.show_sponsor && <CheckIcon />}
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ width: 50 }}>
                                                     <IconButton
