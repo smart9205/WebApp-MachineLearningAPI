@@ -6,11 +6,12 @@ import {
     IconButton,
     CircularProgress
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles'
 import ShareIcon from '@mui/icons-material/Share';
 import gameService from '../../../services/game.service';
 import VIDEO_ICON from '../../../assets/video_icon.jpg';
 import { PlayerContext } from '../index';
-import PlayButton from "../../../assets/Play_button.png"
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const styles = {
@@ -28,6 +29,8 @@ const styles = {
 }
 
 export default function HighlightTab({ playTags }) {
+
+    const theme = useTheme()
     const { context } = useContext(PlayerContext)
     const playerId = context.player.id
     const update_cnt = context.update_cnt
@@ -86,18 +89,17 @@ export default function HighlightTab({ playTags }) {
                             }
                         </td>
                         <td style={{ padding: 0 }}>
-                            <IconButton
-                                style={{ padding: 0 }}
-                                className="skilltab-play-button"
-                                onClick={() => { playTags(row.tags) }}>
-                                <img src={PlayButton} alt="icon" width={40} />
+                            <IconButton color="primary"
+                                onClick={() => { playTags(row.tags) }}
+                            >
+                                <PlayCircleOutlineIcon />
                             </IconButton>
                         </td>
                         <td style={{ padding: 0 }}>
                             <CopyToClipboard
                                 text={process.env.REACT_APP_S3_URI + "/" + process.env.REACT_APP_DIR_HIGHLIGHT + "/" + row.highlight_video_url}
                                 onCopy={() => setOpen(true)}>
-                                <IconButton sx={{ color: "white", p: 0 }} disabled={row.status !== 3}>
+                                <IconButton style={{ color: theme.palette.secondary.main, p: 0 }} disabled={row.status !== 3}>
                                     <ShareIcon />
                                 </IconButton>
                             </CopyToClipboard>

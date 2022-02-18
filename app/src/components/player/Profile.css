@@ -122,6 +122,7 @@ div.player-detail-card {
     background-color: #fff;
 }
 div.profileImg-wrapper {
+    position: relative;
     margin-left: 1rem;
     margin-right: 1rem;
     display: flex;
@@ -149,6 +150,11 @@ div.player-detail-card div.profileInfo {
     display: flex;
     box-shadow: 0px 3px 5px grey;
     justify-content: space-between;
+}
+div.player-detail-card .profileImg-wrapper-teamlogo {
+    position: absolute;
+    top: 5px;
+    right: 0;
 }
 div.player-detail-card div.profileInfo {
     color: #fff;

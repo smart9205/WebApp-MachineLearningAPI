@@ -130,6 +130,7 @@ exports.findOne = async (req, res) => {
       sponsor_logo,
       sponsor_url,
       create_highlights,
+      second_color,
       show_sponsor
     from public."Teams" 
     join (select team_id, date as game_date from public."Team_Players" 

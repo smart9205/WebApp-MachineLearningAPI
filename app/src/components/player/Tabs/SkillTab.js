@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ProgressBar } from "react-step-progress-bar";
 import "react-step-progress-bar/styles.css";
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import {
     Snackbar,
     Alert,
@@ -10,7 +11,6 @@ import {
 import { manualFilterForTags, getPercent } from '../../../common/utilities';
 import GameService from '../../../services/game.service';
 import { PlayerContext } from '../index';
-import PlayButton from "../../../assets/Play_button.png"
 import StarButton from "../../../assets/Stars.png"
 
 const styles = {
@@ -101,12 +101,17 @@ export default function SkillTab({ playTags, onHighlight, showHighlight }) {
                                             <div className="skilltab-action-title">
                                                 <p>{skill.title}</p>
                                             </div>
-                                            <IconButton
+                                            <IconButton color="primary"
+                                                onClick={() => { !!skill.success.length && playTags(skill.success) }}
+                                            >
+                                                <PlayCircleOutlineIcon />
+                                            </IconButton>
+                                            {/* <IconButton
                                                 disabled={skill.success.length === 0}
                                                 className="skilltab-play-button"
                                                 onClick={() => { !!skill.success.length && playTags(skill.success) }}>
                                                 <img src={PlayButton} alt="play button" width="40" />
-                                            </IconButton>
+                                            </IconButton> */}
                                             <div style={{ width: "100%", marginRight: 10 }}>
                                                 <div>
                                                     <ProgressBar

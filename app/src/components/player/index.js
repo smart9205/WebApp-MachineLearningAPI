@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, useMemo, useReducer } from 'react';
 import { useParams } from "react-router-dom";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   IconButton,
   CircularProgress
@@ -35,7 +36,8 @@ const styles = {
     color: '#07863d'
   }
 };
-
+const defaultPrimaryColor = '#058240';
+const defaultSecondColor = '#e7f3e5';
 
 export const PlayerContext = createContext({
   context: {
@@ -60,6 +62,19 @@ export default function Players() {
     [context]
   );
 
+  const [primaryColor, setPrimaryColor] = useState(defaultPrimaryColor);
+  const [secondColor, setSecondColor] = useState(defaultSecondColor);
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          primary: { main: primaryColor },
+          secondary: { main: secondColor }
+        },
+      }),
+    [primaryColor, secondColor],
+  );
+
   useEffect(() => {
     setLoading(true)
     GameService.getAllGamesByPlayer(playerId).then((res) => {
@@ -69,83 +84,94 @@ export default function Players() {
 
     GameService.getPlayerById(playerId).then((res) => {
       setContext({ player: res })
+      setPrimaryColor(res.team_color || defaultPrimaryColor)
+      setSecondColor(res.second_color || defaultSecondColor)
     }).catch(() => { })
   }, [playerId])
 
   const { player: playerData, game: curGame } = context
 
   return (
-    <PlayerContext.Provider value={value}>{
-      loading ?
-        <div style={styles.loader}>
-          <CircularProgress />
-        </div> :
-        (<>
-          {
-            <section className='profileSection'>
-              {
-                !!curGame &&
-                <IconButton style={styles.back} onClick={() => setContext({ game: null })}>
-                  <ArrowBackSharpIcon />
-                </IconButton>
-              }
-              {playerData && <PlayerDetailCard player={playerData} />}
-              {!curGame ? <Table borderless size="sm" className='profileSection_gametable'>
-                <tbody className='text-center'>
-                  <tr className="profileSection_gametable-head">
-                    <th></th>
-                    <th>G</th>
-                    <th>SH</th>
-                    <th>P</th>
-                    <th>I</th>
-                    <th>S</th>
-                    <th>C</th>
-                  </tr>
-                  {games.map((game) =>
-                    <tr>
-                      <td
-                        className='profileSection_opponent-team'
-                        onClick={() => {
-                          setContext({ game })
-                        }}
-                      >
-                        <IconButton style={styles.play} onClick={() => setContext({ game: null })}>
-                          <PlayCircleOutlineIcon />
-                        </IconButton>
-                        <div >
-                          {game.away_team_name}
-                          <div>
-                            2:0
-                          </div>
-                        </div>
-                      </td>
-                      <td>1</td>
-                      <td>8</td>
-                      <td>10</td>
-                      <td>46</td>
-                      <td>46</td>
-                      <td>20</td>
-                    </tr>
-                  )}
-                </tbody>
-                <div className='profileSection_gametable-average'>
-                  <div>
-                    Average
-                    <p className='profileSection_gametable-average-period'>
-                      10.10~10.20
-                    </p>
-                  </div>
-                  <div>1</div>
-                  <div>8</div>
-                  <div>10</div>
-                  <div>46</div>
-                  <div>46</div>
-                  <div>20</div>
-                </div>
-              </Table> :
-                <GameDetailTab />
-              }
-              {/* {!curGame ? games.map((game) =>
+    <ThemeProvider theme={theme}>
+      <PlayerContext.Provider value={value}>{
+        loading ?
+          <div style={styles.loader}>
+            <CircularProgress />
+          </div> :
+          (<>
+            {
+              <section className='profileSection'>
+                {
+                  !!curGame &&
+                  <IconButton style={styles.back} onClick={() => setContext({ game: null })}>
+                    <ArrowBackSharpIcon />
+                  </IconButton>
+                }
+                {playerData && <PlayerDetailCard player={playerData} />}
+                {!curGame ? (
+                  <>
+                    <Table borderless size="sm" className='profileSection_gametable'>
+                      <tbody className='text-center'>
+                        <tr className="profileSection_gametable-head" style={{ backgroundColor: theme.palette.secondary.main }}>
+                          <th></th>
+                          <th>G</th>
+                          <th>SH</th>
+                          <th>P</th>
+                          <th>I</th>
+                          <th>S</th>
+                          <th>C</th>
+                        </tr>
+                        {games.map((game, i) =>
+                          <tr key={i}>
+                            <td
+                              className='profileSection_opponent-team'
+                              onClick={() => {
+                                setContext({ game })
+                              }}
+                            >
+                              <IconButton color="primary"
+                                onClick={() => setContext({ game: null })}
+                              >
+                                <PlayCircleOutlineIcon />
+                              </IconButton>
+                              <div >
+                                {game.away_team_name}
+                                <div>
+                                  2:0
+                                </div>
+                              </div>
+                            </td>
+                            <td>1</td>
+                            <td>8</td>
+                            <td>10</td>
+                            <td>46</td>
+                            <td>46</td>
+                            <td>20</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </Table>
+                    <div
+                      className='profileSection_gametable-average'
+                      style={{ borderColor: theme.palette.primary.main, backgroundColor: theme.palette.secondary.main }}
+                    >
+                      <div>
+                        Average
+                        <p className='profileSection_gametable-average-period'>
+                          10.10~10.20
+                        </p>
+                      </div>
+                      <div>1</div>
+                      <div>8</div>
+                      <div>10</div>
+                      <div>46</div>
+                      <div>46</div>
+                      <div>20</div>
+                    </div>
+                  </>) :
+                  <GameDetailTab />
+                }
+                {/* {!curGame ? games.map((game) =>
                 <div
                   key={game.id}
                   style={{ display: "flex" }}
@@ -165,9 +191,10 @@ export default function Players() {
                 </div>
               ) :
               } */}
-            </section>
-          }
-        </>)
-    }</PlayerContext.Provider>
+              </section>
+            }
+          </>)
+      }</PlayerContext.Provider>
+    </ThemeProvider>
   )
 }

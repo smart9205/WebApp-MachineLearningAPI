@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Tab, Tabs } from 'react-bootstrap'
 import Dialog from '@mui/material/Dialog';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import DialogContent from '@mui/material/DialogContent';
 import { makeStyles } from '@mui/styles';
 import TagVideo from './TagVideo';
@@ -30,7 +34,12 @@ export default function GameDetailTab() {
     const [playTags, setPlayTags] = useState([])
     const [showHighlight, setShowHighlight] = useState(false)
 
-    const [tab, setTab] = useState(1);
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
 
     useEffect(() => {
         GameService.getAllPlayerTagsByPlayer(playerId, game?.game_id).then((res) => {
@@ -53,31 +62,64 @@ export default function GameDetailTab() {
                 </DialogContent>
             </Dialog>
             <div className='skillsTab'>
-                <Tabs
-                    activeKey={tab}
-                    id="uncontrolled-tab-example"
-                    className="mt-1 mb-1"
-                    onSelect={(key) => setTab(key)}
-                >
-                    <Tab eventKey={1} title="Skills">
-                        <SkillTab
-                            tagList={tagList}
-                            playTags={tags => { setPlayTags(tags); setOpen(true) }}
-                            onHighlight={() => setTab(3)}
-                            showHighlight={showHighlight}
-                        />
-                    </Tab>
-                    <Tab eventKey={2} title="Statistics" className='tableBorder'>
-                        <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
-                    </Tab>
-                    {
-                        showHighlight &&
-                        <Tab eventKey={3} title="My HighLights" className='tableBorder'>
-                            <HighlightTab playTags={tags => { setPlayTags(tags); setOpen(true) }} />
-                        </Tab>
-                    }
-                </Tabs>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs" centered>
+                        <Tab label="Skills" {...a11yProps(0)} />
+                        <Tab label="Statistics" {...a11yProps(1)} />
+                        <Tab label="My HighLights" {...a11yProps(2)} />
+                    </Tabs>
+                </Box>
+                <TabPanel value={value} index={0}>
+                    <SkillTab
+                        tagList={tagList}
+                        playTags={tags => { setPlayTags(tags); setOpen(true) }}
+                        onHighlight={() => setValue(3)}
+                        showHighlight={showHighlight}
+                    />
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
+                </TabPanel>
+                {showHighlight &&
+                    <TabPanel value={value} index={2}>
+                        <HighlightTab playTags={tags => { setPlayTags(tags); setOpen(true) }} />
+                    </TabPanel>
+                }
             </div>
         </>
     );
+}
+
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
 }
