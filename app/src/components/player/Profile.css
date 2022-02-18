@@ -137,11 +137,11 @@ div.player-detail-card div.profileimg {
     border: 1px solid #f3f4f5;
     box-shadow: 0px 0px 5px grey;
     margin: 10px;
-    -webkit-border-radius: 80px;
+    -webkit-border-radius: 60px;
     -webkit-background-clip: padding-box;
-    -moz-border-radius: 80px;
+    -moz-border-radius: 60px;
     -moz-background-clip: padding;
-    border-radius: 80px;
+    border-radius: 60px;
     background-clip: padding-box;
     float: left;
     background-size: cover;
