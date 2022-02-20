@@ -16,7 +16,6 @@
 }
 .action-row .skilltab-action-title {
     min-width: 100px;
-    font-size: 13px;
 }
 .skilltab-action-header {
     display: flex;
@@ -30,12 +29,7 @@
 }
 .skilltab-action-header p {
     margin-bottom: 0 !important;
-    font-size: 14px;
 }
-.skilltab-highlight-button {
-    font-size: 14px !important;
-}
-
 .statistic-table-body td {
     border-right: 1px #d6e7e8 solid;
 }
@@ -54,11 +48,14 @@
     background-color: white;
     color: black;
     font-family: sans-serif;
+    font-size: 14px;
     min-height: 100vh;
+}
+.profileSection .css-ahj2mt-MuiTypography-root {
+    font-size: 14px;
 }
 .profileSection td.profileSection_opponent-team {
     display: flex;
-    font-size: 14px;
 }
 .profileSection .profileSection_gametable {
     margin-bottom: 50px;
@@ -80,17 +77,11 @@
     text-align: center;
     bottom: 0;
 }
-.profileSection div.profileSection_gametable-average p {
-    font-size: 12px;
-}
 .profileSection div.profileSection_gametable-average div:first-child {
     flex: 4;
 }
 .profileSection div.profileSection_gametable-average div:not(:first-child) {
     flex: 1;
-}
-.profileSection .profileSection_gametable td {
-    font-size: 14px;
 }
 .profileSection .profileSection_gametable tr td:not(:first-child) {
     width: 10%;
@@ -112,12 +103,11 @@
     background-color: #495057ad;
 }
 .RSPBprogressBar .RSPBprogressBarText {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
 }
 .profileSection .player_name {
     color: #fff;
-    font-size: 18px;
     font-weight: 600;
 }
 div.player-detail-card {
@@ -169,20 +159,12 @@ div.player-detail-card div.profileInfo div.player-detail-card_fullname {
     font-family: sans-serif;
 }
 div.player-detail-card div.profileInfo div.player-detail-card_jersey-pos {
-    font-size: 14px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 div.player-detail-card div.profileInfo div.player-detail-card_team {
-    font-size: 14px;
     padding-left: 1rem;
-}
-.highlight-table th {
-    font-size: 14px;
-}
-.highlight-table td {
-    font-size: 13px;
 }
 div.gameImage {
     margin: 2px 4px;
@@ -232,13 +214,10 @@ ul.nav.nav-tabs {
 .shots p {
     margin: 0px;
     color: #fff;
-    /* font-weight: 700; */
-    font-size: 12px !important;
 }
 .shots-title {
     color: black;
     font-weight: 700;
-    font-size: 14px;
     background-color: #dddddd !important;
 }
 .passes span {
@@ -298,7 +277,6 @@ ul.nav.nav-tabs {
 div.profileSection td h5,
 div.profileSection p,
 div.profileSection span {
-    font-size: 18px !important;
     color: whitesmoke !important;
 }
 
@@ -311,6 +289,10 @@ div.profileSection th,
 div.profileSection td {
     padding: 10px 5px 20px 5px !important;
 }
+.skilltab-highlight-button {
+    font-size: 14px !important;
+}
+
 .highlight-table td {
     vertical-align: middle;
 }
@@ -327,7 +309,6 @@ div.profileSection td {
 .coach-actionlist-table p,
 .coach-actionlist-table td {
     margin: 0px !important;
-    font-size: 12px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
