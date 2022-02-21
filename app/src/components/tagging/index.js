@@ -291,9 +291,7 @@ export default function Tagging() {
       ...(tags.map(tag => {
         return {
           ...tag,
-          start_time: (tag.action_type_id === 4 || tag.action_type_id === 14)
-            ? addSecToHHMMSS(playerTag.start_time, 2)
-            : playerTag.start_time,
+          start_time: playerTag.start_time,
           end_time: playerTag.end_time
         };
       }))
