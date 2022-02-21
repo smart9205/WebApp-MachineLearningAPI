@@ -57,6 +57,16 @@
 .profileSection td.profileSection_opponent-team {
     display: flex;
 }
+.profileSection td.profileSection_opponent-team div.profileSection_game-result {
+    margin: auto;
+}
+.profileSection td.profileSection_opponent-team div.profileSection_game-score {
+    background: #9e9e9e;
+    border-radius: 10px;
+    width: 60px;
+    margin: auto;
+}
+
 .profileSection .profileSection_gametable {
     margin-bottom: 50px;
 }

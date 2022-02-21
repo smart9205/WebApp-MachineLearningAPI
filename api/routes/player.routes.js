@@ -45,6 +45,11 @@ module.exports = app => {
 		controller.gameByPlayerId
 	);
 
+	app.get(
+		"/player/gameDetailsByPlayerId/:id",
+		controller.gameDetailsByPlayerId
+	);
+
 	app.put(
 		"/player/:id",
 		[authJwt.verifyToken, authJwt.isAdmin],

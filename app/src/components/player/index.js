@@ -14,6 +14,14 @@ import GameDetailTab from './GameDetailTab';
 import "./Profile.css"
 import { Table } from 'react-bootstrap';
 
+
+// G = Goals
+// SH = Shots
+// P = Pass
+// I = Interceptions
+// S = Saved
+// C = Clearence
+
 const styles = {
   loader: {
     position: 'fixed',
@@ -77,7 +85,7 @@ export default function Players() {
 
   useEffect(() => {
     setLoading(true)
-    GameService.getAllGamesByPlayer(playerId).then((res) => {
+    GameService.getGameDetailssByPlayer(playerId).then((res) => {
       setGames(res)
       setLoading(false)
     }).catch(() => { setLoading(false) })
@@ -88,6 +96,8 @@ export default function Players() {
       setSecondColor(res.second_color || defaultSecondColor)
     }).catch(() => { })
   }, [playerId])
+
+  console.log("games", games)
 
   const { player: playerData, game: curGame } = context
 
@@ -134,19 +144,26 @@ export default function Players() {
                               >
                                 <PlayCircleOutlineIcon />
                               </IconButton>
-                              <div >
-                                {game.away_team_name}
-                                <div>
-                                  2:0
+                              <div className='profileSection_game-result'>
+                                {
+                                  !game?.is_home_team ? game?.home_team_name : game?.away_team_name
+                                }
+                                <div style={{
+                                  background: game?.home_team_goal === game?.away_team_goal ? '#ffbf00' :
+                                    (game?.is_home_team && game?.home_team_goal > game?.away_team_goal) ? 'green' : 'red'
+                                }}
+                                  className="profileSection_game-score"
+                                >
+                                  {game?.home_team_goal} : {game?.away_team_goal}
                                 </div>
                               </div>
                             </td>
-                            <td>1</td>
-                            <td>8</td>
-                            <td>10</td>
-                            <td>46</td>
-                            <td>46</td>
-                            <td>20</td>
+                            <td>{game.goal}</td>
+                            <td>{game.shot}</td>
+                            <td>{game.pass}</td>
+                            <td>{game.interception}</td>
+                            <td>{game.saved}</td>
+                            <td>{game.clearance}</td>
                           </tr>
                         )}
                       </tbody>

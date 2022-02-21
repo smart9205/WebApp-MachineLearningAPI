@@ -291,6 +291,12 @@ const getAllGamesByPlayer = (id) => {
   });
 }
 
+const getGameDetailssByPlayer = (id) => {
+  return axios.get(API_URL + `player/gameDetailsByPlayerId/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+    return response.data;
+  });
+}
+
 const getAllPlayerTagsByPlayer = (playerId, gameId) => {
   return axios.get(API_URL + `player_tag/getbyplayer/${playerId}/${gameId}`, { headers: authHeader(), data: { playerId, gameId } }).then((response) => {
     return response.data;
@@ -364,6 +370,7 @@ const gameService = {
   getAllGamesByTeam,
   getGameTeamPlayersByTeam,
   getTeamByPlayerGame,
+  getGameDetailssByPlayer,
 
   getNewStreamURL,
 
