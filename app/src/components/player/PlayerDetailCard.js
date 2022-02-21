@@ -5,8 +5,6 @@ import { useTheme } from '@mui/material/styles'
 export default function PlayerDatailCard({ player }) {
     const theme = useTheme()
 
-    console.log("player", player)
-
     return (
         <div className="player-detail-card">
             <div className='profileInfo' style={{ backgroundColor: theme.palette.primary.main }}>

@@ -97,8 +97,6 @@ export default function Players() {
     }).catch(() => { })
   }, [playerId])
 
-  console.log("games", games)
-
   const numClicked = (gameId, key) => {
     GameService.getPlayerTagsByActionName(playerId, gameId, key).then(res => {
       setPlayTags(res); setOpen(true)
@@ -169,7 +167,7 @@ export default function Players() {
                             </td>
                             {['goal', 'shot', 'pass', 'interception', 'saved', 'clearance'].map((key, idx) => (
                               <td
-                                className={game?.[key] > 0 && "profileSection_clickable"}
+                                className={game?.[key] > 0 ? "profileSection_clickable" : ""}
                                 onClick={() => numClicked(game.id, key)}
                               >
                                 {game?.[key]}
@@ -186,12 +184,11 @@ export default function Players() {
                       style={{ borderColor: theme.palette.primary.main, backgroundColor: theme.palette.secondary.main }}
                     >
                       <div>Average</div>
-                      <div>1</div>
-                      <div>8</div>
-                      <div>10</div>
-                      <div>46</div>
-                      <div>46</div>
-                      <div>20</div>
+                      {['goal', 'shot', 'pass', 'interception', 'saved', 'clearance'].map((key, idx) => (
+                        <div>
+                          {games.reduce((a, b) => Number(a?.[key]) + Number(b?.[key])) / games.length}
+                        </div>
+                      ))}
                     </div>
                   </>) :
                   <GameDetailTab playTags={tags => { setPlayTags(tags); setOpen(true) }} />
@@ -200,6 +197,6 @@ export default function Players() {
             }
           </>)
       }</PlayerContext.Provider>
-    </ThemeProvider>
+    </ThemeProvider >
   )
 }
