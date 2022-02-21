@@ -150,7 +150,7 @@ export default function Coach() {
                 display: "flex", height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
             }}>
                 <TeamAccordion
-                    style={{ minWidth: 310, overflowY: "scroll", display: showAccordion ? "" : "none" }}
+                    style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}
                     tagList={allTagList}
                     playTags={(res) => { }}
                     onActionSelected={(res) => {
