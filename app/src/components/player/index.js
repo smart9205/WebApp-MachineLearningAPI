@@ -99,7 +99,7 @@ export default function Players() {
 
   const numClicked = (gameId, key) => {
     GameService.getPlayerTagsByActionName(playerId, gameId, key).then(res => {
-      setPlayTags(res); setOpen(true)
+      // setPlayTags(res); setOpen(true)
     })
   }
 

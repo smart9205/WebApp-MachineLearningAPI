@@ -59,7 +59,7 @@ exports.getPlayersByGame = async (req, res) => {
         season_id = ${game.season_id} and 
         league_id = ${game.league_id} and 
         team_id = ${game.home_team_id} 
-      order by public."Players".jersey_number
+      order by public."Player_Positions".sort_order
     `);
 
     away_team = await Sequelize.query(`
@@ -77,7 +77,7 @@ exports.getPlayersByGame = async (req, res) => {
         season_id = ${game.season_id} and 
         league_id = ${game.league_id} and 
         team_id = ${game.away_team_id} 
-      order by public."Players".jersey_number
+        order by public."Player_Positions".sort_order
     `);
   } catch (e) {
   }
@@ -110,7 +110,7 @@ exports.getPlayersByTeam = async (req, res) => {
         season_id = ${game.season_id} and 
         league_id = ${game.league_id} and 
         team_id = ${teamId} 
-      order by public."Players".jersey_number
+      order by public."Player_Positions".sort_order
     `);
 
   } catch (e) {
@@ -159,7 +159,7 @@ exports.findAll = (req, res) => {
     season_id = ${req.body.season_id} and 
     league_id = ${req.body.league_id} and 
     team_id = ${req.body.team_id} 
-  order by public."Players".jersey_number
+  order by public."Player_Positions".sort_order
   `)
     .then(data => {
       res.send(data[0]);

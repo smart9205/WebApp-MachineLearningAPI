@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   };
   Player_Position.init({
     name: DataTypes.STRING,
-    short: DataTypes.STRING
+    short: DataTypes.STRING,
+    sort_order: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Player_Position',
