@@ -85,7 +85,10 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
                         width="40%"
                         onClick={() => { !!success.length && onActionSelected(success) }}
                       >
-                        <p className={success.length > 0 ? "statistic-clickable-success" : ""}>{success.length}</p>
+                        <p className={success.length > 0 ? (rule.title === 'Turnover' || rule.title === 'Foul')
+                          ? "statistic-clickable-unsuccess"
+                          : "statistic-clickable-success"
+                          : ""}>{success.length}</p>
                       </td>
                       {
                         !!rule?.successful &&
