@@ -5,22 +5,17 @@ import {
   IconButton,
   CircularProgress
 } from '@mui/material';
-import ArrowBackSharpIcon from '@mui/icons-material/ArrowBackSharp';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import GameService from "../../services/game.service";
-
+import DialogContent from '@mui/material/DialogContent';
+import Dialog from '@mui/material/Dialog';
+import TagVideo from './TagVideo';
+import { makeStyles } from '@mui/styles';
+import useScreenOrientation from 'react-hook-screen-orientation'
 import PlayerDetailCard from './PlayerDetailCard';
 import GameDetailTab from './GameDetailTab';
 import "./Profile.css"
 import { Table } from 'react-bootstrap';
-
-
-// G = Goals
-// SH = Shots
-// P = Pass
-// I = Interceptions
-// S = Saved
-// C = Clearence
 
 const styles = {
   loader: {
@@ -33,12 +28,6 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center"
-  },
-  back: {
-    position: "absolute",
-    right: "10px",
-    color: "white",
-    zIndex: 30
   },
   play: {
     color: '#07863d'
@@ -56,14 +45,25 @@ export const PlayerContext = createContext({
   setContext: () => { }
 });
 
-export default function Players() {
+const useStyles = makeStyles(() => ({
+  paper: { minWidth: "98%", backgroundColor: "transparent" },
+  landPaper: { minWidth: "80%", maxHeight: "100%", backgroundColor: "transparent" }
+}));
 
+export default function Players() {
+  const classes = useStyles();
+  const screenOrientation = useScreenOrientation()
   const { id } = useParams();
   const playerId = Number(atob(id))
   const [loading, setLoading] = useState(true)
   const [games, setGames] = useState([])
+  const [open, setOpen] = useState(false);
+  const [playTags, setPlayTags] = useState([])
+  const isLandscape = screenOrientation.split('-')[0] === "landscape"
 
   const [context, setContext] = useReducer((old, action) => ({ ...old, ...action }), {})
+
+  const game = context.game
 
   const value = useMemo(
     () => ({ context, setContext }),
@@ -101,7 +101,7 @@ export default function Players() {
 
   const numClicked = (gameId, key) => {
     GameService.getPlayerTagsByActionName(playerId, gameId, key).then(res => {
-      console.log("player_tags", res)
+      setPlayTags(res); setOpen(true)
     })
   }
 
@@ -117,6 +117,15 @@ export default function Players() {
           (<>
             {
               <section className='profileSection'>
+                <Dialog
+                  classes={{ paper: isLandscape ? classes.landPaper : classes.paper }}
+                  open={open}
+                  onClose={e => setOpen(false)}
+                >
+                  <DialogContent sx={{ p: 0, }}>
+                    <TagVideo tagList={playTags} url={game?.video_url} />
+                  </DialogContent>
+                </Dialog>
                 {playerData && <PlayerDetailCard player={playerData} />}
                 {!curGame ? (
                   <>
@@ -185,7 +194,7 @@ export default function Players() {
                       <div>20</div>
                     </div>
                   </>) :
-                  <GameDetailTab />
+                  <GameDetailTab playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                 }
               </section>
             }
