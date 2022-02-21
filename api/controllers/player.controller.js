@@ -200,12 +200,12 @@ exports.gameDetailsByPlayerId = (req, res) => {
 		select player_id from public."Team_Players" 
 		where season_id = public."Games".season_id and league_id = public."Games".league_id and public."Team_Players".team_id = public."Games".away_team_id
 	) THEN 1 ELSE 0 END) as away_team_goal,
-	SUM(CASE WHEN action_result_id = 3 THEN 1 ELSE 0 END) as goal,
-	SUM(CASE WHEN action_id = 1 THEN 1 ELSE 0 END) as shot,
-	SUM(CASE WHEN action_id = 2 THEN 1 ELSE 0 END) as pass,
-	SUM(CASE WHEN action_id = 10 THEN 1 ELSE 0 END) as interception,
-	SUM(CASE WHEN action_result_id = 6 THEN 1 ELSE 0 END) as saved,
-	SUM(CASE WHEN action_id = 11 THEN 1 ELSE 0 END) as clearance
+	SUM(CASE WHEN action_result_id = 3 and player_id = ${id} THEN 1 ELSE 0 END) as goal,
+	SUM(CASE WHEN action_id = 1 and player_id = ${id} THEN 1 ELSE 0 END) as shot,
+	SUM(CASE WHEN action_id = 2 and player_id = ${id} THEN 1 ELSE 0 END) as pass,
+	SUM(CASE WHEN action_id = 10 and player_id = ${id} THEN 1 ELSE 0 END) as interception,
+	SUM(CASE WHEN action_result_id = 6 and player_id = ${id} THEN 1 ELSE 0 END) as saved,
+	SUM(CASE WHEN action_id = 11 and player_id = ${id} THEN 1 ELSE 0 END) as clearance
 FROM public."Player_Tags" LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
 JOIN public."Games" on public."Games".id = game_id
 LEFT JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id

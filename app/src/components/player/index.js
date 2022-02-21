@@ -99,6 +99,12 @@ export default function Players() {
 
   console.log("games", games)
 
+  const numClicked = (gameId, key) => {
+    GameService.getPlayerTagsByActionName(playerId, gameId, key).then(res => {
+      console.log("player_tags", res)
+    })
+  }
+
   const { player: playerData, game: curGame } = context
 
   return (
@@ -111,12 +117,6 @@ export default function Players() {
           (<>
             {
               <section className='profileSection'>
-                {
-                  !!curGame &&
-                  <IconButton style={styles.back} onClick={() => setContext({ game: null })}>
-                    <ArrowBackSharpIcon />
-                  </IconButton>
-                }
                 {playerData && <PlayerDetailCard player={playerData} />}
                 {!curGame ? (
                   <>
@@ -149,7 +149,7 @@ export default function Players() {
                                   !game?.is_home_team ? game?.home_team_name : game?.away_team_name
                                 }
                                 <div style={{
-                                  background: game?.home_team_goal === game?.away_team_goal ? '#ffbf00' :
+                                  color: game?.home_team_goal === game?.away_team_goal ? '#ffbf00' :
                                     (game?.is_home_team && game?.home_team_goal > game?.away_team_goal) ? 'green' : 'red'
                                 }}
                                   className="profileSection_game-score"
@@ -158,12 +158,16 @@ export default function Players() {
                                 </div>
                               </div>
                             </td>
-                            <td>{game.goal}</td>
-                            <td>{game.shot}</td>
-                            <td>{game.pass}</td>
-                            <td>{game.interception}</td>
-                            <td>{game.saved}</td>
-                            <td>{game.clearance}</td>
+                            {['goal', 'shot', 'pass', 'interception', 'saved', 'clearance'].map((key, idx) => (
+                              <td
+                                className={game?.[key] > 0 && "profileSection_clickable"}
+                                onClick={() => numClicked(game.id, key)}
+                              >
+                                {game?.[key]}
+                              </td>
+                            ))
+                            }
+
                           </tr>
                         )}
                       </tbody>
@@ -183,26 +187,6 @@ export default function Players() {
                   </>) :
                   <GameDetailTab />
                 }
-                {/* {!curGame ? games.map((game) =>
-                <div
-                  key={game.id}
-                  style={{ display: "flex" }}
-                  onClick={() => {
-                    setContext({ game })
-                  }}
-                >
-                  <div
-                    className='gameImage'
-                    style={{ backgroundImage: `url(${game?.image?.length > 0 ? game.image : VIDEO_ICON})`, width: 100, height: 70 }}>
-                  </div>
-                  <div>
-                    <div>{moment(game.date).format('DD MMM, YYYY hh:mm')}</div>
-                    <div>{game.home_team_name}</div>
-                    <div>{game.away_team_name}</div>
-                  </div>
-                </div>
-              ) :
-              } */}
               </section>
             }
           </>)

@@ -29,8 +29,8 @@ const styles = {
 export default function SkillTab({ playTags, onHighlight, showHighlight }) {
     const { context, setContext } = useContext(PlayerContext)
 
-    const teamId = context.game.team_id
-    const gameId = context.game.game_id
+    const teamId = context.game.is_home_team ? context.game.home_team_id : context.game.away_team_id
+    const gameId = context.game.id
     const playerId = context.player.id
 
     const [skills, setSkills] = useState([])
@@ -39,6 +39,9 @@ export default function SkillTab({ playTags, onHighlight, showHighlight }) {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        if (!teamId || !gameId || !playerId) return;
+
+        console.log("team, game", teamId, gameId)
         GameService.getAllPlayerTagsByTeam(teamId, gameId).then((res) => {
             setSkills(manualFilterForTags(res, playerId))
             setLoading(false)
@@ -75,7 +78,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight }) {
                 <div style={styles.loader}>
                     <CircularProgress />
                 </div> : (
-                    <>
+                    <div style={{ padding: 10 }}>
                         <div className="skilltab-action-header">
                             <div>
                                 {showHighlight &&
@@ -107,12 +110,6 @@ export default function SkillTab({ playTags, onHighlight, showHighlight }) {
                                             >
                                                 <PlayCircleOutlineIcon />
                                             </IconButton>
-                                            {/* <IconButton
-                                                disabled={skill.success.length === 0}
-                                                className="skilltab-play-button"
-                                                onClick={() => { !!skill.success.length && playTags(skill.success) }}>
-                                                <img src={PlayButton} alt="play button" width="40" />
-                                            </IconButton> */}
                                             <div style={{ width: "100%", marginRight: 10 }}>
                                                 <div>
                                                     <ProgressBar
@@ -130,7 +127,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight }) {
                                     )
                                 })
                         }
-                    </>
+                    </div>
                 )
 
             }</>

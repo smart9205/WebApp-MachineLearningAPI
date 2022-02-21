@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
 }));
 export default function GameDetailTab() {
     const classes = useStyles();
-    const { context } = useContext(PlayerContext)
+    const { context, setContext } = useContext(PlayerContext)
 
     const screenOrientation = useScreenOrientation()
     const isLandscape = screenOrientation.split('-')[0] === "landscape"
@@ -34,18 +34,21 @@ export default function GameDetailTab() {
     const [playTags, setPlayTags] = useState([])
     const [showHighlight, setShowHighlight] = useState(false)
 
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState(1);
 
     const handleChange = (event, newValue) => {
+        if (newValue === 0)
+            setContext({ game: null })
         setValue(newValue);
     };
 
 
     useEffect(() => {
-        GameService.getAllPlayerTagsByPlayer(playerId, game?.game_id).then((res) => {
+        if (!playerId || !game) return
+        GameService.getAllPlayerTagsByPlayer(playerId, game?.id).then((res) => {
             setTagList(res)
         })
-        GameService.getTeamByPlayerGame(playerId, game?.game_id).then((res) => {
+        GameService.getTeamByPlayerGame(playerId, game?.id).then((res) => {
             setShowHighlight(!!res.create_highlights)
         })
     }, [playerId, game])
@@ -64,14 +67,15 @@ export default function GameDetailTab() {
             <div className='skillsTab'>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs" centered>
-                        <Tab label="Skills" {...a11yProps(0)} />
-                        <Tab label="Statistics" {...a11yProps(1)} />
+                        <Tab label="Games" {...a11yProps(0)} />
+                        <Tab label="Skills" {...a11yProps(1)} />
+                        <Tab label="Statistics" {...a11yProps(2)} />
                         {showHighlight &&
-                            <Tab label="My HighLights" {...a11yProps(2)} />
+                            <Tab label="My HighLights" {...a11yProps(3)} />
                         }
                     </Tabs>
                 </Box>
-                <TabPanel value={value} index={0}>
+                <TabPanel value={value} index={1}>
                     <SkillTab
                         tagList={tagList}
                         playTags={tags => { setPlayTags(tags); setOpen(true) }}
@@ -79,11 +83,11 @@ export default function GameDetailTab() {
                         showHighlight={showHighlight}
                     />
                 </TabPanel>
-                <TabPanel value={value} index={1}>
+                <TabPanel value={value} index={2}>
                     <StatisticTab tagList={tagList} playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                 </TabPanel>
                 {showHighlight &&
-                    <TabPanel value={value} index={2}>
+                    <TabPanel value={value} index={3}>
                         <HighlightTab playTags={tags => { setPlayTags(tags); setOpen(true) }} />
                     </TabPanel>
                 }

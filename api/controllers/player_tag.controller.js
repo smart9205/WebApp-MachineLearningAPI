@@ -125,6 +125,53 @@ exports.getByPlayer = (req, res) => {
     });
 };
 
+exports.getByAction = (req, res) => {
+  const playerId = req.params.player;
+  const gameId = req.params.game;
+  const action = req.params.action;
+
+  let action_condition = '';
+  switch (action) {
+    case 'goal': action_condition = 'action_result_id = 3'; break;
+    case 'shot': action_condition = 'action_id = 1'; break;
+    case 'pass': action_condition = 'action_id = 2'; break;
+    case 'interception': action_condition = 'action_id = 10'; break;
+    case 'saved': action_condition = 'action_result_id = 6'; break;
+    case 'clearance': action_condition = 'action_id = 11'; break;
+  }
+
+  Sequelize.query(`
+    SELECT 
+      public."Player_Tags".*,
+      public."Actions".name as action_name,
+      public."Action_Types".name as action_type_name,
+      public."Action_Results".name as action_result_name,
+      public."Players".f_name as player_fname,
+      public."Players".l_name as player_lname,
+      public."Players".jersey_number as jersey
+    FROM public."Player_Tags"
+      LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+      LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
+      LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
+      LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
+      LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
+    WHERE 
+      public."Player_Tags".player_id = ${playerId} and 
+      public."Team_Tags".game_id = ${gameId} and
+      ${action_condition}
+    order by public."Player_Tags".start_time 
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+};
+
 exports.getByTeam = (req, res) => {
   const teamId = req.params.team;
   const gameId = req.params.game;

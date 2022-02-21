@@ -257,6 +257,7 @@ const getAllPlayerTagsByTeamTag = (id) => {
   });
 }
 
+
 const getTeamById = (id) => {
   return axios.get(API_URL + `team/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
     return response.data;
@@ -301,6 +302,13 @@ const getAllPlayerTagsByPlayer = (playerId, gameId) => {
   return axios.get(API_URL + `player_tag/getbyplayer/${playerId}/${gameId}`, { headers: authHeader(), data: { playerId, gameId } }).then((response) => {
     return response.data;
   });
+}
+
+const getPlayerTagsByActionName = (playerId, gameId, actionName) => {
+  return axios.get(API_URL + `player_tag/getbyaction/${playerId}/${gameId}/${actionName}`,
+    { headers: authHeader(), data: { playerId, gameId, actionName } }).then((response) => {
+      return response.data;
+    });
 }
 
 const getAllPlayerTagsByTeam = (teamId, gameId) => {
@@ -371,6 +379,7 @@ const gameService = {
   getGameTeamPlayersByTeam,
   getTeamByPlayerGame,
   getGameDetailssByPlayer,
+  getPlayerTagsByActionName,
 
   getNewStreamURL,
 
