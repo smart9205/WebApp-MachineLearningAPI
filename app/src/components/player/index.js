@@ -191,7 +191,7 @@ export default function Players() {
                       <div>Average</div>
                       {['goal', 'shot', 'pass', 'interception', 'saved', 'clearance'].map((key, idx) => (
                         <div key={idx}>
-                          {games.reduce((a, b) => Number(a?.[key]) + Number(b?.[key])) / games.length}
+                          {(games.reduce((a, b) => a + Number(b?.[key] || '0'), 0) / games.length) || 0}
                         </div>
                       ))}
                     </div>
