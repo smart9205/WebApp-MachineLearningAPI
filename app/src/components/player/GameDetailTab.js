@@ -1,13 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Dialog from '@mui/material/Dialog';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import DialogContent from '@mui/material/DialogContent';
-import { makeStyles } from '@mui/styles';
-import TagVideo from './TagVideo';
 import GameService from "../../services/game.service";
 import SkillTab from './Tabs/SkillTab';
 import StatisticTab from './Tabs/StatisticTab';
@@ -92,7 +87,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </div>

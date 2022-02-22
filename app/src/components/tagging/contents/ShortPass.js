@@ -25,7 +25,7 @@ export default function ShortPass({
         <List header="List of Players">
           {
             offenseTeam.map((player, i) => (
-              <ListItemButton key={i}
+              !player?.checked && <ListItemButton key={i}
                 onClick={() =>
                   taggingState([{
                     team_id: offenseTeamId,

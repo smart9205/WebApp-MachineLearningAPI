@@ -67,7 +67,7 @@ export default function ShortPass({
         <List header="Offensive Player List">
           {
             offenseTeam.map((player, i) => (
-              <ListItemButton key={i}
+              !player?.checked && <ListItemButton key={i}
                 selected={offensivePlayer === player}
                 onClick={() => setOffensivePlayer(player)}
               >
@@ -141,7 +141,7 @@ export default function ShortPass({
         <List header="Defensive Player List">
           {
             defenseTeam.map((player, i) => (
-              <ListItemButton key={i}
+              !player?.checked && <ListItemButton key={i}
                 selected={defensivePlayer === player}
                 onClick={() => defensivePlayerClicked(player)}
               >
@@ -157,7 +157,7 @@ export default function ShortPass({
           <List header="Offensive Player List">
             {
               offenseTeam.map((player, i) => (
-                <ListItemButton key={i}
+                !player?.checked && <ListItemButton key={i}
                   selected={offsidePlayer === player}
                   onClick={() => {
                     setOffsidePlayer(player)

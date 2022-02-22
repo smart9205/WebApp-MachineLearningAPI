@@ -40,7 +40,7 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
         <List header="List of Players">
           {
             offenseTeam.map((player, i) => (
-              <ListItemButton key={i}
+              !player?.checked && <ListItemButton key={i}
                 selected={offensivePlayer === player}
                 onClick={() => setOffensivePlayer(player)}
               >
@@ -119,7 +119,7 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
           <List header="Saved">
             {
               defenseTeam.map((player, i) => (
-                <ListItemButton key={i}
+                !player?.checked && <ListItemButton key={i}
                   onClick={() => {
                     taggingState([
                       {

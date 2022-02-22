@@ -89,8 +89,8 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
         <SubBox>
           <List header="Offside Player List">
             {
-              offenseTeam.map((player, i) => (
-                <ListItemButton key={i}
+              offenseTeam.map((player, i) =>
+                !player?.checked && < ListItemButton key={i}
                   selected={offsidePlayer === player}
                   onClick={() => {
                     setOffsidePlayer(player)
@@ -114,7 +114,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                 >
                   <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
                 </ListItemButton>
-              ))
+              )
             }
           </List>
         </SubBox> :
@@ -123,7 +123,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
           <List header="Defensive Player List">
             {
               defenseTeam.map((player, i) => (
-                <ListItemButton key={i}
+                !player?.checked && <ListItemButton key={i}
                   selected={defensivePlayer === player}
                   onClick={() => {
                     setDefensivePlayer(player)
@@ -168,7 +168,8 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
               ))
             }
           </List>
-        </SubBox>}
+        </SubBox>
+      }
     </>
   );
 }

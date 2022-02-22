@@ -96,7 +96,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
           <List header="Defensive Player List">
             {
               defenseTeam.map((player, i) => (
-                <ListItemButton key={i}
+                !player?.checked && <ListItemButton key={i}
                   selected={defensivePlayer === player}
                   onClick={() => {
                     setDefensivePlayer(player)
@@ -166,7 +166,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
           <List header="Defensive Player List">
             {
               defenseTeam.map((player, i) => (
-                <ListItemButton key={i}
+                !player?.checked && <ListItemButton key={i}
                   selected={defensivePlayer === player}
                   onClick={() => {
                     setDefensivePlayer(player)

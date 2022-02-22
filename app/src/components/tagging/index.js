@@ -19,17 +19,18 @@ import ReactPlayer from 'react-player';
 import GameService from '../../services/game.service';
 import IndividualTagTable from "./IndividualTagTable"
 import TeamTagTable from "./TeamTagTable"
-import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
+import { Button, stepButtonClasses } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { toHHMMSS, toSecond, addSecToHHMMSS, getUser, setUser } from "../../common/utilities"
+import { toHHMMSS, toSecond, getUser, setUser } from "../../common/utilities"
 import Shot from './contents/Shot';
 import ShortPass from './contents/ShortPass';
 import Pass from './contents/Pass';
 import Cross from './contents/Cross';
 import Foul from './contents/Foul';
 import Dribble from './contents/Dribble';
+import SelectMainPlayers from './contents/SelectMainPlayers';
 // import VIDEO from "../../assets/1.mp4"
 const drawerWidth = "30%";
 
@@ -92,6 +93,7 @@ const TAGGING = {
   cross: { id: 3, hotkey: "c", value: "Cross" },
   dribble: { id: 7, hotkey: "q", value: "Dribble" },
   foul: { id: 8, hotkey: "e", value: "Foul" },
+  selectplayer: { id: 9, hotkey: "p", value: "Select Player" },
 };
 const HOTKEY_OPTION = { enableOnContentEditable: true }
 
@@ -400,6 +402,18 @@ export default function Tagging() {
               taggingState={setTaggingState}
             />
           }
+          {modalContent === TAGGING.selectplayer.value &&
+            <SelectMainPlayers
+              homeTeam={state.homePlayers}
+              onHomePlayerChecked={(i, val) => {
+                setState({ homePlayers: state.homePlayers.map((player, idx) => idx === i ? { ...player, checked: val } : player) })
+              }}
+              awayTeam={state.awayPlayers}
+              onAwayPlayerChecked={(i, val) => {
+                setState({ awayPlayers: state.awayPlayers.map((player, idx) => idx === i ? { ...player, checked: val } : player) })
+              }}
+            />
+          }
         </Box>
       </Modal>
       <CssBaseline />
@@ -474,7 +488,13 @@ export default function Tagging() {
             open &&
             <>
               <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
-
+                <IconButton sx={{ my: 1 }}
+                  onClick={() => {
+                    setCount(count + 1)
+                  }}
+                >
+                  <RefreshIcon />
+                </IconButton>
                 {[-10, -5, -3, -1].map(t => <ControlButton key={t} onClick={() => { seekTo(t); }}>{t}s</ControlButton>)}
 
                 <ControlButton onClick={() => changePlayRate(false)}>slow</ControlButton>
@@ -497,13 +517,6 @@ export default function Tagging() {
               </Box>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Box sx={{ mx: 2, textAlign: 'center' }}>
-                  <IconButton sx={{ my: 1 }}
-                    onClick={() => {
-                      setCount(count + 1)
-                    }}
-                  >
-                    <RefreshIcon />
-                  </IconButton><br />
                   <TextField
                     label="sec. before"
                     sx={{ m: 1, width: 100 }}
@@ -520,6 +533,12 @@ export default function Tagging() {
                     value={config.sec_after}
                     onChange={e => setConfig({ sec_after: e.target.value })}
                   />
+                  <div>
+                    <Button
+                      variant="outlined"
+                      onClick={() => taggingButtonClicked(TAGGING.selectplayer.value)}
+                    >Select Players</Button>
+                  </div>
                 </Box>
                 <Box sx={{ textAlign: "center", mt: 2 }}>
                   {["home", "away"].map(t =>

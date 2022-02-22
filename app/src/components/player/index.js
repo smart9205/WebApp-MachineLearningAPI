@@ -14,6 +14,7 @@ import { makeStyles } from '@mui/styles';
 import useScreenOrientation from 'react-hook-screen-orientation'
 import PlayerDetailCard from './PlayerDetailCard';
 import GameDetailTab from './GameDetailTab';
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import "./Profile.css"
 import { Table } from 'react-bootstrap';
 
@@ -53,6 +54,7 @@ const useStyles = makeStyles(() => ({
 export default function Players() {
   const classes = useStyles();
   const screenOrientation = useScreenOrientation()
+  const handle = useFullScreenHandle();
   const { id } = useParams();
   const playerId = Number(atob(id))
   const [loading, setLoading] = useState(true)
@@ -121,7 +123,9 @@ export default function Players() {
                   onClose={e => setOpen(false)}
                 >
                   <DialogContent sx={{ p: 0, }}>
-                    <TagVideo tagList={playTags} url={game?.video_url} />
+                    <FullScreen handle={handle}>
+                      <TagVideo tagList={playTags} url={game?.video_url} />
+                    </FullScreen>
                   </DialogContent>
                 </Dialog>
                 {playerData && <PlayerDetailCard player={playerData} />}
@@ -167,6 +171,7 @@ export default function Players() {
                             </td>
                             {['goal', 'shot', 'pass', 'interception', 'saved', 'clearance'].map((key, idx) => (
                               <td
+                                key={idx}
                                 className={game?.[key] > 0 ? "profileSection_clickable" : ""}
                                 onClick={() => numClicked(game.id, key)}
                               >
@@ -185,13 +190,13 @@ export default function Players() {
                     >
                       <div>Average</div>
                       {['goal', 'shot', 'pass', 'interception', 'saved', 'clearance'].map((key, idx) => (
-                        <div>
+                        <div key={idx}>
                           {games.reduce((a, b) => Number(a?.[key]) + Number(b?.[key])) / games.length}
                         </div>
                       ))}
                     </div>
                   </>) :
-                  <GameDetailTab playTags={tags => { setPlayTags(tags); setOpen(true) }} />
+                  <GameDetailTab playTags={tags => { setPlayTags(tags); setOpen(true); isLandscape && handle.enter() }} />
                 }
               </section>
             }

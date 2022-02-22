@@ -26,7 +26,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
         <List header="List of Players">
           {
             offenseTeam.map((player, i) => (
-              <ListItemButton key={i}
+              !player?.checked && <ListItemButton key={i}
                 selected={offensivePlayer === player}
                 onClick={() => setOffensivePlayer(player)}
               >
@@ -85,7 +85,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
             defenseTeam
               // .filter(player => player.position === "Goalkeeper")
               .map((player, i) => (
-                <ListItemButton key={i}
+                !player?.checked && <ListItemButton key={i}
                   selected={defensivePlayer === player}
                   onClick={() => {
                     setDefensivePlayer(player)

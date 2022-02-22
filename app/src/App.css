@@ -100,3 +100,6 @@ div.team-theme-color {
 .table-striped tbody tr:nth-of-type(odd) {
     background-color: transparent;
 }
+.player-select-checkbox .css-1e6ud36-MuiButtonBase-root-MuiCheckbox-root {
+    padding: 3px 9px;
+}
