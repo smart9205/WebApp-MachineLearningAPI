@@ -138,10 +138,7 @@ div.profileImg-wrapper {
     margin-left: 1rem;
     margin-right: 1rem;
     display: flex;
-    align-items: end;
-}
-div.player-detail-card div.sponsorimg {
-    margin-bottom: 15px;
+    align-items: center;
 }
 div.player-detail-card div.profileimg {
     width: 120px;
@@ -167,7 +164,7 @@ div.player-detail-card div.profileInfo {
 }
 div.player-detail-card .profileImg-wrapper-teamlogo {
     position: absolute;
-    top: 5px;
+    top: 10px;
     right: 0;
 }
 div.player-detail-card div.profileInfo {
