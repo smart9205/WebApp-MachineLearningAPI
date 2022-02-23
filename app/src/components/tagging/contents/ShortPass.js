@@ -1,17 +1,5 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import List from "./basic/ModalList"
-
-const SubBox = styled(Box)`
-  margin: 6px;
-  & nav {
-    padding: 6px;
-    border-radius: 6px;
-  }
-  `;
+import PlayerSelector from './basic/PlayerSelector';
 
 export default function ShortPass({
   offenseTeam,
@@ -20,28 +8,17 @@ export default function ShortPass({
 }) {
 
   return (
-    <>
-      <SubBox>
-        <List header="List of Players">
-          {
-            offenseTeam.map((player, i) => (
-              !player?.checked && <ListItemButton key={i}
-                onClick={() =>
-                  taggingState([{
-                    team_id: offenseTeamId,
-                    player_id: player.id,
-                    action_type_id: 4,
-                    action_result_id: 4,
-                    action_id: 2
-                  }])
-                }
-              >
-                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
-              </ListItemButton>
-            ))
-          }
-        </List>
-      </SubBox>
-    </>
+    <PlayerSelector
+      title="List of Players"
+      playerList={offenseTeam}
+      editable={false}
+      onSelect={(player) => taggingState([{
+        team_id: offenseTeamId,
+        player_id: player.id,
+        action_type_id: 4,
+        action_result_id: 4,
+        action_id: 2
+      }])}
+    />
   );
 } 

@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import List from "./basic/ModalList"
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import PlayerSelector from './basic/PlayerSelector';
 
 const SubBox = styled(Box)`
   margin: 6px;
@@ -63,21 +64,13 @@ export default function ShortPass({
 
   return (
     <>
-      <SubBox>
-        <List header="Offensive Player List">
-          {
-            offenseTeam.map((player, i) => (
-              !player?.checked && <ListItemButton key={i}
-                selected={offensivePlayer === player}
-                onClick={() => setOffensivePlayer(player)}
-              >
-                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
-              </ListItemButton>
-            ))
-          }
-        </List>
-      </SubBox>
-
+      <PlayerSelector
+        title="Offensive Player List"
+        playerList={offenseTeam}
+        editable={false}
+        selected={offensivePlayer}
+        onSelect={(player) => setOffensivePlayer(player)}
+      />
       <SubBox>
         <List header="Type">
           {[
@@ -137,51 +130,39 @@ export default function ShortPass({
           ))}
         </List>
       </SubBox>
-      {(result.name === STOLE_BY) && <SubBox>
-        <List header="Defensive Player List">
-          {
-            defenseTeam.map((player, i) => (
-              !player?.checked && <ListItemButton key={i}
-                selected={defensivePlayer === player}
-                onClick={() => defensivePlayerClicked(player)}
-              >
-                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
-              </ListItemButton>
-            ))
-          }
-        </List>
-      </SubBox>}
+      {(result.name === STOLE_BY) &&
+        <PlayerSelector
+          title="Defensive Player List"
+          playerList={defenseTeam}
+          editable={false}
+          selected={defensivePlayer}
+          onSelect={(player) => { defensivePlayerClicked(player) }}
+        />
+      }
       {
         result.name === OFFSIDE &&
-        <SubBox>
-          <List header="Offensive Player List">
-            {
-              offenseTeam.map((player, i) => (
-                !player?.checked && <ListItemButton key={i}
-                  selected={offsidePlayer === player}
-                  onClick={() => {
-                    setOffsidePlayer(player)
-                    taggingState([{
-                      ...tagData,
-                      team_id: offenseTeamId,
-                      player_id: offensivePlayer.id,
-                      action_id: 2,
-                      action_result_id: 15 // offside
-                    }, {
-                      ...tagData,
-                      team_id: offenseTeamId,
-                      player_id: player.id,
-                      action_id: 7,
-                      action_result_id: 15 //offside
-                    }])
-                  }}
-                >
-                  <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
-                </ListItemButton>
-              ))
-            }
-          </List>
-        </SubBox>
+        <PlayerSelector
+          title="Offensive Player List"
+          playerList={offenseTeam}
+          editable={false}
+          selected={offsidePlayer}
+          onSelect={(player) => {
+            setOffsidePlayer(player)
+            taggingState([{
+              ...tagData,
+              team_id: offenseTeamId,
+              player_id: offensivePlayer.id,
+              action_id: 2,
+              action_result_id: 15 // offside
+            }, {
+              ...tagData,
+              team_id: offenseTeamId,
+              player_id: player.id,
+              action_id: 7,
+              action_result_id: 15 //offside
+            }])
+          }}
+        />
       }
 
     </>

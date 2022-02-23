@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import List from "./basic/ModalList"
+import PlayerSelector from './basic/PlayerSelector';
 
 const SubBox = styled(Box)`
   margin: 6px;
@@ -36,21 +37,13 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
 
   return (
     <>
-      <SubBox>
-        <List header="List of Players">
-          {
-            offenseTeam.map((player, i) => (
-              !player?.checked && <ListItemButton key={i}
-                selected={offensivePlayer === player}
-                onClick={() => setOffensivePlayer(player)}
-              >
-                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
-              </ListItemButton>
-            ))
-          }
-        </List>
-      </SubBox>
-
+      <PlayerSelector
+        title="List of Players"
+        playerList={offenseTeam}
+        editable={false}
+        selected={offensivePlayer}
+        onSelect={(player) => setOffensivePlayer(player)}
+      />
       <SubBox>
         <List header="Type">
           {[
@@ -115,36 +108,29 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
       }
       {
         goal === "No" &&
-        <SubBox>
-          <List header="Saved">
-            {
-              defenseTeam.map((player, i) => (
-                !player?.checked && <ListItemButton key={i}
-                  onClick={() => {
-                    taggingState([
-                      {
-                        action_type_id: actionTypeId,
-                        team_id: offenseTeamId,
-                        player_id: offensivePlayer.id,
-                        action_id: 1,
-                        action_result_id: 1
-                      },
-                      {
-                        action_type_id: actionTypeId,
-                        team_id: defenseTeamId,
-                        player_id: player.id,
-                        action_id: 8,
-                        action_result_id: 1
-                      }
-                    ])
-                  }}
-                >
-                  <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
-                </ListItemButton>
-              ))
-            }
-          </List>
-        </SubBox>
+        <PlayerSelector
+          title="Saved"
+          playerList={defenseTeam}
+          editable={false}
+          onSelect={(player) => {
+            taggingState([
+              {
+                action_type_id: actionTypeId,
+                team_id: offenseTeamId,
+                player_id: offensivePlayer.id,
+                action_id: 1,
+                action_result_id: 1
+              },
+              {
+                action_type_id: actionTypeId,
+                team_id: defenseTeamId,
+                player_id: player.id,
+                action_id: 8,
+                action_result_id: 1
+              }
+            ])
+          }}
+        />
       }
     </>
   );

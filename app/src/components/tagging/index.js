@@ -19,7 +19,7 @@ import ReactPlayer from 'react-player';
 import GameService from '../../services/game.service';
 import IndividualTagTable from "./IndividualTagTable"
 import TeamTagTable from "./TeamTagTable"
-import { Button, stepButtonClasses } from '@mui/material'; import Radio from '@mui/material/Radio';
+import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -186,7 +186,10 @@ export default function Tagging() {
 
   React.useEffect(() => {
     GameService.getGameTeamPlayers({ game_id }).then((res) => {
-      setState({ homePlayers: res.home_team, awayPlayers: res.away_team })
+      setState({
+        homePlayers: res.home_team.map(p => { return { ...p, checked: true } }),
+        awayPlayers: res.away_team.map(p => { return { ...p, checked: true } })
+      })
     })
   }, [count, game_id])
 
@@ -405,13 +408,7 @@ export default function Tagging() {
           {modalContent === TAGGING.selectplayer.value &&
             <SelectMainPlayers
               homeTeam={state.homePlayers}
-              onHomePlayerChecked={(i, val) => {
-                setState({ homePlayers: state.homePlayers.map((player, idx) => idx === i ? { ...player, checked: val } : player) })
-              }}
               awayTeam={state.awayPlayers}
-              onAwayPlayerChecked={(i, val) => {
-                setState({ awayPlayers: state.awayPlayers.map((player, idx) => idx === i ? { ...player, checked: val } : player) })
-              }}
             />
           }
         </Box>

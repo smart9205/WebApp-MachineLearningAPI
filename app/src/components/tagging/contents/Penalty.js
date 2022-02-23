@@ -22,21 +22,13 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
 
   return (
     <>
-      <SubBox>
-        <List header="List of Players">
-          {
-            offenseTeam.map((player, i) => (
-              !player?.checked && <ListItemButton key={i}
-                selected={offensivePlayer === player}
-                onClick={() => setOffensivePlayer(player)}
-              >
-                <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
-              </ListItemButton>
-            ))
-          }
-        </List>
-      </SubBox>
-
+      <PlayerSelector
+        title="List of Players"
+        playerList={offenseTeam}
+        editable={false}
+        selected={offensivePlayer}
+        onSelect={(player) => setOffensivePlayer(player)}
+      />
       <SubBox>
         <List header="Type">
           {[
@@ -79,40 +71,33 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
           ))}
         </List>
       </SubBox>
-      {result === 9 && <SubBox>
-        <List header="GoalKeepers">
-          {
-            defenseTeam
-              // .filter(player => player.position === "Goalkeeper")
-              .map((player, i) => (
-                !player?.checked && <ListItemButton key={i}
-                  selected={defensivePlayer === player}
-                  onClick={() => {
-                    setDefensivePlayer(player)
-                    taggingState([
-                      {
-                        action_type_id: actionTypeId,
-                        team_id: offenseTeamId,
-                        player_id: offensivePlayer.id,
-                        action_id: 4,
-                        action_result_id: result
-                      },
-                      {
-                        action_type_id: actionTypeId,
-                        team_id: defenseTeamId,
-                        player_id: player.id,
-                        action_id: 12,
-                        action_result_id: result
-                      },
-                    ])
-                  }}
-                >
-                  <ListItemText primary={`#${player.jersey_number}  ${player.f_name} ${player.l_name}  (${player.position_name})`} />
-                </ListItemButton>
-              ))
-          }
-        </List>
-      </SubBox>}
+      {result === 9 &&
+        <PlayerSelector
+          title="GoalKeepers"
+          playerList={defenseTeam}
+          editable={false}
+          selected={defensivePlayer}
+          onSelect={(player) => {
+            setDefensivePlayer(player)
+            taggingState([
+              {
+                action_type_id: actionTypeId,
+                team_id: offenseTeamId,
+                player_id: offensivePlayer.id,
+                action_id: 4,
+                action_result_id: result
+              },
+              {
+                action_type_id: actionTypeId,
+                team_id: defenseTeamId,
+                player_id: player.id,
+                action_id: 12,
+                action_result_id: result
+              },
+            ])
+          }}
+        />
+      }
     </>
   );
 }
