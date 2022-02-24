@@ -257,7 +257,7 @@ export default function PlayerTab() {
                                                 <img width={40} src={row.image?.length > 0 ? row.image : PLAYER_ICON_DEFAULT} alt='Player' /></TableCell>
                                             <TableCell align="center">
                                                 <Link
-                                                    to={`/player/?id=${btoa(row.id)}`}
+                                                    to={`/player/${btoa(row.id)}`}
                                                     target="_blank" rel="noopener noreferrer"
                                                     className="name"
                                                 >

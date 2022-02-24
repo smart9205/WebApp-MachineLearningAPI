@@ -146,7 +146,7 @@ const App = () => {
             <Route path="/verification/:code" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path='/team/:data' element={<Field />} />
-            <Route path='/player' element={<Player />} />
+            <Route path='/player/:data' element={<Player />} />
 
             <Route path='/tagging/:id' element={<PrivateRoute />} >
               <Route path='/tagging/:id' element={<Tagging />} />
@@ -158,7 +158,7 @@ const App = () => {
 
             <Route path='/admin' element={<RoleRoute role="ROLE_ADMIN" />} >
               <Route path='/admin' element={<Admin />} />
-              <Route path='/admin:tab' element={<Admin />} />
+              <Route path='/admin/:tab' element={<Admin />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" />} />

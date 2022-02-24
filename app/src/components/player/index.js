@@ -1,5 +1,5 @@
 import React, { useEffect, useState, createContext, useMemo, useReducer } from 'react';
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   IconButton,
@@ -52,14 +52,11 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export default function Players() {
+export default function Player() {
   const classes = useStyles();
   const screenOrientation = useScreenOrientation()
-  const [searchParams] = useSearchParams();
-
-  const id = searchParams.get("id")
-
-  const playerId = Number(atob(id))
+  const { data } = useParams();
+  const playerId = Number(atob(data))
   const [loading, setLoading] = useState(true)
   const [games, setGames] = useState([])
   const [open, setOpen] = useState(false);
