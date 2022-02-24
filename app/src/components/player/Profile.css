@@ -330,3 +330,6 @@ div.profileSection td {
 .coach-tag-table .Mui-selected {
     background-color: rgba(25, 118, 210, 0.38) !important;
 }
+.profileSection_tagvideo ::-webkit-scrollbar {
+    width: 0 !important;
+}

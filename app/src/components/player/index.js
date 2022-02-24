@@ -14,7 +14,6 @@ import { makeStyles } from '@mui/styles';
 import useScreenOrientation from 'react-hook-screen-orientation'
 import PlayerDetailCard from './PlayerDetailCard';
 import GameDetailTab from './GameDetailTab';
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import "./Profile.css"
 import { Table } from 'react-bootstrap';
 
@@ -48,13 +47,14 @@ export const PlayerContext = createContext({
 
 const useStyles = makeStyles(() => ({
   paper: { minWidth: "98%", backgroundColor: "transparent" },
-  landPaper: { minWidth: "80%", maxHeight: "100%", backgroundColor: "transparent" }
+  landPaper: {
+    minWidth: "80%", maxHeight: "100%", backgroundColor: "transparent"
+  }
 }));
 
 export default function Players() {
   const classes = useStyles();
   const screenOrientation = useScreenOrientation()
-  const handle = useFullScreenHandle();
   const { id } = useParams();
   const playerId = Number(atob(id))
   const [loading, setLoading] = useState(true)
@@ -118,14 +118,13 @@ export default function Players() {
             {
               <section className='profileSection'>
                 <Dialog
+                  className="profileSection_tagvideo"
                   classes={{ paper: isLandscape ? classes.landPaper : classes.paper }}
                   open={open}
                   onClose={e => setOpen(false)}
                 >
-                  <DialogContent sx={{ p: 0, }}>
-                    <FullScreen handle={handle}>
-                      <TagVideo tagList={playTags} url={game?.video_url} />
-                    </FullScreen>
+                  <DialogContent sx={{ p: 0 }} >
+                    <TagVideo tagList={playTags} url={game?.video_url} />
                   </DialogContent>
                 </Dialog>
                 {playerData && <PlayerDetailCard player={playerData} />}
@@ -196,7 +195,10 @@ export default function Players() {
                       ))}
                     </div>
                   </>) :
-                  <GameDetailTab playTags={tags => { setPlayTags(tags); setOpen(true); isLandscape && handle.enter() }} />
+                  <GameDetailTab playTags={tags => {
+                    setPlayTags(tags);
+                    setOpen(true);
+                  }} />
                 }
               </section>
             }
