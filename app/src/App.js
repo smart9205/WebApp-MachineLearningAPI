@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Router, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, Outlet } from "react-router-dom";
 
 import { useIdleTimer } from 'react-idle-timer'
 
@@ -39,41 +39,30 @@ import Layout from "./components/Layout";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const PrivateRoute = ({ component: Component, rememberPath = true, ...rest }) => {
+const PrivateRoute = () => {
   const { user: currentUser } = useSelector((state) => state.auth);
-  return (
-    <Route
-      {...rest}
-      render={(props) => currentUser && (currentUser.subscription.length > 0 || currentUser.roles.includes("ROLE_ADMIN"))
-        ? <Component {...props} />
-        : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
-    />
-  )
+  return currentUser && (currentUser.subscription.length > 0 || currentUser.roles.includes("ROLE_ADMIN"))
+    ? <Outlet /> : <Navigate to="/" />
 }
 
-const AdminRoute = ({ component: Component, rememberPath = true, ...rest }) => {
+const RoleRoute = ({ role }) => {
   const { user: currentUser } = useSelector((state) => state.auth);
-  return (
-    <Route
-      {...rest}
-      render={(props) => currentUser && currentUser.roles.includes("ROLE_ADMIN")
-        ? <Component {...props} />
-        : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
-    />
-  )
+
+  return currentUser && currentUser.roles.includes(role)
+    ? <Outlet /> : <Navigate to="/" />
 }
 
-const CoachRoute = ({ component: Component, rememberPath = true, ...rest }) => {
-  const { user: currentUser } = useSelector((state) => state.auth);
-  return (
-    <Route
-      {...rest}
-      render={(props) => currentUser && currentUser.roles.includes("ROLE_COACH")
-        ? <Component {...props} />
-        : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
-    />
-  )
-}
+// const CoachRoute = () => {
+//   const { user: currentUser } = useSelector((state) => state.auth);
+//   return (
+//     <Route
+//       {...rest}
+//       render={(props) => currentUser && currentUser.roles.includes("ROLE_COACH")
+//         ? <Component {...props} />
+//         : <Navigate to={{ pathname: '/', state: { from: props.location } }} />}
+//     />
+//   )
+// }
 
 const App = () => {
   const { user: currentUser } = useSelector((state) => state.auth);
@@ -146,30 +135,37 @@ const App = () => {
         href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&display=swap"
         rel="stylesheet"
       />
-      <Router history={history}>
+      <BrowserRouter history={history}>
         <Layout>
-          <Switch>
-            <Route exact path={["/", "/home"]} component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/logout" component={Logout} />
-            <Route exact path="/forgetpassword" component={ForgetPassword} />
-            <Route path="/resetPwdVerify/:code" component={ForgetPassword} />
-            <Route path="/verification/:code" component={Login} />
-            <Route exact path="/register" component={Register} />
-            <Route path='/team/:data' component={Field} />
-            <Route path='/player/:id' component={Profile} />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/forgetpassword" element={<ForgetPassword />} />
+            <Route path="/resetPwdVerify/:code" element={<ForgetPassword />} />
+            <Route path="/verification/:code" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path='/team/:data' element={<Field />} />
+            <Route path='/player/:id' element={<Profile />} />
 
-            <PrivateRoute path='/tagging/:id' component={Tagging} />
-            <CoachRoute path='/coach' component={Coach} />
+            <Route path='/tagging/:id' element={<PrivateRoute />} >
+              <Route path='/tagging/:id' element={<Tagging />} />
+            </Route>
 
-            <AdminRoute path='/admin' component={Admin} />
-            <AdminRoute path='/admin/:tab' component={Admin} />
+            <Route path='/coach' element={<RoleRoute role="ROLE_COACH" />} >
+              <Route path='/coach' element={<Coach />} />
+            </Route>
 
-            <Redirect to="/" />
-          </Switch>
+            <Route path='/admin' element={<RoleRoute role="ROLE_ADMIN" />} >
+              <Route path='/admin' element={<Admin />} />
+              <Route path='/admin:tab' element={<Admin />} />
+            </Route>
+
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
           <AuthVerify logOut={logOut} />
         </Layout>
-      </Router>
+      </BrowserRouter>
     </ThemeProvider>
   );
 };

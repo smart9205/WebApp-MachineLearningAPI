@@ -14,7 +14,7 @@ const NO_NAV_Routes = [
 const Layout = ({ children }) => {
 
     const location = useLocation();
-    if (!!NO_NAV_Routes.find(r => location.pathname.startsWith(r))) return <>{children}</>
+    if (!!NO_NAV_Routes.find(r => location?.pathname?.startsWith(r))) return <>{children}</>
     else return (
         <div style={{ marginTop: 90, minHeight: "calc(100vh - 200px)" }}>
 

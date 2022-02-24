@@ -65,7 +65,7 @@ class MatcheHighlights extends Component {
 
                                     <div className="col-lg-6 col-md-6">
                                         <div className="highlights-video">
-                                            <Link href="#play-video"
+                                            <Link to="#play-video"
                                                 onClick={e => { e.preventDefault(); this.openModal() }}
                                                 className="video-btn popup-youtube"
                                             >
@@ -90,7 +90,7 @@ class MatcheHighlights extends Component {
 
                                     <div className="col-lg-6 col-md-6">
                                         <div className="highlights-video">
-                                            <Link href="#play-video"
+                                            <Link to="#play-video"
                                                 onClick={e => { e.preventDefault(); this.openModal() }}
                                                 className="video-btn popup-youtube"
                                             >
@@ -115,7 +115,7 @@ class MatcheHighlights extends Component {
 
                                     <div className="col-lg-6 col-md-6">
                                         <div className="highlights-video">
-                                            <Link href="#play-video"
+                                            <Link to="#play-video"
                                                 onClick={e => { e.preventDefault(); this.openModal() }}
                                                 className="video-btn popup-youtube"
                                             >
@@ -140,7 +140,7 @@ class MatcheHighlights extends Component {
 
                                     <div className="col-lg-6 col-md-6">
                                         <div className="highlights-video">
-                                            <Link href="#play-video"
+                                            <Link to="#play-video"
                                                 onClick={e => { e.preventDefault(); this.openModal() }}
                                                 className="video-btn popup-youtube"
                                             >

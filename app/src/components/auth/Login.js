@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from '@mui/styles';
-import { Redirect, useParams, Link } from 'react-router-dom';
+import { Navigate, useParams, Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { isEmail } from "validator";
 
@@ -143,14 +143,14 @@ const Login = (props) => {
   const handleClose = () => {
     setOpen(false);
     logOut();
-    return <Redirect to={'/'} />;
+    return <Navigate to={'/'} />;
   };
 
   if (isLoggedIn) {
     if (currentUser.subscription.length || currentUser.roles.includes("ROLE_ADMIN")) {
-      if (currentUser.roles.includes("ROLE_ADMIN")) return <Redirect to="/admin" />;
-      else if (currentUser.roles.includes("ROLE_COACH")) return <Redirect to="/coach" />;
-      else return <Redirect to="/" />;
+      if (currentUser.roles.includes("ROLE_ADMIN")) return <Navigate to="/admin" />;
+      else if (currentUser.roles.includes("ROLE_COACH")) return <Navigate to="/coach" />;
+      else return <Navigate to="/" />;
     }
     if (!open) handleOpen();
   }

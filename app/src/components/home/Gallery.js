@@ -60,7 +60,7 @@ const Gallery = () => {
                     >
                         <div className="single-gallery-item">
                             <img src={require("../../assets/images/football/gallery/footb-gallery1.jpg")} alt="img" />
-                            <Link href="#popup"
+                            <Link to="#popup"
                                 className="link-btn popup-btn"
                                 onClick={e => { e.preventDefault(); setIsOpenImage(true); setPhotoIndex(0); }}
                             >
