@@ -23,7 +23,7 @@ import Register from "./components/auth/Register";
 import Home from "./components/home";
 import Tagging from "./components/tagging";
 import Field from "./components/team/Field";
-import Profile from "./components/player";
+import Player from "./components/player";
 import Admin from "./components/admin"
 
 import { logout } from "./actions/auth";
@@ -146,7 +146,7 @@ const App = () => {
             <Route path="/verification/:code" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path='/team/:data' element={<Field />} />
-            <Route path='/player/:id' element={<Profile />} />
+            <Route path='/player' element={<Player />} />
 
             <Route path='/tagging/:id' element={<PrivateRoute />} >
               <Route path='/tagging/:id' element={<Tagging />} />
