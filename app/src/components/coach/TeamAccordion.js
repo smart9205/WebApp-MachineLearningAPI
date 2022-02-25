@@ -48,7 +48,7 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
             id="panel1a-header"
             onClick={() => { handleActionTags() }}
           >
-            <Typography >{rule.title}</Typography>
+            <Typography >{rule.title} ({rule.title_he})</Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ p: 0 }}>
             <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>

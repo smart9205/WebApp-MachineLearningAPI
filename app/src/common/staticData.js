@@ -4,6 +4,7 @@ export const PLAYER_ICON_DEFAULT = "https://s3.amazonaws.com/s4usitesimages/imag
 export const RULE = [
     {
         title: "Shot",
+        title_he: "בעיטות לשער",
         successful: [1, 3],
         unsuccessful: [2],
         row: [
@@ -16,6 +17,7 @@ export const RULE = [
     },
     {
         title: "Pass",
+        title_he: "מסירות",
         successful: [4],
         unsuccessful: [11, 15],
         row: [
@@ -28,6 +30,7 @@ export const RULE = [
     },
     {
         title: "Dribble",
+        title_he: "כדרורים",
         successful: [4],
         unsuccessful: [12, 17],
         row: [
@@ -37,6 +40,7 @@ export const RULE = [
     },
     {
         title: "Cross",
+        title_he: "הרמות",
         successful: [4],
         unsuccessful: [7, 8, 15],
         row: [
@@ -48,6 +52,7 @@ export const RULE = [
     },
     {
         title: "Draw Foul",
+        title_he: "משיכת פאולים",
         row: [
             { action_id: 6, action_type_id: [8], title: "Regular" },
             { action_id: 6, action_type_id: [9], title: "Yellow Card" },
@@ -55,6 +60,7 @@ export const RULE = [
     },
     {
         title: "Interception",
+        title_he: "חטיפות",
         row: [
             { action_id: 10, action_type_id: [1, 2], title: "Dribble" },
             { action_id: 10, action_type_id: [7], title: "Key Pass" },
@@ -65,6 +71,7 @@ export const RULE = [
     },
     {
         title: "Saved",
+        title_he: "הצלות",
         row: [
             { action_id: 8, action_type_id: [1, 2], title: "Foot" },
             { action_id: 8, action_type_id: [3], title: "Header" }
@@ -72,6 +79,7 @@ export const RULE = [
     },
     {
         title: "Clearance",
+        title_he: "הרחקות",
         row: [
             { action_id: 11, action_type_id: [1, 2], title: "Foot" },
             { action_id: 11, action_type_id: [3], title: "Header" }
@@ -79,6 +87,7 @@ export const RULE = [
     },
     {
         title: "Turnover",
+        title_he: "איבודי כדור",
         row: [
             { action_id: 2, action_result_id: [11], title: "Bad Pass" },
             { action_id: 4, action_result_id: [10, 12], title: "Bad Dribble" },
@@ -87,6 +96,7 @@ export const RULE = [
     },
     {
         title: "Foul",
+        title_he: "פאולים",
         row: [
             { action_id: 5, action_type_id: [8], title: "Regular" },
             { action_id: 5, action_type_id: [9], title: "Yellow Card" },
