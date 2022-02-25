@@ -11,7 +11,6 @@ import DialogContent from '@mui/material/DialogContent';
 import Dialog from '@mui/material/Dialog';
 import TagVideo from './TagVideo';
 import { makeStyles } from '@mui/styles';
-import useScreenOrientation from 'react-hook-screen-orientation'
 import PlayerDetailCard from './PlayerDetailCard';
 import GameDetailTab from './GameDetailTab';
 import "./Profile.css"
@@ -31,7 +30,8 @@ const styles = {
   },
   play: {
     color: '#07863d'
-  }
+  },
+  paper: { minWidth: "98%", maxHeight: "none", backgroundColor: "transparent" },
 };
 const defaultPrimaryColor = '#058240';
 const defaultSecondColor = '#e7f3e5';
@@ -46,7 +46,7 @@ export const PlayerContext = createContext({
 });
 
 const useStyles = makeStyles(() => ({
-  paper: { minWidth: "98%", backgroundColor: "transparent" },
+  paper: { minWidth: "98%", maxHeight: "90% !important", backgroundColor: "transparent" },
   landPaper: {
     minWidth: "80%", maxHeight: "100%", backgroundColor: "transparent"
   }
@@ -54,14 +54,12 @@ const useStyles = makeStyles(() => ({
 
 export default function Player() {
   const classes = useStyles();
-  const screenOrientation = useScreenOrientation()
   const { data } = useParams();
   const playerId = Number(atob(data))
   const [loading, setLoading] = useState(true)
   const [games, setGames] = useState([])
   const [open, setOpen] = useState(false);
   const [playTags, setPlayTags] = useState([])
-  const isLandscape = screenOrientation.split('-')[0] === "landscape"
 
   const [context, setContext] = useReducer((old, action) => ({ ...old, ...action }), {})
 
@@ -119,7 +117,7 @@ export default function Player() {
               <section className='profileSection'>
                 <Dialog
                   className="profileSection_tagvideo"
-                  classes={{ paper: isLandscape ? classes.landPaper : classes.paper }}
+                  classes={{ paper: classes.paper }}
                   open={open}
                   onClose={e => setOpen(false)}
                 >
