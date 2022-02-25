@@ -93,7 +93,6 @@ const TAGGING = {
   cross: { id: 3, hotkey: "c", value: "Cross" },
   dribble: { id: 7, hotkey: "q", value: "Dribble" },
   foul: { id: 8, hotkey: "e", value: "Foul" },
-  selectplayer: { id: 9, hotkey: "p", value: "Select Player" },
 };
 const HOTKEY_OPTION = { enableOnContentEditable: true }
 
@@ -405,7 +404,7 @@ export default function Tagging() {
               taggingState={setTaggingState}
             />
           }
-          {modalContent === TAGGING.selectplayer.value &&
+          {modalContent === "SELECT_PLAYER" &&
             <SelectMainPlayers
               homeTeam={state.homePlayers}
               awayTeam={state.awayPlayers}
@@ -533,7 +532,7 @@ export default function Tagging() {
                   <div>
                     <Button
                       variant="outlined"
-                      onClick={() => taggingButtonClicked(TAGGING.selectplayer.value)}
+                      onClick={() => taggingButtonClicked("SELECT_PLAYER")}
                     >Select Players</Button>
                   </div>
                 </Box>
