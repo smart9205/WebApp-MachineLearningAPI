@@ -333,3 +333,14 @@ div.profileSection td {
 .profileSection_tagvideo ::-webkit-scrollbar {
     width: 0 !important;
 }
+.profileSection_tagvideo .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+    min-width: 98%;
+    max-height: 98% !important;
+    background-color: transparent;
+}
+
+@media (min-aspect-ratio: 2/1) {
+    .profileSection_tagvideo .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+        min-width: 80%;
+    }
+}

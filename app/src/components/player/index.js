@@ -117,7 +117,6 @@ export default function Player() {
               <section className='profileSection'>
                 <Dialog
                   className="profileSection_tagvideo"
-                  classes={{ paper: classes.paper }}
                   open={open}
                   onClose={e => setOpen(false)}
                 >
