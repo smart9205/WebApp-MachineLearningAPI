@@ -48,7 +48,7 @@ export default function GameDetailTab({ playTags }) {
                         <Tab label="Skills" {...a11yProps(1)} />
                         <Tab label="Statistics" {...a11yProps(2)} />
                         {showHighlight &&
-                            <Tab label="My HighLights" {...a11yProps(3)} />
+                            <Tab label="HighLights" {...a11yProps(3)} />
                         }
                     </Tabs>
                 </Box>
