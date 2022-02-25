@@ -46,10 +46,7 @@ export const PlayerContext = createContext({
 });
 
 const useStyles = makeStyles(() => ({
-  paper: { minWidth: "98%", maxHeight: "90% !important", backgroundColor: "transparent" },
-  landPaper: {
-    minWidth: "80%", maxHeight: "100%", backgroundColor: "transparent"
-  }
+  paper: { minWidth: "98%", backgroundColor: "transparent" },
 }));
 
 export default function Player() {
@@ -117,6 +114,7 @@ export default function Player() {
               <section className='profileSection'>
                 <Dialog
                   className="profileSection_tagvideo"
+                  classes={{ paper: classes.paper }}
                   open={open}
                   onClose={e => setOpen(false)}
                 >
