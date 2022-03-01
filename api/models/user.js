@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     country: DataTypes.STRING,
     phone_number: DataTypes.STRING,
     is_verified: DataTypes.BOOLEAN,
+    create_edits: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
   }, {
     sequelize,
     modelName: 'User',

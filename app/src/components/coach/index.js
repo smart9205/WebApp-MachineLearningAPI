@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import _ from 'lodash'
 import moment from 'moment'
-import { Grid, TextField, Paper, Box, IconButton, Autocomplete, CircularProgress } from '@mui/material'
+import { Grid, TextField, Paper, Box, IconButton, Autocomplete, CircularProgress, Tab, Tabs } from '@mui/material'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import PropTypes from 'prop-types';
 import VIDEO_ICON from '../../assets/video_icon.jpg';
 import gameService from '../../services/game.service'
 import TeamTagTable from './TeamTagTable';
@@ -41,6 +42,39 @@ const useStyles = makeStyles((theme) => ({
         }
     },
 }));
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
 export default function Coach() {
     const classes = useStyles();
 
@@ -61,6 +95,11 @@ export default function Coach() {
     const [showAccordion, setShowAccordion] = useState(true)
     const [loading, setLoading] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
         autoPlay: true,
@@ -126,8 +165,11 @@ export default function Coach() {
                 <Box sx={{ px: 1, display: drawOpen ? "flex" : "none", minHeight: 50, maxHeight: 350, overflowY: 'auto' }}>
                     {gameList.length === 0 ?
                         <Box sx={{
-                            width: "100%", height: "100%", display: "flex",
-                            justifyContent: "center", alignItems: "center"
+                            width: "100%",
+                            height: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
                         }}>No Game</Box> :
                         <Grid container spacing={2} >
                             {gameList.map((g) => (
@@ -162,34 +204,54 @@ export default function Coach() {
                 </Box>
             </Paper>
 
-            <Box style={{
-                display: "flex", height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
-            }}>
-                <TeamAccordion
-                    style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}
-                    tagList={allTagList}
-                    playTags={(res) => { }}
-                    onActionSelected={(res) => {
-                        console.log("actionselected")
-                        const teamTags = _.uniqBy(res, 'team_tag_id')
-                        setState({
-                            actionTagList: res,
-                            teamTagList: teamTags
-                        })
-                        setCurTeamTagIdx(0)
-                        setVideodata({
-                            idx: 0,
-                            autoPlay: true,
-                            tagList: teamTags.map(t => {
-                                return {
-                                    start_time: t.t_start_time,
-                                    end_time: t.t_end_time
-                                }
-                            }),
-                            videoPlay: false,
-                        })
-                    }}
-                />
+            <Box className='coach-down-side'
+                style={{
+                    display: "flex", height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
+                }}>
+                <Box
+                    style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs">
+                            <Tab label="Games" {...a11yProps(0)} />
+                            <Tab label="Team" {...a11yProps(1)} />
+                            <Tab label="Player" {...a11yProps(2)} />
+                            <Tab label="My Edits" {...a11yProps(3)} />
+                        </Tabs>
+                    </Box>
+
+                    <TabPanel value={value} index={0}>
+                        <TeamAccordion
+                            tagList={allTagList}
+                            playTags={(res) => { }}
+                            onActionSelected={(res) => {
+                                console.log("actionselected")
+                                const teamTags = _.uniqBy(res, 'team_tag_id')
+                                setState({
+                                    actionTagList: res,
+                                    teamTagList: teamTags
+                                })
+                                setCurTeamTagIdx(0)
+                                setVideodata({
+                                    idx: 0,
+                                    autoPlay: true,
+                                    tagList: teamTags.map(t => {
+                                        return {
+                                            start_time: t.t_start_time,
+                                            end_time: t.t_end_time
+                                        }
+                                    }),
+                                    videoPlay: false,
+                                })
+                            }}
+                        />
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        Item Two
+                    </TabPanel>
+                    <TabPanel value={value} index={2}>
+                        Item Three
+                    </TabPanel>
+                </Box>
                 <IconButton onClick={() => setShowAccordion((v) => !v)} sx={{ background: '#8080804d', position: "absolute", left: showAccordion ? 310 : 10 }}>
                     {
                         showAccordion ?
@@ -260,3 +322,4 @@ export default function Coach() {
         </Box>
     )
 }
+
