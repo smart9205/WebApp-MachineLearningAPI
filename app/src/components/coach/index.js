@@ -12,6 +12,7 @@ import TeamTagTable from './TeamTagTable';
 import IndividualTagTable from './IndividualTagTable';
 import TeamAccordion from './TeamAccordion';
 import VideoPlayer from './VideoPlayer';
+import { makeStyles } from '@mui/styles';
 
 const styles = {
     loader: {
@@ -26,7 +27,22 @@ const styles = {
         alignItems: "center"
     }
 };
+
+const useStyles = makeStyles((theme) => ({
+    '@global': {
+        body: {
+            backgroundColor: "white"
+        },
+        ".navbar.is-sticky": {
+            backgroundColor: "white !important"
+        },
+        p: {
+            color: "black"
+        }
+    },
+}));
 export default function Coach() {
+    const classes = useStyles();
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamList: [],
@@ -90,7 +106,7 @@ export default function Coach() {
             </div>
         )
     else return (
-        <>
+        <Box classes={classes['@global']}>
             <Box sx={{ mx: 1, mt: 1, display: drawOpen ? "" : "none" }} >
                 <Autocomplete
                     options={teamList}
@@ -241,6 +257,6 @@ export default function Coach() {
                     onChangeClip={(idx) => setCurTeamTagIdx(idx)}
                 />
             </Box>
-        </>
+        </Box>
     )
 }
