@@ -14,6 +14,7 @@ import IndividualTagTable from './IndividualTagTable';
 import TeamAccordion from './TeamAccordion';
 import VideoPlayer from './VideoPlayer';
 import { makeStyles } from '@mui/styles';
+import ExcelButton from './ExcelButton';
 
 const styles = {
     loader: {
@@ -211,11 +212,9 @@ export default function Coach() {
                 <Box
                     style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs">
-                            <Tab label="Games" {...a11yProps(0)} />
-                            <Tab label="Team" {...a11yProps(1)} />
-                            <Tab label="Player" {...a11yProps(2)} />
-                            <Tab label="My Edits" {...a11yProps(3)} />
+                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs" centered>
+                            <Tab label="My Edits" {...a11yProps(0)} />
+                            <Tab label="New Edits" {...a11yProps(1)} />
                         </Tabs>
                     </Box>
 
@@ -248,18 +247,20 @@ export default function Coach() {
                     <TabPanel value={value} index={1}>
                         Item Two
                     </TabPanel>
-                    <TabPanel value={value} index={2}>
-                        Item Three
-                    </TabPanel>
                 </Box>
-                <IconButton onClick={() => setShowAccordion((v) => !v)} sx={{ background: '#8080804d', position: "absolute", left: showAccordion ? 310 : 10 }}>
-                    {
-                        showAccordion ?
-                            <ArrowLeftIcon /> :
-                            <ArrowRightIcon />
+                <IconButton
+                    onClick={() => setShowAccordion((v) => !v)}
+                    sx={{ background: '#8080804d', zIndex: 10, position: "absolute", left: showAccordion ? 310 : 10 }}>
+                    {showAccordion ?
+                        <ArrowLeftIcon /> :
+                        <ArrowRightIcon />
                     }
                 </IconButton>
-                <Paper style={{ height: "100%", minWidth: 500 }} className="coach-tag-table">
+                <Paper style={{ height: "100%", minWidth: 500, position: 'relative' }} className="coach-tag-table">
+                    <ExcelButton
+                        style={{ position: "absolute", right: 10 }}
+                        team={teamTagList}
+                    />
                     <TeamTagTable
                         sx={{ height: "70%", p: 1, width: "100%" }}
                         rows={teamTagList}
