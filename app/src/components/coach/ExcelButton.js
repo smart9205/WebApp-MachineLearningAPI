@@ -8,7 +8,6 @@ const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const ExcelButton = ({ team, ...rest }) => {
 
-	console.log("export data", team)
 	const buttonRef = useRef();
 
 	const downloadExcel = () => {

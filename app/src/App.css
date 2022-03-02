@@ -103,3 +103,6 @@ div.team-theme-color {
 .player-select-checkbox .css-1e6ud36-MuiButtonBase-root-MuiCheckbox-root {
     padding: 3px;
 }
+.Mui-expanded {
+    margin: 2px 0 !important;
+}

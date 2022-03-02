@@ -68,6 +68,7 @@ export default function Admin() {
                     <Tab label="Player" {...a11yProps(2)} />
                     <Tab label="League" {...a11yProps(3)} />
                     <Tab label="Coach" {...a11yProps(4)} />
+                    <Tab label="My Edits" {...a11yProps(5)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
@@ -84,6 +85,9 @@ export default function Admin() {
             </TabPanel>
             <TabPanel value={value} index={4}>
                 <CoachTab />
+            </TabPanel>
+            <TabPanel value={value} index={5}>
+                My Edits
             </TabPanel>
         </div>
     )
