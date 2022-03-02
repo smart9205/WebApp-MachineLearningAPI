@@ -11,16 +11,15 @@ import ExcelButton from '../ExcelButton';
 import IndividualTagTable from '../IndividualTagTable';
 import TeamAccordion from '../TeamAccordion';
 import VideoPlayer from '../VideoPlayer';
-const GameTab = ({ allTagList }) => {
+const GameTab = ({ allTagList, game }) => {
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        game: null,
         teamTagList: [],
         actionTagList: [],
         playerList: [],
     })
-    const { game, teamTagList, actionTagList, playerList } = state
+    const { teamTagList, actionTagList, playerList } = state
 
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,

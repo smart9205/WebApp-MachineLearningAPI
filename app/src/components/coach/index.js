@@ -164,7 +164,7 @@ export default function Coach() {
                 style={{
                     display: "flex", height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
                 }}>
-                {curTab === 0 && <GameTab allTagList={allTagList} />}
+                {curTab === 0 && <GameTab allTagList={allTagList} game={game} />}
                 {curTab === 1 && <></>}
                 {curTab === 2 && <></>}
                 {curTab === 3 && <></>}
