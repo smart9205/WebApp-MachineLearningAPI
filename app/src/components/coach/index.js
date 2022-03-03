@@ -130,7 +130,8 @@ export default function Coach() {
                         <Grid container spacing={2} >
                             {gameList.map((g) => (
                                 <Grid item xs={6} md={3} key={g.id} >
-                                    <div
+                                    <Paper
+                                        sx={{ m: 1 }}
                                         style={game !== g ? { opacity: 0.5 } : {}}
                                         onClick={() => { setState({ game: g }) }}
                                     >
@@ -143,7 +144,7 @@ export default function Coach() {
                                             <div>{g.home_team_name}</div>
                                             <div>{g.away_team_name}</div>
                                         </div>
-                                    </div>
+                                    </Paper>
                                 </Grid>
                             ))}
                         </Grid>
