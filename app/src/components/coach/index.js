@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react'
+import { useSelector } from "react-redux";
 import moment from 'moment'
 import { Grid, TextField, Paper, Box, IconButton, Autocomplete, CircularProgress, Button } from '@mui/material'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
@@ -36,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Coach() {
     const classes = useStyles();
 
+    const { user: currentUser } = useSelector((state) => state.auth);
     const [curTab, setCurTab] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamList: [],
@@ -93,6 +95,7 @@ export default function Coach() {
         <Box classes={classes['@global']} style={{ background: "white", paddingTop: 8 }}>
             <Box sx={{ mx: 1, mt: 1, display: "flex", gap: 1 }} >
                 {["Games", "Team Stats", "Player Stats", "My Edits"].map((title, idx) =>
+                    !(idx === 3 && !currentUser?.create_edits) &&
                     <Button
                         key={idx}
                         style={{ width: "20%" }}

@@ -94,7 +94,8 @@ sendSigninSuccessInfo = async (res, user) => {
     roles: authorities,
     accessToken: (validSubs.length > 0 || authorities.includes("ROLE_ADMIN")) && token,
     subscription: validSubs,
-    user_config: userConf
+    user_config: userConf,
+    create_edits: user.create_edits
   });
 }
 
