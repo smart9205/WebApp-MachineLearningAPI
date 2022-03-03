@@ -91,8 +91,8 @@ export default function Coach() {
         )
     else return (
         <Box classes={classes['@global']} style={{ background: "white", paddingTop: 8 }}>
-            <Box sx={{ mx: 1, mt: 1, display: drawOpen ? "flex" : "none", gap: 1 }} >
-                {["Games", "Team Stats", "Game Stats", "My Edits"].map((title, idx) =>
+            <Box sx={{ mx: 1, mt: 1, display: "flex", gap: 1 }} >
+                {["Games", "Team Stats", "Player Stats", "My Edits"].map((title, idx) =>
                     <Button
                         key={idx}
                         style={{ width: "20%" }}
@@ -117,49 +117,51 @@ export default function Coach() {
                     }}
                 />
             </Box>
-            <Paper sx={{ m: 1 }}>
-                <Box sx={{ px: 1, display: drawOpen ? "flex" : "none", minHeight: 50, maxHeight: 350, overflowY: 'auto' }}>
-                    {gameList.length === 0 ?
-                        <Box sx={{
-                            width: "100%",
-                            height: "100%",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center"
-                        }}>No Game</Box> :
-                        <Grid container spacing={2} >
-                            {gameList.map((g) => (
-                                <Grid item xs={6} md={3} key={g.id} >
-                                    <Paper
-                                        sx={{ m: 1 }}
-                                        style={game !== g ? { opacity: 0.5 } : {}}
-                                        onClick={() => { setState({ game: g }) }}
-                                    >
-                                        <div
-                                            className='gameImage'
-                                            style={{ backgroundImage: `url(${g?.image?.length > 0 ? g.image : VIDEO_ICON})`, width: 100, height: 70 }}>
-                                        </div>
-                                        <div>
-                                            <div>{moment(g.date).format('DD MMM, YYYY hh:mm')}</div>
-                                            <div>{g.home_team_name}</div>
-                                            <div>{g.away_team_name}</div>
-                                        </div>
-                                    </Paper>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    }
-                </Box>
-                <Box sx={{ textAlign: "center", borderTop: "1px #80808038 solid", m: '0 10px' }}>
-                    <IconButton onClick={() => setDrawOpen((v) => !v)} sx={{ background: '#8080804d' }}>
-                        {
-                            drawOpen ?
-                                <ArrowDropUpIcon /> :
-                                <ArrowDropDownIcon />
+            {curTab !== 1 && curTab !== 2 &&
+                <Paper sx={{ m: 1 }}>
+                    <Box sx={{ px: 1, display: drawOpen ? "flex" : "none", minHeight: 50, maxHeight: 350, overflowY: 'auto' }}>
+                        {gameList.length === 0 ?
+                            <Box sx={{
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}>No Game</Box> :
+                            <Grid container spacing={2} >
+                                {gameList.map((g) => (
+                                    <Grid item xs={6} md={3} key={g.id} >
+                                        <Paper
+                                            sx={{ m: 1 }}
+                                            style={game !== g ? { opacity: 0.5 } : {}}
+                                            onClick={() => { setState({ game: g }) }}
+                                        >
+                                            <div
+                                                className='gameImage'
+                                                style={{ backgroundImage: `url(${g?.image?.length > 0 ? g.image : VIDEO_ICON})`, width: 100, height: 70 }}>
+                                            </div>
+                                            <div>
+                                                <div>{moment(g.date).format('DD MMM, YYYY hh:mm')}</div>
+                                                <div>{g.home_team_name}</div>
+                                                <div>{g.away_team_name}</div>
+                                            </div>
+                                        </Paper>
+                                    </Grid>
+                                ))}
+                            </Grid>
                         }
-                    </IconButton>
-                </Box>
-            </Paper>
+                    </Box>
+                    <Box sx={{ textAlign: "center", borderTop: "1px #80808038 solid", m: '0 10px' }}>
+                        <IconButton onClick={() => setDrawOpen((v) => !v)} sx={{ background: '#8080804d' }}>
+                            {
+                                drawOpen ?
+                                    <ArrowDropUpIcon /> :
+                                    <ArrowDropDownIcon />
+                            }
+                        </IconButton>
+                    </Box>
+                </Paper>
+            }
 
             <Box className='coach-down-side'
                 style={{
