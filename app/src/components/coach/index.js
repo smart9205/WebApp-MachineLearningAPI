@@ -11,6 +11,7 @@ import gameService from '../../services/game.service'
 import { makeStyles } from '@mui/styles';
 
 import GameTab from './Tabs/gameTab';
+import MyEditsTab from './Tabs/myEditsTab';
 
 const styles = {
     loader: {
@@ -173,7 +174,7 @@ export default function Coach() {
                 {curTab === 0 && <GameTab allTagList={allTagList} game={game} />}
                 {curTab === 1 && <></>}
                 {curTab === 2 && <></>}
-                {curTab === 3 && <></>}
+                {curTab === 3 && <MyEditsTab allTagList={allTagList} game={game} />}
             </Box>
         </Box>
     )

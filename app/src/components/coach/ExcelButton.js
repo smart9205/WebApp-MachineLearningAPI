@@ -14,13 +14,16 @@ const ExcelButton = ({ team, ...rest }) => {
 		buttonRef.current.click();
 	}
 
+	console.log("team", team)
 	return (
 		<div {...rest}>
 			<Button variant="outlined" onClick={downloadExcel}>{'Export'}</Button>
 			<ExcelFile element={<button style={{ display: 'none' }} ref={buttonRef}></button>}>
 				<ExcelSheet data={team} name="Team Tags">
+					<ExcelColumn label="Date" value="updatedAt" />
 					<ExcelColumn label="Start Time" value="t_start_time" />
 					<ExcelColumn label="End Time" value="t_end_time" />
+					<ExcelColumn label="Period" value="period_name" />
 					<ExcelColumn label="Offensive Team" value="offensive_team_name" />
 					<ExcelColumn label="Defensive Team" value="defensive_team_name" />
 					<ExcelColumn label="First Name" value="player_fname" />

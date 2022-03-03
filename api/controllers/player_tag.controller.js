@@ -186,6 +186,12 @@ exports.getByTeam = (req, res) => {
       public."Players".l_name as player_lname,
       public."Players".jersey_number as jersey,
       public."Team_Tags".period,
+      CASE
+        WHEN public."Team_Tags".period = 1 THEN '1st Half'
+        WHEN public."Team_Tags".period = 2 THEN '2nd Half'
+        ELSE 'Overtime'
+      END 
+      AS period_name,
       public."Team_Tags".start_time as t_start_time,
       public."Team_Tags".end_time as t_end_time,
       offenseTeam.name as offensive_team_name,
