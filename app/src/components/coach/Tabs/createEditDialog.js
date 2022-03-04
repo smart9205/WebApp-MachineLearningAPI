@@ -149,8 +149,8 @@ const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
                         <Grid item xs={4} key={idx}>
                             <Button
                                 key={idx}
-                                variant={idx === curSelect ? "contained" : "outlined"}
-                                onClick={() => setCurSelect(idx)}
+                                variant={idx === curSelect && !player ? "contained" : "outlined"}
+                                onClick={() => { setCurSelect(idx); setState({ player: null }) }}
                                 sx={{ m: 1 }}
                             >
                                 {label}
