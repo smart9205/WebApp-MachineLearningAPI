@@ -13,21 +13,49 @@ import {
     InputLabel,
     TextField,
     Autocomplete,
-    Grid
+    Grid,
+    OutlinedInput,
+    Chip,
 } from '@mui/material'
+import { useTheme } from '@mui/material/styles';
 import moment from 'moment'
 import gameService from "../../../services/game.service";
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
+function getStyles(name, action, theme) {
+    return {
+        fontWeight:
+            action.indexOf(name) === -1
+                ? theme.typography.fontWeightRegular
+                : theme.typography.fontWeightMedium,
+    };
+}
+
+
 const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
+
+    const theme = useTheme();
+
     const [curSelect, setCurSelect] = useState(0)
+
+    const [action, setAction] = useState([])
+    const [actionType, setActionType] = useState([])
+    const [actionResult, setActionResult] = useState([])
+
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         actionList: [],
         actionTypeList: [],
         actionResultList: [],
-
-        action: 0,
-        actionType: 0,
-        actionResult: 0,
 
         team: teamList[0] ?? null,
         gameList: [],
@@ -35,7 +63,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
 
         player: playerList[0] ?? null,
     })
-    const { actionList, actionTypeList, actionResultList, action, actionType, actionResult, team, gameList, game, player } = state
+    const { actionList, actionTypeList, actionResultList, team, gameList, game, player } = state
 
     useEffect(() => {
         gameService.getAllActions().then(res => setState({ actionList: res, action: res[0] ?? null }))
@@ -50,23 +78,25 @@ const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
         })
     }, [team])
 
-    const handleChangeAction = (e) => {
-        setState({ action: e.target.value })
-    }
-
-    const handleChangeActionType = (e) => {
-        setState({ actionType: e.target.value })
-    }
-
-    const handleChangeActionResult = (e) => {
-        setState({ actionResult: e.target.value })
-    }
 
     const handleSearch = () => {
         console.log("handle search")
     }
 
-    console.log("playerlist", gameList)
+    const handleChangeAction = (event) => {
+        const { target: { value } } = event;
+        setAction(typeof value === 'string' ? value.split(',') : value);
+    };
+
+    const handleChangeActionType = (event) => {
+        const { target: { value } } = event;
+        setActionType(typeof value === 'string' ? value.split(',') : value);
+    };
+
+    const handleChangeActionResult = (event) => {
+        const { target: { value } } = event;
+        setActionResult(typeof value === 'string' ? value.split(',') : value);
+    };
 
     return (
         <Dialog
@@ -84,6 +114,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
                             value={team}
                             fullWidth
                             isOptionEqualToValue={(option, value) => option && option.team_name}
+                            getOptionSelected={(option, value) => option.id === value.id}
                             disableClearable
                             getOptionLabel={(t) => `${t.team_name}`}
                             renderInput={(params) => (
@@ -100,6 +131,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
                             value={game}
                             fullWidth
                             isOptionEqualToValue={(option, value) => option && option.team_name}
+                            getOptionSelected={(option, value) => option.id === value.id}
                             disableClearable
                             getOptionLabel={(t) =>
                                 `${t.season_name} - ${t.league_name} - ${t.home_team_name} VS ${t.away_team_name} - ${moment(t.date).format('DD MMM, YYYY')}`}
@@ -131,6 +163,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
                             value={player}
                             fullWidth
                             isOptionEqualToValue={(option, value) => option && option.name}
+                            getOptionSelected={(option, value) => option.id === value.id}
                             disableClearable
                             getOptionLabel={(t) => `${t.name}`}
                             renderInput={(params) => (
@@ -144,51 +177,77 @@ const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
                 </Grid>
                 <Box sx={{ display: "flex", gap: 1 }}>
                     <FormControl fullWidth>
-                        <InputLabel id="action-select-label">Action</InputLabel>
+                        <InputLabel id="select-multiple-action-label">Actions</InputLabel>
                         <Select
-                            labelId="action-select-label"
-                            id="action-select"
+                            labelId="select-multiple-action-label"
+                            id="select-multiple-action"
+                            multiple
                             value={action}
-                            label="Action"
-                            fullWidth
                             onChange={handleChangeAction}
+                            input={<OutlinedInput id="select-multiple-action" label="Actions" />}
+                            renderValue={(selected) => (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    {selected.map((value, idx) => (
+                                        <Chip key={idx} label={value?.name} />
+                                    ))}
+                                </Box>
+                            )}
+                            MenuProps={MenuProps}
                         >
-                            {actionList.map((action, idx) =>
-                                <MenuItem key={idx} value={action}>{action?.name}</MenuItem>
+                            {actionList.map((a, idx) =>
+                                <MenuItem key={idx} value={a} style={getStyles(a, action, theme)}>{a?.name}</MenuItem>
                             )}
                         </Select>
                     </FormControl>
-                    <FormControl fullWidth>
-                        <InputLabel id="action-select-label">Action Types</InputLabel>
 
-                        <Select
-                            labelId="action-select-label"
-                            id="action-select"
-                            value={actionType}
-                            label="Action Type"
-                            fullWidth
-                            onChange={handleChangeActionType}
-                        >
-                            {actionTypeList.map((actionType, idx) =>
-                                <MenuItem key={idx} value={actionType}>{actionType?.name}</MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
                     <FormControl fullWidth>
-                        <InputLabel id="action-select-label">Action Results</InputLabel>
+                        <InputLabel id="select-multiple-actiontype-label">Action Types</InputLabel>
                         <Select
-                            labelId="action-result-select-label"
-                            id="action-result-select"
-                            value={actionResult}
-                            label="Action Result"
-                            fullWidth
-                            onChange={handleChangeActionResult}
+                            labelId="select-multiple-actiontype-label"
+                            id="select-multiple-actiontype"
+                            multiple
+                            value={actionType}
+                            onChange={handleChangeActionType}
+                            input={<OutlinedInput id="select-multiple-actiontype" label="Action Types" />}
+                            renderValue={(selected) => (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    {selected.map((value, idx) => (
+                                        <Chip key={idx} label={value?.name} />
+                                    ))}
+                                </Box>
+                            )}
+                            MenuProps={MenuProps}
                         >
-                            {actionResultList.map((actionResult, idx) =>
-                                <MenuItem key={idx} value={actionResult}>{actionResult?.name}</MenuItem>
+                            {actionTypeList.map((a, idx) =>
+                                <MenuItem key={idx} value={a} style={getStyles(a, actionType, theme)}>{a?.name}</MenuItem>
                             )}
                         </Select>
                     </FormControl>
+
+                    <FormControl fullWidth>
+                        <InputLabel id="select-multiple-action-label">Action Results</InputLabel>
+                        <Select
+                            labelId="select-multiple-action-label"
+                            id="select-multiple-action"
+                            multiple
+                            value={actionResult}
+                            onChange={handleChangeActionResult}
+                            input={<OutlinedInput id="select-multiple-action" label="Action Results" />}
+                            renderValue={(selected) => (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    {selected.map((value, idx) => (
+                                        <Chip key={idx} label={value?.name} />
+                                    ))}
+                                </Box>
+                            )}
+                            MenuProps={MenuProps}
+                        >
+                            {actionResultList.map((a, idx) =>
+                                <MenuItem key={idx} value={a} style={getStyles(a, actionResult, theme)}>{a?.name}</MenuItem>
+                            )}
+                        </Select>
+                    </FormControl>
+
                 </Box>
             </DialogContent>
             <DialogActions>
