@@ -39,7 +39,7 @@ export default function Coach() {
     const classes = useStyles();
 
     const { user: currentUser } = useSelector((state) => state.auth);
-    const [curTab, setCurTab] = useState(0)
+    const [curTab, setCurTab] = useState(3)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamList: [],
         team: null,

@@ -1,16 +1,20 @@
 import React, { useState, useReducer } from "react";
 
-import _ from 'lodash'
-import { Paper, Box, IconButton, Button, Typography } from '@mui/material'
+import {
+    Paper,
+    Box,
+    IconButton,
+    Button,
+} from '@mui/material'
 
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 import TeamTagTable from '../TeamTagTable';
-import IndividualTagTable from '../IndividualTagTable';
-import TeamAccordion from '../TeamAccordion';
 import VideoPlayer from '../VideoPlayer';
+import CreateEditDialog from "./createEditDialog";
 const MyEditsTab = ({ allTagList, game }) => {
+    const [open, setOpen] = useState(false)
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -18,7 +22,7 @@ const MyEditsTab = ({ allTagList, game }) => {
         actionTagList: [],
         playerList: [],
     })
-    const { teamTagList, actionTagList, playerList } = state
+    const { teamTagList, actionTagList, playerList, } = state
 
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -27,13 +31,18 @@ const MyEditsTab = ({ allTagList, game }) => {
         videoPlay: false,
     })
 
+    const handleOpen = (flag) => {
+        setOpen(flag)
+    }
+
     return (
         <>
+            <CreateEditDialog open={open} handleOpen={handleOpen} />
             <Box
                 style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}>
                 <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h5 style={{ color: 'black', margin: '0.5rem 1rem' }}>My Edits</h5>
-                    <Button variant="outlined" onClick={() => { }}>New Edits</Button>
+                    <Button variant="outlined" onClick={() => handleOpen(true)}>New Edits</Button>
                 </Box>
             </Box>
             <IconButton
