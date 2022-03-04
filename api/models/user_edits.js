@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     processed: DataTypes.INTEGER,
     video_url: DataTypes.STRING,
+    
     offensive_team_id: DataTypes.INTEGER,
     defensive_team_id: DataTypes.INTEGER,
     player_id: DataTypes.INTEGER,
