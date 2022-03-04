@@ -21,8 +21,8 @@ const ExcelButton = ({ team, ...rest }) => {
 			<ExcelFile element={<button style={{ display: 'none' }} ref={buttonRef}></button>}>
 				<ExcelSheet data={team} name="Team Tags">
 					<ExcelColumn label="Date" value="tag_date" />
-					<ExcelColumn label="Start Time" value="t_start_time" />
-					<ExcelColumn label="End Time" value="t_end_time" />
+					<ExcelColumn label="Start Time" value="start_time" />
+					<ExcelColumn label="End Time" value="end_time" />
 					<ExcelColumn label="Period" value="period_name" />
 					<ExcelColumn label="Offensive Team" value="offensive_team_name" />
 					<ExcelColumn label="Defensive Team" value="defensive_team_name" />
