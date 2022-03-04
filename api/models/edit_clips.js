@@ -16,13 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Edit_Clips.init({
     edit_id: DataTypes.INTEGER,
     start_time: DataTypes.STRING,
-    end_time: DataTypes.STRING,
-    offensive_team_id: DataTypes.INTEGER,
-    defensive_team_id: DataTypes.INTEGER,
-    player_id: DataTypes.INTEGER,
-    action_id: DataTypes.INTEGER,
-    action_type_id: DataTypes.INTEGER,
-    action_result_id: DataTypes.INTEGER
+    end_time: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Edit_Clips',

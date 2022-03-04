@@ -13,16 +13,15 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import TeamTagTable from '../TeamTagTable';
 import VideoPlayer from '../VideoPlayer';
 import CreateEditDialog from "./createEditDialog";
-const MyEditsTab = ({ allTagList, game }) => {
+const MyEditsTab = ({ teamList, game, playerList }) => {
     const [open, setOpen] = useState(false)
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamTagList: [],
         actionTagList: [],
-        playerList: [],
     })
-    const { teamTagList, actionTagList, playerList, } = state
+    const { teamTagList, actionTagList, } = state
 
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -37,7 +36,7 @@ const MyEditsTab = ({ allTagList, game }) => {
 
     return (
         <>
-            <CreateEditDialog open={open} handleOpen={handleOpen} />
+            <CreateEditDialog open={open} handleOpen={handleOpen} teamList={teamList} playerList={playerList} />
             <Box
                 style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}>
                 <Box style={{ display: 'flex', justifyContent: 'space-between' }}>

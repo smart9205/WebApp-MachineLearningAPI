@@ -24,6 +24,8 @@ export default function IndividualTagTable({
   const [loading, setLoading] = useState(false)
   const [selectedRow, setSelectedRow] = useState(rows[0])
 
+  console.log("offenseTeam", offenseTeam)
+
   useEffect(() => {
     setSelectedRow(rows[0])
   }, [rows])

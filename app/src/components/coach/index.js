@@ -43,12 +43,13 @@ export default function Coach() {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamList: [],
         team: null,
+        playerList: [],
 
         gameList: [],
         game: null,
         allTagList: [],
     })
-    const { teamList, team, gameList, game, allTagList, } = state
+    const { teamList, team, gameList, game, allTagList, playerList } = state
 
     const [drawOpen, setDrawOpen] = useState(true)
 
@@ -94,34 +95,39 @@ export default function Coach() {
         )
     else return (
         <Box classes={classes['@global']} style={{ background: "white", paddingTop: 8 }}>
-            <Box sx={{ mx: 1, mt: 1, display: "flex", gap: 1 }} >
-                {["Games", "Team Stats", "Player Stats", "My Edits"].map((title, idx) =>
-                    !(idx === 3 && !currentUser?.create_edits) &&
-                    <Button
-                        key={idx}
-                        style={{ width: "20%" }}
-                        variant={curTab === idx ? "contained" : "outlined"}
-                        onClick={() => setCurTab(idx)}
-                    >
-                        {title}
-                    </Button>
-                )}
-                <Autocomplete
-                    options={teamList}
-                    value={team}
-                    fullWidth
-                    isOptionEqualToValue={(option, value) => option && option.team_name}
-                    disableClearable
-                    getOptionLabel={(t) => `${t.season_name} - ${t.league_name} - ${t.team_name}`}
-                    renderInput={(params) => (
-                        <TextField {...params} label="My Team" />
+            <Grid container spacing={2} >
+                <Grid item xs={6} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    {["Games", "Team Stats", "Player Stats", "My Edits"].map((title, idx) =>
+                        !(idx === 3 && !currentUser?.create_edits) &&
+                        <Button
+                            fullWidth
+                            key={idx}
+                            style={{ height: "50px" }}
+                            variant={curTab === idx ? "contained" : "outlined"}
+                            onClick={() => setCurTab(idx)}
+                        >
+                            {title}
+                        </Button>
                     )}
-                    onChange={(event, newValue) => {
-                        setState({ team: newValue });
-                    }}
-                />
-            </Box>
-            {curTab !== 1 && curTab !== 2 &&
+                </Grid>
+                <Grid item xs={6}>
+                    {curTab !== 3 && <Autocomplete
+                        options={teamList}
+                        value={team}
+                        fullWidth
+                        isOptionEqualToValue={(option, value) => option && option.team_name}
+                        disableClearable
+                        getOptionLabel={(t) => `${t.season_name} - ${t.league_name} - ${t.team_name}`}
+                        renderInput={(params) => (
+                            <TextField {...params} label="My Team" />
+                        )}
+                        onChange={(event, newValue) => {
+                            setState({ team: newValue });
+                        }}
+                    />}
+                </Grid>
+            </Grid>
+            {curTab === 0 &&
                 <Paper sx={{ m: 1 }}>
                     <Box sx={{ px: 1, display: drawOpen ? "flex" : "none", minHeight: 50, maxHeight: 350, overflowY: 'auto' }}>
                         {gameList.length === 0 ?
@@ -145,7 +151,7 @@ export default function Coach() {
                                                 style={{ backgroundImage: `url(${g?.image?.length > 0 ? g.image : VIDEO_ICON})`, width: 100, height: 70 }}>
                                             </div>
                                             <div>
-                                                <div>{moment(g.date).format('DD MMM, YYYY hh:mm')}</div>
+                                                <div>{moment(g.date).format('DD MMM, YYYY')}</div>
                                                 <div>{g.home_team_name}</div>
                                                 <div>{g.away_team_name}</div>
                                             </div>
@@ -167,15 +173,16 @@ export default function Coach() {
                 </Paper>
             }
 
-            <Box className='coach-down-side'
+            <Paper className='coach-down-side'
                 style={{
+                    marginTop: 8,
                     display: "flex", height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
                 }}>
-                {curTab === 0 && <GameTab allTagList={allTagList} game={game} />}
+                {curTab === 0 && <GameTab allTagList={allTagList} game={game} playerList={playerList} />}
                 {curTab === 1 && <></>}
                 {curTab === 2 && <></>}
-                {curTab === 3 && <MyEditsTab allTagList={allTagList} game={game} />}
-            </Box>
+                {curTab === 3 && <MyEditsTab teamList={teamList} game={game} playerList={playerList} />}
+            </Paper>
         </Box>
     )
 }
