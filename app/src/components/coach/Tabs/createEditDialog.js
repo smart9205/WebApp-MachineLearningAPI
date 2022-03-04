@@ -48,6 +48,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
 
     const [curSelect, setCurSelect] = useState(0)
 
+    const [game, setGame] = useState([])
     const [action, setAction] = useState([])
     const [actionType, setActionType] = useState([])
     const [actionResult, setActionResult] = useState([])
@@ -59,12 +60,11 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
 
         team: teamList[0] ?? null,
         gameList: [],
-        game: null,
 
         playerList: [],
         player: null,
     })
-    const { actionList, actionTypeList, actionResultList, team, gameList, game, player, playerList } = state
+    const { actionList, actionTypeList, actionResultList, team, gameList, player, playerList } = state
 
     useEffect(() => {
         gameService.getAllActions().then(res => setState({ actionList: res, action: res[0] ?? null }))
@@ -77,11 +77,13 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
         gameService.getAllGamesByTeam(team.season_id, team.league_id, team.team_id).then((res) => {
             setState({ gameList: res, game: res[0] ?? null })
         })
+        setGame([])
     }, [team])
 
     useEffect(() => {
-        if (!!team && !!game) {
-            gameService.getGameTeamPlayersByTeam(team.team_id, game?.id).then((res) => {
+        if (!!team && game.length > 0) {
+            console.log("gamelist", game)
+            gameService.getGameTeamPlayersByTeam(team.team_id, game.map(g => g.id).join(",")).then((res) => {
                 setState({ playerList: res })
             })
         }
@@ -98,6 +100,12 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
     const handleSearch = () => {
         console.log("handle search")
     }
+
+    const handleChangeGame = (event) => {
+        const { target: { value } } = event;
+        if (value.length > 5) return;
+        setGame(typeof value === 'string' ? value.split(',') : value);
+    };
 
     const handleChangeAction = (event) => {
         const { target: { value } } = event;
@@ -142,22 +150,31 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                         />
                     </Grid>
                     <Grid item xs={8} >
-                        <Autocomplete
-                            options={gameList}
-                            value={game}
-                            fullWidth
-                            isOptionEqualToValue={(option, value) => option && option.team_name}
-                            getOptionSelected={(option, value) => option.id === value.id}
-                            disableClearable
-                            getOptionLabel={(t) =>
-                                `${t.season_name} - ${t.league_name} - ${t.home_team_name} VS ${t.away_team_name} - ${moment(t.date).format('DD MMM, YYYY')}`}
-                            renderInput={(params) => (
-                                <TextField {...params} label="Game" />
-                            )}
-                            onChange={(event, newValue) => {
-                                setState({ game: newValue });
-                            }}
-                        />
+                        <FormControl fullWidth>
+                            <InputLabel id="select-multiple-game-label">Games</InputLabel>
+                            <Select
+                                labelId="select-multiple-game-label"
+                                id="select-multiple-game"
+                                multiple
+                                value={game}
+                                onChange={handleChangeGame}
+                                input={<OutlinedInput id="select-multiple-game" label="Games" />}
+                                renderValue={(selected) => (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                        {selected.map((value, idx) => (
+                                            <Chip key={idx} label={`${value.season_name} - ${value.league_name} - ${moment(value.date).format('DD MMM, YYYY')} - ${value.home_team_name} VS ${value.away_team_name}`} />
+                                        ))}
+                                    </Box>
+                                )}
+                                MenuProps={MenuProps}
+                            >
+                                {gameList.map((a, idx) =>
+                                    <MenuItem key={idx} value={a} style={getStyles(a, game, theme)}>
+                                        {`${a.season_name} - ${a.league_name} - ${moment(a.date).format('DD MMM, YYYY')} - ${a.home_team_name} VS ${a.away_team_name}`}
+                                    </MenuItem>
+                                )}
+                            </Select>
+                        </FormControl>
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} sx={{ my: 2 }}>

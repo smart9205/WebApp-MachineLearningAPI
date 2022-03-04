@@ -86,36 +86,38 @@ exports.getPlayersByGame = async (req, res) => {
 
 exports.getPlayersByTeam = async (req, res) => {
   const teamId = req.params.team;
-  const gameId = req.params.game;
-  try {
-    game = await Game.findByPk(gameId);
-    if (!game) return res.status(500).send({ message: "Game not found!" });
-  } catch (e) {
-    return res.status(500).send({ message: "Game not found!" });
-  }
+  const gameIds = req.params.game;
+
   let team;
   try {
     team = await Sequelize.query(`
-      SELECT *, 
-        public."Players".id as id,
-        public."Player_Positions".name as position_name,
-        public."Player_Positions".short as position_short,
-        CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
-        FROM public."Players" 
-        JOIN 
-          public."Team_Players" on public."Players".id = public."Team_Players".player_id
-        LEFT JOIN 
-          public."Player_Positions" on public."Players".position = public."Player_Positions".id
-      WHERE
-        season_id = ${game.season_id} and 
-        league_id = ${game.league_id} and 
-        team_id = ${teamId} 
-      order by public."Player_Positions".sort_order
+    select * from (  SELECT 
+      DISTINCT ON(public."Players".id) *, public."Players".id as id,
+      public."Player_Positions".name as position_name,
+      public."Player_Positions".short as position_short,
+      CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
+      FROM public."Players" 
+      JOIN 
+        public."Team_Players" on public."Players".id = public."Team_Players".player_id
+      LEFT JOIN 
+        public."Games" 
+        on 
+        public."Team_Players".season_id = public."Games".season_id AND 
+        public."Team_Players".league_id = public."Games".league_id AND
+        (public."Team_Players".team_id = public."Games".home_team_id OR 
+        public."Team_Players".team_id = public."Games".away_team_id) 
+      LEFT JOIN 
+        public."Player_Positions" on public."Players".position = public."Player_Positions".id
+    WHERE
+      public."Games".id in (${gameIds}) and
+      team_id = ${teamId}
+    order by public."Players".id) as a
+  order by sort_order
     `);
 
   } catch (e) {
   }
-  res.send(team[0]);
+  res.send(team?.[0]);
 }
 
 
