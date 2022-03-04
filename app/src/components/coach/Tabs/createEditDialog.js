@@ -42,7 +42,7 @@ function getStyles(name, action, theme) {
 }
 
 
-const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
+const CreateEditDialog = ({ open, handleOpen, teamList }) => {
 
     const theme = useTheme();
 
@@ -61,9 +61,10 @@ const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
         gameList: [],
         game: null,
 
-        player: playerList[0] ?? null,
+        playerList: [],
+        player: null,
     })
-    const { actionList, actionTypeList, actionResultList, team, gameList, game, player } = state
+    const { actionList, actionTypeList, actionResultList, team, gameList, game, player, playerList } = state
 
     useEffect(() => {
         gameService.getAllActions().then(res => setState({ actionList: res, action: res[0] ?? null }))
@@ -77,6 +78,21 @@ const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
             setState({ gameList: res, game: res[0] ?? null })
         })
     }, [team])
+
+    useEffect(() => {
+        if (!!team && !!game) {
+            gameService.getGameTeamPlayersByTeam(team.team_id, game?.id).then((res) => {
+                setState({ playerList: res })
+            })
+        }
+    }, [team, game])
+
+    useEffect(() => {
+        setAction([])
+        setActionType([])
+        setActionResult([])
+        setState({ player: null })
+    }, [curSelect])
 
 
     const handleSearch = () => {
@@ -150,7 +166,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
                             <Button
                                 key={idx}
                                 variant={idx === curSelect && !player ? "contained" : "outlined"}
-                                onClick={() => { setCurSelect(idx); setState({ player: null }) }}
+                                onClick={() => setCurSelect(idx)}
                                 sx={{ m: 1 }}
                             >
                                 {label}
@@ -170,6 +186,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList, playerList }) => {
                                 <TextField {...params} label="Individual" />
                             )}
                             onChange={(event, newValue) => {
+                                setCurSelect(2);
                                 setState({ player: newValue });
                             }}
                         />

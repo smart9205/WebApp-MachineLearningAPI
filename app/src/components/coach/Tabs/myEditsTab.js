@@ -36,7 +36,11 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
 
     return (
         <>
-            <CreateEditDialog open={open} handleOpen={handleOpen} teamList={teamList} playerList={playerList} />
+            <CreateEditDialog
+                open={open}
+                handleOpen={handleOpen}
+                teamList={teamList}
+            />
             <Box
                 style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}>
                 <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
