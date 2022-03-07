@@ -87,13 +87,18 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                 setState({ playerList: res })
             })
         }
+        setAction([])
+        setActionType([])
+        setActionResult([])
+        setState({ player: null })
     }, [team, game])
 
     useEffect(() => {
         setAction([])
         setActionType([])
         setActionResult([])
-        setState({ player: null })
+        if (curSelect !== 2)
+            setState({ player: null })
     }, [curSelect])
 
 
