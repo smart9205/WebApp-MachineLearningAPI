@@ -162,7 +162,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                         {selected.map((value, idx) => (
-                                            <Chip key={idx} label={`${value.season_name} - ${value.league_name} - ${moment(value.date).format('DD MMM, YYYY')} - ${value.home_team_name} VS ${value.away_team_name}`} />
+                                            <Chip key={idx} label={`${moment(value.date).format('DD MMM, YYYY')} - ${value.season_name} - ${value.league_name} - ${value.home_team_name} VS ${value.away_team_name}`} />
                                         ))}
                                     </Box>
                                 )}
@@ -170,7 +170,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                             >
                                 {gameList.map((a, idx) =>
                                     <MenuItem key={idx} value={a} style={getStyles(a, game, theme)}>
-                                        {`${a.season_name} - ${a.league_name} - ${moment(a.date).format('DD MMM, YYYY')} - ${a.home_team_name} VS ${a.away_team_name}`}
+                                        {`${moment(a.date).format('DD MMM, YYYY')} - ${a.season_name} - ${a.league_name} - ${a.home_team_name} VS ${a.away_team_name}`}
                                     </MenuItem>
                                 )}
                             </Select>

@@ -94,7 +94,7 @@ export default function Coach() {
             </div>
         )
     else return (
-        <Box classes={classes['@global']} style={{ background: "white", paddingTop: 8 }}>
+        <Box classes={classes['@global']} style={{ background: "white", padding: "8px 8px 0" }}>
             <Grid container spacing={2} >
                 <Grid item xs={6} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     {["Games", "Team Stats", "Player Stats", "My Edits"].map((title, idx) =>
@@ -140,7 +140,7 @@ export default function Coach() {
                             }}>No Game</Box> :
                             <Grid container spacing={2} >
                                 {gameList.map((g) => (
-                                    <Grid item xs={6} md={3} key={g.id} >
+                                    <Grid item xs={6} md={2} key={g.id} >
                                         <Paper
                                             sx={{ m: 1 }}
                                             style={game !== g ? { opacity: 0.5 } : {}}

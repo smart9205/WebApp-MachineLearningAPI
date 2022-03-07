@@ -20,7 +20,7 @@ const ExcelButton = ({ team, ...rest }) => {
 			<Button variant="outlined" onClick={downloadExcel}>{'Export'}</Button>
 			<ExcelFile element={<button style={{ display: 'none' }} ref={buttonRef}></button>}>
 				<ExcelSheet data={team} name="Team Tags">
-					<ExcelColumn label="Date" value="tag_date" />
+					<ExcelColumn label="Date" value="game_date" />
 					<ExcelColumn label="Start Time" value="start_time" />
 					<ExcelColumn label="End Time" value="end_time" />
 					<ExcelColumn label="Period" value="period_name" />

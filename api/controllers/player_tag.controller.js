@@ -196,9 +196,10 @@ exports.getByTeam = (req, res) => {
       public."Team_Tags".end_time as t_end_time,
       offenseTeam.name as offensive_team_name,
       defenseTeam.name as defensive_team_name,
-      to_char(public."Player_Tags"."updatedAt", 'DD Mon YYYY') as tag_date
+      to_char(public."Games"."date", 'DD Mon YYYY') as game_date
     FROM public."Player_Tags"
       LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+      LEFT JOIN public."Games" on public."Team_Tags".game_id = public."Games".id
       LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
       LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
       LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
