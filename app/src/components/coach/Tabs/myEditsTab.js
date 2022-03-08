@@ -22,6 +22,7 @@ import CreateEditDialog from "./createEditDialog";
 import gameService from "../../../services/game.service";
 import DeleteConfirmDialog from "../../../common/DeleteConfirmDialog";
 import EditNameDialog from "../../../common/EditNameDialolg";
+import IndividualTagTable from "../IndividualTagTable";
 
 const styles = {
     loader: {
@@ -49,9 +50,9 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamTagList: [],
-        actionTagList: [],
+        playerTagList: [],
     })
-    const { teamTagList, actionTagList, } = state
+    const { teamTagList, playerTagList, } = state
 
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -80,6 +81,10 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         setCurEdit(edit)
         gameService.getEditClipsByUserEditId(edit.id).then(res => {
             console.log("get EditClipsby userEditid", res)
+            setState({
+                teamTagList: res.filter(t => t.team_tag_id !== null),
+                playerTagList: res.filter(t => t.player_tag_id !== null),
+            })
         })
     }
 
@@ -174,44 +179,52 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                 }
             </IconButton>
             <Paper style={{ height: "100%", minWidth: 500 }} className="coach-tag-table">
-                <TeamTagTable
-                    sx={{ height: "70%", p: 1, width: "100%" }}
-                    rows={teamTagList}
-                    updateTagList={(newTeamTag) => { teamTagList.find(t => t.team_tag_id === newTeamTag.team_tag_id) }}
-                    handleRowClick={({ row, idx }) => {
-                        setCurTeamTagIdx(idx)
-                        setVideodata({
-                            idx,
-                            tagList: teamTagList.map(t => {
-                                return {
-                                    start_time: t.t_start_time,
-                                    end_time: t.t_end_time
-                                }
-                            }),
-                            autoPlay: true,
-                            videoPlay: false,
-                        })
-                    }
-                    }
-                    selected={curTeamTagIdx}
-                    onPlay={({ row, idx }) => {
-                        console.log("onplay", row, idx)
-                        setCurTeamTagIdx(idx)
-                        setVideodata({
-                            idx,
-                            tagList: teamTagList.map(t => {
-                                return {
-                                    start_time: t.t_start_time,
-                                    end_time: t.t_end_time
-                                }
-                            }),
-                            cnt: new Date(),
-                            autoPlay: true,
-                            videoPlay: true,
-                        })
-                    }}
-                />
-
+                {teamTagList.length > 0 &&
+                    <TeamTagTable
+                        sx={{ height: "100%", p: 1, width: "100%" }}
+                        rows={teamTagList}
+                        updateTagList={(newTeamTag) => { teamTagList.find(t => t.team_tag_id === newTeamTag.team_tag_id) }}
+                        handleRowClick={({ row, idx }) => {
+                            setCurTeamTagIdx(idx)
+                            setVideodata({
+                                idx,
+                                tagList: teamTagList,
+                                autoPlay: true,
+                                videoPlay: false,
+                            })
+                        }
+                        }
+                        selected={curTeamTagIdx}
+                        onPlay={({ row, idx }) => {
+                            console.log("onplay", row, idx)
+                            setCurTeamTagIdx(idx)
+                            setVideodata({
+                                idx,
+                                tagList: teamTagList,
+                                cnt: new Date(),
+                                autoPlay: true,
+                                videoPlay: true,
+                            })
+                        }}
+                    />
+                }
+                {playerTagList.length > 0 &&
+                    <IndividualTagTable
+                        sx={{ height: "100%", p: 1, width: "100%" }}
+                        rows={playerTagList}
+                        offenseTeam={playerList}
+                        updateTagList={() => { }}
+                        onPlay={(row) => {
+                            console.log("play", row)
+                            setVideodata({
+                                idx: 0,
+                                autoPlay: false,
+                                tagList: [row],
+                                videoPlay: true
+                            })
+                        }}
+                    />
+                }
             </Paper>
             <VideoPlayer
                 videoData={videoData}

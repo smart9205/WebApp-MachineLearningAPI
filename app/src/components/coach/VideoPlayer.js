@@ -65,7 +65,6 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
         if (!ready) return;
 
         if (!tagList.length) return
-        console.log("VideoData", videoData)
 
         playTagByIdx(idx)
         setCurIdx(idx)
