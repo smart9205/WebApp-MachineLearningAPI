@@ -16,6 +16,7 @@ import {
     Grid,
     OutlinedInput,
     Chip,
+    CircularProgress
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles';
 import moment from 'moment'
@@ -29,6 +30,20 @@ const MenuProps = {
             maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
             width: 250,
         },
+    },
+};
+
+const styles = {
+    loader: {
+        position: 'absolute',
+        left: '0px',
+        top: '0px',
+        width: '100%',
+        height: '100%',
+        zIndex: 9999,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
     },
 };
 
@@ -46,6 +61,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
 
     const theme = useTheme();
 
+    const [loading, setLoading] = useState(false)
     const [nameOpen, setNameOpen] = useState(false)
     const [name, setName] = useState("")
     const [curSelect, setCurSelect] = useState(0)
@@ -69,9 +85,9 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
     const { actionList, actionTypeList, actionResultList, team, gameList, player, playerList } = state
 
     useEffect(() => {
-        gameService.getAllActions().then(res => setState({ actionList: res, action: res[0] ?? null }))
-        gameService.getAllActionTypes().then(res => setState({ actionTypeList: res, actionType: res[0] ?? null }))
-        gameService.getAllActionResults().then(res => setState({ actionResultList: res, actionResult: res[0] }))
+        gameService.getAllActions().then(res => setState({ actionList: res }))
+        gameService.getAllActionTypes().then(res => setState({ actionTypeList: res }))
+        gameService.getAllActionResults().then(res => setState({ actionResultList: res }))
     }, [])
 
     useEffect(() => {
@@ -83,8 +99,8 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
     }, [team])
 
     useEffect(() => {
+        if (!open) return
         if (!!team && game.length > 0) {
-            console.log("gamelist", game)
             gameService.getGameTeamPlayersByTeam(team.team_id, game.map(g => g.id).join(",")).then((res) => {
                 setState({ playerList: res })
             })
@@ -93,7 +109,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
         setActionType([])
         setActionResult([])
         setState({ player: null })
-    }, [team, game])
+    }, [team, game, open])
 
     useEffect(() => {
         setAction([])
@@ -131,6 +147,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
     };
 
     const handleSave = () => {
+        setLoading(true)
         gameService.addUserEdits({
             name,
             teamId: team?.id,
@@ -141,6 +158,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
             curSelect, // 0: offense, 1: defense, 2: individual 
             playerId: player?.id,
         }).then(res => {
+            setLoading(false)
             setNameOpen(false)
             handleOpen(false)
         })
@@ -148,6 +166,12 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
 
     return (
         <>
+            {
+                loading &&
+                <div style={styles.loader}>
+                    <CircularProgress />
+                </div>
+            }
             <Dialog
                 fullWidth
                 maxWidth={"sm"}

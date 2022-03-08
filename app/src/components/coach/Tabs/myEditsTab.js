@@ -9,19 +9,41 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    TableContainer
+    TableContainer,
+    CircularProgress,
 } from '@mui/material'
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-
 import TeamTagTable from '../TeamTagTable';
 import VideoPlayer from '../VideoPlayer';
 import CreateEditDialog from "./createEditDialog";
 import gameService from "../../../services/game.service";
+import DeleteConfirmDialog from "../../../common/DeleteConfirmDialog";
+import EditNameDialog from "../../../common/EditNameDialolg";
+
+const styles = {
+    loader: {
+        position: 'absolute',
+        left: '0px',
+        top: '0px',
+        width: '100%',
+        height: '100%',
+        zIndex: 9999,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+};
 
 const MyEditsTab = ({ teamList, game, playerList }) => {
+    const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
+    const [curEdit, setCurEdit] = useState(null)
+    const [deleteOpen, setDeleteOpen] = useState(false)
+    const [editName, setEditName] = useState("")
+    const [editOpen, setEditOpen] = useState(false)
     const [userEditList, setUserEditList] = useState([])
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
@@ -38,25 +60,65 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         videoPlay: false,
     })
 
-    useEffect(() => {
+    const initUserEdits = () => {
+        setLoading(true)
         gameService.getAllUserEdits().then(res => {
             console.log("all user Edits", res)
             setUserEditList(res)
+            setLoading(false)
         })
-    }, [])
+    }
+
+    useEffect(initUserEdits, [])
 
     const handleOpen = (flag) => {
         setOpen(flag)
+        if (!flag) initUserEdits()
     }
 
-    const handleUserEditDetail = (id) => {
-        gameService.getEditClipsByUserEditId(id).then(res => {
+    const handleUserEditDetail = (edit) => {
+        setCurEdit(edit)
+        gameService.getEditClipsByUserEditId(edit.id).then(res => {
             console.log("get EditClipsby userEditid", res)
+        })
+    }
+
+    const handleDeleteClose = () => {
+        setLoading(true)
+        setDeleteOpen(false)
+        gameService.deleteUserEdit(curEdit.id).then(res => {
+            setLoading(false)
+            initUserEdits()
+        }).catch(e => setLoading(false))
+    }
+
+    const handleEditClose = (name) => {
+        setEditOpen(false)
+        if (name.length === 0) return
+        setLoading(true)
+        gameService.updateUserEdit({ id: curEdit.id, name }).then(res => {
+            setLoading(false)
+            initUserEdits()
         })
     }
 
     return (
         <>
+            {loading &&
+                <div style={styles.loader}>
+                    <CircularProgress />
+                </div>
+            }
+            <DeleteConfirmDialog
+                open={deleteOpen}
+                handleDeleteClose={handleDeleteClose}
+            />
+            <EditNameDialog
+                open={editOpen}
+                name={editName}
+                setName={setEditName}
+                handleEditClose={handleEditClose}
+            />
             <CreateEditDialog
                 open={open}
                 handleOpen={handleOpen}
@@ -75,13 +137,31 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                                 <TableRow
                                     key={idx}
                                     hover
-                                    sx={{ height: 36 }}
-                                    onClick={() => handleUserEditDetail(userEdit.id)}
+                                    onClick={() => handleUserEditDetail(userEdit)}
                                 >
                                     <TableCell align="center">
                                         {idx + 1}
                                     </TableCell>
                                     <TableCell align="center">{userEdit.name}</TableCell>
+                                    <TableCell align="center" sx={{ width: 30 }}>
+                                        <IconButton
+                                            onClick={() => {
+                                                setEditOpen(true)
+                                                setEditName(userEdit.name)
+                                            }}
+                                            size="small"
+                                        >
+                                            <EditIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ width: 30 }}>
+                                        <IconButton
+                                            onClick={() => setDeleteOpen(true)}
+                                            size="small"
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             )}
                         </TableBody>
@@ -90,7 +170,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
             </Box>
             <IconButton
                 onClick={() => setShowAccordion((v) => !v)}
-                sx={{ background: '#8080804d', zIndex: 10, position: "absolute", left: showAccordion ? 310 : 10 }}>
+                sx={{ background: '#8080804d', zIndex: 10, position: "absolute", left: showAccordion ? 250 : 10 }}>
                 {showAccordion ?
                     <ArrowLeftIcon /> :
                     <ArrowRightIcon />

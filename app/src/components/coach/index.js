@@ -12,6 +12,8 @@ import { makeStyles } from '@mui/styles';
 
 import GameTab from './Tabs/gameTab';
 import MyEditsTab from './Tabs/myEditsTab';
+import TeamStatsTab from './Tabs/TeamStatsTab';
+import PlayerStatsTab from './Tabs/PlayerStatsTab';
 
 const styles = {
     loader: {
@@ -176,11 +178,12 @@ export default function Coach() {
             <Paper className='coach-down-side'
                 style={{
                     marginTop: 8,
-                    display: "flex", height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
+                    display: "flex",
+                    height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
                 }}>
                 {curTab === 0 && <GameTab allTagList={allTagList} game={game} playerList={playerList} />}
-                {curTab === 1 && <></>}
-                {curTab === 2 && <></>}
+                {curTab === 1 && <TeamStatsTab />}
+                {curTab === 2 && <PlayerStatsTab />}
                 {curTab === 3 && <MyEditsTab teamList={teamList} game={game} playerList={playerList} />}
             </Paper>
         </Box>
