@@ -1,10 +1,15 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 
 import {
     Paper,
     Box,
     IconButton,
     Button,
+    Table,
+    TableBody,
+    TableRow,
+    TableCell,
+    TableContainer
 } from '@mui/material'
 
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
@@ -13,8 +18,11 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import TeamTagTable from '../TeamTagTable';
 import VideoPlayer from '../VideoPlayer';
 import CreateEditDialog from "./createEditDialog";
+import gameService from "../../../services/game.service";
+
 const MyEditsTab = ({ teamList, game, playerList }) => {
     const [open, setOpen] = useState(false)
+    const [userEditList, setUserEditList] = useState([])
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -30,8 +38,21 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         videoPlay: false,
     })
 
+    useEffect(() => {
+        gameService.getAllUserEdits().then(res => {
+            console.log("all user Edits", res)
+            setUserEditList(res)
+        })
+    }, [])
+
     const handleOpen = (flag) => {
         setOpen(flag)
+    }
+
+    const handleUserEditDetail = (id) => {
+        gameService.getEditClipsByUserEditId(id).then(res => {
+            console.log("get EditClipsby userEditid", res)
+        })
     }
 
     return (
@@ -42,11 +63,30 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                 teamList={teamList}
             />
             <Box
-                style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}>
+                style={{ minWidth: 240, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none", paddingRight: 8 }}>
                 <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h5 style={{ color: 'black', margin: '0.5rem 1rem' }}>My Edits</h5>
                     <Button variant="outlined" onClick={() => handleOpen(true)}>New Edits</Button>
                 </Box>
+                <TableContainer component={Paper}>
+                    <Table aria-label="simple table">
+                        <TableBody>
+                            {userEditList.map((userEdit, idx) =>
+                                <TableRow
+                                    key={idx}
+                                    hover
+                                    sx={{ height: 36 }}
+                                    onClick={() => handleUserEditDetail(userEdit.id)}
+                                >
+                                    <TableCell align="center">
+                                        {idx + 1}
+                                    </TableCell>
+                                    <TableCell align="center">{userEdit.name}</TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Box>
             <IconButton
                 onClick={() => setShowAccordion((v) => !v)}

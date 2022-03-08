@@ -12,7 +12,7 @@ module.exports = app => {
 
 	app.post(
 		"/user_edits",
-		[authJwt.isAdmin],
+		[authJwt.isCoach],
 		controller.create
 	);
 
@@ -28,19 +28,19 @@ module.exports = app => {
 
 	app.put(
 		"/user_edits/:id",
-		[authJwt.isAdmin],
+		[authJwt.isCoach],
 		controller.update
 	);
 
 	app.delete(
 		"/user_edits/:id",
-		[authJwt.isAdmin],
+		[authJwt.isCoach],
 		controller.delete
 	);
 
 	app.delete(
 		"/user_edits",
-		[authJwt.isAdmin],
+		[authJwt.isCoach],
 		controller.deleteAll
 	);
 };

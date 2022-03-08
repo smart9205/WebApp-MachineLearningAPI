@@ -245,6 +245,25 @@ const addHighlight = (req) => {
   });
 }
 
+const addUserEdits = (req) => {
+  return axios.post(API_URL + "user_edits", req, { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+}
+
+const getAllUserEdits = () => {
+  return axios.get(API_URL + "user_edits", { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+}
+
+const getEditClipsByUserEditId = (id) => {
+  return axios.get(API_URL + `user_edits/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+    return response.data;
+  });
+}
+
+
 const getAllTeamTagsByGame = (id) => {
   return axios.get(API_URL + `team_tag/getbygame/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
     return response.data;
@@ -348,8 +367,11 @@ const gameService = {
   addCoachTeam,
   addHighlight,
 
-  getGame,
+  addUserEdits,
 
+  getGame,
+  getAllUserEdits,
+  getEditClipsByUserEditId,
   getTeamById,
   getSeasonById,
   getLeagueById,

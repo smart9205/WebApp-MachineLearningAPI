@@ -46,6 +46,8 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
 
     const theme = useTheme();
 
+    const [nameOpen, setNameOpen] = useState(false)
+    const [name, setName] = useState("")
     const [curSelect, setCurSelect] = useState(0)
 
     const [game, setGame] = useState([])
@@ -104,6 +106,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
 
     const handleSearch = () => {
         console.log("handle search")
+        setNameOpen(true)
     }
 
     const handleChangeGame = (event) => {
@@ -127,174 +130,214 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
         setActionResult(typeof value === 'string' ? value.split(',') : value);
     };
 
+    const handleSave = () => {
+        gameService.addUserEdits({
+            name,
+            teamId: team?.id,
+            gameIds: game.map(g => g.id),
+            actionIds: action.map(a => a.id),
+            actionTypeIds: actionType.map(a => a.id),
+            actionResultIds: actionResult.map(a => a.id),
+            curSelect, // 0: offense, 1: defense, 2: individual 
+            playerId: player?.id,
+        }).then(res => {
+            setNameOpen(false)
+            handleOpen(false)
+        })
+    }
+
     return (
-        <Dialog
-            fullWidth
-            maxWidth={"lg"}
-            open={open}
-            onClose={() => handleOpen(false)}
-        >
-            <DialogTitle>Create Edits</DialogTitle>
-            <DialogContent>
-                <Grid container spacing={2} sx={{ mt: 2 }}>
-                    <Grid item xs={4}>
-                        <Autocomplete
-                            options={teamList}
-                            value={team}
+        <>
+            <Dialog
+                fullWidth
+                maxWidth={"sm"}
+                open={nameOpen}
+                onClose={() => setNameOpen(false)}
+            >
+                <DialogTitle>Input Name</DialogTitle>
+                <DialogContent>
+                    <Box sx={{ pt: 1 }}>
+                        <TextField
                             fullWidth
-                            isOptionEqualToValue={(option, value) => option && option.team_name}
-                            getOptionSelected={(option, value) => option.id === value.id}
-                            disableClearable
-                            getOptionLabel={(t) => `${t.team_name}`}
-                            renderInput={(params) => (
-                                <TextField {...params} label="My Team" />
-                            )}
-                            onChange={(event, newValue) => {
-                                setState({ team: newValue });
-                            }}
+                            label="Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         />
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setNameOpen(false)}>Cancel</Button>
+                    <Button onClick={handleSave}>OK</Button>
+                </DialogActions>
+            </Dialog >
+
+            <Dialog
+                fullWidth
+                maxWidth={"lg"}
+                open={open}
+                onClose={() => handleOpen(false)}
+            >
+                <DialogTitle>Create Edits</DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={2} sx={{ mt: 2 }}>
+                        <Grid item xs={4}>
+                            <Autocomplete
+                                options={teamList}
+                                value={team}
+                                fullWidth
+                                isOptionEqualToValue={(option, value) => option && option.team_name}
+                                getOptionSelected={(option, value) => option.id === value.id}
+                                disableClearable
+                                getOptionLabel={(t) => `${t.team_name}`}
+                                renderInput={(params) => (
+                                    <TextField {...params} label="My Team" />
+                                )}
+                                onChange={(event, newValue) => {
+                                    setState({ team: newValue });
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={8} >
+                            <FormControl fullWidth>
+                                <InputLabel id="select-multiple-game-label">Games</InputLabel>
+                                <Select
+                                    labelId="select-multiple-game-label"
+                                    id="select-multiple-game"
+                                    multiple
+                                    value={game}
+                                    onChange={handleChangeGame}
+                                    input={<OutlinedInput id="select-multiple-game" label="Games" />}
+                                    renderValue={(selected) => (
+                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                            {selected.map((value, idx) => (
+                                                <Chip key={idx} label={`${moment(value.date).format('DD MMM, YYYY')} - ${value.season_name} - ${value.league_name} - ${value.home_team_name} VS ${value.away_team_name}`} />
+                                            ))}
+                                        </Box>
+                                    )}
+                                    MenuProps={MenuProps}
+                                >
+                                    {gameList.map((a, idx) =>
+                                        <MenuItem key={idx} value={a} style={getStyles(a, game, theme)}>
+                                            {`${moment(a.date).format('DD MMM, YYYY')} - ${a.season_name} - ${a.league_name} - ${a.home_team_name} VS ${a.away_team_name}`}
+                                        </MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={8} >
+                    <Grid container spacing={2} sx={{ my: 2 }}>
+                        {["Defense", "Offense"].map((label, idx) =>
+                            <Grid item xs={4} key={idx}>
+                                <Button
+                                    key={idx}
+                                    variant={idx === curSelect && !player ? "contained" : "outlined"}
+                                    onClick={() => setCurSelect(idx)}
+                                    sx={{ m: 1 }}
+                                >
+                                    {label}
+                                </Button>
+                            </Grid>
+                        )}
+                        <Grid item xs={4}>
+                            <Autocomplete
+                                options={playerList}
+                                value={player}
+                                fullWidth
+                                isOptionEqualToValue={(option, value) => option && option.name}
+                                getOptionSelected={(option, value) => option.id === value.id}
+                                disableClearable
+                                getOptionLabel={(t) => `${t.name}`}
+                                renderInput={(params) => (
+                                    <TextField {...params} label="Individual" />
+                                )}
+                                onChange={(event, newValue) => {
+                                    setCurSelect(2);
+                                    setState({ player: newValue });
+                                }}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Box sx={{ display: "flex", gap: 1 }}>
                         <FormControl fullWidth>
-                            <InputLabel id="select-multiple-game-label">Games</InputLabel>
+                            <InputLabel id="select-multiple-action-label">Actions</InputLabel>
                             <Select
-                                labelId="select-multiple-game-label"
-                                id="select-multiple-game"
+                                labelId="select-multiple-action-label"
+                                id="select-multiple-action"
                                 multiple
-                                value={game}
-                                onChange={handleChangeGame}
-                                input={<OutlinedInput id="select-multiple-game" label="Games" />}
+                                value={action}
+                                onChange={handleChangeAction}
+                                input={<OutlinedInput id="select-multiple-action" label="Actions" />}
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                         {selected.map((value, idx) => (
-                                            <Chip key={idx} label={`${moment(value.date).format('DD MMM, YYYY')} - ${value.season_name} - ${value.league_name} - ${value.home_team_name} VS ${value.away_team_name}`} />
+                                            <Chip key={idx} label={value?.name} />
                                         ))}
                                     </Box>
                                 )}
                                 MenuProps={MenuProps}
                             >
-                                {gameList.map((a, idx) =>
-                                    <MenuItem key={idx} value={a} style={getStyles(a, game, theme)}>
-                                        {`${moment(a.date).format('DD MMM, YYYY')} - ${a.season_name} - ${a.league_name} - ${a.home_team_name} VS ${a.away_team_name}`}
-                                    </MenuItem>
+                                {actionList.map((a, idx) =>
+                                    <MenuItem key={idx} value={a} style={getStyles(a, action, theme)}>{a?.name}</MenuItem>
                                 )}
                             </Select>
                         </FormControl>
-                    </Grid>
-                </Grid>
-                <Grid container spacing={2} sx={{ my: 2 }}>
-                    {["Defense", "Offense"].map((label, idx) =>
-                        <Grid item xs={4} key={idx}>
-                            <Button
-                                key={idx}
-                                variant={idx === curSelect && !player ? "contained" : "outlined"}
-                                onClick={() => setCurSelect(idx)}
-                                sx={{ m: 1 }}
+
+                        <FormControl fullWidth>
+                            <InputLabel id="select-multiple-actiontype-label">Action Types</InputLabel>
+                            <Select
+                                labelId="select-multiple-actiontype-label"
+                                id="select-multiple-actiontype"
+                                multiple
+                                value={actionType}
+                                onChange={handleChangeActionType}
+                                input={<OutlinedInput id="select-multiple-actiontype" label="Action Types" />}
+                                renderValue={(selected) => (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                        {selected.map((value, idx) => (
+                                            <Chip key={idx} label={value?.name} />
+                                        ))}
+                                    </Box>
+                                )}
+                                MenuProps={MenuProps}
                             >
-                                {label}
-                            </Button>
-                        </Grid>
-                    )}
-                    <Grid item xs={4}>
-                        <Autocomplete
-                            options={playerList}
-                            value={player}
-                            fullWidth
-                            isOptionEqualToValue={(option, value) => option && option.name}
-                            getOptionSelected={(option, value) => option.id === value.id}
-                            disableClearable
-                            getOptionLabel={(t) => `${t.name}`}
-                            renderInput={(params) => (
-                                <TextField {...params} label="Individual" />
-                            )}
-                            onChange={(event, newValue) => {
-                                setCurSelect(2);
-                                setState({ player: newValue });
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-                <Box sx={{ display: "flex", gap: 1 }}>
-                    <FormControl fullWidth>
-                        <InputLabel id="select-multiple-action-label">Actions</InputLabel>
-                        <Select
-                            labelId="select-multiple-action-label"
-                            id="select-multiple-action"
-                            multiple
-                            value={action}
-                            onChange={handleChangeAction}
-                            input={<OutlinedInput id="select-multiple-action" label="Actions" />}
-                            renderValue={(selected) => (
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                    {selected.map((value, idx) => (
-                                        <Chip key={idx} label={value?.name} />
-                                    ))}
-                                </Box>
-                            )}
-                            MenuProps={MenuProps}
-                        >
-                            {actionList.map((a, idx) =>
-                                <MenuItem key={idx} value={a} style={getStyles(a, action, theme)}>{a?.name}</MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
+                                {actionTypeList.map((a, idx) =>
+                                    <MenuItem key={idx} value={a} style={getStyles(a, actionType, theme)}>{a?.name}</MenuItem>
+                                )}
+                            </Select>
+                        </FormControl>
 
-                    <FormControl fullWidth>
-                        <InputLabel id="select-multiple-actiontype-label">Action Types</InputLabel>
-                        <Select
-                            labelId="select-multiple-actiontype-label"
-                            id="select-multiple-actiontype"
-                            multiple
-                            value={actionType}
-                            onChange={handleChangeActionType}
-                            input={<OutlinedInput id="select-multiple-actiontype" label="Action Types" />}
-                            renderValue={(selected) => (
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                    {selected.map((value, idx) => (
-                                        <Chip key={idx} label={value?.name} />
-                                    ))}
-                                </Box>
-                            )}
-                            MenuProps={MenuProps}
-                        >
-                            {actionTypeList.map((a, idx) =>
-                                <MenuItem key={idx} value={a} style={getStyles(a, actionType, theme)}>{a?.name}</MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
+                        <FormControl fullWidth>
+                            <InputLabel id="select-multiple-action-label">Action Results</InputLabel>
+                            <Select
+                                labelId="select-multiple-action-label"
+                                id="select-multiple-action"
+                                multiple
+                                value={actionResult}
+                                onChange={handleChangeActionResult}
+                                input={<OutlinedInput id="select-multiple-action" label="Action Results" />}
+                                renderValue={(selected) => (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                        {selected.map((value, idx) => (
+                                            <Chip key={idx} label={value?.name} />
+                                        ))}
+                                    </Box>
+                                )}
+                                MenuProps={MenuProps}
+                            >
+                                {actionResultList.map((a, idx) =>
+                                    <MenuItem key={idx} value={a} style={getStyles(a, actionResult, theme)}>{a?.name}</MenuItem>
+                                )}
+                            </Select>
+                        </FormControl>
 
-                    <FormControl fullWidth>
-                        <InputLabel id="select-multiple-action-label">Action Results</InputLabel>
-                        <Select
-                            labelId="select-multiple-action-label"
-                            id="select-multiple-action"
-                            multiple
-                            value={actionResult}
-                            onChange={handleChangeActionResult}
-                            input={<OutlinedInput id="select-multiple-action" label="Action Results" />}
-                            renderValue={(selected) => (
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                    {selected.map((value, idx) => (
-                                        <Chip key={idx} label={value?.name} />
-                                    ))}
-                                </Box>
-                            )}
-                            MenuProps={MenuProps}
-                        >
-                            {actionResultList.map((a, idx) =>
-                                <MenuItem key={idx} value={a} style={getStyles(a, actionResult, theme)}>{a?.name}</MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
-
-                </Box>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={() => handleOpen(false)}>Close</Button>
-                <Button onClick={() => handleSearch()}>Search</Button>
-            </DialogActions>
-        </Dialog >
-
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleOpen(false)}>Close</Button>
+                    <Button onClick={() => handleSearch()} disabled={!game.length || !team}>Search</Button>
+                </DialogActions>
+            </Dialog >
+        </>
     );
 }
 
