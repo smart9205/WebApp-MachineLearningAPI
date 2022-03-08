@@ -139,9 +139,6 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                                     hover
                                     onClick={() => handleUserEditDetail(userEdit)}
                                 >
-                                    <TableCell align="center">
-                                        {idx + 1}
-                                    </TableCell>
                                     <TableCell align="center">{userEdit.name}</TableCell>
                                     <TableCell align="center" sx={{ width: 30 }}>
                                         <IconButton
