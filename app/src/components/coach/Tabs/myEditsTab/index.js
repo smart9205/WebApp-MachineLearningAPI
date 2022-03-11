@@ -16,13 +16,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import TeamTagTable from '../TeamTagTable';
-import VideoPlayer from '../UserEditVideoPlayer';
-import CreateEditDialog from "./createEditDialog";
-import gameService from "../../../services/game.service";
-import DeleteConfirmDialog from "../../../common/DeleteConfirmDialog";
-import EditNameDialog from "../../../common/EditNameDialolg";
-import IndividualTagTable from "../IndividualTagTable";
+import VideoPlayer from '../../UserEditVideoPlayer';
+import CreateEditDialog from "../createEditDialog";
+import gameService from "../../../../services/game.service";
+import DeleteConfirmDialog from "../../../../common/DeleteConfirmDialog";
+import EditNameDialog from "../../../../common/EditNameDialolg";
+import DragableIndividualTagTable from "./DragableIndividualTagTable";
+import DragableTeamTagTable from "./DragableTeamTagTable";
 
 const styles = {
     loader: {
@@ -184,7 +184,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
             <Paper style={{ height: "100%", minWidth: 500 }} className="coach-tag-table">
                 {teamTagList.length === 0 && playerTagList.length === 0 && <p style={{ textAlign: 'center' }}>No Tags</p>}
                 {teamTagList.length > 0 &&
-                    <TeamTagTable
+                    <DragableTeamTagTable
                         sx={{ height: "100%", p: 1, width: "100%" }}
                         rows={teamTagList}
                         updateTagList={(newTeamTag) => { teamTagList.find(t => t.team_tag_id === newTeamTag.team_tag_id) }}
@@ -213,7 +213,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                     />
                 }
                 {playerTagList.length > 0 &&
-                    <IndividualTagTable
+                    <DragableIndividualTagTable
                         sx={{ height: "100%", p: 1, width: "100%" }}
                         rows={playerTagList}
                         offenseTeam={playerList}
