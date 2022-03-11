@@ -80,6 +80,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
     }
 
     const handleUserEditDetail = (edit) => {
+        if (!edit) return
         setCurEdit(edit)
         gameService.getEditClipsByUserEditId(edit.id).then(res => {
             console.log("get EditClipsby userEditid", res)

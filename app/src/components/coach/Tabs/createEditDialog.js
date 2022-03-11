@@ -210,7 +210,6 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                                 value={team}
                                 fullWidth
                                 isOptionEqualToValue={(option, value) => option && option.team_name}
-                                getOptionSelected={(option, value) => option.id === value.id}
                                 disableClearable
                                 getOptionLabel={(t) => `${t.team_name}`}
                                 renderInput={(params) => (
@@ -268,7 +267,6 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                                 value={player}
                                 fullWidth
                                 isOptionEqualToValue={(option, value) => option && option.name}
-                                getOptionSelected={(option, value) => option.id === value.id}
                                 disableClearable
                                 getOptionLabel={(t) => `${t.name}`}
                                 renderInput={(params) => (
