@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,8 +13,11 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TeamTagRow } from './TeamTagRow';
 
 export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, ...params }) {
-
   const [tableRows, setTableRows] = useState(rows)
+
+  useEffect(() => {
+    setTableRows(rows)
+  }, [rows])
 
   const moveRow = useCallback((dragIndex, hoverIndex) => {
     setTableRows((prevCards) => update(prevCards, {
