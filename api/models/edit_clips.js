@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     end_time: DataTypes.STRING,
     team_tag_id: DataTypes.INTEGER,
     player_tag_id: DataTypes.INTEGER,
+    sort: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Edit_Clips',

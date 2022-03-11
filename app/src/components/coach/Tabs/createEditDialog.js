@@ -100,6 +100,8 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
 
     useEffect(() => {
         if (!open) return
+
+        console.log('team', team)
         if (!!team && game.length > 0) {
             gameService.getGameTeamPlayersByTeam(team.team_id, game.map(g => g.id).join(",")).then((res) => {
                 setState({ playerList: res })
@@ -150,7 +152,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
         setLoading(true)
         gameService.addUserEdits({
             name,
-            teamId: team?.id,
+            teamId: team?.team_id,
             gameIds: game.map(g => g.id),
             actionIds: action.map(a => a.id),
             actionTypeIds: actionType.map(a => a.id),
