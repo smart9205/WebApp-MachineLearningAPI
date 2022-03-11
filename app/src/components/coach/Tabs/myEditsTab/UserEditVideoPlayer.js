@@ -11,8 +11,8 @@ import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlin
 import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
-import { toSecond } from "../../common/utilities"
-import gameService from '../../services/game.service';
+import { toSecond } from "../../../../common/utilities"
+import gameService from '../../../../services/game.service';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 // import VIDEO from '../../assets/1.mp4'
 
@@ -84,12 +84,7 @@ export default function VideoPlayer({ videoData, onChangeClip }) {
     const playTagByIdx = (i) => seekTo(toSecond(tagList[i]?.start_time))
 
     const onProgress = (currentTime) => {
-        const startTime = toSecond(tagList[curIdx]?.start_time);
         const endTime = toSecond(tagList[curIdx]?.end_time);
-
-        if (currentTime < startTime && tagList[curIdx - 1]?.video_url === tagList[curIdx]?.video_url) {
-            seekTo(startTime)
-        }
 
         if (currentTime > endTime) {
             if (tagList.length <= curIdx) {// last tag

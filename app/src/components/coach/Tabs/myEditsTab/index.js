@@ -16,7 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import VideoPlayer from '../../UserEditVideoPlayer';
+import VideoPlayer from './UserEditVideoPlayer';
 import CreateEditDialog from "../createEditDialog";
 import gameService from "../../../../services/game.service";
 import DeleteConfirmDialog from "../../../../common/DeleteConfirmDialog";
