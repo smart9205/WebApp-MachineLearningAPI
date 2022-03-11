@@ -17,7 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import TeamTagTable from '../TeamTagTable';
-import VideoPlayer from '../VideoPlayer';
+import VideoPlayer from '../UserEditVideoPlayer';
 import CreateEditDialog from "./createEditDialog";
 import gameService from "../../../services/game.service";
 import DeleteConfirmDialog from "../../../common/DeleteConfirmDialog";
@@ -182,6 +182,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                 }
             </IconButton>
             <Paper style={{ height: "100%", minWidth: 500 }} className="coach-tag-table">
+                {teamTagList.length === 0 && playerTagList.length === 0 && <p style={{ textAlign: 'center' }}>No Tags</p>}
                 {teamTagList.length > 0 &&
                     <TeamTagTable
                         sx={{ height: "100%", p: 1, width: "100%" }}
@@ -231,7 +232,6 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
             </Paper>
             <VideoPlayer
                 videoData={videoData}
-                url={game?.video_url ?? ""}
                 onChangeClip={(idx) => setCurTeamTagIdx(idx)}
             />
         </>
