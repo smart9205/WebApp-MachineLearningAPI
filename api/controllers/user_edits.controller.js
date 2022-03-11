@@ -45,8 +45,8 @@ exports.create = async (req, res) => {
     LEFT JOIN public."Team_Tags" on public."Player_Tags".team_tag_id = public."Team_Tags".id
     WHERE 
       ${req.body.actionIds.length > 0 ? `action_id in (${req.body.actionIds.join(",")}) and ` : ""}
-      ${req.body.actionTypeIds.length > 0 ? `action_id in (${req.body.actionTypeIds.join(",")}) and ` : ""}
-      ${req.body.actionResultIds.length > 0 ? `action_id in (${req.body.actionResultIds.join(",")}) and ` : ""}
+      ${req.body.actionTypeIds.length > 0 ? `action_type_id in (${req.body.actionTypeIds.join(",")}) and ` : ""}
+      ${req.body.actionResultIds.length > 0 ? `action_result_id in (${req.body.actionResultIds.join(",")}) and ` : ""}
       ${req.body.curSelect === 0 ? `offensive_team_id = ${req.body.teamId} and ` : ""}
       ${req.body.curSelect === 1 ? `defensive_team_id = ${req.body.teamId} and ` : ""}
       ${req.body.curSelect === 2 ? `player_id = ${req.body.playerId} and ` : ""}
