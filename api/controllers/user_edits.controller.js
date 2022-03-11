@@ -165,28 +165,22 @@ exports.update = (req, res) => {
     });
 };
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
 
-  User_Edits.destroy({
-    where: { id: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "User_Edits was deleted successfully!"
-        });
-      } else {
-        res.send({
-          message: `Cannot delete User_Edits with id=${id}. Maybe User_Edits was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Could not delete User_Edits with id=" + id
-      });
+  const num = await User_Edits.destroy({ where: { id: id } })
+
+  await Edit_Clips.destroy({ where: { edit_id: id } })
+
+  if (num == 1) {
+    res.send({
+      message: "User_Edits was deleted successfully!"
     });
+  } else {
+    res.send({
+      message: `Cannot delete User_Edits with id=${id}. Maybe User_Edits was not found!`
+    });
+  }
 };
 
 exports.deleteAll = (req, res) => {

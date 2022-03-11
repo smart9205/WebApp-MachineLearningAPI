@@ -251,7 +251,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                         </Grid>
                     </Grid>
                     <Grid container spacing={2} sx={{ my: 2 }}>
-                        {["Defense", "Offense"].map((label, idx) =>
+                        {["Offense", "Defense"].map((label, idx) =>
                             <Grid item xs={4} key={idx}>
                                 <Button
                                     key={idx}
