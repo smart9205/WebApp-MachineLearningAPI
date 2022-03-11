@@ -66,6 +66,8 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         gameService.getAllUserEdits().then(res => {
             console.log("all user Edits", res)
             setUserEditList(res)
+            setCurEdit(res[0])
+            handleUserEditDetail(res[0])
             setLoading(false)
         })
     }
@@ -142,6 +144,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                                 <TableRow
                                     key={idx}
                                     hover
+                                    selected={curEdit === userEdit}
                                     onClick={() => handleUserEditDetail(userEdit)}
                                 >
                                     <TableCell align="center">{userEdit.name}</TableCell>
