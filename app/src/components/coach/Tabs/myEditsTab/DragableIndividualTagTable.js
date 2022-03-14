@@ -15,8 +15,6 @@ import { PlayerTagRow } from './PlayerTagRow';
 export default function DragableIndivitualTagTable({ rows, handleRowClick, selected, onPlay, onDelete, ...params }) {
   const [tableRows, setTableRows] = useState(rows)
 
-  console.log('ind rows', rows)
-
   useEffect(() => {
     setTableRows(rows)
   }, [rows])
