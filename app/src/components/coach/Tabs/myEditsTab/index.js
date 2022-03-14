@@ -47,7 +47,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
     const [editOpen, setEditOpen] = useState(false)
     const [userEditList, setUserEditList] = useState([])
     const [showAccordion, setShowAccordion] = useState(true)
-    const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
+    const [curTagIdx, setCurTagIdx] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamTagList: [],
         playerTagList: [],
@@ -190,19 +190,18 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                         rows={teamTagList}
                         updateTagList={(newTeamTag) => { teamTagList.find(t => t.team_tag_id === newTeamTag.team_tag_id) }}
                         handleRowClick={({ row, idx }) => {
-                            setCurTeamTagIdx(idx)
+                            setCurTagIdx(idx)
                             setVideodata({
                                 idx,
                                 tagList: teamTagList,
                                 autoPlay: true,
                                 videoPlay: false,
                             })
-                        }
-                        }
-                        selected={curTeamTagIdx}
+                        }}
+                        selected={curTagIdx}
                         onPlay={({ row, idx }) => {
                             console.log("onplay", row, idx)
-                            setCurTeamTagIdx(idx)
+                            setCurTagIdx(idx)
                             setVideodata({
                                 idx,
                                 tagList: teamTagList,
@@ -217,15 +216,26 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                     <DragableIndividualTagTable
                         sx={{ height: "100%", p: 1, width: "100%" }}
                         rows={playerTagList}
-                        offenseTeam={playerList}
                         updateTagList={() => { }}
-                        onPlay={(row) => {
-                            console.log("play", row)
+                        selected={curTagIdx}
+                        handleRowClick={({ row, idx }) => {
+                            setCurTagIdx(idx)
                             setVideodata({
-                                idx: 0,
-                                autoPlay: false,
-                                tagList: [row],
-                                videoPlay: true
+                                idx,
+                                tagList: playerTagList,
+                                autoPlay: true,
+                                videoPlay: false,
+                            })
+                        }}
+                        onPlay={({ row, idx }) => {
+                            console.log("onplay", row, idx)
+                            setCurTagIdx(idx)
+                            setVideodata({
+                                idx,
+                                tagList: playerTagList,
+                                cnt: new Date(),
+                                autoPlay: true,
+                                videoPlay: true,
                             })
                         }}
                     />
@@ -233,7 +243,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
             </Paper>
             <VideoPlayer
                 videoData={videoData}
-                onChangeClip={(idx) => setCurTeamTagIdx(idx)}
+                onChangeClip={(idx) => setCurTagIdx(idx)}
             />
         </>
     );

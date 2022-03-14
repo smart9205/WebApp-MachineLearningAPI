@@ -1,73 +1,73 @@
-import React, { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
+import React, { useCallback, useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import IconButton from '@mui/material/IconButton';
-import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import update from 'immutability-helper'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { PlayerTagRow } from './PlayerTagRow';
 
-export default function DragableIndividualTagTable({
-  rows,
-  offenseTeam,
-  updateTagList,
-  onPlay,
-  ...params
-}) {
-  const [selectedRow, setSelectedRow] = useState(rows[0])
+export default function DragableIndivitualTagTable({ rows, handleRowClick, selected, onPlay, ...params }) {
+  const [tableRows, setTableRows] = useState(rows)
+
+  console.log('ind rows', rows)
 
   useEffect(() => {
-    setSelectedRow(rows[0])
+    setTableRows(rows)
   }, [rows])
+
+  const moveRow = useCallback((dragIndex, hoverIndex) => {
+    setTableRows((prevCards) => update(prevCards, {
+      $splice: [
+        [dragIndex, 1],
+        [hoverIndex, 0, prevCards[dragIndex]],
+      ],
+    }));
+  }, []);
+  const renderCard = useCallback((row, idx, selected) => {
+    return (
+      <PlayerTagRow
+        row={row}
+        onPlay={() => onPlay({ row, idx })}
+        selected={idx == selected}
+        onClick={e => handleRowClick({ row, idx })}
+        key={row.id}
+        index={idx}
+        id={row.id}
+        moveRow={moveRow}
+      />);
+  }, []);
 
   return (
     <Box {...params}>
       <Paper sx={{ width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
         <h5 style={{ textAlign: 'center' }}>Player Tag</h5>
         <TableContainer style={{ height: "100%" }}>
-          <Table stickyHeader aria-label="sticky table" size={'small'} sx={{ pb: 4 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">Action</TableCell>
-                <TableCell align="center">Action Type</TableCell>
-                <TableCell align="center">Action Result</TableCell>
-                <TableCell align="center">Player</TableCell>
-                <TableCell align="center">Start Time</TableCell>
-                <TableCell align="center">End Time</TableCell>
-                <TableCell align="center"></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => {
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={selectedRow?.id === row.id}
-                  >
-                    <TableCell align="center">{row.action_name}</TableCell>
-                    <TableCell align="center">{row.action_type_name}</TableCell>
-                    <TableCell align="center">{row.action_result_name}</TableCell>
-                    <TableCell align="center">{row?.player_name}</TableCell>
-                    <TableCell align="center">{row?.start_time}</TableCell>
-                    <TableCell align="center">{row?.end_time}</TableCell>
-                    <TableCell align="center" sx={{ p: 0, m: 0 }}>
-                      <IconButton size="small" onClick={() => { onPlay(row); setSelectedRow(row) }}>
-                        <PlayCircleIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+          <DndProvider backend={HTML5Backend}>
+            <Table stickyHeader aria-label="sticky table" size={'small'} sx={{ pb: 4 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Action</TableCell>
+                  <TableCell align="center">Action Type</TableCell>
+                  <TableCell align="center">Action Result</TableCell>
+                  <TableCell align="center">Player</TableCell>
+                  <TableCell align="center">Start Time</TableCell>
+                  <TableCell align="center">End Time</TableCell>
+                  <TableCell align="center"></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tableRows.map((row, i) => renderCard(row, i, selected))}
+              </TableBody>
+            </Table>
+          </DndProvider>
         </TableContainer>
       </Paper>
-    </Box >
+    </Box>
   );
 }
