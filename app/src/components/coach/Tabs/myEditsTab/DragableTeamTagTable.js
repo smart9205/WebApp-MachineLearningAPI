@@ -27,15 +27,15 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
       ],
     }));
   }, []);
-  const renderCard = useCallback((row, index) => {
+  const renderCard = useCallback((row, idx, selected) => {
     return (
       <TeamTagRow
         row={row}
-        onPlay={() => onPlay({ row, index })}
-        selected={index === selected}
-        onClick={e => handleRowClick({ row, index })}
+        onPlay={() => onPlay({ row, idx })}
+        selected={idx == selected}
+        onClick={e => handleRowClick({ row, idx })}
         key={row.id}
-        index={index}
+        index={idx}
         id={row.id}
         moveRow={moveRow}
       />);
@@ -59,7 +59,7 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tableRows.map((row, i) => renderCard(row, i))}
+                {tableRows.map((row, i) => renderCard(row, i, selected))}
               </TableBody>
             </Table>
           </DndProvider>

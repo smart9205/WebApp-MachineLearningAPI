@@ -48,6 +48,7 @@ export default function VideoPlayer({ videoData, onChangeClip }) {
     const [play, setPlay] = useState(false)
     const [ready, setReady] = useState(false)
     const [curIdx, setCurIdx] = useState(0);
+    const [curOriginURL, setCurOriginURL] = useState(null);
     const [videoURL, setVideoURL] = useState("")
     const [canNext, setCanNext] = useState(true)
 
@@ -66,18 +67,22 @@ export default function VideoPlayer({ videoData, onChangeClip }) {
 
     useEffect(() => {
         const url = tagList[curIdx]?.video_url ?? ''
-        if (url?.startsWith("https://www.youtube.com")) {
+
+        if (url?.startsWith("https://www.youtube.com") && url !== curOriginURL) {
             gameService.getNewStreamURL(url).then((res) => {
                 setVideoURL(res.url)
+                console.log("video", res.url)
             })
         } else (
             setVideoURL(url)
         )
 
+        setCurOriginURL(url)
+
         if (autoPlay)
             onChangeClip(curIdx)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [curIdx])
+    }, [curIdx, idx])
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec)
 
