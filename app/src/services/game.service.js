@@ -67,13 +67,18 @@ const updateUserEdit = (req) => {
     return response.data;
   });
 }
-const deleteCoachTeam = (id) => {
-  return axios.delete(API_URL + `coach_team/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+const deleteUserEdit = (id) => {
+  return axios.delete(API_URL + `user_edits/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
     return response.data;
   });
 }
-const deleteUserEdit = (id) => {
-  return axios.delete(API_URL + `user_edits/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+const deleteEditClip = (id) => {
+  return axios.delete(API_URL + `user_edits/edit_clip/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+    return response.data;
+  });
+}
+const deleteCoachTeam = (id) => {
+  return axios.delete(API_URL + `coach_team/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
     return response.data;
   });
 }
@@ -426,6 +431,7 @@ const gameService = {
 
   deletePlayersInTeam,
 
+  deleteEditClip,
   deleteGame,
   deleteTeamTag,
   deletePlayerTag,

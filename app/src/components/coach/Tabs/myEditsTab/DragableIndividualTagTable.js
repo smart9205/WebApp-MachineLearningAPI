@@ -12,7 +12,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { PlayerTagRow } from './PlayerTagRow';
 
-export default function DragableIndivitualTagTable({ rows, handleRowClick, selected, onPlay, ...params }) {
+export default function DragableIndivitualTagTable({ rows, handleRowClick, selected, onPlay, onDelete, ...params }) {
   const [tableRows, setTableRows] = useState(rows)
 
   console.log('ind rows', rows)
@@ -34,7 +34,8 @@ export default function DragableIndivitualTagTable({ rows, handleRowClick, selec
       <PlayerTagRow
         row={row}
         onPlay={() => onPlay({ row, idx })}
-        selected={idx == selected}
+        selected={idx === selected}
+        onDelete={onDelete}
         onClick={e => handleRowClick({ row, idx })}
         key={row.id}
         index={idx}

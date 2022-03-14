@@ -110,6 +110,13 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         })
     }
 
+    const handleDeleteEditClips = (id) => {
+        gameService.deleteEditClip(id).then(res => {
+            console.log("deleteresult", res)
+            handleUserEditDetail(curEdit)
+        })
+    }
+
     return (
         <>
             {loading &&
@@ -188,6 +195,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                     <DragableTeamTagTable
                         sx={{ height: "100%", p: 1, width: "100%" }}
                         rows={teamTagList}
+                        onDelete={id => handleDeleteEditClips(id)}
                         updateTagList={(newTeamTag) => { teamTagList.find(t => t.team_tag_id === newTeamTag.team_tag_id) }}
                         handleRowClick={({ row, idx }) => {
                             setCurTagIdx(idx)
@@ -218,6 +226,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                         rows={playerTagList}
                         updateTagList={() => { }}
                         selected={curTagIdx}
+                        onDelete={id => handleDeleteEditClips(id)}
                         handleRowClick={({ row, idx }) => {
                             setCurTagIdx(idx)
                             setVideodata({

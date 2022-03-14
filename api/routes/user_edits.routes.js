@@ -39,6 +39,12 @@ module.exports = app => {
 	);
 
 	app.delete(
+		"/user_edits/edit_clip/:id",
+		[authJwt.isCoach],
+		controller.deleteClip
+	);
+
+	app.delete(
 		"/user_edits",
 		[authJwt.isCoach],
 		controller.deleteAll

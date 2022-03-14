@@ -183,6 +183,22 @@ exports.delete = async (req, res) => {
   }
 };
 
+exports.deleteClip = async (req, res) => {
+  const id = req.params.id;
+
+  const num = await Edit_Clips.destroy({ where: { id: id } })
+
+  if (num == 1) {
+    res.send({
+      message: "User_Edits was deleted successfully!"
+    });
+  } else {
+    res.send({
+      message: `Cannot delete User_Edits with id=${id}. Maybe User_Edits was not found!`
+    });
+  }
+};
+
 exports.deleteAll = (req, res) => {
   User_Edits.destroy({
     where: {},

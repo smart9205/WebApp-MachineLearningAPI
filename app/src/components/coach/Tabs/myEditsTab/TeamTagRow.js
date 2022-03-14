@@ -1,13 +1,16 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
 import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import TableCell from '@mui/material/TableCell';
+import DeleteConfirmDialog from "../../../../common/DeleteConfirmDialog";
 import TableRow from '@mui/material/TableRow';
 
-export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected }) => {
+export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete }) => {
     const ref = useRef(null);
+    const [deleteOpen, setDeleteOpen] = useState(false)
 
     const [{ handlerId }, drop] = useDrop({
         accept: "TeamTagRow",
@@ -63,8 +66,13 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected }) => {
             isDragging: monitor.isDragging(),
         }),
     });
-    const opacity = isDragging ? 0 : 1;
     drag(drop(ref));
+
+    const handleDeleteClose = () => {
+        setDeleteOpen(false)
+        onDelete(row.id)
+    }
+
     return (
         <TableRow
             hover
@@ -75,6 +83,10 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected }) => {
             selected={selected}
 
         >
+            <DeleteConfirmDialog
+                open={deleteOpen}
+                handleDeleteClose={handleDeleteClose}
+            />
             <TableCell align="center">{row.period_name}</TableCell>
             <TableCell align="center">{row.offensive_team_name}</TableCell>
             <TableCell align="center">{row.defensive_team_name}</TableCell>
@@ -83,6 +95,14 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected }) => {
             <TableCell align="center" sx={{ p: 0, m: 0 }}>
                 <IconButton size="small" onClick={(e) => onPlay()}>
                     <PlayCircleIcon />
+                </IconButton>
+            </TableCell>
+            <TableCell>
+                <IconButton
+                    onClick={() => setDeleteOpen(true)}
+                    size="small"
+                >
+                    <DeleteIcon />
                 </IconButton>
             </TableCell>
         </TableRow>

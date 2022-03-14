@@ -12,7 +12,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TeamTagRow } from './TeamTagRow';
 
-export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, ...params }) {
+export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, onDelete, ...params }) {
   const [tableRows, setTableRows] = useState(rows)
 
   useEffect(() => {
@@ -32,12 +32,13 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
       <TeamTagRow
         row={row}
         onPlay={() => onPlay({ row, idx })}
-        selected={idx == selected}
+        selected={idx === selected}
         onClick={e => handleRowClick({ row, idx })}
         key={row.id}
         index={idx}
         id={row.id}
         moveRow={moveRow}
+        onDelete={onDelete}
       />);
   }, []);
 
@@ -55,6 +56,7 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
                   <TableCell align="center">Defensive Team</TableCell>
                   <TableCell align="center">Start Time</TableCell>
                   <TableCell align="center">End Time</TableCell>
+                  <TableCell></TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
