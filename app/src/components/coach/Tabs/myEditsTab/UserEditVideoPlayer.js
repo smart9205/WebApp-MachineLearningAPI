@@ -40,9 +40,9 @@ const styles = {
         color: "white", backgroundColor: "#80808069"
     }
 }
-export default function VideoPlayer({ videoData, onChangeClip }) {
+export default function VideoPlayer({ videoData, onChangeClip, tagList }) {
     const handle = useFullScreenHandle();
-    const { tagList, autoPlay, idx, videoPlay, cnt = null } = videoData
+    const { autoPlay, idx, videoPlay, cnt = null } = videoData
 
     const player = useRef(null)
     const [play, setPlay] = useState(false)
@@ -68,6 +68,8 @@ export default function VideoPlayer({ videoData, onChangeClip }) {
     useEffect(() => {
         const url = tagList[curIdx]?.video_url ?? ''
 
+        console.log("VideoData : ",tagList, url, curOriginURL)
+
         if(url !== curOriginURL){
             if (url?.startsWith("https://www.youtube.com")) {
                 gameService.getNewStreamURL(url).then((res) => {
@@ -83,7 +85,7 @@ export default function VideoPlayer({ videoData, onChangeClip }) {
         if (autoPlay)
             onChangeClip(curIdx)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [videoData,curIdx])
+    }, [tagList,curIdx])
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec)
 

@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer, useEffect, useCallback } from "react";
 
 import {
     Paper,
@@ -48,16 +48,11 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
     const [userEditList, setUserEditList] = useState([])
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTagIdx, setCurTagIdx] = useState(0)
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        teamTagList: [],
-        playerTagList: [],
-    })
-    const { teamTagList, playerTagList, } = state
+    const [tagList, setTagList] = useState([])
 
-    const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
+    const [videoData, setVideodata] = useState({
         idx: 0,
         autoPlay: true,
-        tagList: [],
         videoPlay: false,
     })
 
@@ -87,13 +82,9 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
             setCurTagIdx(0)
             const ttag = res.filter(t => t.team_tag_id !== null)
             const ptag = res.filter(t => t.player_tag_id !== null)
-            setState({
-                teamTagList: ttag,
-                playerTagList: ptag
-            })
+            setTagList(ttag.length > 0 ? ttag: ptag,)
             setVideodata({
                 idx: 0,
-                tagList: ttag.length > 0 ? ttag: ptag,
                 autoPlay: true,
                 videoPlay: false,
             })
@@ -123,6 +114,13 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         gameService.deleteEditClip(id).then(res => {
             handleUserEditDetail(curEdit)
         })
+    }
+
+    console.log("teamTeag-------------", tagList)
+
+    const handleVideoData = (type, play, idx) => {
+        setCurTagIdx(idx)
+        setVideodata({idx, autoPlay:true, videoPlay: play})
     }
 
     return (
@@ -198,69 +196,33 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                 }
             </IconButton>
             <Paper style={{ height: "100%", minWidth: 500 }} className="coach-tag-table">
-                {teamTagList.length === 0 && playerTagList.length === 0 && <p style={{ textAlign: 'center' }}>No Tags</p>}
-                {teamTagList.length > 0 &&
+                {tagList.length === 0 && <p style={{ textAlign: 'center' }}>No Tags</p>}
+                {tagList.length > 0 &&
                     <DragableTeamTagTable
                         sx={{ height: "100%", p: 1, width: "100%" }}
-                        rows={teamTagList}
+                        rows={tagList}
                         onDelete={id => handleDeleteEditClips(id)}
-                        updateTagList={(newTeamTag) => { teamTagList.find(t => t.team_tag_id === newTeamTag.team_tag_id) }}
-                        handleRowClick={({ row, idx }) => {
-                            console.log("handleRowClick", row)
-                            setCurTagIdx(idx)
-                            setVideodata({
-                                idx,
-                                tagList: teamTagList,
-                                autoPlay: true,
-                                videoPlay: false,
-                            })
-                        }}
+                        updateTagList={(newTeamTag) => { tagList.find(t => t.team_tag_id === newTeamTag.team_tag_id) }}
+                        handleRowClick={({ row, idx }) => handleVideoData("teamTag", false, idx)}
                         selected={curTagIdx}
-                        onPlay={({ row, idx }) => {
-                            console.log("onplay", row, idx)
-                            setCurTagIdx(idx)
-                            setVideodata({
-                                idx,
-                                tagList: teamTagList,
-                                cnt: new Date(),
-                                autoPlay: true,
-                                videoPlay: true,
-                            })
-                        }}
+                        onPlay={({ row, idx }) => handleVideoData("teamTag", true, idx)}
                     />
                 }
-                {playerTagList.length > 0 &&
+                {tagList.length > 0 &&
                     <DragableIndividualTagTable
                         sx={{ height: "100%", p: 1, width: "100%" }}
-                        rows={playerTagList}
+                        rows={tagList}
                         updateTagList={() => { }}
                         selected={curTagIdx}
                         onDelete={id => handleDeleteEditClips(id)}
-                        handleRowClick={({ row, idx }) => {
-                            setCurTagIdx(idx)
-                            setVideodata({
-                                idx,
-                                tagList: playerTagList,
-                                autoPlay: true,
-                                videoPlay: false,
-                            })
-                        }}
-                        onPlay={({ row, idx }) => {
-                            console.log("onplay", row, idx)
-                            setCurTagIdx(idx)
-                            setVideodata({
-                                idx,
-                                tagList: playerTagList,
-                                cnt: new Date(),
-                                autoPlay: true,
-                                videoPlay: true,
-                            })
-                        }}
+                        handleRowClick={({ row, idx }) => handleVideoData("playerTag", false, idx)}
+                        onPlay={({ row, idx }) => handleVideoData("playerTag", true, idx)}
                     />
                 }
             </Paper>
             <VideoPlayer
                 videoData={videoData}
+                tagList={tagList}
                 onChangeClip={(idx) => setCurTagIdx(idx)}
             />
         </>
