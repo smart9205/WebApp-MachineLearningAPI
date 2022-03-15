@@ -68,15 +68,17 @@ export default function VideoPlayer({ videoData, onChangeClip }) {
     useEffect(() => {
         const url = tagList[curIdx]?.video_url ?? ''
 
-        if (url?.startsWith("https://www.youtube.com") && url !== curOriginURL) {
-            gameService.getNewStreamURL(url).then((res) => {
-                setVideoURL(res.url)
-            })
-        } else (
-            setVideoURL(url)
-        )
+        if(url !== curOriginURL){
+            if (url?.startsWith("https://www.youtube.com")) {
+                gameService.getNewStreamURL(url).then((res) => {
+                    setVideoURL(res.url)
+                })
+            } else (
+                setVideoURL(url)
+            )
 
-        setCurOriginURL(url)
+            setCurOriginURL(url)
+        }
 
         if (autoPlay)
             onChangeClip(curIdx)
