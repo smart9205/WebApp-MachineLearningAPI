@@ -31,6 +31,7 @@ const styles = {
         position: "absolute",
         bottom: 5,
         left: 0,
+        paddingInline: "5%",
         width: "50%",
         minWidth: 300,
         display: 'flex',
@@ -121,7 +122,7 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList }) {
     return (
         <div style={{ width: "100%", margin: 'auto', minWidth: 500, position: "relative" }}>
             <FullScreen handle={handle}>
-                <div style={{ width: "98%", margin: 'auto' }}>
+                <div style={{ width: "90%", margin: 'auto' }}>
                     <div className="player-wrapper">
                         <ReactPlayer
                             className="react-player"
