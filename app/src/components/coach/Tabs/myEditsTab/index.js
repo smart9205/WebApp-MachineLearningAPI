@@ -85,9 +85,17 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         gameService.getEditClipsByUserEditId(edit.id).then(res => {
             console.log("get EditClipsby userEditid", res)
             setCurTagIdx(0)
+            const ttag = res.filter(t => t.team_tag_id !== null)
+            const ptag = res.filter(t => t.player_tag_id !== null)
             setState({
-                teamTagList: res.filter(t => t.team_tag_id !== null),
-                playerTagList: res.filter(t => t.player_tag_id !== null),
+                teamTagList: ttag,
+                playerTagList: ptag
+            })
+            setVideodata({
+                idx: 0,
+                tagList: ttag.length > 0 ? ttag: ptag,
+                autoPlay: true,
+                videoPlay: false,
             })
         })
     }
@@ -113,7 +121,6 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
 
     const handleDeleteEditClips = (id) => {
         gameService.deleteEditClip(id).then(res => {
-            console.log("deleteresult", res)
             handleUserEditDetail(curEdit)
         })
     }

@@ -11,7 +11,7 @@ import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlin
 import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
-import { toSecond } from "../../../../common/utilities"
+import { toSecond,toHHMMSS } from "../../../../common/utilities"
 import gameService from '../../../../services/game.service';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 // import VIDEO from '../../assets/1.mp4'
@@ -71,7 +71,6 @@ export default function VideoPlayer({ videoData, onChangeClip }) {
         if (url?.startsWith("https://www.youtube.com") && url !== curOriginURL) {
             gameService.getNewStreamURL(url).then((res) => {
                 setVideoURL(res.url)
-                console.log("video", res.url)
             })
         } else (
             setVideoURL(url)
@@ -82,7 +81,7 @@ export default function VideoPlayer({ videoData, onChangeClip }) {
         if (autoPlay)
             onChangeClip(curIdx)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [curIdx, idx])
+    }, [videoData,curIdx])
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec)
 
@@ -91,12 +90,13 @@ export default function VideoPlayer({ videoData, onChangeClip }) {
     const onProgress = (currentTime) => {
         const endTime = toSecond(tagList[curIdx]?.end_time);
 
-        if (currentTime > endTime) {
+        if (currentTime >= endTime) {
             if (tagList.length <= curIdx) {// last tag
                 setPlay(false)
             }
             else if (canNext) { // is auto play, next clip
                 setCurIdx(c => c + 1)
+                PlayVideo(1)
             } else {
                 setPlay(false)
             }
