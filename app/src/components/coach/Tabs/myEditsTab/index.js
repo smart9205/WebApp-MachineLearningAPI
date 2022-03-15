@@ -82,12 +82,8 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
             setCurTagIdx(0)
             const ttag = res.filter(t => t.team_tag_id !== null)
             const ptag = res.filter(t => t.player_tag_id !== null)
-            setTagList(ttag.length > 0 ? ttag: ptag,)
-            setVideodata({
-                idx: 0,
-                autoPlay: true,
-                videoPlay: false,
-            })
+            setTagList(ttag.length > 0 ? ttag : ptag,)
+            setVideodata({ idx: 0, autoPlay: true, videoPlay: false })
         })
     }
 
@@ -116,11 +112,9 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         })
     }
 
-    console.log("teamTeag-------------", tagList)
-
     const handleVideoData = (type, play, idx) => {
         setCurTagIdx(idx)
-        setVideodata({idx, autoPlay:true, videoPlay: play})
+        setVideodata({ idx, autoPlay: true, videoPlay: play })
     }
 
     return (
@@ -197,7 +191,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
             </IconButton>
             <Paper style={{ height: "100%", minWidth: 500 }} className="coach-tag-table">
                 {tagList.length === 0 && <p style={{ textAlign: 'center' }}>No Tags</p>}
-                {tagList.length > 0 &&
+                {tagList.filter(t => t.team_tag_id !== null).length > 0 &&
                     <DragableTeamTagTable
                         sx={{ height: "100%", p: 1, width: "100%" }}
                         rows={tagList}
@@ -208,7 +202,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                         onPlay={({ row, idx }) => handleVideoData("teamTag", true, idx)}
                     />
                 }
-                {tagList.length > 0 &&
+                {tagList.filter(t => t.player_tag_id !== null).length > 0 &&
                     <DragableIndividualTagTable
                         sx={{ height: "100%", p: 1, width: "100%" }}
                         rows={tagList}
