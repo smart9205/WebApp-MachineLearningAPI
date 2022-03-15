@@ -66,6 +66,7 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete
             isDragging: monitor.isDragging(),
         }),
     });
+
     drag(drop(ref));
 
     const handleDeleteClose = () => {

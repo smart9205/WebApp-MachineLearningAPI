@@ -7,16 +7,6 @@ const Sequelize = db.sequelize;
 exports.create = async (req, res) => {
 
   console.log("create new", req.body)
-  // create new {
-  //   name: 'edit2',
-  //   teamId: 9,
-  //   gameIds: [ 4 ],
-  //   actionIds: [ 2, 4 ],
-  //   actionTypeIds: [ 2, 4 ],
-  //   actionResultIds: [ 6, 7 ],
-  //   curSelect: 2,
-  //   playerId: 25
-  // }
 
   // Validate request
   if (!req.body.name) {
@@ -54,18 +44,20 @@ exports.create = async (req, res) => {
   `).then(data => {
     const tagList = data[0]
 
-    tagList.forEach(async tag => {
+    tagList.forEach(async (tag, idx) => {
       const clip = req.body.curSelect === 2 ?
         {
           start_time: tag.p_start_time,
           end_time: tag.p_end_time,
           player_tag_id: tag.player_tag_id,
-          edit_id: userEdits.id
+          edit_id: userEdits.id,
+          sort: idx
         } : {
           start_time: tag.t_start_time,
           end_time: tag.t_end_time,
           team_tag_id: tag.team_tag_id,
-          edit_id: userEdits.id
+          edit_id: userEdits.id,
+          sort: idx
         }
       await Edit_Clips.create(clip)
     })
