@@ -121,6 +121,7 @@ exports.findOne = (req, res) => {
   LEFT JOIN public."Games" on public."Games".id = public."Team_Tags".game_id
 
   WHERE edit_id = ${id}
+  order by sort
   `).then(data => {
     res.send(data[0]);
 
@@ -132,6 +133,21 @@ exports.findOne = (req, res) => {
       });
     });
 };
+
+exports.updateEditClipsSort = (req, res) => {
+  console.log("updateEditClips", req.body)
+
+  if (req.body.length < 2)
+    res.send({
+      message: "Edit_clips are not enough to update sort."
+    });
+
+  req.body.forEach(row => Edit_Clips.update(row, { where: { id: row.id } }))
+
+  res.send({
+    message: "Edit_clips are updated successfully."
+  });
+}
 
 exports.update = (req, res) => {
   const id = req.params.id;

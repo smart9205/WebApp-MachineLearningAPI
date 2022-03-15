@@ -12,7 +12,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { PlayerTagRow } from './PlayerTagRow';
 
-export default function DragableIndivitualTagTable({ rows, handleRowClick, selected, onPlay, onDelete, ...params }) {
+export default function DragableIndivitualTagTable({ rows, handleRowClick, selected, onPlay, handleSort, onDelete, ...params }) {
   const [tableRows, setTableRows] = useState(rows)
 
   useEffect(() => {
@@ -20,12 +20,18 @@ export default function DragableIndivitualTagTable({ rows, handleRowClick, selec
   }, [rows])
 
   const moveRow = useCallback((dragIndex, hoverIndex) => {
-    setTableRows((prevCards) => update(prevCards, {
-      $splice: [
-        [dragIndex, 1],
-        [hoverIndex, 0, prevCards[dragIndex]],
-      ],
-    }));
+    setTableRows((prevCards) => {
+      const newRow = update(prevCards, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, prevCards[dragIndex]],
+        ],
+      })
+      const start = dragIndex < hoverIndex ? dragIndex : hoverIndex;
+      const end = (dragIndex > hoverIndex ? dragIndex : hoverIndex) + 1;
+      handleSort(newRow.slice(start, end).map((row, i) => { return { ...row, sort: start + i } }))
+      return newRow
+    });
   }, []);
   const renderCard = useCallback((row, idx, selected) => {
     return (

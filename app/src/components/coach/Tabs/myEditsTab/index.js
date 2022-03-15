@@ -117,6 +117,10 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         setVideodata({ idx, autoPlay: true, videoPlay: play })
     }
 
+    const handleSort = (rows) => {
+        gameService.updateEditClipsSort(rows).then(res => console.log(res))
+    }
+
     return (
         <>
             {loading &&
@@ -196,7 +200,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                         sx={{ height: "100%", p: 1, width: "100%" }}
                         rows={tagList}
                         onDelete={id => handleDeleteEditClips(id)}
-                        updateTagList={(newTeamTag) => { tagList.find(t => t.team_tag_id === newTeamTag.team_tag_id) }}
+                        handleSort={handleSort}
                         handleRowClick={({ row, idx }) => handleVideoData("teamTag", false, idx)}
                         selected={curTagIdx}
                         onPlay={({ row, idx }) => handleVideoData("teamTag", true, idx)}
@@ -206,8 +210,8 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                     <DragableIndividualTagTable
                         sx={{ height: "100%", p: 1, width: "100%" }}
                         rows={tagList}
-                        updateTagList={() => { }}
                         selected={curTagIdx}
+                        handleSort={handleSort}
                         onDelete={id => handleDeleteEditClips(id)}
                         handleRowClick={({ row, idx }) => handleVideoData("playerTag", false, idx)}
                         onPlay={({ row, idx }) => handleVideoData("playerTag", true, idx)}
