@@ -84,6 +84,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         setCurEdit(edit)
         gameService.getEditClipsByUserEditId(edit.id).then(res => {
             console.log("get EditClipsby userEditid", res)
+            setCurTagIdx(0)
             setState({
                 teamTagList: res.filter(t => t.team_tag_id !== null),
                 playerTagList: res.filter(t => t.player_tag_id !== null),
@@ -198,6 +199,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                         onDelete={id => handleDeleteEditClips(id)}
                         updateTagList={(newTeamTag) => { teamTagList.find(t => t.team_tag_id === newTeamTag.team_tag_id) }}
                         handleRowClick={({ row, idx }) => {
+                            console.log("handleRowClick", row)
                             setCurTagIdx(idx)
                             setVideodata({
                                 idx,

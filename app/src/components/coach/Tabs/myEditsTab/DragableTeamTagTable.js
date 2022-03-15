@@ -15,6 +15,8 @@ import { TeamTagRow } from './TeamTagRow';
 export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, onDelete, ...params }) {
   const [tableRows, setTableRows] = useState(rows)
 
+  console.log("selected", selected)
+
   useEffect(() => {
     setTableRows(rows)
   }, [rows])
