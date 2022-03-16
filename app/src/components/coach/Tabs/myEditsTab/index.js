@@ -87,13 +87,15 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         })
     }
 
-    const handleDeleteClose = () => {
-        setLoading(true)
+    const handleDeleteClose = (result) => {
         setDeleteOpen(false)
-        gameService.deleteUserEdit(curEdit.id).then(res => {
-            setLoading(false)
-            initUserEdits()
-        }).catch(e => setLoading(false))
+        if (result) {
+            setLoading(true)
+            gameService.deleteUserEdit(curEdit.id).then(res => {
+                setLoading(false)
+                initUserEdits()
+            }).catch(e => setLoading(false))
+        }
     }
 
     const handleEditClose = (name) => {

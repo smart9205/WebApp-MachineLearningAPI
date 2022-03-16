@@ -68,9 +68,10 @@ export const PlayerTagRow = ({ id, row, index, moveRow, onPlay, selected, onDele
     });
     drag(drop(ref));
 
-    const handleDeleteClose = () => {
+    const handleDeleteClose = (result) => {
         setDeleteOpen(false)
-        onDelete(row.id)
+        if (result)
+            onDelete(row.id)
     }
 
     return (
