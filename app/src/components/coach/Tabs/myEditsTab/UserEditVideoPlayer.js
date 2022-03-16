@@ -11,7 +11,7 @@ import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlin
 import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
-import { toSecond,toHHMMSS } from "../../../../common/utilities"
+import { toSecond, toHHMMSS } from "../../../../common/utilities"
 import gameService from '../../../../services/game.service';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 // import VIDEO from '../../assets/1.mp4'
@@ -69,9 +69,9 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList }) {
     useEffect(() => {
         const url = tagList[curIdx]?.video_url ?? ''
 
-        console.log("VideoData : ",tagList, url, curOriginURL)
+        console.log("VideoData : ", tagList, url, curOriginURL)
 
-        if(url !== curOriginURL){
+        if (url !== curOriginURL) {
             if (url?.startsWith("https://www.youtube.com")) {
                 gameService.getNewStreamURL(url).then((res) => {
                     setVideoURL(res.url)
@@ -86,7 +86,7 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList }) {
         if (autoPlay)
             onChangeClip(curIdx)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tagList,curIdx])
+    }, [tagList, curIdx])
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec)
 
@@ -110,12 +110,15 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList }) {
 
     const PlayVideo = (num) => {
         let index;
-        if (curIdx + num >= tagList.length) { index = 0 }
-        else if (curIdx + num < 0) { index = tagList.length - 1 }
-        else index = curIdx + num
-
-        playTagByIdx(index)
-        setPlay(true)
+        if (curIdx + num >= tagList.length) {
+            index = 0;
+            setPlay(false)
+        } else {
+            if (curIdx + num < 0) { index = tagList.length - 1 }
+            else index = curIdx + num
+            playTagByIdx(index)
+            setPlay(true)
+        }
         setCurIdx(index)
     }
 
