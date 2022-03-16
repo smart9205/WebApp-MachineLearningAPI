@@ -193,7 +193,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                     <ArrowRightIcon />
                 }
             </IconButton>
-            <Paper style={{ height: "100%", minWidth: 500 }} className="coach-tag-table">
+            <Paper style={{ height: "100%", minWidth: 540 }} className="coach-tag-table">
                 {tagList.length === 0 && <p style={{ textAlign: 'center' }}>No Tags</p>}
                 {tagList.filter(t => t.team_tag_id !== null).length > 0 &&
                     <DragableTeamTagTable
@@ -222,6 +222,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                 videoData={videoData}
                 tagList={tagList}
                 onChangeClip={(idx) => setCurTagIdx(idx)}
+                drawOpen={showAccordion}
             />
         </>
     );

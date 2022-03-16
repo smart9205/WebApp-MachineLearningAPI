@@ -97,7 +97,7 @@ export const PlayerTagRow = ({ id, row, index, moveRow, onPlay, selected, onDele
                     <PlayCircleIcon />
                 </IconButton>
             </TableCell>
-            <TableCell>
+            <TableCell align="center" sx={{ p: 0, m: 0 }}>
                 <IconButton
                     onClick={() => setDeleteOpen(true)}
                     size="small"

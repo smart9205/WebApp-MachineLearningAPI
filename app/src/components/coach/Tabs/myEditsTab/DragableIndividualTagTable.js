@@ -64,6 +64,7 @@ export default function DragableIndivitualTagTable({ rows, handleRowClick, selec
                   <TableCell align="center">Start Time</TableCell>
                   <TableCell align="center">End Time</TableCell>
                   <TableCell align="center"></TableCell>
+                  <TableCell align="center"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
