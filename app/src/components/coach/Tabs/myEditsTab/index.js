@@ -115,6 +115,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
     }
 
     const handleVideoData = (type, play, idx) => {
+        console.log("row clicked")
         setCurTagIdx(idx)
         setVideodata({ idx, autoPlay: true, videoPlay: play })
     }

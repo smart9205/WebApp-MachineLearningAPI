@@ -8,7 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import DeleteConfirmDialog from "../../../../common/DeleteConfirmDialog";
 import TableRow from '@mui/material/TableRow';
 
-export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete }) => {
+export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete, ...rest }) => {
     const ref = useRef(null);
     const [deleteOpen, setDeleteOpen] = useState(false)
 
@@ -83,7 +83,7 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete
             role="checkbox"
             tabIndex={-1}
             selected={selected}
-
+            {...rest}
         >
             <DeleteConfirmDialog
                 open={deleteOpen}

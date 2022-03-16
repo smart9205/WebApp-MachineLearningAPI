@@ -40,7 +40,7 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
         row={row}
         onPlay={() => onPlay({ row, idx })}
         selected={idx === selected}
-        onClick={e => handleRowClick({ row, idx })}
+        onClick={() => handleRowClick({ row, idx })}
         key={row.id}
         index={idx}
         id={row.id}
