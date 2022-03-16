@@ -112,15 +112,14 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
     const PlayVideo = (num) => {
         let index;
         if (curIdx + num >= tagList.length) {
-            index = 0;
             setPlay(false)
         } else {
             if (curIdx + num < 0) { index = tagList.length - 1 }
             else index = curIdx + num
             playTagByIdx(index)
             setPlay(true)
+            setCurIdx(index)
         }
-        setCurIdx(index)
     }
 
     return (
