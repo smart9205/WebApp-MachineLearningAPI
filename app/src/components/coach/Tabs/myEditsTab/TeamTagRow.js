@@ -95,7 +95,7 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete
             <TableCell align="center">{row.t_start_time}</TableCell>
             <TableCell align="center">{row.t_end_time}</TableCell>
             <TableCell align="center" sx={{ p: 0, m: 0 }}>
-                <IconButton size="small" onClick={(e) => onPlay()}>
+                <IconButton size="small" onClick={(e) => { e.stopPropagation(); onPlay() }}>
                     <PlayCircleIcon />
                 </IconButton>
             </TableCell>
