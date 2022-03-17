@@ -59,13 +59,15 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
 
         if (!tagList.length) return
 
-        playTagByIdx(idx)
         setCurIdx(idx)
-
+        
         setPlay(videoPlay)
 
+        console.log("play +++++++++++++++++++++", tagList[0]?.start_time)
+        playTagByIdx(idx)
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tagList, idx, videoPlay, ready, cnt])
+    }, [tagList, videoData, videoURL, ready])
 
     useEffect(() => {
         const url = tagList[curIdx]?.video_url ?? ''
@@ -86,6 +88,8 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
 
         if (autoPlay)
             onChangeClip(curIdx)
+
+            playTagByIdx(curIdx)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tagList, curIdx])
 
@@ -137,7 +141,7 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
                             onReady={() => setReady(true)}
                             onProgress={(p) => onProgress(p.playedSeconds)}
                             playing={play}
-                            controls={false}
+                            controls={true}
                             width='100%'
                             height='100%'
                         />
