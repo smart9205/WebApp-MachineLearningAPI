@@ -33,9 +33,15 @@ module.exports = app => {
 	);
 
 	app.put(
-		"/user_edit_clips",
+		"/user_edit_clips_sort",
 		[authJwt.isCoach],
 		controller.updateEditClipsSort
+	);
+
+	app.put(
+		"/user_edit_clip/:id",
+		[authJwt.isCoach],
+		controller.updateEditClip
 	);
 
 	app.delete(

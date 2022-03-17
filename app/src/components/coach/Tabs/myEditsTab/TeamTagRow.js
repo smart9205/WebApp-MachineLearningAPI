@@ -7,10 +7,13 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import TableCell from '@mui/material/TableCell';
 import DeleteConfirmDialog from "../../../../common/DeleteConfirmDialog";
 import TableRow from '@mui/material/TableRow';
+import TCellTimeEdit from '../../../tagging/TCellTimeEdit';
+import GameService from '../../../../services/game.service';
 
 export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete, ...rest }) => {
     const ref = useRef(null);
     const [deleteOpen, setDeleteOpen] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const [{ handlerId }, drop] = useDrop({
         accept: "TeamTagRow",
@@ -75,6 +78,14 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete
             onDelete(row.id)
     }
 
+    const update = (data) => {
+        setLoading(true)
+        GameService.updateEditClip(data).then(res => {
+            console.log(res)
+            setLoading(false)
+        }).catch(err => setLoading(false))
+    }
+
     return (
         <TableRow
             hover
@@ -92,8 +103,22 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete
             <TableCell align="center">{row.period_name}</TableCell>
             <TableCell align="center">{row.offensive_team_name}</TableCell>
             <TableCell align="center">{row.defensive_team_name}</TableCell>
-            <TableCell align="center">{row.t_start_time}</TableCell>
-            <TableCell align="center">{row.t_end_time}</TableCell>
+            <TCellTimeEdit
+                value={row.start_time}
+                update={v => {
+                    update({ ...row, start_time: v })
+                    row.start_time = v
+                }}
+                end={row.end_time}
+            />
+            <TCellTimeEdit
+                value={row.end_time}
+                update={v => {
+                    update({ ...row, end_time: v })
+                    row.end_time = v
+                }}
+                start={row.start_time}
+            />
             <TableCell align="center" sx={{ p: 0, m: 0 }}>
                 <IconButton size="small" onClick={(e) => onPlay()}>
                     <PlayCircleIcon />

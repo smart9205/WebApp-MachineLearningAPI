@@ -30,9 +30,11 @@ exports.create = async (req, res) => {
       public."Player_Tags".start_time as p_start_time,
       public."Player_Tags".end_time as p_end_time,
       public."Team_Tags".start_time as t_start_time,
-      public."Team_Tags".end_time as t_end_time
+      public."Team_Tags".end_time as t_end_time,
+      public."Games".date
     FROM public."Player_Tags"
     LEFT JOIN public."Team_Tags" on public."Player_Tags".team_tag_id = public."Team_Tags".id
+    LEFT JOIN public."Games" on public."Team_Tags".game_id = public."Games".id
     WHERE 
       ${req.body.actionIds.length > 0 ? `action_id in (${req.body.actionIds.join(",")}) and ` : ""}
       ${req.body.actionTypeIds.length > 0 ? `action_type_id in (${req.body.actionTypeIds.join(",")}) and ` : ""}
@@ -41,6 +43,7 @@ exports.create = async (req, res) => {
       ${req.body.curSelect === 1 ? `defensive_team_id = ${req.body.teamId} and ` : ""}
       ${req.body.curSelect === 2 ? `player_id = ${req.body.playerId} and ` : ""}
       game_id in (${req.body.gameIds.join(",")})
+    ORDER BY date, t_start_time, p_start_time
   `).then(data => {
     const tagList = data[0]
 
@@ -147,6 +150,41 @@ exports.updateEditClipsSort = (req, res) => {
   res.send({
     message: "Edit_clips are updated successfully."
   });
+}
+
+exports.updateEditClip = (req, res) => {
+  console.log("updateEdit Clips", req.body)
+  const id = req.params.id;
+
+  const editClip = {
+    id: req.body.id,
+    edit_id: req.body.edit_id,
+    start_time: req.body.start_time,
+    end_time: req.body.end_time,
+    team_tag_id: req.body.team_tag_id,
+    player_tag_id: req.body.player_tag_id,
+    sort: req.body.sort,
+  }
+
+  Edit_Clips.update(editClip, {
+    where: { id: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Team_Tag was updated successfully."
+        });
+      } else {
+        res.send({
+          message: `Cannot update Team_Tag with id=${id}. Maybe Team_Tag was not found or req.body is empty!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Team_Tag with id=" + id
+      });
+    });
 }
 
 exports.update = (req, res) => {

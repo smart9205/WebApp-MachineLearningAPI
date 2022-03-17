@@ -106,7 +106,13 @@ const updateLeague = (req) => {
 }
 
 const updateEditClipsSort = (req) => {
-  return axios.put(API_URL + `user_edit_clips`, req, { headers: authHeader() }).then((response) => {
+  return axios.put(API_URL + `user_edit_clips_sort`, req, { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+}
+
+const updateEditClip = (req) => {
+  return axios.put(API_URL + `user_edit_clip/${req.id}`, req, { headers: authHeader() }).then((response) => {
     return response.data;
   });
 }
@@ -436,6 +442,7 @@ const gameService = {
   updateCoachTeam,
   updateUserEdit,
   updateEditClipsSort,
+  updateEditClip,
 
   deletePlayersInTeam,
 
