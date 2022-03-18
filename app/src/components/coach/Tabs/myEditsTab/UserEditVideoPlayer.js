@@ -63,7 +63,6 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
         
         setPlay(videoPlay)
 
-        console.log("play +++++++++++++++++++++", tagList[0]?.start_time)
         playTagByIdx(idx)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,8 +70,6 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
 
     useEffect(() => {
         const url = tagList[curIdx]?.video_url ?? ''
-
-        console.log("VideoData : ", tagList, url, curOriginURL)
 
         if (url !== curOriginURL) {
             if (url?.startsWith("https://www.youtube.com")) {
