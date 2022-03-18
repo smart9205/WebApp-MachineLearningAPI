@@ -29,6 +29,11 @@ const TeamStatsTab = ({ gameList }) => {
         const {
             target: { value },
         } = event;
+
+        if (value[value.length - 1] === "all") {
+            setGames(gameList);
+            return;
+        }
         setGames(
             // On autofill we get a stringified value.
             typeof value === 'string' ? value.split(',') : value,
@@ -55,6 +60,16 @@ const TeamStatsTab = ({ gameList }) => {
                     )}
                     MenuProps={MenuProps}
                 >
+                    <MenuItem value="all">
+                        <Checkbox
+                            checked={gameList.length > 0 && games.length === gameList.length}
+                            indeterminate={games.length > 0 && games.length < gameList.length}
+                            onChange={e => !e.target.checked && setGames([])}
+                        />
+                        <ListItemText
+                            primary={'Select All'}
+                        />
+                    </MenuItem>
                     {gameList.map((g) => (
                         <MenuItem key={g.id} value={g}>
                             <Checkbox checked={games.indexOf(g) > -1} />
@@ -63,7 +78,7 @@ const TeamStatsTab = ({ gameList }) => {
                     ))}
                 </Select>
             </FormControl>
-        </Box>
+        </Box >
     );
 }
 
