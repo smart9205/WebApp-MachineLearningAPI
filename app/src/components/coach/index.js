@@ -41,7 +41,9 @@ export default function Coach() {
     const classes = useStyles();
 
     const { user: currentUser } = useSelector((state) => state.auth);
-    const [curTab, setCurTab] = useState(0)
+
+    const [curTab, setCurTab] = useState(1)
+
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamList: [],
         team: null,
@@ -195,7 +197,7 @@ export default function Coach() {
                     height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
                 }}>
                 {curTab === 0 && <GameTab allTagList={allTagList} game={game} playerList={playerList} gameScore={gameScore} />}
-                {curTab === 1 && <TeamStatsTab />}
+                {curTab === 1 && <TeamStatsTab gameList={gameList} />}
                 {curTab === 2 && <PlayerStatsTab />}
                 {curTab === 3 && <MyEditsTab teamList={teamList} game={game} playerList={playerList} />}
             </Paper>
