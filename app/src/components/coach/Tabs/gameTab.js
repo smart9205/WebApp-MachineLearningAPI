@@ -11,7 +11,7 @@ import ExcelButton from '../ExcelButton';
 import IndividualTagTable from '../IndividualTagTable';
 import TeamAccordion from '../TeamAccordion';
 import VideoPlayer from '../VideoPlayer';
-const GameTab = ({ allTagList, game, playerList }) => {
+const GameTab = ({ allTagList, game, playerList, gameScore }) => {
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -33,6 +33,7 @@ const GameTab = ({ allTagList, game, playerList }) => {
                 style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}>
                 <TeamAccordion
                     tagList={allTagList}
+                    gameScore={gameScore}
                     playTags={(res) => { }}
                     onActionSelected={(res) => {
                         console.log("actionselected")

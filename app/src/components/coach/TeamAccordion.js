@@ -8,8 +8,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Table, } from 'react-bootstrap'
 import { RULE } from '../../common/staticData';
 
-export default function TeamAccordion({ playTags, tagList = [], onActionSelected, ...params }) {
+export default function TeamAccordion({ playTags, tagList = [], onActionSelected, gameScore, ...params }) {
   const [expand, setExpand] = useState(0)
+
+  console.log("tagList", tagList)
 
   useEffect(() => {
     handleActionTags();
@@ -55,14 +57,19 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
               <tbody className='text-center' style={{ m: 0 }}>
                 {
                   !!rule?.successful && <tr>
-                    <td></td>
                     {rule.title === "Shot" ?
                       <>
+                        <td>
+                          {gameScore?.team_score ?? 0}
+                          {" : "}
+                          {gameScore?.opponent_score ?? 0}
+                        </td>
                         <td><p>On Target</p></td>
                         <td><p>Off Target</p></td>
                       </>
                       :
                       <>
+                        <td></td>
                         <td><p>Successful</p></td>
                         <td><p>Unsuccessful</p></td>
                       </>

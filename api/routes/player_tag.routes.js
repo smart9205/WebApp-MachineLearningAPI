@@ -44,6 +44,11 @@ module.exports = app => {
 		controller.getByTeam
 	);
 
+	app.get(
+		"/player_tag/getgamescore/:game",
+		controller.getGameScore
+	);
+
 	app.put(
 		"/player_tag/:id",
 		[authJwt.verifyToken],
