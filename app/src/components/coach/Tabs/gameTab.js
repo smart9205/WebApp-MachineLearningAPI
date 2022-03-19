@@ -36,7 +36,6 @@ const GameTab = ({ allTagList, game, playerList, gameScore }) => {
                     gameScore={gameScore}
                     playTags={(res) => { }}
                     onActionSelected={(res) => {
-                        console.log("actionselected")
                         const teamTags = _.uniqBy(res, 'team_tag_id')
                         setState({
                             actionTagList: res,
@@ -91,7 +90,6 @@ const GameTab = ({ allTagList, game, playerList, gameScore }) => {
                     }
                     selected={curTeamTagIdx}
                     onPlay={({ row, idx }) => {
-                        console.log("onplay", row, idx)
                         setCurTeamTagIdx(idx)
                         setVideodata({
                             idx,
@@ -113,7 +111,6 @@ const GameTab = ({ allTagList, game, playerList, gameScore }) => {
                     offenseTeam={playerList}
                     updateTagList={() => { }}
                     onPlay={(row) => {
-                        console.log("play", row)
                         setVideodata({
                             idx: 0,
                             autoPlay: false,

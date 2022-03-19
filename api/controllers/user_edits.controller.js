@@ -5,10 +5,6 @@ const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
 
 exports.create = async (req, res) => {
-
-  console.log("create new", req.body)
-
-  // Validate request
   if (!req.body.name) {
     res.status(400).send({
       message: "Name can not be empty!"
@@ -74,7 +70,6 @@ exports.create = async (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-
   User_Edits.findAll({ where: { user_id: req.userId } })
     .then(data => {
       res.send(data);
@@ -139,8 +134,6 @@ exports.findOne = (req, res) => {
 };
 
 exports.updateEditClipsSort = (req, res) => {
-  console.log("updateEditClips", req.body)
-
   if (req.body.length < 2)
     res.send({
       message: "Edit_clips are not enough to update sort."
@@ -154,7 +147,6 @@ exports.updateEditClipsSort = (req, res) => {
 }
 
 exports.updateEditClip = (req, res) => {
-  console.log("updateEdit Clips", req.body)
   const id = req.params.id;
 
   const editClip = {

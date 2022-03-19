@@ -227,16 +227,16 @@ exports.getGameScore = (req, res) => {
   const gameId = req.params.game;
 
   Sequelize.query(`
-  SELECT 
-    SUM(CASE WHEN team_id = home_team_id THEN 1 ELSE 0 END) as home_score,
-    SUM(CASE WHEN team_id = away_team_id THEN 1 ELSE 0 END) as away_score,
-    home_team_id,
-    away_team_id
-  FROM public."Player_Tags"
-  LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
-  LEFT JOIN public."Games" on public."Games".id = public."Team_Tags".game_id
-  Where game_id = ${gameId} and action_result_id = 3
-  group by home_team_id, away_team_id
+    SELECT 
+      SUM(CASE WHEN team_id = home_team_id THEN 1 ELSE 0 END) as home_score,
+      SUM(CASE WHEN team_id = away_team_id THEN 1 ELSE 0 END) as away_score,
+      home_team_id,
+      away_team_id
+    FROM public."Player_Tags"
+    LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+    LEFT JOIN public."Games" on public."Games".id = public."Team_Tags".game_id
+    Where game_id = ${gameId} and action_result_id = 3
+    group by home_team_id, away_team_id
   `)
     .then(data => {
       res.send(data[0][0]);
