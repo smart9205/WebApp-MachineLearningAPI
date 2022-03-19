@@ -11,15 +11,14 @@ import ExcelButton from '../ExcelButton';
 import IndividualTagTable from '../IndividualTagTable';
 import TeamAccordion from '../TeamAccordion';
 import VideoPlayer from '../VideoPlayer';
-const GameTab = ({ allTagList, game, playerList, gameScore, opponentTagList, teamId }) => {
+const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId }) => {
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamTagList: [],
         actionTagList: [],
-        gameTagList: []
     })
-    const { teamTagList, actionTagList, gameTagList } = state
+    const { teamTagList, actionTagList } = state
 
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -28,18 +27,14 @@ const GameTab = ({ allTagList, game, playerList, gameScore, opponentTagList, tea
         videoPlay: false,
     })
 
-    useEffect(() => {
-        setState({ gameTagList: [...allTagList, ...opponentTagList] })
-    }, [allTagList, opponentTagList])
-
     return (
         <>
             <Box
                 style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}>
                 <TeamAccordion
-                    tagList={gameTagList}
+                    allTagList={allTagList}
+                    opponentTagList={opponentTagList}
                     teamId={teamId}
-                    gameScore={gameScore}
                     playTags={(res) => { }}
                     onActionSelected={(res) => {
                         const teamTags = _.uniqBy(res, 'team_tag_id')

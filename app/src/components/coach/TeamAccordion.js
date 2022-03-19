@@ -8,10 +8,20 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Table, } from 'react-bootstrap'
 import { RULE } from '../../common/staticData';
 
-export default function TeamAccordion({ playTags, tagList = [], onActionSelected, gameScore, teamId, ...params }) {
+export default function TeamAccordion({ playTags, allTagList = [], opponentTagList = [], onActionSelected, teamId, ...params }) {
   const [expand, setExpand] = useState(0)
 
-  console.log("teamId", teamId)
+  const [tagList, setTagList] = useState([])
+  const [teamShots, setTeamShots] = useState([])
+  const [opponentShots, setOpponentShots] = useState([])
+
+  useEffect(() => {
+    setTagList([...allTagList, ...opponentTagList])
+
+    setTeamShots(allTagList.filter(t => t.action_result_id === 3))
+    setOpponentShots(opponentTagList.filter(t => t.action_result_id === 3))
+
+  }, [allTagList, opponentTagList])
 
   useEffect(() => {
     handleActionTags();
@@ -36,13 +46,19 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
     <Box {...params}>
       <Box sx={{ display: "flex", justifyContent: "space-evenly", p: 1 }}>
         <Typography>Total Score</Typography>
-        <Box sx={{ display: "flex", textDecoration: "underline" }}>
-          <Typography>
-            {gameScore?.team_score ?? 0}
+        <Box sx={{ display: "flex" }}>
+          <Typography
+            sx={teamShots.length > 0 ? { textDecoration: "underline", cursor: "pointer" } : {}}
+            onClick={() => onActionSelected(teamShots)}
+          >
+            {teamShots.length}
           </Typography>
           <Typography sx={{ px: 1 }}>{":"}</Typography>
-          <Typography>
-            {gameScore?.opponent_score ?? 0}
+          <Typography
+            sx={opponentShots.length > 0 ? { textDecoration: "underline", cursor: "pointer" } : {}}
+            onClick={() => onActionSelected(opponentShots)}
+          >
+            {opponentShots.length}
           </Typography>
         </Box>
       </Box>
