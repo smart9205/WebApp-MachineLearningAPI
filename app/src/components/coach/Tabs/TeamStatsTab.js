@@ -53,9 +53,7 @@ const TeamStatsTab = ({ gameList }) => {
                     input={<OutlinedInput label="Tag" />}
                     renderValue={(selected) => (
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                            {selected.map((g) => (
-                                <Chip key={g.id} label={`${g.home_team_name} VS ${g.away_team_name}`} />
-                            ))}
+                            {`${selected.length} games selected`}
                         </Box>
                     )}
                     MenuProps={MenuProps}
