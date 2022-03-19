@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 
 import _ from 'lodash'
 import { Paper, Box, IconButton } from '@mui/material'
@@ -11,14 +11,15 @@ import ExcelButton from '../ExcelButton';
 import IndividualTagTable from '../IndividualTagTable';
 import TeamAccordion from '../TeamAccordion';
 import VideoPlayer from '../VideoPlayer';
-const GameTab = ({ allTagList, game, playerList, gameScore }) => {
+const GameTab = ({ allTagList, game, playerList, gameScore, opponentTagList, teamId }) => {
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamTagList: [],
         actionTagList: [],
+        gameTagList: []
     })
-    const { teamTagList, actionTagList } = state
+    const { teamTagList, actionTagList, gameTagList } = state
 
     const [videoData, setVideodata] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -27,12 +28,17 @@ const GameTab = ({ allTagList, game, playerList, gameScore }) => {
         videoPlay: false,
     })
 
+    useEffect(() => {
+        setState({ gameTagList: [...allTagList, ...opponentTagList] })
+    }, [allTagList, opponentTagList])
+
     return (
         <>
             <Box
                 style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}>
                 <TeamAccordion
-                    tagList={allTagList}
+                    tagList={gameTagList}
+                    teamId={teamId}
                     gameScore={gameScore}
                     playTags={(res) => { }}
                     onActionSelected={(res) => {

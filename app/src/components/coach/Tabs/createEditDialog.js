@@ -101,7 +101,6 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
     useEffect(() => {
         if (!open) return
 
-        console.log('team', team)
         if (!!team && game.length > 0) {
             gameService.getGameTeamPlayersByTeam(team.team_id, game.map(g => g.id).join(",")).then((res) => {
                 setState({ playerList: res })

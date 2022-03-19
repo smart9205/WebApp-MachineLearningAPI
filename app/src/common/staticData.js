@@ -3,6 +3,7 @@ export const PLAYER_ICON_DEFAULT = "https://s3.amazonaws.com/s4usitesimages/imag
 
 export const RULE = [
     {
+        opponent: false,
         title: "Shot",
         title_he: "בעיטות לשער",
         successful: [1, 3],
@@ -16,6 +17,7 @@ export const RULE = [
         ]
     },
     {
+        opponent: false,
         title: "Pass",
         title_he: "מסירות",
         successful: [4],
@@ -29,6 +31,7 @@ export const RULE = [
             { action_id: 2, action_type_id: [11], title: "Free Kick" }]
     },
     {
+        opponent: false,
         title: "Dribble",
         title_he: "כדרורים",
         successful: [4],
@@ -39,6 +42,7 @@ export const RULE = [
         ]
     },
     {
+        opponent: false,
         title: "Cross",
         title_he: "הרמות",
         successful: [4],
@@ -51,6 +55,7 @@ export const RULE = [
         ]
     },
     {
+        opponent: false,
         title: "Draw Foul",
         title_he: "משיכת פאולים",
         row: [
@@ -59,6 +64,7 @@ export const RULE = [
             { action_id: 6, action_type_id: [10], title: "Red Card" }]
     },
     {
+        opponent: false,
         title: "Interception",
         title_he: "חטיפות",
         row: [
@@ -70,6 +76,7 @@ export const RULE = [
             { action_id: 10, action_type_id: [14], title: "Throw-In" }]
     },
     {
+        opponent: false,
         title: "Saved",
         title_he: "הצלות",
         row: [
@@ -78,6 +85,7 @@ export const RULE = [
         ]
     },
     {
+        opponent: false,
         title: "Clearance",
         title_he: "הרחקות",
         row: [
@@ -86,6 +94,7 @@ export const RULE = [
         ]
     },
     {
+        opponent: false,
         title: "Turnover",
         title_he: "איבודי כדור",
         row: [
@@ -95,12 +104,40 @@ export const RULE = [
         ]
     },
     {
+        opponent: false,
         title: "Foul",
         title_he: "פאולים",
         row: [
             { action_id: 5, action_type_id: [8], title: "Regular" },
             { action_id: 5, action_type_id: [9], title: "Yellow Card" },
             { action_id: 5, action_type_id: [10], title: "Red Card" }
+        ]
+    },
+    {
+        opponent: true,
+        title: "Opponent Shot",
+        title_he: "בעיטות לשער",
+        successful: [1, 3],
+        unsuccessful: [2],
+        row: [
+            { action_id: 1, action_type_id: [1], title: "Right" },
+            { action_id: 1, action_type_id: [2], title: "Left" },
+            { action_id: 1, action_type_id: [3], title: "Header" },
+            { action_id: 1, action_type_id: [11], title: "Free-Kick" },
+            { action_id: 1, action_type_id: [13], title: "Penalty" }
+        ]
+    },
+    {
+        opponent: true,
+        title: "Opponent Cross",
+        title_he: "הרמות",
+        successful: [4],
+        unsuccessful: [7, 8, 15],
+        row: [
+            { action_id: 3, action_type_id: [1], title: "Right" },
+            { action_id: 3, action_type_id: [2], title: "Left" },
+            { action_id: 3, action_type_id: [11], title: "Free Kick" },
+            { action_id: 3, action_type_id: [12], title: "Corner" }
         ]
     },
 ]

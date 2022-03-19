@@ -13,8 +13,6 @@ const ExcelButton = ({ team, ...rest }) => {
 	const downloadExcel = () => {
 		buttonRef.current.click();
 	}
-
-	console.log("team", team)
 	return (
 		<div {...rest}>
 			<Button variant="outlined" onClick={downloadExcel}>{'Export'}</Button>

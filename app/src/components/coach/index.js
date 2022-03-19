@@ -53,8 +53,9 @@ export default function Coach() {
         game: null,
         allTagList: [],
         gameScore: null,
+        opponentTagList: []
     })
-    const { teamList, team, gameList, game, allTagList, playerList, gameScore } = state
+    const { teamList, team, gameList, game, allTagList, playerList, gameScore, opponentTagList } = state
 
     const [drawOpen, setDrawOpen] = useState(true)
 
@@ -78,10 +79,16 @@ export default function Coach() {
         })
     }, [team])
     useEffect(() => {
+        console.log("game", game)
         if (!!team && !!game) {
             setLoading(true)
+            const opponentTeamId = game?.away_team_id === team.team_id ? game?.home_team_id : game?.away_team_id
             gameService.getAllPlayerTagsByTeam(team.team_id, game?.id).then((res) => {
                 setState({ allTagList: res })
+                setLoading(false)
+            })
+            gameService.getAllPlayerTagsByTeam(opponentTeamId, game?.id).then((res) => {
+                setState({ opponentTagList: res })
                 setLoading(false)
             })
             gameService.getGameTeamPlayersByTeam(team.team_id, game?.id).then((res) => {
@@ -196,7 +203,15 @@ export default function Coach() {
                     display: "flex",
                     height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
                 }}>
-                {curTab === 0 && <GameTab allTagList={allTagList} game={game} playerList={playerList} gameScore={gameScore} />}
+                {curTab === 0 &&
+                    <GameTab
+                        allTagList={allTagList}
+                        game={game}
+                        playerList={playerList}
+                        gameScore={gameScore}
+                        teamId={team?.team_id}
+                        opponentTagList={opponentTagList}
+                    />}
                 {curTab === 1 && <TeamStatsTab gameList={gameList} />}
                 {curTab === 2 && <PlayerStatsTab />}
                 {curTab === 3 && <MyEditsTab teamList={teamList} game={game} playerList={playerList} />}

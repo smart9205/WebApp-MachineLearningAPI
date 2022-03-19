@@ -8,10 +8,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Table, } from 'react-bootstrap'
 import { RULE } from '../../common/staticData';
 
-export default function TeamAccordion({ playTags, tagList = [], onActionSelected, gameScore, ...params }) {
+export default function TeamAccordion({ playTags, tagList = [], onActionSelected, gameScore, teamId, ...params }) {
   const [expand, setExpand] = useState(0)
 
-  console.log("tagList", tagList)
+  console.log("teamId", teamId)
 
   useEffect(() => {
     handleActionTags();
@@ -19,16 +19,17 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
   }, [expand, tagList])
 
   const handleActionTags = () => {
-    const actionTags = tagList?.filter(t => !!RULE[expand].row.find(a =>
-      a.action_id === t.action_id &&
-      (!a?.action_result_id ? true : a.action_result_id.includes(t.action_result_id)) &&
-      (!a?.action_type_id ? true : a.action_type_id.includes(t.action_type_id)) &&
-      // a.action_type_id?.includes(t.action_type_id) &&
-      (
-        (!a?.susuccessful ? true : a?.susuccessful?.includes(t.action_result_id)) ||
-        (!a?.unsusuccessful ? true : a?.unsusuccessful?.includes(t.action_result_id))
-      )
-    ));
+    const actionTags = tagList?.filter(t =>
+      (RULE[expand].opponent === (t.team_id !== teamId)) &&
+      !!RULE[expand].row.find(a =>
+        a.action_id === t.action_id &&
+        (!a?.action_result_id ? true : a.action_result_id.includes(t.action_result_id)) &&
+        (!a?.action_type_id ? true : a.action_type_id.includes(t.action_type_id)) &&
+        (
+          (!a?.susuccessful ? true : a?.susuccessful?.includes(t.action_result_id)) ||
+          (!a?.unsusuccessful ? true : a?.unsusuccessful?.includes(t.action_result_id))
+        )
+      ));
     onActionSelected(actionTags)
   }
   return (
@@ -81,6 +82,7 @@ export default function TeamAccordion({ playTags, tagList = [], onActionSelected
                   </tr>}
                   {rule.row.map((type, i) => {
                     const data = tagList.filter(t =>
+                      (RULE[expand].opponent === (t.team_id !== teamId)) &&
                       t.action_id === type.action_id &&
                       (!type?.action_result_id ? true : type.action_result_id.includes(t.action_result_id)) &&
                       (!type?.action_type_id ? true : type.action_type_id.includes(t.action_type_id))
