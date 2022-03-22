@@ -124,7 +124,7 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen }) 
                     <div className="player-wrapper">
                         <ReactPlayer
                             className="react-player"
-                            url={videoURL}
+                            url={tagList.length > 0 ? videoURL : ""}
                             // url={VIDEO}
                             ref={player}
                             onPlay={() => setPlay(true)}
