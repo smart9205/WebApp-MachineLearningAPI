@@ -98,7 +98,7 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
         const endTime = toSecond(tagList[curIdx]?.end_time);
 
         if (currentTime >= endTime) {
-            if (tagList.length <= curIdx) {// last tag
+            if (tagList.length <= curIdx + 1) {// last tag
                 setPlay(false)
             }
             else if (canNext) { // is auto play, next clip
@@ -138,7 +138,7 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
                             onReady={() => setReady(true)}
                             onProgress={(p) => onProgress(p.playedSeconds)}
                             playing={play}
-                            controls={true}
+                            controls={false}
                             width='100%'
                             height='100%'
                         />
