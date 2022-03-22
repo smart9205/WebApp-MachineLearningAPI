@@ -30,7 +30,7 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
 
   const handleActionTags = () => {
     const actionTags = tagList?.filter(t =>
-      (RULE[expand].opponent === (t.team_id !== teamId)) &&
+      (RULE[expand]?.opponent === (t.team_id !== teamId)) &&
       !!RULE[expand].row.find(a =>
         a.action_id === t.action_id &&
         (!a?.action_result_id ? true : a.action_result_id.includes(t.action_result_id)) &&
@@ -66,7 +66,7 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
         RULE.map((rule, idx) => (
           <Accordion
             key={idx}
-            onChange={(event, expanded) => expanded && setExpand(idx)}
+            onChange={(event, expanded) => { setExpand(expanded ? idx : -1); }}
             expanded={expand === idx}
           >
             <AccordionSummary
@@ -97,12 +97,12 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
                     }
                   </tr>}
                   {rule.row.map((type, i) => {
-                    const data = tagList.filter(t =>
-                      (RULE[expand].opponent === (t.team_id !== teamId)) &&
+                    const data = !!tagList ? tagList.filter(t =>
+                      (RULE[expand]?.opponent === (t.team_id !== teamId)) &&
                       t.action_id === type.action_id &&
                       (!type?.action_result_id ? true : type.action_result_id.includes(t.action_result_id)) &&
                       (!type?.action_type_id ? true : type.action_type_id.includes(t.action_type_id))
-                    )
+                    ) : []
                     const success = data.filter(f => !rule?.successful ? true : rule?.successful.includes(f.action_result_id))
                     const unsuccess = data.filter(f => !rule?.unsuccessful ? true : rule?.unsuccessful.includes(f.action_result_id))
                     return (
