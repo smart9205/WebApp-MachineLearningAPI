@@ -45,7 +45,7 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
   return (
     <Box {...params}>
       <Box sx={{ display: "flex", justifyContent: "space-evenly", p: 1 }}>
-        <Typography>Total Score</Typography>
+        <Typography>Final Score</Typography>
         <Box sx={{ display: "flex" }}>
           <Typography
             sx={teamShots.length > 0 ? { textDecoration: "underline", cursor: "pointer" } : {}}
