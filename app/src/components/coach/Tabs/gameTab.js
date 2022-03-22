@@ -125,6 +125,7 @@ const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId }) => {
                 videoData={videoData}
                 url={game?.video_url ?? ""}
                 onChangeClip={(idx) => setCurTeamTagIdx(idx)}
+                drawOpen={showAccordion}
             />
         </>
     );

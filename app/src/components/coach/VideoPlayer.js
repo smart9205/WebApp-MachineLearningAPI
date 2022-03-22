@@ -31,16 +31,18 @@ const styles = {
         position: "absolute",
         bottom: 5,
         left: 0,
-        width: "50%",
+        paddingInline: "7%",
         minWidth: 300,
         display: 'flex',
+        gap: "1rem",
+        alignItems: "center",
         justifyContent: 'space-evenly'
     },
     button: {
         color: "white", backgroundColor: "#80808069"
     }
 }
-export default function VideoPlayer({ videoData, url, onChangeClip }) {
+export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen }) {
     const handle = useFullScreenHandle();
     const { tagList, autoPlay, idx, videoPlay, cnt = null } = videoData
 
@@ -118,7 +120,7 @@ export default function VideoPlayer({ videoData, url, onChangeClip }) {
     return (
         <div style={{ width: "100%", margin: 'auto', minWidth: 500, position: "relative" }}>
             <FullScreen handle={handle}>
-                <div style={{ width: "98%", margin: 'auto' }}>
+                <div style={{ width: drawOpen ? "100%" : "90%", margin: 'auto' }}>
                     <div className="player-wrapper">
                         <ReactPlayer
                             className="react-player"
