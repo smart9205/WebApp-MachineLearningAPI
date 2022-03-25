@@ -1,5 +1,4 @@
-import { Box } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import moment from 'moment'
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -8,7 +7,15 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import Typography from "@mui/material/Typography";
+
+
+import { Table, } from 'react-bootstrap'
+
+import { RULE } from '../../../common/staticData';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -21,9 +28,10 @@ const MenuProps = {
     },
 };
 
-const TeamStatsTab = ({ gameList }) => {
+const TeamStatsTab = ({ gameList, teamId }) => {
 
-    const [games, setGames] = React.useState([]);
+    const [games, setGames] = useState([]);
+    const [tagList, setTagList] = useState([])
 
     const handleChange = (event) => {
         const {
@@ -40,8 +48,14 @@ const TeamStatsTab = ({ gameList }) => {
         );
     };
 
+    useEffect(() => {
+
+    }, [games])
+
+
+    console.log("games", games)
     return (
-        <Box sx={{ width: "100%", textAlign: "center", marginTop: 20 }}>
+        <Box sx={{ width: "100%" }}>
             <FormControl sx={{ width: 600 }}>
                 <InputLabel id="game-multiple-checkbox-label">Games</InputLabel>
                 <Select
@@ -76,6 +90,75 @@ const TeamStatsTab = ({ gameList }) => {
                     ))}
                 </Select>
             </FormControl>
+
+            <Box sx={{ display: 'flex' }}>
+                <Box sx={{ width: "20%" }}>
+                    <Card sx={{ m: 1 }}>
+                        <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Goals"}</Typography>
+                        19: 0
+                    </Card>
+                </Box>
+                <Grid container>
+                    {[0, 1, 2].map(i =>
+                        <Grid sm={6} md={4}>
+                            {RULE.filter((r, a) => a % 3 === i).map((rule, idx) =>
+                                <Card sx={{ m: 1, fontSize: "0.7rem" }}>
+                                    <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{rule.title}</Typography>
+                                    <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
+                                        <tbody className='text-center' style={{ m: 0 }}>
+                                            {!!rule?.successful && <tr>
+                                                {rule.title === "Shot" ?
+                                                    <>
+                                                        <td></td>
+                                                        <td><p>On Target</p></td>
+                                                        <td><p>Off Target</p></td>
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <td></td>
+                                                        <td><p>Successful</p></td>
+                                                        <td><p>Unsuccessful</p></td>
+                                                    </>
+                                                }
+                                            </tr>}
+                                            {rule.row.map((type, i) => {
+                                                const data = !!tagList ? tagList.filter(t =>
+                                                    (RULE[idx]?.opponent === (t.team_id !== teamId)) &&
+                                                    t.action_id === type.action_id &&
+                                                    (!type?.action_result_id ? true : type.action_result_id.includes(t.action_result_id)) &&
+                                                    (!type?.action_type_id ? true : type.action_type_id.includes(t.action_type_id))
+                                                ) : []
+                                                const success = data.filter(f => !rule?.successful ? true : rule?.successful.includes(f.action_result_id))
+                                                const unsuccess = data.filter(f => !rule?.unsuccessful ? true : rule?.unsuccessful.includes(f.action_result_id))
+                                                return (
+                                                    <tr key={i}>
+                                                        <td style={{ width: "20%", minWidth: 120 }}><p>{type.title}</p></td>
+                                                        <td
+                                                            width="40%"
+                                                        >
+                                                            <p className={success.length > 0 ? (rule.title === 'Turnover' || rule.title === 'Foul')
+                                                                ? "statistic-clickable-unsuccess"
+                                                                : "statistic-clickable-success"
+                                                                : ""}>{success.length}</p>
+                                                        </td>
+                                                        {
+                                                            !!rule?.successful &&
+                                                            <td
+                                                                width="40%"
+                                                            >
+                                                                <p className={unsuccess.length > 0 ? "statistic-clickable-unsuccess" : ""}>{unsuccess.length}</p>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </Table>
+                                </Card>)}
+                        </Grid>
+                    )}
+                </Grid>
+            </Box>
         </Box >
     );
 }

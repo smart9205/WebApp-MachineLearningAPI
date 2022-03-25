@@ -78,7 +78,6 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         if (!edit) return
         setCurEdit(edit)
         gameService.getEditClipsByUserEditId(edit.id).then(res => {
-            console.log("get EditClipsby userEditid", res)
             setCurTagIdx(0)
             const ttag = res.filter(t => t.team_tag_id !== null)
             const ptag = res.filter(t => t.player_tag_id !== null)

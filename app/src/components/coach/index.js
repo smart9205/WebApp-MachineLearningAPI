@@ -42,7 +42,9 @@ export default function Coach() {
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
-    const [curTab, setCurTab] = useState(!currentUser?.create_edits ? 0 : 3)
+    // const [curTab, setCurTab] = useState(!currentUser?.create_edits ? 0 : 3)
+
+    const [curTab, setCurTab] = useState(1)
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamList: [],
@@ -198,7 +200,7 @@ export default function Coach() {
                         teamId={team?.team_id}
                         opponentTagList={opponentTagList}
                     />}
-                {curTab === 1 && <TeamStatsTab gameList={gameList} />}
+                {curTab === 1 && <TeamStatsTab gameList={gameList} teamId={team?.team_id} />}
                 {curTab === 2 && <PlayerStatsTab />}
                 {curTab === 3 && <MyEditsTab teamList={teamList} game={game} playerList={playerList} />}
             </Paper>
