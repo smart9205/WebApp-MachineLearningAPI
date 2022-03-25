@@ -95,7 +95,6 @@ const TeamStatsTab = ({ gameList, teamId }) => {
                 <Box sx={{ width: "20%" }}>
                     <Card sx={{ m: 1 }}>
                         <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Goals"}</Typography>
-                        19: 0
                     </Card>
                 </Box>
                 <Grid container>
