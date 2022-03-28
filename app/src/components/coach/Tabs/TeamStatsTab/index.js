@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import moment from 'moment'
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -15,7 +15,9 @@ import Typography from "@mui/material/Typography";
 
 import { Table, } from 'react-bootstrap'
 
-import { RULE } from '../../../common/staticData';
+import { RULE } from '../../../../common/staticData';
+import gameService from "../../../../services/game.service";
+import PlayersTab from "./PlayersTab";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -28,10 +30,16 @@ const MenuProps = {
     },
 };
 
-const TeamStatsTab = ({ gameList, teamId }) => {
+const TeamStatsTab = ({ gameList, team }) => {
 
     const [games, setGames] = useState([]);
     const [tagList, setTagList] = useState([])
+    const [data, setData] = useReducer((old, action) => ({ ...old, ...action }), {
+        team_score: 0,
+        opponent_score: 0
+    })
+
+    const { team_score, opponent_score } = data
 
     const handleChange = (event) => {
         const {
@@ -49,11 +57,13 @@ const TeamStatsTab = ({ gameList, teamId }) => {
     };
 
     useEffect(() => {
-
+        console.log("games", games, team)
+        const gameIds = games.map(g => g.id).join(",")
+        gameService.getScoreInGames(gameIds, team?.id ?? 0).then(res => {
+            setData({ team_score: res.team_score, opponent_score: res.opponent_score })
+        })
     }, [games])
 
-
-    console.log("games", games)
     return (
         <Box sx={{ width: "100%" }}>
             <FormControl sx={{ width: 600 }}>
@@ -95,13 +105,26 @@ const TeamStatsTab = ({ gameList, teamId }) => {
                 <Box sx={{ width: "20%" }}>
                     <Card sx={{ m: 1 }}>
                         <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Goals"}</Typography>
+                        <Box sx={{ display: 'flex', justifyContent: "space-evenly", m: 2 }}>
+                            <Typography sx={{ textAlign: 'center' }}>{team?.team_name ?? "My Team"}:</Typography>
+                            <Typography sx={{ textAlign: 'center' }}>{team_score ?? 0}</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: "space-evenly", m: 2 }}>
+                            <Typography sx={{ textAlign: 'center' }}>{"Opponents"}:</Typography>
+                            <Typography sx={{ textAlign: 'center' }}>{opponent_score ?? 0}</Typography>
+                        </Box>
+                    </Card>
+
+                    <Card sx={{ m: 1 }}>
+                        <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Players"}</Typography>
+                        <PlayersTab />
                     </Card>
                 </Box>
                 <Grid container>
                     {[0, 1, 2].map(i =>
                         <Grid sm={6} md={4}>
                             {RULE.filter((r, a) => a % 3 === i).map((rule, idx) =>
-                                <Card sx={{ m: 1, fontSize: "0.7rem" }}>
+                                <Card sx={{ m: 0.5, fontSize: "0.675rem" }}>
                                     <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{rule.title}</Typography>
                                     <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
                                         <tbody className='text-center' style={{ m: 0 }}>
@@ -122,7 +145,7 @@ const TeamStatsTab = ({ gameList, teamId }) => {
                                             </tr>}
                                             {rule.row.map((type, i) => {
                                                 const data = !!tagList ? tagList.filter(t =>
-                                                    (RULE[idx]?.opponent === (t.team_id !== teamId)) &&
+                                                    (RULE[idx]?.opponent === (t.team_id !== team?.id ?? 0)) &&
                                                     t.action_id === type.action_id &&
                                                     (!type?.action_result_id ? true : type.action_result_id.includes(t.action_result_id)) &&
                                                     (!type?.action_type_id ? true : type.action_type_id.includes(t.action_type_id))

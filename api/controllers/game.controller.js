@@ -138,6 +138,32 @@ exports.findOne = (req, res) => {
 
 };
 
+exports.getScoreInGames = (req, res) => {
+  const gameIds = req.body.gameIds;
+  const teamId = req.body.teamId;
+
+  console.log("gameIds", gameIds, teamId)
+
+  Sequelize.query(`
+    SELECT 
+      SUM(CASE WHEN team_id = ${teamId} THEN 1 ELSE 0 END) as team_score,
+      SUM(CASE WHEN team_id <> ${teamId} THEN 1 ELSE 0 END) as opponent_score
+    FROM public."Player_Tags"
+    LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+    LEFT JOIN public."Games" on public."Games".id = public."Team_Tags".game_id
+    Where game_id in (${gameIds.length > 0 ? gameIds : 0}) and action_result_id = 3
+  `)
+    .then(data => {
+      res.send(data[0][0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+};
+
 exports.update = (req, res) => {
   const id = req.params.id;
 
@@ -151,7 +177,7 @@ exports.update = (req, res) => {
         });
       } else {
         res.send({
-          message: `Cannot update Game with id=${id}. Maybe Game was not found or req.body is empty!`
+          message: `Cannot update Game with id = ${id}. Maybe Game was not found or req.body is empty!`
         });
       }
     })
@@ -189,7 +215,7 @@ exports.delete = async (req, res) => {
       } else {
         res.send({
           result: "success",
-          message: `Cannot delete Game with id=${id}. Maybe Game was not found!`
+          message: `Cannot delete Game with id = ${id}. Maybe Game was not found!`
         });
       }
     })

@@ -368,6 +368,12 @@ const getGameScore = (gameId) => {
   });
 }
 
+const getScoreInGames = (gameIds, teamId) => {
+  return axios.post(API_URL + `game/getscoreingames`, { gameIds, teamId }, { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+}
+
 // NEW STREAM URL
 const getNewStreamURL = (url) => {
   return axios.post(API_URL + "game/getnewstream", { video_url: url }, { headers: authHeader() }).then((response) => {
@@ -435,6 +441,7 @@ const gameService = {
   getGameDetailssByPlayer,
   getPlayerTagsByActionName,
   getGameScore,
+  getScoreInGames,
   getNewStreamURL,
 
   updateJersey,

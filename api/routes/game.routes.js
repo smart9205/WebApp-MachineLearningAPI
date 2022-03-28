@@ -24,6 +24,11 @@ module.exports = app => {
 		controller.getNewStreamURL
 	);
 
+	app.post(
+		"/game/getscoreingames",
+		controller.getScoreInGames
+	);
+
 	app.get(
 		"/game",
 		controller.findAll
