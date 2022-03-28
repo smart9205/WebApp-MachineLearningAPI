@@ -58,8 +58,7 @@ const TeamStatsTab = ({ gameList, team }) => {
 
     useEffect(() => {
         console.log("games", games, team)
-        const gameIds = games.map(g => g.id).join(",")
-        gameService.getScoreInGames(gameIds, team?.id ?? 0).then(res => {
+        gameService.getScoreInGames(games.map(g => g.id).join(","), team?.id ?? 0).then(res => {
             setData({ team_score: res.team_score, opponent_score: res.opponent_score })
         })
     }, [games])
@@ -116,8 +115,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                     </Card>
 
                     <Card sx={{ m: 1 }}>
-                        <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Players"}</Typography>
-                        <PlayersTab />
+                        <PlayersTab gameIds={games.map(g => g.id).join(",")} />
                     </Card>
                 </Box>
                 <Grid container>

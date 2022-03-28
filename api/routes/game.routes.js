@@ -25,6 +25,11 @@ module.exports = app => {
 	);
 
 	app.post(
+		"/game/getplayeractions",
+		controller.getPlayerActions
+	);
+
+	app.post(
 		"/game/getscoreingames",
 		controller.getScoreInGames
 	);

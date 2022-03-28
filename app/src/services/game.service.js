@@ -380,6 +380,11 @@ const getNewStreamURL = (url) => {
     return response.data;
   });
 }
+const getPlayerActions = (gameIds) => {
+  return axios.post(API_URL + "game/getplayeractions", { gameIds }, { headers: authHeader() }).then((response) => {
+    return response.data;
+  });
+}
 
 const getAllGamesByTeam = (season, league, team) => {
   return axios.get(API_URL + `game/getbyteam/${season}/${league}/${team}`, { headers: authHeader(), data: { season, league, team } }).then((response) => {
@@ -443,6 +448,7 @@ const gameService = {
   getGameScore,
   getScoreInGames,
   getNewStreamURL,
+  getPlayerActions,
 
   updateJersey,
   updateGame,

@@ -164,6 +164,41 @@ exports.getScoreInGames = (req, res) => {
     });
 };
 
+exports.getPlayerActions = (req, res) => {
+  const gameIds = req.body.gameIds;
+
+  console.log("gameIds", gameIds)
+
+  Sequelize.query(`
+    SELECT 
+      public."Players".*,
+      SUM(CASE WHEN action_result_id = 3 THEN 1 ELSE 0 END) as "G",
+      SUM(CASE WHEN action_id = 1 THEN 1 ELSE 0 END) as "SH",
+      SUM(CASE WHEN action_id = 2 THEN 1 ELSE 0 END) as "P",
+      SUM(CASE WHEN action_id = 10 THEN 1 ELSE 0 END) as "I",
+      SUM(CASE WHEN action_result_id = 6 THEN 1 ELSE 0 END) as "S",
+      SUM(CASE WHEN action_id = 11 THEN 1 ELSE 0 END) as "C"
+      
+    FROM public."Player_Tags"
+
+    LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+    LEFT JOIN public."Games" on public."Games".id = public."Team_Tags".game_id
+    LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
+
+    Where game_id in (${gameIds}) and action_result_id = 3
+    group by public."Players".id
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+};
+
 exports.update = (req, res) => {
   const id = req.params.id;
 
