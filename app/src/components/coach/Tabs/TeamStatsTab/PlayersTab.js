@@ -48,7 +48,6 @@ const PlayersTab = ({ gameIds }) => {
                         </>}
                 </Box>
             )}
-
         </Box>
     );
 }

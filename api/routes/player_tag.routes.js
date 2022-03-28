@@ -39,8 +39,8 @@ module.exports = app => {
 		controller.getByAction
 	);
 
-	app.get(
-		"/player_tag/getbyteam/:team/:game",
+	app.post(
+		"/player_tag/getbyteam",
 		controller.getByTeam
 	);
 

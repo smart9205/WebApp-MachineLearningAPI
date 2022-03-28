@@ -357,7 +357,7 @@ const getPlayerTagsByActionName = (playerId, gameId, actionName) => {
 }
 
 const getAllPlayerTagsByTeam = (teamId, gameId) => {
-  return axios.get(API_URL + `player_tag/getbyteam/${teamId}/${gameId}`, { headers: authHeader(), data: { teamId, gameId } }).then((response) => {
+  return axios.post(API_URL + `player_tag/getbyteam`, { teamId, gameId }, { headers: authHeader() }).then((response) => {
     return response.data;
   });
 }

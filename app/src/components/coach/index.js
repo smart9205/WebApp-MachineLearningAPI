@@ -43,7 +43,6 @@ export default function Coach() {
     const { user: currentUser } = useSelector((state) => state.auth);
 
     // const [curTab, setCurTab] = useState(!currentUser?.create_edits ? 0 : 3)
-
     const [curTab, setCurTab] = useState(1)
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {

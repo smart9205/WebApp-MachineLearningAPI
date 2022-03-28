@@ -58,8 +58,13 @@ const TeamStatsTab = ({ gameList, team }) => {
 
     useEffect(() => {
         console.log("games", games, team)
-        gameService.getScoreInGames(games.map(g => g.id).join(","), team?.id ?? 0).then(res => {
+        const gameIds = games.map(g => g.id).join(",")
+        gameService.getScoreInGames(gameIds, team?.team_id ?? 0).then(res => {
             setData({ team_score: res.team_score, opponent_score: res.opponent_score })
+        })
+        gameService.getAllPlayerTagsByTeam(team?.team_id ?? 0, gameIds).then(res => {
+            console.log("getAllPlayerTagsByTeam", res)
+            setTagList(res)
         })
     }, [games])
 
@@ -143,7 +148,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                                             </tr>}
                                             {rule.row.map((type, i) => {
                                                 const data = !!tagList ? tagList.filter(t =>
-                                                    (RULE[idx]?.opponent === (t.team_id !== team?.id ?? 0)) &&
+                                                    (RULE[idx]?.opponent === (t.team_id !== team?.team_id ?? 0)) &&
                                                     t.action_id === type.action_id &&
                                                     (!type?.action_result_id ? true : type.action_result_id.includes(t.action_result_id)) &&
                                                     (!type?.action_type_id ? true : type.action_type_id.includes(t.action_type_id))
