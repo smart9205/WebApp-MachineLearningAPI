@@ -161,17 +161,20 @@ const TeamStatsTab = ({ gameList, team }) => {
                                                         <td
                                                             width="40%"
                                                         >
-                                                            <p className={success.length > 0 ? (rule.title === 'Turnover' || rule.title === 'Foul')
-                                                                ? "statistic-clickable-unsuccess"
-                                                                : "statistic-clickable-success"
-                                                                : ""}>{success.length}</p>
+                                                            <p style={success.length > 0 ? { color: "#007200" } : {}}>
+                                                                {success.length}
+                                                                (avg:{(success.length / games.length) || 0})
+                                                            </p>
                                                         </td>
                                                         {
                                                             !!rule?.successful &&
                                                             <td
                                                                 width="40%"
                                                             >
-                                                                <p className={unsuccess.length > 0 ? "statistic-clickable-unsuccess" : ""}>{unsuccess.length}</p>
+                                                                <p style={unsuccess.length > 0 ? { color: "red" } : {}}>
+                                                                    {unsuccess.length}
+                                                                    (avg:{(unsuccess.length / games.length) || 0})
+                                                                </p>
                                                             </td>
                                                         }
                                                     </tr>
