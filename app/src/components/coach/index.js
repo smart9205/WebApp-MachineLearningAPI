@@ -189,7 +189,7 @@ export default function Coach() {
                 style={{
                     marginTop: 8,
                     display: "flex",
-                    height: `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 150 : gameList?.length / 4 * 50 + 170 : 100}px)`
+                    height: curTab === 0 || curTab === 3 ? `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 200 : gameList?.length / 4 * 50 + 220 : 150}px)` : ''
                 }}>
                 {curTab === 0 &&
                     <GameTab

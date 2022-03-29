@@ -127,7 +127,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                     {[0, 1, 2].map(i =>
                         <Grid sm={6} md={4}>
                             {RULE.filter((r, a) => a % 3 === i).map((rule, idx) =>
-                                <Card sx={{ m: 0.5, fontSize: "0.675rem" }}>
+                                <Card sx={{ m: 0.5, fontSize: "0.75rem" }}>
                                     <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{rule.title}</Typography>
                                     <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
                                         <tbody className='text-center' style={{ m: 0 }}>

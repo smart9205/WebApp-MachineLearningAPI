@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
 
             {children}
 
-            <Footer />
+            {!location?.pathname?.startsWith('/coach') && <Footer />}
 
             <GoTop scrollStepInPx="100" delayInMs="10.50" />
         </div>

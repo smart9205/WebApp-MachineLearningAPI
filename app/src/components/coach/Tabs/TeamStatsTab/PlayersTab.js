@@ -36,15 +36,15 @@ const PlayersTab = ({ gameIds }) => {
                     {i === 0 ?
                         <>
                             <img src={player.image} width={100} />
-                            <Box sx={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center" }}>
-                                <Typography>{player.f_name}{' '}{player.l_name}</Typography>
-                                <Typography sx={{ backgroundColor: "red", color: "white", px: 1 }}>{player[curTab]}</Typography>
+                            <Box sx={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center", }}>
+                                <Typography sx={{ fontSize: "0.875rem" }}>{player.f_name}{' '}{player.l_name}</Typography>
+                                <Typography sx={{ backgroundColor: "red", color: "white", px: 1, fontSize: "0.75rem" }}>{player[curTab]}</Typography>
                             </Box>
                         </> :
                         <>
-                            <Typography>{player.jersey_number}</Typography>
-                            <Typography>{player.f_name}{' '}{player.l_name}</Typography>
-                            <Typography>{player[curTab]}</Typography>
+                            <Typography sx={{ fontSize: "0.75rem" }}>{player.jersey_number}</Typography>
+                            <Typography sx={{ fontSize: "0.75rem" }}>{player.f_name}{' '}{player.l_name}</Typography>
+                            <Typography sx={{ fontSize: "0.75rem" }}>{player[curTab]}</Typography>
                         </>}
                 </Box>
             )}
