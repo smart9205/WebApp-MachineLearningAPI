@@ -30,24 +30,25 @@ const PlayersTab = ({ gameIds }) => {
                 )}
             </Grid>
 
-
-            {players.filter((p) => Number(p[curTab]) > 0).sort((a, b) => Number(b[curTab]) - Number(a[curTab])).map((player, i) =>
-                <Box sx={{ display: "flex", justifyContent: "space-between", m: 1 }}>
-                    {i === 0 ?
-                        <>
-                            <img src={player.image} width={100} />
-                            <Box sx={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center", }}>
-                                <Typography sx={{ fontSize: "0.875rem" }}>{player.f_name}{' '}{player.l_name}</Typography>
-                                <Typography sx={{ backgroundColor: "red", color: "white", px: 1, fontSize: "0.75rem" }}>{player[curTab]}</Typography>
-                            </Box>
-                        </> :
-                        <>
-                            <Typography sx={{ fontSize: "0.75rem" }}>{player.jersey_number}</Typography>
-                            <Typography sx={{ fontSize: "0.75rem" }}>{player.f_name}{' '}{player.l_name}</Typography>
-                            <Typography sx={{ fontSize: "0.75rem" }}>{player[curTab]}</Typography>
-                        </>}
-                </Box>
-            )}
+            <Box sx={{ height: "33rem", overflowY: "auto" }}>
+                {players.filter((p) => Number(p[curTab]) > 0).sort((a, b) => Number(b[curTab]) - Number(a[curTab])).map((player, i) =>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", m: 1 }}>
+                        {i === 0 ?
+                            <>
+                                <img src={player.image} width={100} />
+                                <Box sx={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center", }}>
+                                    <Typography sx={{ fontSize: "0.875rem" }}>{player.f_name}{' '}{player.l_name}</Typography>
+                                    <Typography sx={{ backgroundColor: "red", color: "white", px: 1, fontSize: "0.75rem" }}>{player[curTab]}</Typography>
+                                </Box>
+                            </> :
+                            <>
+                                <Typography sx={{ fontSize: "0.75rem" }}>{player.jersey_number}</Typography>
+                                <Typography sx={{ fontSize: "0.75rem" }}>{player.f_name}{' '}{player.l_name}</Typography>
+                                <Typography sx={{ fontSize: "0.75rem" }}>{player[curTab]}</Typography>
+                            </>}
+                    </Box>
+                )}
+            </Box>
         </Box>
     );
 }

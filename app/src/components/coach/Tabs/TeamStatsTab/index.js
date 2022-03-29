@@ -107,15 +107,15 @@ const TeamStatsTab = ({ gameList, team }) => {
 
             <Box sx={{ display: 'flex' }}>
                 <Box sx={{ width: "20%" }}>
-                    <Card sx={{ m: 1 }}>
+                    <Card sx={{ m: 1, }}>
                         <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Goals"}</Typography>
                         <Box sx={{ display: 'flex', justifyContent: "space-evenly", m: 2 }}>
-                            <Typography sx={{ textAlign: 'center' }}>{team?.team_name ?? "My Team"}:</Typography>
-                            <Typography sx={{ textAlign: 'center' }}>{team_score ?? 0}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontSize: '0.75rem' }}>{team?.team_name ?? "My Team"}:</Typography>
+                            <Typography sx={{ textAlign: 'center', fontSize: '0.75rem' }}>{team_score ?? 0}</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: "space-evenly", m: 2 }}>
-                            <Typography sx={{ textAlign: 'center' }}>{"Opponents"}:</Typography>
-                            <Typography sx={{ textAlign: 'center' }}>{opponent_score ?? 0}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontSize: '0.75rem' }}>{"Opponents"}:</Typography>
+                            <Typography sx={{ textAlign: 'center', fontSize: '0.75rem' }}>{opponent_score ?? 0}</Typography>
                         </Box>
                     </Card>
 

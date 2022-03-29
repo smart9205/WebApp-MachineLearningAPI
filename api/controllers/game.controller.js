@@ -185,7 +185,7 @@ exports.getPlayerActions = (req, res) => {
     LEFT JOIN public."Games" on public."Games".id = public."Team_Tags".game_id
     LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
 
-    Where game_id in (${gameIds}) and action_result_id = 3
+    Where game_id in (${gameIds})
     group by public."Players".id
   `)
     .then(data => {
