@@ -58,7 +58,7 @@ const TeamStatsTab = ({ gameList, team }) => {
 
     useEffect(() => {
         console.log("games", games, team)
-        const gameIds = games.map(g => g.id).join(",")
+        const gameIds = games.length > 0 ? games.map(g => g.id).join(",") : 0;
         gameService.getScoreInGames(gameIds, team?.team_id ?? 0).then(res => {
             setData({ team_score: res.team_score, opponent_score: res.opponent_score })
         })
@@ -120,7 +120,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                     </Card>
 
                     <Card sx={{ m: 1 }}>
-                        <PlayersTab gameIds={games.map(g => g.id).join(",")} teamId={team.team_id} />
+                        <PlayersTab gameIds={games.length > 0 ? games.map(g => g.id).join(",") : 0} teamId={team.team_id} />
                     </Card>
                 </Box>
                 <Grid container>
@@ -167,7 +167,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                                                             <span style={success.length > 0 ? { color: "#007200" } : {}}>
                                                                 {success.length}
                                                             </span>{" "}
-                                                            ({(success.length / games.length) || 0})
+                                                            ({games.length > 0 ? (success.length / games.length) || 0 : 0})
                                                         </td>
                                                         {
                                                             !!rule?.successful &&
@@ -177,7 +177,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                                                                 <span style={unsuccess.length > 0 ? { color: "red" } : {}}>
                                                                     {unsuccess.length}
                                                                 </span>{" "}
-                                                                ({(unsuccess.length / games.length) || 0})
+                                                                ({games.length > 0 ? (unsuccess.length / games.length) || 0 : 0})
                                                             </td>
                                                         }
                                                     </tr>
