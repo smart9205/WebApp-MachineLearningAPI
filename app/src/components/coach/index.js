@@ -201,7 +201,7 @@ export default function Coach() {
                         opponentTagList={opponentTagList}
                     />}
                 {curTab === 1 && <TeamStatsTab gameList={gameList} team={team} />}
-                {curTab === 2 && <PlayerStatsTab />}
+                {curTab === 2 && <PlayerStatsTab gameList={gameList} team={team} />}
                 {curTab === 3 && <MyEditsTab teamList={teamList} game={game} playerList={playerList} />}
             </Paper>
         </Box>
