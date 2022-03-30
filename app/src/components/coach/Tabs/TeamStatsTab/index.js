@@ -120,7 +120,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                     </Card>
 
                     <Card sx={{ m: 1 }}>
-                        <PlayersTab gameIds={games.map(g => g.id).join(",")} />
+                        <PlayersTab gameIds={games.map(g => g.id).join(",")} teamId={team.team_id} />
                     </Card>
                 </Box>
                 <Grid container>

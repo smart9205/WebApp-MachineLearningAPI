@@ -166,6 +166,7 @@ exports.getScoreInGames = (req, res) => {
 
 exports.getPlayerActions = (req, res) => {
   const gameIds = req.body.gameIds;
+  const teamId = req.body.teamId;
 
   console.log("gameIds", gameIds)
 
@@ -185,7 +186,7 @@ exports.getPlayerActions = (req, res) => {
     LEFT JOIN public."Games" on public."Games".id = public."Team_Tags".game_id
     LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
 
-    Where game_id in (${gameIds})
+    Where game_id in (${gameIds}) and team_id = ${teamId}
     group by public."Players".id
   `)
     .then(data => {

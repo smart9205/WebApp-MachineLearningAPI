@@ -380,8 +380,8 @@ const getNewStreamURL = (url) => {
     return response.data;
   });
 }
-const getPlayerActions = (gameIds) => {
-  return axios.post(API_URL + "game/getplayeractions", { gameIds }, { headers: authHeader() }).then((response) => {
+const getPlayerActions = (gameIds, teamId) => {
+  return axios.post(API_URL + "game/getplayeractions", { gameIds, teamId }, { headers: authHeader() }).then((response) => {
     return response.data;
   });
 }

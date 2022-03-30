@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import gameService from "../../../../services/game.service";
 
-const PlayersTab = ({ gameIds }) => {
+const PlayersTab = ({ gameIds, teamId }) => {
     const [curTab, setCurTab] = useState('G')
     const [players, setPlayers] = useState([])
 
     useEffect(() => {
-        gameService.getPlayerActions(gameIds ?? "0").then(res => {
+        gameService.getPlayerActions(gameIds ?? "0", teamId).then(res => {
             setPlayers(res)
             console.log('res', res)
         })
@@ -37,13 +37,17 @@ const PlayersTab = ({ gameIds }) => {
                             <>
                                 <img src={player.image} width={100} />
                                 <Box sx={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center", }}>
-                                    <Typography sx={{ fontSize: "0.875rem" }}>{player.f_name}{' '}{player.l_name}</Typography>
+                                    <Typography sx={{ fontSize: "0.875rem" }}>
+                                        {`#${player.jersey_number} ${player.f_name} ${player.l_name}`}
+                                    </Typography>
                                     <Typography sx={{ backgroundColor: "red", color: "white", px: 1, fontSize: "0.75rem" }}>{player[curTab]}</Typography>
                                 </Box>
                             </> :
                             <>
-                                <Typography sx={{ fontSize: "0.75rem" }}>{player.jersey_number}</Typography>
-                                <Typography sx={{ fontSize: "0.75rem" }}>{player.f_name}{' '}{player.l_name}</Typography>
+                                <Typography sx={{ fontSize: "0.75rem" }}>{i + 1}</Typography>
+                                <Typography sx={{ fontSize: "0.75rem" }}>
+                                    {`#${player.jersey_number} ${player.f_name} ${player.l_name}`}
+                                </Typography>
                                 <Typography sx={{ fontSize: "0.75rem" }}>{player[curTab]}</Typography>
                             </>}
                     </Box>
