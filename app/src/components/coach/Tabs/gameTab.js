@@ -1,7 +1,7 @@
 import React, { useState, useReducer, useEffect } from "react";
 
 import _ from 'lodash'
-import { Paper, Box, IconButton } from '@mui/material'
+import { Paper, Card, IconButton } from '@mui/material'
 
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
@@ -29,8 +29,8 @@ const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId }) => {
 
     return (
         <>
-            <Box
-                style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none" }}>
+            <Card
+                style={{ minWidth: 310, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none", mb: 1 }}>
                 <TeamAccordion
                     allTagList={allTagList}
                     opponentTagList={opponentTagList}
@@ -56,7 +56,7 @@ const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId }) => {
                         })
                     }}
                 />
-            </Box>
+            </Card>
             <IconButton
                 onClick={() => setShowAccordion((v) => !v)}
                 sx={{ background: '#8080804d', zIndex: 10, position: "absolute", left: showAccordion ? 310 : 10 }}>
