@@ -16,10 +16,11 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
   const [opponentShots, setOpponentShots] = useState([])
 
   useEffect(() => {
+    console.log("teramfdf", allTagList)
     setTagList([...allTagList, ...opponentTagList])
 
-    setTeamShots(allTagList.filter(t => t.action_result_id === 3))
-    setOpponentShots(opponentTagList.filter(t => t.action_result_id === 3))
+    setTeamShots(allTagList.filter(t => t.action_result_id === 3 && t.team_id === teamId))
+    setOpponentShots(opponentTagList.filter(t => t.action_result_id === 3 && t.team_id !== teamId))
 
   }, [allTagList, opponentTagList])
 
