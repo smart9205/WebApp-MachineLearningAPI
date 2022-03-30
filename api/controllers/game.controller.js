@@ -177,7 +177,7 @@ exports.getPlayerActions = (req, res) => {
       SUM(CASE WHEN action_id = 1 THEN 1 ELSE 0 END) as "SH",
       SUM(CASE WHEN action_id = 2 THEN 1 ELSE 0 END) as "P",
       SUM(CASE WHEN action_id = 10 THEN 1 ELSE 0 END) as "I",
-      SUM(CASE WHEN action_result_id = 6 THEN 1 ELSE 0 END) as "S",
+      SUM(CASE WHEN action_id = 8 and action_type_id in (1, 2, 3) THEN 1 ELSE 0 END) as "S",
       SUM(CASE WHEN action_id = 11 THEN 1 ELSE 0 END) as "C"
       
     FROM public."Player_Tags"
