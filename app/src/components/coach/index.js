@@ -197,7 +197,7 @@ export default function Coach() {
                         allTagList={allTagList}
                         game={game}
                         playerList={playerList}
-                        teamId={team?.team_id}
+                        teamId={team?.team_id ?? 0}
                         opponentTagList={opponentTagList}
                     />}
                 {curTab === 1 && <TeamStatsTab gameList={gameList} team={team} />}
