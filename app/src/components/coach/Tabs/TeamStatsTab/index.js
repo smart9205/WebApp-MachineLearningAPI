@@ -127,7 +127,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                     {[0, 1, 2].map(i =>
                         <Grid sm={6} md={4}>
                             {RULE.filter((r, a) => a % 3 === i).map((rule, idx) =>
-                                <Card sx={{ m: 0.5, fontSize: "0.75rem" }}>
+                                <Card sx={{ marginBlock: 0.5, fontSize: "0.75rem", maxWidth: "21rem", marginInline: "auto" }}>
                                     <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{rule.title}</Typography>
                                     <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
                                         <tbody className='text-center' style={{ m: 0 }}>
@@ -164,7 +164,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                                                             <span style={success.length > 0 ? { color: "#007200" } : {}}>
                                                                 {success.length}
                                                             </span>{" "}
-                                                            (avg:{(success.length / games.length) || 0})
+                                                            ({(success.length / games.length) || 0})
                                                         </td>
                                                         {
                                                             !!rule?.successful &&
@@ -174,7 +174,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                                                                 <span style={unsuccess.length > 0 ? { color: "red" } : {}}>
                                                                     {unsuccess.length}
                                                                 </span>{" "}
-                                                                (avg:{(unsuccess.length / games.length) || 0})
+                                                                ({(unsuccess.length / games.length) || 0})
                                                             </td>
                                                         }
                                                     </tr>
