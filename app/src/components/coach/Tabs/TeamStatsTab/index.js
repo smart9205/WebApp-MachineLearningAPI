@@ -126,8 +126,9 @@ const TeamStatsTab = ({ gameList, team }) => {
                 <Grid container>
                     {[0, 1, 2].map(i =>
                         <Grid sm={6} md={4}>
-                            {RULE.filter((r, a) => a % 3 === i).map((rule, idx) =>
-                                <Card sx={{ marginBlock: 0.5, fontSize: "0.75rem", maxWidth: "21rem", marginInline: "auto" }}>
+                            {RULE.filter((r, a) => a % 3 === i).map((rule, idx) => {
+                                let sum_success = 0, sum_unsuccess = 0
+                                return <Card sx={{ marginBlock: 0.5, fontSize: "0.75rem", maxWidth: "21rem", marginInline: "auto" }}>
                                     <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{rule.title}</Typography>
                                     <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
                                         <tbody className='text-center' style={{ m: 0 }}>
@@ -155,7 +156,9 @@ const TeamStatsTab = ({ gameList, team }) => {
                                                 ) : []
                                                 const success = data.filter(f => !rule?.successful ? true : rule?.successful.includes(f.action_result_id))
                                                 const unsuccess = data.filter(f => !rule?.unsuccessful ? true : rule?.unsuccessful.includes(f.action_result_id))
-                                                return (
+                                                sum_success += success.length
+                                                sum_unsuccess += unsuccess.length
+                                                return (<>
                                                     <tr key={i}>
                                                         <td style={{ width: "20%", minWidth: 120 }}><p>{type.title}</p></td>
                                                         <td
@@ -178,11 +181,19 @@ const TeamStatsTab = ({ gameList, team }) => {
                                                             </td>
                                                         }
                                                     </tr>
-                                                )
+                                                    {!!rule?.successful && rule.row.length === i + 1 &&
+                                                        <tr key={i + 1}>
+                                                            <td></td>
+                                                            <td>{(sum_success / (sum_success + sum_unsuccess) * 100 || 0).toFixed(1)}%</td>
+                                                            <td>{(sum_unsuccess / (sum_success + sum_unsuccess) * 100 || 0).toFixed(1)}%</td>
+                                                        </tr>
+                                                    }
+                                                </>)
                                             })}
                                         </tbody>
                                     </Table>
-                                </Card>)}
+                                </Card>
+                            })}
                         </Grid>
                     )}
                 </Grid>
