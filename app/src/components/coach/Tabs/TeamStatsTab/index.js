@@ -128,7 +128,9 @@ const TeamStatsTab = ({ gameList, team }) => {
                         let sum_success = 0, sum_unsuccess = 0
                         return <Grid sm={4} md={3}>
                             <Card sx={{ marginBlock: 0.5, fontSize: "0.8rem", maxWidth: "21rem", marginInline: "auto" }}>
-                                <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{rule.title}</Typography>
+                                <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray', fontWeight: "bold", textTransform: "uppercase" }}>
+                                    {rule.title}
+                                </Typography>
                                 <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
                                     <tbody className='text-center' style={{ m: 0 }}>
                                         {!!rule?.successful && <tr>

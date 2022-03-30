@@ -56,6 +56,16 @@ export const RULE = [
     },
     {
         opponent: false,
+        title: "Foul",
+        title_he: "פאולים",
+        row: [
+            { action_id: 5, action_type_id: [8], title: "Regular" },
+            { action_id: 5, action_type_id: [9], title: "Yellow Card" },
+            { action_id: 5, action_type_id: [10], title: "Red Card" }
+        ]
+    },
+    {
+        opponent: false,
         title: "Draw Foul",
         title_he: "משיכת פאולים",
         row: [
@@ -77,6 +87,16 @@ export const RULE = [
     },
     {
         opponent: false,
+        title: "Turnover",
+        title_he: "איבודי כדור",
+        row: [
+            { action_id: 2, action_result_id: [11], title: "Bad Pass" },
+            { action_id: 4, action_result_id: [10, 12], title: "Bad Dribble" },
+            { action_id: 7, action_result_id: [15], title: "Offside" },
+        ]
+    },
+    {
+        opponent: false,
         title: "Saved",
         title_he: "הצלות",
         row: [
@@ -91,26 +111,6 @@ export const RULE = [
         row: [
             { action_id: 11, action_type_id: [1, 2], title: "Foot" },
             { action_id: 11, action_type_id: [3], title: "Header" }
-        ]
-    },
-    {
-        opponent: false,
-        title: "Turnover",
-        title_he: "איבודי כדור",
-        row: [
-            { action_id: 2, action_result_id: [11], title: "Bad Pass" },
-            { action_id: 4, action_result_id: [10, 12], title: "Bad Dribble" },
-            { action_id: 7, action_result_id: [15], title: "Offside" },
-        ]
-    },
-    {
-        opponent: false,
-        title: "Foul",
-        title_he: "פאולים",
-        row: [
-            { action_id: 5, action_type_id: [8], title: "Regular" },
-            { action_id: 5, action_type_id: [9], title: "Yellow Card" },
-            { action_id: 5, action_type_id: [10], title: "Red Card" }
         ]
     },
     {
