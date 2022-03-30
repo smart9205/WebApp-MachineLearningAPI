@@ -209,7 +209,7 @@ exports.getByTeam = (req, res) => {
       LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
       JOIN public."Teams" as offenseTeam on public."Team_Tags".offensive_team_id = offenseTeam.id
       JOIN public."Teams" as defenseTeam on public."Team_Tags".defensive_team_id = defenseTeam.id
-    WHERE public."Player_Tags".team_id = ${teamId} and public."Team_Tags".game_id in (${gameId ?? 0})
+    WHERE public."Team_Tags".game_id in (${gameId ?? 0})
     ORDER BY public."Team_Tags".start_time, public."Player_Tags".start_time 
   `)
     .then(data => {
