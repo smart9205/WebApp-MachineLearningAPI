@@ -161,20 +161,20 @@ const TeamStatsTab = ({ gameList, team }) => {
                                                         <td
                                                             width="40%"
                                                         >
-                                                            <p style={success.length > 0 ? { color: "#007200" } : {}}>
+                                                            <span style={success.length > 0 ? { color: "#007200" } : {}}>
                                                                 {success.length}
-                                                                (avg:{(success.length / games.length) || 0})
-                                                            </p>
+                                                            </span>{" "}
+                                                            (avg:{(success.length / games.length) || 0})
                                                         </td>
                                                         {
                                                             !!rule?.successful &&
                                                             <td
                                                                 width="40%"
                                                             >
-                                                                <p style={unsuccess.length > 0 ? { color: "red" } : {}}>
+                                                                <span style={unsuccess.length > 0 ? { color: "red" } : {}}>
                                                                     {unsuccess.length}
-                                                                    (avg:{(unsuccess.length / games.length) || 0})
-                                                                </p>
+                                                                </span>{" "}
+                                                                (avg:{(unsuccess.length / games.length) || 0})
                                                             </td>
                                                         }
                                                     </tr>
