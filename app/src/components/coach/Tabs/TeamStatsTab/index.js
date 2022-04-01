@@ -32,7 +32,7 @@ const MenuProps = {
 
 const TeamStatsTab = ({ gameList, team }) => {
 
-    const [games, setGames] = useState([]);
+    const [games, setGames] = useState(gameList);
     const [tagList, setTagList] = useState([])
     const [data, setData] = useReducer((old, action) => ({ ...old, ...action }), {
         team_score: 0,

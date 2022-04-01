@@ -16,6 +16,12 @@ module.exports = app => {
 		controller.create
 	);
 
+	app.post(
+		"/coach_team/get_tags_by_player",
+		[authJwt.isCoach],
+		controller.getTagsByPlayer
+	);
+
 	app.get(
 		"/coach_team",
 		controller.findAll
@@ -25,6 +31,18 @@ module.exports = app => {
 		"/coach_team/mine",
 		[authJwt.isCoach],
 		controller.findAllMine
+	);
+
+	app.get(
+		"/coach_team/player_games/:id",
+		[authJwt.isCoach],
+		controller.getAllPlayerGames
+	);
+
+	app.get(
+		"/coach_team/players",
+		[authJwt.isCoach],
+		controller.getAllPlayers
 	);
 
 	app.get(

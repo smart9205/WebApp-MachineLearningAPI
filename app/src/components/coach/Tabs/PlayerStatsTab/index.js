@@ -17,7 +17,6 @@ import { Table, } from 'react-bootstrap'
 
 import { RULE } from '../../../../common/staticData';
 import gameService from "../../../../services/game.service";
-import PlayersTab from "./PlayersTab";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -30,17 +29,21 @@ const MenuProps = {
     },
 };
 
-const PlayerStatsTab = ({ gameList, team }) => {
+const PlayerStatsTab = ({ player }) => {
 
+
+    console.log("player", player)
+    const [gameList, setGameList] = useState([])
     const [games, setGames] = useState([]);
     const [tagList, setTagList] = useState([])
-    const [data, setData] = useReducer((old, action) => ({ ...old, ...action }), {
-        team_score: 0,
-        opponent_score: 0
-    })
+    const [score, setScore] = useState(0)
 
-    const { team_score, opponent_score } = data
-
+    useEffect(() => {
+        gameService.getCoachPlayerGames(player?.id ?? 0).then(res => {
+            setGameList(res)
+            setGames(res)
+        })
+    }, [player])
     const handleChange = (event) => {
         const {
             target: { value },
@@ -57,19 +60,18 @@ const PlayerStatsTab = ({ gameList, team }) => {
     };
 
     useEffect(() => {
-        console.log("games", games, team)
+        console.log(games)
         const gameIds = games.length > 0 ? games.map(g => g.id).join(",") : 0;
-        gameService.getScoreInGames(gameIds, team?.team_id ?? 0).then(res => {
-            setData({ team_score: res.team_score, opponent_score: res.opponent_score })
-        })
-        gameService.getAllPlayerTagsByTeam(team?.team_id ?? 0, gameIds).then(res => {
-            console.log("getAllPlayerTagsByTeam", res)
+
+        gameService.getAllPlayerTagsByCoachPlayer({ player_id: player?.id ?? 0, gameIds }).then(res => {
+            console.log("getAllPlayerTagsByCoachPlayer", res)
             setTagList(res)
+            setScore(res.filter(t => t.action_result_id === 3).length)
         })
     }, [games])
 
     return (
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: "100%", minHeight: "80vh" }}>
             <FormControl sx={{ width: 600 }}>
                 <InputLabel id="game-multiple-checkbox-label">Games</InputLabel>
                 <Select
@@ -107,24 +109,23 @@ const PlayerStatsTab = ({ gameList, team }) => {
 
             <Box sx={{ display: 'flex' }}>
                 <Box sx={{ width: "20%" }}>
+                    <Card sx={{ m: 1 }}>
+                        <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Profile"}</Typography>
+                        <img src={player?.image} width={"100%"} />
+                        <Typography sx={{ textAlign: 'center', fontSize: '1rem' }}>#{player?.jersey_number} {player?.f_name} {player?.l_name}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontSize: '0.9rem' }}>{moment(player?.date_of_birth).format('DD MMM, YYYY')}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontSize: '0.9rem' }}>{player?.position_name}</Typography>
+                    </Card>
+
                     <Card sx={{ m: 1, }}>
                         <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Goals"}</Typography>
                         <Box sx={{ display: 'flex', justifyContent: "space-evenly", m: 2 }}>
-                            <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{team?.team_name ?? "My Team"}:</Typography>
-                            <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{team_score ?? 0}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontSize: '1rem' }}>{score} ({((score / games.length) || 0).toFixed(1)})</Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', justifyContent: "space-evenly", m: 2 }}>
-                            <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{"Opponents"}:</Typography>
-                            <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{opponent_score ?? 0}</Typography>
-                        </Box>
-                    </Card>
-
-                    <Card sx={{ m: 1 }}>
-                        <PlayersTab gameIds={games.length > 0 ? games.map(g => g.id).join(",") : 0} teamId={team.team_id} />
                     </Card>
                 </Box>
                 <Grid container>
-                    {RULE.map((rule, idx) => {
+                    {RULE.filter(f => !f.opponent).map((rule, idx) => {
                         let sum_success = 0, sum_unsuccess = 0
                         return <Grid sm={4} md={3}>
                             <Card sx={{ marginBlock: 0.5, fontSize: "0.8rem", maxWidth: "21rem", marginInline: "auto" }}>
@@ -148,7 +149,6 @@ const PlayerStatsTab = ({ gameList, team }) => {
                                         </tr>}
                                         {rule.row.map((type, i) => {
                                             const data = !!tagList ? tagList.filter(t =>
-                                                (RULE[idx]?.opponent === (t.team_id !== team?.team_id ?? 0)) &&
                                                 t.action_id === type.action_id &&
                                                 (!type?.action_result_id ? true : type.action_result_id.includes(t.action_result_id)) &&
                                                 (!type?.action_type_id ? true : type.action_type_id.includes(t.action_type_id))
@@ -199,7 +199,7 @@ const PlayerStatsTab = ({ gameList, team }) => {
                         </Grid>
                     })}
                 </Grid>
-            </Box>
+            </Box >
         </Box >
     );
 }

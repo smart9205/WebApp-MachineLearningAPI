@@ -43,10 +43,12 @@ export default function Coach() {
     const { user: currentUser } = useSelector((state) => state.auth);
 
     // const [curTab, setCurTab] = useState(!currentUser?.create_edits ? 0 : 3)
-    const [curTab, setCurTab] = useState(1)
+    const [curTab, setCurTab] = useState(2)
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         teamList: [],
+        coachPlayerList: [],
+        coachPlayer: null,
         team: null,
         playerList: [],
 
@@ -55,7 +57,7 @@ export default function Coach() {
         allTagList: [],
         opponentTagList: []
     })
-    const { teamList, team, gameList, game, allTagList, playerList, opponentTagList } = state
+    const { teamList, coachPlayerList, coachPlayer, team, gameList, game, allTagList, playerList, opponentTagList } = state
 
     const [drawOpen, setDrawOpen] = useState(true)
 
@@ -66,6 +68,11 @@ export default function Coach() {
         setLoading(true)
         gameService.getAllMyCoachTeam().then((res) => {
             setState({ teamList: res, team: res[0] })
+            setLoading(false)
+        })
+        gameService.getAllMyCoachPlayer().then((res) => {
+            setState({ coachPlayerList: res, coachPlayer: res[0] })
+            console.log("Coachplayers", res)
             setLoading(false)
         })
     }, [])
@@ -123,7 +130,7 @@ export default function Coach() {
                     )}
                 </Grid>
                 <Grid item xs={6}>
-                    {curTab !== 3 && <Autocomplete
+                    {curTab !== 3 && curTab !== 2 && <Autocomplete
                         options={teamList}
                         value={team}
                         fullWidth
@@ -135,6 +142,20 @@ export default function Coach() {
                         )}
                         onChange={(event, newValue) => {
                             setState({ team: newValue });
+                        }}
+                    />}
+                    {curTab === 2 && <Autocomplete
+                        options={coachPlayerList}
+                        value={coachPlayer}
+                        fullWidth
+                        isOptionEqualToValue={(option, value) => option && option.name}
+                        disableClearable
+                        getOptionLabel={(t) => `${t.f_name} ${t.l_name}`}
+                        renderInput={(params) => (
+                            <TextField {...params} label="Player" />
+                        )}
+                        onChange={(event, newValue) => {
+                            setState({ coachPlayer: newValue });
                         }}
                     />}
                 </Grid>
@@ -201,7 +222,7 @@ export default function Coach() {
                         opponentTagList={opponentTagList}
                     />}
                 {curTab === 1 && <TeamStatsTab gameList={gameList} team={team} />}
-                {curTab === 2 && <PlayerStatsTab gameList={gameList} team={team} />}
+                {curTab === 2 && <PlayerStatsTab player={coachPlayer} />}
                 {curTab === 3 && <MyEditsTab teamList={teamList} game={game} playerList={playerList} />}
             </Paper>
         </Box>
