@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import gameService from "../../../../services/game.service";
+import { PLAYER_ICON_DEFAULT } from "../../../../common/staticData";
 
 const PlayersTab = ({ gameIds, teamId }) => {
     const [curTab, setCurTab] = useState('G')
@@ -35,7 +36,7 @@ const PlayersTab = ({ gameIds, teamId }) => {
                     <Box sx={{ display: "flex", justifyContent: "space-between", m: 1 }}>
                         {i === 0 ?
                             <>
-                                <img src={player.image} width={100} />
+                                <img src={player?.image?.length > 0 ? player?.image : PLAYER_ICON_DEFAULT} width={100} />
                                 <Box sx={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center", }}>
                                     <Typography sx={{ fontSize: "0.875rem" }}>
                                         {`#${player.jersey_number} ${player.f_name} ${player.l_name}`}
