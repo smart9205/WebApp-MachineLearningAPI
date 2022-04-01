@@ -115,7 +115,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: "space-evenly", m: 2 }}>
                             <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{"Opponents"}:</Typography>
-                            <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>({games.length > 0 ? (opponent_score / games.length).toFixed(1) || 0 : 0})</Typography>
+                            <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{opponent_score ?? 0}{' '}({games.length > 0 ? (opponent_score / games.length).toFixed(1) || 0 : 0})</Typography>
                         </Box>
                     </Card>
 
