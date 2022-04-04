@@ -112,8 +112,7 @@ const PlayerStatsTab = ({ player }) => {
                     <Card sx={{ m: 1 }}>
                         <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Profile"}</Typography>
                         <img src={player?.image?.length > 0 ? player?.image : PLAYER_ICON_DEFAULT} width={"100%"} />
-                        <Typography sx={{ textAlign: 'center', fontSize: '1rem' }}>#{player?.jersey_number} {player?.f_name} {player?.l_name}</Typography>
-                        <Typography sx={{ textAlign: 'center', fontSize: '0.9rem' }}>{moment(player?.date_of_birth).format('DD MMM, YYYY')}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontSize: '1rem', mt: "1rem" }}>#{player?.jersey_number} {player?.f_name} {player?.l_name}</Typography>
                         <Typography sx={{ textAlign: 'center', fontSize: '0.9rem' }}>{player?.position_name}</Typography>
                     </Card>
 
