@@ -41,7 +41,7 @@ const PlayerStatsTab = ({ player }) => {
     useEffect(() => {
         gameService.getCoachPlayerGames(player?.id ?? 0).then(res => {
             setGameList(res)
-            setGames(res)
+            setGames(res.slice(0, 1))
         })
     }, [player])
     const handleChange = (event) => {
@@ -126,8 +126,8 @@ const PlayerStatsTab = ({ player }) => {
                 <Grid container>
                     {RULE.filter(f => !f.opponent).map((rule, idx) => {
                         let sum_success = 0, sum_unsuccess = 0
-                        return <Grid sm={4} md={3}>
-                            <Card sx={{ marginBlock: 0.5, fontSize: "0.8rem", maxWidth: "21rem", marginInline: "auto" }}>
+                        return <Grid md={4} lg={3} sx={{ p: 0.5 }}>
+                            <Card sx={{ fontSize: "0.8rem", marginInline: "auto" }}>
                                 <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{rule.title}</Typography>
                                 <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
                                     <tbody className='text-center' style={{ m: 0 }}>
