@@ -108,7 +108,8 @@ exports.getTagsByPlayer = (req, res) => {
     offenseTeam.id as offensive_team_id,
     defenseTeam.id as defensive_team_id,
     game_id,
-    to_char(public."Games"."date", 'DD Mon YYYY') as game_date
+    to_char(public."Games"."date", 'DD Mon YYYY') as game_date,
+    public."Games".video_url
   FROM public."Player_Tags"
     LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
     LEFT JOIN public."Games" on public."Team_Tags".game_id = public."Games".id

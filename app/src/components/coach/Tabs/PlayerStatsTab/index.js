@@ -33,8 +33,6 @@ const MenuProps = {
 
 const PlayerStatsTab = ({ player }) => {
 
-
-    console.log("player", player)
     const [gameList, setGameList] = useState([])
     const [games, setGames] = useState([]);
     const [tagList, setTagList] = useState([])
