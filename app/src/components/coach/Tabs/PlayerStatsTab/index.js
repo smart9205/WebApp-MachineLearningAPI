@@ -16,7 +16,7 @@ import { Table, } from 'react-bootstrap'
 import { PLAYER_ICON_DEFAULT, RULE } from '../../../../common/staticData';
 import gameService from "../../../../services/game.service";
 import { Dialog, IconButton } from "@mui/material";
-import VideoPlayer from "../myEditsTab/UserEditVideoPlayer";
+import VideoPlayer from "./PlayerStatsVideoPlayer";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -82,7 +82,7 @@ const PlayerStatsTab = ({ player }) => {
                 // style={{ position: "relative" }}
                 onClose={() => setOpen(false)}>
                 <IconButton
-                    style={{ position: "absolute", right: "0", zIndex: "10", color: "white" }}
+                    style={{ position: "absolute", right: "0", zIndex: "10", color: "white", backgroundColor: "rgba(128, 128, 128, 0.41)" }}
                     onClick={() => setOpen(false)}
                 >
                     <CloseIcon />
