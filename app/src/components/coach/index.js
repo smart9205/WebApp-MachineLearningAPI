@@ -211,7 +211,7 @@ export default function Coach() {
                     paddingBottom: "0.5rem",
                     display: "flex",
                     height: curTab === 0 ? `calc(100vh - ${drawOpen ? gameList?.length === 0 ? 230 : gameList?.length / 4 * 50 + 250 : 180}px)` :
-                        curTab === 3 ? `calc(95vh - ${drawOpen ? gameList?.length === 0 ? 100 : gameList?.length / 4 * 50 + 120 : 50}px)` : ''
+                        curTab === 3 ? `calc(100vh - ${drawOpen ? gameList?.length === 0 ? 100 : gameList?.length / 4 * 50 + 120 : 50}px)` : ''
                 }}>
                 {curTab === 0 &&
                     <GameTab
