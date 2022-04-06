@@ -168,7 +168,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                                                         <span style={success.length > 0 ? { color: "#007200" } : {}}>
                                                             {success.length}
                                                         </span>{" "}
-                                                        ({games.length > 0 ? (success.length / games.length) || 0 : 0})
+                                                        ({games.length > 0 ? (success.length / games.length).toFixed(1) || 0 : 0})
                                                     </td>
                                                     {
                                                         !!rule?.successful &&
@@ -178,7 +178,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                                                             <span style={unsuccess.length > 0 ? { color: "red" } : {}}>
                                                                 {unsuccess.length}
                                                             </span>{" "}
-                                                            ({games.length > 0 ? (unsuccess.length / games.length) || 0 : 0})
+                                                            ({games.length > 0 ? (unsuccess.length / games.length).toFixed(1) || 0 : 0})
                                                         </td>
                                                     }
                                                 </tr>

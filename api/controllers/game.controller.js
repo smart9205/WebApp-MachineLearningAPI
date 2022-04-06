@@ -54,6 +54,7 @@ exports.getbyTeam = (req, res) => {
     JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
     WHERE (public."Games".home_team_id = ${teamId} OR public."Games".away_team_id = ${teamId})  
       AND public."Games".season_id = ${seasonId} AND public."Games".league_id = ${leagueId}
+    ORDER BY public."Games".date desc
   `)
     .then(data => {
       res.send(data[0]);
