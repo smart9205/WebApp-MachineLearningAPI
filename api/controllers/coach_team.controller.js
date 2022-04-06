@@ -150,6 +150,7 @@ exports.getAllPlayerGames = (req, res) => {
     public."Games".league_id = public."Coach_Teams".league_id
   
   where public."Coach_Teams".user_id = ${req.userId} and public."Team_Players".player_id = ${playerId}
+  ORDER BY public."Games".date desc
   `)
     .then(data => {
       res.send(data[0]);
