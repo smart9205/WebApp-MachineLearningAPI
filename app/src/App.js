@@ -2,8 +2,6 @@ import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes, Navigate, Outlet, useLocation } from "react-router-dom";
 
-import { useIdleTimer } from 'react-idle-timer'
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -108,25 +106,6 @@ const App = () => {
       EventBus.remove("logout");
     };
   }, [currentUser, logOut]);
-
-  const handleOnIdle = event => {
-    console.log('last active', getLastActiveTime())
-    logOut();
-  }
-
-  const handleOnActive = event => {
-    console.log('time remaining', getRemainingTime())
-  }
-
-  const handleOnAction = event => { }
-
-  const { getRemainingTime, getLastActiveTime } = useIdleTimer({
-    timeout: 1000 * 60 * 60,
-    onIdle: handleOnIdle,
-    onActive: handleOnActive,
-    onAction: handleOnAction,
-    debounce: 500
-  })
 
   return (
     <ThemeProvider theme={theme}>
