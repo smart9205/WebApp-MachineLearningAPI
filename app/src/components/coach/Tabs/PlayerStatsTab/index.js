@@ -151,7 +151,7 @@ const PlayerStatsTab = ({ player }) => {
                     {RULE.filter(f => !f.opponent).map((rule, idx) => {
                         let sum_success = 0, sum_unsuccess = 0
                         return <Card sx={{ fontSize: "0.8rem", position: "relative", margin: "0.5rem", maxWidth: 500, minWidth: 320, display: "inline-block", verticalAlign: "top" }}>
-                            <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{rule.title}</Typography>
+                            <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray', fontWeight: "bold", textTransform: "uppercase" }}>{rule.title}</Typography>
                             <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
                                 <tbody className='text-center' style={{ m: 0 }}>
                                     {!!rule?.successful && <tr>
