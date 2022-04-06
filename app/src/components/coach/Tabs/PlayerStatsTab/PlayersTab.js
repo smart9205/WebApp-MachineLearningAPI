@@ -9,7 +9,6 @@ const PlayersTab = ({ gameIds, teamId }) => {
     useEffect(() => {
         gameService.getPlayerActions(gameIds ?? "0", teamId).then(res => {
             setPlayers(res)
-            console.log('res', res)
         })
     }, [gameIds])
 

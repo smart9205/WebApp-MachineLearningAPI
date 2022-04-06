@@ -37,12 +37,9 @@ sendEmail = async (to, subject, html) => {
     content: html
   })
 
-  console.log("email_queue", email_queue);
-
   sendgrid
     .send(msg)
     .then((resp) => {
-      console.log('Email sent\n', resp)
       Email_Queue.update({ success: true }, { where: { id: email_queue.id } })
     })
     .catch((error) => {
@@ -70,8 +67,6 @@ sendSigninSuccessInfo = async (res, user) => {
       JOIN public."Subscriptions" on public."User_Subscriptions".subscription_id = public."Subscriptions".id
       where public."User_Subscriptions".user_id = ${user.id}
      `))[0];
-
-  console.log("user", subscriptions);
 
   for (let i = 0; i < subscriptions.length; i++) {
     if (Date.now() < subscriptions[i].end_date)
@@ -166,10 +161,8 @@ exports.signup = (req, res) => {
 };
 
 exports.signin = async (req, res) => {
-  console.log("res.auth:", req.body);
   const user = await User.findOne({ where: { email: req.body.email } });
 
-  console.log("user", user);
   if (!user) {
     return res.status(404).send({ message: "User Not found." });
   }
@@ -181,7 +174,6 @@ exports.signin = async (req, res) => {
       user.password
     );
 
-    console.log("passwordIsValid", passwordIsValid);
     if (!passwordIsValid) {
       return res.status(401).send({
         accessToken: null,
@@ -199,8 +191,6 @@ exports.signin = async (req, res) => {
 exports.firstVerify = (req, res) => {
   var bytes = CryptoJS.AES.decrypt(decodeURIComponent(req.body.verificationCode), config.secret);
   var data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-
-  console.log("Verification data", data);
 
   User.findOne({
     where: {
@@ -268,8 +258,6 @@ exports.forgetpassword = async (req, res) => {
     token: verificationToken.token,
     to: user.email
   };
-
-  console.log("ver: ", data)
   //encrypt data
   const ciphertext = encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify(data), config.forgetpwdkey).toString());
   const url = `${req.get("origin")}/resetPwdVerify/${ciphertext}`;
@@ -357,8 +345,6 @@ exports.resetPassword = (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-
-  console.log("req/userId", req.userId);
   const user = await User.findOne({ where: { id: req.userId } });
 
   if (!user) {

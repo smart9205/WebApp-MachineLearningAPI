@@ -81,7 +81,6 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete
     const update = (data) => {
         setLoading(true)
         GameService.updateEditClip(data).then(res => {
-            console.log(res)
             setLoading(false)
         }).catch(err => setLoading(false))
     }

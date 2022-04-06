@@ -54,7 +54,6 @@ exports.findAll = (req, res) => {
 
 
 exports.findAllMine = (req, res) => {
-  console.log("My id", req)
 
   Sequelize.query(`
     SELECT 

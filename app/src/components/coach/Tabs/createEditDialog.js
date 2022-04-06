@@ -122,7 +122,6 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
 
 
     const handleSearch = () => {
-        console.log("handle search")
         setNameOpen(true)
     }
 

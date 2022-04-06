@@ -62,18 +62,15 @@ const PlayerStatsTab = ({ player }) => {
     };
 
     useEffect(() => {
-        console.log(games)
         const gameIds = games.length > 0 ? games.map(g => g.id).join(",") : 0;
 
         gameService.getAllPlayerTagsByCoachPlayer({ player_id: player?.id ?? 0, gameIds }).then(res => {
-            console.log("getAllPlayerTagsByCoachPlayer", res)
             setTagList(res)
             setScore(res.filter(t => t.action_result_id === 3).length)
         })
     }, [games])
 
     const onActionSelected = (list) => {
-        console.log("taglist", list)
         setPlayList(list)
         setOpen(true)
     }

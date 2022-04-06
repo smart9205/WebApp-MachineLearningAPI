@@ -2,7 +2,7 @@ const db = require("../models");
 const Action_Type = db.action_type;
 const Op = db.Sequelize.Op;
 
-exports.create =  (req, res) => {
+exports.create = (req, res) => {
   // Validate request
   if (!req.body.name) {
     res.status(400).send({
@@ -25,11 +25,10 @@ exports.create =  (req, res) => {
           err.message || "Some error occurred while creating the Action_Type."
       });
     });
- 
+
 };
 
 exports.findAll = (req, res) => {
-  console.log("getSeason", req.body);
   const name = req.query.name;
   var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 

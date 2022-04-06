@@ -8,8 +8,6 @@ const Sequelize = db.sequelize;
 
 exports.create = async (req, res) => {
 
-  console.log("TeamPlayer ", req.body)
-
   const checkTeamPlayer = await Team_Player.findOne({
     where: {
       season_id: req.body.season_id,
@@ -145,7 +143,6 @@ exports.teambyplayergame = async (req, res) => {
 }
 
 exports.findAll = (req, res) => {
-  console.log("req team_player", req.body);
   Sequelize.query(`
   SELECT public."Players".*,
     public."Team_Players".id as team_player_id,

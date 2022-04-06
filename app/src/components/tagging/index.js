@@ -289,7 +289,6 @@ export default function Tagging() {
   const addPlayerTag = async (PTag) => await GameService.addPlayerTag(PTag)
 
   const setTaggingState = (tags) => {
-    console.log("Saving Tags", tags)
     setTempPlayerTagList([
       ...temp_playerTag_list,
       ...(tags.map(tag => {

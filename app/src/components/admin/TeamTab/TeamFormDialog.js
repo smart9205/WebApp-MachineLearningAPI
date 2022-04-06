@@ -135,7 +135,7 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
                 <UploadSponsor
                     dirName={process.env.REACT_APP_DIR_TEAM}
                     img={data.sponsor_logo}
-                    onSponsorURL={url => { console.log("sponser"); setData({ sponsor_logo: url }) }}
+                    onSponsorURL={url => { setData({ sponsor_logo: url }) }}
                     defaultImg={TEAM_ICON_DEFAULT}
                     btn_name="Sponsor Logo"
                 />

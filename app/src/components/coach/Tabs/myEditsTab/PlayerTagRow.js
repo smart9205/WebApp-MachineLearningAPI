@@ -80,7 +80,6 @@ export const PlayerTagRow = ({ id, row, index, moveRow, onPlay, selected, onDele
     const update = (data) => {
         setLoading(true)
         GameService.updateEditClip(data).then(res => {
-            console.log(res)
             setLoading(false)
         }).catch(err => setLoading(false))
     }

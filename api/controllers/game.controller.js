@@ -27,7 +27,6 @@ exports.create = (req, res) => {
 };
 
 exports.getNewStreamURL = async (req, res) => {
-  console.log("NewStream Req", req.body)
   try {
     const response = await axios.post("https://api.newstream.ai/api/video/v1/youtube_download_link", req.body);
     return res.send(response?.data);
@@ -111,8 +110,6 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  console.log("find game one", id)
-
   Sequelize.query(`
     SELECT 
       public."Games".*,
@@ -143,8 +140,6 @@ exports.getScoreInGames = (req, res) => {
   const gameIds = req.body.gameIds;
   const teamId = req.body.teamId;
 
-  console.log("gameIds", gameIds, teamId)
-
   Sequelize.query(`
     SELECT 
       SUM(CASE WHEN team_id = ${teamId} THEN 1 ELSE 0 END) as team_score,
@@ -168,8 +163,6 @@ exports.getScoreInGames = (req, res) => {
 exports.getPlayerActions = (req, res) => {
   const gameIds = req.body.gameIds;
   const teamId = req.body.teamId;
-
-  console.log("gameIds", gameIds)
 
   Sequelize.query(`
     SELECT 
@@ -232,7 +225,6 @@ exports.delete = async (req, res) => {
     where: { game_id: id }
   })
 
-  console.log("TeamTag finded", teamTag)
   if (teamTag !== null) {
     return res.send({
       result: "fail",

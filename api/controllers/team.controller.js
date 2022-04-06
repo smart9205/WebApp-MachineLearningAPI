@@ -22,8 +22,6 @@ exports.create = async (req, res) => {
     show_sponsor: req.body.show_sponsor
   };
 
-  console.log("new team", team)
-
   const checkTeam = await Team.findOne({
     where: {
       name: req.body.name
@@ -48,7 +46,6 @@ exports.create = async (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  console.log("getSeason", req.body);
   const name = req.query.name;
   var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 

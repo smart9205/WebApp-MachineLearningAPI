@@ -4,7 +4,6 @@ const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
 
 exports.create = (req, res) => {
-  console.log("PlayerTag", req.body)
 
   Player_Tag.create({
     team_tag_id: req.body.team_tag_id,
@@ -29,7 +28,6 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  console.log("getSeason", req.body);
   const name = req.query.name;
   var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 

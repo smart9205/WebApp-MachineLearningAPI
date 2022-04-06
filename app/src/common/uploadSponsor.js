@@ -46,7 +46,6 @@ function UploadSponsor({ dirName, img, onSponsorURL, fileName, defaultImg = "", 
                 setImage(data.location)
                 onSponsorURL(data.location)
             } else {
-                console.log("fail");
             }
             setLoading(false)
         }).catch((e) => {

@@ -83,7 +83,7 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
             else {
                 GameService.updatePlayer({ ...playerData, position: playerData.position.id }).then((res) => {
                     onResult({ open: false, msg: res, result: "success" });
-                }).catch((e) => { onResult({ open: false }); console.log("PLAYER ERROR", e) });
+                }).catch((e) => { onResult({ open: false }); });
             }
         }
         setPlayerData(init)

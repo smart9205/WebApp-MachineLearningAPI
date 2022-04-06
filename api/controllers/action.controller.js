@@ -2,7 +2,7 @@ const db = require("../models");
 const Action = db.action;
 const Op = db.Sequelize.Op;
 
-exports.create =  (req, res) => {
+exports.create = (req, res) => {
   // Validate request
   if (!req.body.name) {
     res.status(400).send({
@@ -25,12 +25,10 @@ exports.create =  (req, res) => {
           err.message || "Some error occurred while creating the Action."
       });
     });
- 
+
 };
 
 exports.findAll = (req, res) => {
-  console.log("find all actions:")
-
   Action.findAll()
     .then(data => {
       res.send(data);

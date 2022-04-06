@@ -23,7 +23,6 @@ module.exports = {
         type: Sequelize.DATE
       }
     }).then(() => {
-      console.log('created VerificationToken table');
       return queryInterface.sequelize.query(`
         CREATE EVENT expireToken
         ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL  1 DAY 

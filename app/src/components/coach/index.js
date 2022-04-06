@@ -72,7 +72,6 @@ export default function Coach() {
         })
         gameService.getAllMyCoachPlayer().then((res) => {
             setState({ coachPlayerList: res, coachPlayer: res[0] })
-            console.log("Coachplayers", res)
             setLoading(false)
         })
     }, [])
@@ -86,7 +85,6 @@ export default function Coach() {
         })
     }, [team])
     useEffect(() => {
-        console.log("game", game)
         if (!!team && !!game) {
             setLoading(true)
             const opponentTeamId = game?.away_team_id === team.team_id ? game?.home_team_id : game?.away_team_id

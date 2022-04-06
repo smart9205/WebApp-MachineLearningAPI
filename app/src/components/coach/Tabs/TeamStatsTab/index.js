@@ -57,13 +57,11 @@ const TeamStatsTab = ({ gameList, team }) => {
     };
 
     useEffect(() => {
-        console.log("games", games, team)
         const gameIds = games.length > 0 ? games.map(g => g.id).join(",") : 0;
         gameService.getScoreInGames(gameIds, team?.team_id ?? 0).then(res => {
             setData({ team_score: res.team_score, opponent_score: res.opponent_score })
         })
         gameService.getAllPlayerTagsByTeam(team?.team_id ?? 0, gameIds).then(res => {
-            console.log("getAllPlayerTagsByTeam", res)
             setTagList(res)
         })
     }, [games])

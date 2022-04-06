@@ -46,7 +46,6 @@ function Upload({ dirName, img, onURL, fileName, defaultImg = "", btn_name = "Up
                 setImage(data.location)
                 onURL(data.location)
             } else {
-                console.log("fail");
             }
             setLoading(false)
         }).catch((e) => {

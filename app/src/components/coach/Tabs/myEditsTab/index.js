@@ -59,7 +59,6 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
     const initUserEdits = () => {
         setLoading(true)
         gameService.getAllUserEdits().then(res => {
-            console.log("all user Edits", res)
             setUserEditList(res)
             setCurEdit(res[0])
             handleUserEditDetail(res[0])
@@ -114,7 +113,6 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
     }
 
     const handleVideoData = (type, play, idx) => {
-        console.log("row clicked")
         setCurTagIdx(idx)
         setVideodata({ idx, autoPlay: true, videoPlay: play })
     }
