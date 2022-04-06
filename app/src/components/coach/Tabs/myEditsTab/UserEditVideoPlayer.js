@@ -60,7 +60,7 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
         if (!tagList.length) return
 
         setCurIdx(idx)
-        
+
         setPlay(videoPlay)
 
         playTagByIdx(idx)
@@ -86,7 +86,7 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
         if (autoPlay)
             onChangeClip(curIdx)
 
-            playTagByIdx(curIdx)
+        playTagByIdx(curIdx)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tagList, curIdx])
 
