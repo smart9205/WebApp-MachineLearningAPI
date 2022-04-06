@@ -7,17 +7,15 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
-
-
+import CloseIcon from '@mui/icons-material/Close';
 import { Table, } from 'react-bootstrap'
 
 import { PLAYER_ICON_DEFAULT, RULE } from '../../../../common/staticData';
 import gameService from "../../../../services/game.service";
-import { Dialog } from "@mui/material";
+import { Dialog, IconButton } from "@mui/material";
 import VideoPlayer from "../myEditsTab/UserEditVideoPlayer";
 
 const ITEM_HEIGHT = 48;
@@ -81,7 +79,14 @@ const PlayerStatsTab = ({ player }) => {
                 fullWidth
                 maxWidth={"lg"}
                 open={open}
+                // style={{ position: "relative" }}
                 onClose={() => setOpen(false)}>
+                <IconButton
+                    style={{ position: "absolute", right: "0", zIndex: "10", color: "white" }}
+                    onClick={() => setOpen(false)}
+                >
+                    <CloseIcon />
+                </IconButton>
                 <VideoPlayer
                     onChangeClip={(idx) => { }}
                     videoData={{
@@ -187,7 +192,7 @@ const PlayerStatsTab = ({ player }) => {
                                                         : ""}>
                                                         {success.length}
                                                     </span>{" "}
-                                                    ({games.length > 0 ? (success.length / games.length) || 0 : 0})
+                                                    ({games.length > 0 ? (success.length / games.length).toFixed(1) || 0 : 0})
                                                 </td>
                                                 {
                                                     !!rule?.successful &&
@@ -197,7 +202,7 @@ const PlayerStatsTab = ({ player }) => {
                                                     >
                                                         <span className={unsuccess.length > 0 ? "statistic-clickable-unsuccess" : ""}>{unsuccess.length}
                                                         </span>{" "}
-                                                        ({games.length > 0 ? (unsuccess.length / games.length) || 0 : 0})
+                                                        ({games.length > 0 ? (unsuccess.length / games.length).toFixed(1) || 0 : 0})
                                                     </td>
                                                 }
                                             </tr>

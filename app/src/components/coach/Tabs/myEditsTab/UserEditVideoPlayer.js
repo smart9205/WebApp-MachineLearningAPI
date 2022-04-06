@@ -11,9 +11,10 @@ import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlin
 import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
-import { toSecond, toHHMMSS } from "../../../../common/utilities"
+import { toSecond } from "../../../../common/utilities"
 import gameService from '../../../../services/game.service';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
+// import VIDEO from '../../../../assets/1.mp4'
 
 const styles = {
     action: {
