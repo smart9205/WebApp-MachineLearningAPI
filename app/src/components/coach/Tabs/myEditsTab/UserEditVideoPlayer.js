@@ -14,7 +14,6 @@ import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import { toSecond, toHHMMSS } from "../../../../common/utilities"
 import gameService from '../../../../services/game.service';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
-// import VIDEO from '../../../../assets/1.mp4'
 
 const styles = {
     action: {
@@ -42,7 +41,7 @@ const styles = {
         color: "white", backgroundColor: "#80808069"
     }
 }
-export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen }) {
+export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen = true }) {
     const handle = useFullScreenHandle();
     const { autoPlay, idx, videoPlay, cnt = null } = videoData
 
@@ -124,7 +123,7 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
     }
 
     return (
-        <div style={{ width: "100%", margin: 'auto', minWidth: 500, position: "relative" }}>
+        <div style={{ width: "100%", margin: 'auto', minWidth: 500, position: "relative", overflow: "hidden" }}>
             <FullScreen handle={handle}>
                 <div style={{ width: drawOpen ? "100%" : "90%", margin: 'auto' }}>
                     <div className="player-wrapper">

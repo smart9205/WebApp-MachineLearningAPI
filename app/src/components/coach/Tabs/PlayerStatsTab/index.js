@@ -17,6 +17,8 @@ import { Table, } from 'react-bootstrap'
 
 import { PLAYER_ICON_DEFAULT, RULE } from '../../../../common/staticData';
 import gameService from "../../../../services/game.service";
+import { Dialog } from "@mui/material";
+import VideoPlayer from "../myEditsTab/UserEditVideoPlayer";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -37,6 +39,8 @@ const PlayerStatsTab = ({ player }) => {
     const [games, setGames] = useState([]);
     const [tagList, setTagList] = useState([])
     const [score, setScore] = useState(0)
+    const [playList, setPlayList] = useState([])
+    const [open, setOpen] = useState(false)
 
     useEffect(() => {
         gameService.getCoachPlayerGames(player?.id ?? 0).then(res => {
@@ -70,8 +74,28 @@ const PlayerStatsTab = ({ player }) => {
         })
     }, [games])
 
+    const onActionSelected = (list) => {
+        console.log("taglist", list)
+        setPlayList(list)
+        setOpen(true)
+    }
+
     return (
         <Box sx={{ width: "100%", minHeight: "80vh" }}>
+            <Dialog
+                fullWidth
+                maxWidth={"lg"}
+                open={open}
+                onClose={() => setOpen(false)}>
+                <VideoPlayer
+                    onChangeClip={(idx) => { }}
+                    videoData={{
+                        idx: 0,
+                        autoPlay: true,
+                        videoPlay: false,
+                    }}
+                    tagList={playList} />
+            </Dialog>
             <FormControl sx={{ width: 600 }}>
                 <InputLabel id="game-multiple-checkbox-label">Games</InputLabel>
                 <Select
@@ -160,8 +184,12 @@ const PlayerStatsTab = ({ player }) => {
                                                 <td style={{ width: "20%", minWidth: 120 }}><p>{type.title}</p></td>
                                                 <td
                                                     width="40%"
+                                                    onClick={() => { !!success.length && onActionSelected(success) }}
                                                 >
-                                                    <span style={success.length > 0 ? { color: "#007200" } : {}}>
+                                                    <span className={success.length > 0 ? (rule.title === 'Turnover' || rule.title === 'Foul')
+                                                        ? "statistic-clickable-unsuccess"
+                                                        : "statistic-clickable-success"
+                                                        : ""}>
                                                         {success.length}
                                                     </span>{" "}
                                                     ({games.length > 0 ? (success.length / games.length) || 0 : 0})
@@ -170,9 +198,9 @@ const PlayerStatsTab = ({ player }) => {
                                                     !!rule?.successful &&
                                                     <td
                                                         width="40%"
+                                                        onClick={() => { !!unsuccess.length && onActionSelected(unsuccess) }}
                                                     >
-                                                        <span style={unsuccess.length > 0 ? { color: "red" } : {}}>
-                                                            {unsuccess.length}
+                                                        <span className={unsuccess.length > 0 ? "statistic-clickable-unsuccess" : ""}>{unsuccess.length}
                                                         </span>{" "}
                                                         ({games.length > 0 ? (unsuccess.length / games.length) || 0 : 0})
                                                     </td>
