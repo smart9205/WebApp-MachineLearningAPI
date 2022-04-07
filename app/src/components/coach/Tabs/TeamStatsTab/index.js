@@ -104,7 +104,7 @@ const TeamStatsTab = ({ gameList, team }) => {
             </FormControl>
 
             <Box sx={{ display: 'flex' }}>
-                <Box sx={{ width: "20%" }}>
+                <Box sx={{ width: "50rem" }}>
                     <Card sx={{ m: 1, }}>
                         <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Goals"}</Typography>
                         <Box sx={{ display: 'flex', justifyContent: "space-evenly", m: 2 }}>
@@ -121,84 +121,82 @@ const TeamStatsTab = ({ gameList, team }) => {
                         <PlayersTab gameIds={games.length > 0 ? games.map(g => g.id).join(",") : 0} teamId={team.team_id} />
                     </Card>
                 </Box>
-                <Grid container>
+                <div style={{ textAlign: "justify" }}>
                     {RULE.map((rule, idx) => {
                         let sum_success = 0, sum_unsuccess = 0
-                        return <Grid sm={4} md={3}>
-                            <Card sx={{ marginBlock: 0.5, fontSize: "0.8rem", maxWidth: "21rem", marginInline: "auto" }}>
-                                <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray', fontWeight: "bold", textTransform: "uppercase" }}>
-                                    {rule.title}
-                                </Typography>
-                                <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
-                                    <tbody className='text-center' style={{ m: 0 }}>
-                                        {!!rule?.successful && <tr>
-                                            {rule.title === "Shot" ?
-                                                <>
-                                                    <td></td>
-                                                    <td><p style={{ fontWeight: "bold" }}>On Target</p></td>
-                                                    <td><p style={{ fontWeight: "bold" }}>Off Target</p></td>
-                                                </>
-                                                :
-                                                <>
-                                                    <td></td>
-                                                    <td><p style={{ fontWeight: "bold" }}>Successful</p></td>
-                                                    <td><p style={{ fontWeight: "bold" }}>Unsuccessful</p></td>
-                                                </>
-                                            }
-                                        </tr>}
-                                        {rule.row.map((type, i) => {
-                                            const data = !!tagList ? tagList.filter(t =>
-                                                (RULE[idx]?.opponent === (t.team_id !== team?.team_id ?? 0)) &&
-                                                t.action_id === type.action_id &&
-                                                (!type?.action_result_id ? true : type.action_result_id.includes(t.action_result_id)) &&
-                                                (!type?.action_type_id ? true : type.action_type_id.includes(t.action_type_id))
-                                            ) : []
-                                            const success = data.filter(f => !rule?.successful ? true : rule?.successful.includes(f.action_result_id))
-                                            const unsuccess = data.filter(f => !rule?.unsuccessful ? true : rule?.unsuccessful.includes(f.action_result_id))
-                                            sum_success += success.length
-                                            sum_unsuccess += unsuccess.length
-                                            return (<>
-                                                <tr key={i}>
-                                                    <td style={{ width: "20%", minWidth: 120 }}><p>{type.title}</p></td>
+                        return <Card sx={{ fontSize: "0.8rem", position: "relative", margin: "0.5rem", maxWidth: 500, minWidth: 320, display: "inline-block", verticalAlign: "top" }}>
+                            <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray', fontWeight: "bold", textTransform: "uppercase" }}>
+                                {rule.title}
+                            </Typography>
+                            <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
+                                <tbody className='text-center' style={{ m: 0 }}>
+                                    {!!rule?.successful && <tr>
+                                        {rule.title === "Shot" ?
+                                            <>
+                                                <td></td>
+                                                <td><p style={{ fontWeight: "bold" }}>On Target</p></td>
+                                                <td><p style={{ fontWeight: "bold" }}>Off Target</p></td>
+                                            </>
+                                            :
+                                            <>
+                                                <td></td>
+                                                <td><p style={{ fontWeight: "bold" }}>Successful</p></td>
+                                                <td><p style={{ fontWeight: "bold" }}>Unsuccessful</p></td>
+                                            </>
+                                        }
+                                    </tr>}
+                                    {rule.row.map((type, i) => {
+                                        const data = !!tagList ? tagList.filter(t =>
+                                            (RULE[idx]?.opponent === (t.team_id !== team?.team_id ?? 0)) &&
+                                            t.action_id === type.action_id &&
+                                            (!type?.action_result_id ? true : type.action_result_id.includes(t.action_result_id)) &&
+                                            (!type?.action_type_id ? true : type.action_type_id.includes(t.action_type_id))
+                                        ) : []
+                                        const success = data.filter(f => !rule?.successful ? true : rule?.successful.includes(f.action_result_id))
+                                        const unsuccess = data.filter(f => !rule?.unsuccessful ? true : rule?.unsuccessful.includes(f.action_result_id))
+                                        sum_success += success.length
+                                        sum_unsuccess += unsuccess.length
+                                        return (<>
+                                            <tr key={i}>
+                                                <td style={{ width: "20%", minWidth: 120 }}><p>{type.title}</p></td>
+                                                <td
+                                                    width="40%"
+                                                >
+                                                    <span style={success.length > 0 ? { color: "#007200" } : {}}>
+                                                        {success.length}
+                                                    </span>{" "}
+                                                    ({games.length > 0 ? (success.length / games.length).toFixed(1) || 0 : 0})
+                                                </td>
+                                                {
+                                                    !!rule?.successful &&
                                                     <td
                                                         width="40%"
                                                     >
-                                                        <span style={success.length > 0 ? { color: "#007200" } : {}}>
-                                                            {success.length}
+                                                        <span style={unsuccess.length > 0 ? { color: "red" } : {}}>
+                                                            {unsuccess.length}
                                                         </span>{" "}
-                                                        ({games.length > 0 ? (success.length / games.length).toFixed(1) || 0 : 0})
+                                                        ({games.length > 0 ? (unsuccess.length / games.length).toFixed(1) || 0 : 0})
                                                     </td>
-                                                    {
-                                                        !!rule?.successful &&
-                                                        <td
-                                                            width="40%"
-                                                        >
-                                                            <span style={unsuccess.length > 0 ? { color: "red" } : {}}>
-                                                                {unsuccess.length}
-                                                            </span>{" "}
-                                                            ({games.length > 0 ? (unsuccess.length / games.length).toFixed(1) || 0 : 0})
-                                                        </td>
-                                                    }
-                                                </tr>
-                                                {!!rule?.successful && rule.row.length === i + 1 &&
-                                                    <tr key={i + 1}>
-                                                        <td></td>
-                                                        <td style={{ fontWeight: "bold", color: "#007200" }}>
-                                                            {(sum_success / (sum_success + sum_unsuccess) * 100 || 0).toFixed(1)}%
-                                                        </td>
-                                                        <td style={{ fontWeight: "bold", color: "red" }}>
-                                                            {(sum_unsuccess / (sum_success + sum_unsuccess) * 100 || 0).toFixed(1)}%
-                                                        </td>
-                                                    </tr>
                                                 }
-                                            </>)
-                                        })}
-                                    </tbody>
-                                </Table>
-                            </Card>
-                        </Grid>
+                                            </tr>
+                                            {!!rule?.successful && rule.row.length === i + 1 &&
+                                                <tr key={i + 1}>
+                                                    <td></td>
+                                                    <td style={{ fontWeight: "bold", color: "#007200" }}>
+                                                        {(sum_success / (sum_success + sum_unsuccess) * 100 || 0).toFixed(1)}%
+                                                    </td>
+                                                    <td style={{ fontWeight: "bold", color: "red" }}>
+                                                        {(sum_unsuccess / (sum_success + sum_unsuccess) * 100 || 0).toFixed(1)}%
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </>)
+                                    })}
+                                </tbody>
+                            </Table>
+                        </Card>
                     })}
-                </Grid>
+                </div>
             </Box>
         </Box >
     );
