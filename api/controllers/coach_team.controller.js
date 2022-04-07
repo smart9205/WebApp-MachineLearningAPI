@@ -136,7 +136,9 @@ exports.getAllPlayerGames = (req, res) => {
   const playerId = req.params.id;
 
   Sequelize.query(`
-  select public."Games".* 
+  select public."Games".*,
+  HomeTeam.name as home_team_name,
+  AwayTeam.name as away_team_name
 
   from public."Team_Players" 
   
@@ -148,6 +150,8 @@ exports.getAllPlayerGames = (req, res) => {
     (public."Games".home_team_id = public."Coach_Teams".team_id or public."Games".away_team_id = public."Coach_Teams".team_id) and
     public."Games".season_id = public."Coach_Teams".season_id and
     public."Games".league_id = public."Coach_Teams".league_id
+  JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id
+  JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
   
   where public."Coach_Teams".user_id = ${req.userId} and public."Team_Players".player_id = ${playerId}
   ORDER BY public."Games".date desc
