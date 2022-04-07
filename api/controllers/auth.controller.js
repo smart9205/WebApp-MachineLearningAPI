@@ -132,7 +132,7 @@ exports.signup = (req, res) => {
           };
           //encrypt data
           const ciphertext = encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify(data), config.secret).toString());
-          const url = `https://soccer.s4upro.com/verification/${ciphertext}`;
+          const url = `https://soccer.scouting4u.com/verification/${ciphertext}`;
 
           var html = `<!DOCTYPE html>
             <html>

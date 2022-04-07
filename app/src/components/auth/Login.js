@@ -90,7 +90,7 @@ const Login = (props) => {
       dispatch(verification(params.code))
         .then((data) => {
           // Here we receive verification succeess 
-          window.location.replace('https://soccer.s4upro.com');
+          window.location.replace('https://soccer.scouting4u.com');
           // window.location.replace(`https://${data.lang ? data.lang : "www"}.Stats2Win.net${data.lang ? "/analyzer" : ""}`);
         })
         .catch(() => {
