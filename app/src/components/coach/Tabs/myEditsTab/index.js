@@ -23,6 +23,8 @@ import DeleteConfirmDialog from "../../../../common/DeleteConfirmDialog";
 import EditNameDialog from "../../../../common/EditNameDialolg";
 import DragableIndividualTagTable from "./DragableIndividualTagTable";
 import DragableTeamTagTable from "./DragableTeamTagTable";
+import fileDownload from 'js-file-download';
+import { createCommand } from "../../../../helpers/createBAT";
 
 const styles = {
     loader: {
@@ -119,6 +121,11 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
 
     const handleSort = (rows) => {
         gameService.updateEditClipsSort(rows).then(res => console.log(res))
+    }
+
+    const handleRender = () => {
+        console.log("render", tagList)
+        fileDownload(createCommand(tagList), 'render_video.bat');
     }
 
     return (
@@ -219,7 +226,13 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                         />
                     }
                 </Paper>
-                <Button variant="contained" style={{ marginTop: "1rem" }}>Render</Button>
+                <Button
+                    variant="contained"
+                    style={{ marginTop: "1rem" }}
+                    onClick={handleRender}
+                >
+                    Render
+                </Button>
             </Box>
             <VideoPlayer
                 videoData={videoData}
