@@ -193,31 +193,34 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                     <ArrowRightIcon />
                 }
             </IconButton>
-            <Paper style={{ height: "100%", minWidth: 540 }} className="coach-tag-table">
-                {tagList.length === 0 && <p style={{ textAlign: 'center' }}>No Tags</p>}
-                {tagList.filter(t => t.team_tag_id !== null).length > 0 &&
-                    <DragableTeamTagTable
-                        sx={{ height: "100%", p: 1, width: "100%" }}
-                        rows={tagList}
-                        onDelete={id => handleDeleteEditClips(id)}
-                        handleSort={handleSort}
-                        handleRowClick={({ row, idx }) => handleVideoData("teamTag", false, idx)}
-                        selected={curTagIdx}
-                        onPlay={({ row, idx }) => handleVideoData("teamTag", true, idx)}
-                    />
-                }
-                {tagList.filter(t => t.player_tag_id !== null).length > 0 &&
-                    <DragableIndividualTagTable
-                        sx={{ height: "100%", p: 1, width: "100%" }}
-                        rows={tagList}
-                        selected={curTagIdx}
-                        handleSort={handleSort}
-                        onDelete={id => handleDeleteEditClips(id)}
-                        handleRowClick={({ row, idx }) => handleVideoData("playerTag", false, idx)}
-                        onPlay={({ row, idx }) => handleVideoData("playerTag", true, idx)}
-                    />
-                }
-            </Paper>
+            <Box style={{ textAlign: "center" }}>
+                <Paper style={{ height: "calc(95vh - 200px)", minWidth: 540 }} className="coach-tag-table">
+                    {tagList.length === 0 && <p style={{ textAlign: 'center' }}>No Tags</p>}
+                    {tagList.filter(t => t.team_tag_id !== null).length > 0 &&
+                        <DragableTeamTagTable
+                            sx={{ height: "100%", p: 1, width: "100%" }}
+                            rows={tagList}
+                            onDelete={id => handleDeleteEditClips(id)}
+                            handleSort={handleSort}
+                            handleRowClick={({ row, idx }) => handleVideoData("teamTag", false, idx)}
+                            selected={curTagIdx}
+                            onPlay={({ row, idx }) => handleVideoData("teamTag", true, idx)}
+                        />
+                    }
+                    {tagList.filter(t => t.player_tag_id !== null).length > 0 &&
+                        <DragableIndividualTagTable
+                            sx={{ height: "100%", p: 1, width: "100%" }}
+                            rows={tagList}
+                            selected={curTagIdx}
+                            handleSort={handleSort}
+                            onDelete={id => handleDeleteEditClips(id)}
+                            handleRowClick={({ row, idx }) => handleVideoData("playerTag", false, idx)}
+                            onPlay={({ row, idx }) => handleVideoData("playerTag", true, idx)}
+                        />
+                    }
+                </Paper>
+                <Button variant="contained" style={{ marginTop: "1rem" }}>Render</Button>
+            </Box>
             <VideoPlayer
                 videoData={videoData}
                 tagList={tagList}
