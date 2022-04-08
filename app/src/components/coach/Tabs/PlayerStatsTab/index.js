@@ -40,7 +40,6 @@ const PlayerStatsTab = ({ player }) => {
 
     useEffect(() => {
         gameService.getCoachPlayerGames(player?.id ?? 0).then(res => {
-            console.log("game List", res)
             setGameList(res)
             setGames(res.slice(0, 1))
         })
@@ -93,7 +92,7 @@ const PlayerStatsTab = ({ player }) => {
                     videoData={{
                         idx: 0,
                         autoPlay: true,
-                        videoPlay: false,
+                        videoPlay: true,
                     }}
                     tagList={playList} />
             </Dialog>
