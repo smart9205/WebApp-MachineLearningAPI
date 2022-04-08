@@ -24,7 +24,7 @@ import EditNameDialog from "../../../../common/EditNameDialolg";
 import DragableIndividualTagTable from "./DragableIndividualTagTable";
 import DragableTeamTagTable from "./DragableTeamTagTable";
 import fileDownload from 'js-file-download';
-import { createCommand } from "../../../../helpers/createBAT";
+import { createCommand } from "../../../../common/utilities"
 
 const styles = {
     loader: {
@@ -125,7 +125,12 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
 
     const handleRender = () => {
         console.log("render", tagList)
-        fileDownload(createCommand(tagList), 'render_video.bat');
+        if (!tagList.length) return
+        fileDownload(createCommand(tagList),
+            `${!tagList[0]?.player_fname ?
+                tagList[0].offensive_team_name :
+                `${tagList[0]?.player_fname} ${tagList[0]?.action_name} ${tagList[0]?.action_result_name}`
+            }.bat`);
     }
 
     return (
