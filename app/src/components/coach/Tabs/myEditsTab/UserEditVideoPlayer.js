@@ -75,11 +75,11 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
             if (url?.startsWith("https://www.youtube.com")) {
                 gameService.getNewStreamURL(url).then((res) => {
                     setVideoURL(res.url)
+                    console.log("useEditurl", res.url)
                 })
             } else (
                 setVideoURL(url)
             )
-
             setCurOriginURL(url)
         }
 
