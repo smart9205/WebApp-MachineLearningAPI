@@ -95,7 +95,6 @@ services:
       - app
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /opt/traefik/acme.json:/letsencrypt/acme.json
       - /opt/traefik/letsencrypt:/letsencrypt
 
 networks:
