@@ -60,9 +60,10 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
     const initUserEdits = () => {
         setLoading(true)
         gameService.getAllUserEdits().then(res => {
+            console.log("res111", res[0] ?? -1)
             setUserEditList(res)
-            setCurEdit(res[0])
-            handleUserEditDetail(res[0])
+            setCurEdit(res[0] ?? -1)
+            handleUserEditDetail(res[0] ?? -1)
             setLoading(false)
         })
     }
@@ -77,7 +78,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
     const handleUserEditDetail = (edit) => {
         if (!edit) return
         setCurEdit(edit)
-        gameService.getEditClipsByUserEditId(edit.id).then(res => {
+        gameService.getEditClipsByUserEditId(edit?.id ?? -1).then(res => {
             setCurTagIdx(0)
             const ttag = res.filter(t => t.team_tag_id !== null)
             const ptag = res.filter(t => t.player_tag_id !== null)
@@ -109,6 +110,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
 
     const handleDeleteEditClips = (id) => {
         gameService.deleteEditClip(id).then(res => {
+            console.log('res', res)
             handleUserEditDetail(curEdit)
         })
     }
