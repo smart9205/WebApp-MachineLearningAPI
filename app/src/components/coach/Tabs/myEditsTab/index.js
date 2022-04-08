@@ -23,7 +23,6 @@ import DeleteConfirmDialog from "../../../../common/DeleteConfirmDialog";
 import EditNameDialog from "../../../../common/EditNameDialolg";
 import DragableIndividualTagTable from "./DragableIndividualTagTable";
 import DragableTeamTagTable from "./DragableTeamTagTable";
-import fileDownload from 'js-file-download';
 import { createCommand } from "../../../../common/utilities"
 
 const styles = {
@@ -124,13 +123,18 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
     }
 
     const handleRender = () => {
-        console.log("render", tagList)
+        console.log("render", curEdit.name)
         if (!tagList.length) return
-        fileDownload(createCommand(tagList),
-            `${!tagList[0]?.player_fname ?
-                tagList[0].offensive_team_name :
-                `${tagList[0]?.player_fname} ${tagList[0]?.action_name} ${tagList[0]?.action_result_name}`
-            }.bat`);
+
+        let url = tagList[0].video_url
+        if (url?.startsWith("https://www.youtube.com")) {
+            gameService.getNewStreamURL(url).then(res => {
+                console.log("res", res.url)
+                createCommand(tagList, res.url, curEdit.name)
+            })
+        } else {
+            createCommand(tagList, url, curEdit.name)
+        }
     }
 
     return (
