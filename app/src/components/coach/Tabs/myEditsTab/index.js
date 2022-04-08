@@ -125,7 +125,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
     }
 
     const handleRender = () => {
-        console.log("render", curEdit.name)
+        console.log("render", tagList)
         if (!tagList.length) return
 
         let url = tagList[0].video_url
