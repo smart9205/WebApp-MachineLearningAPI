@@ -128,15 +128,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
         console.log("render", tagList)
         if (!tagList.length) return
 
-        let url = tagList[0].video_url
-        if (url?.startsWith("https://www.youtube.com")) {
-            gameService.getNewStreamURL(url).then(res => {
-                console.log("res", res.url)
-                createCommand(tagList, decodeURIComponent(res.url), curEdit.name)
-            })
-        } else {
-            createCommand(tagList, url, curEdit.name)
-        }
+        createCommand(tagList, curEdit.name)
     }
 
     return (

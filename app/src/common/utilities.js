@@ -3,12 +3,18 @@ import builder from 'xmlbuilder'
 import fileDownload from 'js-file-download'
 import { SECRET } from "../config/settings"
 import { DEMO } from "./staticData"
+import gameService from '../services/game.service'
 
-export const createCommand = (tagList, url, name) => {
+export const createCommand = async (tagList, name) => {
 
-  console.log("tagList", tagList)
-
-  let videoList = [...new Set(tagList.map(tag => tag.video_url))]
+  let rawVideoList = [...new Set(tagList.map(tag => tag.video_url))]
+  let videoList = await Promise.all(rawVideoList.map(async url => {
+    if (url?.startsWith("https://www.youtube.com")) {
+      return (await gameService.getAsyncNewStreamURL(url)).url
+    }
+    return url
+  }))
+  console.log("tagList", videoList)
 
   let videos = videoList.map(tag => {
     return {
@@ -19,7 +25,7 @@ export const createCommand = (tagList, url, name) => {
 
   let clips = tagList.map((tag, i) => {
     return {
-      Video: videoList.indexOf(tag.video_url) + 1,
+      Video: rawVideoList.indexOf(tag.video_url) + 1,
       Trim: `${toSecond(tag.start_time)}:${toSecond(tag.end_time)}`,
       FirstBoxText: `${tag.action_name ?? "Team Actions"}`,
     }

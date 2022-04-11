@@ -390,6 +390,9 @@ const getScoreInGames = (gameIds, teamId) => {
 }
 
 // NEW STREAM URL
+const getAsyncNewStreamURL = async (url) => {
+  return (await axios.post(API_URL + "game/getnewstream", { video_url: url }, { headers: authHeader() })).data;
+}
 const getNewStreamURL = (url) => {
   return axios.post(API_URL + "game/getnewstream", { video_url: url }, { headers: authHeader() }).then((response) => {
     return response.data;
@@ -463,6 +466,7 @@ const gameService = {
   getPlayerTagsByActionName,
   getGameScore,
   getScoreInGames,
+  getAsyncNewStreamURL,
   getNewStreamURL,
   getPlayerActions,
   getCoachPlayerGames,
