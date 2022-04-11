@@ -56,7 +56,8 @@
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0",
         "sass": "^1.49.7",
-        "validator": "^13.1.1"
+        "validator": "^13.1.1",
+        "xmlbuilder": "^15.1.1"
     },
     "scripts": {
         "start": "react-scripts start",
