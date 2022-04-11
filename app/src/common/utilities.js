@@ -6,16 +6,20 @@ import { DEMO } from "./staticData"
 
 export const createCommand = (tagList, url, name) => {
 
-  let videos = tagList.map(tag => {
+  console.log("tagList", tagList)
+
+  let videoList = [...new Set(tagList.map(tag => tag.video_url))]
+
+  let videos = videoList.map(tag => {
     return {
-      url: tag.video_url,
-      SecondBoxText: !tag.player_fname ? name : `#${tag?.jersey} ${tag?.player_fname}`
+      url: tag,
+      SecondBoxText: name
     }
   })
 
   let clips = tagList.map((tag, i) => {
     return {
-      Video: i + 1,
+      Video: videoList.indexOf(tag.video_url) + 1,
       Trim: `${toSecond(tag.start_time)}:${toSecond(tag.end_time)}`,
       FirstBoxText: `${tag.action_name ?? "Team Actions"}`,
     }
@@ -46,8 +50,6 @@ export const createCommand = (tagList, url, name) => {
   };
 
   const command = builder.create(obj).end({ pretty: true });
-
-  console.log("command", command)
 
   // const command = `ffmpeg -y -i "${url}" -f lavfi -i color=color=#808080@0.7:size=300x60,format=rgba -f lavfi -i color=color=#FFA500@0.7:size=${!tagList[0]?.player_fname ? "540" : "340"}x60,format=rgba -i "https://s3.eu-west-1.amazonaws.com/scouting4u.com/IMG/JustSmallLogo.png" -filter_complex "${tagList.map((tag, i) =>
   //   `[0:v]trim=${toSecond(tag.start_time)}:${toSecond(tag.end_time)},setpts=PTS-STARTPTS[v${i}];[1:v]drawtext=text='${tag.action_name ?? "Team Actions"}':fontfile=ArialBold.ttf:x=(w-text_w)/2:y=(h-text_h)/2:fontsize=37:fontcolor=white[trans_gray_tx${i ? i : ''}];[v${i}][trans_gray_tx${i ? i : ''}]overlay=shortest=1:x=20:y=H-h-20[v_${i}];[0:a]atrim=${toSecond(tag.start_time)}:${toSecond(tag.end_time)},asetpts=PTS-STARTPTS[a${i}];`).join("")
