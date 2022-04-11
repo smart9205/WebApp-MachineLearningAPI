@@ -14,7 +14,6 @@ export const createCommand = async (tagList, name) => {
     }
     return url
   }))
-  console.log("tagList", videoList)
 
   let videos = videoList.map(tag => {
     return {
