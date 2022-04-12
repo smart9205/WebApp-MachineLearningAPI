@@ -131,7 +131,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
 
         tagList.forEach((tag, i) => {
             let last = newList.at(-1)
-            if (last && (toSecond(last?.end_time ?? 0) > toSecond(tag.start_time)) && (toSecond(last?.start_time ?? 0) < toSecond(tag.start_time))) {
+            if (last && (toSecond(last?.end_time ?? 0) >= toSecond(tag.start_time)) && (toSecond(last?.start_time ?? 0) <= toSecond(tag.start_time))) {
                 last.end_time = last.end_time > tag.end_time ? last.end_time : tag.end_time;
 
                 if (last.action_name && !last.action_name?.includes(tag.action_name))
