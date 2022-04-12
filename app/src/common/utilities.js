@@ -7,6 +7,7 @@ import gameService from '../services/game.service'
 
 export const createCommand = async (tagList, name) => {
 
+
   let rawVideoList = [...new Set(tagList.map(tag => tag.video_url))]
   let videoList = await Promise.all(rawVideoList.map(async url => {
     if (url?.startsWith("https://www.youtube.com")) {
@@ -15,10 +16,10 @@ export const createCommand = async (tagList, name) => {
     return url
   }))
 
-  let videos = videoList.map(tag => {
+  let videos = videoList.map((tag, i) => {
     return {
       url: tag,
-      SecondBoxText: !tag?.player_fname ? name : `#${tag?.jersey} ${tag?.player_fname}`
+      SecondBoxText: tagList[0]?.player_fname ? `#${tagList[0]?.jersey} ${tagList[0]?.player_fname}` : name
     }
   })
 
