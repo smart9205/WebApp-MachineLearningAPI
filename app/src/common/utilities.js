@@ -14,7 +14,6 @@ export const createCommand = async (tagList, name) => {
     }
     return url
   }))
-  console.log("tagList", videoList)
 
   let videos = videoList.map(tag => {
     return {
@@ -26,8 +25,8 @@ export const createCommand = async (tagList, name) => {
   let clips = tagList.map((tag, i) => {
     return {
       Video: rawVideoList.indexOf(tag.video_url) + 1,
-      Trim: `${toSecond(tag.start_time)}:${toSecond(tag.end_time)} `,
-      FirstBoxText: `${tag.action_name ?? "Team Actions"} `,
+      Trim: `${toSecond(tag.start_time)}:${toSecond(tag.end_time)}`,
+      FirstBoxText: `${tag.action_name ?? "Team Actions"}`,
     }
   })
 
