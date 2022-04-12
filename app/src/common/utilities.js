@@ -19,7 +19,7 @@ export const createCommand = async (tagList, name) => {
   let videos = videoList.map((tag, i) => {
     return {
       url: tag,
-      SecondBoxText: tagList[0]?.player_fname ? `#${tagList[0]?.jersey} ${tagList[0]?.player_fname}` : name
+      SecondBoxText: tagList[0]?.player_fname ? `#${tagList[0]?.jersey} ${tagList[0]?.player_fname} ${tagList[0]?.player_lname}` : name
     }
   })
 
