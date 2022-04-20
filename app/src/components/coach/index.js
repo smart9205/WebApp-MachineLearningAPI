@@ -14,6 +14,7 @@ import GameTab from './Tabs/gameTab';
 import MyEditsTab from './Tabs/myEditsTab';
 import TeamStatsTab from './Tabs/TeamStatsTab';
 import PlayerStatsTab from './Tabs/PlayerStatsTab';
+import SettingsTab from './Tabs/SettingsTab';
 
 const styles = {
     loader: {
@@ -127,7 +128,7 @@ export default function Coach() {
                         </Button>
                     )}
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={4.5}>
                     {curTab !== 3 && curTab !== 2 && <Autocomplete
                         options={teamList}
                         value={team}
@@ -156,6 +157,19 @@ export default function Coach() {
                             setState({ coachPlayer: newValue });
                         }}
                     />}
+                </Grid>
+                <Grid item xs={1.5} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    {["Settings"].map((title, idx) =>
+                        <Button
+                            fullWidth
+                            key={idx}
+                            style={{ height: "50px" }}
+                            variant={curTab === 4 ? "contained" : "outlined"}
+                            onClick={() => setCurTab(4)}
+                        >
+                            {title}
+                        </Button>
+                    )}
                 </Grid>
             </Grid>
             {curTab === 0 &&
@@ -222,6 +236,7 @@ export default function Coach() {
                 {curTab === 1 && <TeamStatsTab gameList={gameList} team={team} />}
                 {curTab === 2 && <PlayerStatsTab player={coachPlayer} />}
                 {curTab === 3 && <MyEditsTab teamList={teamList} game={game} playerList={playerList} />}
+                {curTab === 4 && <SettingsTab frameSrc='http://soccersettings.scouting4u.com/' />}
             </Paper>
         </Box>
     )
