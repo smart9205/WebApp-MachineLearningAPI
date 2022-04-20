@@ -128,8 +128,24 @@ export default function Coach() {
                         </Button>
                     )}
                 </Grid>
-                <Grid item xs={4.5}>
-                    {curTab !== 3 && curTab !== 2 && <Autocomplete
+                {
+                    (curTab === 3 || curTab === 4) &&
+                    <Grid item xs={1.5} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        {["Settings"].map((title, idx) =>
+                            <Button
+                                fullWidth
+                                key={idx}
+                                style={{ height: "50px" }}
+                                variant={curTab === 4 ? "contained" : "outlined"}
+                                onClick={() => setCurTab(4)}
+                            >
+                                {title}
+                            </Button>
+                        )}
+                    </Grid>
+                }
+                <Grid item xs={6}>
+                    {curTab !== 4 && curTab !== 3 && curTab !== 2 && <Autocomplete
                         options={teamList}
                         value={team}
                         fullWidth
@@ -157,19 +173,6 @@ export default function Coach() {
                             setState({ coachPlayer: newValue });
                         }}
                     />}
-                </Grid>
-                <Grid item xs={1.5} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    {["Settings"].map((title, idx) =>
-                        <Button
-                            fullWidth
-                            key={idx}
-                            style={{ height: "50px" }}
-                            variant={curTab === 4 ? "contained" : "outlined"}
-                            onClick={() => setCurTab(4)}
-                        >
-                            {title}
-                        </Button>
-                    )}
                 </Grid>
             </Grid>
             {curTab === 0 &&
