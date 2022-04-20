@@ -229,6 +229,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                             handleRowClick={({ row, idx }) => handleVideoData("teamTag", false, idx)}
                             selected={curTagIdx}
                             onPlay={({ row, idx }) => handleVideoData("teamTag", true, idx)}
+                            initUserEdits={initUserEdits}
                         />
                     }
                     {tagList.filter(t => t.player_tag_id !== null).length > 0 &&
@@ -240,6 +241,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                             onDelete={id => handleDeleteEditClips(id)}
                             handleRowClick={({ row, idx }) => handleVideoData("playerTag", false, idx)}
                             onPlay={({ row, idx }) => handleVideoData("playerTag", true, idx)}
+                            initUserEdits={initUserEdits}
                         />
                     }
                 </Paper>

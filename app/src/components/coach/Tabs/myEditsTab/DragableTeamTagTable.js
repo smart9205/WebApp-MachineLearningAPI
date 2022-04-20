@@ -12,7 +12,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TeamTagRow } from './TeamTagRow';
 
-export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, onDelete, handleSort, ...params }) {
+export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, onDelete, handleSort, initUserEdits, ...params }) {
   const [tableRows, setTableRows] = useState(rows)
 
   useEffect(() => {
@@ -32,6 +32,7 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
       handleSort(newRow.slice(start, end).map((row, i) => { return { ...row, sort: start + i } }))
       return newRow
     });
+    initUserEdits()
   }, []);
 
   const renderCard = useCallback((row, idx, selected) => {
