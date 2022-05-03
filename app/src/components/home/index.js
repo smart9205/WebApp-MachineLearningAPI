@@ -14,21 +14,21 @@ const Home = () => {
         <>
             <Banner />
 
-            <NextMatch />
+            {/* <NextMatch /> */}
 
-            <UpcomingMatches />
+            {/* <UpcomingMatches /> */}
 
-            <MatcheHighlights />
+            {/* <MatcheHighlights /> */}
 
-            <Products />
+            {/* <Products /> */}
 
-            <Partners />
+            {/* <Partners /> */}
 
-            <Gallery />
+            {/* <Gallery /> */}
 
-            <Subscribe />
+            {/* <Subscribe /> */}
 
-            <BlogPost />
+            {/* <BlogPost /> */}
         </>
     );
 }

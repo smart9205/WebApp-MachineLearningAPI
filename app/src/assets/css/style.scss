@@ -172,7 +172,7 @@ p {
 Navbar Area CSS
 =================================================*/
 .navbar {
-    position: relative;
+    position: absolute;
     left: 0;
     top: 0;
     width: 100%;
@@ -400,7 +400,7 @@ Navbar Area CSS
 Main Banner Area CSS
 =================================================*/
 .main-banner {
-    height: 100vh;
+    height: 90vh;
     position: relative;
     z-index: 1;
     overflow: hidden;

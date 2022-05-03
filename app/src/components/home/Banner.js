@@ -15,7 +15,7 @@ const Banner = () => {
                 </div>
             </div>
 
-            <div className="banner-footer-content">
+            {/* <div className="banner-footer-content">
                 <div className="container-fluid">
                     <div className="row align-items-center">
                         <div className="col-lg-6 col-sm-6">
@@ -53,7 +53,7 @@ const Banner = () => {
                         </div >
                     </div >
                 </div >
-            </div >
+            </div > */}
         </div >
     );
 }

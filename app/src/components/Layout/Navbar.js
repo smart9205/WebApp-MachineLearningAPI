@@ -18,7 +18,7 @@ export default function Navbar() {
                 elementId.classList.remove("is-sticky");
             }
         });
-        window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
 
         menuActiveClass()
     }, [])
