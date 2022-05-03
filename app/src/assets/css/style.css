@@ -168,7 +168,7 @@ p:last-child {
 Navbar Area CSS
 =================================================*/
 .navbar {
-  position: absolute;
+  position: relative;
   left: 0;
   top: 0;
   width: 100%;
@@ -385,7 +385,7 @@ Navbar Area CSS
 Main Banner Area CSS
 =================================================*/
 .main-banner {
-  height: 90vh;
+  height: 80vh;
   position: relative;
   z-index: 1;
   overflow: hidden;

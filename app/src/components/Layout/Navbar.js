@@ -93,7 +93,7 @@ export default function Navbar() {
                                             Home
                                         </AnchorLink>
                                     </li>
-                                    <li className="nav-item">
+                                    {/* <li className="nav-item">
                                         <AnchorLink
                                             onClick={toggleNavbar}
                                             offset={() => -1}
@@ -152,7 +152,7 @@ export default function Navbar() {
                                         >
                                             News
                                         </AnchorLink>
-                                    </li>
+                                    </li> */}
                                 </>
                             }
 
