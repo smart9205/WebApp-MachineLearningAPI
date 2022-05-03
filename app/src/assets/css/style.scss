@@ -50,6 +50,7 @@ body {
         family: $font-family;
         size: $font-size;
     }
+    top: 0 !important;
 }
 .container {
     max-width: 1230px;
@@ -209,6 +210,22 @@ Navbar Area CSS
         }
         .others-option {
             display: none;
+        }
+    }
+    select {
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        padding: 0;
+        margin: 0 !important;
+        color: #c6c6c6;
+        font-size: 20px;
+        font-family: "Teko", sans-serif;
+        font-weight: 500;
+
+        option {
+            color: #000000;
+            font-size: 0.8em;
         }
     }
 }
@@ -2367,4 +2384,8 @@ Footer Area CSS
             color: $main-color;
         }
     }
+}
+
+.goog-te-banner-frame {
+    display: none;
 }
