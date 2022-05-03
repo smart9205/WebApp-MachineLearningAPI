@@ -168,7 +168,7 @@ p:last-child {
 Navbar Area CSS
 =================================================*/
 .navbar {
-  position: absolute;
+  position: relative;
   left: 0;
   top: 0;
   width: 100%;
