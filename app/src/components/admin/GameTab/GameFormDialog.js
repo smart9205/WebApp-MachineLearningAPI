@@ -47,7 +47,7 @@ const styles = {
     alignItems: "center"
   }
 };
-export default function GameFormDialog({ open, setOpen, gameListUpdated, actionType, editData }) {
+export default function GameFormDialog({ open, setOpen, gameListUpdated, actionType, editData, t }) {
   const classes = useStyles();
   const descriptionElementRef = useRef(null);
 
@@ -149,7 +149,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
         video_url: videoUrl
       }).then((res) => {
         gameListUpdated();
-        OpenAlert("Added a new game");
+        OpenAlert(t("addedGame"));
         setLoading(false)
       }).catch(() => { setLoading(false) })
     } else if (actionType === "Edit") {
@@ -164,7 +164,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
         video_url: videoUrl
       }).then((res) => {
         gameListUpdated();
-        OpenAlert("Game is edited");
+        OpenAlert(t("editedGame"));
         setLoading(false)
       }).catch(() => { setLoading(false) })
     }
@@ -177,7 +177,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
     GameService.addLeague({ name: leagueName }).then(
       (response) => {
         setCount(count + 1);
-        OpenAlert(`${leagueName} is successfully added!`);
+        OpenAlert(`${leagueName} ${t("successAdd")}`);
       },
       (error) => {
       }
@@ -198,7 +198,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
           <CircularProgress />
         </div>
       }
-      <DialogTitle id="scroll-dialog-title">{actionType} Game</DialogTitle>
+      <DialogTitle id="scroll-dialog-title">{actionType === 'Add' ? t("Add") : t("Edit")} {t("Game")}</DialogTitle>
       <DialogContent
         dividers={true}
         style={{ height: '90vh' }}
@@ -209,7 +209,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
             {alert}
           </Alert>
         </Snackbar>
-        <TeamFormDialog open={teamOpen} onResult={res => setTeamOpen(false)} />
+        <TeamFormDialog open={teamOpen} onResult={res => setTeamOpen(false)} t={t} />
         <PlayerFormDialog
           open={playerOpen}
           onResult={(res) => {
@@ -220,12 +220,14 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
             if (res?.type === "success") {
               getPlayerList();
             }
-          }} />
+          }}
+          t={t}
+        />
         <Dialog open={leagueOpen} onClose={e => handleLeagueClose(false)}>
-          <DialogTitle>Add New League</DialogTitle>
+          <DialogTitle>{t("newLeagueTitle")}</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To add new League, please input League name.
+              {t("newLeagueText")}
             </DialogContentText>
             <TextField
               autoFocus
@@ -239,8 +241,8 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={e => handleLeagueClose(false)}>Cancel</Button>
-            <Button onClick={e => handleLeagueClose(true)}>Add</Button>
+            <Button onClick={e => handleLeagueClose(false)}>{t("Cancel")}</Button>
+            <Button onClick={e => handleLeagueClose(true)}>{t("Add")}</Button>
           </DialogActions>
         </Dialog>
 
@@ -255,10 +257,10 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
               playerList={playerList}
               defaultTeamId={editData?.home_team_id}
               updatePlayerListCallBack={updatePlayerListCallBack}
+              t={t}
             />
           </Grid>
           <Grid item xs={4} className={classes.central}>
-
             <div style={{ textAlign: "center" }}>
               <Button
                 sx={{ width: 120 }}
@@ -266,7 +268,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
                 onClick={() => handleClickTeamOpen()}
                 startIcon={<AddIcon />}
               >
-                Team
+                {t("Team")}
               </Button>
             </div>
             <div style={{ textAlign: "center" }}>
@@ -276,12 +278,12 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
                 onClick={e => handleClickPlayerOpen()}
                 startIcon={<AddIcon />}
               >
-                Player
+                {t("Player")}
               </Button>
             </div>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
-                label="Game Date"
+                label={t("gameDate")}
                 value={gameDate}
                 onChange={(newValue) => {
                   setGameDate(newValue);
@@ -304,7 +306,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
                   </li>
                 );
               }}
-              renderInput={(params) => <TextField {...params} label="Season" sx={{ my: 1 }} />}
+              renderInput={(params) => <TextField {...params} label={t("Season")} sx={{ my: 1 }} />}
               onChange={(event, newValue) => {
                 setSeason(newValue);
               }}
@@ -326,7 +328,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
                     </li>
                   );
                 }}
-                renderInput={(params) => <TextField {...params} label="League" sx={{ my: 1 }} />}
+                renderInput={(params) => <TextField {...params} label={t("League")} sx={{ my: 1 }} />}
                 onChange={(event, newValue) => {
                   setLeague(newValue);
                 }}
@@ -337,8 +339,8 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
             </div>
             <TextField
               id="outlined-textarea"
-              label="Video URL"
-              placeholder="Video URL"
+              label= {t("VideoURL")}
+              placeholder= {t("VideoURL")}
               multiline
               fullWidth
               sx={{ my: 1 }}
@@ -349,6 +351,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
               dirName={process.env.REACT_APP_DIR_GAME}
               onURL={url => setImage(url)}
               defaultImg={editData?.image?.length > 0 ? editData?.image : TEAM_ICON_DEFAULT}
+              btn_name={t("Upload")}
             />
           </Grid>
           <Grid item xs={4}>
@@ -361,13 +364,14 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
               playerList={playerList}
               defaultTeamId={editData?.away_team_id}
               updatePlayerListCallBack={updatePlayerListCallBack}
+              t={t}
             />
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpen(false)}>Close</Button>
-        <Button variant="outlined" onClick={gameClicked}>{actionType} Game</Button>
+        <Button onClick={() => setOpen(false)}>{t("Close")}</Button>
+        <Button variant="outlined" onClick={gameClicked}>{actionType === 'Add' ? t("Add") : t("Edit")} {t("Game")}</Button>
       </DialogActions>
     </Dialog>
 

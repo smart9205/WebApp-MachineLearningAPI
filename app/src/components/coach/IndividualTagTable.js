@@ -19,6 +19,7 @@ export default function IndividualTagTable({
   offenseTeam,
   updateTagList,
   onPlay,
+  t,
   ...params
 }) {
   const [loading, setLoading] = useState(false)
@@ -41,17 +42,17 @@ export default function IndividualTagTable({
   return (
     <Box {...params}>
       <Paper sx={{ width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
-        <h5 style={{ textAlign: 'center' }}>Player Tag</h5>
+        <h5 style={{ textAlign: 'center' }}>{t("Player")} {t("Tag")}</h5>
         <TableContainer style={{ height: "100%" }}>
           <Table stickyHeader aria-label="sticky table" size={'small'} sx={{ pb: 4 }}>
             <TableHead>
               <TableRow>
-                <TableCell align="center">Action</TableCell>
-                <TableCell align="center">Action Type</TableCell>
-                <TableCell align="center">Action Result</TableCell>
-                <TableCell align="center">Player</TableCell>
-                <TableCell align="center">Start Time</TableCell>
-                <TableCell align="center">End Time</TableCell>
+                <TableCell align="center">{t("Action")}</TableCell>
+                <TableCell align="center">{t("ActionType")}</TableCell>
+                <TableCell align="center">{t("ActionResult")}</TableCell>
+                <TableCell align="center">{t("Player")}</TableCell>
+                <TableCell align="center">{t("StartTime")}</TableCell>
+                <TableCell align="center">{t("EndTime")}</TableCell>
                 <TableCell align="center"></TableCell>
               </TableRow>
             </TableHead>

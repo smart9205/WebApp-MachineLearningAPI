@@ -28,7 +28,7 @@ const styles = {
     },
 }
 
-export default function HighlightTab({ playTags }) {
+export default function HighlightTab({ playTags, t }) {
 
     const theme = useTheme()
     const { context } = useContext(PlayerContext)
@@ -65,9 +65,9 @@ export default function HighlightTab({ playTags }) {
         <Table responsive="sm" borderless size="sm" className='text-uppercase text-black highlight-table' >
             <thead>
                 <tr>
-                    <th className='text-center'>Game</th>
-                    <th className='text-center'>Date</th>
-                    <th className='text-center'>Status</th>
+                    <th className='text-center'>{t("Game")}</th>
+                    <th className='text-center'>{t("Date")}</th>
+                    <th className='text-center'>{t("Status")}</th>
                 </tr>
             </thead>
             <tbody className='text-center'>

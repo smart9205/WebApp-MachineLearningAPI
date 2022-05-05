@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from "react-i18next";
 import Banner from './Banner';
 import NextMatch from './NextMatch';
 import UpcomingMatches from './UpcomingMatches';
@@ -10,9 +11,10 @@ import Subscribe from './Subscribe';
 import BlogPost from './BlogPost';
 
 const Home = () => {
+    const { t } = useTranslation("home");
     return (
         <>
-            <Banner />
+            <Banner t={t} />
 
             {/* <NextMatch /> */}
 

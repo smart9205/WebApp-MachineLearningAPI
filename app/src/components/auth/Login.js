@@ -4,6 +4,7 @@ import { makeStyles } from '@mui/styles';
 import { Navigate, useParams, Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { isEmail } from "validator";
+import { useTranslation } from "react-i18next";
 
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
@@ -60,6 +61,7 @@ const validEmail = (value) => {
   }
 };
 const Login = (props) => {
+  const { t } = useTranslation("admin_coach");
   const classes = useStyles();
   const form = useRef();
   const checkBtn = useRef();
@@ -89,7 +91,7 @@ const Login = (props) => {
     if (pathname.match(/\/verification\//) !== null) {
       dispatch(verification(params.code))
         .then((data) => {
-          // Here we receive verification succeess 
+          // Here we receive verification succeess
           window.location.replace('https://soccer.scouting4u.com');
           // window.location.replace(`https://${data.lang ? data.lang : "www"}.Stats2Win.net${data.lang ? "/analyzer" : ""}`);
         })
@@ -213,7 +215,7 @@ const Login = (props) => {
 
         <Form onSubmit={handleLogin} ref={form}>
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{t("Email")}</label>
             <Input
               type="text"
               className="form-control"
@@ -225,7 +227,7 @@ const Login = (props) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t("Password")}</label>
             <Input
               type="password"
               className="form-control"
@@ -241,7 +243,7 @@ const Login = (props) => {
               {loading && (
                 <span className="spinner-border spinner-border-sm"></span>
               )}
-              <span>Login</span>
+              <span>{t("Login")}</span>
             </button>
           </div>
 
@@ -254,10 +256,10 @@ const Login = (props) => {
           )}
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Link to={"/forgetpassword"}>
-              Forgot password?
+              {t("ForgotPassword")}
             </Link>
             <Link to={"/register"}>
-              Register
+              {t("Register")}
             </Link>
           </div>
           <CheckButton style={{ display: "none" }} ref={checkBtn} />

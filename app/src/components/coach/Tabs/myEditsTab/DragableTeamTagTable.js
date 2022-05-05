@@ -12,7 +12,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TeamTagRow } from './TeamTagRow';
 
-export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, onDelete, handleSort, initUserEdits, ...params }) {
+export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, onDelete, handleSort, initUserEdits, t, ...params }) {
   const [tableRows, setTableRows] = useState(rows)
 
   useEffect(() => {
@@ -53,17 +53,17 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
   return (
     <Box {...params}>
       <Paper sx={{ width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
-        <h5 style={{ textAlign: 'center' }}>Team Tag</h5>
+        <h5 style={{ textAlign: 'center' }}>{t("Team")} {t("Tag")}</h5>
         <TableContainer style={{ height: "100%" }}>
           <DndProvider backend={HTML5Backend}>
             <Table stickyHeader aria-label="sticky table" size={'small'} sx={{ pb: 4 }}>
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">Period</TableCell>
-                  <TableCell align="center">Offensive Team</TableCell>
-                  <TableCell align="center">Defensive Team</TableCell>
-                  <TableCell align="center">Start Time</TableCell>
-                  <TableCell align="center">End Time</TableCell>
+                  <TableCell align="center">{t("Period")}</TableCell>
+                  <TableCell align="center">{t("OffensiveTeam")}</TableCell>
+                  <TableCell align="center">{t("DefensiveTeam")}</TableCell>
+                  <TableCell align="center">{t("StartTime")}</TableCell>
+                  <TableCell align="center">{t("EndTime")}</TableCell>
                   <TableCell></TableCell>
                   <TableCell></TableCell>
                 </TableRow>

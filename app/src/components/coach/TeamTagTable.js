@@ -16,15 +16,14 @@ import TCellTimeEdit from '../tagging/TCellTimeEdit';
 import CircularProgress from '@mui/material/CircularProgress';
 import TCellSelectEdit from '../tagging/TCellSelectEdit';
 
-const PERIOD = [
-  { id: 1, name: "1st Half" },
-  { id: 2, name: "2nd Half" },
-  { id: 3, name: "Overtime" },
-]
-
-export default function TeamTagTable({ rows, handleRowClick, selected, onPlay, ...params }) {
+export default function TeamTagTable({ rows, handleRowClick, selected, onPlay, t, ...params }) {
   const [loading, setLoading] = React.useState(false)
 
+  const PERIOD = [
+    { id: 1, name: t("Period1") },
+    { id: 2, name: t("Period2") },
+    { id: 3, name: t("Overtime") },
+  ]
   const update = (v) => {
     setLoading(true)
     GameService.updateTeamTag(v).then(res => {
@@ -37,16 +36,16 @@ export default function TeamTagTable({ rows, handleRowClick, selected, onPlay, .
   return (
     <Box {...params}>
       <Paper sx={{ width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
-        <h5 style={{ textAlign: 'center' }}>Team Tag</h5>
+        <h5 style={{ textAlign: 'center' }}>{t("Team")}{t("Tag")}</h5>
         <TableContainer style={{ height: "100%" }}>
           <Table stickyHeader aria-label="sticky table" size={'small'} sx={{ pb: 4 }}>
             <TableHead>
               <TableRow>
-                <TableCell align="center">Period</TableCell>
-                <TableCell align="center">Offensive Team</TableCell>
-                <TableCell align="center">Defensive Team</TableCell>
-                <TableCell align="center">Start Time</TableCell>
-                <TableCell align="center">End Time</TableCell>
+                <TableCell align="center">{t("Period")}</TableCell>
+                <TableCell align="center">{t("OffensiveTeam")}</TableCell>
+                <TableCell align="center">{t("DefensiveTeam")}</TableCell>
+                <TableCell align="center">{t("StartTime")}</TableCell>
+                <TableCell align="center">{t("EndTime")}</TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>

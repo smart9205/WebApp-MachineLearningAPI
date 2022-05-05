@@ -68,20 +68,18 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-    {
-        id: 'image',
-        label: 'Image',
-    },
-    {
-        id: 'name',
-        label: 'Name',
-    },
-];
-
 function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } =
-        props;
+    const { order, orderBy, onRequestSort, t } = props;
+    const headCells = [
+        {
+            id: 'image',
+            label: t("Image"),
+        },
+        {
+            id: 'name',
+            label: t("Name"),
+        },
+    ];
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -124,7 +122,7 @@ const initials = {
     image: "",
     name: ""
 }
-export default function LeagueTab() {
+export default function LeagueTab({t}) {
     const [rows, setRows] = useState([])
     const [loading, setLoading] = useState(true)
     const [order, setOrder] = useState('asc');
@@ -195,25 +193,26 @@ export default function LeagueTab() {
         <Box sx={{ width: '100%' }}>
             <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
             <Dialog open={formOpen} onClose={e => handleEditClose(false)}>
-                <DialogTitle>{isEdit ? "Edit" : "New"} League</DialogTitle>
+                <DialogTitle>{isEdit ? t("Edit") : t("New")} {t("League")}</DialogTitle>
                 <DialogContent>
                     <Upload
                         dirName={process.env.REACT_APP_DIR_LEAGUE}
                         img={selected.image}
                         onURL={url => setSelected({ image: url })}
                         defaultImg={TEAM_ICON_DEFAULT}
+                        btn_name={t("Upload")}
                     />
                     <Input
                         fullWidth
                         sx={{ mt: 1 }}
-                        placeholder='League name'
+                        placeholder={`${t("League")} ${t("Name")}`}
                         value={selected.name}
                         onChange={(e) => setSelected({ name: e.target.value })}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={e => handleEditClose(false)}>Cancel</Button>
-                    <Button onClick={e => handleEditClose(true)}>Done</Button>
+                    <Button onClick={e => handleEditClose(false)}>{t("Cancel")}</Button>
+                    <Button onClick={e => handleEditClose(true)}>{t("Done")}</Button>
                 </DialogActions>
             </Dialog>
             <Paper sx={{ width: '100%', mb: 2 }}>
@@ -227,11 +226,11 @@ export default function LeagueTab() {
                             setSelected(initials)
                         }}>
                         <AddIcon />
-                        Add League
+                        {t("Add")} {t("League")}
                     </Button>
                     <Input
                         sx={{ mx: 10 }}
-                        placeholder='Search'
+                        placeholder={t("Search")}
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -252,6 +251,7 @@ export default function LeagueTab() {
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            t={t}
                         />
                         <>{loading ? <TableBody style={styles.loader}>
                             <TableRow>

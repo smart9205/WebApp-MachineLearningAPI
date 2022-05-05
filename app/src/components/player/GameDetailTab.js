@@ -9,7 +9,7 @@ import StatisticTab from './Tabs/StatisticTab';
 import HighlightTab from './Tabs/HighlightTab';
 import { PlayerContext } from './index'
 
-export default function GameDetailTab({ playTags }) {
+export default function GameDetailTab({ playTags, t }) {
     const { context, setContext } = useContext(PlayerContext)
 
     const playerId = context.player.id
@@ -44,11 +44,11 @@ export default function GameDetailTab({ playTags }) {
             <div className='skillsTab'>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs" centered>
-                        <Tab label="Games" {...a11yProps(0)} />
-                        <Tab label="Skills" {...a11yProps(1)} />
-                        <Tab label="Statistics" {...a11yProps(2)} />
+                        <Tab label={t("Games")} {...a11yProps(0)} />
+                        <Tab label={t("Skills")} {...a11yProps(1)} />
+                        <Tab label={t("Statistics")} {...a11yProps(2)} />
                         {showHighlight &&
-                            <Tab label="HighLights" {...a11yProps(3)} />
+                            <Tab label={t("Highlights")} {...a11yProps(3)} />
                         }
                     </Tabs>
                 </Box>
@@ -58,14 +58,15 @@ export default function GameDetailTab({ playTags }) {
                         playTags={playTags}
                         onHighlight={() => setValue(3)}
                         showHighlight={showHighlight}
+                        t={t}
                     />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <StatisticTab tagList={tagList} playTags={playTags} />
+                    <StatisticTab tagList={tagList} playTags={playTags} t={t} />
                 </TabPanel>
                 {showHighlight &&
                     <TabPanel value={value} index={3}>
-                        <HighlightTab playTags={playTags} />
+                        <HighlightTab playTags={playTags} t={t} />
                     </TabPanel>
                 }
             </div>

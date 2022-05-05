@@ -39,7 +39,7 @@ const styles = {
     },
 };
 
-const MyEditsTab = ({ teamList, game, playerList }) => {
+const MyEditsTab = ({ teamList, game, playerList, t }) => {
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [curEdit, setCurEdit] = useState(null)
@@ -166,12 +166,13 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                 open={open}
                 handleOpen={handleOpen}
                 teamList={teamList}
+                t={t}
             />
             <Box
                 style={{ minWidth: 240, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none", paddingRight: 8 }}>
                 <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <h5 style={{ color: 'black', margin: '0.5rem 1rem' }}>My Edits</h5>
-                    <Button variant="outlined" onClick={() => handleOpen(true)}>New Edits</Button>
+                    <h5 style={{ color: 'black', margin: '0.5rem 1rem' }}>{t("Edits")}</h5>
+                    <Button variant="outlined" onClick={() => handleOpen(true)}>{t("New")} {t("NewEdit")}</Button>
                 </Box>
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
@@ -219,7 +220,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
             </IconButton>
             <Box style={{ textAlign: "center" }}>
                 <Paper style={{ height: "calc(95vh - 200px)", minWidth: 540 }} className="coach-tag-table">
-                    {tagList.length === 0 && <p style={{ textAlign: 'center' }}>No Tags</p>}
+                    {tagList.length === 0 && <p style={{ textAlign: 'center' }}>{t("NoTags")}</p>}
                     {tagList.filter(t => t.team_tag_id !== null).length > 0 &&
                         <DragableTeamTagTable
                             sx={{ height: "100%", p: 1, width: "100%" }}
@@ -230,6 +231,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                             selected={curTagIdx}
                             onPlay={({ row, idx }) => handleVideoData("teamTag", true, idx)}
                             initUserEdits={initUserEdits}
+                            t={t}
                         />
                     }
                     {tagList.filter(t => t.player_tag_id !== null).length > 0 &&
@@ -242,6 +244,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                             handleRowClick={({ row, idx }) => handleVideoData("playerTag", false, idx)}
                             onPlay={({ row, idx }) => handleVideoData("playerTag", true, idx)}
                             initUserEdits={initUserEdits}
+                            t={t}
                         />
                     }
                 </Paper>
@@ -250,7 +253,7 @@ const MyEditsTab = ({ teamList, game, playerList }) => {
                     style={{ margin: "1rem 0.5rem" }}
                     onClick={handleRender}
                 >
-                    Render
+                    {t("Render")}
                 </Button>
             </Box>
             <VideoPlayer

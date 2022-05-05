@@ -15,6 +15,7 @@ import PlayerDetailCard from './PlayerDetailCard';
 import GameDetailTab from './GameDetailTab';
 import "./Profile.css"
 import { Table } from 'react-bootstrap';
+import { useTranslation } from "react-i18next";
 
 const styles = {
   loader: {
@@ -50,6 +51,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function Player() {
+  const { t } = useTranslation("admin_coach");
   const classes = useStyles();
   const { data } = useParams();
   const playerId = Number(atob(data))
@@ -190,10 +192,13 @@ export default function Player() {
                       ))}
                     </div>
                   </>) :
-                  <GameDetailTab playTags={tags => {
-                    setPlayTags(tags);
-                    setOpen(true);
-                  }} />
+                  <GameDetailTab
+                    playTags={tags => {
+                      setPlayTags(tags);
+                      setOpen(true);
+                    }}
+                    t={t}
+                  />
                 }
               </section>
             }

@@ -39,7 +39,7 @@ const styles = {
         alignItems: "center"
     }
 };
-export default function TeamFormDialog({ open, onResult, edit = null }) {
+export default function TeamFormDialog({ open, onResult, edit = null, t }) {
 
     const [data, setData] = useReducer((old, action) => ({ ...old, ...action }), init)
     const [loading, setLoading] = useState(false)
@@ -87,31 +87,31 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
                     <CircularProgress />
                 </div>
             }
-            <DialogTitle>{!edit ? "Add" : "Edit"} Team</DialogTitle>
+            <DialogTitle>{!edit ? t("Add") : t("Edit")} {t("Team")}</DialogTitle>
             <DialogContent style={{ display: "flex" }}>
                 <Upload
                     dirName={process.env.REACT_APP_DIR_TEAM}
                     img={data.image}
                     onURL={url => setData({ image: url })}
                     defaultImg={TEAM_ICON_DEFAULT}
-                    btn_name="Team Logo"
+                    btn_name={`${t("Team")} ${t("Logo")}`}
                 />
 
                 <Box style={{ margin: 10 }}>
                     <TextField
                         fullWidth
                         sx={{ my: 2 }}
-                        label='Team name'
+                        label={`${t("Team")} ${t("Name")}`}
                         value={data.name}
                         onChange={(e) => setData({ name: e.target.value })}
                     />
-                    Team Color
+                    {`${t("Team")} ${t("Color")}`}
                     <ColorPicker
                         defaultValue="transparent"
                         value={data.team_color}
                         onChange={(color) => setData({ team_color: "#" + color.hex })}
                     />
-                    Second Color
+                    {`${t("Second")} ${t("Color")}`}
                     <ColorPicker
                         defaultValue="transparent"
                         value={data.second_color}
@@ -126,7 +126,7 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
                                 inputProps={{ 'aria-label': 'controlled' }}
                             />
                         }
-                        label="Create Highlights"
+                        label={`${t("Create")} ${t("Highlights")}`}
                     />
                 </Box>
             </DialogContent>
@@ -137,7 +137,7 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
                     img={data.sponsor_logo}
                     onSponsorURL={url => { setData({ sponsor_logo: url }) }}
                     defaultImg={TEAM_ICON_DEFAULT}
-                    btn_name="Sponsor Logo"
+                    btn_name={`${t("Sponsor")} ${t("Logo")}`}
                 />
                 <Box style={{ margin: 10 }}>
 
@@ -145,7 +145,7 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
                         fullWidth
                         style={{ margin: 10 }}
                         sx={{ mt: 1 }}
-                        label='Sponsor URL'
+                        label={`${t("Sponsor")} ${t("URL")}`}
                         value={data.sponsor_url}
                         onChange={(e) => setData({ sponsor_url: e.target.value })}
                     />
@@ -158,13 +158,13 @@ export default function TeamFormDialog({ open, onResult, edit = null }) {
                                 inputProps={{ 'aria-label': 'controlled' }}
                             />
                         }
-                        label="Show Sponsor"
+                        label={`${t("Show")} ${t("Sponsor")}`}
                     />
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={e => onResult(false)}>Cancel</Button>
-                <Button onClick={e => handleClose(true)}>Done</Button>
+                <Button onClick={e => onResult(false)}>{t("Cancel")}</Button>
+                <Button onClick={e => handleClose(true)}>{t("Done")}</Button>
             </DialogActions>
         </Dialog>
     )

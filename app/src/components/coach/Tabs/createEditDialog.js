@@ -57,7 +57,7 @@ function getStyles(name, action, theme) {
 }
 
 
-const CreateEditDialog = ({ open, handleOpen, teamList }) => {
+const CreateEditDialog = ({ open, handleOpen, teamList, t }) => {
 
     const theme = useTheme();
 
@@ -178,12 +178,12 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                 open={nameOpen}
                 onClose={() => setNameOpen(false)}
             >
-                <DialogTitle>Input Name</DialogTitle>
+                <DialogTitle>{t("Name")}</DialogTitle>
                 <DialogContent>
                     <Box sx={{ pt: 1 }}>
                         <TextField
                             fullWidth
-                            label="Name"
+                            label={t("Name")}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
@@ -201,7 +201,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                 open={open}
                 onClose={() => handleOpen(false)}
             >
-                <DialogTitle>Create Edits</DialogTitle>
+                <DialogTitle>{t("Create")} {t("NewEdit")}</DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2} sx={{ mt: 2 }}>
                         <Grid item xs={4}>
@@ -213,7 +213,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                                 disableClearable
                                 getOptionLabel={(t) => `${t.team_name}`}
                                 renderInput={(params) => (
-                                    <TextField {...params} label="My Team" />
+                                    <TextField {...params} label={t("MyTeam")} />
                                 )}
                                 onChange={(event, newValue) => {
                                     setState({ team: newValue });
@@ -222,14 +222,14 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                         </Grid>
                         <Grid item xs={8} >
                             <FormControl fullWidth>
-                                <InputLabel id="select-multiple-game-label">Games</InputLabel>
+                                <InputLabel id="select-multiple-game-label">{t("Games")}</InputLabel>
                                 <Select
                                     labelId="select-multiple-game-label"
                                     id="select-multiple-game"
                                     multiple
                                     value={game}
                                     onChange={handleChangeGame}
-                                    input={<OutlinedInput id="select-multiple-game" label="Games" />}
+                                    input={<OutlinedInput id="select-multiple-game" label={t("Games")} />}
                                     renderValue={(selected) => (
                                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                             {selected.map((value, idx) => (
@@ -249,7 +249,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                         </Grid>
                     </Grid>
                     <Grid container spacing={2} sx={{ my: 2 }}>
-                        {["Offense", "Defense"].map((label, idx) =>
+                        {[t("Offense"), t("Defense")].map((label, idx) =>
                             <Grid item xs={4} key={idx}>
                                 <Button
                                     key={idx}
@@ -270,7 +270,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                                 disableClearable
                                 getOptionLabel={(t) => `${t.name}`}
                                 renderInput={(params) => (
-                                    <TextField {...params} label="Individual" />
+                                    <TextField {...params} label={t("Individual")} />
                                 )}
                                 onChange={(event, newValue) => {
                                     setCurSelect(2);
@@ -288,7 +288,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                                 multiple
                                 value={action}
                                 onChange={handleChangeAction}
-                                input={<OutlinedInput id="select-multiple-action" label="Actions" />}
+                                input={<OutlinedInput id="select-multiple-action" label={t("Action")} />}
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                         {selected.map((value, idx) => (
@@ -312,7 +312,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                                 multiple
                                 value={actionType}
                                 onChange={handleChangeActionType}
-                                input={<OutlinedInput id="select-multiple-actiontype" label="Action Types" />}
+                                input={<OutlinedInput id="select-multiple-actiontype" label={t("ActionType")} />}
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                         {selected.map((value, idx) => (
@@ -336,7 +336,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                                 multiple
                                 value={actionResult}
                                 onChange={handleChangeActionResult}
-                                input={<OutlinedInput id="select-multiple-action" label="Action Results" />}
+                                input={<OutlinedInput id="select-multiple-action" label={t("ActionResult")} />}
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                         {selected.map((value, idx) => (
@@ -355,8 +355,8 @@ const CreateEditDialog = ({ open, handleOpen, teamList }) => {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleOpen(false)}>Close</Button>
-                    <Button onClick={() => handleSearch()} disabled={!game.length || !team}>Search</Button>
+                    <Button onClick={() => handleOpen(false)}>{t("Close")}</Button>
+                    <Button onClick={() => handleSearch()} disabled={!game.length || !team}>{t("Search")}</Button>
                 </DialogActions>
             </Dialog >
         </>

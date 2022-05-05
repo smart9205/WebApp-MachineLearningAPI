@@ -20,7 +20,8 @@ export default function SearchComponent({
   league,
   teamList,
   playerList,
-  defaultTeamId
+  defaultTeamId,
+  t
 }) {
   const mounted = React.useRef(false);
   const [open, setOpen] = React.useState(false);
@@ -139,7 +140,7 @@ export default function SearchComponent({
               </li>
             );
           }}
-          renderInput={(params) => <TextField {...params} label={`Search ${teamtype} team`} />}
+          renderInput={(params) => <TextField {...params} label={`${t("Search")} ${teamtype === 'home' ? t("HomeTeam") : t("AwayTeam")}`} />}
           onChange={(event, newValue) => {
             setSelectedTeam(newValue);
           }}
@@ -162,7 +163,7 @@ export default function SearchComponent({
               </li>
             );
           }}
-          renderInput={(params) => <TextField sx={{ my: 2 }} {...params} label={`Search Player`} />}
+          renderInput={(params) => <TextField sx={{ my: 2 }} {...params} label={`${t("Search")} ${t("Player")}`} />}
           onChange={(event, newValue) => {
             setSelectedPlayer(newValue);
           }}
@@ -175,6 +176,7 @@ export default function SearchComponent({
         jerseyUpdatedCallBack={jerseyUpdatedCallBack}
         deletePlayerCallBack={deletePlayerCallBack}
         rows={teamPlayerList}
+        t={t}
       />
     </div>
   );

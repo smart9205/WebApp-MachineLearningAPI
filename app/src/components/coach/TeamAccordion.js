@@ -8,7 +8,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Table, } from 'react-bootstrap'
 import { RULE } from '../../common/staticData';
 
-export default function TeamAccordion({ playTags, allTagList = [], opponentTagList = [], onActionSelected, teamId, ...params }) {
+export default function TeamAccordion({ playTags, allTagList = [], opponentTagList = [], onActionSelected, teamId, t, ...params }) {
   const [expand, setExpand] = useState(0)
 
   const [tagList, setTagList] = useState([])
@@ -46,7 +46,7 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
   return (
     <Box {...params}>
       <Box sx={{ display: "flex", justifyContent: "space-evenly", p: 1 }}>
-        <Typography>Final Score</Typography>
+        <Typography>{t("FinalScore")}</Typography>
         <Box sx={{ display: "flex" }}>
           <Typography
             sx={teamShots.length > 0 ? { textDecoration: "underline", cursor: "pointer" } : {}}
@@ -86,14 +86,14 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
                     {rule.title === "Shot" ?
                       <>
                         <td></td>
-                        <td><p>On Target</p></td>
-                        <td><p>Off Target</p></td>
+                        <td><p>{t("OnTarget")}</p></td>
+                        <td><p>{t("OffTarget")}</p></td>
                       </>
                       :
                       <>
                         <td></td>
-                        <td><p>Successful</p></td>
-                        <td><p>Unsuccessful</p></td>
+                        <td><p>{t("Successful")}</p></td>
+                        <td><p>{t("Unsuccessful")}</p></td>
                       </>
                     }
                   </tr>}

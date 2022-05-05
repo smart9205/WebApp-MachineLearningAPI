@@ -11,7 +11,7 @@ import ExcelButton from '../ExcelButton';
 import IndividualTagTable from '../IndividualTagTable';
 import TeamAccordion from '../TeamAccordion';
 import VideoPlayer from '../VideoPlayer';
-const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId }) => {
+const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId, t }) => {
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -55,6 +55,7 @@ const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId }) => {
                             videoPlay: false,
                         })
                     }}
+                    t={t}
                 />
             </Card>
             <IconButton
@@ -69,6 +70,7 @@ const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId }) => {
                 <ExcelButton
                     style={{ position: "absolute", right: 10 }}
                     team={allTagList}
+                    t={t}
                 />
                 <TeamTagTable
                     sx={{ height: "70%", p: 1, width: "100%" }}
@@ -105,6 +107,7 @@ const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId }) => {
                             videoPlay: true,
                         })
                     }}
+                    t={t}
                 />
                 <IndividualTagTable
                     sx={{ height: "30%", p: 1, width: "100%" }}
@@ -119,6 +122,7 @@ const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId }) => {
                             videoPlay: true
                         })
                     }}
+                    t={t}
                 />
             </Paper>
             <VideoPlayer

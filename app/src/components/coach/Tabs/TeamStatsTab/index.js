@@ -30,7 +30,7 @@ const MenuProps = {
     },
 };
 
-const TeamStatsTab = ({ gameList, team }) => {
+const TeamStatsTab = ({ gameList, team, t }) => {
 
     const [games, setGames] = useState(gameList.slice(0, 1));
     const [tagList, setTagList] = useState([])
@@ -69,7 +69,7 @@ const TeamStatsTab = ({ gameList, team }) => {
     return (
         <Box sx={{ width: "100%" }}>
             <FormControl sx={{ width: 600 }}>
-                <InputLabel id="game-multiple-checkbox-label">Games</InputLabel>
+                <InputLabel id="game-multiple-checkbox-label">{t("Games")}</InputLabel>
                 <Select
                     labelId="game-multiple-checkbox-label"
                     id="game-multiple-checkbox"
@@ -79,7 +79,7 @@ const TeamStatsTab = ({ gameList, team }) => {
                     input={<OutlinedInput label="Tag" />}
                     renderValue={(selected) => (
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                            {`${selected.length} games selected`}
+                            {`${selected.length} ${t("Games")} ${t("selected")}`}
                         </Box>
                     )}
                     MenuProps={MenuProps}
@@ -106,13 +106,13 @@ const TeamStatsTab = ({ gameList, team }) => {
             <Box sx={{ display: 'flex' }}>
                 <Box sx={{ width: "50rem" }}>
                     <Card sx={{ m: 1, }}>
-                        <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Goals"}</Typography>
+                        <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{t("Goals")}</Typography>
                         <Box sx={{ display: 'flex', justifyContent: "space-evenly", m: 2 }}>
-                            <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{team?.team_name ?? "My Team"}:</Typography>
+                            <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{team?.team_name ?? t("MyTeam")}:</Typography>
                             <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{team_score ?? 0}{' '}({games.length > 0 ? (team_score / games.length).toFixed(1) || 0 : 0})</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: "space-evenly", m: 2 }}>
-                            <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{"Opponents"}:</Typography>
+                            <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{t("Opponents")}:</Typography>
                             <Typography sx={{ textAlign: 'center', fontSize: '0.8rem' }}>{opponent_score ?? 0}{' '}({games.length > 0 ? (opponent_score / games.length).toFixed(1) || 0 : 0})</Typography>
                         </Box>
                     </Card>
@@ -134,14 +134,14 @@ const TeamStatsTab = ({ gameList, team }) => {
                                         {rule.title === "Shot" ?
                                             <>
                                                 <td></td>
-                                                <td><p style={{ fontWeight: "bold" }}>On Target</p></td>
-                                                <td><p style={{ fontWeight: "bold" }}>Off Target</p></td>
+                                                <td><p style={{ fontWeight: "bold" }}>{t("OnTarget")}</p></td>
+                                                <td><p style={{ fontWeight: "bold" }}>{t("OffTarget")}</p></td>
                                             </>
                                             :
                                             <>
                                                 <td></td>
-                                                <td><p style={{ fontWeight: "bold" }}>Successful</p></td>
-                                                <td><p style={{ fontWeight: "bold" }}>Unsuccessful</p></td>
+                                                <td><p style={{ fontWeight: "bold" }}>{t("Successful")}</p></td>
+                                                <td><p style={{ fontWeight: "bold" }}>{t("Unsuccessful")}</p></td>
                                             </>
                                         }
                                     </tr>}

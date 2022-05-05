@@ -2,10 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
+import cookie from "react-cookies";
 import { logout } from "../../actions/auth";
+import lang from '../../assets/lang.json';
 
 export default function Navbar() {
+    const { t } = useTranslation("menu");
+
     const dispatch = useDispatch();
+    const savedLanguage = cookie.load("i18next") ? cookie.load("i18next") : "en"
+    const [language, setLanguage] = useState(savedLanguage)
     const [collapsed, setCallapsed] = useState(true)
     const { user: currentUser } = useSelector((state) => state.auth);
 
@@ -22,6 +30,15 @@ export default function Navbar() {
 
         menuActiveClass()
     }, [])
+
+    useEffect(() => {
+        i18next.changeLanguage(language);
+        if(language == 'iw' || language == 'ar') {
+            document.body.style.direction = 'rtl'
+        } else {
+            document.body.style.direction = 'ltr'
+        }
+    }, [language])
 
     const toggleNavbar = () => {
         setCallapsed(c => !c);
@@ -79,7 +96,7 @@ export default function Navbar() {
                                         className="nav-link"
                                         to="/"
                                     >
-                                        Home
+                                        {t("Home")}
                                     </Link>
                                 </li> :
                                 <>
@@ -90,7 +107,7 @@ export default function Navbar() {
                                             className="nav-link active"
                                             href="#home"
                                         >
-                                            Home
+                                            {t("Home")}
                                         </AnchorLink>
                                     </li>
                                     {/* <li className="nav-item">
@@ -162,7 +179,7 @@ export default function Navbar() {
                                         className="nav-link"
                                         to="/coach"
                                     >
-                                        Coach
+                                        {t("Coach")}
                                     </Link>
                                 </li>
                             }
@@ -172,7 +189,7 @@ export default function Navbar() {
                                         className="nav-link"
                                         to="/admin"
                                     >
-                                        Admin
+                                        {t("Admin")}
                                     </Link>
                                 </li>
                             }
@@ -182,19 +199,25 @@ export default function Navbar() {
                                         className="nav-link"
                                         to="/login"
                                     >
-                                        Signin
+                                        {t("Signin")}
                                     </Link> :
                                     <Link
                                         className="nav-link"
                                         to="#"
                                         onClick={() => dispatch(logout())}
                                     >
-                                        Signout
+                                        {t("Signout")}
                                     </Link>
                                 }
                             </li>
                             <li className='nav-item'>
-                                <div id='google_translate_element'></div>
+                                <select onChange={e => setLanguage(e.target.value)} value={language}>
+                                    {
+                                        lang.map((item, index) => (
+                                            <option key={index} value={item.code}>{item.name}</option>
+                                        ))
+                                    }
+                                </select>
                             </li>
                         </ul>
                     </div>

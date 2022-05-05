@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
     Tabs,
     Tab,
@@ -53,6 +54,7 @@ const tablist = {
     league: 3
 }
 export default function Admin() {
+    const { t } = useTranslation("admin_coach");
     const { tab } = useParams();
     const [value, setValue] = useState(tablist[tab] ?? 0);
     const handleChange = (event, newValue) => {
@@ -63,31 +65,31 @@ export default function Admin() {
         <div>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
-                    <Tab label="Game" {...a11yProps(0)} />
-                    <Tab label="Team" {...a11yProps(1)} />
-                    <Tab label="Player" {...a11yProps(2)} />
-                    <Tab label="League" {...a11yProps(3)} />
-                    <Tab label="Coach" {...a11yProps(4)} />
-                    <Tab label="My Edits" {...a11yProps(5)} />
+                    <Tab label={t("Game")} {...a11yProps(0)} />
+                    <Tab label={t("Team")} {...a11yProps(1)} />
+                    <Tab label={t("Player")} {...a11yProps(2)} />
+                    <Tab label={t("League")} {...a11yProps(3)} />
+                    <Tab label={t("Coach")} {...a11yProps(4)} />
+                    <Tab label={t("Edits")} {...a11yProps(5)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <GameTab />
+                <GameTab t={t} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <TeamTab />
+                <TeamTab t={t}  />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <PlayerTab />
+                <PlayerTab t={t}  />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <LeagueTab />
+                <LeagueTab t={t}  />
             </TabPanel>
             <TabPanel value={value} index={4}>
-                <CoachTab />
+                <CoachTab t={t}  />
             </TabPanel>
             <TabPanel value={value} index={5}>
-                My Edits
+                {t("Edits")}
             </TabPanel>
         </div>
     )

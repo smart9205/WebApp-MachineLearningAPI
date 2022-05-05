@@ -65,44 +65,43 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-    {
-        id: 'image',
-        label: 'Image',
-    },
-    {
-        id: 'name',
-        label: 'Name',
-    },
-    {
-        id: 'team_color',
-        label: 'Team Color',
-    },
-    {
-        id: 'second_color',
-        label: 'Second Color',
-    },
-    {
-        id: 'create_highlights',
-        label: 'Create Highlights',
-    },
-    {
-        id: 'sponsor_logo',
-        label: 'Sponsor Logo',
-    },
-    {
-        id: 'sponsor_url',
-        label: 'Sponsor URL',
-    },
-    {
-        id: 'show_sponsor',
-        label: 'Show Sponsor',
-    },
-];
 
 function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } =
-        props;
+    const { order, orderBy, onRequestSort, t } = props;
+    const headCells = [
+        {
+            id: 'image',
+            label: t("Image"),
+        },
+        {
+            id: 'name',
+            label: t("Name"),
+        },
+        {
+            id: 'team_color',
+            label: `${t("Team")} ${t("Color")}`,
+        },
+        {
+            id: 'second_color',
+            label: `${t("Second")} ${t("Color")}`,
+        },
+        {
+            id: 'create_highlights',
+            label: `${t("Create")} ${t("Highlights")}`,
+        },
+        {
+            id: 'sponsor_logo',
+            label: `${t("Sponsor")} ${t("Logo")}`,
+        },
+        {
+            id: 'sponsor_url',
+            label: `${t("Sponsor")} ${t("URL")}`,
+        },
+        {
+            id: 'show_sponsor',
+            label: `${t("Show")} ${t("Sponsor")}`,
+        },
+    ];
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -141,7 +140,7 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-export default function TeamTab() {
+export default function TeamTab({t}) {
     const [rows, setRows] = useState([])
     const [loading, setLoading] = useState(true)
     const [order, setOrder] = useState('asc');
@@ -202,7 +201,9 @@ export default function TeamTab() {
                     setFormOpen(false)
                     if (res) init()
                 }}
-                edit={selected} />
+                edit={selected}
+                t={t}
+            />
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <div style={{ position: "absolute", zIndex: 10, padding: 10, display: "flex" }}>
                     <Button
@@ -213,11 +214,11 @@ export default function TeamTab() {
                             setSelected(null)
                         }}>
                         <AddIcon />
-                        Add Team
+                        {t("Add")} {t("Team")}
                     </Button>
                     <Input
                         sx={{ mx: 10 }}
-                        placeholder='Search'
+                        placeholder={t("Search")}
                         value={search}
                         onChange={(e) => { setSearch(e.target.value); setPage(0); }}
                     />
@@ -238,6 +239,7 @@ export default function TeamTab() {
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            t={t}
                         />
                         <>{loading ? <TableBody style={styles.loader}>
                             <TableRow>

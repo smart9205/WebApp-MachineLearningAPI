@@ -32,7 +32,7 @@ const styles = {
         alignItems: "center"
     }
 };
-export default function CoachFormDialog({ open, onResult, edit = null }) {
+export default function CoachFormDialog({ open, onResult, edit = null, t }) {
     const classes = useStyles();
 
     const [data, setData] = useReducer((old, action) => ({ ...old, ...action }), init)
@@ -107,7 +107,7 @@ export default function CoachFormDialog({ open, onResult, edit = null }) {
                     <CircularProgress />
                 </div>
             }
-            <DialogTitle>{!edit ? "Add" : "Edit"} Coach</DialogTitle>
+            <DialogTitle>{!edit ? t("Add") : t("Edit")} {t("Coach")}</DialogTitle>
             <DialogContent >
                 <Autocomplete
                     id="combo-box-demo"
@@ -124,7 +124,7 @@ export default function CoachFormDialog({ open, onResult, edit = null }) {
                             </li>
                         );
                     }}
-                    renderInput={(params) => <TextField {...params} label="Season" sx={{ my: 1 }} />}
+                    renderInput={(params) => <TextField {...params} label={t("Season")} sx={{ my: 1 }} />}
                     onChange={(event, newValue) => {
                         setData({ season: newValue });
                     }}
@@ -144,7 +144,7 @@ export default function CoachFormDialog({ open, onResult, edit = null }) {
                             </li>
                         );
                     }}
-                    renderInput={(params) => <TextField {...params} label="League" sx={{ my: 1 }} />}
+                    renderInput={(params) => <TextField {...params} label={t("League")} sx={{ my: 1 }} />}
                     onChange={(event, newValue) => {
                         setData({ league: newValue });
                     }}
@@ -164,7 +164,7 @@ export default function CoachFormDialog({ open, onResult, edit = null }) {
                             </li>
                         );
                     }}
-                    renderInput={(params) => <TextField {...params} label="Team" sx={{ my: 1 }} />}
+                    renderInput={(params) => <TextField {...params} label={t("Team")} sx={{ my: 1 }} />}
                     onChange={(event, newValue) => {
                         setData({ team: newValue });
                     }}
@@ -184,15 +184,15 @@ export default function CoachFormDialog({ open, onResult, edit = null }) {
                             </li>
                         );
                     }}
-                    renderInput={(params) => <TextField {...params} label="Coach" sx={{ my: 1 }} />}
+                    renderInput={(params) => <TextField {...params} label={t("Coach")} sx={{ my: 1 }} />}
                     onChange={(event, newValue) => {
                         setData({ coach: newValue });
                     }}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={e => onResult(false)}>Cancel</Button>
-                <Button onClick={e => handleClose(true)}>Done</Button>
+                <Button onClick={e => onResult(false)}>{t("Cancel")}</Button>
+                <Button onClick={e => handleClose(true)}>{t("Done")}</Button>
             </DialogActions>
         </Dialog>
     )

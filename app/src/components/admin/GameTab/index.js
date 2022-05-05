@@ -6,7 +6,7 @@ import GameTable from './GameTable'
 import GameFormDialog from './GameFormDialog'
 import gameService from '../../../services/game.service';
 
-export default function Game() {
+export default function Game({t}) {
   const [open, setOpen] = useState(false);
   const [actionType, setActionType] = useState("Add");
   const [gameList, setGameList] = useState([]);
@@ -43,10 +43,10 @@ export default function Game() {
   return (
     <div>
       <div style={{ position: "absolute", zIndex: 10, padding: 10, display: "flex" }}>
-        <Button onClick={handleClickOpen()} variant="outlined"><AddIcon />Add Game</Button>
+        <Button onClick={handleClickOpen()} variant="outlined"><AddIcon />{t("Add")} {t("Game")}</Button>
         <Input
           sx={{ mx: 10 }}
-          placeholder='Search'
+          placeholder={t("Search")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -60,6 +60,7 @@ export default function Game() {
         gameListUpdated={gameListUpdated}
         actionType={actionType}
         editData={editData}
+        t={t}
       />
       <GameTable
         rows={gameList}
@@ -68,6 +69,7 @@ export default function Game() {
         search={search}
         loading={loading}
         setLoading={(v) => setLoading(v)}
+        t={t}
       />
     </div>
   );

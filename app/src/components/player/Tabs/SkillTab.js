@@ -26,7 +26,7 @@ const styles = {
         alignItems: "center"
     },
 }
-export default function SkillTab({ playTags, onHighlight, showHighlight }) {
+export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
     const { context, setContext } = useContext(PlayerContext)
 
     const teamId = context.game.is_home_team ? context.game.home_team_id : context.game.away_team_id
@@ -85,12 +85,12 @@ export default function SkillTab({ playTags, onHighlight, showHighlight }) {
                                         color="primary"
                                         className="skilltab-highlight-button"
                                         onClick={() => saveHighlight()}>
-                                        <img src={StarButton} alt="icon" width={70} />CREATE HIGHLIGHT
+                                        <img src={StarButton} alt="icon" width={70} />{t("Create")} {t("Highlights")}
                                     </IconButton>
                                 }
                             </div>
-                            <div className="skilltab-action-header-player"><p>PLAYER</p></div>
-                            <p>TEAM</p>
+                            <div className="skilltab-action-header-player"><p>{t("Player")}</p></div>
+                            <p>{t("Team")}</p>
                         </div>
                         {
                             skills
@@ -112,7 +112,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight }) {
                                                 <div>
                                                     <ProgressBar
                                                         height={20}
-                                                        filledBackground={`linear-gradient(to right, 
+                                                        filledBackground={`linear-gradient(to right,
                                                                 ${skill.total / 4 > skill.success.length ?
                                                                 "#fefb72, #f0bb31" : "#98ffae, #00851e"})`}
                                                         percent={percent}

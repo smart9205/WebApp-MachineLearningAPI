@@ -23,7 +23,7 @@ const init = {
     image: "",
 }
 
-export default function PlayerFormDialog({ open, onResult, edit = null }) {
+export default function PlayerFormDialog({ open, onResult, edit = null, t }) {
     const [positionList, setPositionList] = useState([]);
 
     const [playerData, setPlayerData] = useReducer((old, action) => ({ ...old, ...action }), init)
@@ -68,7 +68,6 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
     }
 
     const handlePlayerClose = (result) => {
-
         if (result) {
             if (!edit) {
                 GameService.addPlayer({ ...playerData, position: playerData.position.id }).then((res) => {
@@ -92,7 +91,7 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
 
     return (
         <Dialog open={open} onClose={e => handlePlayerClose(false)} maxWidth="lg">
-            <DialogTitle>{!edit ? "Add New " : "Edit "}Player</DialogTitle>
+            <DialogTitle>{!edit ? t("Add") : t("Edit")} {t("Player")}</DialogTitle>
             <DialogContent style={{ display: "flex" }}>
                 <Upload
                     dirName={process.env.REACT_APP_DIR_PLAYER}
@@ -100,6 +99,7 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
                     onURL={url => setPlayerData({ image: url })}
                     fimeName={""}
                     defaultImg={PLAYER_ICON_DEFAULT}
+                    btn_name={t("Upload")}
                 />
                 <div>
                     <div style={{ display: 'flex' }}>
@@ -110,7 +110,7 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
                             onChange={e => setPlayerData({ f_name: e.target.value })}
                             helperText={error.f_name ? "First Name cannot be empty" : ""}
                             error={error.f_name}
-                            label="First Name"
+                            label={t("FirstName")}
                             fullWidth
                             variant="outlined"
                         />
@@ -120,7 +120,7 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
                             onChange={e => setPlayerData({ l_name: e.target.value })}
                             helperText={error.l_name ? "Last Name cannot be empty" : ""}
                             error={error.l_name}
-                            label="Last  Name"
+                            label={t("LastName")}
                             fullWidth
                             variant="outlined"
                         />
@@ -148,14 +148,14 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
                             renderInput={(params) =>
                                 <TextField
                                     {...params}
-                                    label="Position"
+                                    label={t("Position")}
                                     helperText={error.position ? "Position cannot be empty" : ""}
                                     error={error.position}
                                 />}
                         />
                         <LocalizationProvider dateAdapter={AdapterDateFns} >
                             <DatePicker
-                                label="Date of Birth"
+                                label={t("DOB")}
                                 value={playerData.date_of_birth}
                                 onChange={v => setPlayerData({ date_of_birth: v })}
                                 renderInput={(params) =>
@@ -169,7 +169,7 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
                     </div>
                     <TextField
                         sx={{ m: 0.8 }}
-                        label="Jercey Number"
+                        label={`${t("Jersey")} ${t("Number")}`}
                         type="number"
                         value={playerData.jersey_number}
                         onChange={e => setPlayerData({ jersey_number: e.target.value })}
@@ -180,8 +180,8 @@ export default function PlayerFormDialog({ open, onResult, edit = null }) {
                 </div>
             </DialogContent>
             <DialogActions>
-                <Button onClick={e => handlePlayerClose(false)}>Cancel</Button>
-                <Button onClick={e => checkErrorPlayer() && handlePlayerClose(true)}>Done</Button>
+                <Button onClick={e => handlePlayerClose(false)}>{t("Cancel")}</Button>
+                <Button onClick={e => checkErrorPlayer() && handlePlayerClose(true)}>{t("Done")}</Button>
             </DialogActions>
         </Dialog>
     )

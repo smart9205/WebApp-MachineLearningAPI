@@ -3,7 +3,7 @@ import { Table, } from 'react-bootstrap'
 import { RULE } from '../../../common/staticData';
 
 
-export default function StatisticTab({ tagList, playTags }) {
+export default function StatisticTab({ tagList, playTags, t }) {
     return (
         <>
             {RULE.map((rule, idx) =>
@@ -19,13 +19,13 @@ export default function StatisticTab({ tagList, playTags }) {
                                 <td></td>
                                 {rule.title === "Shot" ?
                                     <>
-                                        <td><p>On Target</p></td>
-                                        <td><p>Off Target</p></td>
+                                        <td><p>{t("OnTarget")}</p></td>
+                                        <td><p>{t("OffTarget")}</p></td>
                                     </>
                                     :
                                     <>
-                                        <td><p>Successful</p></td>
-                                        <td><p>Unsuccessful</p></td>
+                                        <td><p>{t("Successful")}</p></td>
+                                        <td><p>{t("Unsuccessful")}</p></td>
                                     </>
                                 }
                             </tr>

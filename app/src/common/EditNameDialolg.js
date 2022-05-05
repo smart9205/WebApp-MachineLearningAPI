@@ -5,14 +5,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import { useTranslation } from "react-i18next";
 
 export default function EditNameDialog({ open, name, setName, handleEditClose }) {
+    const { t } = useTranslation("admin_coach");
     return (
         <Dialog open={open} onClose={e => handleEditClose("")}>
-            <DialogTitle>Edit</DialogTitle>
+            <DialogTitle>{t("Edit")}</DialogTitle>
             <DialogContent>
                 <TextField
-                    label="Name"
+                    label={t("Name")}
                     fullWidth
                     variant="outlined"
                     autoFocus
@@ -21,8 +23,8 @@ export default function EditNameDialog({ open, name, setName, handleEditClose })
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={e => handleEditClose("")}>Cancel</Button>
-                <Button onClick={e => handleEditClose(name)}>Confirm</Button>
+                <Button onClick={e => handleEditClose("")}>{t("Cancel")}</Button>
+                <Button onClick={e => handleEditClose(name)}>{t("Confirm")}</Button>
             </DialogActions>
         </Dialog>
     )

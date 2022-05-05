@@ -4,6 +4,7 @@ import moment from 'moment'
 import { Grid, TextField, Paper, Box, IconButton, Autocomplete, CircularProgress, Button } from '@mui/material'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { useTranslation } from "react-i18next";
 
 import VIDEO_ICON from '../../assets/video_icon.jpg';
 import gameService from '../../services/game.service'
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Coach() {
+    const { t } = useTranslation("admin_coach");
     const classes = useStyles();
 
     const { user: currentUser } = useSelector((state) => state.auth);
@@ -115,7 +117,7 @@ export default function Coach() {
         <Box classes={classes['@global']} style={{ background: "white", padding: "8px 8px 0" }}>
             <Grid container spacing={2} >
                 <Grid item xs={6} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    {["Games", "Team Stats", "Player Stats", "My Edits"].map((title, idx) =>
+                    {[t("Games"), `${t("Team")} ${t("Stats")}`, `${t("Player")} ${t("Stats")}`, t("Edits")].map((title, idx) =>
                         !(idx === 3 && !currentUser?.create_edits) &&
                         <Button
                             fullWidth
@@ -131,7 +133,7 @@ export default function Coach() {
                 {
                     (curTab === 3 || curTab === 4) &&
                     <Grid item xs={1.5} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        {["Settings"].map((title, idx) =>
+                        {[t("Settings")].map((title, idx) =>
                             <Button
                                 fullWidth
                                 key={idx}
@@ -153,7 +155,7 @@ export default function Coach() {
                         disableClearable
                         getOptionLabel={(t) => `${t.season_name} - ${t.league_name} - ${t.team_name}`}
                         renderInput={(params) => (
-                            <TextField {...params} label="My Team" />
+                            <TextField {...params} label={t("Team")} />
                         )}
                         onChange={(event, newValue) => {
                             setState({ team: newValue });
@@ -167,7 +169,7 @@ export default function Coach() {
                         disableClearable
                         getOptionLabel={(t) => `${t.f_name} ${t.l_name}`}
                         renderInput={(params) => (
-                            <TextField {...params} label="Player" />
+                            <TextField {...params} label={t("Player")} />
                         )}
                         onChange={(event, newValue) => {
                             setState({ coachPlayer: newValue });
@@ -235,11 +237,12 @@ export default function Coach() {
                         playerList={playerList}
                         teamId={team?.team_id ?? 0}
                         opponentTagList={opponentTagList}
+                        t={t}
                     />}
-                {curTab === 1 && <TeamStatsTab gameList={gameList} team={team} />}
-                {curTab === 2 && <PlayerStatsTab player={coachPlayer} />}
-                {curTab === 3 && <MyEditsTab teamList={teamList} game={game} playerList={playerList} />}
-                {curTab === 4 && <SettingsTab frameSrc='http://soccersettings.scouting4u.com/' />}
+                {curTab === 1 && <TeamStatsTab gameList={gameList} team={team} t={t} />}
+                {curTab === 2 && <PlayerStatsTab player={coachPlayer} t={t} />}
+                {curTab === 3 && <MyEditsTab teamList={teamList} game={game} playerList={playerList} t={t} />}
+                {curTab === 4 && <SettingsTab frameSrc='http://soccersettings.scouting4u.com/' t={t} />}
             </Paper>
         </Box>
     )

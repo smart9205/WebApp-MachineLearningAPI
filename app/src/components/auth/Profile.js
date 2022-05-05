@@ -17,7 +17,7 @@ const Profile = () => {
           My Profile
         </h3>
       </header>
-     
+
       <p>
         <strong>User:</strong> {currentUser.first_name} {currentUser.last_name}
       </p>

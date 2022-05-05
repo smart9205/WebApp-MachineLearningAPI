@@ -1,11 +1,38 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import i18next from "i18next";
+import { initReactI18next } from "react-i18next";
+import HttpApi from "i18next-http-backend";
+import LanguageDetector from "i18next-browser-languagedetector";
 import store from "./store";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
 import { CookiesProvider } from 'react-cookie';
+
+i18next
+  .use(HttpApi)
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    react: {
+      useSuspense: false //   <---- this will do the magic
+    },
+    fallbackLng: "en",
+    debug: false,
+    // Options for language detector
+    detection: {
+      order: ["path", "cookie", "htmlTag"],
+      caches: ["cookie"]
+    },
+    // backend: {
+    //   loadPath: process.env.NODE_ENV !== "production"
+    //     ? `/locales/{{lng}}/{{ns}}.json`
+    //     : `/static/app/static/locales/{{lng}}/{{ns}}.json`,
+    //   allowMultiLoading: true,
+    // },
+  });
 
 ReactDOM.render(
   <Provider store={store}>

@@ -64,28 +64,26 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-    {
-        id: 'coach_name',
-        label: 'Name',
-    },
-    {
-        id: 'season_name',
-        label: 'Season',
-    },
-    {
-        id: 'league_name',
-        label: 'League',
-    },
-    {
-        id: 'team_name',
-        label: 'Team',
-    },
-];
-
 function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } =
-        props;
+    const { order, orderBy, onRequestSort, t } = props;
+    const headCells = [
+        {
+            id: 'coach_name',
+            label: t("Name"),
+        },
+        {
+            id: 'season_name',
+            label: t("Season"),
+        },
+        {
+            id: 'league_name',
+            label: t("League"),
+        },
+        {
+            id: 'team_name',
+            label: t("Team"),
+        },
+    ];
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -124,7 +122,7 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-export default function CoachTab() {
+export default function CoachTab({t}) {
     const [rows, setRows] = useState([])
     const [loading, setLoading] = useState(true)
     const [order, setOrder] = useState('asc');
@@ -185,7 +183,9 @@ export default function CoachTab() {
                     setFormOpen(false)
                     if (res) init()
                 }}
-                edit={selected} />
+                edit={selected}
+                t={t}
+            />
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <div style={{ position: "absolute", zIndex: 10, padding: 10, display: "flex" }}>
                     <Button
@@ -196,11 +196,11 @@ export default function CoachTab() {
                             setSelected(null)
                         }}>
                         <AddIcon />
-                        Add Coach
+                        {t("Add")} {t("Coach")}
                     </Button>
                     <Input
                         sx={{ mx: 10 }}
-                        placeholder='Search'
+                        placeholder={t("Search")}
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -221,6 +221,7 @@ export default function CoachTab() {
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            t={t}
                         />
                         <>{loading ? <TableBody style={styles.loader}>
                             <TableRow>

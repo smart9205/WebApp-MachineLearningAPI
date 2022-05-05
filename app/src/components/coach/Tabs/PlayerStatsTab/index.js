@@ -29,7 +29,7 @@ const MenuProps = {
     },
 };
 
-const PlayerStatsTab = ({ player }) => {
+const PlayerStatsTab = ({ player, t }) => {
 
     const [gameList, setGameList] = useState([])
     const [games, setGames] = useState([]);
@@ -97,7 +97,7 @@ const PlayerStatsTab = ({ player }) => {
                     tagList={playList} />
             </Dialog>
             <FormControl sx={{ width: 600 }}>
-                <InputLabel id="game-multiple-checkbox-label">Games</InputLabel>
+                <InputLabel id="game-multiple-checkbox-label">{t("Games")}</InputLabel>
                 <Select
                     labelId="game-multiple-checkbox-label"
                     id="game-multiple-checkbox"
@@ -107,7 +107,7 @@ const PlayerStatsTab = ({ player }) => {
                     input={<OutlinedInput label="Tag" />}
                     renderValue={(selected) => (
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                            {`${selected.length} games selected`}
+                            {`${selected.length} ${t("Games")} ${t("selected")}`}
                         </Box>
                     )}
                     MenuProps={MenuProps}
@@ -119,7 +119,7 @@ const PlayerStatsTab = ({ player }) => {
                             onChange={e => !e.target.checked && setGames([])}
                         />
                         <ListItemText
-                            primary={'Select All'}
+                            primary={t("SelectAll")}
                         />
                     </MenuItem>
                     {gameList.map((g) => (
@@ -134,14 +134,14 @@ const PlayerStatsTab = ({ player }) => {
             <Box sx={{ display: 'flex' }}>
                 <Box sx={{ width: "30rem" }}>
                     <Card sx={{ m: 1 }}>
-                        <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Profile"}</Typography>
+                        <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{t("Profile")}</Typography>
                         <img src={player?.image?.length > 0 ? player?.image : PLAYER_ICON_DEFAULT} width={"100%"} />
                         <Typography sx={{ textAlign: 'center', fontSize: '1.2rem', fontWeight: "bold", mt: "0.5rem" }}>#{player?.jersey_number} {player?.f_name} {player?.l_name}</Typography>
                         <Typography sx={{ textAlign: 'center', fontSize: '0.9rem' }}>{player?.position_name}</Typography>
                     </Card>
 
                     <Card sx={{ m: 1, }}>
-                        <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{"Goals"}</Typography>
+                        <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{t("Goals")}</Typography>
                         <Box sx={{ display: 'flex', justifyContent: "space-evenly", m: 2 }}>
                             <Typography sx={{ textAlign: 'center', fontSize: '1rem' }}>{score} ({((score / games.length) || 0).toFixed(1)})</Typography>
                         </Box>
@@ -158,14 +158,14 @@ const PlayerStatsTab = ({ player }) => {
                                         {rule.title === "Shot" ?
                                             <>
                                                 <td></td>
-                                                <td><p style={{ fontWeight: "bold" }}>On Target</p></td>
-                                                <td><p style={{ fontWeight: "bold" }}>Off Target</p></td>
+                                                <td><p style={{ fontWeight: "bold" }}>{t("OnTarget")}</p></td>
+                                                <td><p style={{ fontWeight: "bold" }}>{t("OffTarget")}</p></td>
                                             </>
                                             :
                                             <>
                                                 <td></td>
-                                                <td><p style={{ fontWeight: "bold" }}>Successful</p></td>
-                                                <td><p style={{ fontWeight: "bold" }}>Unsuccessful</p></td>
+                                                <td><p style={{ fontWeight: "bold" }}>{t("Successful")}</p></td>
+                                                <td><p style={{ fontWeight: "bold" }}>{t("Unsuccessful")}</p></td>
                                             </>
                                         }
                                     </tr>}

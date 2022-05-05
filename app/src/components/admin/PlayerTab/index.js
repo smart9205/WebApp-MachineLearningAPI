@@ -67,32 +67,30 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-    {
-        id: 'image',
-        label: 'Image',
-    },
-    {
-        id: 'name',
-        label: 'Name',
-    },
-    {
-        id: 'jersey_number',
-        label: 'Jersey',
-    },
-    {
-        id: 'position_name',
-        label: 'position',
-    },
-    {
-        id: 'day_of_birth',
-        label: 'Birth',
-    },
-];
-
 function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } =
-        props;
+    const { order, orderBy, onRequestSort, t } = props;
+    const headCells = [
+        {
+            id: 'image',
+            label: t("Image"),
+        },
+        {
+            id: 'name',
+            label: t("Name"),
+        },
+        {
+            id: 'jersey_number',
+            label: t("Jersey"),
+        },
+        {
+            id: 'position_name',
+            label: t("Position"),
+        },
+        {
+            id: 'day_of_birth',
+            label: t("DOB"),
+        },
+    ];
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -131,7 +129,7 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-export default function PlayerTab() {
+export default function PlayerTab({t}) {
     const [rows, setRows] = useState([])
     const [loading, setLoading] = useState(true)
     const [order, setOrder] = useState('asc');
@@ -198,6 +196,7 @@ export default function PlayerTab() {
                         init()
                     }
                 }}
+                t={t}
             />
 
             <Paper sx={{ width: '100%', mb: 2 }}>
@@ -209,11 +208,11 @@ export default function PlayerTab() {
                             setPlayerOpen(true)
                         }}>
                         <AddIcon />
-                        Add Player
+                        {t("Add")} {t("Player")}
                     </Button>
                     <Input
                         sx={{ mx: 10 }}
-                        placeholder='Search'
+                        placeholder={t("Search")}
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -234,6 +233,7 @@ export default function PlayerTab() {
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            t={t}
                         />
                         <>{loading ? <TableBody style={styles.loader}>
                             <TableRow>

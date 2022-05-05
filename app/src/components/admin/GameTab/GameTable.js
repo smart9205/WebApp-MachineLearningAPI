@@ -59,58 +59,55 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-
-const headCells = [
-  {
-    id: 'image',
-    numeric: false,
-    disablePadding: true,
-    label: 'Image',
-  },
-  {
-    id: 'season_name',
-    numeric: false,
-    disablePadding: true,
-    label: 'Season',
-  },
-  {
-    id: 'league_name',
-    numeric: false,
-    disablePadding: false,
-    label: 'League',
-  },
-  {
-    id: 'home_team_name',
-    numeric: false,
-    disablePadding: false,
-    label: 'Home Team',
-  },
-  {
-    id: 'away_team_name',
-    numeric: false,
-    disablePadding: false,
-    label: 'Away Team',
-  },
-  {
-    id: 'date',
-    numeric: false,
-    disablePadding: false,
-    label: 'Date',
-  },
-  {
-    id: 'video_url',
-    numeric: false,
-    disablePadding: false,
-    label: 'Video',
-  },
-];
-
 function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort } =
-    props;
+  const { order, orderBy, onRequestSort, t } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  const headCells = [
+    {
+      id: 'image',
+      numeric: false,
+      disablePadding: true,
+      label: t("Image"),
+    },
+    {
+      id: 'season_name',
+      numeric: false,
+      disablePadding: true,
+      label: t("Season"),
+    },
+    {
+      id: 'league_name',
+      numeric: false,
+      disablePadding: false,
+      label: t("League"),
+    },
+    {
+      id: 'home_team_name',
+      numeric: false,
+      disablePadding: false,
+      label: t("HomeTeam"),
+    },
+    {
+      id: 'away_team_name',
+      numeric: false,
+      disablePadding: false,
+      label: t("AwayTeam"),
+    },
+    {
+      id: 'date',
+      numeric: false,
+      disablePadding: false,
+      label: t("Date"),
+    },
+    {
+      id: 'video_url',
+      numeric: false,
+      disablePadding: false,
+      label: t("Video"),
+    },
+  ];
 
   return (
     <TableHead>
@@ -151,7 +148,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loading, setLoading, search }) {
+export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loading, setLoading, search, t }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState({});
@@ -213,15 +210,13 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
         </Alert>
       </Snackbar>
       <Dialog open={deleteOpen} onClose={e => handleDeleteClose(false)}>
-        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogTitle>{t("confirmMsg")}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            You are going to delete games, are you sure?
-          </DialogContentText>
+          <DialogContentText>{t("deleteConformMsg")}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={e => handleDeleteClose(false)}>Cancel</Button>
-          <Button onClick={e => handleDeleteClose(true)}>Delete</Button>
+          <Button onClick={e => handleDeleteClose(false)}>{t("Close")}</Button>
+          <Button onClick={e => handleDeleteClose(true)}>{t("Delete")}</Button>
         </DialogActions>
       </Dialog>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -245,6 +240,7 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              t={t}
             />
             <TableBody>
               {loading ?
@@ -318,7 +314,7 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                               onClick={() => editCallBack(row)}
                               startIcon={<EditIcon />}
                             >
-                              Edit
+                              {t("Edit")}
                             </Button>
                           </TableCell>
                           <TableCell align="center" sx={{ width: 100 }}>
@@ -331,7 +327,7 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                                 variant="outlined"
                                 startIcon={<TagIcon />}
                               >
-                                Tag
+                                {t("Tag")}
                               </Button>
                             </Link>
                           </TableCell>

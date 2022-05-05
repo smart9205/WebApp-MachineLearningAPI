@@ -49,36 +49,34 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-  {
-    id: 'jersey_number',
-    numeric: true,
-    disablePadding: true,
-    label: 'NUMBER',
-  },
-  {
-    id: 'f_name',
-    numeric: true,
-    disablePadding: true,
-    label: 'NAME',
-  },
-  {
-    id: 'position',
-    numeric: true,
-    disablePadding: true,
-    label: 'Position',
-  },
-  {
-    id: 'delete',
-    numeric: true,
-    disablePadding: true,
-    label: '',
-  },
-];
-
 function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort } =
-    props;
+  const { order, orderBy, onRequestSort, t } = props;
+  const headCells = [
+    {
+      id: 'jersey_number',
+      numeric: true,
+      disablePadding: true,
+      label: t("Number"),
+    },
+    {
+      id: 'f_name',
+      numeric: true,
+      disablePadding: true,
+      label: t("Name"),
+    },
+    {
+      id: 'position',
+      numeric: true,
+      disablePadding: true,
+      label: t("Position"),
+    },
+    {
+      id: 'delete',
+      numeric: true,
+      disablePadding: true,
+      label: '',
+    },
+  ];
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -122,7 +120,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
+  const { numSelected, t } = props;
 
   return (
     <Toolbar
@@ -142,7 +140,7 @@ const EnhancedTableToolbar = (props) => {
           variant="subtitle1"
           component="div"
         >
-          {numSelected} selected
+          {numSelected} {t("Selected")}
         </Typography>
       ) : (
         <Typography
@@ -151,7 +149,7 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Players
+          {t("Players")}
         </Typography>
       )}
     </Toolbar>
@@ -162,7 +160,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-function EnhancedTable({ jerseyUpdatedCallBack, rows, deletePlayerCallBack }) {
+function EnhancedTable({ jerseyUpdatedCallBack, rows, deletePlayerCallBack, t }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -196,7 +194,7 @@ function EnhancedTable({ jerseyUpdatedCallBack, rows, deletePlayerCallBack }) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', height: "100%" }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} t={t} />
         <TableContainer
           style={{ height: "calc(90vh - 330px)" }}
         >
@@ -213,6 +211,7 @@ function EnhancedTable({ jerseyUpdatedCallBack, rows, deletePlayerCallBack }) {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              t={t}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:

@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-const Banner = () => {
+const Banner = ({t}) => {
     return (
         <div id="home" className="main-banner jarallax">
             <div className="d-table">
                 <div className="d-table-cell">
                     <div className="container-fluid">
                         <div className="main-banner-content">
-                            <span className="sub-title">Scouting4U</span>
-                            <h1>Soccer</h1>
+                            <span className="sub-title">{t("banner.subtitle")}</span>
+                            <h1>{t("banner.title")}</h1>
                         </div>
                     </div>
                 </div>
