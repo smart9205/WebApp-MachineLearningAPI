@@ -61,7 +61,7 @@ const validEmail = (value) => {
   }
 };
 const Login = (props) => {
-  const { t } = useTranslation("admin_coach");
+  const { t } = useTranslation();
   const classes = useStyles();
   const form = useRef();
   const checkBtn = useRef();

@@ -9,7 +9,7 @@ import { logout } from "../../actions/auth";
 import lang from '../../assets/lang.json';
 
 export default function Navbar() {
-    const { t } = useTranslation("menu");
+    const { t } = useTranslation();
 
     const dispatch = useDispatch();
     const savedLanguage = cookie.load("i18next") ? cookie.load("i18next") : "en"

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 const Footer = () => {
-    const { t } = useTranslation("footer");
+    const { t } = useTranslation();
     let currentYear = new Date().getFullYear();
 
     return (
@@ -10,7 +10,7 @@ const Footer = () => {
             <div className="container">
                 <div className="row align-items-center">
                     <div className="col-lg-4 col-md-12">
-                        <p><i className="flaticon-copyright"></i> {currentYear} {t("copyright")} <a href="http://www.Scouting4U.com/" target="_blank" rel="noopener noreferrer" >Scouting4U</a></p>
+                        <p><i className="flaticon-copyright"></i> {currentYear} {t("footer.copyright")} <a href="http://www.Scouting4U.com/" target="_blank" rel="noopener noreferrer" >Scouting4U</a></p>
                     </div>
 
                     <div className="col-lg-4 col-md-12">
@@ -40,8 +40,8 @@ const Footer = () => {
 
                     <div className="col-lg-4 col-md-12">
                         <ul className="info-link">
-                            <li><Link to="#">{t("privacyMenu")}</Link></li>
-                            <li><Link to="#">{t("termsMenu")}</Link></li>
+                            <li><Link to="#">{t("footer.privacyMenu")}</Link></li>
+                            <li><Link to="#">{t("footer.termsMenu")}</Link></li>
                         </ul>
                     </div>
                 </div>

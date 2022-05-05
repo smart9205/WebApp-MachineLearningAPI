@@ -11,7 +11,7 @@ import Subscribe from './Subscribe';
 import BlogPost from './BlogPost';
 
 const Home = () => {
-    const { t } = useTranslation("home");
+    const { t } = useTranslation();
     return (
         <>
             <Banner t={t} />

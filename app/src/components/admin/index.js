@@ -54,7 +54,7 @@ const tablist = {
     league: 3
 }
 export default function Admin() {
-    const { t } = useTranslation("admin_coach");
+    const { t } = useTranslation();
     const { tab } = useParams();
     const [value, setValue] = useState(tablist[tab] ?? 0);
     const handleChange = (event, newValue) => {

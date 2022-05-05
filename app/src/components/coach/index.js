@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Coach() {
-    const { t } = useTranslation("admin_coach");
+    const { t } = useTranslation();
     const classes = useStyles();
 
     const { user: currentUser } = useSelector((state) => state.auth);

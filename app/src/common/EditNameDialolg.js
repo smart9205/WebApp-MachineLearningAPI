@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import { useTranslation } from "react-i18next";
 
 export default function EditNameDialog({ open, name, setName, handleEditClose }) {
-    const { t } = useTranslation("admin_coach");
+    const { t } = useTranslation();
     return (
         <Dialog open={open} onClose={e => handleEditClose("")}>
             <DialogTitle>{t("Edit")}</DialogTitle>

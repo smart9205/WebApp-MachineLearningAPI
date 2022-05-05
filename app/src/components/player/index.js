@@ -51,7 +51,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function Player() {
-  const { t } = useTranslation("admin_coach");
+  const { t } = useTranslation();
   const classes = useStyles();
   const { data } = useParams();
   const playerId = Number(atob(data))

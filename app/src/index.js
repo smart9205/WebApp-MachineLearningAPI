@@ -26,12 +26,9 @@ i18next
       order: ["path", "cookie", "htmlTag"],
       caches: ["cookie"]
     },
-    // backend: {
-    //   loadPath: process.env.NODE_ENV !== "production"
-    //     ? `/locales/{{lng}}/{{ns}}.json`
-    //     : `/static/app/static/locales/{{lng}}/{{ns}}.json`,
-    //   allowMultiLoading: true,
-    // },
+    backend: {
+      loadPath: `/locales/{{lng}}/admin_coach.json`
+    },
   });
 
 ReactDOM.render(

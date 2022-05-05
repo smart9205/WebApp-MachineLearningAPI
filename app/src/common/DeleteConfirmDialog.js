@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import { useTranslation } from "react-i18next";
 
 export default function DeleteConfirmDialog({ open, handleDeleteClose }) {
-    const { t } = useTranslation("admin_coach");
+    const { t } = useTranslation();
     return (
         <Dialog open={open} onClose={e => handleDeleteClose(false)}>
             <DialogTitle>{t("confirmMsg")}</DialogTitle>
