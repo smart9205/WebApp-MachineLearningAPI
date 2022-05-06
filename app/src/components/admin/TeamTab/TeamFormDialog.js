@@ -8,12 +8,18 @@ import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import GameService from '../../../services/game.service';
 import Upload from '../../../common/upload';
 import CircularProgress from '@mui/material/CircularProgress';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 import { ColorPicker } from 'material-ui-color';
 import UploadSponsor from '../../../common/uploadSponsor';
+import lang from '../../../assets/lang.json';
+
 const init = {
     id: 0,
     name: "",
@@ -23,7 +29,8 @@ const init = {
     sponsor_logo: "",
     sponsor_url: "",
     show_sponsor: false,
-    create_highlights: false
+    create_highlights: false,
+    team_language: "en"
 }
 
 const styles = {
@@ -55,7 +62,8 @@ export default function TeamFormDialog({ open, onResult, edit = null, t }) {
             sponsor_logo: edit?.sponsor_logo,
             sponsor_url: edit?.sponsor_url,
             create_highlights: edit?.create_highlights,
-            show_sponsor: edit?.show_sponsor
+            show_sponsor: edit?.show_sponsor,
+            team_language: edit?.team_language ? edit.team_language : 'en'
         })
     }, [edit])
 
@@ -105,6 +113,22 @@ export default function TeamFormDialog({ open, onResult, edit = null, t }) {
                         value={data.name}
                         onChange={(e) => setData({ name: e.target.value })}
                     />
+                    <FormControl fullWidth>
+                        <InputLabel id="select-language">Team Language</InputLabel>
+                        <Select
+                            labelId="select-language"
+                            id="select"
+                            value={data.team_language}
+                            label="Language"
+                            onChange={e => setData({team_language: e.target.value})}
+                        >
+                            {
+                                lang.map((item, index) => (
+                                    <MenuItem key={index} value={item.code}>{item.name}</MenuItem>
+                                ))
+                            }
+                        </Select>
+                    </FormControl>
                     {`${t("Team")} ${t("Color")}`}
                     <ColorPicker
                         defaultValue="transparent"
