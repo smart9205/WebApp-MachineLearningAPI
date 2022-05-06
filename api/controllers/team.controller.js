@@ -19,7 +19,8 @@ exports.create = async (req, res) => {
     sponsor_logo: req.body.sponsor_logo,
     sponsor_url: req.body.sponsor_url,
     create_highlights: req.body.create_highlights,
-    show_sponsor: req.body.show_sponsor
+    show_sponsor: req.body.show_sponsor,
+    team_language: req.body.team_language,
   };
 
   const checkTeam = await Team.findOne({
