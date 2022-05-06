@@ -130,5 +130,12 @@
   "Goal": "هدف",
   "Clearance": "تخليص",
   "OpponentShot": "تسديدة الخصم",
-  "OpponentCross": "عبر الخصم"
+  "OpponentCross": "عبر الخصم",
+  "Assist": "مساعدة",
+  "HeaderPass": "تمرير الرأس",
+  "VideoURLCopied": "تم نسخ عنوان URL للفيديو بنجاح!",
+  "ReadyForShare": "جاهز للمشاركة",
+  "Processing": "يعالج",
+  "Average": "متوسط",
+  "Pending": "قيد الانتظار"
 }

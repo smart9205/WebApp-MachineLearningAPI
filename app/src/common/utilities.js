@@ -163,54 +163,54 @@ export function getPercent(value, max) {
   return value * 100 / max;
 }
 
-const filterData = [
-  {
-    title: "Goal", action: 1, action_type: null, action_result: [3],
-  },
-  {
-    title: "Assist", action: 9, action_type: null, action_result: null,
-  },
-  {
-    title: "Shot", action: 1, action_type: null, action_result: [1],
-  },
-  {
-    title: "Cross", action: 3, action_type: null, action_result: [4],
-  },
-  {
-    title: "Dribble", action: 4, action_type: null, action_result: [4],
-  },
-  {
-    title: "Through Pass", action: 2, action_type: 6, action_result: [4],
-  },
-  {
-    title: "Short Pass", action: 2, action_type: 4, action_result: [4],
-  },
-  {
-    title: "Long Pass", action: 2, action_type: 5, action_result: [4],
-  },
-  {
-    title: "Key Pass", action: 2, action_type: 7, action_result: [4],
-  },
-  {
-    title: "Header Pass", action: 2, action_type: 3, action_result: [4],
-  },
-  {
-    title: "Draw Foul", action: 6, action_type: null, action_result: [13, 14],
-  },
-  {
-    title: "Interception", action: 10, action_type: null, action_result: null,
-  },
-  {
-    title: "Clearence", action: 11, action_type: null, action_result: null,
-  },
-  {
-    title: "Saved", action: 8, action_type: null, action_result: null,
-  },
-  {
-    title: "Throw-In", action: 2, action_type: 14, action_result: [4],
-  },
-]
-export function manualFilterForTags(tagList, playerId) {
+export function manualFilterForTags(tagList, playerId, t) {
+  const filterData = [
+    {
+      title: t("Goal"), action: 1, action_type: null, action_result: [3],
+    },
+    {
+      title: t("Assist"), action: 9, action_type: null, action_result: null,
+    },
+    {
+      title: t("Shot"), action: 1, action_type: null, action_result: [1],
+    },
+    {
+      title: t("Cross"), action: 3, action_type: null, action_result: [4],
+    },
+    {
+      title: t("Dribble"), action: 4, action_type: null, action_result: [4],
+    },
+    {
+      title: t("ThroughPass"), action: 2, action_type: 6, action_result: [4],
+    },
+    {
+      title: t("ShortPass"), action: 2, action_type: 4, action_result: [4],
+    },
+    {
+      title: t("LongPass"), action: 2, action_type: 5, action_result: [4],
+    },
+    {
+      title: t("KeyPass"), action: 2, action_type: 7, action_result: [4],
+    },
+    {
+      title: t("HeaderPass"), action: 2, action_type: 3, action_result: [4],
+    },
+    {
+      title: t("DrawFoul"), action: 6, action_type: null, action_result: [13, 14],
+    },
+    {
+      title: t("Interception"), action: 10, action_type: null, action_result: null,
+    },
+    {
+      title: t("Clearance"), action: 11, action_type: null, action_result: null,
+    },
+    {
+      title: t("Saved"), action: 8, action_type: null, action_result: null,
+    },
+    {
+      title: t("ThrowIn"), action: 2, action_type: 14, action_result: [4],
+    },
+  ]
   return filterData.map(f => {
     const total = tagList.filter(tag => tag.action_id === f.action &&
       (f.action_type === null ? true : tag.action_type_id === f.action_type) &&

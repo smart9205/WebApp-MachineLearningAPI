@@ -41,7 +41,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
     useEffect(() => {
         if (!teamId || !gameId || !playerId) return;
         GameService.getAllPlayerTagsByTeam(teamId, gameId).then((res) => {
-            setSkills(manualFilterForTags(res, playerId))
+            setSkills(manualFilterForTags(res, playerId, t))
             setLoading(false)
         }).catch(() => setLoading(false))
     }, [teamId, gameId, playerId])

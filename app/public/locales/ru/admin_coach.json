@@ -130,5 +130,12 @@
   "Goal": "Цель",
   "Clearance": "Распродажа",
   "OpponentShot": "Противник выстрел",
-  "OpponentCross": "Противник Кросс"
+  "OpponentCross": "Противник Кросс",
+  "Assist": "помочь",
+  "HeaderPass": "Пропуск заголовка",
+  "VideoURLCopied": "URL-адрес видео успешно скопирован!",
+  "ReadyForShare": "Готов поделиться",
+  "Processing": "Обработка",
+  "Average": "В среднем",
+  "Pending": "В ожидании"
 }

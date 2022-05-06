@@ -12,7 +12,7 @@ export default function Navbar() {
     const { t } = useTranslation();
 
     const dispatch = useDispatch();
-    const savedLanguage = cookie.load("i18next") ? cookie.load("i18next") : "en"
+    const savedLanguage = cookie.load("lang") ? cookie.load("lang") : "en"
     const [language, setLanguage] = useState(savedLanguage)
     const [collapsed, setCallapsed] = useState(true)
     const { user: currentUser } = useSelector((state) => state.auth);
@@ -32,6 +32,7 @@ export default function Navbar() {
     }, [])
 
     useEffect(() => {
+        cookie.save('lang', language, { path: '/' })
         i18next.changeLanguage(language);
         if(language == 'iw' || language == 'ar') {
             document.body.style.direction = 'rtl'

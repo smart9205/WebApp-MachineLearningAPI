@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, useMemo, useReducer } from 'react';
 import { useParams } from "react-router-dom";
+import i18next from "i18next";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   IconButton,
@@ -71,6 +72,8 @@ export default function Player() {
 
   const [primaryColor, setPrimaryColor] = useState(defaultPrimaryColor);
   const [secondColor, setSecondColor] = useState(defaultSecondColor);
+  const [language, setLanguage] = useState('en')
+
   const theme = useMemo(
     () =>
       createTheme({
@@ -93,8 +96,20 @@ export default function Player() {
       setContext({ player: res })
       setPrimaryColor(res.team_color || defaultPrimaryColor)
       setSecondColor(res.second_color || defaultSecondColor)
+      GameService.getTeamById(res.team_id).then((result) => {
+        setLanguage(result.team_language)
+      })
     }).catch(() => { })
   }, [playerId])
+
+  useEffect(() => {
+    i18next.changeLanguage(language);
+    if(language == 'iw' || language == 'ar') {
+        document.body.style.direction = 'rtl'
+    } else {
+        document.body.style.direction = 'ltr'
+    }
+  }, [language])
 
   const numClicked = (gameId, key) => {
     GameService.getPlayerTagsByActionName(playerId, gameId, key).then(res => {
@@ -184,7 +199,7 @@ export default function Player() {
                       className='profileSection_gametable-average'
                       style={{ borderColor: theme.palette.primary.main, backgroundColor: theme.palette.secondary.main }}
                     >
-                      <div>Average</div>
+                      <div>{t("Average")}</div>
                       {['goal', 'shot', 'pass', 'interception', 'saved', 'clearance'].map((key, idx) => (
                         <div key={idx}>
                           {(games.reduce((a, b) => a + Number(b?.[key] || '0'), 0) / games.length) || 0}

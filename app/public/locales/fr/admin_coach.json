@@ -130,5 +130,12 @@
   "Goal": "But",
   "Clearance": "Autorisation",
   "OpponentShot": "Tir adverse",
-  "OpponentCross": "Centre adverse"
+  "OpponentCross": "Centre adverse",
+  "Assist": "Aider",
+  "HeaderPass": "Passe d'en-tête",
+  "VideoURLCopied": "URL de la vidéo copiée avec succès !",
+  "ReadyForShare": "Prêt à partager",
+  "Processing": "Traitement",
+  "Average": "Moyenne",
+  "Pending": "En attente"
 }

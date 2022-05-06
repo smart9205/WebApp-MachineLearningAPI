@@ -130,5 +130,12 @@
   "Goal": "Doel",
   "Clearance": "opruiming",
   "OpponentShot": "Schot van de tegenstander",
-  "OpponentCross": "tegenstander kruis"
+  "OpponentCross": "tegenstander kruis",
+  "Assist": "Helpen",
+  "HeaderPass": "kop pas",
+  "VideoURLCopied": "Video-URL succesvol gekopieerd!",
+  "ReadyForShare": "Klaar om te delen",
+  "Processing": "Verwerken",
+  "Average": "Gemiddeld",
+  "Pending": "In afwachting"
 }

@@ -130,5 +130,12 @@
   "Goal": "Meta",
   "Clearance": "Autorización",
   "OpponentShot": "Tiro del oponente",
-  "OpponentCross": "Cruz del oponente"
+  "OpponentCross": "Cruz del oponente",
+  "Assist": "Asistir",
+  "HeaderPass": "Pase de encabezado",
+  "VideoURLCopied": "¡La URL del video se copió con éxito!",
+  "ReadyForShare": "Lista para compartir",
+  "Processing": "Procesando",
+  "Average": "Promedio",
+  "Pending": "Pendiente"
 }

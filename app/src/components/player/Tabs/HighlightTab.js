@@ -59,7 +59,7 @@ export default function HighlightTab({ playTags, t }) {
             onClose={() => setOpen(false)}
         >
             <Alert onClose={() => setOpen(false)} severity="success" sx={{ width: '100%' }}>
-                Video URL copied successfully!
+                {t("VideoURLCopied")}
             </Alert>
         </Snackbar>
         <Table responsive="sm" borderless size="sm" className='text-uppercase text-black highlight-table' >
@@ -84,9 +84,9 @@ export default function HighlightTab({ playTags, t }) {
                         </td>
                         <td><span>{row.date.slice(0, 10)}</span></td>
                         <td className='highlight-progressbar'>
-                            {row.status === 3 ? <ProgressBar animated variant="success" now={100} label="Ready for share" /> :
-                                row.status === 2 ? <ProgressBar animated variant="warning" now={70} label="Processing" /> :
-                                    row.status === 1 ? <ProgressBar animated variant="danger" now={50} label="Pending" /> : <></>
+                            {row.status === 3 ? <ProgressBar animated variant="success" now={100} label={t("ReadyForShare")} /> :
+                                row.status === 2 ? <ProgressBar animated variant="warning" now={70} label={t("Processing")} /> :
+                                    row.status === 1 ? <ProgressBar animated variant="danger" now={50} label={t("Pending")} /> : <></>
                             }
                         </td>
                         <td style={{ padding: 0 }}>

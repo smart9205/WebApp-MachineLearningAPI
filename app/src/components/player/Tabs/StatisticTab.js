@@ -1,9 +1,137 @@
 import React from 'react';
 import { Table, } from 'react-bootstrap'
-import { RULE } from '../../../common/staticData';
 
 
 export default function StatisticTab({ tagList, playTags, t }) {
+    const RULE = [
+        {
+            opponent: false,
+            title: t("Shot"),
+            successful: [1, 3],
+            unsuccessful: [2],
+            row: [
+                { action_id: 1, action_type_id: [1], title: t("Right") },
+                { action_id: 1, action_type_id: [2], title: t("Left") },
+                { action_id: 1, action_type_id: [3], title: t("Header") },
+                { action_id: 1, action_type_id: [11], title: t("FreeKick") },
+                { action_id: 1, action_type_id: [13], title: t("Penalty") }
+            ]
+        },
+        {
+            opponent: false,
+            title: t("Pass"),
+            successful: [4],
+            unsuccessful: [11, 15],
+            row: [
+                { action_id: 2, action_type_id: [7], title: t("KeyPass") },
+                { action_id: 2, action_type_id: [6], title: t("ThroughPass") },
+                { action_id: 2, action_type_id: [5], title: t("LongPass") },
+                { action_id: 2, action_type_id: [4], title: t("ShortPass") },
+                { action_id: 2, action_type_id: [14], title: t("ThrowIn") },
+                { action_id: 2, action_type_id: [11], title: t("FreeKick") }]
+        },
+        {
+            opponent: false,
+            title: t("Dribble"),
+            successful: [4],
+            unsuccessful: [12, 17],
+            row: [
+                { action_id: 4, action_type_id: [1], title: t("Right") },
+                { action_id: 4, action_type_id: [2], title: t("Left") }
+            ]
+        },
+        {
+            opponent: false,
+            title: t("Cross"),
+            successful: [4],
+            unsuccessful: [7, 8, 15],
+            row: [
+                { action_id: 3, action_type_id: [1], title: t("Right") },
+                { action_id: 3, action_type_id: [2], title: t("Left") },
+                { action_id: 3, action_type_id: [11], title: t("FreeKick") },
+                { action_id: 3, action_type_id: [12], title: t("Corner") }
+            ]
+        },
+        {
+            opponent: false,
+            title: t("Foul"),
+            row: [
+                { action_id: 5, action_type_id: [8], title: t("Regular") },
+                { action_id: 5, action_type_id: [9], title: t("YellowCard") },
+                { action_id: 5, action_type_id: [10], title: t("RedCard") }
+            ]
+        },
+        {
+            opponent: false,
+            title: t("DrawFoul"),
+            row: [
+                { action_id: 6, action_type_id: [8], title: t("Regular") },
+                { action_id: 6, action_type_id: [9], title: t("YellowCard") },
+                { action_id: 6, action_type_id: [10], title: t("RedCard") }]
+        },
+        {
+            opponent: false,
+            title: t("Interception"),
+            row: [
+                { action_id: 10, action_type_id: [1, 2], title: t("Dribble") },
+                { action_id: 10, action_type_id: [7], title: t("KeyPass") },
+                { action_id: 10, action_type_id: [6], title: t("ThroughPass") },
+                { action_id: 10, action_type_id: [5], title: t("LongPass") },
+                { action_id: 10, action_type_id: [4], title: t("ShortPass") },
+                { action_id: 10, action_type_id: [14], title: t("ThrowIn") }]
+        },
+        {
+            opponent: false,
+            title: t("Turnover"),
+            row: [
+                { action_id: 2, action_result_id: [11], title: t("BadPass") },
+                { action_id: 4, action_result_id: [10, 12], title: t("BadDribble") },
+                { action_id: 7, action_result_id: [15], title: t("Offside") },
+            ]
+        },
+        {
+            opponent: false,
+            title: t("Saved"),
+            row: [
+                { action_id: 8, action_type_id: [1, 2], title: t("Foot") },
+                { action_id: 8, action_type_id: [3], title: t("Header") }
+            ]
+        },
+        {
+            opponent: false,
+            title: t("Clearance"),
+            row: [
+                { action_id: 11, action_type_id: [1, 2], title: t("Foot") },
+                { action_id: 11, action_type_id: [3], title: t("Header") }
+            ]
+        },
+        {
+            opponent: true,
+            title: t("OpponentShot"),
+            successful: [1, 3],
+            unsuccessful: [2],
+            row: [
+                { action_id: 1, action_type_id: [1], title: t("Right") },
+                { action_id: 1, action_type_id: [2], title: t("Left") },
+                { action_id: 1, action_type_id: [3], title: t("Header") },
+                { action_id: 1, action_type_id: [11], title: t("FreeKick") },
+                { action_id: 1, action_type_id: [13], title: t("Penalty") }
+            ]
+        },
+        {
+            opponent: true,
+            title: t("OpponentCross"),
+            successful: [4],
+            unsuccessful: [7, 8, 15],
+            row: [
+                { action_id: 3, action_type_id: [1], title: t("Right") },
+                { action_id: 3, action_type_id: [2], title: t("Left") },
+                { action_id: 3, action_type_id: [11], title: t("FreeKick") },
+                { action_id: 3, action_type_id: [12], title: t("Corner") }
+            ]
+        },
+    ]
+
     return (
         <>
             {RULE.map((rule, idx) =>

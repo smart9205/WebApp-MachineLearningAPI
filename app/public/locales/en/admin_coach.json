@@ -130,5 +130,12 @@
   "Goal": "Goal",
   "Clearance": "Clearance",
   "OpponentShot": "Opponent Shot",
-  "OpponentCross": "Opponent Cross"
+  "OpponentCross": "Opponent Cross",
+  "Assist": "Assist",
+  "HeaderPass": "Header Pass",
+  "VideoURLCopied": "Video URL copied successfully!",
+  "ReadyForShare": "Ready for share",
+  "Processing": "Processing",
+  "Average": "Average",
+  "Pending": "Pending"
 }

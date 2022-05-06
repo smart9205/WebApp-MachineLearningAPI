@@ -130,5 +130,12 @@
   "Goal": "Obbiettivo",
   "Clearance": "Liquidazione",
   "OpponentShot": "Colpo avversario",
-  "OpponentCross": "Croce avversaria"
+  "OpponentCross": "Croce avversaria",
+  "Assist": "Assistere",
+  "HeaderPass": "Passaggio di intestazione",
+  "VideoURLCopied": "URL del video copiato correttamente!",
+  "ReadyForShare": "Pronto per la condivisione",
+  "Processing": "in lavorazione",
+  "Average": "Media",
+  "Pending": "In attesa di"
 }
