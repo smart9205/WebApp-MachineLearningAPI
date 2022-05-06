@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from '@mui/icons-material/Close';
 import { Table, } from 'react-bootstrap'
 
-import { PLAYER_ICON_DEFAULT, RULE } from '../../../../common/staticData';
+import { PLAYER_ICON_DEFAULT } from '../../../../common/staticData';
 import gameService from "../../../../services/game.service";
 import { Dialog, IconButton } from "@mui/material";
 import VideoPlayer from "./PlayerStatsVideoPlayer";
@@ -37,6 +37,147 @@ const PlayerStatsTab = ({ player, t }) => {
     const [score, setScore] = useState(0)
     const [playList, setPlayList] = useState([])
     const [open, setOpen] = useState(false)
+
+    const RULE = [
+        {
+            opponent: false,
+            title: t("Shot"),
+            title_he: "בעיטות לשער",
+            successful: [1, 3],
+            unsuccessful: [2],
+            row: [
+                { action_id: 1, action_type_id: [1], title: t("Right") },
+                { action_id: 1, action_type_id: [2], title: t("Left") },
+                { action_id: 1, action_type_id: [3], title: t("Header") },
+                { action_id: 1, action_type_id: [11], title: t("FreeKick") },
+                { action_id: 1, action_type_id: [13], title: t("Penalty") }
+            ]
+        },
+        {
+            opponent: false,
+            title: t("Pass"),
+            title_he: "מסירות",
+            successful: [4],
+            unsuccessful: [11, 15],
+            row: [
+                { action_id: 2, action_type_id: [7], title: t("KeyPass") },
+                { action_id: 2, action_type_id: [6], title: t("ThroughPass") },
+                { action_id: 2, action_type_id: [5], title: t("LongPass") },
+                { action_id: 2, action_type_id: [4], title: t("ShortPass") },
+                { action_id: 2, action_type_id: [14], title: t("ThrowIn") },
+                { action_id: 2, action_type_id: [11], title: t("FreeKick") }]
+        },
+        {
+            opponent: false,
+            title: t("Dribble"),
+            title_he: "כדרורים",
+            successful: [4],
+            unsuccessful: [12, 17],
+            row: [
+                { action_id: 4, action_type_id: [1], title: t("Right") },
+                { action_id: 4, action_type_id: [2], title: t("Left") }
+            ]
+        },
+        {
+            opponent: false,
+            title: t("Cross"),
+            title_he: "הרמות",
+            successful: [4],
+            unsuccessful: [7, 8, 15],
+            row: [
+                { action_id: 3, action_type_id: [1], title: t("Right") },
+                { action_id: 3, action_type_id: [2], title: t("Left") },
+                { action_id: 3, action_type_id: [11], title: t("FreeKick") },
+                { action_id: 3, action_type_id: [12], title: t("Corner") }
+            ]
+        },
+        {
+            opponent: false,
+            title: t("Foul"),
+            title_he: "פאולים",
+            row: [
+                { action_id: 5, action_type_id: [8], title: t("Regular") },
+                { action_id: 5, action_type_id: [9], title: t("YellowCard") },
+                { action_id: 5, action_type_id: [10], title: t("RedCard") }
+            ]
+        },
+        {
+            opponent: false,
+            title: t("DrawFoul"),
+            title_he: "משיכת פאולים",
+            row: [
+                { action_id: 6, action_type_id: [8], title: t("Regular") },
+                { action_id: 6, action_type_id: [9], title: t("YellowCard") },
+                { action_id: 6, action_type_id: [10], title: t("RedCard") }]
+        },
+        {
+            opponent: false,
+            title: t("Interception"),
+            title_he: "חטיפות",
+            row: [
+                { action_id: 10, action_type_id: [1, 2], title: t("Dribble") },
+                { action_id: 10, action_type_id: [7], title: t("KeyPass") },
+                { action_id: 10, action_type_id: [6], title: t("ThroughPass") },
+                { action_id: 10, action_type_id: [5], title: t("LongPass") },
+                { action_id: 10, action_type_id: [4], title: t("ShortPass") },
+                { action_id: 10, action_type_id: [14], title: t("ThrowIn") }]
+        },
+        {
+            opponent: false,
+            title: t("Turnover"),
+            title_he: "איבודי כדור",
+            row: [
+                { action_id: 2, action_result_id: [11], title: t("BadPass") },
+                { action_id: 4, action_result_id: [10, 12], title: t("BadDribble") },
+                { action_id: 7, action_result_id: [15], title: t("Offside") },
+            ]
+        },
+        {
+            opponent: false,
+            title: t("Saved"),
+            title_he: "הצלות",
+            row: [
+                { action_id: 8, action_type_id: [1, 2], title: t("Foot") },
+                { action_id: 8, action_type_id: [3], title: t("Header") }
+            ]
+        },
+        {
+            opponent: false,
+            title: t("Clearance"),
+            title_he: "הרחקות",
+            row: [
+                { action_id: 11, action_type_id: [1, 2], title: t("Foot") },
+                { action_id: 11, action_type_id: [3], title: t("Header") }
+            ]
+        },
+        {
+            opponent: true,
+            title: t("OpponentShot"),
+            title_he: "בעיטות לשער",
+            successful: [1, 3],
+            unsuccessful: [2],
+            row: [
+                { action_id: 1, action_type_id: [1], title: t("Right") },
+                { action_id: 1, action_type_id: [2], title: t("Left") },
+                { action_id: 1, action_type_id: [3], title: t("Header") },
+                { action_id: 1, action_type_id: [11], title: t("FreeKick") },
+                { action_id: 1, action_type_id: [13], title: t("Penalty") }
+            ]
+        },
+        {
+            opponent: true,
+            title: t("OpponentCross"),
+            title_he: "הרמות",
+            successful: [4],
+            unsuccessful: [7, 8, 15],
+            row: [
+                { action_id: 3, action_type_id: [1], title: t("Right") },
+                { action_id: 3, action_type_id: [2], title: t("Left") },
+                { action_id: 3, action_type_id: [11], title: t("FreeKick") },
+                { action_id: 3, action_type_id: [12], title: t("Corner") }
+            ]
+        },
+    ]
 
     useEffect(() => {
         gameService.getCoachPlayerGames(player?.id ?? 0).then(res => {
@@ -150,7 +291,7 @@ const PlayerStatsTab = ({ player, t }) => {
                 <div style={{ textAlign: "justify" }}>
                     {RULE.filter(f => !f.opponent).map((rule, idx) => {
                         let sum_success = 0, sum_unsuccess = 0
-                        return <Card sx={{ fontSize: "0.8rem", position: "relative", margin: "0.5rem", maxWidth: 500, minWidth: 320, display: "inline-block", verticalAlign: "top" }}>
+                        return <Card sx={{ fontSize: "0.8rem", position: "relative", margin: "0.5rem", maxWidth: 500, minWidth: 320, display: "inline-block", verticalAlign: "top" }} key={idx}>
                             <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray', fontWeight: "bold", textTransform: "uppercase" }}>{rule.title}</Typography>
                             <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>
                                 <tbody className='text-center' style={{ m: 0 }}>
