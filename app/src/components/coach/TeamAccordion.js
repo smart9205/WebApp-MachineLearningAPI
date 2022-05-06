@@ -18,7 +18,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: false,
         title: t("Shot"),
-        title_he: "בעיטות לשער",
         successful: [1, 3],
         unsuccessful: [2],
         row: [
@@ -32,7 +31,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: false,
         title: t("Pass"),
-        title_he: "מסירות",
         successful: [4],
         unsuccessful: [11, 15],
         row: [
@@ -46,7 +44,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: false,
         title: t("Dribble"),
-        title_he: "כדרורים",
         successful: [4],
         unsuccessful: [12, 17],
         row: [
@@ -57,7 +54,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: false,
         title: t("Cross"),
-        title_he: "הרמות",
         successful: [4],
         unsuccessful: [7, 8, 15],
         row: [
@@ -70,7 +66,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: false,
         title: t("Foul"),
-        title_he: "פאולים",
         row: [
             { action_id: 5, action_type_id: [8], title: t("Regular") },
             { action_id: 5, action_type_id: [9], title: t("YellowCard") },
@@ -80,7 +75,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: false,
         title: t("DrawFoul"),
-        title_he: "משיכת פאולים",
         row: [
             { action_id: 6, action_type_id: [8], title: t("Regular") },
             { action_id: 6, action_type_id: [9], title: t("YellowCard") },
@@ -89,7 +83,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: false,
         title: t("Interception"),
-        title_he: "חטיפות",
         row: [
             { action_id: 10, action_type_id: [1, 2], title: t("Dribble") },
             { action_id: 10, action_type_id: [7], title: t("KeyPass") },
@@ -101,7 +94,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: false,
         title: t("Turnover"),
-        title_he: "איבודי כדור",
         row: [
             { action_id: 2, action_result_id: [11], title: t("BadPass") },
             { action_id: 4, action_result_id: [10, 12], title: t("BadDribble") },
@@ -111,7 +103,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: false,
         title: t("Saved"),
-        title_he: "הצלות",
         row: [
             { action_id: 8, action_type_id: [1, 2], title: t("Foot") },
             { action_id: 8, action_type_id: [3], title: t("Header") }
@@ -120,7 +111,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: false,
         title: t("Clearance"),
-        title_he: "הרחקות",
         row: [
             { action_id: 11, action_type_id: [1, 2], title: t("Foot") },
             { action_id: 11, action_type_id: [3], title: t("Header") }
@@ -129,7 +119,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: true,
         title: t("OpponentShot"),
-        title_he: "בעיטות לשער",
         successful: [1, 3],
         unsuccessful: [2],
         row: [
@@ -143,7 +132,6 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
     {
         opponent: true,
         title: t("OpponentCross"),
-        title_he: "הרמות",
         successful: [4],
         unsuccessful: [7, 8, 15],
         row: [
@@ -217,7 +205,7 @@ export default function TeamAccordion({ playTags, allTagList = [], opponentTagLi
               id="panel1a-header"
               onClick={() => { handleActionTags() }}
             >
-              <Typography >{rule.title} ({rule.title_he})</Typography>
+              <Typography >{rule.title}</Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ p: 0 }}>
               <Table responsive="sm" striped borderless hover size="sm" className='text-uppercase coach-actionlist-table'>

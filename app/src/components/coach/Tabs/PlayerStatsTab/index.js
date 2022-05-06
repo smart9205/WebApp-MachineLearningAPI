@@ -42,7 +42,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: false,
             title: t("Shot"),
-            title_he: "בעיטות לשער",
             successful: [1, 3],
             unsuccessful: [2],
             row: [
@@ -56,7 +55,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: false,
             title: t("Pass"),
-            title_he: "מסירות",
             successful: [4],
             unsuccessful: [11, 15],
             row: [
@@ -70,7 +68,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: false,
             title: t("Dribble"),
-            title_he: "כדרורים",
             successful: [4],
             unsuccessful: [12, 17],
             row: [
@@ -81,7 +78,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: false,
             title: t("Cross"),
-            title_he: "הרמות",
             successful: [4],
             unsuccessful: [7, 8, 15],
             row: [
@@ -94,7 +90,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: false,
             title: t("Foul"),
-            title_he: "פאולים",
             row: [
                 { action_id: 5, action_type_id: [8], title: t("Regular") },
                 { action_id: 5, action_type_id: [9], title: t("YellowCard") },
@@ -104,7 +99,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: false,
             title: t("DrawFoul"),
-            title_he: "משיכת פאולים",
             row: [
                 { action_id: 6, action_type_id: [8], title: t("Regular") },
                 { action_id: 6, action_type_id: [9], title: t("YellowCard") },
@@ -113,7 +107,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: false,
             title: t("Interception"),
-            title_he: "חטיפות",
             row: [
                 { action_id: 10, action_type_id: [1, 2], title: t("Dribble") },
                 { action_id: 10, action_type_id: [7], title: t("KeyPass") },
@@ -125,7 +118,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: false,
             title: t("Turnover"),
-            title_he: "איבודי כדור",
             row: [
                 { action_id: 2, action_result_id: [11], title: t("BadPass") },
                 { action_id: 4, action_result_id: [10, 12], title: t("BadDribble") },
@@ -135,7 +127,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: false,
             title: t("Saved"),
-            title_he: "הצלות",
             row: [
                 { action_id: 8, action_type_id: [1, 2], title: t("Foot") },
                 { action_id: 8, action_type_id: [3], title: t("Header") }
@@ -144,7 +135,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: false,
             title: t("Clearance"),
-            title_he: "הרחקות",
             row: [
                 { action_id: 11, action_type_id: [1, 2], title: t("Foot") },
                 { action_id: 11, action_type_id: [3], title: t("Header") }
@@ -153,7 +143,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: true,
             title: t("OpponentShot"),
-            title_he: "בעיטות לשער",
             successful: [1, 3],
             unsuccessful: [2],
             row: [
@@ -167,7 +156,6 @@ const PlayerStatsTab = ({ player, t }) => {
         {
             opponent: true,
             title: t("OpponentCross"),
-            title_he: "הרמות",
             successful: [4],
             unsuccessful: [7, 8, 15],
             row: [
