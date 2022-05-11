@@ -104,32 +104,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
                 { action_id: 11, action_type_id: [1, 2], title: t("Foot") },
                 { action_id: 11, action_type_id: [3], title: t("Header") }
             ]
-        },
-        {
-            opponent: true,
-            title: t("OpponentShot"),
-            successful: [1, 3],
-            unsuccessful: [2],
-            row: [
-                { action_id: 1, action_type_id: [1], title: t("Right") },
-                { action_id: 1, action_type_id: [2], title: t("Left") },
-                { action_id: 1, action_type_id: [3], title: t("Header") },
-                { action_id: 1, action_type_id: [11], title: t("FreeKick") },
-                { action_id: 1, action_type_id: [13], title: t("Penalty") }
-            ]
-        },
-        {
-            opponent: true,
-            title: t("OpponentCross"),
-            successful: [4],
-            unsuccessful: [7, 8, 15],
-            row: [
-                { action_id: 3, action_type_id: [1], title: t("Right") },
-                { action_id: 3, action_type_id: [2], title: t("Left") },
-                { action_id: 3, action_type_id: [11], title: t("FreeKick") },
-                { action_id: 3, action_type_id: [12], title: t("Corner") }
-            ]
-        },
+        }
     ]
 
     return (
