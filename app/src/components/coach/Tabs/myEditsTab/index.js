@@ -172,7 +172,7 @@ const MyEditsTab = ({ teamList, game, playerList, t }) => {
                 style={{ minWidth: 240, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none", paddingRight: 8 }}>
                 <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h5 style={{ color: 'black', margin: '0.5rem 1rem' }}>{t("Edits")}</h5>
-                    <Button variant="outlined" onClick={() => handleOpen(true)}>{t("New")} {t("NewEdit")}</Button>
+                    <Button variant="outlined" onClick={() => handleOpen(true)}>{t("NewEdit")}</Button>
                 </Box>
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
