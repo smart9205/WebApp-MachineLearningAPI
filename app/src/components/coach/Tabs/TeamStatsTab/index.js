@@ -194,7 +194,7 @@ const TeamStatsTab = ({ gameList, team, t }) => {
 
     return (
         <Box sx={{ width: "100%" }}>
-            <FormControl sx={{ width: 600 }}>
+            <FormControl sx={{ width: 600 }} className="my-3">
                 <InputLabel id="game-multiple-checkbox-label">{t("Games")}</InputLabel>
                 <Select
                     labelId="game-multiple-checkbox-label"

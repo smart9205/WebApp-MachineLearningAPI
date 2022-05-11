@@ -225,7 +225,7 @@ const PlayerStatsTab = ({ player, t }) => {
                     }}
                     tagList={playList} />
             </Dialog>
-            <FormControl sx={{ width: 600 }}>
+            <FormControl sx={{ width: 600 }} className="my-3">
                 <InputLabel id="game-multiple-checkbox-label">{t("Games")}</InputLabel>
                 <Select
                     labelId="game-multiple-checkbox-label"

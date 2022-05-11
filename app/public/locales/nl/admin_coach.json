@@ -122,7 +122,7 @@
   "Interception": "Onderschepping",
   "DrawFoul": "Gelijkspel fout",
   "Turnover": "Afzet",
-  "Bad Pass": "Slechte pas",
+  "BadPass": "Slechte pas",
   "BadDribble": "Slechte dribbel",
   "Offside": "buitenspel",
   "Saved": "Opgeslagen",
@@ -137,5 +137,7 @@
   "ReadyForShare": "Klaar om te delen",
   "Processing": "Verwerken",
   "Average": "Gemiddeld",
-  "Pending": "In afwachting"
+  "Pending": "In afwachting",
+  "TeamStats": "Teamstatistieken",
+  "PlayerStats": "Spelerstatistieken"
 }

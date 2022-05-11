@@ -122,7 +122,7 @@
   "Interception": "اعتراض",
   "DrawFoul": "رسم خطأ",
   "Turnover": "دوران",
-  "Bad Pass": "ممر سيء",
+  "BadPass": "ممر سيء",
   "BadDribble": "المراوغة السيئة",
   "Offside": "التسلل",
   "Saved": "أنقذ",
@@ -137,5 +137,7 @@
   "ReadyForShare": "جاهز للمشاركة",
   "Processing": "يعالج",
   "Average": "متوسط",
-  "Pending": "قيد الانتظار"
+  "Pending": "قيد الانتظار",
+  "TeamStats": "احصائيات الفريق",
+  "PlayerStats": "احصائيات اللاعب"
 }

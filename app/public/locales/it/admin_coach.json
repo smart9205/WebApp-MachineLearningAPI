@@ -122,7 +122,7 @@
   "Interception": "Intercettazione",
   "DrawFoul": "Disegna fallo",
   "Turnover": "Turnover",
-  "Bad Pass": "Brutto passaggio",
+  "BadPass": "Brutto passaggio",
   "BadDribble": "Dribbling pessimo",
   "Offside": "Fuorigioco",
   "Saved": "Salvato",
@@ -137,5 +137,7 @@
   "ReadyForShare": "Pronto per la condivisione",
   "Processing": "in lavorazione",
   "Average": "Media",
-  "Pending": "In attesa di"
+  "Pending": "In attesa di",
+  "TeamStats": "Statistiche della squadra",
+  "PlayerStats": "Statistiche del giocatore"
 }

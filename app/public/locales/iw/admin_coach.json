@@ -74,7 +74,7 @@
   "StartTime": "זמן התחלה",
   "EndTime": "זמן סיום",
   "FinalScore": "תוצאה סופית",
-  "OnTarget": "במסגרת",
+  "OnTarget": "למסגרת",
   "OffTarget": "מחוץ למסגרת",
   "Successful": "מוצלח",
   "Unsuccessful": "לא מוצלח",
@@ -122,7 +122,7 @@
   "Interception": "חטיפות",
   "DrawFoul": "משיכת פאולים",
   "Turnover": "איבוד כדור",
-  "Bad Pass": "ממסירה",
+  "BadPass": "מסירה לא טובה",
   "BadDribble": "מכדרור",
   "Offside": "נבדל",
   "Saved": "הצלות",
@@ -137,5 +137,7 @@
   "ReadyForShare": "מוכן לשיתוף",
   "Processing": "מעבד",
   "Average": "ממוצע",
-  "Pending": "ממתין ל"
+  "Pending": "ממתין ל",
+  "TeamStats": "סטטיסטיקה קבוצתית",
+  "PlayerStats": "סטטיסטיקה אישית"
 }

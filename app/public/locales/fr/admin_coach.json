@@ -122,7 +122,7 @@
   "Interception": "Interception",
   "DrawFoul": "Faute nulle",
   "Turnover": "Chiffre d'affaires",
-  "Bad Pass": "Mauvaise passe",
+  "BadPass": "Mauvaise passe",
   "BadDribble": "Mauvais dribble",
   "Offside": "Hors-jeu",
   "Saved": "Enregistrée",
@@ -137,5 +137,7 @@
   "ReadyForShare": "Prêt à partager",
   "Processing": "Traitement",
   "Average": "Moyenne",
-  "Pending": "En attente"
+  "Pending": "En attente",
+  "TeamStats": "Statistiques d'équipe",
+  "PlayerStats": "Statistiques du joueur"
 }

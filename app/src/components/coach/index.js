@@ -117,7 +117,7 @@ export default function Coach() {
         <Box classes={classes['@global']} style={{ background: "white", padding: "8px 8px 0" }}>
             <Grid container spacing={2} >
                 <Grid item xs={6} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    {[t("Games"), `${t("Team")} ${t("Stats")}`, `${t("Player")} ${t("Stats")}`, t("Edits")].map((title, idx) =>
+                    {[t("Games"), `${t("TeamStats")}`, `${t("PlayerStats")}`, t("Edits")].map((title, idx) =>
                         !(idx === 3 && !currentUser?.create_edits) &&
                         <Button
                             fullWidth
@@ -179,7 +179,7 @@ export default function Coach() {
             </Grid>
             {curTab === 0 &&
                 <Paper sx={{ m: 1 }}>
-                    <Box sx={{ px: 1, display: drawOpen ? "flex" : "none", minHeight: 50, maxHeight: 350, overflowY: 'auto' }}>
+                    <Box sx={{ px: 1, display: drawOpen ? "flex" : "none", minHeight: 50, maxHeight: 350 }}>
                         {gameList.length === 0 ?
                             <Box sx={{
                                 width: "100%",

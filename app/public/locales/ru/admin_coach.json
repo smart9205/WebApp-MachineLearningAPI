@@ -122,7 +122,7 @@
   "Interception": "Перехват",
   "DrawFoul": "Ничья Фол",
   "Turnover": "Оборот",
-  "Bad Pass": "Плохой проход",
+  "BadPass": "Плохой проход",
   "BadDribble": "Плохой дриблинг",
   "Offside": "Офсайд",
   "Saved": "Сохранено",
@@ -137,5 +137,7 @@
   "ReadyForShare": "Готов поделиться",
   "Processing": "Обработка",
   "Average": "В среднем",
-  "Pending": "В ожидании"
+  "Pending": "В ожидании",
+  "TeamStats": "Статистика команды",
+  "PlayerStats": "Статистика игрока"
 }
