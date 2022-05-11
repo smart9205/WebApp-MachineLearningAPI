@@ -7,6 +7,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
         {
             opponent: false,
             title: t("Shot"),
+            id: "Shot",
             successful: [1, 3],
             unsuccessful: [2],
             row: [
@@ -20,6 +21,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
         {
             opponent: false,
             title: t("Pass"),
+            id: "Pass",
             successful: [4],
             unsuccessful: [11, 15],
             row: [
@@ -33,6 +35,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
         {
             opponent: false,
             title: t("Dribble"),
+            id: "Dribble",
             successful: [4],
             unsuccessful: [12, 17],
             row: [
@@ -43,6 +46,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
         {
             opponent: false,
             title: t("Cross"),
+            id: "Cross",
             successful: [4],
             unsuccessful: [7, 8, 15],
             row: [
@@ -55,6 +59,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
         {
             opponent: false,
             title: t("Foul"),
+            id: "Foul",
             row: [
                 { action_id: 5, action_type_id: [8], title: t("Regular") },
                 { action_id: 5, action_type_id: [9], title: t("YellowCard") },
@@ -64,6 +69,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
         {
             opponent: false,
             title: t("DrawFoul"),
+            id: "DrawFoul",
             row: [
                 { action_id: 6, action_type_id: [8], title: t("Regular") },
                 { action_id: 6, action_type_id: [9], title: t("YellowCard") },
@@ -72,6 +78,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
         {
             opponent: false,
             title: t("Interception"),
+            id: "Interception",
             row: [
                 { action_id: 10, action_type_id: [1, 2], title: t("Dribble") },
                 { action_id: 10, action_type_id: [7], title: t("KeyPass") },
@@ -83,6 +90,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
         {
             opponent: false,
             title: t("Turnover"),
+            id: "Turnover",
             row: [
                 { action_id: 2, action_result_id: [11], title: t("BadPass") },
                 { action_id: 4, action_result_id: [10, 12], title: t("BadDribble") },
@@ -92,6 +100,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
         {
             opponent: false,
             title: t("Saved"),
+            id: "Saved",
             row: [
                 { action_id: 8, action_type_id: [1, 2], title: t("Foot") },
                 { action_id: 8, action_type_id: [3], title: t("Header") }
@@ -100,6 +109,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
         {
             opponent: false,
             title: t("Clearance"),
+            id: "Clearance",
             row: [
                 { action_id: 11, action_type_id: [1, 2], title: t("Foot") },
                 { action_id: 11, action_type_id: [3], title: t("Header") }
@@ -120,7 +130,7 @@ export default function StatisticTab({ tagList, playTags, t }) {
                         {
                             !!rule?.successful && <tr>
                                 <td></td>
-                                {rule.title === "Shot" ?
+                                {rule.id === "Shot" ?
                                     <>
                                         <td><p>{t("OnTarget")}</p></td>
                                         <td><p>{t("OffTarget")}</p></td>
