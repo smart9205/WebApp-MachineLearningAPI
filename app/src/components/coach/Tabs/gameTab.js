@@ -58,14 +58,25 @@ const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId, t }) =
                     t={t}
                 />
             </Card>
-            <IconButton
-                onClick={() => setShowAccordion((v) => !v)}
-                sx={{ background: '#8080804d', zIndex: 10, position: "absolute", left: showAccordion ? 310 : 10 }}>
-                {showAccordion ?
-                    <ArrowLeftIcon /> :
-                    <ArrowRightIcon />
-                }
-            </IconButton>
+            {
+                document.body.style.direction === 'ltr' ?
+                    <IconButton
+                        onClick={() => setShowAccordion((v) => !v)}
+                        sx={{ background: '#8080804d', zIndex: 10, position: "absolute", left: showAccordion ? 310 : 10 }}>
+                        {showAccordion ?
+                            <ArrowLeftIcon /> :
+                            <ArrowRightIcon />
+                        }
+                    </IconButton> :
+                    <IconButton
+                        onClick={() => setShowAccordion((v) => !v)}
+                        sx={{ background: '#8080804d', zIndex: 10, position: "absolute", right: showAccordion ? 300 : 10 }}>
+                        {showAccordion ?
+                            <ArrowRightIcon /> :
+                            <ArrowLeftIcon />
+                        }
+                    </IconButton>
+            }
             <Paper style={{ height: "100%", minWidth: 500, position: 'relative' }} className="coach-tag-table">
                 <ExcelButton
                     style={{ position: "absolute", right: 10 }}
