@@ -133,9 +133,13 @@ export default function TagVideo({ tagList, url }) {
                         #{tagList[curIdx]?.jersey}{" "}{tagList[curIdx]?.player_lname}{" "}{tagList[curIdx]?.player_fname.slice(0, 1)}.
                     </div>
                 </div>}
-                <div style={styles.buttonBox} >
+                <div style={styles.buttonBox}>
                     <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
-                        <SkipPreviousSharpIcon color="white" />
+                        {
+                            document.body.style.direction === 'ltr' ?
+                                <SkipPreviousSharpIcon color="white" /> :
+                                <SkipNextSharpIcon />
+                        }
                     </IconButton>
 
                     <IconButton onClick={() => setPlay(p => !p)} style={styles.button}>
@@ -143,7 +147,11 @@ export default function TagVideo({ tagList, url }) {
                     </IconButton>
 
                     <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
-                        <SkipNextSharpIcon />
+                        {
+                            document.body.style.direction === 'ltr' ?
+                                <SkipNextSharpIcon /> :
+                                <SkipPreviousSharpIcon color="white" />
+                        }
                     </IconButton>
                 </div>
             </>}
