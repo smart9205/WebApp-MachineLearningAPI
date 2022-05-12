@@ -138,6 +138,10 @@ div.profileImg-wrapper {
     margin-left: 1rem;
     margin-right: 1rem;
     display: flex;
+    justify-content: space-between;
+}
+div.profileImg-wrapper .profileSponsorImg {
+    display: flex;
     align-items: center;
 }
 div.player-detail-card div.profileimg {
@@ -163,9 +167,7 @@ div.player-detail-card div.profileInfo {
     justify-content: space-between;
 }
 div.player-detail-card .profileImg-wrapper-teamlogo {
-    position: absolute;
-    top: 10px;
-    right: 0;
+    margin: 12px 0;
 }
 div.player-detail-card div.profileInfo {
     color: #fff;
