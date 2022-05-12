@@ -210,14 +210,26 @@ const MyEditsTab = ({ teamList, game, playerList, t }) => {
                     </Table>
                 </TableContainer>
             </Box>
-            <IconButton
-                onClick={() => setShowAccordion((v) => !v)}
-                sx={{ background: '#8080804d', zIndex: 10, position: "absolute", left: showAccordion ? 250 : 10 }}>
-                {showAccordion ?
-                    <ArrowLeftIcon /> :
-                    <ArrowRightIcon />
-                }
-            </IconButton>
+            {
+                document.body.style.direction === 'ltr' ?
+                    <IconButton
+                        onClick={() => setShowAccordion((v) => !v)}
+                        sx={{ background: '#8080804d', zIndex: 10, position: "absolute", left: showAccordion ? 250 : 10 }}>
+                        {showAccordion ?
+                            <ArrowLeftIcon /> :
+                            <ArrowRightIcon />
+                        }
+                    </IconButton> :
+                    <IconButton
+                        onClick={() => setShowAccordion((v) => !v)}
+                        sx={{ background: '#8080804d', zIndex: 10, position: "absolute", right: showAccordion ? 250 : 10 }}>
+                        {showAccordion ?
+                            <ArrowRightIcon /> :
+                            <ArrowLeftIcon />
+                        }
+                    </IconButton>
+
+            }
             <Box style={{ textAlign: "center" }}>
                 <Paper style={{ height: "calc(95vh - 200px)", minWidth: 540 }} className="coach-tag-table">
                     {tagList.length === 0 && <p style={{ textAlign: 'center' }}>{t("NoTags")}</p>}
