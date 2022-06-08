@@ -105,6 +105,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
     editLeague && setLeague(editLeague);
     setGameDate(editData.date)
     setVideoUrl(editData.video_url);
+    setMobileVideoUrl(editData.mobile_video_url);
   }, [editData, seasonList, leagueList, actionType])
 
   const getTeamList = () => GameService.getAllTeams().then((res) => setTeamList(res))
@@ -147,7 +148,8 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
         home_team_id: homeTeam.id,
         away_team_id: awayTeam.id,
         date: gameDate,
-        video_url: videoUrl
+        video_url: videoUrl,
+        mobile_video_url: mobileVideoUrl ? mobileVideoUrl : videoUrl
       }).then((res) => {
         gameListUpdated();
         OpenAlert(t("addedGame"));
@@ -162,7 +164,8 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
         home_team_id: homeTeam.id,
         away_team_id: awayTeam.id,
         date: gameDate,
-        video_url: videoUrl
+        video_url: videoUrl,
+        mobile_video_url: mobileVideoUrl ? mobileVideoUrl : videoUrl
       }).then((res) => {
         gameListUpdated();
         OpenAlert(t("editedGame"));
@@ -355,7 +358,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
               multiline
               fullWidth
               sx={{ my: 1 }}
-              value={mobileVideoUrl ? mobileVideoUrl : videoUrl}
+              value={mobileVideoUrl}
               onChange={e => setMobileVideoUrl(e.target.value)}
             />
             <Upload
