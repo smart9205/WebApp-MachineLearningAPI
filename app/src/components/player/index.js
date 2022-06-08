@@ -136,7 +136,7 @@ export default function Player() {
                   onClose={e => setOpen(false)}
                 >
                   <DialogContent sx={{ p: 0 }} >
-                    <TagVideo tagList={playTags} url={game?.video_url} />
+                    <TagVideo tagList={playTags} url={game?.mobile_video_url ? game?.mobile_video_url : game?.video_url} />
                   </DialogContent>
                 </Dialog>
                 {playerData && <PlayerDetailCard player={playerData} />}
