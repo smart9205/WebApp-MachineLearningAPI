@@ -74,6 +74,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
   const [image, setImage] = useState("");
 
   const [videoUrl, setVideoUrl] = useState("");
+  const [mobileVideoUrl, setMobileVideoUrl] = useState("");
 
   useEffect(() => {
     if (open) {
@@ -346,6 +347,16 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
               sx={{ my: 1 }}
               value={videoUrl}
               onChange={e => setVideoUrl(e.target.value)}
+            />
+            <TextField
+              id="outlined-textarea"
+              label= {t("MobileVideoURL")}
+              placeholder= {t("MobileVideoURL")}
+              multiline
+              fullWidth
+              sx={{ my: 1 }}
+              value={mobileVideoUrl ? mobileVideoUrl : videoUrl}
+              onChange={e => setMobileVideoUrl(e.target.value)}
             />
             <Upload
               dirName={process.env.REACT_APP_DIR_GAME}

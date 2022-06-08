@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     home_team_id: DataTypes.INTEGER,
     away_team_id: DataTypes.INTEGER,
     video_url: DataTypes.STRING,
+    mobile_video_url: DataTypes.STRING,
     image: DataTypes.STRING
   }, {
     sequelize,
