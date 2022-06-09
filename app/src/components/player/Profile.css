@@ -349,3 +349,13 @@ div.profileSection td {
         min-width: 80%;
     }
 }
+
+@media(orientation: landscape) {
+    .player-wrapper .react-player {
+        height: 70% !important;
+    }
+
+    .play-action-controls {
+        width: 70%;
+    }
+}

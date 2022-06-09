@@ -13,22 +13,24 @@ import gameService from '../../services/game.service';
 
 const styles = {
     action: {
-        position: "absolute",
-        left: "3%",
-        bottom: 10,
-        zIndex: 100,
         color: "white",
         fontSize: 14,
         display: "flex",
         width: "50%",
     },
     buttonBox: {
-        position: "absolute",
-        bottom: 5,
-        right: 0,
         width: "45%",
         display: 'flex',
         justifyContent: 'space-evenly'
+    },
+    actionControls: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        display: 'flex',
+        justifyContent: 'space-between',
+        margin: 'auto'
     },
     button: {
         color: "white", backgroundColor: "#80808069"
@@ -113,7 +115,7 @@ export default function TagVideo({ tagList, url }) {
                     height='100%'
                 />
             </div>
-            {ready && <>
+            {ready && <div style={styles.actionControls} className='play-action-controls'>
                 {!!tagList[curIdx] && <div style={styles.action}>
                     <div style={{
                         backgroundColor: "rgb(62 62 62 / 62%)",
@@ -154,7 +156,7 @@ export default function TagVideo({ tagList, url }) {
                         }
                     </IconButton>
                 </div>
-            </>}
+            </div>}
         </ >
     )
 }
