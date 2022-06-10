@@ -351,8 +351,8 @@ div.profileSection td {
 }
 
 @media(orientation: landscape) {
-    .player-wrapper .react-player {
-        height: 70% !important;
+    .player-wrapper.tag-video {
+        padding-top: 40% !important;
     }
 
     .play-action-controls {

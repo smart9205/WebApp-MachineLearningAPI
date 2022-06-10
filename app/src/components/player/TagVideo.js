@@ -99,7 +99,7 @@ export default function TagVideo({ tagList, url }) {
 
     return (
         <>
-            <div className="player-wrapper">
+            <div className="player-wrapper tag-video">
                 <ReactPlayer
                     className="react-player"
                     url={videoURL}
