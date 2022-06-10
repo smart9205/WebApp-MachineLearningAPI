@@ -355,6 +355,11 @@ div.profileSection td {
     overflow: hidden;
 }
 
+.profileSection_tagvideo .MuiPaper-root.MuiPaper-elevation {
+    background: transparent;
+    box-shadow: none;
+}
+
 @media(orientation: landscape) {
     .profileSection_tagvideo .MuiDialog-container.MuiDialog-scrollPaper {
         align-items: flex-start;
