@@ -358,6 +358,7 @@ div.profileSection td {
 .profileSection_tagvideo .MuiPaper-root.MuiPaper-elevation {
     background: transparent;
     box-shadow: none;
+    margin: 4px;
 }
 
 @media(orientation: landscape) {
@@ -366,7 +367,7 @@ div.profileSection td {
     }
 
     .player-wrapper.tag-video {
-        padding-top: 40% !important;
+        padding-top: 46% !important;
     }
 
     .play-action-controls {
