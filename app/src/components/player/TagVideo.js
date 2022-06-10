@@ -36,7 +36,7 @@ const styles = {
         color: "white", backgroundColor: "#80808069"
     }
 }
-export default function TagVideo({ tagList, url }) {
+export default function TagVideo({ tagList, url, setOpen }) {
 
     const player = useRef(null)
     const [play, setPlay] = useState(true)
@@ -79,6 +79,7 @@ export default function TagVideo({ tagList, url }) {
         if (currentTime > endTime) {
             if (tagList.length <= curIdx) {// last tag
                 setPlay(false)
+                setOpen(false)
             }
             else {
                 setCurIdx(c => c + 1)
