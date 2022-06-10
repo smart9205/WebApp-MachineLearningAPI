@@ -342,6 +342,7 @@ div.profileSection td {
     min-width: 98%;
     max-height: 98% !important;
     background-color: transparent;
+    box-shadow: none;
 }
 
 @media (min-aspect-ratio: 2/1) {
@@ -350,7 +351,15 @@ div.profileSection td {
     }
 }
 
+.player-wrapper .react-player {
+    overflow: hidden;
+}
+
 @media(orientation: landscape) {
+    .profileSection_tagvideo .MuiDialog-container.MuiDialog-scrollPaper {
+        align-items: flex-start;
+    }
+
     .player-wrapper.tag-video {
         padding-top: 40% !important;
     }
