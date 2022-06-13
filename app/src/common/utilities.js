@@ -36,7 +36,7 @@ export const createCommand = async (tagList, name) => {
       FileData: {
         Name: name,
         Format: 'mp4',
-        Resolution: '1080x720',
+        Resolution: '1280x720',
         FPS: '60',
         Preset: 'ultrafast',
         FontFile: 'ArialBold.ttf',
