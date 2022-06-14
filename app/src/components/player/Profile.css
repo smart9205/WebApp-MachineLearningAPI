@@ -374,3 +374,12 @@ div.profileSection td {
         width: 70%;
     }
 }
+
+@media only screen and (max-width: 767px) {
+    .profileSection .profileSection_gametable {
+        margin-bottom: 0;
+    }
+    .profileSection div.profileSection_gametable-average {
+        position: unset;
+    }
+}
