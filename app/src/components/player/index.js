@@ -25,6 +25,7 @@ const styles = {
     top: '0px',
     width: '100%',
     height: '100%',
+    backgroundColor: '#fff',
     zIndex: 9999,
     display: "flex",
     justifyContent: "center",
