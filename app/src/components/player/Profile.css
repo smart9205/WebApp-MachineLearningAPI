@@ -358,7 +358,7 @@ div.profileSection td {
 .profileSection_tagvideo .MuiPaper-root.MuiPaper-elevation {
     background: transparent;
     box-shadow: none;
-    margin: 4px;
+    margin: 0 4px;
 }
 
 @media(orientation: landscape) {
