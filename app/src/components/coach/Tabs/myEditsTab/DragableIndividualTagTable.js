@@ -32,7 +32,7 @@ export default function DragableIndivitualTagTable({ rows, handleRowClick, selec
       handleSort(newRow.slice(start, end).map((row, i) => { return { ...row, sort: start + i } }))
       return newRow
     });
-    initUserEdits()
+    // initUserEdits()
   }, []);
   const renderCard = useCallback((row, idx, selected) => {
     return (
