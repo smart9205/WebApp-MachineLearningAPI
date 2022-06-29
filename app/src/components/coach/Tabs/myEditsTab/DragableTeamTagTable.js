@@ -15,17 +15,21 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { TeamTagRow } from './TeamTagRow';
 import DeleteConfirmDialog from '../../../../common/DeleteConfirmDialog';
 
-export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, handleSort, initUserEdits, t, ...params }) {
+export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, onDelete, handleSort, initUserEdits, t, ...params }) {
   const [tableRows, setTableRows] = useState(rows);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const selectedRef = useRef();
+  const rowsRef = useRef();
 
   selectedRef.current = selectedRows;
+  rowsRef.current = tableRows;
 
   useEffect(() => {
     setTableRows(rows)
+    setSelectedRows([])
+    setSelectAll(false)
   }, [rows])
 
   const moveRow = useCallback((dragIndex, hoverIndex) => {
@@ -47,7 +51,7 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
   useEffect(() => {
     if(selectAll) {
       setSelectedRows([])
-      tableRows.forEach(ele => {
+      rowsRef.current.forEach(ele => {
         setSelectedRows(oldSelectedRows => [...oldSelectedRows, ele.id])
       });
     } else {
@@ -61,7 +65,7 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
       await setSelectAll(false);
       setSelectedRows(currentSelection);
     } else {
-      if(tableRows.length === selectedRef.current.length+1) {
+      if(rowsRef.current.length === selectedRef.current.length+1) {
         setSelectAll(true);
       } else {
         setSelectedRows(oldSelectedRows => [...oldSelectedRows, id]);
@@ -72,7 +76,7 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
   const handleDeleteClose = (result) => {
     setDeleteOpen(false)
     if (result)
-      console.log('selectedRef', selectedRef.current)
+      onDelete(selectedRef.current)
   }
 
   const renderCard = useCallback((row, idx, selected) => {

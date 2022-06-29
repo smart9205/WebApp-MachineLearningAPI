@@ -237,6 +237,7 @@ const MyEditsTab = ({ teamList, game, playerList, t }) => {
                         <DragableTeamTagTable
                             sx={{ height: "100%", p: 1, width: "100%" }}
                             rows={tagList}
+                            onDelete={id => handleDeleteEditClips(id)}
                             handleSort={handleSort}
                             handleRowClick={({ row, idx }) => handleVideoData("teamTag", false, idx)}
                             selected={curTagIdx}
