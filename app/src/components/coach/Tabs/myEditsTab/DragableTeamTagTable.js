@@ -95,16 +95,6 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
     <Box {...params}>
       <Paper sx={{ position: 'relative', width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
         <h5 style={{ textAlign: 'center' }}>{t("Team")} {t("Tag")}</h5>
-        {
-          !!selectedRef.current.length &&
-          <IconButton
-            onClick={() => setDeleteOpen(true)}
-            size="small"
-            sx={{position: 'absolute', top: 4, right: 8}}
-          >
-            <DeleteIcon />
-          </IconButton>
-        }
         <DeleteConfirmDialog
           open={deleteOpen}
           handleDeleteClose={handleDeleteClose}
@@ -125,7 +115,18 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
                   <TableCell align="center">{t("DefensiveTeam")}</TableCell>
                   <TableCell align="center">{t("StartTime")}</TableCell>
                   <TableCell align="center">{t("EndTime")}</TableCell>
-                  <TableCell></TableCell>
+                  <TableCell align="center">
+                  {
+                    !!selectedRef.current.length &&
+                    <IconButton
+                      onClick={() => setDeleteOpen(true)}
+                      size="small"
+                      sx={{position: 'absolute', top: 4, right: 8}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  }
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
