@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useEffect, useState, useReducer, useRef } from "react";
 import moment from 'moment'
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,7 +11,9 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import CloseIcon from '@mui/icons-material/Close';
-import { Table, } from 'react-bootstrap'
+import { Table, } from 'react-bootstrap';
+import { useReactToPrint } from 'react-to-print';
+import { Button } from "@mui/material";
 
 import { PLAYER_ICON_DEFAULT } from '../../../../common/staticData';
 import gameService from "../../../../services/game.service";
@@ -214,6 +216,11 @@ const PlayerStatsTab = ({ player, t }) => {
         setOpen(true)
     }
 
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+    });
+
     return (
         <Box sx={{ width: "100%", minHeight: "80vh" }}>
             <Dialog
@@ -237,42 +244,45 @@ const PlayerStatsTab = ({ player, t }) => {
                     }}
                     tagList={playList} />
             </Dialog>
-            <FormControl sx={{ width: 600 }} className="my-3">
-                <InputLabel id="game-multiple-checkbox-label">{t("Games")}</InputLabel>
-                <Select
-                    labelId="game-multiple-checkbox-label"
-                    id="game-multiple-checkbox"
-                    multiple
-                    value={games}
-                    onChange={handleChange}
-                    input={<OutlinedInput label="Tag" />}
-                    renderValue={(selected) => (
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                            {`${selected.length} ${t("Games")} ${t("selected")}`}
-                        </Box>
-                    )}
-                    MenuProps={MenuProps}
-                >
-                    <MenuItem value="all">
-                        <Checkbox
-                            checked={gameList.length > 0 && games.length === gameList.length}
-                            indeterminate={games.length > 0 && games.length < gameList.length}
-                            onChange={e => !e.target.checked && setGames([])}
-                        />
-                        <ListItemText
-                            primary={t("SelectAll")}
-                        />
-                    </MenuItem>
-                    {gameList.map((g) => (
-                        <MenuItem key={g.id} value={g}>
-                            <Checkbox checked={games.indexOf(g) > -1} />
-                            <ListItemText primary={`${moment(g.date).format('DD MMM, YYYY')} ${g.home_team_name} VS ${g.away_team_name}`} />
+            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                <FormControl sx={{ width: 600 }} className="my-3">
+                    <InputLabel id="game-multiple-checkbox-label">{t("Games")}</InputLabel>
+                    <Select
+                        labelId="game-multiple-checkbox-label"
+                        id="game-multiple-checkbox"
+                        multiple
+                        value={games}
+                        onChange={handleChange}
+                        input={<OutlinedInput label="Tag" />}
+                        renderValue={(selected) => (
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {`${selected.length} ${t("Games")} ${t("selected")}`}
+                            </Box>
+                        )}
+                        MenuProps={MenuProps}
+                    >
+                        <MenuItem value="all">
+                            <Checkbox
+                                checked={gameList.length > 0 && games.length === gameList.length}
+                                indeterminate={games.length > 0 && games.length < gameList.length}
+                                onChange={e => !e.target.checked && setGames([])}
+                            />
+                            <ListItemText
+                                primary={t("SelectAll")}
+                            />
                         </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
+                        {gameList.map((g) => (
+                            <MenuItem key={g.id} value={g}>
+                                <Checkbox checked={games.indexOf(g) > -1} />
+                                <ListItemText primary={`${moment(g.date).format('DD MMM, YYYY')} ${g.home_team_name} VS ${g.away_team_name}`} />
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <Button variant="contained" onClick={handlePrint}>Print this out!</Button>
+            </Box>
 
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex' }} ref={componentRef}>
                 <Box sx={{ width: "30rem" }}>
                     <Card sx={{ m: 1 }}>
                         <Typography sx={{ textAlign: 'center', backgroundColor: 'lightgray' }}>{t("Profile")}</Typography>

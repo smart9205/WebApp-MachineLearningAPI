@@ -57,6 +57,7 @@
         "react-router-dom": "^6.2.1",
         "react-scripts": "^3.0.1",
         "react-step-progress-bar": "^1.0.3",
+        "react-to-print": "^2.14.7",
         "react-validation": "^3.0.7",
         "recharts": "^2.1.2",
         "redux": "^4.0.5",
