@@ -2589,4 +2589,21 @@ Footer Area CSS
 .goog-te-banner-frame {
   display: none;
 }
+
+.printable-data {
+  display: none !important;
+}
+
+.printable-data img {
+  width: 240px;
+  height: 60px;
+}
+
+@media print {
+  .printable-data {
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+  }
+}
 /*# sourceMappingURL=style.css.map */
