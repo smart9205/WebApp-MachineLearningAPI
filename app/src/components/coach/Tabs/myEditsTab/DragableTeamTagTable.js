@@ -15,7 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { TeamTagRow } from './TeamTagRow';
 import DeleteConfirmDialog from '../../../../common/DeleteConfirmDialog';
 
-export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, onDelete, handleSort, initUserEdits, t, ...params }) {
+export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, handleSort, initUserEdits, t, ...params }) {
   const [tableRows, setTableRows] = useState(rows);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -86,7 +86,6 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
         index={idx}
         id={row.id}
         moveRow={moveRow}
-        onDelete={onDelete}
         handleRowSelection={handleRowSelection}
         checked={selectedRef.current.includes(row.id)}
       />);
@@ -126,7 +125,6 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
                   <TableCell align="center">{t("DefensiveTeam")}</TableCell>
                   <TableCell align="center">{t("StartTime")}</TableCell>
                   <TableCell align="center">{t("EndTime")}</TableCell>
-                  <TableCell></TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>

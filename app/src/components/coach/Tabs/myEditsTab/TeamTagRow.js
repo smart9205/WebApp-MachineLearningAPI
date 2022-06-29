@@ -5,15 +5,13 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import TableCell from '@mui/material/TableCell';
-import DeleteConfirmDialog from "../../../../common/DeleteConfirmDialog";
 import TableRow from '@mui/material/TableRow';
 import TCellTimeEdit from '../../../tagging/TCellTimeEdit';
 import GameService from '../../../../services/game.service';
 import { Checkbox } from '@mui/material';
 
-export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete, handleRowSelection, checked, ...rest }) => {
+export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, handleRowSelection, checked, ...rest }) => {
     const ref = useRef(null);
-    const [deleteOpen, setDeleteOpen] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const [{ handlerId }, drop] = useDrop({
@@ -73,12 +71,6 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete
 
     drag(drop(ref));
 
-    const handleDeleteClose = (result) => {
-        setDeleteOpen(false)
-        if (result)
-            onDelete(row.id)
-    }
-
     const update = (data) => {
         setLoading(true)
         GameService.updateEditClip(data).then(res => {
@@ -96,10 +88,6 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete
             selected={selected}
             {...rest}
         >
-            <DeleteConfirmDialog
-                open={deleteOpen}
-                handleDeleteClose={handleDeleteClose}
-            />
             <TableCell>
                 <Checkbox
                     checked={checked}
@@ -128,14 +116,6 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete
             <TableCell align="center" sx={{ p: 0, m: 0 }}>
                 <IconButton size="small" onClick={(e) => { e.stopPropagation(); onPlay() }}>
                     <PlayCircleIcon />
-                </IconButton>
-            </TableCell>
-            <TableCell>
-                <IconButton
-                    onClick={() => setDeleteOpen(true)}
-                    size="small"
-                >
-                    <DeleteIcon />
                 </IconButton>
             </TableCell>
         </TableRow>
