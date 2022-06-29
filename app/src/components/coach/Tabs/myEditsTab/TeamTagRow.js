@@ -9,8 +9,9 @@ import DeleteConfirmDialog from "../../../../common/DeleteConfirmDialog";
 import TableRow from '@mui/material/TableRow';
 import TCellTimeEdit from '../../../tagging/TCellTimeEdit';
 import GameService from '../../../../services/game.service';
+import { Checkbox } from '@mui/material';
 
-export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete, ...rest }) => {
+export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete, handleRowSelection, checked, ...rest }) => {
     const ref = useRef(null);
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -99,6 +100,12 @@ export const TeamTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete
                 open={deleteOpen}
                 handleDeleteClose={handleDeleteClose}
             />
+            <TableCell>
+                <Checkbox
+                    checked={checked}
+                    onChange={() => handleRowSelection(id)}
+                />
+            </TableCell>
             <TableCell align="center">{row.period_name}</TableCell>
             <TableCell align="center">{row.offensive_team_name}</TableCell>
             <TableCell align="center">{row.defensive_team_name}</TableCell>

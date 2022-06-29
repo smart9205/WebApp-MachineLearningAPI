@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,10 +10,19 @@ import Box from '@mui/material/Box';
 import update from 'immutability-helper'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { Checkbox, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { TeamTagRow } from './TeamTagRow';
+import DeleteConfirmDialog from '../../../../common/DeleteConfirmDialog';
 
 export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, onDelete, handleSort, initUserEdits, t, ...params }) {
-  const [tableRows, setTableRows] = useState(rows)
+  const [tableRows, setTableRows] = useState(rows);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const selectedRef = useRef();
+
+  selectedRef.current = selectedRows;
 
   useEffect(() => {
     setTableRows(rows)
@@ -35,6 +44,37 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
     // initUserEdits()
   }, []);
 
+  useEffect(() => {
+    if(selectAll) {
+      setSelectedRows([])
+      tableRows.forEach(ele => {
+        setSelectedRows(oldSelectedRows => [...oldSelectedRows, ele.id])
+      });
+    } else {
+      setSelectedRows([])
+    }
+  }, [selectAll])
+
+  const handleRowSelection = async(id) => {
+    if(selectedRef.current.includes(id)) {
+      let currentSelection = selectedRef.current.filter(item => item !== id);
+      await setSelectAll(false);
+      setSelectedRows(currentSelection);
+    } else {
+      if(tableRows.length === selectedRef.current.length+1) {
+        setSelectAll(true);
+      } else {
+        setSelectedRows(oldSelectedRows => [...oldSelectedRows, id]);
+      }
+    }
+  }
+
+  const handleDeleteClose = (result) => {
+    setDeleteOpen(false)
+    if (result)
+      console.log('selectedRef', selectedRef.current)
+  }
+
   const renderCard = useCallback((row, idx, selected) => {
     return (
       <TeamTagRow
@@ -47,18 +87,40 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
         id={row.id}
         moveRow={moveRow}
         onDelete={onDelete}
+        handleRowSelection={handleRowSelection}
+        checked={selectedRef.current.includes(row.id)}
       />);
   }, []);
 
   return (
     <Box {...params}>
-      <Paper sx={{ width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
+      <Paper sx={{ position: 'relative', width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
         <h5 style={{ textAlign: 'center' }}>{t("Team")} {t("Tag")}</h5>
+        {
+          !!selectedRef.current.length &&
+          <IconButton
+            onClick={() => setDeleteOpen(true)}
+            size="small"
+            sx={{position: 'absolute', top: 4, right: 8}}
+          >
+            <DeleteIcon />
+          </IconButton>
+        }
+        <DeleteConfirmDialog
+          open={deleteOpen}
+          handleDeleteClose={handleDeleteClose}
+        />
         <TableContainer style={{ height: "100%" }}>
           <DndProvider backend={HTML5Backend}>
             <Table stickyHeader aria-label="sticky table" size={'small'} sx={{ pb: 4 }}>
               <TableHead>
                 <TableRow>
+                  <TableCell>
+                    <Checkbox
+                      checked={selectAll}
+                      onChange={() => setSelectAll(!selectAll)}
+                    />
+                  </TableCell>
                   <TableCell align="center">{t("Period")}</TableCell>
                   <TableCell align="center">{t("OffensiveTeam")}</TableCell>
                   <TableCell align="center">{t("DefensiveTeam")}</TableCell>
