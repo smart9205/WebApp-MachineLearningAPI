@@ -5,14 +5,13 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import TableCell from '@mui/material/TableCell';
-import DeleteConfirmDialog from "../../../../common/DeleteConfirmDialog";
 import TableRow from '@mui/material/TableRow';
 import TCellTimeEdit from '../../../tagging/TCellTimeEdit';
 import GameService from '../../../../services/game.service';
+import { Checkbox } from '@mui/material';
 
-export const PlayerTagRow = ({ id, row, index, moveRow, onPlay, selected, onDelete }) => {
+export const PlayerTagRow = ({ id, row, index, moveRow, onPlay, selected, handleRowSelection, checked }) => {
     const ref = useRef(null);
-    const [deleteOpen, setDeleteOpen] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const [{ handlerId }, drop] = useDrop({
@@ -69,13 +68,8 @@ export const PlayerTagRow = ({ id, row, index, moveRow, onPlay, selected, onDele
             isDragging: monitor.isDragging(),
         }),
     });
-    drag(drop(ref));
 
-    const handleDeleteClose = (result) => {
-        setDeleteOpen(false)
-        if (result)
-            onDelete(row.id)
-    }
+    drag(drop(ref));
 
     const update = (data) => {
         setLoading(true)
@@ -93,10 +87,12 @@ export const PlayerTagRow = ({ id, row, index, moveRow, onPlay, selected, onDele
             tabIndex={-1}
             selected={selected}
         >
-            <DeleteConfirmDialog
-                open={deleteOpen}
-                handleDeleteClose={handleDeleteClose}
-            />
+            <TableCell>
+                <Checkbox
+                    checked={checked}
+                    onChange={() => handleRowSelection(id)}
+                />
+            </TableCell>
             <TableCell align="center">{row.action_name}</TableCell>
             <TableCell align="center">{row.action_type_name}</TableCell>
             <TableCell align="center">{row.action_result_name}</TableCell>
@@ -120,14 +116,6 @@ export const PlayerTagRow = ({ id, row, index, moveRow, onPlay, selected, onDele
             <TableCell align="center" sx={{ p: 0, m: 0 }}>
                 <IconButton size="small" onClick={(e) => onPlay()}>
                     <PlayCircleIcon />
-                </IconButton>
-            </TableCell>
-            <TableCell align="center" sx={{ p: 0, m: 0 }}>
-                <IconButton
-                    onClick={() => setDeleteOpen(true)}
-                    size="small"
-                >
-                    <DeleteIcon />
                 </IconButton>
             </TableCell>
         </TableRow>

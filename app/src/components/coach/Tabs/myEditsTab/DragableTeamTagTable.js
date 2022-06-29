@@ -122,16 +122,16 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
                   <TableCell align="center">{t("StartTime")}</TableCell>
                   <TableCell align="center">{t("EndTime")}</TableCell>
                   <TableCell align="center">
-                  {
-                    !!selectedRef.current.length &&
-                    <IconButton
-                      onClick={() => setDeleteOpen(true)}
-                      size="small"
-                      sx={{position: 'absolute', top: 4, right: 8}}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  }
+                    {
+                      !!selectedRef.current.length &&
+                      <IconButton
+                        onClick={() => setDeleteOpen(true)}
+                        size="small"
+                        sx={{position: 'absolute', top: 4, right: 8}}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    }
                   </TableCell>
                 </TableRow>
               </TableHead>

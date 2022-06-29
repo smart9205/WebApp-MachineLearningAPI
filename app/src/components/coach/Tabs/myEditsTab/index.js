@@ -110,7 +110,6 @@ const MyEditsTab = ({ teamList, game, playerList, t }) => {
 
     const handleDeleteEditClips = (id) => {
         gameService.deleteEditClip(id).then(res => {
-            console.log('res', res)
             handleUserEditDetail(curEdit)
         })
     }
