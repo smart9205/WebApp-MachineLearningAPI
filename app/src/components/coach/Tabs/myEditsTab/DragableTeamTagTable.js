@@ -76,7 +76,9 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
   const handleDeleteClose = (result) => {
     setDeleteOpen(false)
     if (result)
-      onDelete(selectedRef.current)
+      selectedRef.current.forEach(id => {
+        onDelete(id)
+      });
   }
 
   const renderCard = useCallback((row, idx, selected) => {
