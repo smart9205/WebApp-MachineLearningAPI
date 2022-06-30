@@ -388,7 +388,7 @@ Main Banner Area CSS
   position: relative;
   z-index: 1;
   overflow: hidden;
-  background-image: url(/images/football/footb-main-banner1.jpg);
+  background-image: url(../images/football/footb-main-banner1.jpg);
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
