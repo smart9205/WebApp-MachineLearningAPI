@@ -28,7 +28,7 @@ const FREE_KICK = "Free Kick"
 const PASS_FOR_A_SHOT = "Pass For a Shot"
 const ASSIST = "Assist"
 
-export default function ShortPass({
+export default function Pass({
   defenseTeam,
   offenseTeam,
   taggingState,
