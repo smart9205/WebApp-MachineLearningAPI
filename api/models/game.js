@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     away_team_id: DataTypes.INTEGER,
     video_url: DataTypes.STRING,
     mobile_video_url: DataTypes.STRING,
-    image: DataTypes.STRING
+    image: DataTypes.STRING,
+    mute_video: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'Game',

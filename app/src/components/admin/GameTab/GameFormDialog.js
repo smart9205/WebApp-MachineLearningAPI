@@ -76,6 +76,9 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
   const [videoUrl, setVideoUrl] = useState("");
   const [mobileVideoUrl, setMobileVideoUrl] = useState("");
 
+  const [muteVideoList, setMuteVideoList] = useState("")
+  const [muteVideo, setMuteVideo] = useState(true)
+
   useEffect(() => {
     if (open) {
       const { current: descriptionElement } = descriptionElementRef;
@@ -149,7 +152,8 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
         away_team_id: awayTeam.id,
         date: gameDate,
         video_url: videoUrl,
-        mobile_video_url: mobileVideoUrl ? mobileVideoUrl : videoUrl
+        mobile_video_url: mobileVideoUrl ? mobileVideoUrl : videoUrl,
+        mute_video: muteVideo
       }).then((res) => {
         gameListUpdated();
         OpenAlert(t("addedGame"));
@@ -165,7 +169,8 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
         away_team_id: awayTeam.id,
         date: gameDate,
         video_url: videoUrl,
-        mobile_video_url: mobileVideoUrl ? mobileVideoUrl : videoUrl
+        mobile_video_url: mobileVideoUrl ? mobileVideoUrl : videoUrl,
+        mute_video: muteVideo
       }).then((res) => {
         gameListUpdated();
         OpenAlert(t("editedGame"));
@@ -285,6 +290,34 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
                 {t("Player")}
               </Button>
             </div>
+            <div>
+              <Autocomplete
+                id="combo-box-demo"
+                options={[{ label: "Yes" }, { label: "No" }]}
+                value={muteVideoList}
+                isOptionEqualToValue={(option, value) => option && option.label}
+                getOptionLabel={
+                  (option) => !option.label ? "" : option.label
+                }
+                fullWidth
+                renderOption={(props, option) => {
+                  return (
+                    <li {...props}>
+                      {option.label}
+                    </li>
+                  );
+                }}
+                renderInput={(params) => <TextField {...params} label={t("Mute Video")} sx={{ my: 1 }} />}
+                onChange={(event, newValue) => {
+                  setMuteVideoList(newValue)
+                  if (newValue.label == 'Yes') {
+                    setMuteVideo(true);
+                  } else {
+                    setMuteVideo(false);
+                  }
+                }}
+              />
+            </div>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label={t("gameDate")}
@@ -343,8 +376,8 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
             </div>
             <TextField
               id="outlined-textarea"
-              label= {t("VideoURL")}
-              placeholder= {t("VideoURL")}
+              label={t("VideoURL")}
+              placeholder={t("VideoURL")}
               multiline
               fullWidth
               sx={{ my: 1 }}
@@ -353,8 +386,8 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
             />
             <TextField
               id="outlined-textarea"
-              label= {t("MobileVideoURL")}
-              placeholder= {t("MobileVideoURL")}
+              label={t("MobileVideoURL")}
+              placeholder={t("MobileVideoURL")}
               multiline
               fullWidth
               sx={{ my: 1 }}

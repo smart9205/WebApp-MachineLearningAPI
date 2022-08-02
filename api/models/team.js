@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     create_highlights: DataTypes.BOOLEAN,
     show_sponsor: DataTypes.BOOLEAN,
     team_language: DataTypes.STRING,
+    filter_by_position: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'Team',

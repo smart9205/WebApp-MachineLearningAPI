@@ -6,7 +6,7 @@ import GameTable from './GameTable'
 import GameFormDialog from './GameFormDialog'
 import gameService from '../../../services/game.service';
 
-export default function Game({t}) {
+export default function Game({ t }) {
   const [open, setOpen] = useState(false);
   const [actionType, setActionType] = useState("Add");
   const [gameList, setGameList] = useState([]);

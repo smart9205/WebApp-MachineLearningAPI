@@ -21,6 +21,7 @@ exports.create = async (req, res) => {
     create_highlights: req.body.create_highlights,
     show_sponsor: req.body.show_sponsor,
     team_language: req.body.team_language,
+    filter_by_position: req.body.filter_by_position
   };
 
   const checkTeam = await Team.findOne({

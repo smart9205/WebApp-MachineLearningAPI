@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -30,7 +31,8 @@ const init = {
     sponsor_url: "",
     show_sponsor: false,
     create_highlights: false,
-    team_language: "en"
+    team_language: "en",
+    filter_by_position: false
 }
 
 const styles = {
@@ -63,7 +65,8 @@ export default function TeamFormDialog({ open, onResult, edit = null, t }) {
             sponsor_url: edit?.sponsor_url,
             create_highlights: edit?.create_highlights,
             show_sponsor: edit?.show_sponsor,
-            team_language: edit?.team_language ? edit.team_language : 'en'
+            team_language: edit?.team_language ? edit.team_language : 'en',
+            filter_by_position: edit?.filter_by_position,
         })
     }, [edit])
 
@@ -120,7 +123,7 @@ export default function TeamFormDialog({ open, onResult, edit = null, t }) {
                             id="select"
                             value={data.team_language}
                             label="Language"
-                            onChange={e => setData({team_language: e.target.value})}
+                            onChange={e => setData({ team_language: e.target.value })}
                         >
                             {
                                 lang.map((item, index) => (
@@ -152,6 +155,19 @@ export default function TeamFormDialog({ open, onResult, edit = null, t }) {
                         }
                         label={`${t("Create")} ${t("Highlights")}`}
                     />
+
+                    <FormControlLabel
+                        sx={{ mt: 1 }}
+                        control={
+                            <Switch
+                                checked={data.filter_by_position}
+                                onChange={() => setData({ filter_by_position: !data.filter_by_position })}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                        }
+                        label={`${t("Filter By Position")}`}
+                    />
+
                 </Box>
             </DialogContent>
             <DialogContent style={{ display: "flex" }}>
