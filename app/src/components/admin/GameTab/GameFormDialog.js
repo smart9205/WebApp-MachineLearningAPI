@@ -3,6 +3,8 @@ import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
 import Snackbar from '@mui/material/Snackbar';
 import Autocomplete from '@mui/material/Autocomplete';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -291,31 +293,16 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
               </Button>
             </div>
             <div>
-              <Autocomplete
-                id="combo-box-demo"
-                options={[{ label: "Yes" }, { label: "No" }]}
-                value={muteVideoList}
-                isOptionEqualToValue={(option, value) => option && option.label}
-                getOptionLabel={
-                  (option) => !option.label ? "" : option.label
+              <FormControlLabel
+                sx={{ mt: 1 }}
+                control={
+                  <Switch
+                    checked={muteVideo}
+                    onChange={() => setMuteVideo(!muteVideo)}
+                    inputProps={{ 'aria-label': 'controlled' }}
+                  />
                 }
-                fullWidth
-                renderOption={(props, option) => {
-                  return (
-                    <li {...props}>
-                      {option.label}
-                    </li>
-                  );
-                }}
-                renderInput={(params) => <TextField {...params} label={t("Mute Video")} sx={{ my: 1 }} />}
-                onChange={(event, newValue) => {
-                  setMuteVideoList(newValue)
-                  if (newValue.label == 'Yes') {
-                    setMuteVideo(true);
-                  } else {
-                    setMuteVideo(false);
-                  }
-                }}
+                label={`${t("Mute Video")}`}
               />
             </div>
             <LocalizationProvider dateAdapter={AdapterDateFns}>

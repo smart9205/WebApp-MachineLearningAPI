@@ -6,7 +6,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
@@ -147,7 +146,7 @@ export default function TeamFormDialog({ open, onResult, edit = null, t }) {
                     <FormControlLabel
                         sx={{ mt: 1 }}
                         control={
-                            <Checkbox
+                            <Switch
                                 checked={data.create_highlights}
                                 onChange={() => setData({ create_highlights: !data.create_highlights })}
                                 inputProps={{ 'aria-label': 'controlled' }}
@@ -192,7 +191,7 @@ export default function TeamFormDialog({ open, onResult, edit = null, t }) {
                     <FormControlLabel
                         sx={{ mt: 1 }}
                         control={
-                            <Checkbox
+                            <Switch
                                 checked={data.show_sponsor}
                                 onChange={() => setData({ show_sponsor: !data.show_sponsor })}
                                 inputProps={{ 'aria-label': 'controlled' }}
