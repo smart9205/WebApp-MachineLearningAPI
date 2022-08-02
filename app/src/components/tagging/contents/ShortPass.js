@@ -30,51 +30,8 @@ export default function ShortPass({
   const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
   const [inTheBox, setInTheBox] = React.useState("No")
 
-  const targetClicked = (target) => {
-    if (target === "No") {
-      taggingState([{
-        action_type_id: actionTypeId,
-        team_id: offenseTeamId,
-        player_id: offensivePlayer.id,
-        action_id: 1,
-        action_result_id: 2
-      }])
-    } else if (target === "Yes") {
-      taggingState([
-        {
-          action_type_id: actionTypeId,
-          team_id: offenseTeamId,
-          player_id: offensivePlayer.id,
-          action_id: 1,
-          action_result_id: 3
-        }
-      ])
-    }
-  }
-
   return (
     <>
-
-      {actionTypeId && (actionTypeId === 1 || actionTypeId === 4) &&
-        <SubBox>
-          <List header="In The Box">
-            {
-              ["Yes", "No"].map((g, i) => (
-                <ListItemButton key={i}
-                  selected={inTheBox === g}
-                  onClick={() => {
-                    setInTheBox(g)
-                    targetClicked(g)
-                  }}
-                >
-                  <ListItemText primary={g} />
-                </ListItemButton>
-              ))
-            }
-          </List>
-        </SubBox>
-      }
-
       <SubBox>
         <List header="Area">
           {[
@@ -87,17 +44,6 @@ export default function ShortPass({
               selected={actionTypeId === r.id}
               onClick={() => {
                 setActionTypeId(r.id)
-                if (r.name === DEFENSIVE_MIDDLE || r.name === OFFENSIVE_MIDDLE) {
-                  taggingState([
-                    {
-                      action_type_id: actionTypeId,
-                      team_id: offenseTeamId,
-                      player_id: offensivePlayer.id,
-                      action_id: 1,
-                      action_result_id: 3
-                    }
-                  ])
-                }
               }}
             >
               <ListItemText primary={r.name} />
@@ -107,12 +53,42 @@ export default function ShortPass({
         </List>
       </SubBox>
 
+      {
+        actionTypeId && (actionTypeId === 1 || actionTypeId === 4) &&
+        <SubBox>
+          <List header="In The Box">
+            {
+              ["Yes", "No"].map((g, i) => (
+                <ListItemButton key={i}
+                  selected={inTheBox === g}
+                  onClick={() => {
+                    setInTheBox(g)
+                  }}
+                >
+                  <ListItemText primary={g} />
+                </ListItemButton>
+              ))
+            }
+          </List>
+        </SubBox>
+      }
+
       <PlayerSelector
         title="List of Players"
         playerList={offenseTeam}
         editable={false}
         selected={offensivePlayer}
-        onSelect={(player) => setOffensivePlayer(player)}
+        onSelect={(player) => {
+          taggingState([{
+            team_id: offenseTeamId,
+            player_id: player.id,
+            action_type_id: 4,
+            action_result_id: 4,
+            action_id: 2
+          }])
+          setOffensivePlayer(player)
+        }}
+
       />
     </>
   );
