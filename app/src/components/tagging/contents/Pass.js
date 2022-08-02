@@ -25,6 +25,7 @@ const KEY_PASS = "Key Pass"
 const SHORT_PASS = "Short Pass"
 const THROW_IN = "Throw-In"
 const FREE_KICK = "Free Kick"
+const PASS_FOR_A_SHOT = "Pass For a Shot"
 const ASSIST = "Assist"
 
 export default function ShortPass({
@@ -80,6 +81,7 @@ export default function ShortPass({
             { id: 4, name: SHORT_PASS },
             { id: 14, name: THROW_IN },
             { id: 11, name: FREE_KICK },
+            { id: 15, name: PASS_FOR_A_SHOT },
           ].map((r, i) => (
             <ListItemButton key={r.id}
               selected={actionTypeId === r.id}
