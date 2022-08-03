@@ -14,6 +14,8 @@ exports.create = (req, res) => {
     action_result_id: req.body.action_result_id,
     start_time: req.body.start_time,
     end_time: req.body.end_time,
+    court_area_id: req.body.court_area_id,
+    inside_the_paint: req.body.inside_the_paint
   })
     .then(data => {
       res.send(data);

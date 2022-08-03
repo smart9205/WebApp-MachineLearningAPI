@@ -22,6 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     action_result_id: DataTypes.INTEGER,
     start_time: DataTypes.STRING,
     end_time: DataTypes.STRING,
+    court_area_id: DataTypes.INTEGER,
+    inside_the_paint: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Player_Tag',

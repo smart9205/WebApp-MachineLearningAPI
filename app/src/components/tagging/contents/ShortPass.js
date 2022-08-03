@@ -26,19 +26,45 @@ export default function ShortPass({
   offenseTeamId,
 }) {
 
-  const [actionTypeId, setActionTypeId] = React.useState(3);
+  const [actionTypeId, setActionTypeId] = React.useState(4);
   const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
   const [inTheBox, setInTheBox] = React.useState("No")
+
+  const targetClicked = (target) => {
+    if (target === "No") {
+      taggingState([{
+        action_type_id: actionTypeId,
+        team_id: offenseTeamId,
+        player_id: offensivePlayer.id,
+        action_id: 2,
+        action_result_id: 3,
+        court_area_id: actionTypeId && actionTypeId === 1 ? 2 : 3,
+        inside_the_paint: false
+      }])
+    } else if (target === "Yes") {
+      taggingState([
+        {
+          action_type_id: actionTypeId,
+          team_id: offenseTeamId,
+          player_id: offensivePlayer.id,
+          action_id: 2,
+          action_result_id: 3,
+          court_area_id: actionTypeId && actionTypeId === 1 ? 2 : 3,
+          inside_the_paint: true
+        }
+      ])
+    }
+  }
 
   return (
     <>
       <SubBox>
         <List header="Area">
           {[
-            { id: 1, name: DEFENSIVE },
-            { id: 2, name: DEFENSIVE_MIDDLE },
-            { id: 3, name: OFFENSIVE_MIDDLE },
-            { id: 4, name: OFFENSIVE },
+            { id: 1, name: OFFENSIVE },
+            { id: 2, name: OFFENSIVE_MIDDLE },
+            { id: 3, name: DEFENSIVE },
+            { id: 4, name: DEFENSIVE_MIDDLE },
           ].map((r, i) => (
             <ListItemButton key={r.id}
               selected={actionTypeId === r.id}
@@ -54,7 +80,7 @@ export default function ShortPass({
       </SubBox>
 
       {
-        actionTypeId && (actionTypeId === 1 || actionTypeId === 4) &&
+        actionTypeId && (actionTypeId === 1 || actionTypeId === 3) &&
         <SubBox>
           <List header="In The Box">
             {
@@ -63,6 +89,7 @@ export default function ShortPass({
                   selected={inTheBox === g}
                   onClick={() => {
                     setInTheBox(g)
+                    targetClicked(g)
                   }}
                 >
                   <ListItemText primary={g} />
@@ -83,8 +110,7 @@ export default function ShortPass({
             team_id: offenseTeamId,
             player_id: player.id,
             action_type_id: 4,
-            action_result_id: 4,
-            action_id: 2
+            action_id: 2,
           }])
           setOffensivePlayer(player)
         }}
