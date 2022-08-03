@@ -5,6 +5,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import List from "./basic/ModalList"
 import PlayerSelector from './basic/PlayerSelector';
+import AreaCourtMenu from './AreaCourtMenu';
 
 const SubBox = styled(Box)`
   margin: 6px;
@@ -34,9 +35,13 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
   const [foulTypeId, setFoulTypeId] = React.useState(8);
   const [result, setResult] = React.useState(RESULT_LIST[0]);
   const [foulResult, setFoulResult] = React.useState(FOUL_RESULT_LIST[0]);
+  const [areaCourtId, setAreaCourtId] = React.useState(4);
+  const [inTheBox, setInTheBox] = React.useState("No")
 
   return (
     <>
+      <AreaCourtMenu areaCourtId={areaCourtId} setAreaCourtId={setAreaCourtId} inTheBox={inTheBox} setInTheBox={setInTheBox} />
+
       <PlayerSelector
         title="Offensive Player List"
         playerList={offenseTeam}
@@ -73,7 +78,9 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                       team_id: offenseTeamId,
                       player_id: offensivePlayer.id,
                       action_id: 4, //Dribble
-                      action_result_id: r.id
+                      action_result_id: r.id,
+                      court_area_id: areaCourtId,
+                      inside_the_paint: inTheBox
                     },
                   ])
               }}
@@ -98,14 +105,18 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                 team_id: offenseTeamId,
                 player_id: offensivePlayer.id,
                 action_id: 4, // Dribble
-                action_result_id: result.id
+                action_result_id: result.id,
+                court_area_id: areaCourtId,
+                inside_the_paint: inTheBox
               },
               {
                 action_type_id: actionTypeId,
                 team_id: defenseTeamId,
                 player_id: player.id,
                 action_id: 10, // Interception
-                action_result_id: result.id
+                action_result_id: result.id,
+                court_area_id: areaCourtId,
+                inside_the_paint: inTheBox
               },
             ])
           }}
@@ -161,21 +172,27 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                 team_id: offenseTeamId,
                 player_id: offensivePlayer.id,
                 action_id: 4, //Dribble
-                action_result_id: result.id
+                action_result_id: result.id,
+                court_area_id: areaCourtId,
+                inside_the_paint: inTheBox
               },
               {
                 action_type_id: foulTypeId,
                 team_id: offenseTeamId,
                 player_id: offensivePlayer.id,
                 action_id: 6, //Draw Foul
-                action_result_id: foulResult.id
+                action_result_id: foulResult.id,
+                court_area_id: areaCourtId,
+                inside_the_paint: inTheBox
               },
               {
                 action_type_id: foulTypeId,
                 team_id: defenseTeamId,
                 player_id: player.id,
                 action_id: 5, //Foul 
-                action_result_id: foulResult.id
+                action_result_id: foulResult.id,
+                court_area_id: areaCourtId,
+                inside_the_paint: inTheBox
               },
             ])
           }}
