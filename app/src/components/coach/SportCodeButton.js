@@ -44,15 +44,11 @@ const SportCodeButton = ({ game, t, team, ...rest }) => {
 
     ]
 
-    console.log(items)
-
     const getActualDate = new Date(game.date)
     const date = getActualDate.getDate()
     const month = getActualDate.getMonth()
     const year = getActualDate.getFullYear()
     const gameDate = '(' + date + '-' + month + '-' + year + ')'
-
-    console.log(gameDate)
 
     const downloadXML = () => {
         const data = XMLData;
