@@ -26,59 +26,9 @@ export default function ShortPass({
   offenseTeamId,
 }) {
 
-  const [actionTypeId, setActionTypeId] = React.useState(4);
+  const [areaCourtId, setAreaCourtId] = React.useState(4);
   const [offensivePlayer, setOffensivePlayer] = React.useState(offenseTeam[0]);
   const [inTheBox, setInTheBox] = React.useState("No")
-  const [selectedPlayer, setSelectedPlayer] = React.useState({})
-
-  React.useEffect(() => {
-    const playerData = localStorage.getItem('PlayerSelected')
-    setSelectedPlayer(JSON.parse(playerData))
-  }, [offensivePlayer])
-
-  const tagData = {
-    action_type_id: actionTypeId
-  }
-
-  const PlayerClicked = (player) => {
-    setOffensivePlayer(player)
-    localStorage.setItem('PlayerSelected', JSON.stringify(player))
-    taggingState([{
-      ...tagData,
-      team_id: offenseTeamId,
-      player_id: player.id,
-      action_type_id: 4,
-      action_id: 2,
-      court_area_id: actionTypeId && actionTypeId === 2 ? 2 : 4,
-      inside_the_paint: false
-    }])
-  }
-
-  const targetClicked = (target) => {
-    if (target === "No") {
-      taggingState([{
-        action_type_id: actionTypeId,
-        team_id: offenseTeamId,
-        player_id: selectedPlayer.id,
-        action_id: 2,
-        action_result_id: 3,
-        court_area_id: actionTypeId && actionTypeId === 1 ? 1 : 3,
-        inside_the_paint: false
-      }])
-    } else if (target === "Yes") {
-      taggingState([
-        {
-          action_type_id: actionTypeId,
-          team_id: offenseTeamId,
-          player_id: selectedPlayer.id,
-          action_id: 2,
-          action_result_id: 3,
-          court_area_id: actionTypeId && actionTypeId === 1 ? 1 : 3,
-          inside_the_paint: true
-        }
-      ])
-    }
-  }
 
   return (
     <>
@@ -91,9 +41,9 @@ export default function ShortPass({
             { id: 4, name: DEFENSIVE_MIDDLE },
           ].map((r, i) => (
             <ListItemButton key={r.id}
-              selected={actionTypeId === r.id}
+              selected={areaCourtId === r.id}
               onClick={() => {
-                setActionTypeId(r.id)
+                setAreaCourtId(r.id)
               }}
             >
               <ListItemText primary={r.name} />
@@ -104,7 +54,7 @@ export default function ShortPass({
       </SubBox>
 
       {
-        actionTypeId && (actionTypeId === 1 || actionTypeId === 3) &&
+        areaCourtId && (areaCourtId === 1 || areaCourtId === 3) &&
         <SubBox>
           <List header="In The Box">
             {
@@ -113,7 +63,7 @@ export default function ShortPass({
                   selected={inTheBox === g}
                   onClick={() => {
                     setInTheBox(g)
-                    targetClicked(g)
+                    // targetClicked(g)
                   }}
                 >
                   <ListItemText primary={g} />
@@ -128,12 +78,17 @@ export default function ShortPass({
         title="List of Players"
         playerList={offenseTeam}
         editable={false}
-        selected={selectedPlayer}
         onSelect={(player) => {
-          PlayerClicked(player)
-        }}
-
-      />
+          taggingState([{
+            team_id: offenseTeamId,
+            player_id: player.id,
+            action_type_id: 4,
+            action_result_id: 4,
+            action_id: 2,
+            court_area_id: areaCourtId,
+            inside_the_paint: inTheBox
+          }])
+        }} />
     </>
   );
 } 

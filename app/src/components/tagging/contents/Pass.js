@@ -28,6 +28,12 @@ const FREE_KICK = "Free Kick"
 const PASS_FOR_A_SHOT = "Pass For a Shot"
 const ASSIST = "Assist"
 
+
+const DEFENSIVE = "Defensive"
+const DEFENSIVE_MIDDLE = "Defensive Middle"
+const OFFENSIVE_MIDDLE = "Offensive Middle"
+const OFFENSIVE = "Offensive"
+
 export default function Pass({
   defenseTeam,
   offenseTeam,
@@ -41,6 +47,9 @@ export default function Pass({
   const [offsidePlayer, setOffsidePlayer] = React.useState({});
   const [defensivePlayer, setDefensivePlayer] = React.useState({});
   const [actionTypeId, setActionTypeId] = React.useState(5);
+  const [areaCourtId, setAreaCourtId] = React.useState(4);
+  const [inTheBox, setInTheBox] = React.useState("No")
+
 
   const tagData = {
     action_type_id: actionTypeId
@@ -53,18 +62,64 @@ export default function Pass({
       team_id: defenseTeamId,
       player_id: player.id,
       action_id: 10,
-      action_result_id: 11 //Bad Pass
+      action_result_id: 11, //Bad Pass
+      court_area_id: areaCourtId,
+      inside_the_paint: inTheBox
     }, {
       ...tagData,
       player_id: offensivePlayer.id,
       team_id: offenseTeamId,
       action_id: 2,
-      action_result_id: 11 //Bad Pass
+      action_result_id: 11, //Bad Pass
+      court_area_id: areaCourtId,
+      inside_the_paint: inTheBox
     }])
   }
 
   return (
     <>
+      <SubBox sx={{ ml: 50 }}>
+        <List header="Area">
+          {[
+            { id: 1, name: OFFENSIVE },
+            { id: 2, name: OFFENSIVE_MIDDLE },
+            { id: 3, name: DEFENSIVE },
+            { id: 4, name: DEFENSIVE_MIDDLE },
+          ].map((r, i) => (
+            <ListItemButton key={r.id}
+              selected={areaCourtId === r.id}
+              onClick={() => {
+                setAreaCourtId(r.id)
+              }}
+            >
+              <ListItemText primary={r.name} />
+            </ListItemButton>
+          ))
+          }
+        </List>
+      </SubBox>
+
+      {
+        areaCourtId && (areaCourtId === 1 || areaCourtId === 3) &&
+        <SubBox>
+          <List header="In The Box">
+            {
+              ["Yes", "No"].map((g, i) => (
+                <ListItemButton key={i}
+                  selected={inTheBox === g}
+                  onClick={() => {
+                    setInTheBox(g)
+                    // targetClicked(g)
+                  }}
+                >
+                  <ListItemText primary={g} />
+                </ListItemButton>
+              ))
+            }
+          </List>
+        </SubBox>
+      }
+
       <PlayerSelector
         title="Offensive Player List"
         playerList={offenseTeam}
@@ -92,6 +147,8 @@ export default function Pass({
                   team_id: offenseTeamId,
                   player_id: offensivePlayer.id,
                   action_type_id: r.id,
+                  court_area_id: areaCourtId,
+                  inside_the_paint: inTheBox
                 };
                 if (r.name === KEY_PASS) taggingState([{ ...d, action_id: 2, action_result_id: 4, }])
 
@@ -120,7 +177,9 @@ export default function Pass({
                   ...tagData,
                   team_id: offenseTeamId,
                   player_id: offensivePlayer.id,
-                  action_result_id: r.id
+                  action_result_id: r.id,
+                  court_area_id: areaCourtId,
+                  inside_the_paint: inTheBox
                 };
                 if (r.name === SUCCESSFUL) taggingState([{ ...d, action_id: 2, }])
                 if (r.name === BAD_PASS) taggingState([{ ...d, action_id: 2, }])
@@ -155,13 +214,17 @@ export default function Pass({
               team_id: offenseTeamId,
               player_id: offensivePlayer.id,
               action_id: 2,
-              action_result_id: 15 // offside
+              action_result_id: 15, // offside
+              court_area_id: areaCourtId,
+              inside_the_paint: inTheBox
             }, {
               ...tagData,
               team_id: offenseTeamId,
               player_id: player.id,
               action_id: 7,
-              action_result_id: 15 //offside
+              action_result_id: 15, //offside
+              court_area_id: areaCourtId,
+              inside_the_paint: inTheBox
             }])
           }}
         />
