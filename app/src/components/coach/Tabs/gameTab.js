@@ -8,6 +8,7 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 import TeamTagTable from '../TeamTagTable';
 import ExcelButton from '../ExcelButton';
+import SportCodeButton from '../SportCodeButton'
 import IndividualTagTable from '../IndividualTagTable';
 import TeamAccordion from '../TeamAccordion';
 import VideoPlayer from '../VideoPlayer';
@@ -78,11 +79,18 @@ const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId, t }) =
                     </IconButton>
             }
             <Paper style={{ height: "100%", minWidth: 500, position: 'relative' }} className="coach-tag-table">
+
                 <ExcelButton
                     style={{ position: "absolute", right: 10 }}
                     team={allTagList}
                     t={t}
                 />
+                <SportCodeButton
+                    style={{ position: "absolute", left: 35 }}
+                    game={game}
+                    team={allTagList}
+                    t={t} />
+
                 <TeamTagTable
                     sx={{ height: "70%", p: 1, width: "100%" }}
                     rows={teamTagList}

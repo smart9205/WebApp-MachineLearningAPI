@@ -6,7 +6,7 @@ const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
-const ExcelButton = ({ team, t, ...rest}) => {
+const ExcelButton = ({ team, t, ...rest }) => {
 
 	const buttonRef = useRef();
 
@@ -15,7 +15,7 @@ const ExcelButton = ({ team, t, ...rest}) => {
 	}
 	return (
 		<div {...rest}>
-			<Button variant="outlined" onClick={downloadExcel}>{t("Export")}</Button>
+			<Button style={{ fontSize: '11px' }} variant="outlined" onClick={downloadExcel}>{t("Export To Excel")}</Button>
 			<ExcelFile element={<button style={{ display: 'none' }} ref={buttonRef}></button>}>
 				<ExcelSheet data={team} name="Team Tags">
 					<ExcelColumn label="Date" value="game_date" />
