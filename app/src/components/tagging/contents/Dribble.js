@@ -113,7 +113,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                 action_type_id: actionTypeId,
                 team_id: defenseTeamId,
                 player_id: player.id,
-                action_id: 10, // Interception
+                action_id: 12, // Tackle
                 action_result_id: result.id,
                 court_area_id: areaCourtId,
                 inside_the_paint: inTheBox

@@ -30,8 +30,8 @@ export default function AreaCourtMenu({
                     {[
                         { id: 1, name: OFFENSIVE },
                         { id: 2, name: OFFENSIVE_MIDDLE },
-                        { id: 3, name: DEFENSIVE },
-                        { id: 4, name: DEFENSIVE_MIDDLE },
+                        { id: 3, name: DEFENSIVE_MIDDLE },
+                        { id: 4, name: DEFENSIVE },
                     ].map((r, i) => (
                         <ListItemButton key={r.id}
                             selected={areaCourtId === r.id}
@@ -47,7 +47,7 @@ export default function AreaCourtMenu({
             </SubBox>
 
             {
-                areaCourtId && (areaCourtId === 1 || areaCourtId === 3) &&
+                areaCourtId && (areaCourtId === 1 || areaCourtId === 4) &&
                 <SubBox>
                     <List header="In The Box">
                         {
