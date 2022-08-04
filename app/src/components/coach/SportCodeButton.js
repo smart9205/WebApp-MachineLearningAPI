@@ -1,48 +1,44 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { Button } from '@mui/material'
-import exportFromJSON from "export-from-json";
-
-const XMLFields = [
-    "SESSION_INFO"
-]
+import { toXML } from 'jstoxml'
 
 const SportCodeButton = ({ game, t, team, ...rest }) => {
 
-    const [tagsData, setTagsData] = useState({
-        id: '',
-        start: '',
-        end: '',
-        code: ''
-    })
 
-    var items = []
+    const teamData = team.map(data => ({
 
-    const teamData = team.map(data => {
-
-        let objData = {
-            "instance": {
-                "ID": data.team_tag_id,
-                "start": data.t_start_time,
-                "end": data.t_end_time,
-                "code": data.action_name,
-                "label": {
-                    "text": data.action_result_name
-                }
+        instance: {
+            ID: data.team_tag_id,
+            start: data.t_start_time,
+            end: data.t_end_time,
+            code: data.action_name,
+            label: {
+                text: data.action_result_name
             }
         }
-        items.push(objData)
 
-    })
+    }))
 
-    const XMLData = [
-        {
+    console.log('Team: ', team)
+    console.log('Team Data: ', teamData)
+
+    const XMLData =
+    {
+        "file": {
             "SESSION_INFO": {
                 "start_time": game.date
             },
-            "ALL_INSTANCES": items
-        },
+            "ALL_INSTANCES": teamData
+        }
+    }
 
-    ]
+    const config = {
+        indent: '    '
+    };
+
+    const newXMLData = toXML(XMLData, config)
+
+    const blob = new Blob([newXMLData], { type: 'text/xml' })
 
     const getActualDate = new Date(game.date)
     const date = getActualDate.getDate()
@@ -51,11 +47,14 @@ const SportCodeButton = ({ game, t, team, ...rest }) => {
     const gameDate = '(' + date + '-' + month + '-' + year + ')'
 
     const downloadXML = () => {
-        const data = XMLData;
         const fileName = game.home_team_name + ' vs ' + game.away_team_name + ' ' + gameDate;
-        let fields = [];
-        const exportType = 'xml';
-        exportFromJSON({ data, fileName, fields, exportType })
+        var pom = document.createElement('a');
+        pom.setAttribute('href', window.URL.createObjectURL(blob));
+        pom.setAttribute('download', fileName);
+        pom.dataset.downloadurl = ['text/xml', pom.download, pom.href].join(':');
+        pom.draggable = true;
+        pom.classList.add('dragout');
+        pom.click();
     }
     return (
         <div {...rest}>
