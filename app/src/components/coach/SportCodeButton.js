@@ -19,8 +19,51 @@ const SportCodeButton = ({ game, t, team, ...rest }) => {
 
     }))
 
-    console.log('Team: ', team)
-    console.log('Team Data: ', teamData)
+
+    const convertionIntoNumber = (numberTime) => {
+        let array = numberTime.split(":")
+        let hour = (parseInt(array[0], 10) * 3600)
+        let minute = (parseInt(array[1], 10) * 60)
+        let seconds = (parseInt(array[2], 10))
+        return hour + minute + seconds
+    }
+
+    const sortByTeamId = (x, y) => {
+        return x.team_id - y.team_id
+    }
+
+    const sortByPlayerId = (x, y) => {
+        return x.player_id - y.player_id
+    }
+    const sortByStartTime = (x, y) => {
+        return convertionIntoNumber(x.start_time) - convertionIntoNumber(y.start_time)
+    }
+
+
+    let sortedStartTime = team.sort(sortByStartTime)
+    let sortedPlayerId = sortedStartTime.sort(sortByPlayerId)
+    let sortedTeamId = sortedPlayerId.sort(sortByTeamId)
+
+
+
+    const playerData = sortedTeamId.map(data => ({
+
+        instance: {
+            ID: data.id,
+            start: convertionIntoNumber(data.start_time),
+            end: convertionIntoNumber(data.end_time),
+            code: data.player_fname + " " + data.player_lname, // here we need to concat the player_fname + player_lname
+            label: {
+                group: 'PLAYERS',
+                text: data.action_name + " - " + data.action_type_name + " - " + data.action_result_name
+
+            }
+        }
+    }))
+
+    // console.log('Player Data :', playerData)
+    console.log('TeamData', team)
+
 
     const XMLData =
     {
@@ -28,7 +71,10 @@ const SportCodeButton = ({ game, t, team, ...rest }) => {
             "SESSION_INFO": {
                 "start_time": game.date
             },
-            "ALL_INSTANCES": teamData
+            "SORT_INFO": {
+                "sort_type": 'color'
+            },
+            "ALL_INSTANCES": playerData
         }
     }
 
