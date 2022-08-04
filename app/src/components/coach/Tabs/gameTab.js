@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer } from "react";
 
 import _ from 'lodash'
 import { Paper, Card, IconButton } from '@mui/material'
@@ -12,6 +12,7 @@ import SportCodeButton from '../SportCodeButton'
 import IndividualTagTable from '../IndividualTagTable';
 import TeamAccordion from '../TeamAccordion';
 import VideoPlayer from '../VideoPlayer';
+
 const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId, t }) => {
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
@@ -89,6 +90,7 @@ const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId, t }) =
                     style={{ position: "absolute", left: 35 }}
                     game={game}
                     team={allTagList}
+                    playerList={playerList}
                     t={t} />
 
                 <TeamTagTable

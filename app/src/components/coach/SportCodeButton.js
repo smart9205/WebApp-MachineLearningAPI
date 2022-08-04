@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from '@mui/material'
 import { toXML } from 'jstoxml'
 
-const SportCodeButton = ({ game, t, team, ...rest }) => {
+const SportCodeButton = ({ game, t, team, playerList, ...rest }) => {
 
+    let Goalkeeper = []
+
+    const playerPosition = playerList.map(data => {
+        if (data.position === 16) {
+            Goalkeeper.push(data)
+        }
+    })
 
     const teamData = team.map(data => ({
-
         instance: {
             ID: data.team_tag_id,
             start: data.t_start_time,
@@ -14,11 +20,9 @@ const SportCodeButton = ({ game, t, team, ...rest }) => {
             code: data.action_name,
             label: {
                 text: data.action_result_name
-            }
-        }
-
+            },
+        },
     }))
-
 
     const convertionIntoNumber = (numberTime) => {
         let array = numberTime.split(":")
@@ -35,35 +39,27 @@ const SportCodeButton = ({ game, t, team, ...rest }) => {
     const sortByPlayerId = (x, y) => {
         return x.player_id - y.player_id
     }
+
     const sortByStartTime = (x, y) => {
         return convertionIntoNumber(x.start_time) - convertionIntoNumber(y.start_time)
     }
-
 
     let sortedStartTime = team.sort(sortByStartTime)
     let sortedPlayerId = sortedStartTime.sort(sortByPlayerId)
     let sortedTeamId = sortedPlayerId.sort(sortByTeamId)
 
-
-
     const playerData = sortedTeamId.map(data => ({
-
         instance: {
             ID: data.id,
             start: convertionIntoNumber(data.start_time),
             end: convertionIntoNumber(data.end_time),
-            code: data.player_fname + " " + data.player_lname, // here we need to concat the player_fname + player_lname
+            code: data.player_fname + " " + data.player_lname,
             label: {
                 group: 'PLAYERS',
                 text: data.action_name + " - " + data.action_type_name + " - " + data.action_result_name
-
-            }
-        }
+            },
+        },
     }))
-
-    // console.log('Player Data :', playerData)
-    console.log('TeamData', team)
-
 
     const XMLData =
     {
@@ -79,7 +75,7 @@ const SportCodeButton = ({ game, t, team, ...rest }) => {
     }
 
     const config = {
-        indent: '    '
+        indent: ' '
     };
 
     const newXMLData = toXML(XMLData, config)
@@ -93,7 +89,7 @@ const SportCodeButton = ({ game, t, team, ...rest }) => {
     const gameDate = '(' + date + '-' + month + '-' + year + ')'
 
     const downloadXML = () => {
-        const fileName = game.home_team_name + ' vs ' + game.away_team_name + ' ' + gameDate;
+        const fileName = game.home_team_name.split('_').join(' ') + ' vs ' + game.away_team_name + ' ' + gameDate;
         var pom = document.createElement('a');
         pom.setAttribute('href', window.URL.createObjectURL(blob));
         pom.setAttribute('download', fileName);
@@ -102,6 +98,7 @@ const SportCodeButton = ({ game, t, team, ...rest }) => {
         pom.classList.add('dragout');
         pom.click();
     }
+
     return (
         <div {...rest}>
             <Button style={{ fontSize: '11px' }} variant="outlined" onClick={downloadXML}>{t("Export To SportCode")}</Button>
