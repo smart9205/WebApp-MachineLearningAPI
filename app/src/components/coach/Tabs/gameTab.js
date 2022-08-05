@@ -90,6 +90,7 @@ const GameTab = ({ allTagList, game, playerList, playersInGameList, opponentTagL
                     style={{ position: "absolute", left: 35 }}
                     game={game}
                     team={allTagList}
+                    teamId={teamId}
                     playerList={playerList}
                     playersInGameList={playersInGameList}
                     t={t} />

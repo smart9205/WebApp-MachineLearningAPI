@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Button } from '@mui/material'
 import { toXML } from 'jstoxml'
 
-const SportCodeButton = ({ game, t, team, playerList, playersInGameList, ...rest }) => {
+const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList, ...rest }) => {
 
     let GoalkeeperId = []
 
@@ -63,31 +63,55 @@ const SportCodeButton = ({ game, t, team, playerList, playersInGameList, ...rest
     let sortedByTeamTagId = sortedStartTime.sort(sortByTeamTagId)
     let BuildUpGoalkeeperData = []
     let OpponentBuildUpGoalkeeperData = []
+    let SortedGoalkeeperData = []
+    let selectedTeamID = parseInt(teamId)
+
+    // console.log('selectedTeamID', selectedTeamID)
 
     const teamData = sortedByTeamTagId.map(data => {
-        if (Object.values(GoalkeeperId).includes(parseInt(data.player_id))) {
-            if (data.action_id === 2 || data.action_id === 1) {
-                // SortedGoalkeeperData.push(data)
-                if (data.team_id === data.offensive_team_id) {
+
+        if (selectedTeamID === parseInt(data.offensive_team_id)) {
+            if (GoalkeeperId.includes(parseInt(data.player_id))) {
+                if (data.action_id === 2 || data.action_id === 1) {
                     BuildUpGoalkeeperData.push(data)
-                } else OpponentBuildUpGoalkeeperData.push(data)
+                }
+            }
+        } else {
+            if (GoalkeeperId.includes(parseInt(data.player_id))) {
+                if (data.action_id === 2 || data.action_id === 1) {
+                    OpponentBuildUpGoalkeeperData.push(data)
+                }
             }
         }
-        // {
-        //     instance: {
-        //         ID: data.team_tag_id,
-        //         start: data.t_start_time,
-        //         end: data.t_end_time,
-        //         code: data.action_name,
-        //         label: {
-        //             text: data.action_result_name
-        //         },
-        //     },
-        // }
-
     })
 
-    // console.log('BuildUpGoalkeeperData : ', BuildUpGoalkeeperData)
+    const BuildUpGoalKeeperDataFoxXML = BuildUpGoalkeeperData.map(data => ({
+        instance: {
+            ID: data.team_tag_id,
+            start: convertionIntoNumber(data.start_time),
+            end: convertionIntoNumber(data.t_end_time),
+            code: 'Build Up - Goalkeeper',
+            label: {
+                text: data.action_type_name
+            },
+        },
+    }))
+
+    const OpponentBuildUpGoalKeeperDataFoxXML = OpponentBuildUpGoalkeeperData.map(data => ({
+        instance: {
+            ID: data.team_tag_id,
+            start: convertionIntoNumber(data.start_time),
+            end: convertionIntoNumber(data.t_end_time),
+            code: 'Opponent Build Up - Goalkeeper',
+            label: {
+                text: data.action_type_name
+            },
+        },
+    }))
+
+    // console.log(team)
+
+    // console.log('BuildUpGoalkeeperData : ', BGoalkeeperData)
     // console.log('OpponentBuildUpGoalkeeperData : ', OpponentBuildUpGoalkeeperData)
 
     const XMLData =
@@ -99,8 +123,12 @@ const SportCodeButton = ({ game, t, team, playerList, playersInGameList, ...rest
             "SORT_INFO": {
                 "sort_type": 'color'
             },
-            "ALL_INSTANCES": playerData,
-            "ROWS": teamData
+
+            "ALL_INSTANCES": {
+                BuildUpGoalKeeperDataFoxXML,
+                OpponentBuildUpGoalKeeperDataFoxXML,
+                playerData
+            }
         }
     }
 
