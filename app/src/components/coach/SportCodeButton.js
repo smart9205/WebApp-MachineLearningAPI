@@ -52,7 +52,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         instance: {
             ID: data.id,
             start: convertionIntoNumber(data.start_time),
-            end: convertionIntoNumber(data.end_time),
+            end: convertionIntoNumber(data.end_time) + 5,
             code: data.player_fname + " " + data.player_lname,
             label: {
                 text: data.action_name + " - " + data.action_type_name + " - " + data.action_result_name
@@ -85,11 +85,11 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         }
     })
 
-    const BuildUpGoalKeeperDataFoxXML = BuildUpGoalkeeperData.map(data => ({
+    const BuildUpGoalKeeperDataForXML = BuildUpGoalkeeperData.map(data => ({
         instance: {
             ID: data.team_tag_id,
-            start: convertionIntoNumber(data.start_time),
-            end: convertionIntoNumber(data.t_end_time),
+            start: convertionIntoNumber(data.start_time) - 5,
+            end: convertionIntoNumber(data.t_end_time) + 5,
             code: 'Build Up - Goalkeeper',
             label: {
                 text: data.action_type_name
@@ -97,11 +97,11 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         },
     }))
 
-    const OpponentBuildUpGoalKeeperDataFoxXML = OpponentBuildUpGoalkeeperData.map(data => ({
+    const OpponentBuildUpGoalKeeperDataForXML = OpponentBuildUpGoalkeeperData.map(data => ({
         instance: {
             ID: data.team_tag_id,
-            start: convertionIntoNumber(data.start_time),
-            end: convertionIntoNumber(data.t_end_time),
+            start: convertionIntoNumber(data.start_time) - 5,
+            end: convertionIntoNumber(data.t_end_time) + 5,
             code: 'Opponent Build Up - Goalkeeper',
             label: {
                 text: data.action_type_name
@@ -111,7 +111,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
 
     // console.log(team)
 
-    // console.log('BuildUpGoalkeeperData : ', BGoalkeeperData)
+    // console.log('BuildUpGoalkeeperData : ', BuildUpGoalkeeperData)
     // console.log('OpponentBuildUpGoalkeeperData : ', OpponentBuildUpGoalkeeperData)
 
     const XMLData =
@@ -120,13 +120,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
             "SESSION_INFO": {
                 "start_time": game.date
             },
-            "SORT_INFO": {
-                "sort_type": 'color'
-            },
-
             "ALL_INSTANCES": {
-                BuildUpGoalKeeperDataFoxXML,
-                OpponentBuildUpGoalKeeperDataFoxXML,
+                BuildUpGoalKeeperDataForXML,
+                OpponentBuildUpGoalKeeperDataForXML,
                 playerData
             }
         }
