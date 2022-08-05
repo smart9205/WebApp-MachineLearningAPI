@@ -2,27 +2,23 @@ import React, { useEffect } from "react";
 import { Button } from '@mui/material'
 import { toXML } from 'jstoxml'
 
-const SportCodeButton = ({ game, t, team, playerList, ...rest }) => {
+const SportCodeButton = ({ game, t, team, playerList, playersInGameList, ...rest }) => {
 
-    let Goalkeeper = []
+    let GoalkeeperId = []
 
-    const playerPosition = playerList.map(data => {
+    playersInGameList.home_team.map(data => {
         if (data.position === 16) {
-            Goalkeeper.push(data)
+            GoalkeeperId.push(data.id)
         }
     })
 
-    const teamData = team.map(data => ({
-        instance: {
-            ID: data.team_tag_id,
-            start: data.t_start_time,
-            end: data.t_end_time,
-            code: data.action_name,
-            label: {
-                text: data.action_result_name
-            },
-        },
-    }))
+    playersInGameList.away_team.map(data => {
+        if (data.position === 16) {
+            GoalkeeperId.push(data.id)
+        }
+    })
+
+    // console.log('GoalkeeperId : ', GoalkeeperId)
 
     const convertionIntoNumber = (numberTime) => {
         let array = numberTime.split(":")
@@ -36,6 +32,10 @@ const SportCodeButton = ({ game, t, team, playerList, ...rest }) => {
         return x.team_id - y.team_id
     }
 
+    const sortByTeamTagId = (x, y) => {
+        return x.team_tag_id - y.team_tag_id
+    }
+
     const sortByPlayerId = (x, y) => {
         return x.player_id - y.player_id
     }
@@ -46,9 +46,9 @@ const SportCodeButton = ({ game, t, team, playerList, ...rest }) => {
 
     let sortedStartTime = team.sort(sortByStartTime)
     let sortedPlayerId = sortedStartTime.sort(sortByPlayerId)
-    let sortedTeamId = sortedPlayerId.sort(sortByTeamId)
+    let sortedPlayerData = sortedPlayerId.sort(sortByTeamId)
 
-    const playerData = sortedTeamId.map(data => ({
+    const playerData = sortedPlayerData.map(data => ({
         instance: {
             ID: data.id,
             start: convertionIntoNumber(data.start_time),
@@ -61,6 +61,36 @@ const SportCodeButton = ({ game, t, team, playerList, ...rest }) => {
         },
     }))
 
+    let sortedByTeamTagId = sortedStartTime.sort(sortByTeamTagId)
+    let BuildUpGoalkeeperData = []
+    let OpponentBuildUpGoalkeeperData = []
+
+    const teamData = sortedByTeamTagId.map(data => {
+        if (Object.values(GoalkeeperId).includes(parseInt(data.player_id))) {
+            if (data.action_id === 2 || data.action_id === 1) {
+                // SortedGoalkeeperData.push(data)
+                if (data.team_id === data.offensive_team_id) {
+                    BuildUpGoalkeeperData.push(data)
+                } else OpponentBuildUpGoalkeeperData.push(data)
+            }
+        }
+        // {
+        //     instance: {
+        //         ID: data.team_tag_id,
+        //         start: data.t_start_time,
+        //         end: data.t_end_time,
+        //         code: data.action_name,
+        //         label: {
+        //             text: data.action_result_name
+        //         },
+        //     },
+        // }
+
+    })
+
+    // console.log('BuildUpGoalkeeperData : ', BuildUpGoalkeeperData)
+    // console.log('OpponentBuildUpGoalkeeperData : ', OpponentBuildUpGoalkeeperData)
+
     const XMLData =
     {
         "file": {
@@ -70,7 +100,8 @@ const SportCodeButton = ({ game, t, team, playerList, ...rest }) => {
             "SORT_INFO": {
                 "sort_type": 'color'
             },
-            "ALL_INSTANCES": playerData
+            "ALL_INSTANCES": playerData,
+            "ROWS": teamData
         }
     }
 

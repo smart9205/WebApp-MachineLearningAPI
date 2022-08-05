@@ -13,7 +13,7 @@ import IndividualTagTable from '../IndividualTagTable';
 import TeamAccordion from '../TeamAccordion';
 import VideoPlayer from '../VideoPlayer';
 
-const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId, t }) => {
+const GameTab = ({ allTagList, game, playerList, playersInGameList, opponentTagList, teamId, t }) => {
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -91,6 +91,7 @@ const GameTab = ({ allTagList, game, playerList, opponentTagList, teamId, t }) =
                     game={game}
                     team={allTagList}
                     playerList={playerList}
+                    playersInGameList={playersInGameList}
                     t={t} />
 
                 <TeamTagTable

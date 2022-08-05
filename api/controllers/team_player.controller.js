@@ -32,6 +32,7 @@ exports.create = async (req, res) => {
       });
     });
 };
+
 exports.getPlayersByGame = async (req, res) => {
   let game;
   try {
@@ -116,6 +117,56 @@ exports.getPlayersByTeam = async (req, res) => {
   } catch (e) {
   }
   res.send(team?.[0]);
+}
+
+exports.getAllGameTeamPlayers = async (req, res) => {
+  let game;
+  try {
+    game = await Game.findByPk(req.params.gameid);
+    if (!game) return res.status(500).send({ message: "Game not found!" });
+  } catch (e) {
+    return res.status(500).send({ message: "Game not found!" });
+  }
+  let home_team, away_team;
+  try {
+    home_team = await Sequelize.query(`
+      SELECT *, 
+        public."Players".id as id,
+        public."Player_Positions".name as position_name,
+        public."Player_Positions".short as position_short,
+        CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
+        FROM public."Players" 
+        JOIN 
+          public."Team_Players" on public."Players".id = public."Team_Players".player_id
+        LEFT JOIN 
+          public."Player_Positions" on public."Players".position = public."Player_Positions".id
+      WHERE
+        season_id = ${game.season_id} and 
+        league_id = ${game.league_id} and 
+        team_id = ${game.home_team_id} 
+      order by public."Player_Positions".sort_order
+    `);
+
+    away_team = await Sequelize.query(`
+      SELECT *, 
+        public."Players".id as id,
+        public."Player_Positions".name as position_name,
+        public."Player_Positions".short as position_short,
+        CONCAT (public."Players".f_name,' ', public."Players".l_name) as name
+        FROM public."Players" 
+        JOIN 
+          public."Team_Players" on public."Players".id = public."Team_Players".player_id
+        LEFT JOIN 
+          public."Player_Positions" on public."Players".position = public."Player_Positions".id
+      WHERE
+        season_id = ${game.season_id} and 
+        league_id = ${game.league_id} and 
+        team_id = ${game.away_team_id} 
+        order by public."Player_Positions".sort_order
+    `);
+  } catch (e) {
+  }
+  res.send({ home_team: home_team[0], away_team: away_team[0] });
 }
 
 

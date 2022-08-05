@@ -54,13 +54,13 @@ export default function Coach() {
         coachPlayer: null,
         team: null,
         playerList: [],
-
+        playersInGameList: [],
         gameList: [],
         game: null,
         allTagList: [],
         opponentTagList: []
     })
-    const { teamList, coachPlayerList, coachPlayer, team, gameList, game, allTagList, playerList, opponentTagList } = state
+    const { teamList, coachPlayerList, coachPlayer, team, gameList, game, allTagList, playerList, playersInGameList, opponentTagList } = state
 
     const [drawOpen, setDrawOpen] = useState(true)
 
@@ -102,6 +102,13 @@ export default function Coach() {
             gameService.getGameTeamPlayersByTeam(team.team_id, game?.id).then((res) => {
                 setState({ playerList: res })
             })
+
+            gameService.getAllGameTeamPlayers(game?.id).then((res) => {
+                setState({
+                    playersInGameList: res
+                })
+            })
+
         } else {
             setState({ allTagList: [] })
         }
@@ -237,6 +244,7 @@ export default function Coach() {
                         playerList={playerList}
                         teamId={team?.team_id ?? 0}
                         opponentTagList={opponentTagList}
+                        playersInGameList={playersInGameList}
                         t={t}
                     />}
                 {curTab === 1 && <TeamStatsTab gameList={gameList} team={team} t={t} />}

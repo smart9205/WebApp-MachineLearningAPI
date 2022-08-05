@@ -32,7 +32,9 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
         team_id: offenseTeamId,
         player_id: offensivePlayer.id,
         action_id: 1,
-        action_result_id: 2
+        action_result_id: 2,
+        court_area_id: areaCourtId,
+        inside_the_paint: inTheBox
       }])
     };
   }

@@ -15,6 +15,13 @@ const getGameTeamPlayers = (req) => {
     return response.data;
   });
 }
+
+const getAllGameTeamPlayers = (gameId) => {
+  return axios.get(API_URL + `team_player/allplayersbygameteam/${gameId}`, { headers: authHeader(), data: { gameId } }).then((response) => {
+    return response.data;
+  });
+}
+
 const getGameTeamPlayersByTeam = (teamId, gameId) => {
   return axios.get(API_URL + `team_player/playersbyteam/${teamId}/${gameId}`,
     { headers: authHeader(), data: { teamId, gameId } }).then((response) => {
@@ -471,6 +478,7 @@ const gameService = {
   getPlayerActions,
   getCoachPlayerGames,
   getAllPlayerTagsByCoachPlayer,
+  getAllGameTeamPlayers,
 
   updateJersey,
   updateGame,
