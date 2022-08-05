@@ -55,7 +55,6 @@ const SportCodeButton = ({ game, t, team, playerList, playersInGameList, ...rest
             end: convertionIntoNumber(data.end_time),
             code: data.player_fname + " " + data.player_lname,
             label: {
-                group: 'PLAYERS',
                 text: data.action_name + " - " + data.action_type_name + " - " + data.action_result_name
             },
         },
