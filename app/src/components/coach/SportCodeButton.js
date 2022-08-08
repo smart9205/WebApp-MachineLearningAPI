@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useReducer } from "react";
 import { Button } from '@mui/material'
 import { toXML } from 'jstoxml'
+import { redColor, greenColor } from "./Colors";
 
 const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList, ...rest }) => {
 
@@ -17,8 +18,6 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
             GoalkeeperId.push(data.id)
         }
     })
-
-    // console.log('GoalkeeperId : ', GoalkeeperId)
 
     const convertionIntoNumber = (numberTime) => {
         let array = numberTime.split(":")
@@ -63,12 +62,15 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
     let sortedByTeamTagId = sortedStartTime.sort(sortByTeamTagId)
     let BuildUpGoalkeeperData = []
     let OpponentBuildUpGoalkeeperData = []
-    let SortedGoalkeeperData = []
+    let BuildUpDefensiveHalfSellectedTeam = []
+    let BuildUpDefensiveHalfOpponentTeam = []
+    let BuildUpOfensiveHalfSellectedTeam = []
+    let BuildUpOfensiveHalfOpponentTeam = []
+    let prevTeamValue = []
+    let rowsForXML = []
     let selectedTeamID = parseInt(teamId)
 
-    // console.log('selectedTeamID', selectedTeamID)
-
-    const teamData = sortedByTeamTagId.map(data => {
+    const teamData = sortedByTeamTagId.map((data, index, arr) => {
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
             if (GoalkeeperId.includes(parseInt(data.player_id))) {
@@ -83,36 +85,191 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 }
             }
         }
+
+        let prevValue = arr[index - 1]
+
+        if (selectedTeamID === parseInt(data.offensive_team_id)) {
+            if (!GoalkeeperId.includes(parseInt(data.player_id))) {
+                if (data.court_area_id === 3 || data.court_area_id === 4) {
+                    if (prevValue?.team_tag_id !== data.team_tag_id) {
+                        BuildUpDefensiveHalfSellectedTeam.push(data)
+                    } else {
+                        prevTeamValue.push(data)
+                    }
+                } else {
+                    if (prevValue?.team_tag_id !== data.team_tag_id) {
+                        BuildUpOfensiveHalfSellectedTeam.push(data)
+                    } else {
+                        prevTeamValue.push(data)
+                    }
+                }
+            }
+        } else {
+            if (!GoalkeeperId.includes(parseInt(data.player_id))) {
+                if (data.court_area_id === 3 || data.court_area_id === 4) {
+                    if (prevValue?.team_tag_id !== data.team_tag_id) {
+                        BuildUpDefensiveHalfOpponentTeam.push(data)
+                    } else {
+                        prevTeamValue.push(data)
+                    }
+                } else {
+                    if (prevValue?.team_tag_id !== data.team_tag_id) {
+                        BuildUpOfensiveHalfOpponentTeam.push(data)
+                    } else {
+                        prevTeamValue.push(data)
+                    }
+                }
+            }
+        }
     })
 
-    const BuildUpGoalKeeperDataForXML = BuildUpGoalkeeperData.map(data => ({
-        instance: {
-            ID: data.team_tag_id,
-            start: convertionIntoNumber(data.start_time) - 5,
-            end: convertionIntoNumber(data.t_end_time) + 5,
-            code: 'Build Up - Goalkeeper',
-            label: {
-                text: data.action_type_name
+    let random_index_red_color = Math.floor(Math.random() * redColor.length);
+    let random_index_green_color = Math.floor(Math.random() * greenColor.length);
+
+    const BuildUpGoalKeeperDataForXML = BuildUpGoalkeeperData.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.t_start_time) - 5,
+                end: convertionIntoNumber(data.t_end_time) + 5,
+                code: 'Build Up - Goalkeeper',
+                label: {
+                    text: data.action_type_name
+                },
             },
-        },
-    }))
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Build Up - Goalkeeper',
+                R: greenColor[random_index_green_color].r,
+                G: greenColor[random_index_green_color].g,
+                B: greenColor[random_index_green_color].b
+            }
+        })
+        return XMLdata
 
-    const OpponentBuildUpGoalKeeperDataForXML = OpponentBuildUpGoalkeeperData.map(data => ({
-        instance: {
-            ID: data.team_tag_id,
-            start: convertionIntoNumber(data.start_time) - 5,
-            end: convertionIntoNumber(data.t_end_time) + 5,
-            code: 'Opponent Build Up - Goalkeeper',
-            label: {
-                text: data.action_type_name
+    })
+
+    const OpponentBuildUpGoalKeeperDataForXML = OpponentBuildUpGoalkeeperData.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.t_start_time) - 5,
+                end: convertionIntoNumber(data.t_end_time) + 5,
+                code: 'Opponent Build Up - Goalkeeper',
+                label: {
+                    text: data.action_type_name
+                },
             },
-        },
-    }))
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Opponent Build Up - Goalkeeper',
+                R: redColor[random_index_red_color].r,
+                G: redColor[random_index_red_color].g,
+                B: redColor[random_index_red_color].b
+            }
+        })
+        return XMLdata
+    })
 
-    // console.log(team)
+    const BuildUpDefensiveHalfSellectedTeamDataForXML = BuildUpDefensiveHalfSellectedTeam.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.t_start_time) - 5,
+                end: convertionIntoNumber(data.t_end_time) + 5,
+                code: 'Build Up - Defensive Half',
+                label: {
+                    text: data.action_type_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Build Up - Defensive Half',
+                R: greenColor[random_index_green_color].r,
+                G: greenColor[random_index_green_color].g,
+                B: greenColor[random_index_green_color].b
+            }
+        })
+        return XMLdata
+    })
 
-    // console.log('BuildUpGoalkeeperData : ', BuildUpGoalkeeperData)
-    // console.log('OpponentBuildUpGoalkeeperData : ', OpponentBuildUpGoalkeeperData)
+    const BuildUpDefensiveHalfOpponentTeamDataFoxXML = BuildUpDefensiveHalfOpponentTeam.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.t_start_time) - 5,
+                end: convertionIntoNumber(data.t_end_time) + 5,
+                code: 'Opponent Build Up - Defensive Half',
+                label: {
+                    text: data.action_type_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Opponent Build Up - Defensive Half',
+                R: redColor[random_index_red_color].r,
+                G: redColor[random_index_red_color].g,
+                B: redColor[random_index_red_color].b
+            }
+        })
+        return XMLdata
+    })
+
+    const BuildUpOfensiveHalfSellectedTeamDataForXML = BuildUpOfensiveHalfSellectedTeam.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.t_start_time) - 5,
+                end: convertionIntoNumber(data.t_end_time) + 5,
+                code: 'Build Up - Offensive Half',
+                label: {
+                    text: data.action_type_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Build Up - Offensive Half',
+                R: greenColor[random_index_green_color].r,
+                G: greenColor[random_index_green_color].g,
+                B: greenColor[random_index_green_color].b
+            }
+        })
+        return XMLdata
+    })
+
+    const BuildUpOfensiveHalfOpponentTeamDataForXML = BuildUpOfensiveHalfOpponentTeam.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.t_start_time) - 5,
+                end: convertionIntoNumber(data.t_end_time) + 5,
+                code: 'Opponent Build Up - Offensive Half',
+                label: {
+                    text: data.action_type_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Opponent Build Up - Offensive Half',
+                R: redColor[random_index_red_color].r,
+                G: redColor[random_index_red_color].g,
+                B: redColor[random_index_red_color].b
+            }
+        })
+        return XMLdata
+    })
+
+    const rowDataForXML = rowsForXML.filter((value, index, self) =>
+        index === self.findIndex((t) => (
+            t.row.code === value.row.code
+        ))
+    )
 
     const XMLData =
     {
@@ -123,7 +280,14 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
             "ALL_INSTANCES": {
                 BuildUpGoalKeeperDataForXML,
                 OpponentBuildUpGoalKeeperDataForXML,
+                BuildUpDefensiveHalfSellectedTeamDataForXML,
+                BuildUpDefensiveHalfOpponentTeamDataFoxXML,
+                BuildUpOfensiveHalfSellectedTeamDataForXML,
+                BuildUpOfensiveHalfOpponentTeamDataForXML,
                 playerData
+            },
+            "ROWS": {
+                rowDataForXML
             }
         }
     }
