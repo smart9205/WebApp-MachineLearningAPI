@@ -119,24 +119,32 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
     let BuildUpOfensiveHalfSelectedTeam = [] 
     let BuildUpOfensiveHalfOpponentTeam = [] 
     let prevTeamValue = []
-        
+    let lastActionID = 0    
     //console.log('SELECTED TEAM ID ====',selectedTeamID)
     console.log('ALL DATA ============',sortedByTeamTagId)
 
+
     const teamData = sortedByTeamTagId.map((data, index, arr) => {
         
+
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
   
-            if((data.action_id == 4 && data.action_result_id == 4)|| (data.action_id == 2 && (data.action_type_id == 6 ||  data.action_type_id == 7) && data.action_result_id == 4)){
+            if((lastActionID == 10 || lastActionID ==12 || lastActionID ==7) && (data.action_id == 4 && data.action_result_id == 4)|| (data.action_id == 2 && (data.action_type_id == 6 ||  data.action_type_id == 7) && data.action_result_id == 4)){
+                console.log('LAST ACTION ID:', lastActionID)
+                console.log('CURRENT ACTION ID:', data.action_id)
                 BuildUpDefenseToOffenseSelectedTeam.push(data)
             }   
         }else{
-            if((data.action_id == 4 && data.action_result_id == 4)|| (data.action_id == 2 && (data.action_type_id == 6 ||  data.action_type_id == 7) && data.action_result_id == 4)){
+            if((lastActionID == 10 || lastActionID ==12 || lastActionID ==7) && (data.action_id == 4 && data.action_result_id == 4)|| (data.action_id == 2 && (data.action_type_id == 6 ||  data.action_type_id == 7) && data.action_result_id == 4)){
+
+                console.log('LAST ACTION ID else:', lastActionID)
+                console.log('CURRENT ACTION ID else:', data.action_id)
                 BuildUpDefenseToOffenseOpponentTeam.push(data)
             } 
 
         }
 
+        lastActionID = data.action_id
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
             if (GoalkeeperId.includes(parseInt(data.player_id))) {
@@ -347,7 +355,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Build Up - Defense To Offense',
                 label: {
-                    text: data.action_type_name
+                    text: data.action_name + ' ' + data.action_type_name + ' ' + data.action_result_name
                 },
             },
         }
@@ -370,7 +378,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Opponent Build Up - Defense To Offense',
                 label: {
-                    text: data.action_type_name
+                    text: data.action_name + ' ' + data.action_type_name + ' ' + data.action_result_name
                 },
             },
         }
