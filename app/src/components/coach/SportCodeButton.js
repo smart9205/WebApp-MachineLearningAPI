@@ -5,7 +5,7 @@ import { redColor, greenColor } from "./Colors";
 
 const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList, ...rest }) => {
 
-    console.log('team ID-==--=', teamId)
+
     let GoalkeeperId = []
     let greenIndex = 3
     let redIndex = 3
@@ -112,16 +112,31 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
     let sortedByTeamTagId = sortedStartTime.sort(sortByTeamTagId)
     let BuildUpGoalkeeperData = []
     let OpponentBuildUpGoalkeeperData = []
-    let BuildUpDefensiveHalfSellectedTeam = []
+    let BuildUpDefenseToOffenseSelectedTeam = []
+    let BuildUpDefenseToOffenseOpponentTeam = []
+    let BuildUpDefensiveHalfSelectedTeam = []
     let BuildUpDefensiveHalfOpponentTeam = []
-    let BuildUpOfensiveHalfSellectedTeam = []
-    let BuildUpOfensiveHalfOpponentTeam = []
+    let BuildUpOfensiveHalfSelectedTeam = [] 
+    let BuildUpOfensiveHalfOpponentTeam = [] 
     let prevTeamValue = []
-    
-    
-    
+        
+    //console.log('SELECTED TEAM ID ====',selectedTeamID)
+    console.log('ALL DATA ============',sortedByTeamTagId)
 
     const teamData = sortedByTeamTagId.map((data, index, arr) => {
+        
+        if (selectedTeamID === parseInt(data.offensive_team_id)) {
+  
+            if((data.action_id == 4 && data.action_result_id == 4)|| (data.action_id == 2 && (data.action_type_id == 6 ||  data.action_type_id == 7) && data.action_result_id == 4)){
+                BuildUpDefenseToOffenseSelectedTeam.push(data)
+            }   
+        }else{
+            if((data.action_id == 4 && data.action_result_id == 4)|| (data.action_id == 2 && (data.action_type_id == 6 ||  data.action_type_id == 7) && data.action_result_id == 4)){
+                BuildUpDefenseToOffenseOpponentTeam.push(data)
+            } 
+
+        }
+
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
             if (GoalkeeperId.includes(parseInt(data.player_id))) {
@@ -140,16 +155,17 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         let prevValue = arr[index - 1]
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
+
             if (!GoalkeeperId.includes(parseInt(data.player_id))) {
                 if (data.court_area_id === 3 || data.court_area_id === 4) {
                     if (prevValue?.team_tag_id !== data.team_tag_id) {
-                        BuildUpDefensiveHalfSellectedTeam.push(data)
+                        BuildUpDefensiveHalfSelectedTeam.push(data)
                     } else {
                         prevTeamValue.push(data)
                     }
                 } else {
                     if (prevValue?.team_tag_id !== data.team_tag_id) {
-                        BuildUpOfensiveHalfSellectedTeam.push(data)
+                        BuildUpOfensiveHalfSelectedTeam.push(data)
                     } else {
                         prevTeamValue.push(data)
                     }
@@ -157,6 +173,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
             }
         } else {
             if (!GoalkeeperId.includes(parseInt(data.player_id))) {
+
                 if (data.court_area_id === 3 || data.court_area_id === 4) {
                     if (prevValue?.team_tag_id !== data.team_tag_id) {
                         BuildUpDefensiveHalfOpponentTeam.push(data)
@@ -173,6 +190,12 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
             }
         }
     })
+
+
+    console.log('BuildUpDefenseToOffenseSellectedTeam : ', BuildUpDefenseToOffenseSelectedTeam)
+    console.log('BuildUpDefenseToOffenseOpponentTeam : ', BuildUpDefenseToOffenseOpponentTeam)
+
+    
     
     const BuildUpGoalKeeperDataForXML = BuildUpGoalkeeperData.map(data => {
         const XMLdata = {
@@ -222,7 +245,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         return XMLdata
     })
 
-    const BuildUpDefensiveHalfSellectedTeamDataForXML = BuildUpDefensiveHalfSellectedTeam.map(data => {
+    const BuildUpDefensiveHalfSelectedTeamDataForXML = BuildUpDefensiveHalfSelectedTeam.map(data => {
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -268,7 +291,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         return XMLdata
     })
 
-    const BuildUpOfensiveHalfSellectedTeamDataForXML = BuildUpOfensiveHalfSellectedTeam.map(data => {
+    const BuildUpOfensiveHalfSelectedTeamDataForXML = BuildUpOfensiveHalfSelectedTeam.map(data => {
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -329,9 +352,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
             "ALL_INSTANCES": {
                 BuildUpGoalKeeperDataForXML,
                 OpponentBuildUpGoalKeeperDataForXML,
-                BuildUpDefensiveHalfSellectedTeamDataForXML,
+                BuildUpDefensiveHalfSelectedTeamDataForXML,
                 BuildUpDefensiveHalfOpponentTeamDataFoxXML,
-                BuildUpOfensiveHalfSellectedTeamDataForXML,
+                BuildUpOfensiveHalfSelectedTeamDataForXML,
                 BuildUpOfensiveHalfOpponentTeamDataForXML,
                 playerData
             },
