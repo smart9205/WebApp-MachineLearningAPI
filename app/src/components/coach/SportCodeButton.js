@@ -7,8 +7,8 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
 
 
     let GoalkeeperId = []
-    let greenIndex = 3
-    let redIndex = 3
+    let greenIndex = 4
+    let redIndex = 4
     let rowsForXML = []
     let playerNames = []
     let selectedTeamID = parseInt(teamId)
@@ -83,10 +83,10 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
 
 
             if(redIndex === 30) {
-                redIndex = 0;
+                redIndex = 4;
             }
             if(greenIndex === 30) {
-                greenIndex = 0;
+                greenIndex = 4;
             }
             
         }
@@ -291,6 +291,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         return XMLdata
     })
 
+ 
     const BuildUpOfensiveHalfSelectedTeamDataForXML = BuildUpOfensiveHalfSelectedTeam.map(data => {
         const XMLdata = {
             instance: {
@@ -337,6 +338,56 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         return XMLdata
     })
 
+
+    const BuildUpDefenseToOffenseSelectedTeamDataForXML = BuildUpDefenseToOffenseSelectedTeam.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.t_start_time) - 5,
+                end: convertionIntoNumber(data.t_end_time) + 5,
+                code: 'Build Up - Defense To Offense',
+                label: {
+                    text: data.action_type_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Build Up - Defense To Offense',
+                R: greenColor[3].r,
+                G: greenColor[3].g,
+                B: greenColor[3].b
+            }
+        })
+        return XMLdata
+    })
+
+    const BuildUpDefenseToOffenseOpponentTeamDataForXML = BuildUpDefenseToOffenseOpponentTeam.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.t_start_time) - 5,
+                end: convertionIntoNumber(data.t_end_time) + 5,
+                code: 'Opponent Build Up - Defense To Offense',
+                label: {
+                    text: data.action_type_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Opponent Build Up - Defense To Offense',
+                R: redColor[3].r,
+                G: redColor[3].g,
+                B: redColor[3].b
+            }
+        })
+        return XMLdata
+    })
+
+
+    
+
     const rowDataForXML = rowsForXML.filter((value, index, self) =>
         index === self.findIndex((t) => (
             t.row.code === value.row.code
@@ -356,6 +407,8 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 BuildUpDefensiveHalfOpponentTeamDataFoxXML,
                 BuildUpOfensiveHalfSelectedTeamDataForXML,
                 BuildUpOfensiveHalfOpponentTeamDataForXML,
+                BuildUpDefenseToOffenseSelectedTeamDataForXML,
+                BuildUpDefenseToOffenseOpponentTeamDataForXML,
                 playerData
             },
             "ROWS": rowDataForXML
