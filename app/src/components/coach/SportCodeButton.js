@@ -244,9 +244,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Build Up - Goalkeeper',
-                R: parseInt(greenColor[0].r)*256,
-                G: parseInt(greenColor[0].g)*256,
-                B: parseInt(greenColor[0].b)*256
+                R: greenColor[0].r,
+                G: greenColor[0].g,
+                B: greenColor[0].b
             }
         }) // should be pushed only one time ok
 
