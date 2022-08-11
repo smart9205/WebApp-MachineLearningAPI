@@ -262,7 +262,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Opponent Build Up - Goalkeeper',
-                R: redColor[0].r, // these one?no
+                R: redColor[0].r, 
                 G: redColor[0].g,
                 B: redColor[0].b
             }
