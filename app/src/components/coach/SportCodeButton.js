@@ -515,7 +515,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Goals',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
                 },
             },
         }
@@ -538,7 +538,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Opponent Goals',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
                 },
             },
         }
@@ -561,7 +561,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Crosses',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
                 },
             },
         }
@@ -584,7 +584,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Opponet Crosses',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
                 },
             },
         }
@@ -607,7 +607,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Free Kicks',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
                 },
             },
         }
@@ -630,7 +630,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Opponent Free Kicks',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
                 },
             },
         }
@@ -653,7 +653,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Shots On Target',
                 label: {
-                    text: data.action_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
                 },
             },
         }
@@ -677,7 +677,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponent Shots On Target',
                 label: {
-                    text: data.action_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
                 },
             },
         }
@@ -701,7 +701,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Shots Of Target',
                 label: {
-                    text: data.action_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
                 },
             },
         }
@@ -725,7 +725,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponent Shots Of Target',
                 label: {
-                    text: data.action_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
                 },
             },
         }

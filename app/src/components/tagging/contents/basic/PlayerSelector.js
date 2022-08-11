@@ -57,6 +57,7 @@ export default function PlayerSelector({
 
     const [loading, setLoading] = React.useState(false)
     const [modalOpen, setModalOpen] = React.useState(false)
+    const [addPlayerModalOpen, setAddPlayerModalOpen] = React.useState(false)
     const [playerOpen, setPlayerOpen] = React.useState(false);
 
     const [teamPlayer, setTeamPlayer] = React.useState({
@@ -147,7 +148,7 @@ export default function PlayerSelector({
                 <Button
                     variant="outlined"
                     onClick={() => {
-                        setModalOpen(true)
+                        setAddPlayerModalOpen(true)
                         setPlayerOpen(true)
                     }}
                 >Add Players</Button>
@@ -155,8 +156,8 @@ export default function PlayerSelector({
 
             <Modal
                 disableAutoFocus
-                open={modalOpen}
-                onClose={() => setModalOpen(false)}
+                open={addPlayerModalOpen}
+                onClose={() => setAddPlayerModalOpen(false)}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
@@ -165,7 +166,7 @@ export default function PlayerSelector({
                         open={playerOpen}
                         title={title}
                         teamPlayer={teamPlayer}
-                        setTeamPlayer={setTeamPlayer}
+                        setAddPlayerModalOpen={setAddPlayerModalOpen}
                         onResult={(res) => {
                             setPlayerOpen(res.open);
                             if (!!res?.msg) {

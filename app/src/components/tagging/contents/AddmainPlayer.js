@@ -23,7 +23,7 @@ const init = {
     image: "",
 }
 
-const AddmainPlayer = ({ title, teamPlayer, setTeamPlayer }) => {
+const AddmainPlayer = ({ title, teamPlayer, setAddPlayerModalOpen }) => {
 
     const [positionList, setPositionList] = useState([]);
     const [playerData, setPlayerData] = useReducer((old, action) => ({ ...old, ...action }), init)
@@ -86,10 +86,11 @@ const AddmainPlayer = ({ title, teamPlayer, setTeamPlayer }) => {
         }
         setPlayerData(init)
         setHandleDialog(false)
+        setAddPlayerModalOpen(false)
     };
 
     return (
-        <Dialog open={handleDialog} onClose={(e) => handlePlayerClose(false)} maxWidth="lg">
+        <Dialog open={handleDialog} onClose={(e) => setHandleDialog(false)} maxWidth="lg">
             <DialogTitle>{'Add Player'}</DialogTitle>
             <DialogContent style={{ display: "flex" }}>
                 <Upload
