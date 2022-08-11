@@ -222,13 +222,6 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         }
     })
 
-    // console.log('GoalsSelectedTeam : ', GoalsSelectedTeam)
-    // console.log('GoalsOpponentTeam : ', GoalsOpponentTeam)
-    // console.log('CrossesSelectedTeam : ', CrossesSelectedTeam)
-    // console.log('CrossesOpponentTeam : ', CrossesOpponentTeam)
-    // console.log('FreeKicksSelectedTeam : ', FreeKicksSelectedTeam)
-    // console.log('FreeKicksOpponentTeam : ', FreeKicksOpponentTeam)
-
     const BuildUpGoalKeeperDataForXML = BuildUpGoalkeeperData.map(data => {
         const XMLdata = {
             instance: {

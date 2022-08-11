@@ -14,9 +14,9 @@ export default function SelectMainPlayers({
   }, [])
   return (
     <>
-      <PlayerSelector title="Home Team" playerList={homeTeam} posList={posList} />
+      <PlayerSelector title="Home Team" playerList={homeTeam} homeTeam={homeTeam} awayTeam={awayTeam} posList={posList} />
 
-      <PlayerSelector title="Away Team" playerList={awayTeam} posList={posList} />
+      <PlayerSelector title="Away Team" playerList={awayTeam} homeTeam={homeTeam} awayTeam={awayTeam} posList={posList} />
     </>
   );
 }
