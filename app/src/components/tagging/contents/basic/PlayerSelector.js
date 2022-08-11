@@ -80,15 +80,17 @@ export default function PlayerSelector({
         })
     }
 
-    homeTeam.map(data => {
-        seasonID = data.season_id
-        leagueID = data.league_id
-        homeTeamID = data.team_id
-    })
+    const gettingTeamData = async () => {
+        await homeTeam.map(data => {
+            seasonID = data.season_id
+            leagueID = data.league_id
+            homeTeamID = data.team_id
+        })
 
-    awayTeam.map(data => {
-        awayTeamID = data.team_id
-    })
+        await awayTeam.map(data => {
+            awayTeamID = data.team_id
+        })
+    }
 
     React.useEffect(() => {
         setTeamPlayer({ seasonID: seasonID, leagueID: leagueID, homeTeamID: homeTeamID, awayTeamID: awayTeamID })
@@ -143,43 +145,47 @@ export default function PlayerSelector({
                 </Table>
             </TableContainer>
 
-            <div style={{ marginTop: '20px', marginBottom: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Button
-                    variant="outlined"
-                    onClick={() => {
-                        setAddPlayerModalOpen(true)
-                        setPlayerOpen(true)
-                    }}
-                >Add Players</Button>
-            </div>
+            {title && (title === 'Home Team' || title === 'Away Team') &&
+                <>
+                    <div style={{ marginTop: '20px', marginBottom: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Button
+                            variant="outlined"
+                            onClick={() => {
+                                setAddPlayerModalOpen(true)
+                                setPlayerOpen(true)
+                            }}
+                        >Add Players</Button>
+                    </div>
 
-            <Modal
-                disableAutoFocus
-                open={addPlayerModalOpen}
-                onClose={() => setAddPlayerModalOpen(false)}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box style={style}>
-                    <AddMainPlayers
-                        open={playerOpen}
-                        title={title}
-                        teamPlayer={teamPlayer}
-                        setAddPlayerModalOpen={setAddPlayerModalOpen}
-                        onResult={(res) => {
-                            setPlayerOpen(res.open);
-                            if (!!res?.msg) {
-                                // OpenAlert(res.msg, res.result)
-                            }
-                            if (res?.result === "success") {
+                    <Modal
+                        disableAutoFocus
+                        open={addPlayerModalOpen}
+                        onClose={() => setAddPlayerModalOpen(false)}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box style={style}>
+                            <AddMainPlayers
+                                open={playerOpen}
+                                title={title}
+                                teamPlayer={teamPlayer}
+                                setAddPlayerModalOpen={setAddPlayerModalOpen}
+                                onResult={(res) => {
+                                    setPlayerOpen(res.open);
+                                    if (!!res?.msg) {
+                                        // OpenAlert(res.msg, res.result)
+                                    }
+                                    if (res?.result === "success") {
 
-                            }
-                        }}
-                    />
-                </Box>
-            </Modal>
+                                    }
+                                }}
+                            />
+                        </Box>
+                    </Modal>
+                </>
+            }
 
-        </SubBox>
+        </SubBox >
     );
 }
 
