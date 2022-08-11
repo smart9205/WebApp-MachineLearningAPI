@@ -94,68 +94,64 @@ export default function PlayerSelector({
         setTeamPlayer({ seasonID: seasonID, leagueID: leagueID, homeTeamID: homeTeamID, awayTeamID: awayTeamID })
     }, [seasonID, leagueID, homeTeamID, awayTeamID])
 
-
     if (loading) { }
     return (
-        <>
-            <SubBox>
-                <div className='title'>{title}</div>
-                <TableContainer component={Paper}>
-                    <Table aria-label="a dense table">
-                        <TableBody>
-                            {playerList.map((player, i) => (
-                                !editable && !player.checked
-                                    ? <></>
-                                    : <TableRow
-                                        key={i}
-                                        onClick={() => onSelect(player)}
-                                        sx={{ border: 0, height: 35, background: selected && selected.id === player.id ? 'darkblue' : '' }}
-                                    >
-                                        {editable && <TableCell className="player-select-checkbox">
 
-                                            <CustomCheck defaultValue={player.checked}
-                                                onCheck={v => player.checked = v}
-                                            />
+        <SubBox>
+            <div className='title'>{title}</div>
+            <TableContainer component={Paper}>
+                <Table aria-label="a dense table">
+                    <TableBody>
+                        {playerList.map((player, i) => (
+                            !editable && !player.checked
+                                ? <></>
+                                : <TableRow
+                                    key={i}
+                                    onClick={() => onSelect(player)}
+                                    sx={{ border: 0, height: 35, background: selected && selected.id === player.id ? 'darkblue' : '' }}
+                                >
+                                    {editable && <TableCell className="player-select-checkbox">
 
-                                        </TableCell>
-                                        }
-                                        {editable ?
-                                            <TCellJerseyEdit value={player.jersey_number}
-                                                update={v => {
-                                                    player.jersey_number = v
-                                                    update(player)
-                                                }} />
-                                            :
-                                            <TableCell align="left">#{player.jersey_number}</TableCell>
-                                        }
-                                        <TableCell align="left">{player.f_name} {player.l_name}</TableCell>
-                                        {editable ? <TCellPositionEdit
-                                            rows={posList}
-                                            value={{ id: player.position, name: player.position_name }}
+                                        <CustomCheck defaultValue={player.checked}
+                                            onCheck={v => player.checked = v}
+                                        />
+
+                                    </TableCell>
+                                    }
+                                    {editable ?
+                                        <TCellJerseyEdit value={player.jersey_number}
                                             update={v => {
-                                                player.position = v.id
-                                                player.position_name = v.name
+                                                player.jersey_number = v
                                                 update(player)
-                                            }}
-                                        /> : <TableCell align="left">{player.position_name}</TableCell>}
-                                    </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                                            }} />
+                                        :
+                                        <TableCell align="left">#{player.jersey_number}</TableCell>
+                                    }
+                                    <TableCell align="left">{player.f_name} {player.l_name}</TableCell>
+                                    {editable ? <TCellPositionEdit
+                                        rows={posList}
+                                        value={{ id: player.position, name: player.position_name }}
+                                        update={v => {
+                                            player.position = v.id
+                                            player.position_name = v.name
+                                            update(player)
+                                        }}
+                                    /> : <TableCell align="left">{player.position_name}</TableCell>}
+                                </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
 
-                <div style={{ marginTop: '20px', marginBottom: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Button
-                        variant="outlined"
-                        onClick={() => {
-                            setModalOpen(true)
-                            setPlayerOpen(true)
-                        }}
-                    >Add Players</Button>
-                </div>
-
-            </SubBox>
-
+            <div style={{ marginTop: '20px', marginBottom: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Button
+                    variant="outlined"
+                    onClick={() => {
+                        setModalOpen(true)
+                        setPlayerOpen(true)
+                    }}
+                >Add Players</Button>
+            </div>
 
             <Modal
                 disableAutoFocus
@@ -169,6 +165,7 @@ export default function PlayerSelector({
                         open={playerOpen}
                         title={title}
                         teamPlayer={teamPlayer}
+                        setTeamPlayer={setTeamPlayer}
                         onResult={(res) => {
                             setPlayerOpen(res.open);
                             if (!!res?.msg) {
@@ -182,7 +179,7 @@ export default function PlayerSelector({
                 </Box>
             </Modal>
 
-        </>
+        </SubBox>
     );
 }
 

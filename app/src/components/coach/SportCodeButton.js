@@ -145,12 +145,12 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
             testArray.push(data)
-            if (data.action_id != 7 && data.action_id != 12 && data.action_id != 10 && data.action_result_id != 4 && data.action_result_id != 9 && data.action_result_id != 13 && data.action_result_id != 17 && data.action_result_id != 18) {
+            if (data.action_id != 7 && data.action_id != 8 && data.action_id != 11 && data.action_id != 12 && data.action_id != 10 && data.action_result_id != 4 && data.action_result_id != 9 && data.action_result_id != 13 && data.action_result_id != 17 && data.action_result_id != 18) {
                 Offense.push(data)
             }
         }
         else {
-            if (data.action_id != 7 && data.action_id != 12 && data.action_id != 10 && data.action_result_id != 4 && data.action_result_id != 9 && data.action_result_id != 13 && data.action_result_id != 17 && data.action_result_id != 18) {
+            if (data.action_id != 7 && data.action_id != 8 && data.action_id != 11 && data.action_id != 12 && data.action_id != 10 && data.action_result_id != 4 && data.action_result_id != 9 && data.action_result_id != 13 && data.action_result_id != 17 && data.action_result_id != 18) {
                 Defense.push(data)
             }
         }
@@ -329,7 +329,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Build Up - Goalkeeper',
                 label: {
-                    text: data.action_type_name
+                    text: data.action_name + ' - ' + data.action_type_name
                 },
             },
         }
@@ -354,7 +354,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponent Build Up - Goalkeeper',
                 label: {
-                    text: data.action_type_name
+                    text: data.action_name + ' - ' + data.action_type_name
                 },
             },
         }
@@ -377,7 +377,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Build Up - Defensive Half',
                 label: {
-                    text: data.action_type_name
+                    text: data.action_name + ' - ' + data.action_type_name
                 },
             },
         }
@@ -400,7 +400,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponent Build Up - Defensive Half',
                 label: {
-                    text: data.action_type_name
+                    text: data.action_name + ' - ' + data.action_type_name
                 },
             },
         }
@@ -423,7 +423,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Build Up - Offensive Half',
                 label: {
-                    text: data.action_type_name
+                    text: data.action_name + ' - ' + data.action_type_name
                 },
             },
         }
@@ -446,7 +446,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponent Build Up - Offensive Half',
                 label: {
-                    text: data.action_type_name
+                    text: data.action_name + ' - ' + data.action_type_name
                 },
             },
         }

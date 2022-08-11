@@ -23,7 +23,7 @@ const init = {
     image: "",
 }
 
-const AddmainPlayer = ({ title, teamPlayer }) => {
+const AddmainPlayer = ({ title, teamPlayer, setTeamPlayer }) => {
 
     const [positionList, setPositionList] = useState([]);
     const [playerData, setPlayerData] = useReducer((old, action) => ({ ...old, ...action }), init)
@@ -85,10 +85,11 @@ const AddmainPlayer = ({ title, teamPlayer }) => {
             }).catch((e) => console.log("PLAYER ERROR", e));
         }
         setPlayerData(init)
+        setHandleDialog(false)
     };
 
     return (
-        <Dialog open={handleDialog} maxWidth="lg">
+        <Dialog open={handleDialog} onClose={(e) => handlePlayerClose(false)} maxWidth="lg">
             <DialogTitle>{'Add Player'}</DialogTitle>
             <DialogContent style={{ display: "flex" }}>
                 <Upload
