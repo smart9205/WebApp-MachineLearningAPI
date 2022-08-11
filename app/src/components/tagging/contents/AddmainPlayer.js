@@ -182,7 +182,7 @@ const AddmainPlayer = ({ title, teamPlayer, setAddPlayerModalOpen }) => {
             <DialogActions>
                 <Button onClick={e => {
                     setHandleDialog(false)
-                    window.location.reload()
+                    setAddPlayerModalOpen(false)
                 }}>Cancel</Button>
                 <Button onClick={e => checkErrorPlayer() && handlePlayerClose(true)}>Done</Button>
             </DialogActions>

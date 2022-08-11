@@ -56,7 +56,6 @@ export default function PlayerSelector({
 }) {
 
     const [loading, setLoading] = React.useState(false)
-    const [modalOpen, setModalOpen] = React.useState(false)
     const [addPlayerModalOpen, setAddPlayerModalOpen] = React.useState(false)
     const [playerOpen, setPlayerOpen] = React.useState(false);
 
