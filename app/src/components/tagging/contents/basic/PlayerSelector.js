@@ -80,19 +80,23 @@ export default function PlayerSelector({
         })
     }
 
-    const gettingTeamData = async () => {
-        await homeTeam.map(data => {
+    const gettingHomeTeamData = async () => {
+        await homeTeam?.map(data => {
             seasonID = data.season_id
             leagueID = data.league_id
             homeTeamID = data.team_id
         })
 
-        await awayTeam.map(data => {
+    }
+    const gettingAwayTeamData = async () => {
+        await awayTeam?.map(data => {
             awayTeamID = data.team_id
         })
     }
 
     React.useEffect(() => {
+        gettingHomeTeamData()
+        gettingAwayTeamData()
         setTeamPlayer({ seasonID: seasonID, leagueID: leagueID, homeTeamID: homeTeamID, awayTeamID: awayTeamID })
     }, [seasonID, leagueID, homeTeamID, awayTeamID])
 

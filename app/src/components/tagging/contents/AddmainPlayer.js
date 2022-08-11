@@ -41,6 +41,7 @@ const AddmainPlayer = ({ title, teamPlayer, setAddPlayerModalOpen }) => {
         GameService.getAllPositions().then(res => {
             setPositionList(res)
         })
+        console.log(teamPlayer)
     }, [])
 
     useEffect(() => {
