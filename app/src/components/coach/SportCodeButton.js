@@ -6,11 +6,14 @@ import { redColor, greenColor } from "./Colors";
 const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList, ...rest }) => {
 
     let GoalkeeperId = []
-    let greenIndex = 7
-    let redIndex = 7
+    let greenIndex = 10
+    let redIndex = 10
     let rowsForXML = []
     let playerNames = []
     let selectedTeamID = parseInt(teamId)
+
+    let colorMultipleNumber = 257
+
 
     playersInGameList.home_team.map(data => {
         if (data.position === 16) {
@@ -61,9 +64,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 var playerRow = rowsForXML.push({
                     row: {
                         code: data.player_fname + " " + data.player_lname,
-                        R: greenColor[greenIndex].r,
-                        G: greenColor[greenIndex].g,
-                        B: greenColor[greenIndex].b
+                        R: parseInt(greenColor[greenIndex].r) * colorMultipleNumber, // we need to add this to all okay 
+                        G: parseInt(greenColor[greenIndex].g) * colorMultipleNumber,
+                        B: parseInt(greenColor[greenIndex].b) * colorMultipleNumber
                     }
                 })
                 greenIndex = greenIndex + 1
@@ -71,9 +74,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 var playerRow = rowsForXML.push({
                     row: {
                         code: data.player_fname + " " + data.player_lname,
-                        R: redColor[redIndex].r,
-                        G: redColor[redIndex].g,
-                        B: redColor[redIndex].b
+                        R: parseInt(redColor[redIndex].r) * colorMultipleNumber,
+                        G: parseInt(redColor[redIndex].g) * colorMultipleNumber,
+                        B: parseInt(redColor[redIndex].b) * colorMultipleNumber
                     }
                 })
                 redIndex = redIndex + 1
@@ -102,6 +105,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
 
     let sortedByTeamTagId = sortedStartTime.sort(sortByTeamTagId)
 
+    let Offense = []
+    let Defense = []
+
     let BuildUpGoalkeeperData = []
     let OpponentBuildUpGoalkeeperData = []
 
@@ -123,10 +129,54 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
     let FreeKicksSelectedTeam = []
     let FreeKicksOpponentTeam = []
 
+    let ShotsOnTargetSelectedTeam = []
+    let ShotsOnTargetOpponnetTeam = []
+
+    let ShotsOfTargetSelectedTeam = []
+    let ShotsOfTargetOpponnetTeam = []
+
     let prevTeamValue = []
     let lastActionID = 0
+    let testArray = []
 
     const teamData = sortedByTeamTagId.map((data, index, arr) => {
+
+        let prevValue = arr[index - 1] //it will give prev data
+
+        if (selectedTeamID === parseInt(data.offensive_team_id)) {
+            testArray.push(data)
+            if (data.action_id != 7 && data.action_id != 12 && data.action_id != 10 && data.action_result_id != 4 && data.action_result_id != 9 && data.action_result_id != 13 && data.action_result_id != 17 && data.action_result_id != 18) {
+                Offense.push(data)
+            }
+        }
+        else {
+            if (data.action_id != 7 && data.action_id != 12 && data.action_id != 10 && data.action_result_id != 4 && data.action_result_id != 9 && data.action_result_id != 13 && data.action_result_id != 17 && data.action_result_id != 18) {
+                Defense.push(data)
+            }
+        }
+
+
+        if (selectedTeamID === parseInt(data.offensive_team_id)) {
+            if (data.action_id == 1 && data.action_result_id == 1) {
+                ShotsOnTargetSelectedTeam.push(data)
+            }
+        } else {
+            if (data.action_id == 1 && data.action_result_id == 1) {
+                ShotsOnTargetOpponnetTeam.push(data)
+            }
+        }
+
+
+        if (selectedTeamID === parseInt(data.offensive_team_id)) {
+            if (data.action_id == 1 && data.action_result_id == 2) {
+                ShotsOfTargetSelectedTeam.push(data)
+            }
+        } else {
+            if (data.action_id == 1 && data.action_result_id == 2) {
+                ShotsOfTargetOpponnetTeam.push(data)
+            }
+        }
+
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
             if (GoalkeeperId.includes(parseInt(data.player_id))) {
@@ -142,10 +192,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
             }
         }
 
-        let prevValue = arr[index - 1]
-
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
-
             if (!GoalkeeperId.includes(parseInt(data.player_id))) {
                 if (data.court_area_id === 3 || data.court_area_id === 4) {
                     if (prevValue?.team_tag_id !== data.team_tag_id) {
@@ -222,6 +269,58 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         }
     })
 
+    console.log('Offense : ', Offense)
+    console.log('Defense : ', Defense)
+    console.log('Test-Array : ', testArray)
+
+    const OffenseDataForXML = Offense.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.t_start_time),
+                end: convertionIntoNumber(data.t_end_time),
+                code: 'Offense',
+                label: {
+                    text: data.action_name + ' - ' + data.action_result_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Offense',
+                R: parseInt(greenColor[0].r) * colorMultipleNumber,
+                G: parseInt(greenColor[0].g) * colorMultipleNumber,
+                B: parseInt(greenColor[0].b) * colorMultipleNumber
+            }
+        })
+
+        return XMLdata
+    })
+
+    const DefenseDataForXML = Defense.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.t_start_time),
+                end: convertionIntoNumber(data.t_end_time),
+                code: 'Opponents Offense',
+                label: {
+                    text: data.action_name + ' - ' + data.action_result_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Opponents Offense',
+                R: parseInt(redColor[0].r) * colorMultipleNumber,
+                G: parseInt(redColor[0].g) * colorMultipleNumber,
+                B: parseInt(redColor[0].b) * colorMultipleNumber
+            }
+        })
+
+        return XMLdata
+    })
+
     const BuildUpGoalKeeperDataForXML = BuildUpGoalkeeperData.map(data => {
         const XMLdata = {
             instance: {
@@ -237,11 +336,11 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Build Up - Goalkeeper',
-                R: greenColor[0].r,
-                G: greenColor[0].g,
-                B: greenColor[0].b
+                R: parseInt(greenColor[1].r) * colorMultipleNumber,
+                G: parseInt(greenColor[1].g) * colorMultipleNumber,
+                B: parseInt(greenColor[1].b) * colorMultipleNumber
             }
-        }) // should be pushed only one time ok
+        })
 
         return XMLdata
 
@@ -262,9 +361,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Opponent Build Up - Goalkeeper',
-                R: redColor[0].r, 
-                G: redColor[0].g,
-                B: redColor[0].b
+                R: parseInt(redColor[1].r) * colorMultipleNumber,
+                G: parseInt(redColor[1].g) * colorMultipleNumber,
+                B: parseInt(redColor[1].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -285,9 +384,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Build Up - Defensive Half',
-                R: greenColor[1].r,
-                G: greenColor[1].g,
-                B: greenColor[1].b
+                R: parseInt(greenColor[2].r) * colorMultipleNumber,
+                G: parseInt(greenColor[2].g) * colorMultipleNumber,
+                B: parseInt(greenColor[2].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -308,9 +407,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Opponent Build Up - Defensive Half',
-                R: redColor[1].r,
-                G: redColor[1].g,
-                B: redColor[1].b
+                R: parseInt(redColor[2].r) * colorMultipleNumber,
+                G: parseInt(redColor[2].g) * colorMultipleNumber,
+                B: parseInt(redColor[2].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -331,9 +430,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Build Up - Offensive Half',
-                R: greenColor[2].r,
-                G: greenColor[2].g,
-                B: greenColor[2].b
+                R: parseInt(greenColor[3].r) * colorMultipleNumber,
+                G: parseInt(greenColor[3].g) * colorMultipleNumber,
+                B: parseInt(greenColor[3].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -354,9 +453,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Opponent Build Up - Offensive Half',
-                R: redColor[2].r,
-                G: redColor[2].g,
-                B: redColor[2].b
+                R: parseInt(redColor[3].r) * colorMultipleNumber,
+                G: parseInt(redColor[3].g) * colorMultipleNumber,
+                B: parseInt(redColor[3].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -377,9 +476,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Build Up - Defense To Offense',
-                R: greenColor[3].r,
-                G: greenColor[3].g,
-                B: greenColor[3].b
+                R: parseInt(greenColor[4].r) * colorMultipleNumber,
+                G: parseInt(greenColor[4].g) * colorMultipleNumber,
+                B: parseInt(greenColor[4].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -400,9 +499,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Opponent Build Up - Defense To Offense',
-                R: redColor[3].r,
-                G: redColor[3].g,
-                B: redColor[3].b
+                R: parseInt(redColor[4].r) * colorMultipleNumber,
+                G: parseInt(redColor[4].g) * colorMultipleNumber,
+                B: parseInt(redColor[4].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -423,9 +522,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Goals',
-                R: greenColor[4].r,
-                G: greenColor[4].g,
-                B: greenColor[4].b
+                R: parseInt(greenColor[5].r) * colorMultipleNumber,
+                G: parseInt(greenColor[5].g) * colorMultipleNumber,
+                B: parseInt(greenColor[5].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -446,9 +545,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Opponent Goals',
-                R: redColor[4].r,
-                G: redColor[4].g,
-                B: redColor[4].b
+                R: parseInt(redColor[5].r) * colorMultipleNumber,
+                G: parseInt(redColor[5].g) * colorMultipleNumber,
+                B: parseInt(redColor[5].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -469,9 +568,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Crosses',
-                R: greenColor[5].r,
-                G: greenColor[5].g,
-                B: greenColor[5].b
+                R: parseInt(greenColor[6].r) * colorMultipleNumber,
+                G: parseInt(greenColor[6].g) * colorMultipleNumber,
+                B: parseInt(greenColor[6].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -492,9 +591,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Opponent Crosses',
-                R: redColor[5].r,
-                G: redColor[5].g,
-                B: redColor[5].b
+                R: parseInt(redColor[6].r) * colorMultipleNumber,
+                G: parseInt(redColor[6].g) * colorMultipleNumber,
+                B: parseInt(redColor[6].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -515,9 +614,9 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Free Kicks',
-                R: greenColor[6].r,
-                G: greenColor[6].g,
-                B: greenColor[6].b
+                R: parseInt(greenColor[7].r) * colorMultipleNumber,
+                G: parseInt(greenColor[7].g) * colorMultipleNumber,
+                B: parseInt(greenColor[7].b) * colorMultipleNumber
             }
         })
         return XMLdata
@@ -538,11 +637,107 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         rowsForXML.push({
             row: {
                 code: 'Opponent Free Kicks',
-                R: redColor[6].r,
-                G: redColor[6].g,
-                B: redColor[6].b
+                R: parseInt(redColor[7].r) * colorMultipleNumber,
+                G: parseInt(redColor[7].g) * colorMultipleNumber,
+                B: parseInt(redColor[7].b) * colorMultipleNumber
             }
         })
+        return XMLdata
+    })
+
+    const ShotsOnTargetSelectedTeamDataForXML = ShotsOnTargetSelectedTeam.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.start_time),
+                end: convertionIntoNumber(data.t_end_time),
+                code: 'Shots On Target',
+                label: {
+                    text: data.action_name + ' - ' + data.action_result_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Shots On Target',
+                R: parseInt(greenColor[8].r) * colorMultipleNumber,
+                G: parseInt(greenColor[8].g) * colorMultipleNumber,
+                B: parseInt(greenColor[8].b) * colorMultipleNumber
+            }
+        })
+
+        return XMLdata
+    })
+
+    const ShotsOnTargetOpponnetTeamDataForXML = ShotsOnTargetOpponnetTeam.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.start_time),
+                end: convertionIntoNumber(data.t_end_time),
+                code: 'Opponent Shots On Target',
+                label: {
+                    text: data.action_name + ' - ' + data.action_result_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Opponent Shots On Target',
+                R: parseInt(redColor[8].r) * colorMultipleNumber,
+                G: parseInt(redColor[8].g) * colorMultipleNumber,
+                B: parseInt(redColor[8].b) * colorMultipleNumber
+            }
+        })
+
+        return XMLdata
+    })
+
+    const ShotsOfTargetSelectedTeamDataForXML = ShotsOfTargetSelectedTeam.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.start_time),
+                end: convertionIntoNumber(data.t_end_time),
+                code: 'Shots Of Target',
+                label: {
+                    text: data.action_name + ' - ' + data.action_result_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Shots Of Target',
+                R: parseInt(greenColor[9].r) * colorMultipleNumber,
+                G: parseInt(greenColor[9].g) * colorMultipleNumber,
+                B: parseInt(greenColor[9].b) * colorMultipleNumber
+            }
+        })
+
+        return XMLdata
+    })
+
+    const ShotsOfTargetOpponnetTeamDataForXML = ShotsOfTargetOpponnetTeam.map(data => {
+        const XMLdata = {
+            instance: {
+                ID: data.team_tag_id,
+                start: convertionIntoNumber(data.start_time),
+                end: convertionIntoNumber(data.t_end_time),
+                code: 'Opponent Shots Of Target',
+                label: {
+                    text: data.action_name + ' - ' + data.action_result_name
+                },
+            },
+        }
+        rowsForXML.push({
+            row: {
+                code: 'Opponent Shots Of Target',
+                R: parseInt(redColor[9].r) * colorMultipleNumber,
+                G: parseInt(redColor[9].g) * colorMultipleNumber,
+                B: parseInt(redColor[9].b) * colorMultipleNumber
+            }
+        })
+
         return XMLdata
     })
 
@@ -559,6 +754,10 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
                 "start_time": game.date
             },
             "ALL_INSTANCES": {
+
+                OffenseDataForXML,
+                DefenseDataForXML,
+
                 BuildUpGoalKeeperDataForXML,
                 OpponentBuildUpGoalKeeperDataForXML,
 
@@ -579,6 +778,12 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
 
                 FreeKicksSelectedTeamDataForXML,
                 FreeKicksOpponentTeamDataForXML,
+
+                ShotsOnTargetSelectedTeamDataForXML,
+                ShotsOnTargetOpponnetTeamDataForXML,
+
+                ShotsOfTargetSelectedTeamDataForXML,
+                ShotsOfTargetOpponnetTeamDataForXML,
 
                 playerData
             },
