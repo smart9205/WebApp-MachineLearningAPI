@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React from "react";
 import { Button } from '@mui/material'
 import { toXML } from 'jstoxml'
 import { redColor, greenColor } from "./Colors";
@@ -8,7 +8,6 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
     let GoalkeeperId = []
 
     let rowsForXML = []
-    let playerNames = []
 
     let SelectedTeamPlayers = []
     let OpponentTeamPlayers = []
@@ -34,6 +33,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         if (data.team_id) {
             HomeTeam = data.team_id
         }
+        return
     })
 
     playersInGameList.away_team.map(data => {
@@ -46,6 +46,7 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         if (data.team_id) {
             AwayTeam = data.team_id
         }
+        return
     })
 
     const convertionIntoNumber = (numberTime) => {
@@ -135,34 +136,34 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
             testArray.push(data)
-            if (data.action_id != 7 && data.action_id != 8 && data.action_id != 11 && data.action_id != 12 && data.action_id != 10 && data.action_result_id != 4 && data.action_result_id != 9 && data.action_result_id != 13 && data.action_result_id != 17 && data.action_result_id != 18) {
+            if (data.action_id !== 7 && data.action_id !== 8 && data.action_id !== 11 && data.action_id !== 12 && data.action_id !== 10 && data.action_result_id !== 4 && data.action_result_id !== 9 && data.action_result_id !== 13 && data.action_result_id !== 17 && data.action_result_id !== 18) {
                 Offense.push(data)
             }
         }
         else {
-            if (data.action_id != 7 && data.action_id != 8 && data.action_id != 11 && data.action_id != 12 && data.action_id != 10 && data.action_result_id != 4 && data.action_result_id != 9 && data.action_result_id != 13 && data.action_result_id != 17 && data.action_result_id != 18) {
+            if (data.action_id !== 7 && data.action_id !== 8 && data.action_id !== 11 && data.action_id !== 12 && data.action_id !== 10 && data.action_result_id !== 4 && data.action_result_id !== 9 && data.action_result_id !== 13 && data.action_result_id !== 17 && data.action_result_id !== 18) {
                 Defense.push(data)
             }
         }
 
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
-            if (data.action_id == 1 && data.action_result_id == 1) {
+            if (data.action_id === 1 && data.action_result_id === 1) {
                 ShotsOnTargetSelectedTeam.push(data)
             }
         } else {
-            if (data.action_id == 1 && data.action_result_id == 1) {
+            if (data.action_id === 1 && data.action_result_id === 1) {
                 ShotsOnTargetOpponnetTeam.push(data)
             }
         }
 
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
-            if (data.action_id == 1 && data.action_result_id == 2) {
+            if (data.action_id === 1 && data.action_result_id === 2) {
                 ShotsOfTargetSelectedTeam.push(data)
             }
         } else {
-            if (data.action_id == 1 && data.action_result_id == 2) {
+            if (data.action_id === 1 && data.action_result_id === 2) {
                 ShotsOfTargetOpponnetTeam.push(data)
             }
         }
@@ -218,11 +219,11 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         }
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
-            if ((lastActionID == 10 || lastActionID == 12 || lastActionID == 7) && (data.action_id == 4 && data.action_result_id == 4) || (data.action_id == 2 && (data.action_type_id == 6 || data.action_type_id == 7) && data.action_result_id == 4)) {
+            if ((lastActionID === 10 || lastActionID === 12 || lastActionID === 7) && (data.action_id === 4 && data.action_result_id === 4) || (data.action_id === 2 && (data.action_type_id === 6 || data.action_type_id === 7) && data.action_result_id === 4)) {
                 BuildUpDefenseToOffenseSelectedTeam.push(data)
             }
         } else {
-            if ((lastActionID == 10 || lastActionID == 12 || lastActionID == 7) && (data.action_id == 4 && data.action_result_id == 4) || (data.action_id == 2 && (data.action_type_id == 6 || data.action_type_id == 7) && data.action_result_id == 4)) {
+            if ((lastActionID === 10 || lastActionID === 12 || lastActionID === 7) && (data.action_id === 4 && data.action_result_id === 4) || (data.action_id === 2 && (data.action_type_id === 6 || data.action_type_id === 7) && data.action_result_id === 4)) {
                 BuildUpDefenseToOffenseOpponentTeam.push(data)
             }
 
@@ -231,28 +232,28 @@ const SportCodeButton = ({ game, t, team, teamId, playerList, playersInGameList,
         lastActionID = data.action_id
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
-            if (data.action_id == 1 && data.action_result_id == 3) {
+            if (data.action_id === 1 && data.action_result_id === 3) {
                 GoalsSelectedTeam.push(data)
             }
 
-            if (data.action_id == 3) {
+            if (data.action_id === 3) {
                 CrossesSelectedTeam.push(data)
             }
 
-            if (data.action_id == 1 && (data.action_type_id == 11 || data.action_type_id == 13)) {
+            if (data.action_id === 1 && (data.action_type_id === 11 || data.action_type_id === 13)) {
                 FreeKicksSelectedTeam.push(data)
             }
 
         } else {
-            if (data.action_id == 1 && data.action_result_id == 3) {
+            if (data.action_id === 1 && data.action_result_id === 3) {
                 GoalsOpponentTeam.push(data)
             }
 
-            if (data.action_id == 3) {
+            if (data.action_id === 3) {
                 CrossesOpponentTeam.push(data)
             }
 
-            if (data.action_id == 1 && (data.action_type_id == 11 || data.action_type_id == 13)) {
+            if (data.action_id === 1 && (data.action_type_id === 11 || data.action_type_id === 13)) {
                 FreeKicksOpponentTeam.push(data)
             }
 
