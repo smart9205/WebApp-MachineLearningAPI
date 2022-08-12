@@ -23,7 +23,7 @@ const init = {
     image: "",
 }
 
-const AddmainPlayer = ({ title, teamPlayer, setAddPlayerModalOpen }) => {
+const AddmainPlayer = ({ title, teamPlayer, setAddPlayerModalOpen, setGamePlayerRefresh }) => {
 
     const [positionList, setPositionList] = useState([]);
     const [playerData, setPlayerData] = useReducer((old, action) => ({ ...old, ...action }), init)
@@ -41,7 +41,6 @@ const AddmainPlayer = ({ title, teamPlayer, setAddPlayerModalOpen }) => {
         GameService.getAllPositions().then(res => {
             setPositionList(res)
         })
-        console.log(teamPlayer)
     }, [])
 
     useEffect(() => {
@@ -88,6 +87,7 @@ const AddmainPlayer = ({ title, teamPlayer, setAddPlayerModalOpen }) => {
         setPlayerData(init)
         setHandleDialog(false)
         setAddPlayerModalOpen(false)
+        setGamePlayerRefresh(true)
     };
 
     return (

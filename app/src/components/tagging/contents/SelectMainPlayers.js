@@ -4,7 +4,8 @@ import gameService from '../../../services/game.service';
 
 export default function SelectMainPlayers({
   homeTeam,
-  awayTeam
+  awayTeam,
+  setGamePlayerRefresh
 }) {
   const [posList, setPosList] = React.useState([])
   React.useEffect(() => {
@@ -14,9 +15,9 @@ export default function SelectMainPlayers({
   }, [])
   return (
     <>
-      <PlayerSelector title="Home Team" playerList={homeTeam} homeTeam={homeTeam} awayTeam={awayTeam} posList={posList} />
+      <PlayerSelector title="Home Team" playerList={homeTeam} homeTeam={homeTeam} awayTeam={awayTeam} posList={posList} setGamePlayerRefresh={setGamePlayerRefresh} />
 
-      <PlayerSelector title="Away Team" playerList={awayTeam} homeTeam={homeTeam} awayTeam={awayTeam} posList={posList} />
+      <PlayerSelector title="Away Team" playerList={awayTeam} homeTeam={homeTeam} awayTeam={awayTeam} posList={posList} setGamePlayerRefresh={setGamePlayerRefresh} />
     </>
   );
 }

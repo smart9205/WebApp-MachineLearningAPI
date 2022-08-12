@@ -153,6 +153,8 @@ export default function Tagging() {
     end_time: "00:00:00",
   })
 
+  const [gamePlayerRefresh, setGamePlayerRefresh] = React.useState(false)
+
   const offenseTeam = state.offense === "home" ? state.homePlayers : state.awayPlayers
   const defenseTeam = state.offense === "away" ? state.homePlayers : state.awayPlayers
 
@@ -183,14 +185,22 @@ export default function Tagging() {
     });
   }, [game_id])
 
-  React.useEffect(() => {
-    GameService.getGameTeamPlayers({ game_id }).then((res) => {
+  const GameTeamPlayer = async () => {
+    await GameService.getGameTeamPlayers({ game_id }).then((res) => {
       setState({
         homePlayers: res.home_team.map(p => { return { ...p, checked: true } }),
         awayPlayers: res.away_team.map(p => { return { ...p, checked: true } })
       })
     })
+  }
+
+  React.useEffect(() => {
+    GameTeamPlayer()
   }, [count, game_id])
+
+  if (gamePlayerRefresh) {
+    GameTeamPlayer()
+  }
 
   const updateTagList = () => setTagCnt(tagCnt + 1)
   const handleDrawerOpen = () => setOpen(!open)
@@ -407,6 +417,7 @@ export default function Tagging() {
             <SelectMainPlayers
               homeTeam={state.homePlayers}
               awayTeam={state.awayPlayers}
+              setGamePlayerRefresh={setGamePlayerRefresh}
             />
           }
         </Box>

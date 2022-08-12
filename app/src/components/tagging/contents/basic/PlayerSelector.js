@@ -23,7 +23,6 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: '100%',
     display: 'flex',
-    // boxShadow: 24,
     justifyContent: 'center',
     p: 4,
 };
@@ -52,7 +51,8 @@ export default function PlayerSelector({
     posList = [],
     editable = true,
     selected = null,
-    onSelect
+    onSelect,
+    setGamePlayerRefresh
 }) {
 
     const [loading, setLoading] = React.useState(false)
@@ -174,6 +174,7 @@ export default function PlayerSelector({
                                 title={title}
                                 teamPlayer={teamPlayer}
                                 setAddPlayerModalOpen={setAddPlayerModalOpen}
+                                setGamePlayerRefresh={setGamePlayerRefresh}
                                 onResult={(res) => {
                                     setPlayerOpen(res.open);
                                     if (!!res?.msg) {
