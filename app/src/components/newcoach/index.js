@@ -5,9 +5,6 @@ import Sidebar from './sidebar';
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
-        p: {
-            color: 'black'
-        },
         html: {
             height: '100%'
         },
@@ -20,15 +17,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const NewCoach = () => {
+const NewCoach = ({ children }) => {
     const classes = useStyles();
 
     return (
         <Box classes={classes['@global']} style={{ display: 'flex', height: '100%' }}>
             <Sidebar />
-            <Box style={{ backgroundColor: '#F8F8F8', flex: 1, padding: '24px' }}>
-                <p>alkdlfekjf</p>
-            </Box>
+            <Box style={{ backgroundColor: '#F8F8F8', flex: 1, display: 'flex', justifyContent: 'center' }}>{children}</Box>
         </Box>
     );
 };
