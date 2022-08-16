@@ -24,7 +24,8 @@ const Games = () => {
 
     const [updateGamesList, setUpdateGamesList] = useState(false)
     const [period, setPeriod] = React.useState('all');
-    const [teamSelection, setTeamSelection] = useState()
+    const [teamSelection, setTeamSelection] = useState('all')
+    const [TeamSelectionOptions, setTeamSelectionOptions] = useState()
 
     useEffect(() => {
         gameService.getAllMyCoachTeam().then((res) => {
@@ -46,8 +47,8 @@ const Games = () => {
 
     let teamSelectionFields = []
 
-    useEffect(() => {
-        gameListByCoach.map(teamData => {
+    const gettingTeamData = async () => {
+        await gameListByCoach.map(teamData => {
             if (teamData?.home_team_id && teamData?.away_team_id) {
                 teamSelectionFields.push({
                     value: teamData.home_team_id,
@@ -59,15 +60,16 @@ const Games = () => {
                 })
             }
         })
-        console.log(teamSelectionFields)
+    }
+
+    useEffect(() => {
+        gettingTeamData()
+        setTeamSelectionOptions({ ...TeamSelectionOptions, teamSelectionFields })
     }, [gameListByCoach])
-
-
 
     const handleChange = (event) => {
         setPeriod(event.target.value);
     };
-
 
     return (
         <>
@@ -107,13 +109,16 @@ const Games = () => {
                                     <Select
                                         value={teamSelection}
                                         onChange={(e) => setTeamSelection(e.target.value)}
-                                        variant='outlined'
                                         label=''
+                                        variant="standard"
+                                        disableUnderline
                                         inputProps={{ 'aria-label': 'Without label' }}
-                                        sx={{ border: 'none', height: '36px', width: '160px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                        sx={{ outline: 'none', height: '36px' }}
                                     >
-                                        {teamSelectionFields?.map(option => (
-                                            <MenuItem>{option.label}</MenuItem>
+                                        <MenuItem value='all'>All</MenuItem>
+
+                                        {TeamSelectionOptions?.teamSelectionFields && TeamSelectionOptions?.teamSelectionFields?.map((option, index) => (
+                                            <MenuItem key={index} value={option.value} >{option.label}</MenuItem>
                                         ))}
 
                                     </Select>
