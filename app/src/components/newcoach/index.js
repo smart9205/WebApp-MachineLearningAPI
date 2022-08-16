@@ -1,29 +1,31 @@
-import { Box, Typography } from '@mui/material';
-import React, { useState } from 'react';
-import PasswordTab from './tabs/passwordTab';
+import { Box } from '@mui/material';
+import React from 'react';
+import { makeStyles } from '@mui/styles';
+import Sidebar from './sidebar';
 
-import ProfileTab from './tabs/profileTab';
+const useStyles = makeStyles((theme) => ({
+    '@global': {
+        html: {
+            height: '100%'
+        },
+        body: {
+            height: '100%'
+        },
+        '#root': {
+            height: '100%'
+        }
+    }
+}));
 
-const Tabs = ['Profiles', 'Password'];
-
-const Settings = () => {
-    const [curTab, setCurTab] = useState(0);
+const NewCoach = ({ children }) => {
+    const classes = useStyles();
 
     return (
-        <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
-            <Box sx={{ padding: '24px 24px 21px 48px' }}>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Settings</Typography>
-                <Box sx={{ display: 'flex', marginTop: '24px', alignItems: 'center', gap: '24px' }}>
-                    {Tabs.map((title, index) => (
-                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: 'fit-content', gap: '4px', cursor: 'pointer' }} onClick={() => setCurTab(index)}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: curTab === index ? 'black' : '#A5A5A8' }}>{title}</Typography>
-                            <Box sx={{ height: '2px', width: '100%', backgroundColor: curTab === index ? 'red' : '#F8F8F8' }} />
-                        </Box>
-                    ))}
-                </Box>
-            </Box>
-            {curTab === 0 && <ProfileTab />}
-            {curTab === 1 && <PasswordTab />}
+        <Box classes={classes['@global']} style={{ display: 'flex', height: '100%' }}>
+            <Sidebar />
+            <Box style={{ backgroundColor: '#F8F8F8', flex: 1, display: 'flex', justifyContent: 'center' }}>{children}</Box>
         </Box>
     );
 };
+
+export default NewCoach;
