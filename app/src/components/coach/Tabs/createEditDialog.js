@@ -57,7 +57,7 @@ function getStyles(name, action, theme) {
 }
 
 
-const CreateEditDialog = ({ open, handleOpen, teamList, t }) => {
+const CreateEditDialog = ({ open, handleEditOpen, teamList, t }) => {
 
     const theme = useTheme();
 
@@ -160,7 +160,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList, t }) => {
         }).then(res => {
             setLoading(false)
             setNameOpen(false)
-            handleOpen(false)
+            handleEditOpen(false)
         })
     }
 
@@ -199,7 +199,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList, t }) => {
                 fullWidth
                 maxWidth={"lg"}
                 open={open}
-                onClose={() => handleOpen(false)}
+                onClose={() => handleEditOpen(false)}
             >
                 <DialogTitle>{t("Create")} {t("NewEdit")}</DialogTitle>
                 <DialogContent>
@@ -355,7 +355,7 @@ const CreateEditDialog = ({ open, handleOpen, teamList, t }) => {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleOpen(false)}>{t("Close")}</Button>
+                    <Button onClick={() => handleEditOpen(false)}>{t("Close")}</Button>
                     <Button onClick={() => handleSearch()} disabled={!game.length || !team}>{t("Search")}</Button>
                 </DialogActions>
             </Dialog >

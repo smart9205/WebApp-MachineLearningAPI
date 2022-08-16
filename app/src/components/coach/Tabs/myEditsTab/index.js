@@ -18,6 +18,7 @@ import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import VideoPlayer from './UserEditVideoPlayer';
 import CreateEditDialog from "../createEditDialog";
+import CreateQuickEditDialog from "../createQuickEditDialog";
 import gameService from "../../../../services/game.service";
 import DeleteConfirmDialog from "../../../../common/DeleteConfirmDialog";
 import EditNameDialog from "../../../../common/EditNameDialolg";
@@ -42,6 +43,7 @@ const styles = {
 const MyEditsTab = ({ teamList, game, playerList, t }) => {
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
+    const [quickOpen, setQuickOpen] = useState(false)
     const [curEdit, setCurEdit] = useState(null)
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [editName, setEditName] = useState("")
@@ -70,8 +72,13 @@ const MyEditsTab = ({ teamList, game, playerList, t }) => {
 
     useEffect(initUserEdits, [])
 
-    const handleOpen = (flag) => {
+    const handleEditOpen = (flag) => {
         setOpen(flag)
+        if (!flag) initUserEdits()
+    }
+
+    const handleQuickEditOpen = (flag) => {
+        setQuickOpen(flag)
         if (!flag) initUserEdits()
     }
 
@@ -163,15 +170,16 @@ const MyEditsTab = ({ teamList, game, playerList, t }) => {
             />
             <CreateEditDialog
                 open={open}
-                handleOpen={handleOpen}
+                handleEditOpen={handleEditOpen}
                 teamList={teamList}
                 t={t}
             />
+
             <Box
                 style={{ minWidth: 240, overflowY: "scroll", fontSize: 12, display: showAccordion ? "" : "none", paddingRight: 8 }}>
-                <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <h5 style={{ color: 'black', margin: '0.5rem 1rem' }}>{t("Edits")}</h5>
-                    <Button variant="outlined" onClick={() => handleOpen(true)}>{t("NewEdit")}</Button>
+                <h5 style={{ color: 'black', margin: '0.5rem 1rem' }}>{t("Edits")}</h5>
+                <Box style={{ display: 'flex', justifyContent: 'space-between', padding: '2px', marginBottom: '5px' }}>
+                    <Button variant="outlined" onClick={() => handleEditOpen(true)}>{t("NewEdit")}</Button>
                 </Box>
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
