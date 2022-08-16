@@ -163,7 +163,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
       }).catch(() => { setLoading(false) })
     } else if (actionType === "Edit") {
       GameService.updateGame({
-        id: editData.id,
+        id: editData?.id,
         image,
         season_id: season.id,
         league_id: league.id,

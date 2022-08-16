@@ -75,8 +75,9 @@ exports.getbyCoach = (req, res) => {
     public."Seasons".name as season_name,
     public."Leagues".name as league_name,
     HomeTeam.name as home_team_name,
-    AwayTeam.name as away_team_name
-
+    AwayTeam.name as away_team_name,
+	  HomeTeam.image as home_team_image,
+	  AwayTeam.image as away_team_image
     FROM public."Games" 
     JOIN public."Seasons" on public."Games".season_id = public."Seasons".id
     JOIN public."Leagues" on public."Games".league_id = public."Leagues".id

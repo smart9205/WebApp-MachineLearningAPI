@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Box } from '@mui/material'
 import GameImage from '../../../../assets/game_image.png'
+import TeamImage from '../../../../assets/logoAlone.png'
+import MenuIcon from '@mui/icons-material/MenuOutlined';
 
 const ProcessedTab = ({ allGamesList }) => {
 
@@ -27,13 +29,13 @@ const ProcessedTab = ({ allGamesList }) => {
     }
 
     return (
-        <>
+        <Box sx={{ backgroundColor: '#F8F8F8', width: 'auto' }}>
             {gamesByCoach && gamesByCoach?.processedGamesList?.map((gameData, index) => (
 
-                <Box Box sx={{ padding: '10px', backgroundColor: 'white', display: 'flex', gap: '24px', borderRadius: '10px', margin: '0 24px 24px', height: 'auto' }} key={index}>
+                <Box sx={{ padding: '10px', backgroundColor: 'white', display: 'flex', gap: '24px', borderRadius: '10px', margin: '0 24px 24px', height: 'auto' }} key={index}>
                     <Box>
                         <img style={{
-                            width: '192px',
+                            width: '174px',
                             height: '108px',
                             borderRadius: '15px'
                         }} src={gameData.image ? gameData.image : GameImage} alt="" />
@@ -43,19 +45,20 @@ const ProcessedTab = ({ allGamesList }) => {
                         <span style={{ color: 'black', fontFamily: 'sans-serif', fontSize: '12px', fontWeight: 'bold', position: 'absolute', marginLeft: '100px' }}>{gameData.league_name}</span>
                         <span style={{ color: 'black', fontFamily: 'sans-serif', fontSize: '12px', fontWeight: 'bold', position: 'absolute', right: '4rem' }}>{gameData.season_name}</span>
                         <Box>
-                            <img style={{ borderRadius: '5px', width: '24px' }} src="https://api.static.newstream.ai/media/common/team/273eb4dd-f259-4ea9-8acb-13596937e0fd./tmp/tmpxihzjlb7.40x40_q85_crop.jpg" alt="" />
+                            <img style={{ borderRadius: '5px', width: '24px' }} src={gameData.home_team_image ? gameData.home_team_image : TeamImage} alt="" />
                             <label style={{ color: 'black', fontFamily: 'sans-serif', fontWeight: 'bold', fontSize: '14px', marginLeft: '15px' }}>{gameData.home_team_name}</label>
                         </Box>
                         <Box>
-                            <img style={{ borderRadius: '5px', width: '24px' }} src="https://api.static.newstream.ai/media/common/team/3bf65ce1-5b4c-41cb-9b6c-7596f2e5ec15./tmp/tmpn7v4yurf.40x40_q85_crop.jpg" alt="" />
+                            <img style={{ borderRadius: '5px', width: '24px' }} src={gameData.away_team_image ? gameData.away_team_image : TeamImage} alt="" />
                             <label style={{ color: 'black', fontFamily: 'sans-serif', fontWeight: 'bold', fontSize: '14px', marginLeft: '15px' }}>{gameData.away_team_name}</label>
                         </Box>
                     </Box>
+                    <Box sx={{ 'svg path': { fill: 'black' } }}><MenuIcon sx={{ cursor: 'pointer', position: 'absolute', right: '4rem', display: 'block', marginTop: '3rem' }} /></Box>
                 </Box>
             ))
             }
+        </Box>
 
-        </>
     )
 }
 
