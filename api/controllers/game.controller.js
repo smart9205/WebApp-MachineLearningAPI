@@ -66,6 +66,39 @@ exports.getbyTeam = (req, res) => {
     });
 };
 
+exports.getbyCoach = (req, res) => {
+  const coachId = req.params.coachId;
+
+  Sequelize.query(`
+    SELECT 
+    distinct public."Games".*,
+    public."Seasons".name as season_name,
+    public."Leagues".name as league_name,
+    HomeTeam.name as home_team_name,
+    AwayTeam.name as away_team_name
+
+    FROM public."Games" 
+    JOIN public."Seasons" on public."Games".season_id = public."Seasons".id
+    JOIN public."Leagues" on public."Games".league_id = public."Leagues".id
+    JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id
+    JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
+    join public."Coach_Teams" as Coach_Teams on public."Games".season_id = Coach_Teams.season_id
+    WHERE (public."Games".home_team_id = Coach_Teams.team_id OR public."Games".away_team_id = Coach_Teams.team_id)  
+      AND public."Games".season_id = Coach_Teams.season_id AND public."Games".league_id = Coach_Teams.league_id and Coach_Teams.user_id=${coachId} 
+    ORDER BY public."Games".date desc
+  `)
+    .then(data => {
+      res.send(data[0]);
+      console.log(data)
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+};
+
 
 exports.deleteGames = (req, res) => {
   Sequelize.query(`

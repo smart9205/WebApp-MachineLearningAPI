@@ -67,4 +67,10 @@ module.exports = app => {
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getbyTeam
 	);
+
+	app.get(
+		"/game/getbycoach/:coachId",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getbyCoach
+	);
 };

@@ -423,6 +423,13 @@ const getTeamByPlayerGame = (playerId, gameId) => {
   });
 }
 
+const getAllGamesByCoach = (coachId) => {
+  return axios.get(API_URL + `game/getbycoach/${coachId}`, { headers: authHeader(), data: { coachId } }).then((response) => {
+    return response.data;
+  });
+}
+
+
 
 const gameService = {
   addTeamPlayer,
@@ -479,6 +486,7 @@ const gameService = {
   getCoachPlayerGames,
   getAllPlayerTagsByCoachPlayer,
   getAllGameTeamPlayers,
+  getAllGamesByCoach,
 
   updateJersey,
   updateGame,
