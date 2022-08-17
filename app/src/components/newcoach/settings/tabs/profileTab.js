@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormControl, Typography, Box } from '@mui/material';
 
 import { BootstrapInput, SaveButton } from '../components';
@@ -6,6 +6,19 @@ import { BootstrapInput, SaveButton } from '../components';
 import CameraIcon from '@mui/icons-material/PhotoCameraOutlined';
 
 const PrfileTab = () => {
+    const [values, setValues] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: ''
+    });
+
+    const handleChange = (prop) => (event) => {
+        setValues({ ...values, [prop]: event.target.value });
+    };
+
+    const saveChanges = () => {};
+
     return (
         <Box sx={{ padding: '24px', backgroundColor: 'white', display: 'flex', gap: '24px', borderRadius: '10px', margin: '0 24px 24px', height: '700px' }}>
             <Box
@@ -26,26 +39,28 @@ const PrfileTab = () => {
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 <FormControl variant="standard" sx={{ gap: '4px' }}>
-                    <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: 'DM Sans', fontWeight: 600 }}>Role</Typography>
+                    <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Role</Typography>
                     <BootstrapInput inputProps={{ readOnly: true }} />
                 </FormControl>
                 <FormControl variant="standard" sx={{ gap: '4px' }}>
-                    <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: 'DM Sans', fontWeight: 600 }}>First Name</Typography>
-                    <BootstrapInput />
+                    <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>First Name</Typography>
+                    <BootstrapInput onChange={handleChange('firstName')} />
                 </FormControl>
                 <FormControl variant="standard" sx={{ gap: '4px' }}>
-                    <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: 'DM Sans', fontWeight: 600 }}>Last Name</Typography>
-                    <BootstrapInput />
+                    <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Last Name</Typography>
+                    <BootstrapInput onChange={handleChange('lastName')} />
                 </FormControl>
                 <FormControl variant="standard" sx={{ gap: '4px' }}>
-                    <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: 'DM Sans', fontWeight: 600 }}>Email</Typography>
-                    <BootstrapInput />
+                    <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Email</Typography>
+                    <BootstrapInput onChange={handleChange('email')} />
                 </FormControl>
                 <FormControl variant="standard" sx={{ gap: '4px' }}>
-                    <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: 'DM Sans', fontWeight: 600 }}>Phone</Typography>
-                    <BootstrapInput placeholder="+X (XXX) XXX-XX-XX" />
+                    <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Phone</Typography>
+                    <BootstrapInput placeholder="+X (XXX) XXX-XX-XX" onChange={handleChange('phone')} />
                 </FormControl>
-                <SaveButton disabled>Save changes</SaveButton>
+                <SaveButton disabled={!(values.firstName.length > 0 || values.lastName.length > 0 || values.email.length > 0 || values.phone.length > 0)} onClick={saveChanges}>
+                    Save changes
+                </SaveButton>
             </Box>
         </Box>
     );
