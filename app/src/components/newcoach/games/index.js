@@ -6,10 +6,13 @@ import gameService from '../../../services/game.service';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { useTranslation } from "react-i18next";
 
 const Tabs = ['Processed', 'Pending'];
 
 const Games = () => {
+
+    const { t } = useTranslation()
 
     const [curTab, setCurTab] = useState(0);
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -23,7 +26,7 @@ const Games = () => {
         opponentTagList: [],
         gameList: []
     })
-    const { team, gameListByCoach, teamList, playerList, playersInGameList, game, gameList, allTagList, opponentTagList } = state
+    const { team, gameListByCoach, teamList, game } = state
 
     const [updateGamesList, setUpdateGamesList] = useState(false)
     const [period, setPeriod] = React.useState('all');
@@ -39,31 +42,17 @@ const Games = () => {
     useEffect(() => {
         if (!team) return
         gameService.getAllGamesByTeam(team.season_id, team.league_id, team.team_id).then((res) => {
-            setState({ gameList: res, game: res[0] })
+            setState({ gameList: res })
         })
     }, [team])
 
     useEffect(() => {
         if (!!team && !!game) {
             const opponentTeamId = game?.away_team_id === team.team_id ? game?.home_team_id : game?.away_team_id
-            gameService.getAllPlayerTagsByTeam(team.team_id, game?.id).then((res) => {
-                setState({ allTagList: res })
-            })
             gameService.getAllPlayerTagsByTeam(opponentTeamId, game?.id).then((res) => {
                 setState({ opponentTagList: res })
             })
-            gameService.getGameTeamPlayersByTeam(team.team_id, game?.id).then((res) => {
-                setState({ playerList: res })
-            })
 
-            gameService.getAllGameTeamPlayers(game?.id).then((res) => {
-                setState({
-                    playersInGameList: res
-                })
-            })
-
-        } else {
-            setState({ allTagList: [] })
         }
     }, [team, game])
 
@@ -162,11 +151,10 @@ const Games = () => {
                 </Box>
                 {curTab === 0 && <ProcessedTab
                     allGamesList={gameListByCoach}
-                    allTagList={allTagList}
-                    game={game}
-                    teamId={team?.team_id ?? 0}
-                    playerList={playerList}
-                    playersInGameList={playersInGameList} />}
+                    teamList={teamList}
+                    setState={setState}
+                    t={t}
+                />}
 
                 {curTab === 1 && <PendingTab allGamesList={gameListByCoach} setUpdateGamesList={setUpdateGamesList} />}
 

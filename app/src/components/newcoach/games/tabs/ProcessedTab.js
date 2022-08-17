@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useReducer } from 'react'
 import {
     Box, Menu, MenuItem
 } from '@mui/material'
@@ -7,13 +7,26 @@ import TeamImage from '../../../../assets/logoAlone.png'
 import MenuIcon from '@mui/icons-material/MenuOutlined';
 import EditIcon from '@mui/icons-material/Edit'
 import DownloadIcon from '@mui/icons-material/Download'
-import SportCodeButton from '../../../coach/SportCodeButton';
+import SportCodeButton from '../../../coach/SportCodeButton'
+import gameService from '../../../../services/game.service';
+import XmlDataFiltering from '../../../coach/XmlDataFiltering';
 
-const ProcessedTab = ({ allGamesList, game, allTagList, teamId, playerList, playersInGameList }) => {
+const ProcessedTab = ({ allGamesList, teamList, t }) => {
+
+    const [gameState, setGameState] = useReducer((old, action) => ({ ...old, ...action }), {
+        playerList: [],
+        playersInGameList: [],
+        allTagList: [],
+        game: null,
+        teamId: null
+    })
+
+    const { playerList, playersInGameList, allTagList, game, teamId } = gameState
 
     let processedGamesList = []
     const [gamesByCoach, setGamesByCoach] = useState()
     const [anchorEl, setanchorEl] = useState(null)
+    const [exportXML, setExportXML] = useState(false)
 
     useEffect(() => {
         allGamesList.map(data => {
@@ -24,9 +37,6 @@ const ProcessedTab = ({ allGamesList, game, allTagList, teamId, playerList, play
         })
     }, [allGamesList])
 
-    // console.log('games : ', allGamesList)
-    // console.log(game, allTagList, teamId, playerList, playersInGameList)
-
     const getActualGameDate = (gameDate) => {
         const getActualDate = new Date(gameDate)
         const date = getActualDate.getDate()
@@ -35,19 +45,7 @@ const ProcessedTab = ({ allGamesList, game, allTagList, teamId, playerList, play
         return date + '/' + month + '/' + year
     }
 
-    const handleClose = (event) => {
-        // let value = event.target.value
-        // if (value === 2) {
-        //     return (
-        //         <SportCodeButton
-        //             game={game}
-        //             team={allTagList}
-        //             teamId={teamId}
-        //             playerList={playerList}
-        //             playersInGameList={playersInGameList}
-        //         />
-        //     )
-        // }
+    const handleClose = () => {
         setanchorEl(null)
     }
 
@@ -56,7 +54,40 @@ const ProcessedTab = ({ allGamesList, game, allTagList, teamId, playerList, play
     }
 
     const downloadXML = (game) => {
-        // console.log('game : ', game)
+
+        let selectedTeamId = []
+        let selectedHomeTeamId = parseInt(game?.home_team_id)
+        let selectedAwayTeamId = parseInt(game?.away_team_id)
+
+        setGameState({ game: game })
+
+        teamList.map(data => {
+            if (parseInt(data?.team_id) === selectedHomeTeamId || parseInt(data?.team_id) === selectedAwayTeamId) {
+                selectedTeamId.push(data)
+            }
+        })
+
+        if (selectedTeamId.length > 1) {
+            console.log('slect : ', selectedTeamId)
+        } else {
+            if (!!selectedTeamId && !!game) {
+
+                gameService.getAllPlayerTagsByTeam(selectedTeamId[0]?.team_id, game?.id).then((res) => {
+                    setGameState({ allTagList: res })
+                })
+
+                gameService.getGameTeamPlayersByTeam(selectedTeamId[0]?.team_id, game?.id).then((res) => {
+                    setGameState({ playerList: res })
+                })
+
+                gameService.getAllGameTeamPlayers(game?.id).then((res) => {
+                    setGameState({
+                        playersInGameList: res
+                    })
+                })
+            }
+            setGameState({ teamId: selectedTeamId[0].team_id })
+        }
     }
 
     return (
@@ -87,8 +118,10 @@ const ProcessedTab = ({ allGamesList, game, allTagList, teamId, playerList, play
                         </Box>
                     </Box>
                     <Box sx={{ 'svg path': { fill: 'black' } }}>
-                        <MenuIcon sx={{ cursor: 'pointer', position: 'absolute', right: '4rem', display: 'block' }} onClick={openMenu} />
-
+                        <MenuIcon sx={{ cursor: 'pointer', position: 'absolute', right: '6rem', display: 'block' }} onClick={(e) => {
+                            openMenu(e)
+                            downloadXML(gameData)
+                        }} />
                         <Menu
                             id='simple-menu'
                             anchorEl={anchorEl}
@@ -99,15 +132,28 @@ const ProcessedTab = ({ allGamesList, game, allTagList, teamId, playerList, play
                         >
                             <MenuItem onClick={handleClose} value="1"><EditIcon /> Edit</MenuItem>
                             <hr style={{ margin: '1px' }} />
-                            <MenuItem onClick={() => { downloadXML(gameData.id) }} value="2"><DownloadIcon />Export to Sportgate </MenuItem>
+
+                            <MenuItem onClick={() => {
+                                setExportXML(true)
+                                handleClose()
+                            }} value="2"><DownloadIcon />Export to Sportgate</MenuItem>
+
                             <hr style={{ margin: '1px' }} />
                             <MenuItem onClick={handleClose} value="3"><DownloadIcon /> Export to Excel</MenuItem>
-
                         </Menu>
-
                     </Box>
                 </Box>
             ))
+            }
+            {exportXML &&
+                <XmlDataFiltering
+                    game={game}
+                    team={allTagList}
+                    teamId={teamId}
+                    playerList={playerList}
+                    playersInGameList={playersInGameList}
+                    setExportXML={setExportXML}
+                />
             }
         </Box>
 
