@@ -4,10 +4,8 @@ import ProcessedTab from './tabs/ProcessedTab'
 import PendingTab from './tabs/PendingTab'
 import gameService from '../../../services/game.service';
 import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 
 const Tabs = ['Processed', 'Pending'];
 
@@ -17,10 +15,15 @@ const Games = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         team: null,
         teamList: [],
-        game: null,
         gameListByCoach: [],
+        playerList: [],
+        playersInGameList: [],
+        game: null,
+        allTagList: [],
+        opponentTagList: [],
+        gameList: []
     })
-    const { team, game, gameListByCoach, teamList } = state
+    const { team, gameListByCoach, teamList, playerList, playersInGameList, game, gameList, allTagList, opponentTagList } = state
 
     const [updateGamesList, setUpdateGamesList] = useState(false)
     const [period, setPeriod] = React.useState('all');
@@ -32,6 +35,37 @@ const Games = () => {
             setState({ teamList: res, team: res[0] })
         })
     }, [])
+
+    useEffect(() => {
+        if (!team) return
+        gameService.getAllGamesByTeam(team.season_id, team.league_id, team.team_id).then((res) => {
+            setState({ gameList: res, game: res[0] })
+        })
+    }, [team])
+
+    useEffect(() => {
+        if (!!team && !!game) {
+            const opponentTeamId = game?.away_team_id === team.team_id ? game?.home_team_id : game?.away_team_id
+            gameService.getAllPlayerTagsByTeam(team.team_id, game?.id).then((res) => {
+                setState({ allTagList: res })
+            })
+            gameService.getAllPlayerTagsByTeam(opponentTeamId, game?.id).then((res) => {
+                setState({ opponentTagList: res })
+            })
+            gameService.getGameTeamPlayersByTeam(team.team_id, game?.id).then((res) => {
+                setState({ playerList: res })
+            })
+
+            gameService.getAllGameTeamPlayers(game?.id).then((res) => {
+                setState({
+                    playersInGameList: res
+                })
+            })
+
+        } else {
+            setState({ allTagList: [] })
+        }
+    }, [team, game])
 
     const gettingAllGamesByCoach = () => {
         if (!team) return
@@ -110,10 +144,9 @@ const Games = () => {
                                         value={teamSelection}
                                         onChange={(e) => setTeamSelection(e.target.value)}
                                         label=''
-                                        variant="standard"
-                                        disableUnderline
+                                        variant="outlined"
                                         inputProps={{ 'aria-label': 'Without label' }}
-                                        sx={{ outline: 'none', height: '36px' }}
+                                        sx={{ outline: 'none', height: '36px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                     >
                                         <MenuItem value='all'>All</MenuItem>
 
@@ -127,7 +160,14 @@ const Games = () => {
                         </Box>
                     </Box>
                 </Box>
-                {curTab === 0 && <ProcessedTab allGamesList={gameListByCoach} />}
+                {curTab === 0 && <ProcessedTab
+                    allGamesList={gameListByCoach}
+                    allTagList={allTagList}
+                    game={game}
+                    teamId={team?.team_id ?? 0}
+                    playerList={playerList}
+                    playersInGameList={playersInGameList} />}
+
                 {curTab === 1 && <PendingTab allGamesList={gameListByCoach} setUpdateGamesList={setUpdateGamesList} />}
 
             </Box>

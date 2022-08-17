@@ -25,7 +25,7 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
     const getActualGameDate = (gameDate) => {
         const getActualDate = new Date(gameDate)
         const date = getActualDate.getDate()
-        const month = getActualDate.getMonth()
+        const month = getActualDate.getMonth() + 1
         const year = getActualDate.getFullYear()
         return date + '/' + month + '/' + year
     }
@@ -61,7 +61,7 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
         <>
             {gamesByCoach && gamesByCoach?.pendingGamesList?.map((gameData, index) => (
 
-                <Box Box sx={{ padding: '10px', backgroundColor: 'white', display: 'flex', gap: '24px', borderRadius: '10px', margin: '0 24px 24px', height: 'auto' }} key={index}>
+                <Box sx={{ padding: '10px', backgroundColor: 'white', display: 'flex', gap: '18px', borderRadius: '10px', margin: '0 24px 24px', height: 'auto', '&:hover': { boxShadow: 3 } }} key={index}>
                     <Box >
                         <img style={{
                             width: '174px',
@@ -69,10 +69,11 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
                             borderRadius: '15px'
                         }} src={gameData.image ? gameData.image : GameImage} alt="" />
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <span style={{ color: 'rgb(165, 165, 168)', fontFamily: 'sans-serif', fontSize: '12px' }}>{getActualGameDate(gameData.date)}</span>
-                        <span style={{ color: 'black', fontFamily: 'sans-serif', fontSize: '12px', fontWeight: 'bold', position: 'absolute', marginLeft: '100px' }}>{gameData.league_name}</span>
-                        <span style={{ color: 'black', fontFamily: 'sans-serif', fontSize: '12px', fontWeight: 'bold', position: 'absolute', right: '4rem' }}>{gameData.season_name}</span>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '250px' }}>
+                        <span style={{ color: 'black', fontFamily: 'sans-serif', fontSize: '12px' }}>{getActualGameDate(gameData.date)}</span>
+
+                        <span style={{ color: 'black', fontFamily: 'sans-serif', fontSize: '12px', position: 'absolute', marginLeft: '100px' }}>{gameData.league_name}</span>
+                        <span style={{ color: 'black', fontFamily: 'sans-serif', fontSize: '12px', position: 'absolute', marginLeft: '300px' }}>{gameData.season_name}</span>
                         <Box>
                             <img style={{ borderRadius: '5px', width: '24px' }} src={gameData.home_team_image ? gameData.home_team_image : TeamImage} alt="" />
                             <label style={{ color: 'black', fontFamily: 'sans-serif', fontWeight: 'bold', fontSize: '14px', marginLeft: '15px' }}>{gameData.home_team_name}</label>
@@ -82,8 +83,8 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
                             <label style={{ color: 'black', fontFamily: 'sans-serif', fontWeight: 'bold', fontSize: '14px', marginLeft: '15px' }}>{gameData.away_team_name}</label>
                         </Box>
                     </Box>
-                    <Box>
-                        <label style={{ color: 'black', fontSize: '14px', marginLeft: '26px', fontFamily: 'sans-serif', fontWeight: 600 }} >Video URL: </label>
+                    <Box >
+                        <label style={{ color: 'black', fontSize: '14px', marginLeft: '26px', fontFamily: 'sans-serif', fontWeight: 300 }} >Video URL: </label>
                         <BootstrapInput variant="standard" value={videoUrl} onChange={handleChange} />
                         <UpdateButton onClick={() => handleSubmit(gameData)}>+  Update</UpdateButton>
                     </Box>
