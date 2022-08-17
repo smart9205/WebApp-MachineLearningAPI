@@ -10,7 +10,7 @@ const Settings = () => {
     const [curTab, setCurTab] = useState(0);
 
     return (
-        <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
+        <Box sx={{ minWidth: '95%', margin: '0 auto' }}>
             <Box sx={{ padding: '24px 24px 21px 48px' }}>
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Settings</Typography>
                 <Box sx={{ display: 'flex', marginTop: '24px', alignItems: 'center', gap: '24px' }}>

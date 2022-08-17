@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useReducer } from 'react'
 import {
-    Box, Menu, MenuItem
+    Box, Container, Menu, MenuItem
 } from '@mui/material'
 import GameImage from '../../../../assets/game_image.png'
 import TeamImage from '../../../../assets/logoAlone.png'
@@ -98,11 +98,11 @@ const ProcessedTab = ({ allGamesList, teamList, t }) => {
                     <Box>
                         <img style={{
                             width: '174px',
-                            height: '108px',
+                            height: '100px',
                             borderRadius: '15px'
                         }} src={gameData.image ? gameData.image : GameImage} alt="" />
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '300px' }}>
                         <span style={{ color: 'black', fontFamily: 'sans-serif', fontSize: '12px' }}>{getActualGameDate(gameData.date)}</span>
 
                         <span style={{ color: 'black', fontFamily: 'sans-serif', fontSize: '12px', position: 'absolute', marginLeft: '100px' }}>{gameData.league_name}</span>
@@ -118,7 +118,7 @@ const ProcessedTab = ({ allGamesList, teamList, t }) => {
                         </Box>
                     </Box>
                     <Box sx={{ 'svg path': { fill: 'black' } }}>
-                        <MenuIcon sx={{ cursor: 'pointer', position: 'absolute', right: '6rem', display: 'block' }} onClick={(e) => {
+                        <MenuIcon sx={{ cursor: 'pointer', display: 'block', position: 'absolute', right: '8rem' }} onClick={(e) => {
                             openMenu(e)
                             downloadXML(gameData)
                         }} />
