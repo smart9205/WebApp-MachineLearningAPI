@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FormControl, Typography, Box, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-import { StyleTextField, SaveButton } from '../components';
+import { StyleTextField, SaveButton } from '../../components';
 
 const PasswordTab = () => {
     const [values, setValues] = useState({
@@ -47,7 +47,12 @@ const PasswordTab = () => {
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton onClick={handleClickShowOldPassword} onMouseDown={handleMouseDownPassword} edge="end">
+                                <IconButton
+                                    onClick={handleClickShowOldPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                    sx={{ backgroundColor: 'white', '&:hover': { backgroundColor: 'white' }, '&:focus': { backgroundColor: 'white' } }}
+                                >
                                     {values.showOldPassword ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
                             </InputAdornment>
@@ -67,7 +72,12 @@ const PasswordTab = () => {
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton onClick={handleClickShowNewPassword} onMouseDown={handleMouseDownPassword} edge="end">
+                                <IconButton
+                                    onClick={handleClickShowNewPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                    sx={{ backgroundColor: 'white', '&:hover': { backgroundColor: 'white' }, '&:focus': { backgroundColor: 'white' } }}
+                                >
                                     {values.showOldPassword ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
                             </InputAdornment>
@@ -87,7 +97,12 @@ const PasswordTab = () => {
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton onClick={handleClickShowConfirmPassword} onMouseDown={handleMouseDownPassword} edge="end">
+                                <IconButton
+                                    onClick={handleClickShowConfirmPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                    sx={{ backgroundColor: 'white', '&:hover': { backgroundColor: 'white' }, '&:focus': { backgroundColor: 'white' } }}
+                                >
                                     {values.showOldPassword ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
                             </InputAdornment>

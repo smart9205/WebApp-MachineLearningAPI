@@ -37,6 +37,7 @@ import Layout from './components/Layout';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import NewCoach from './components/newcoach';
 import Settings from './components/newcoach/settings';
+import Teams from './components/newcoach/teams';
 import Games from './components/newcoach/games';
 
 const CustomTheme = () => {
@@ -144,6 +145,14 @@ const App = () => {
                                         element={
                                             <NewCoach>
                                                 <Settings />
+                                            </NewCoach>
+                                        }
+                                    />
+                                    <Route
+                                        path="/new_coach/teams"
+                                        element={
+                                            <NewCoach>
+                                                <Teams />
                                             </NewCoach>
                                         }
                                     />

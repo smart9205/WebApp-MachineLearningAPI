@@ -146,6 +146,44 @@ exports.findOne = async (req, res) => {
   res.send({ ...player[0][0], ...team[0][0] });
 };
 
+exports.findTeams = async(req, res) => {
+  const fname = req.params.fname;
+  const lname = req.params.lname;
+
+  Sequelize.query(`
+      SELECT public."Teams".id as id,
+        public."Teams".image as team_image,
+        public."Teams".name as team_name,
+        public."Leagues".name as league_name,
+        public."Seasons".name as season_name,
+        player_count
+      FROM public."Teams" 
+      LEFT JOIN 
+        public."Team_Players" on public."Teams".id = public."Team_Players".team_id
+      LEFT JOIN 
+        public."Players" on public."Team_Players".player_id = public."Players".id
+      LEFT JOIN 
+        public."Leagues" on public."Team_Players".league_id = public."Leagues".id
+      LEFT JOIN 
+        public."Seasons" on public."Team_Players".season_id = public."Seasons".id
+      LEFT JOIN (
+        SELECT count(public."Team_Players".id) as player_count, public."Team_Players".team_id as temp_team_id
+        FROM public."Team_Players" 
+        GROUP BY
+          public."Team_Players".team_id
+      ) AS tempTeamTable on tempTeamTable.temp_team_id = public."Teams".id
+      WHERE public."Players".f_name = '${fname}' and public."Players".l_name = '${lname}'
+    `).then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
 exports.gameByPlayerId = (req, res) => {
   const id = req.params.id;
 

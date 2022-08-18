@@ -21,6 +21,7 @@ import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 import CircularProgress from '@mui/material/CircularProgress';
+
 import Search from './search';
 import GameService from '../../../services/game.service';
 import Upload from '../../../common/upload';
@@ -35,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
         }
     }
 }));
-
 const styles = {
     loader: {
         position: 'fixed',
@@ -49,10 +49,10 @@ const styles = {
         alignItems: 'center'
     }
 };
-
 export default function GameFormDialog({ open, setOpen, gameListUpdated, actionType, editData, t }) {
     const classes = useStyles();
     const descriptionElementRef = useRef(null);
+
     const [loading, setLoading] = useState(false);
     const [alertOpen, setAlertOpen] = useState(false);
     const [alert, setAlert] = useState('');
@@ -60,6 +60,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
     const [leagueOpen, setLeagueOpen] = useState(false);
     const [leagueName, setLeagueName] = useState('');
     const [teamOpen, setTeamOpen] = useState(false);
+
     const [gameDate, setGameDate] = useState(new Date());
     const [season, setSeason] = useState({});
     const [league, setLeague] = useState({});
@@ -67,15 +68,19 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
     const [leagueList, setLeagueList] = useState([]);
     const [teamList, setTeamList] = useState([]);
     const [playerList, setPlayerList] = useState([]);
+
     const [homeTeam, setHomeTeam] = useState(false);
     const [awayTeam, setAwayTeam] = useState(false);
     const [playerOpen, setPlayerOpen] = useState(false);
     const [alertType, setAlertType] = useState('success');
     const [image, setImage] = useState('');
+
     const [videoUrl, setVideoUrl] = useState('');
     const [mobileVideoUrl, setMobileVideoUrl] = useState('');
+
     const [muteVideoList, setMuteVideoList] = useState('');
     const [muteVideo, setMuteVideo] = useState(true);
+
     useEffect(() => {
         if (open) {
             const { current: descriptionElement } = descriptionElementRef;
@@ -84,6 +89,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
             }
         }
     }, [open]);
+
     useEffect(() => {
         GameService.getAllSeasons().then((res) => {
             setSeasonList(res);
@@ -94,6 +100,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
             setLeague(res[0]);
         });
     }, [count]);
+
     useEffect(() => {
         if (actionType !== 'Edit' || !leagueList.length || !seasonList.length) return;
         // setSeason(seasonList.find(s => s.id === editData.season_id));
@@ -105,6 +112,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
         setVideoUrl(editData.video_url);
         setMobileVideoUrl(editData.mobile_video_url);
     }, [editData, seasonList, leagueList, actionType]);
+
     const getTeamList = () => GameService.getAllTeams().then((res) => setTeamList(res));
     const getPlayerList = () => GameService.getAllPlayers().then((res) => setPlayerList(res));
     const handleClickPlayerOpen = () => setPlayerOpen(true);
@@ -112,16 +120,19 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
     const handleClickTeamOpen = () => setTeamOpen(true);
     const homeTeamCallBack = useCallback((param) => setHomeTeam(param), []);
     const awayTeamCallBack = useCallback((param) => setAwayTeam(param), []);
+
     useEffect(() => {
         getTeamList();
         getPlayerList();
     }, []);
+
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
         setAlertOpen(false);
     };
+
     const OpenAlert = (msg, type = 'success') => {
         setAlertOpen(true);
         setAlert(msg);
@@ -133,6 +144,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
             return;
         }
         setLoading(true);
+
         if (actionType === 'Add') {
             GameService.addGame({
                 image,
@@ -176,8 +188,10 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
                 });
         }
     };
+
     const handleLeagueClose = (result) => {
         setLeagueOpen(false);
+
         if (!result) return;
         GameService.addLeague({ name: leagueName }).then(
             (response) => {
@@ -187,6 +201,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
             (error) => {}
         );
     };
+
     return (
         <Dialog open={open} classes={{ paper: classes.paper }} onClose={() => setOpen(false)} scroll="paper" aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
             {loading && (
@@ -228,6 +243,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
                         <Button onClick={(e) => handleLeagueClose(true)}>{t('Add')}</Button>
                     </DialogActions>
                 </Dialog>
+
                 <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid item xs={4}>
                         <Search

@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import PasswordTab from './tabs/passwordTab';
 
+import PasswordTab from './tabs/passwordTab';
 import ProfileTab from './tabs/profileTab';
 
 const Tabs = ['Profiles', 'Password'];

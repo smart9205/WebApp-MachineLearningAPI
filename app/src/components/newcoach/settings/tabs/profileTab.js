@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormControl, Typography, Box } from '@mui/material';
 
-import { BootstrapInput, SaveButton } from '../components';
+import { BootstrapInput, SaveButton } from '../../components';
 
 import CameraIcon from '@mui/icons-material/PhotoCameraOutlined';
 

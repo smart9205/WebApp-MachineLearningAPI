@@ -262,17 +262,22 @@ exports.update = (req, res) => {
 
 exports.updateJersey = async (req, res) => {
 
-  const teamPlayer = await Team_Player.findByPk(req.body.id);
-
-  const player = await Player.findByPk(teamPlayer.player_id);
-
-  player.jersey_number = req.body.jersey_number;
-
-  await player.save();
-
-  res.send({
-    message: "Player Jersey updated"
-  });
+  Sequelize.query(`
+  UPDATE public."Players"
+  SET jersey_number = ${req.body.jersey}
+  WHERE id = ${req.body.id}
+  `)
+    .then(data => {
+      res.send({
+        message: "Players updated jersey_number"
+      });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving seasons."
+      });
+    });
 }
 
 exports.delete = (req, res) => {
