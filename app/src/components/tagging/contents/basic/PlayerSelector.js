@@ -70,9 +70,9 @@ export default function PlayerSelector({
     if (loading) { }
     return (
 
-        <SubBox>
+        <SubBox sx={{ marginTop: '5rem', height: '100%' }}>
             <div className='title'>{title}</div>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ height: '600px' }}>
                 <Table aria-label="a dense table">
                     <TableBody>
                         {playerList.map((player, i) => (
@@ -100,7 +100,7 @@ export default function PlayerSelector({
                                         :
                                         <TableCell align="left">#{player.jersey_number}</TableCell>
                                     }
-                                    <TableCell align="left">{player.f_name} {player.l_name}</TableCell>
+                                    <TableCell sx={{ width: '120px' }} align="left">{player.f_name} {player.l_name}</TableCell>
                                     {editable ? <TCellPositionEdit
                                         rows={posList}
                                         value={{ id: player.position, name: player.position_name }}
@@ -118,7 +118,7 @@ export default function PlayerSelector({
 
             {title && (title === 'Home Team' || title === 'Away Team') &&
                 <>
-                    <div style={{ marginTop: '20px', marginBottom: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <div style={{ padding: '0.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Button
                             variant="outlined"
                             onClick={() => {

@@ -24,6 +24,7 @@ export default function TCellPositionEdit({ value, rows, update }) {
         <TableCell
             align="left"
             onClick={() => setEditable(true)}
+            sx={{ width: '120px' }}
         >
             {editable ?
                 <Select
