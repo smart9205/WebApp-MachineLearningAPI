@@ -23,7 +23,7 @@ const init = {
     image: "",
 }
 
-const AddmainPlayer = ({ title, teamPlayer, setAddPlayerModalOpen, setGamePlayerRefresh }) => {
+const AddmainPlayer = ({ title, game, setAddPlayerModalOpen, setGamePlayerRefresh }) => {
 
     const [positionList, setPositionList] = useState([]);
     const [playerData, setPlayerData] = useReducer((old, action) => ({ ...old, ...action }), init)
@@ -64,18 +64,18 @@ const AddmainPlayer = ({ title, teamPlayer, setAddPlayerModalOpen, setGamePlayer
 
                     if (title == 'Home Team') {
                         GameService.addTeamPlayer({
-                            season_id: teamPlayer.seasonID,
-                            league_id: teamPlayer.leagueID,
-                            team_id: teamPlayer.homeTeamID,
+                            season_id: game.season_id,
+                            league_id: game.league_id,
+                            team_id: game.home_team_id,
                             player_id: res.data.id
                         }).then((res) => {
                             // console.log(res)
                         })
                     } else if (title == 'Away Team') {
                         GameService.addTeamPlayer({
-                            season_id: teamPlayer.seasonID,
-                            league_id: teamPlayer.leagueID,
-                            team_id: teamPlayer.awayTeamID,
+                            season_id: game.season_id,
+                            league_id: game.league_id,
+                            team_id: game.away_team_id,
                             player_id: res.data.id
                         }).then((res) => {
                             // console.log(res)

@@ -46,8 +46,7 @@ const SubBox = styled(Box)`
 export default function PlayerSelector({
     title,
     playerList,
-    homeTeam,
-    awayTeam,
+    game,
     posList = [],
     editable = true,
     selected = null,
@@ -59,18 +58,6 @@ export default function PlayerSelector({
     const [addPlayerModalOpen, setAddPlayerModalOpen] = React.useState(false)
     const [playerOpen, setPlayerOpen] = React.useState(false);
 
-    const [teamPlayer, setTeamPlayer] = React.useState({
-        seasonID: 0,
-        leagueID: 0,
-        homeTeamID: 0,
-        awayTeamID: 0,
-    })
-
-    let seasonID = 0
-    let leagueID = 0
-    let homeTeamID = 0
-    let awayTeamID = 0
-
     const update = (data) => {
         setLoading(true)
         gameService.updatePlayer(data).then(res => {
@@ -79,26 +66,6 @@ export default function PlayerSelector({
             setLoading(false)
         })
     }
-
-    const gettingHomeTeamData = async () => {
-        await homeTeam?.map(data => {
-            seasonID = data.season_id
-            leagueID = data.league_id
-            homeTeamID = data.team_id
-        })
-
-    }
-    const gettingAwayTeamData = async () => {
-        await awayTeam?.map(data => {
-            awayTeamID = data.team_id
-        })
-    }
-
-    React.useEffect(() => {
-        gettingHomeTeamData()
-        gettingAwayTeamData()
-        setTeamPlayer({ seasonID: seasonID, leagueID: leagueID, homeTeamID: homeTeamID, awayTeamID: awayTeamID })
-    }, [seasonID, leagueID, homeTeamID, awayTeamID])
 
     if (loading) { }
     return (
@@ -172,7 +139,7 @@ export default function PlayerSelector({
                             <AddMainPlayers
                                 open={playerOpen}
                                 title={title}
-                                teamPlayer={teamPlayer}
+                                game={game}
                                 setAddPlayerModalOpen={setAddPlayerModalOpen}
                                 setGamePlayerRefresh={setGamePlayerRefresh}
                                 onResult={(res) => {
