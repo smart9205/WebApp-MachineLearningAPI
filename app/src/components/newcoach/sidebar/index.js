@@ -41,7 +41,7 @@ const Sidebar = () => {
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {menuData.map((menuItem, idx) => (
-                    <Box onMouseEnter={() => handleMouseEnter(idx)} onMouseLeave={handleMouseLeave} onClick={() => setSelectIndex(idx)}>
+                    <Box key={idx} onMouseEnter={() => handleMouseEnter(idx)} onMouseLeave={handleMouseLeave} onClick={() => setSelectIndex(idx)}>
                         <MenuItem
                             path={menuItem.path}
                             icon={menuItem.icon}

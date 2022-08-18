@@ -51,6 +51,12 @@ const getAllCoachTeam = () => {
     });
 };
 
+const getAllGamesByCoach = (coachId) => {
+    return axios.get(API_URL + `game/getbycoach/${coachId}`, { headers: authHeader(), data: { coachId } }).then((response) => {
+        return response.data;
+    });
+}
+
 const getAllMyCoachTeam = () => {
     return axios.get(API_URL + 'coach_team/mine', { headers: authHeader() }).then((response) => {
         return response.data;
@@ -461,6 +467,7 @@ const gameService = {
     getAllPlayerTagsByTeam,
     getAllCoach,
     getAllCoachTeam,
+    getAllGamesByCoach,
     getAllMyCoachTeam,
     getAllMyCoachPlayer,
     getAllHighlightByPlayerId,
