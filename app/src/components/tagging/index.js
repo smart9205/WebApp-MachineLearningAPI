@@ -125,6 +125,7 @@ export default function Tagging() {
     homePlayers: [],
     awayPlayers: [],
     curTeamTagId: 0,
+    game: []
   })
 
   const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -170,10 +171,11 @@ export default function Tagging() {
   React.useEffect(() => {
     GameService.getGame(game_id).then((res) => {
       setState({
+        game: res,
         home_team_id: res.home_team_id,
         away_team_id: res.away_team_id,
         home_team_name: res.home_team_name,
-        away_team_name: res.away_team_name
+        away_team_name: res.away_team_name,
       });
       if (res.video_url.startsWith("https://www.youtube.com")) {
         GameService.getNewStreamURL(res.video_url).then((res) => {
@@ -198,9 +200,17 @@ export default function Tagging() {
     GameTeamPlayer()
   }, [count, game_id])
 
-  if (gamePlayerRefresh) {
-    GameTeamPlayer()
-  }
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      GameTeamPlayer()
+    }, 2000)
+    return () => {
+      clearTimeout(timer)
+      setGamePlayerRefresh(false)
+    }
+  }, [gamePlayerRefresh])
+
 
   const updateTagList = () => setTagCnt(tagCnt + 1)
   const handleDrawerOpen = () => setOpen(!open)
@@ -417,6 +427,7 @@ export default function Tagging() {
             <SelectMainPlayers
               homeTeam={state.homePlayers}
               awayTeam={state.awayPlayers}
+              game={state.game}
               setGamePlayerRefresh={setGamePlayerRefresh}
             />
           }
