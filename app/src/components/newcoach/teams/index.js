@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { Typography, Box, InputAdornment, IconButton } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/SearchOutlined';
@@ -11,7 +10,6 @@ import GameService from '../../../services/game.service';
 import TeamListItem from './teamListItem';
 
 const Teams = () => {
-    const { user: currentUser } = useSelector((state) => state.auth);
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(true);
     const [hoverIndex, setHoverIndex] = useState(-1);
@@ -25,14 +23,10 @@ const Teams = () => {
 
     const init = () => {
         setLoading(true);
-        GameService.getPlayerTeams(currentUser.first_name, currentUser.last_name)
-            .then((res) => {
-                setRows(res);
-                setLoading(false);
-            })
-            .catch(() => {
-                setLoading(false);
-            });
+        GameService.getAllMyCoachTeam().then((res) => {
+            setRows(res);
+            setLoading(false);
+        });
     };
 
     useEffect(() => {
@@ -48,7 +42,7 @@ const Teams = () => {
     };
 
     return (
-        <Box sx={{ minWidth: '95%', margin: '0 auto', }}>
+        <Box sx={{ minWidth: '95%', margin: '0 auto' }}>
             <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Teams</Typography>
@@ -77,11 +71,13 @@ const Teams = () => {
                 </Box>
             </Box>
             <Box sx={{ margin: '0 24px 24px' }}>
-                {rows.map((row, index) => (
-                    <Box key={row.id} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
-                        <TeamListItem row={row} isHover={hoverIndex === index} />
-                    </Box>
-                ))}
+                <Box sx={{ overflowY: 'scroll', maxHeight: '75vh' }}>
+                    {rows.map((row, index) => (
+                        <Box key={row.id} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
+                            <TeamListItem row={row} isHover={hoverIndex === index} />
+                        </Box>
+                    ))}
+                </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '16px', margin: '15px 24px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#A5A5A8' }}>Show by</Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '4px', 'svg path': { fill: 'black' } }}>
