@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useReducer } from 'react'
 import {
-    Box, Container, Menu, MenuItem
+    Box, Menu, MenuItem
 } from '@mui/material'
 import GameImage from '../../../../assets/game_image.png'
 import TeamImage from '../../../../assets/logoAlone.png'
 import MenuIcon from '@mui/icons-material/MenuOutlined';
 import EditIcon from '@mui/icons-material/Edit'
 import DownloadIcon from '@mui/icons-material/Download'
-import SportCodeButton from '../../../coach/SportCodeButton'
 import gameService from '../../../../services/game.service';
 import XmlDataFiltering from '../../../coach/XmlDataFiltering';
+import ExcelDataFiltering from '../../../coach/ExcelDataFiltering';
 
 const ProcessedTab = ({ allGamesList, teamList, t }) => {
 
@@ -27,6 +27,7 @@ const ProcessedTab = ({ allGamesList, teamList, t }) => {
     const [gamesByCoach, setGamesByCoach] = useState()
     const [anchorEl, setanchorEl] = useState(null)
     const [exportXML, setExportXML] = useState(false)
+    const [excelData, setExcelData] = useState(false)
 
     useEffect(() => {
         allGamesList.map(data => {
@@ -68,7 +69,7 @@ const ProcessedTab = ({ allGamesList, teamList, t }) => {
         })
 
         if (selectedTeamId.length > 1) {
-            console.log('slect : ', selectedTeamId)
+            console.log('Multiple Team Id Found : ', selectedTeamId)
         } else {
             if (!!selectedTeamId && !!game) {
 
@@ -94,7 +95,7 @@ const ProcessedTab = ({ allGamesList, teamList, t }) => {
         <Box sx={{ backgroundColor: '#F8F8F8' }}>
             {gamesByCoach && gamesByCoach?.processedGamesList?.map((gameData, index) => (
 
-                <Box sx={{ padding: '10px', backgroundColor: 'white', display: 'flex', gap: '18px', borderRadius: '10px', margin: '0 24px 24px', height: 'auto', '&:hover': { boxShadow: 3 } }} key={index}>
+                <Box sx={{ padding: '10px', backgroundColor: 'white', display: 'flex', gap: '18px', b0orderRadius: '10px', margin: '0 24px 24px', height: 'auto', '&:hover': { boxShadow: 3 } }} key={index}>
                     <Box>
                         <img style={{
                             width: '174px',
@@ -139,7 +140,10 @@ const ProcessedTab = ({ allGamesList, teamList, t }) => {
                             }} value="2"><DownloadIcon />Export to Sportgate</MenuItem>
 
                             <hr style={{ margin: '1px' }} />
-                            <MenuItem onClick={handleClose} value="3"><DownloadIcon /> Export to Excel</MenuItem>
+                            <MenuItem onClick={() => {
+                                setExcelData(true)
+                                handleClose()
+                            }} value="3"><DownloadIcon /> Export to Excel</MenuItem>
                         </Menu>
                     </Box>
                 </Box>
@@ -153,6 +157,12 @@ const ProcessedTab = ({ allGamesList, teamList, t }) => {
                     playerList={playerList}
                     playersInGameList={playersInGameList}
                     setExportXML={setExportXML}
+                />
+            }
+            {excelData &&
+                <ExcelDataFiltering
+                    team={allTagList}
+                    setExcelData={setExcelData}
                 />
             }
         </Box>

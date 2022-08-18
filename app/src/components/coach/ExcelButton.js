@@ -11,29 +11,14 @@ const ExcelButton = ({ team, t, ...rest }) => {
 
 	const [excelData, setExcelData] = useState(false)
 
-	const buttonRef = useRef();
-
-	const downloadExcel = () => {
-		buttonRef.current.click();
-	}
 	return (
 		<div {...rest}>
-			<Button style={{ fontSize: '11px' }} variant="outlined" onClick={downloadExcel}>{t("Export To Excel")}</Button>
-			<ExcelFile element={<button style={{ display: 'none' }} ref={buttonRef}></button>}>
-				<ExcelSheet data={team} name="Team Tags">
-					<ExcelColumn label="Date" value="game_date" />
-					<ExcelColumn label="Start Time" value="start_time" />
-					<ExcelColumn label="End Time" value="end_time" />
-					<ExcelColumn label="Period" value="period_name" />
-					<ExcelColumn label="Offensive Team" value="offensive_team_name" />
-					<ExcelColumn label="Defensive Team" value="defensive_team_name" />
-					<ExcelColumn label="First Name" value="player_fname" />
-					<ExcelColumn label="Last Name" value="player_lname" />
-					<ExcelColumn label="Action" value="action_name" />
-					<ExcelColumn label="Action Type" value="action_type_name" />
-					<ExcelColumn label="Action Result" value="action_result_name" />
-				</ExcelSheet>
-			</ExcelFile>
+			<Button style={{ fontSize: '11px' }} variant="outlined" onClick={() => {
+				setExcelData(true)
+			}}>{t("Export To Excel")}</Button>
+			{excelData &&
+				<ExcelDataFiltering team={team} setExcelData={setExcelData} />
+			}
 		</div>
 	);
 }

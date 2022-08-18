@@ -20,8 +20,6 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
         })
     }, [allGamesList])
 
-    // console.log(gamesByCoach?.pendingGamesList)
-
     const getActualGameDate = (gameDate) => {
         const getActualDate = new Date(gameDate)
         const date = getActualDate.getDate()
@@ -58,7 +56,7 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
 
 
     return (
-        <>
+        <Box sx={{ backgroundColor: '#F8F8F8' }}>
             {gamesByCoach && gamesByCoach?.pendingGamesList?.map((gameData, index) => (
 
                 <Box sx={{ padding: '10px', backgroundColor: 'white', display: 'flex', gap: '18px', borderRadius: '10px', margin: '0 24px 24px', height: 'auto', '&:hover': { boxShadow: 3 } }} key={index}>
@@ -91,8 +89,7 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
                 </Box>
             ))
             }
-
-        </>
+        </Box>
     )
 }
 
