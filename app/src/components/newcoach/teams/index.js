@@ -48,7 +48,7 @@ const Teams = () => {
     };
 
     return (
-        <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
+        <Box sx={{ minWidth: '95%', margin: '0 auto', }}>
             <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Teams</Typography>
