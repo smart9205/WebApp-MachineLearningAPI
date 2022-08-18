@@ -11,7 +11,7 @@ import gameService from '../../../../services/game.service';
 import XmlDataFiltering from '../../../coach/XmlDataFiltering';
 import ExcelDataFiltering from '../../../coach/ExcelDataFiltering';
 
-const ProcessedTab = ({ allGamesList, teamList, t }) => {
+const ProcessedTab = ({ allGamesList, teamList, period, teamSelection, seasonSelection, leagueSelection }) => {
 
     const [gameState, setGameState] = useReducer((old, action) => ({ ...old, ...action }), {
         playerList: [],
@@ -24,10 +24,15 @@ const ProcessedTab = ({ allGamesList, teamList, t }) => {
     const { playerList, playersInGameList, allTagList, game, teamId } = gameState
 
     let processedGamesList = []
+    let filteredByTeamGames = []
+    let filteredBySeasonGames = []
+    let filteredByLeagueGames = []
+
     const [gamesByCoach, setGamesByCoach] = useState()
     const [anchorEl, setanchorEl] = useState(null)
     const [exportXML, setExportXML] = useState(false)
     const [excelData, setExcelData] = useState(false)
+    const [gameList, setGameList] = useState()
 
     useEffect(() => {
         allGamesList.map(data => {
@@ -91,9 +96,39 @@ const ProcessedTab = ({ allGamesList, teamList, t }) => {
         }
     }
 
+
+    const filterByTeam = async () => {
+        await gamesByCoach?.processedGamesList?.map(game => {
+            if (parseInt(teamSelection) === parseInt(game.home_team_id) || parseInt(teamSelection) === parseInt(game.away_team_id)) {
+                filteredByTeamGames.push(game)
+            } else if (parseInt(teamSelection) === 0) {
+                filteredByTeamGames.push(game)
+            }
+        })
+    }
+
+    const filterBySeason = async () => {
+        await gamesByCoach?.processedGamesList?.map(game => {
+            if (parseInt(seasonSelection) === parseInt(game.season_id)) {
+                filteredBySeasonGames.push(game)
+            } else if (parseInt(seasonSelection) === 0) {
+                filteredBySeasonGames.push(game)
+            }
+        })
+    }
+
+    useEffect(() => {
+        filterBySeason()
+        filterByTeam()
+        // console.log(gamesByCoach?.processedGamesList)
+        // setGameList(filterBySeason)
+        setGameList(filteredByTeamGames)
+    }, [gamesByCoach, teamSelection])
+
     return (
         <Box sx={{ backgroundColor: '#F8F8F8' }}>
-            {gamesByCoach && gamesByCoach?.processedGamesList?.map((gameData, index) => (
+
+            {gameList && gameList.map((gameData, index) => (
 
                 <Box sx={{ padding: '10px', backgroundColor: 'white', display: 'flex', gap: '18px', b0orderRadius: '10px', margin: '0 24px 24px', height: 'auto', '&:hover': { boxShadow: 3 } }} key={index}>
                     <Box>

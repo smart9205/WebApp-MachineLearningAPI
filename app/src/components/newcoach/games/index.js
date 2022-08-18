@@ -26,25 +26,22 @@ const Games = () => {
         opponentTagList: [],
         gameList: []
     })
-    const { team, gameListByCoach, teamList, game } = state
+    const { team, gameListByCoach, teamList, gameList, game } = state
 
     const [updateGamesList, setUpdateGamesList] = useState(false)
     const [period, setPeriod] = React.useState('all');
-    const [teamSelection, setTeamSelection] = useState('all')
-    const [TeamSelectionOptions, setTeamSelectionOptions] = useState()
+    const [teamSelection, setTeamSelection] = useState(0)
+    const [seasonSelection, setSeasonSelection] = useState(0)
+    const [leagueSelection, setLeagueSelection] = useState('all')
+    const [teamSelectionOptions, setTeamSelectionOptions] = useState()
+    const [seasonSelectionOptions, setSeasonSelectionOptions] = useState()
+    const [leagueSelectionOptions, setLeagueSelectionOptions] = useState()
 
     useEffect(() => {
         gameService.getAllMyCoachTeam().then((res) => {
             setState({ teamList: res, team: res[0] })
         })
     }, [])
-
-    useEffect(() => {
-        if (!team) return
-        gameService.getAllGamesByTeam(team.season_id, team.league_id, team.team_id).then((res) => {
-            setState({ gameList: res })
-        })
-    }, [team])
 
     useEffect(() => {
         if (!!team && !!game) {
@@ -73,21 +70,80 @@ const Games = () => {
     const gettingTeamData = async () => {
         await gameListByCoach.map(teamData => {
             if (teamData?.home_team_id && teamData?.away_team_id) {
-                teamSelectionFields.push({
-                    value: teamData.home_team_id,
-                    label: teamData.home_team_name
+                const isFound = teamSelectionFields.some(el => {
+                    if (el.value === teamData?.home_team_id || el.value === teamData?.away_team_id) {
+                        return true
+                    }
                 })
-                teamSelectionFields.push({
-                    value: teamData.away_team_id,
-                    label: teamData.away_team_name
+                if (isFound) {
+                    return
+                } else {
+                    teamSelectionFields.push({
+                        value: teamData.home_team_id,
+                        label: teamData.home_team_name
+                    })
+                    teamSelectionFields.push({
+                        value: teamData.away_team_id,
+                        label: teamData.away_team_name
+                    })
+                }
+            }
+        })
+    }
+
+    let seasonSelectionFields = []
+
+    const gettingSeasonData = async () => {
+        await gameListByCoach.map(seasonData => {
+            if (seasonData?.season_name && seasonData?.season_id) {
+                const isFound = seasonSelectionFields.some(el => {
+                    if (el.value === seasonData?.season_id) {
+                        return true
+                    }
                 })
+                if (isFound) {
+                    return
+                } else {
+                    seasonSelectionFields.push({
+                        value: seasonData.season_id,
+                        label: seasonData.season_name
+                    })
+                }
+            }
+        })
+    }
+
+    let leagueSelectionFields = []
+
+    const gettingLeagueData = async () => {
+        await gameListByCoach.map(leagueData => {
+            if (leagueData?.league_name && leagueData?.league_id) {
+                const isFound = leagueSelectionFields.some(el => {
+                    if (el.value === leagueData?.league_id) {
+                        return true
+                    }
+                })
+                if (isFound) {
+                    return
+                } else {
+                    leagueSelectionFields.push({
+                        value: leagueData.league_id,
+                        label: leagueData.league_name
+                    })
+                }
             }
         })
     }
 
     useEffect(() => {
         gettingTeamData()
-        setTeamSelectionOptions({ ...TeamSelectionOptions, teamSelectionFields })
+        gettingSeasonData()
+        gettingLeagueData()
+
+        setTeamSelectionOptions({ ...teamSelectionOptions, teamSelectionFields })
+        setSeasonSelectionOptions({ ...seasonSelectionOptions, seasonSelectionFields })
+        setLeagueSelectionOptions({ ...leagueSelectionOptions, leagueSelectionFields })
+
     }, [gameListByCoach])
 
     const handleChange = (event) => {
@@ -137,9 +193,51 @@ const Games = () => {
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         sx={{ outline: 'none', height: '36px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                     >
+                                        <MenuItem value='0'>All</MenuItem>
+
+                                        {teamSelectionOptions?.teamSelectionFields && teamSelectionOptions?.teamSelectionFields?.map((option, index) => (
+                                            <MenuItem key={index} value={option.value} >{option.label}</MenuItem>
+                                        ))}
+
+                                    </Select>
+                                </FormControl>
+                            </Box>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <Typography sx={{ fontFamily: 'sans-serif', fontSize: '16px', fontWeight: 500, color: '#A5A5A8' }}>Season</Typography>
+                                <FormControl sx={{ m: 1, minWidth: 120, border: 'none' }}>
+                                    <Select
+                                        value={seasonSelection}
+                                        onChange={(e) => setSeasonSelection(e.target.value)}
+                                        label=''
+                                        variant="outlined"
+                                        inputProps={{ 'aria-label': 'Without label' }}
+                                        sx={{ outline: 'none', height: '36px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                    >
+                                        <MenuItem value='0'>All</MenuItem>
+
+                                        {seasonSelectionOptions?.seasonSelectionFields && seasonSelectionOptions?.seasonSelectionFields?.map((option, index) => (
+                                            <MenuItem key={index} value={option.value} >{option.label}</MenuItem>
+                                        ))}
+
+                                    </Select>
+                                </FormControl>
+                            </Box>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <Typography sx={{ fontFamily: 'sans-serif', fontSize: '16px', fontWeight: 500, color: '#A5A5A8' }}>League</Typography>
+                                <FormControl sx={{ m: 1, minWidth: 120, border: 'none' }}>
+                                    <Select
+                                        value={leagueSelection}
+                                        onChange={(e) => setLeagueSelection(e.target.value)}
+                                        label=''
+                                        variant="outlined"
+                                        inputProps={{ 'aria-label': 'Without label' }}
+                                        sx={{ outline: 'none', height: '36px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                    >
                                         <MenuItem value='all'>All</MenuItem>
 
-                                        {TeamSelectionOptions?.teamSelectionFields && TeamSelectionOptions?.teamSelectionFields?.map((option, index) => (
+                                        {leagueSelectionOptions?.leagueSelectionFields && leagueSelectionOptions?.leagueSelectionFields?.map((option, index) => (
                                             <MenuItem key={index} value={option.value} >{option.label}</MenuItem>
                                         ))}
 
@@ -153,6 +251,10 @@ const Games = () => {
                     allGamesList={gameListByCoach}
                     teamList={teamList}
                     setState={setState}
+                    period={period}
+                    teamSelection={teamSelection}
+                    seasonSelection={seasonSelection}
+                    leagueSelection={leagueSelection}
                     t={t}
                 />}
 
