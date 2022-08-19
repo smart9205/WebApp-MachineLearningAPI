@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FormControl, Typography, Box, IconButton, InputAdornment } from '@mui/material';
 
-import { BootstrapInput, SaveButton, StyleTextField } from '../components';
-import AuthService from '../../../services/auth.service';
+import { SaveButton, StyleTextField } from '../components';
+import { updateProfile1 } from '../../../actions/auth';
 
 import CameraIcon from '@mui/icons-material/PhotoCameraOutlined';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -12,7 +12,7 @@ const profileList = [
     {
         id: 'firstName',
         title: 'First Name',
-        placeholder: 'Danielaaa',
+        placeholder: 'Daniel',
         error: 'First Name cannot be empty.'
     },
     {
@@ -82,13 +82,16 @@ const PrfileTab = () => {
         country: false,
         confirm: false
     });
+    const dispatch = useDispatch();
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
     };
 
     const saveChanges = () => {
-        if (values.confirmPassword === values.newPassword) AuthService.updateProfile(values.oldPassword, values.newPassword, values.firstName, values.lastName, values.phone, values.country);
+        console.log('settings => ', values);
+        if (values.confirmPassword === values.newPassword)
+            dispatch(updateProfile1(values.oldPassword, values.newPassword, values.firstName, values.lastName, values.email, values.phone, values.country));
     };
 
     const handleClickShowPassword = (prop) => (event) => {
@@ -122,6 +125,8 @@ const PrfileTab = () => {
             confirm: values.oldPassword.length === 0 || values.newPassword.length === 0 || values.confirmPassword.length === 0
         });
     }, [values]);
+
+    console.log('Settings => ', currentUser);
 
     return (
         <Box sx={{ padding: '24px', backgroundColor: 'white', display: 'flex', gap: '24px', borderRadius: '10px', margin: '0 24px 24px', maxHeight: '700px', height: '750px', overflowY: 'scroll' }}>
@@ -175,7 +180,7 @@ const PrfileTab = () => {
                                         endAdornment: (
                                             <InputAdornment position="end">
                                                 <IconButton
-                                                    onClick={handleClickShowPassword(pass.id)}
+                                                    onClick={handleClickShowPassword(pass.show)}
                                                     onMouseDown={handleMouseDownPassword}
                                                     edge="end"
                                                     sx={{ backgroundColor: 'white', '&:hover': { backgroundColor: 'white' }, '&:focus': { backgroundColor: 'white' } }}
@@ -201,8 +206,7 @@ const PrfileTab = () => {
                                 values.phone.length > 0 &&
                                 values.confirmPassword.length > 0 &&
                                 values.newPassword.length > 0 &&
-                                values.confirmPassword.length &&
-                                0
+                                values.confirmPassword.length > 0
                             )
                         }
                         onClick={saveChanges}

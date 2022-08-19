@@ -34,4 +34,10 @@ module.exports = function(app) {
     [authJwt.verifyToken],
     controller.updateProfile
   );
+
+  app.post(
+    "/api/auth/updateprofile1", 
+     [authJwt.verifyToken, authJwt.isCoach],
+    controller.updateProfile1
+  );
 };

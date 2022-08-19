@@ -86,6 +86,7 @@ sendSigninSuccessInfo = async (res, user) => {
     last_name: user.last_name,
     country: user.country,
     phone: user.phone_number,
+    password: user.password,
     roles: authorities,
     accessToken: (validSubs.length > 0 || authorities.includes("ROLE_ADMIN")) && token,
     subscription: validSubs,
@@ -345,6 +346,7 @@ exports.resetPassword = (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
+  console.log('##################user Id##############', req.userId)
   const user = await User.findOne({ where: { id: req.userId } });
 
   if (!user) {
@@ -369,6 +371,42 @@ exports.updateProfile = async (req, res) => {
     last_name: req.body.last_name,
     country: req.body.country,
     phone_number: req.body.phone_number,
+  }, { where: { id: req.userId } }
+  ).then(user => {
+    res.status(200).send({ message: `Profile is updated successfully!` });
+  })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
+};
+
+exports.updateProfile1 = async (req, res) => {
+  const user = await User.findOne({ where: { id: req.userId } });
+  console.log("********************user******************", user)
+
+  if (!user) {
+    return res.status(404).send({ message: "User Not found." });
+  }
+
+  var passwordIsValid = bcrypt.compareSync(
+    req.body.old_password,
+    user.password
+  );
+
+  if (!passwordIsValid) {
+    return res.status(401).send({
+      accessToken: null,
+      message: "Invalid Password!"
+    });
+  }
+
+  User.update({
+    password: bcrypt.hashSync(req.body.new_password, 8),
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    country: req.body.country,
+    phone_number: req.body.phone_number,
+    email: req.body.email
   }, { where: { id: req.userId } }
   ).then(user => {
     res.status(200).send({ message: `Profile is updated successfully!` });

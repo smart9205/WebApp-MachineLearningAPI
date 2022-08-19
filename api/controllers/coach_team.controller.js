@@ -74,7 +74,7 @@ exports.findAllMine = (req, res) => {
         FROM public."Team_Players" 
         GROUP BY
           public."Team_Players".team_id
-      ) AS tempTeamTable on tempTeamTable.temp_team_id = public."Teams".id
+      ) AS tempTeamTable on tempTeamTable.temp_team_id = public."Coach_Teams".team_id
     WHERE public."Coach_Teams".user_id = ${req.userId}
   `)
     .then(data => {
