@@ -95,10 +95,10 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
         }
     }
 
-    const filterByTeam = async (gameList) => {
+    const filterByTeam = async (gameListData) => {
         let filteredResult = []
 
-        await gameList && gameList
+        await gameListData && gameListData
             .filter((item) => parseInt(item.home_team_id) === parseInt(teamFilter) || parseInt(item.away_team_id) === parseInt(teamFilter) || parseInt(teamFilter) === 0)
             .map(game => {
                 filteredResult.push(game)
@@ -107,10 +107,10 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
         return filteredResult
     }
 
-    const filterBySeason = async (gameList) => {
+    const filterBySeason = async (gameListData) => {
         let filteredResult = []
 
-        await gameList && gameList
+        await gameListData && gameListData
             .filter((item) => parseInt(item.season_id) === parseInt(seasonFilter) || parseInt(seasonFilter) === 0)
             .map(game => {
                 filteredResult.push(game)
@@ -119,10 +119,10 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
         return filteredResult
     }
 
-    const filterByLeague = async (gameList) => {
+    const filterByLeague = async (gameListData) => {
         let filteredResult = []
 
-        await gameList && gameList
+        await gameListData && gameListData
             .filter((item) => parseInt(item.league_id) === parseInt(leagueFilter) || parseInt(leagueFilter) === 0)
             .map(game => {
                 filteredResult.push(game)
@@ -131,42 +131,60 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
         return filteredResult
     }
 
-    const filteredDataByFilters = async (gameList) => {
-        await gameList
-        const shallowData = [...gameList]
+    const filteredDataByFilters = async (gameData) => {
+        await gameData
+        const shallowData = [...gameData]
         let filteredData = []
 
-        if (parseInt(teamFilter) !== 0) {
-            let filtered = filterByTeam(shallowData)
-            filteredData = filtered
-            setSeasonFilter(0)
-            setLeagueFilter(0)
-        } else if (parseInt(seasonFilter) !== 0) {
-            setTeamFilter(0)
-            setLeagueFilter(0)
-            let filtered = filterBySeason(shallowData)
-            filteredData = filtered
-        }
-        else if (parseInt(leagueFilter) !== 0) {
-            setTeamFilter(0)
-            setSeasonFilter(0)
-            let filtered = filterByLeague(shallowData)
-            filteredData = filtered
+        if (parseInt(leagueFilter) === 0 && parseInt(seasonFilter) === 0 && parseInt(teamFilter) === 0) {
+            filteredData = shallowData
         }
         else {
-            filteredData = shallowData
+            if (parseInt(teamFilter) !== 0) {
+
+                let filtered = filterByTeam(shallowData)
+                filteredData = filtered
+
+                console.log('TeamFilter : ', filteredData)
+
+                setSeasonFilter(0)
+                setLeagueFilter(0)
+            }
+
+            if (parseInt(seasonFilter) !== 0) {
+
+                let filtered = filterBySeason(shallowData)
+                filteredData = filtered
+
+                console.log('SeasonFilter : ', filteredData)
+
+                setTeamFilter(0)
+                setLeagueFilter(0)
+            }
+
+            if (parseInt(leagueFilter) !== 0) {
+
+                let filtered = filterByLeague(shallowData)
+                filteredData = filtered
+
+                console.log('leagueFilter : ', filteredData)
+
+                setTeamFilter(0)
+                setSeasonFilter(0)
+            }
         }
 
         return filteredData
     }
 
+    useEffect(() => { setGameList(gamesByCoach?.processedGamesList) }, [gamesByCoach])
+
     useEffect(() => {
-        const filterLeague = filteredDataByFilters(gamesByCoach?.processedGamesList)
-        filterLeague.then(function (result) {
+        const filterAllData = filteredDataByFilters(gamesByCoach?.processedGamesList)
+        filterAllData.then(function (result) {
             setGameList(result)
         })
-        // console.log(teamFilter, seasonFilter, leagueFilter)
-    }, [gamesByCoach, teamFilter, seasonFilter, leagueFilter])
+    }, [teamFilter, seasonFilter, leagueFilter])
 
     return (
         <Box sx={{ backgroundColor: '#F8F8F8' }}>

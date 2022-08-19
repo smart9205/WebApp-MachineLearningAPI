@@ -141,8 +141,9 @@ const Games = () => {
         setSeasonSelectionOptions({ ...seasonSelectionOptions, seasonSelectionFields })
         setLeagueSelectionOptions({ ...leagueSelectionOptions, leagueSelectionFields })
 
+        console.log(teamFilter, seasonFilter, leagueFilter)
 
-    }, [gameListByCoach])
+    }, [gameListByCoach, teamFilter, seasonFilter, leagueFilter])
 
     const handleChange = (event) => {
         setPeriod(event.target.value);
