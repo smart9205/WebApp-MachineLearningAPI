@@ -62,6 +62,8 @@ const passwordList = [
 const PrfileTab = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const [values, setValues] = useState({
+        logoText: '',
+        logoColor: '',
         firstName: '',
         lastName: '',
         email: '',
@@ -89,9 +91,13 @@ const PrfileTab = () => {
     };
 
     const saveChanges = () => {
-        console.log('settings => ', values);
-        if (values.confirmPassword === values.newPassword)
+        if (values.confirmPassword === values.newPassword) {
+            const text = `${values.firstName.slice(0, 1)}${values.lastName.slice(0, 1)}`;
+            const color = `#${(Math.random() % 256).toString(16)}${(Math.random() % 256).toString(16)}${(Math.random() % 256).toString(16)}`;
+
+            setValues({ ...values, logoText: text, logoColor: color });
             dispatch(updateProfile1(values.oldPassword, values.newPassword, values.firstName, values.lastName, values.email, values.phone, values.country));
+        }
     };
 
     const handleClickShowPassword = (prop) => (event) => {

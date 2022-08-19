@@ -13,7 +13,6 @@ const Teams = () => {
     const [teamsList, setTeamsList] = useState([]);
     const [seasonList, setSeasonList] = useState([]);
     const [seasonFilter, setSeasonFilter] = useState({});
-    const [loading, setLoading] = useState(true);
     const [hoverIndex, setHoverIndex] = useState(-1);
     const [values, setValues] = useState({
         searchText: '',

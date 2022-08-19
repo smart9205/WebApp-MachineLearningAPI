@@ -56,25 +56,23 @@ exports.findAll = (req, res) => {
 exports.findAllMine = (req, res) => {
 
   Sequelize.query(`
-    SELECT 
-      public."Coach_Teams".*,
-      CONCAT (public."Users".first_name,' ', public."Users".last_name) as coach_name,
-      public."Seasons".name as season_name,
-      public."Leagues".name as league_name,
-      public."Teams".name as team_name,
-      public."Teams".image as team_image,
-      player_count
-    FROM public."Coach_Teams" 
-    JOIN public."Users" on public."Users".id = public."Coach_Teams".user_id
-    JOIN public."Teams" on public."Teams".id = public."Coach_Teams".team_id
-    JOIN public."Seasons" on public."Seasons".id = public."Coach_Teams".season_id
-    JOIN public."Leagues" on public."Leagues".id = public."Coach_Teams".league_id
-    JOIN (
-        SELECT count(public."Team_Players".id) as player_count, public."Team_Players".team_id as temp_team_id
-        FROM public."Team_Players" 
-        GROUP BY public."Team_Players".season_id, public."Team_Players".team_id
-      ) AS tempTeamTable on tempTeamTable.temp_team_id = public."Coach_Teams".team_id
-    WHERE public."Coach_Teams".user_id = ${req.userId}
+  SELECT
+  player_count,public."Coach_Teams".*,
+  CONCAT (public."Users".first_name,' ', public."Users".last_name) as coach_name,
+  public."Seasons".name as season_name,
+  public."Leagues".name as league_name,
+  public."Teams".name as team_name,
+  public."Teams".image as team_image
+FROM public."Coach_Teams"
+JOIN public."Users" on public."Users".id = public."Coach_Teams".user_id
+JOIN public."Teams" on public."Teams".id = public."Coach_Teams".team_id
+JOIN public."Seasons" on public."Seasons".id = public."Coach_Teams".season_id
+JOIN public."Leagues" on public."Leagues".id = public."Coach_Teams".league_id
+JOIN (
+    SELECT count(public."Team_Players".id) as player_count, public."Team_Players".team_id as temp_team_id, public."Team_Players".season_id as temp_season_id
+    FROM public."Team_Players"  GROUP BY  public."Team_Players".team_id,public."Team_Players".season_id
+  ) AS tempTeamTable on tempTeamTable.temp_team_id = public."Coach_Teams".team_id and tempTeamTable.temp_season_id = public."Coach_Teams".season_id
+WHERE public."Coach_Teams".user_id =  ${req.userId}
   `)
     .then(data => {
       res.send(data[0]);
