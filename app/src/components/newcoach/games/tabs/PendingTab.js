@@ -9,7 +9,7 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
 
     let pendingGamesList = []
     const [gamesByCoach, setGamesByCoach] = useState()
-    const [videoUrl, setVideoUrl] = useState('')
+    const [videoUrl, setVideoUrl] = useState([])
 
     useEffect(() => {
         allGamesList.map(data => {
@@ -28,8 +28,14 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
         return date + '/' + month + '/' + year
     }
 
-    const handleChange = event => {
-        setVideoUrl(event.target.value)
+    const handleChange = (e) => {
+        e.preventDefault();
+        const { name, value } = e.target
+        const data = {
+            ...videoUrl,
+            [name]: value
+        }
+        setVideoUrl(data)
     }
 
     const handleSubmit = (gameData) => {
@@ -83,7 +89,9 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
                     </Box>
                     <Box >
                         <label style={{ color: 'black', fontSize: '14px', marginLeft: '26px', fontFamily: 'sans-serif', fontWeight: 300 }} >Video URL: </label>
-                        <BootstrapInput variant="standard" value={videoUrl} onChange={handleChange} />
+                        <BootstrapInput variant="standard" value={videoUrl.index} name={index} onChange={(e) => {
+                            handleChange(e)
+                        }} />
                         <UpdateButton onClick={() => handleSubmit(gameData)}>+  Update</UpdateButton>
                     </Box>
                 </Box>
