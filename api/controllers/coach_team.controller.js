@@ -72,8 +72,7 @@ exports.findAllMine = (req, res) => {
     JOIN (
         SELECT count(public."Team_Players".id) as player_count, public."Team_Players".team_id as temp_team_id
         FROM public."Team_Players" 
-        GROUP BY
-          public."Team_Players".team_id
+        GROUP BY public."Team_Players".season_id, public."Team_Players".team_id
       ) AS tempTeamTable on tempTeamTable.temp_team_id = public."Coach_Teams".team_id
     WHERE public."Coach_Teams".user_id = ${req.userId}
   `)
