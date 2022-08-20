@@ -9,6 +9,32 @@ import { SearchText } from '../components';
 import GameService from '../../../services/game.service';
 import TeamListItem from './teamListItem';
 
+function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) return -1;
+
+    if (b[orderBy] > a[orderBy]) return 1;
+
+    return 0;
+}
+
+function getComparator(order, orderBy) {
+    return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort(array, comparator) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+
+    stabilizedThis.sort((a, b) => {
+        const order = comparator(a[0], b[0]);
+
+        if (order !== 0) return order;
+
+        return a[1] - b[1];
+    });
+
+    return stabilizedThis.map((el) => el[0]);
+}
+
 const Teams = () => {
     const [teamsList, setTeamsList] = useState([]);
     const [seasonList, setSeasonList] = useState([]);
@@ -29,8 +55,10 @@ const Teams = () => {
             setValues({ ...values, teamCount: teamsList.length });
         });
         GameService.getAllSeasons().then((res) => {
-            setSeasonList(res);
-            setSeasonFilter(res[0]);
+            const descArray = stableSort(res, getComparator('desc', 'id'));
+
+            setSeasonList(descArray);
+            setSeasonFilter(descArray[0]);
         });
     }, [values.teamCount]);
 
@@ -42,7 +70,7 @@ const Teams = () => {
         setHoverIndex(-1);
     };
 
-    console.log('Teams => ', seasonFilter);
+    console.log('Teams => ', seasonList, seasonFilter);
 
     return (
         <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
@@ -96,17 +124,15 @@ const Teams = () => {
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ margin: '24px' }}>
-                <Box sx={{ overflowY: 'scroll', maxHeight: '75vh' }}>
-                    {teamsList
-                        .filter((item) => item.season_name === seasonFilter.name)
-                        .map((team, index) => (
-                            <Box key={team.id} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
-                                <TeamListItem row={team} isHover={hoverIndex === index} />
-                            </Box>
-                        ))}
+            <Box sx={{ margin: '0 24px' }}>
+                <Box sx={{ overflowY: 'scroll', maxHeight: '70vh' }}>
+                    {(seasonFilter === null || seasonFilter === undefined ? teamsList : teamsList.filter((item) => item.season_name === seasonFilter.name)).map((team, index) => (
+                        <Box key={team.id} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
+                            <TeamListItem row={team} isHover={hoverIndex === index} />
+                        </Box>
+                    ))}
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '16px', margin: '15px 24px' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '16px', margin: '24px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#A5A5A8' }}>Show by</Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '4px', 'svg path': { fill: 'black' } }}>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>20</Typography>
