@@ -29,8 +29,7 @@ const updateProfile = (old_password, new_password, first_name, last_name, phone_
     );
 };
 
-const updateProfile1 = (old_password, new_password, first_name, last_name, email, phone_number, country) => {
-    console.log('email => ', email);
+const updateProfile1 = (old_password, new_password, first_name, last_name, phone_number, country) => {
     return axios.post(
         API_URL + 'updateprofile1',
         {
@@ -38,12 +37,32 @@ const updateProfile1 = (old_password, new_password, first_name, last_name, email
             new_password,
             first_name,
             last_name,
-            email,
             phone_number,
             country
         },
         { headers: authHeader() }
     );
+};
+
+const updateProfile2 = (first_name, last_name, phone_number, country) => {
+    return axios
+        .post(
+            API_URL + 'updateprofile2',
+            {
+                first_name,
+                last_name,
+                phone_number,
+                country
+            },
+            { headers: authHeader() }
+        )
+        .then((response) => {
+            console.log('updateprofile2 => ', response.data);
+            if (response.data.accessToken) {
+                setUser(response.data);
+            }
+            return response.data;
+        });
 };
 
 const verification = (verificationCode) => {
@@ -100,6 +119,17 @@ const resetpassword = (userdata, password) => {
         });
 };
 
+const updatepassword = (id, password) => {
+    return axios
+        .post(API_URL + 'updatepassword', {
+            id: id,
+            password
+        })
+        .then((data) => {
+            return data;
+        });
+};
+
 const logout = () => {
     localStorage.removeItem('user');
 };
@@ -108,11 +138,13 @@ const authService = {
     register,
     updateProfile,
     updateProfile1,
+    updateProfile2,
     login,
     logout,
     verification,
     forgetpassword,
     resetPwdVerify,
-    resetpassword
+    resetpassword,
+    updatepassword
 };
 export default authService;

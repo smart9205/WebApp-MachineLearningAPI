@@ -1,61 +1,47 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FormControl, Typography, Box, IconButton, InputAdornment } from '@mui/material';
+import { FormControl, Typography, Box, TextField } from '@mui/material';
 
 import { SaveButton, StyleTextField } from '../components';
-import { updateProfile1 } from '../../../actions/auth';
+import { updateProfile2 } from '../../../actions/auth';
 
 import CameraIcon from '@mui/icons-material/PhotoCameraOutlined';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const profileList = [
     {
         id: 'firstName',
         title: 'First Name',
         placeholder: 'Daniel',
-        error: 'First Name cannot be empty.'
+        error: 'First Name cannot be empty.',
+        readonly: false
     },
     {
         id: 'lastName',
         title: 'Last Name',
         placeholder: 'Gutt',
-        error: 'Last Name cannot be empty.'
+        error: 'Last Name cannot be empty.',
+        readonly: false
     },
     {
         id: 'email',
         title: 'Email',
         placeholder: 'gutt@scoutting4u.com',
-        error: 'Email cannot be empty.'
+        error: 'Email cannot be empty.',
+        readonly: true
     },
     {
         id: 'phone',
         title: 'Phone Number',
         placeholder: '+X (XXX) XXX-XX-XX',
-        error: 'Phone Number cannot be empty.'
+        error: 'Phone Number cannot be empty.',
+        readonly: false
     },
     {
         id: 'country',
         title: 'Country',
         placeholder: 'Israel',
-        error: 'Country cannot be empty.'
-    }
-];
-
-const passwordList = [
-    {
-        id: 'oldPassword',
-        title: 'Old Password',
-        show: 'showOldPassword'
-    },
-    {
-        id: 'newPassword',
-        title: 'New Password',
-        show: 'showNewPassword'
-    },
-    {
-        id: 'confirmPassword',
-        title: 'Confirm Password',
-        show: 'showConfirmPassword'
+        error: 'Country cannot be empty.',
+        readonly: false
     }
 ];
 
@@ -68,13 +54,7 @@ const PrfileTab = () => {
         lastName: '',
         email: '',
         phone: '',
-        country: '',
-        oldPassword: '',
-        showOldPassword: false,
-        newPassword: '',
-        showNewPassword: false,
-        confirmPassword: '',
-        showConfirmPassword: false
+        country: ''
     });
     const [errors, setErrors] = useReducer((old, action) => ({ ...old, ...action }), {
         fileName: false,
@@ -91,23 +71,11 @@ const PrfileTab = () => {
     };
 
     const saveChanges = () => {
-        if (values.confirmPassword === values.newPassword) {
-            const text = `${values.firstName.slice(0, 1)}${values.lastName.slice(0, 1)}`;
-            const color = `#${(Math.random() % 256).toString(16)}${(Math.random() % 256).toString(16)}${(Math.random() % 256).toString(16)}`;
+        const text = `${values.firstName.slice(0, 1)}${values.lastName.slice(0, 1)}`;
+        const color = `#${(Math.random() % 256).toString(16)}${(Math.random() % 256).toString(16)}${(Math.random() % 256).toString(16)}`;
 
-            setValues({ ...values, logoText: text, logoColor: color });
-            dispatch(updateProfile1(values.oldPassword, values.newPassword, values.firstName, values.lastName, values.email, values.phone, values.country));
-        }
-    };
-
-    const handleClickShowPassword = (prop) => (event) => {
-        const flag = !values[prop];
-
-        setValues({ ...values, [prop]: flag });
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
+        setValues({ ...values, logoText: text, logoColor: color });
+        dispatch(updateProfile2(values.firstName, values.lastName, values.phone, values.country));
     };
 
     useEffect(() => {
@@ -127,8 +95,7 @@ const PrfileTab = () => {
             lastName: values.lastName.length === 0,
             email: values.email.length === 0,
             phone: values.phone.length === 0,
-            country: values.country.length === 0,
-            confirm: values.oldPassword.length === 0 || values.newPassword.length === 0 || values.confirmPassword.length === 0
+            country: values.country.length === 0
         });
     }, [values]);
 
@@ -152,71 +119,28 @@ const PrfileTab = () => {
                     </Box>
                 </label>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                <Box sx={{ display: 'flex', gap: '64px' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                        {profileList.map((item) => (
-                            <FormControl variant="standard" sx={{ gap: '4px' }} key={item.id}>
-                                <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>{item.title}</Typography>
-                                <StyleTextField
-                                    value={values[item.id]}
-                                    label=" "
-                                    placeholder={item.placeholder}
-                                    onChange={handleChange(item.id)}
-                                    helperText={errors[item.id] ? item.error : ''}
-                                    error={errors[item.id]}
-                                    sx={{ width: '300px', height: '48px' }}
-                                />
-                            </FormControl>
-                        ))}
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                        {passwordList.map((pass) => (
-                            <FormControl variant="outlined" sx={{ gap: '4px' }} key={pass.id}>
-                                <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 600 }}>{pass.title}</Typography>
-                                <StyleTextField
-                                    type={values[pass.show] ? 'text' : 'password'}
-                                    value={values[pass.id]}
-                                    label=" "
-                                    placeholder="Enter password here"
-                                    onChange={handleChange(pass.id)}
-                                    helperText={errors.confirm ? 'Password cannot be empty' : ''}
-                                    error={errors.confirm}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    onClick={handleClickShowPassword(pass.show)}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    edge="end"
-                                                    sx={{ backgroundColor: 'white', '&:hover': { backgroundColor: 'white' }, '&:focus': { backgroundColor: 'white' } }}
-                                                >
-                                                    {values[pass.show] ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
-                                    }}
-                                    sx={{ width: '300px', height: '48px' }}
-                                />
-                            </FormControl>
-                        ))}
-                    </Box>
-                </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                {profileList.map((item) => (
+                    <FormControl sx={{ gap: '4px' }} key={item.id}>
+                        <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>{item.title}</Typography>
+                        <TextField
+                            value={values[item.id]}
+                            label=""
+                            inputProps={{ 'aria-label': 'Without label', readOnly: item.readonly }}
+                            variant="outlined"
+                            placeholder={item.placeholder}
+                            onChange={handleChange(item.id)}
+                            helperText={errors[item.id] ? item.error : ''}
+                            error={errors[item.id]}
+                            sx={{ borderRadius: '10px', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                        />
+                    </FormControl>
+                ))}
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '24px' }}>
                     <SaveButton
-                        disabled={
-                            !(
-                                values.firstName.length > 0 &&
-                                values.lastName.length > 0 &&
-                                values.email.length > 0 &&
-                                values.phone.length > 0 &&
-                                values.confirmPassword.length > 0 &&
-                                values.newPassword.length > 0 &&
-                                values.confirmPassword.length > 0
-                            )
-                        }
+                        disabled={!(values.firstName.length > 0 && values.lastName.length > 0 && values.email.length > 0 && values.phone.length > 0 && values.country.length > 0)}
                         onClick={saveChanges}
-                        sx={{ width: '400px', fontSize: '16px' }}
+                        sx={{ width: '200px', fontSize: '16px' }}
                     >
                         Save changes
                     </SaveButton>

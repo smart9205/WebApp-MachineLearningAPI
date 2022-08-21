@@ -1,4 +1,4 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, UPDATEPROFILE_SUCCESS, UPDATEPROFILE_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, SET_MESSAGE, RESET_PWD_READY } from './types';
+import { REGISTER_SUCCESS, REGISTER_FAIL, UPDATEPROFILE_SUCCESS, UPDATEPROFILE_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, SET_MESSAGE, RESET_PWD_READY, UPDATEPROFILE1_SUCCESS } from './types';
 
 import AuthService from '../services/auth.service';
 export const register = (email, firstname, lastname, phonenumber, country) => (dispatch) =>
@@ -61,8 +61,8 @@ export const updateProfile = (oldPassword, newPassword, firstname, lastname, pho
         }
     );
 
-export const updateProfile1 = (oldPassword, newPassword, firstname, lastname, email, phonenumber, country) => (dispatch) =>
-    AuthService.updateProfile1(oldPassword, newPassword, firstname, lastname, email, phonenumber, country).then(
+export const updateProfile1 = (oldPassword, newPassword, firstname, lastname, phonenumber, country) => (dispatch) =>
+    AuthService.updateProfile1(oldPassword, newPassword, firstname, lastname, phonenumber, country).then(
         (response) => {
             dispatch({
                 type: UPDATEPROFILE_SUCCESS
@@ -72,6 +72,34 @@ export const updateProfile1 = (oldPassword, newPassword, firstname, lastname, em
                 type: SET_MESSAGE,
                 payload: response.data.message
             });
+
+            return Promise.resolve();
+        },
+        (error) => {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+
+            dispatch({
+                type: UPDATEPROFILE_FAIL
+            });
+
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message
+            });
+
+            return Promise.reject();
+        }
+    );
+
+export const updateProfile2 = (firstname, lastname, phonenumber, country) => (dispatch) =>
+    AuthService.updateProfile2(firstname, lastname, phonenumber, country).then(
+        (data) => {
+            dispatch({
+                type: UPDATEPROFILE1_SUCCESS,
+                payload: { user: data }
+            });
+
+            console.log('auth => ', data);
 
             return Promise.resolve();
         },
@@ -142,6 +170,7 @@ export const login = (email, password, device) => (dispatch) =>
             return Promise.reject();
         }
     );
+
 export const forgetpassword = (email) => (dispatch) =>
     AuthService.forgetpassword(email).then(
         (response) => {
@@ -173,6 +202,36 @@ export const resetpassword = (userdata, password, confirmPassword) => (dispatch)
         return Promise.reject();
     }
     return AuthService.resetpassword(userdata, password).then(
+        (response) => {
+            dispatch({
+                type: SET_MESSAGE,
+                payload: response.data.message
+            });
+
+            return Promise.resolve();
+        },
+        (error) => {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message
+            });
+
+            return Promise.reject();
+        }
+    );
+};
+
+export const updatepassword = (id, password, confirmPassword) => (dispatch) => {
+    if (password !== confirmPassword) {
+        dispatch({
+            type: SET_MESSAGE,
+            payload: 'Confirm Password Failed!'
+        });
+        return Promise.reject();
+    }
+    return AuthService.updatepassword(id, password).then(
         (response) => {
             dispatch({
                 type: SET_MESSAGE,

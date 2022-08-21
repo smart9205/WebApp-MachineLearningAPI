@@ -29,6 +29,8 @@ module.exports = function(app) {
 
   app.post("/api/auth/resetpassword",  controller.resetPassword);
 
+  app.post("/api/auth/updatepassword",  controller.updatePassword);
+
   app.post(
     "/api/auth/updateprofile", 
     [authJwt.verifyToken],
@@ -39,5 +41,11 @@ module.exports = function(app) {
     "/api/auth/updateprofile1", 
      [authJwt.verifyToken, authJwt.isCoach],
     controller.updateProfile1
+  );
+
+  app.post(
+    "/api/auth/updateprofile2", 
+     [authJwt.verifyToken, authJwt.isCoach],
+    controller.updateProfile2
   );
 };

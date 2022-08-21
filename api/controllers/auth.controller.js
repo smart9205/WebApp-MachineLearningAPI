@@ -345,6 +345,15 @@ exports.resetPassword = (req, res) => {
     });
 };
 
+exports.updatePassword = (req, res) => {
+  User.update({ password: bcrypt.hashSync(req.body.password, 8) },
+          { where: { id: req.body.id } })
+          .then((num) => {
+            VerificationToken.update({ token: "" }, { where: { user_id: req.body.id } });
+            return res.status(200).send({ message: `Reset Password Success` });
+          });
+};
+
 exports.updateProfile = async (req, res) => {
   console.log('##################user Id##############', req.userId)
   const user = await User.findOne({ where: { id: req.userId } });
@@ -405,8 +414,7 @@ exports.updateProfile1 = async (req, res) => {
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     country: req.body.country,
-    phone_number: req.body.phone_number,
-    email: req.body.email
+    phone_number: req.body.phone_number
   }, { where: { id: req.userId } }
   ).then(user => {
     res.status(200).send({ message: `Profile is updated successfully!` });
@@ -414,4 +422,26 @@ exports.updateProfile1 = async (req, res) => {
     .catch(err => {
       res.status(500).send({ message: err.message });
     });
+};
+
+exports.updateProfile2 = async (req, res) => {
+  const user = await User.findOne({ where: { id: req.userId } });
+
+  if (!user) {
+    return res.status(404).send({ message: "User Not found." });
+  }
+
+  Sequelize.query(`
+  UPDATE public."Users"
+  SET first_name='${req.body.first_name}',
+  last_name='${req.body.last_name}',
+  country='${req.body.country}',
+  phone_number='${req.body.phone_number}'
+  WHERE id = ${req.userId}
+  `);
+
+  const user1 = await User.findOne({ where: { id: req.userId } });
+  console.log("********************user******************", user1)
+
+  sendSigninSuccessInfo(res, user1);
 };
