@@ -82,6 +82,7 @@ sendSigninSuccessInfo = async (res, user) => {
   res.status(200).send({
     id: user.id,
     email: user.email,
+    image: user.user_image,
     first_name: user.first_name,
     last_name: user.last_name,
     country: user.country,
@@ -91,7 +92,7 @@ sendSigninSuccessInfo = async (res, user) => {
     accessToken: (validSubs.length > 0 || authorities.includes("ROLE_ADMIN")) && token,
     subscription: validSubs,
     user_config: userConf,
-    create_edits: user.create_edits
+    create_edits: user.create_edits,
   });
 }
 
@@ -436,12 +437,13 @@ exports.updateProfile2 = async (req, res) => {
   SET first_name='${req.body.first_name}',
   last_name='${req.body.last_name}',
   country='${req.body.country}',
-  phone_number='${req.body.phone_number}'
+  phone_number='${req.body.phone_number}',
+  user_image='${req.body.logo}'
   WHERE id = ${req.userId}
   `);
 
   const user1 = await User.findOne({ where: { id: req.userId } });
-  console.log("********************user******************", user1)
+  console.log("********************user/updateprofile2******************", user1)
 
   sendSigninSuccessInfo(res, user1);
 };

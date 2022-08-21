@@ -44,7 +44,7 @@ const updateProfile1 = (old_password, new_password, first_name, last_name, phone
     );
 };
 
-const updateProfile2 = (first_name, last_name, phone_number, country) => {
+const updateProfile2 = (first_name, last_name, phone_number, country, logo) => {
     return axios
         .post(
             API_URL + 'updateprofile2',
@@ -52,7 +52,8 @@ const updateProfile2 = (first_name, last_name, phone_number, country) => {
                 first_name,
                 last_name,
                 phone_number,
-                country
+                country,
+                logo
             },
             { headers: authHeader() }
         )

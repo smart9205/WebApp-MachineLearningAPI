@@ -1,11 +1,27 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FormControl, Typography, Box, TextField } from '@mui/material';
-
-import { SaveButton, StyleTextField } from '../components';
-import { updateProfile2 } from '../../../actions/auth';
+import S3 from 'react-aws-s3';
+import { FormControl, Typography, Box, TextField, CircularProgress } from '@mui/material';
 
 import CameraIcon from '@mui/icons-material/PhotoCameraOutlined';
+
+import { SaveButton } from '../components';
+import { updateProfile2 } from '../../../actions/auth';
+import { USER_IMAGE_DEFAULT } from '../../../common/staticData';
+
+const styles = {
+    loader: {
+        position: 'absolute',
+        left: '0px',
+        top: '0px',
+        width: '100%',
+        height: '100%',
+        zIndex: 9999,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+};
 
 const profileList = [
     {
@@ -47,9 +63,10 @@ const profileList = [
 
 const PrfileTab = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
+    const fileInput = useRef();
+    const [loading, setLoading] = useState(false);
     const [values, setValues] = useState({
-        logoText: '',
-        logoColor: '',
+        logo: '',
         firstName: '',
         lastName: '',
         email: '',
@@ -65,22 +82,48 @@ const PrfileTab = () => {
         confirm: false
     });
     const dispatch = useDispatch();
+    const dirName = process.env.REACT_APP_DIR_USER;
+    const fileName = '';
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
     };
 
     const saveChanges = () => {
-        const text = `${values.firstName.slice(0, 1)}${values.lastName.slice(0, 1)}`;
-        const color = `#${(Math.random() % 256).toString(16)}${(Math.random() % 256).toString(16)}${(Math.random() % 256).toString(16)}`;
+        dispatch(updateProfile2(values.firstName, values.lastName, values.phone, values.country, values.logo));
+    };
 
-        setValues({ ...values, logoText: text, logoColor: color });
-        dispatch(updateProfile2(values.firstName, values.lastName, values.phone, values.country));
+    const getImage = () => {
+        return values.logo && values.logo.length > 0 ? values.logo : USER_IMAGE_DEFAULT;
+    };
+
+    const handleUpload = () => {
+        const file = fileInput.current.files[0];
+        if (!file) return;
+        const config = {
+            bucketName: process.env.REACT_APP_BUCKET_NAME,
+            dirName,
+            region: process.env.REACT_APP_REGION,
+            accessKeyId: process.env.REACT_APP_ACCESS_ID,
+            secretAccessKey: process.env.REACT_APP_ACCESS_KEY,
+            s3Url: process.env.REACT_APP_S3_URI
+        };
+        const ReactS3Client = new S3(config);
+        setLoading(true);
+        ReactS3Client.uploadFile(file, fileName)
+            .then((data) => {
+                if (data.status === 204) setValues({ ...values, logo: data.location });
+                setLoading(false);
+            })
+            .catch((e) => {
+                setLoading(false);
+            });
     };
 
     useEffect(() => {
         setValues({
             ...values,
+            logo: currentUser.image,
             firstName: currentUser.first_name,
             lastName: currentUser.last_name,
             email: currentUser.email,
@@ -99,25 +142,23 @@ const PrfileTab = () => {
         });
     }, [values]);
 
-    console.log('Settings => ', currentUser);
+    console.log('Settings => ', currentUser, values);
 
     return (
         <Box sx={{ padding: '24px', backgroundColor: 'white', display: 'flex', gap: '24px', borderRadius: '10px', margin: '0 24px 24px', maxHeight: '700px', height: '750px', overflowY: 'scroll' }}>
-            <Box
-                sx={{
-                    width: '140px',
-                    height: '140px',
-                    borderRadius: '15px',
-                    background: 'url("https://api.static.newstream.ai/media/backend_api_account/coach/e593b826-e858-41ea-bac6-1a7f53f2a311./tmp/tmpsgjzfqh9.128x128_q85_crop.jpg")'
-                }}
-            >
-                <input style={{ display: 'none' }} id="photo" type="file" accept="image/*" />
+            <Box sx={{ width: '140px', height: '140px', borderRadius: '15px', background: `url(${getImage()}) center center / cover no-repeat silver` }}>
+                <input accept="image/*" id="photo" type="file" ref={fileInput} onChange={(e) => handleUpload()} style={{ display: 'none' }} />
                 <label htmlFor="photo" style={{ width: '100%', cursor: 'pointer' }}>
                     <Box sx={{ background: 'transparent', height: '110px' }} />
                     <Box sx={{ width: '100%', height: '30px', backgroundColor: 'black', borderRadius: '0 0 15px 15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <CameraIcon />
                     </Box>
                 </label>
+                {loading && (
+                    <div style={styles.loader}>
+                        <CircularProgress />
+                    </div>
+                )}
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                 {profileList.map((item) => (

@@ -91,8 +91,8 @@ export const updateProfile1 = (oldPassword, newPassword, firstname, lastname, ph
         }
     );
 
-export const updateProfile2 = (firstname, lastname, phonenumber, country) => (dispatch) =>
-    AuthService.updateProfile2(firstname, lastname, phonenumber, country).then(
+export const updateProfile2 = (firstname, lastname, phonenumber, country, logo) => (dispatch) =>
+    AuthService.updateProfile2(firstname, lastname, phonenumber, country, logo).then(
         (data) => {
             dispatch({
                 type: UPDATEPROFILE1_SUCCESS,
