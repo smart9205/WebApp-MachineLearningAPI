@@ -40,10 +40,10 @@ module.exports = app => {
 		controller.findOne
 	);
 
-	app.get(
-		"/player/:fname/:lname",
-		controller.findTeams
-	);
+	// app.get(
+	// 	"/player/:fname/:lname",
+	// 	controller.findTeams
+	// );
 
 	app.get(
 		"/player/gameByPlayerId/:id",

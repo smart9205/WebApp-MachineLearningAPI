@@ -88,7 +88,7 @@ export default function Player() {
 
   useEffect(() => {
     setLoading(true)
-    GameService.getGameDetailssByPlayer(playerId).then((res) => {
+    GameService.getGameDetailsByPlayer(playerId).then((res) => {
       setGames(res)
       setLoading(false)
     }).catch(() => { setLoading(false) })
@@ -105,10 +105,10 @@ export default function Player() {
 
   useEffect(() => {
     i18next.changeLanguage(language);
-    if(language == 'iw' || language == 'ar') {
-        document.body.style.direction = 'rtl'
+    if (language == 'iw' || language == 'ar') {
+      document.body.style.direction = 'rtl'
     } else {
-        document.body.style.direction = 'ltr'
+      document.body.style.direction = 'ltr'
     }
   }, [language])
 

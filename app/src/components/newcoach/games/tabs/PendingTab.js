@@ -10,6 +10,7 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
     let pendingGamesList = []
     const [gamesByCoach, setGamesByCoach] = useState()
     const [videoUrl, setVideoUrl] = useState([])
+    const [urlIndex, setUrlIndex] = useState([])
 
     useEffect(() => {
         allGamesList.map(data => {
@@ -35,6 +36,7 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
             ...videoUrl,
             [name]: value
         }
+        setUrlIndex(name)
         setVideoUrl(data)
     }
 
@@ -48,12 +50,13 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
                 home_team_id: gameData?.home_team_id,
                 away_team_id: gameData?.away_team_time,
                 date: gameData?.date,
-                video_url: videoUrl,
+                video_url: videoUrl[urlIndex],
                 mobile_video_url: gameData?.mobile_video_url ? gameData?.mobile_video_url : videoUrl,
                 mute_video: gameData?.mute_video
             }).then((res) => {
                 setUpdateGamesList(true)
-                console.log(res)
+                setUrlIndex([])
+                setVideoUrl('')
             }).catch((e) => { console.log(e) })
         } catch (error) {
             console.log(error)
