@@ -366,7 +366,7 @@ const getAllGamesByPlayer = (id) => {
 };
 
 const getGameDetailsByPlayer = (id) => {
-    return axios.get(API_URL + `player/gameDetailsByPlayerId/${id}`, { data: { id } }).then((response) => {
+    return axios.get(API_URL + `player/gameDetailsByPlayerId/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
         return response.data;
     });
 };
