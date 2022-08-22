@@ -21,6 +21,7 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
   const [actionTypeId, setActionTypeId] = React.useState(1);
   const [onTarget, setOnTarget] = React.useState("Yes");
   const [goal, setGoal] = React.useState("No");
+  const [result, setResult] = React.useState(7)
   const [areaCourtId, setAreaCourtId] = React.useState(4);
   const [inTheBox, setInTheBox] = React.useState("No")
 
@@ -116,6 +117,28 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
       }
       {
         goal === "No" &&
+        <SubBox>
+          <List header="Result">
+            {
+              [
+                { id: 6, name: "Saved By" },
+                { id: 7, name: "Blocked By" },
+              ].map((type, i) => (
+                <ListItemButton key={i}
+                  selected={result === type.id}
+                  onClick={() => {
+                    setResult(type.id)
+                  }}
+                >
+                  <ListItemText primary={type.name} />
+                </ListItemButton>
+              ))
+            }
+          </List>
+        </SubBox>
+      }
+
+      {result === 6 &&
         <PlayerSelector
           title="Saved"
           playerList={defenseTeam}
@@ -137,6 +160,36 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
                 player_id: player.id,
                 action_id: 8,
                 action_result_id: 1,
+                court_area_id: areaCourtId,
+                inside_the_paint: inTheBox
+              }
+            ])
+          }}
+        />
+      }
+
+      {result === 7 &&
+        <PlayerSelector
+          title="Defensive Player List"
+          playerList={defenseTeam}
+          editable={false}
+          onSelect={(player) => {
+            taggingState([
+              {
+                action_type_id: actionTypeId,
+                team_id: offenseTeamId,
+                player_id: offensivePlayer.id,
+                action_id: 1,
+                action_result_id: 7,
+                court_area_id: areaCourtId,
+                inside_the_paint: inTheBox
+              },
+              {
+                action_type_id: actionTypeId,
+                team_id: defenseTeamId,
+                player_id: player.id,
+                action_id: 8,
+                action_result_id: 7,
                 court_area_id: areaCourtId,
                 inside_the_paint: inTheBox
               }

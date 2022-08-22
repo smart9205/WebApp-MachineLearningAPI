@@ -17,6 +17,7 @@ const SubBox = styled(Box)`
 
 const RESULT_LIST = [
   { id: 4, name: "Successful" },
+  { id: 10, name: "Unsuccessful" },
   { id: 7, name: "Blocked" },
   { id: 8, name: "Cleared" },
   { id: 15, name: "Offside" },
@@ -77,6 +78,17 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                     inside_the_paint: inTheBox
                   }])
                 }
+                if (r.name === "Unsuccessful") {
+                  taggingState([{
+                    action_type_id: actionTypeId,
+                    team_id: offenseTeamId,
+                    player_id: offensivePlayer.id,
+                    action_id: 3,
+                    action_result_id: r.id,
+                    court_area_id: areaCourtId,
+                    inside_the_paint: inTheBox
+                  }])
+                }
               }}
             >
               <ListItemText primary={r.name} />
@@ -115,7 +127,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
           }}
         />
         :
-        result.name !== "Successful" &&
+        result.name !== "Successful" || result.name !== "Unsuccessful" &&
         <PlayerSelector
           title="Defensive Player List"
           playerList={defenseTeam}
