@@ -78,7 +78,7 @@ export default function Pass({
       ...tagData,
       team_id: defenseTeamId,
       player_id: player.id,
-      action_id: 10,
+      action_id: 13,
       action_result_id: 7,  //Blocked
       court_area_id: areaCourtId,
       inside_the_paint: inTheBox
