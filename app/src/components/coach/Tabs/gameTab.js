@@ -81,7 +81,7 @@ const GameTab = ({ allTagList, game, playerList, playersInGameList, opponentTagL
             }
             <Paper style={{ height: "100%", minWidth: 500, position: 'relative' }} className="coach-tag-table">
 
-                <ExcelButton
+                { /*              <ExcelButton
                     style={{ position: "absolute", right: 10 }}
                     team={allTagList}
                     t={t}
@@ -93,7 +93,7 @@ const GameTab = ({ allTagList, game, playerList, playersInGameList, opponentTagL
                     teamId={teamId}
                     playerList={playerList}
                     playersInGameList={playersInGameList}
-                    t={t} />
+        t={t} /> */}
 
                 <TeamTagTable
                     sx={{ height: "70%", p: 1, width: "100%" }}
