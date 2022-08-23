@@ -29,6 +29,7 @@
         "jstoxml": "^3.2.3",
         "lodash": "^4.17.21",
         "material-ui-color": "^1.2.0",
+        "moment": "^2.29.4",
         "randomstring": "^1.2.1",
         "react": "^17.0.2",
         "react-anchor-link-smooth-scroll": "^1.0.12",

@@ -31,6 +31,8 @@ import Cross from './contents/Cross';
 import Foul from './contents/Foul';
 import Dribble from './contents/Dribble';
 import SelectMainPlayers from './contents/SelectMainPlayers';
+import moment from 'moment'
+import { compose } from '@mui/system';
 // import VIDEO from "../../assets/1.mp4"
 const drawerWidth = "30%";
 
@@ -129,8 +131,8 @@ export default function Tagging() {
   })
 
   const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
-    sec_before: getUser()?.user_config ? getUser()?.user_config.sec_before : 10,
-    sec_after: getUser()?.user_config ? getUser()?.user_config.sec_after : 3,
+    sec_before: 10,
+    sec_after: 2,
   })
 
   const [teamTag, setTeamTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -333,6 +335,7 @@ export default function Tagging() {
   }, [config]);
 
   const saveTags = async (isCP = false) => {
+    setPlay(false)
     const tTag = await addTeamTag(isCP)
     for (const pTag of temp_playerTag_list) {
       await addPlayerTag({ ...pTag, team_tag_id: tTag.id })
@@ -348,16 +351,19 @@ export default function Tagging() {
       /* saveTags() */
       /* offensiveTeamClicked(state.offense === "home" ? "home" : "away") */
       const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
-      /* console.log(st) */
-      setState({ start_time: st })
+
+      const [hh, mm, ss] = st.split(':')
+      let extractedStartTime = hh + ":" + mm + ":" + (ss - 5)
+
+      setState({ start_time: extractedStartTime })
 
       if (temp_playerTag_list.find(t => ALL_ACTION_RESULTS.find(f => f.id === t?.action_result_id)?.change_possession)) {
-        setTeamTag({ start_time: teamTag.start_time - 5 })
+        setTeamTag({ start_time: teamTag.start_time })
 
       }
+      setPlay(true)
     }
     setModalOpen(false)
-    setPlay(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [temp_playerTag_list])
 

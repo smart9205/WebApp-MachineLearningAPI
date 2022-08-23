@@ -188,7 +188,7 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
                 action_type_id: actionTypeId,
                 team_id: defenseTeamId,
                 player_id: player.id,
-                action_id: 8,
+                action_id: 13,
                 action_result_id: 7,
                 court_area_id: areaCourtId,
                 inside_the_paint: inTheBox
