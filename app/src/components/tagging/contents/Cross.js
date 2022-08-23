@@ -35,7 +35,9 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
 
   return (
     <>
+
       <AreaCourtMenu areaCourtId={areaCourtId} setAreaCourtId={setAreaCourtId} inTheBox={inTheBox} setInTheBox={setInTheBox} />
+
       <PlayerSelector
         title="Offensive Player List"
         playerList={offenseTeam}
@@ -43,6 +45,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
         selected={offensivePlayer}
         onSelect={(player) => setOffensivePlayer(player)}
       />
+
       <SubBox>
         <List header="Type">
           {[
@@ -60,6 +63,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
           ))}
         </List>
       </SubBox>
+
       <SubBox>
         <List header="Result">
           {RESULT_LIST.map((r, i) => (
@@ -96,6 +100,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
           ))}
         </List>
       </SubBox>
+
       {result.name === "Offside" ?
         <PlayerSelector
           title="Offensive Player List"
@@ -127,7 +132,8 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
           }}
         />
         :
-        result.name !== "Successful" || result.name !== "Unsuccessful" &&
+        result.name !== "Successful" && result.name !== "Unsuccessful" &&
+
         <PlayerSelector
           title="Defensive Player List"
           playerList={defenseTeam}
@@ -135,6 +141,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
           selected={defensivePlayer}
           onSelect={(player) => {
             setDefensivePlayer(player)
+
             if (result.name === "Blocked")
               taggingState([
                 {
@@ -146,6 +153,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                   court_area_id: areaCourtId,
                   inside_the_paint: inTheBox
                 },
+
                 {
                   action_type_id: actionTypeId,
                   team_id: defenseTeamId,
@@ -156,6 +164,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                   inside_the_paint: inTheBox
                 },
               ])
+
             if (result.name === "Cleared")
               taggingState([
                 {
@@ -167,6 +176,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                   court_area_id: areaCourtId,
                   inside_the_paint: inTheBox
                 },
+
                 {
                   action_type_id: actionTypeId,
                   team_id: defenseTeamId,
@@ -181,6 +191,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
         />
 
       }
+
     </>
   );
 }

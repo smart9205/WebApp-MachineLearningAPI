@@ -1,19 +1,6 @@
 import * as React from 'react';
 import PlayerSelector from './basic/PlayerSelector';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import List from "./basic/ModalList"
 import AreaCourtMenu from './AreaCourtMenu';
-
-const SubBox = styled(Box)`
-  margin: 6px;
-  & nav {
-    padding: 6px;
-    border-radius: 6px;
-  }
-  `;
 
 export default function ShortPass({
   offenseTeam,

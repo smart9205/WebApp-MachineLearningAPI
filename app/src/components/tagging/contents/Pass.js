@@ -95,6 +95,7 @@ export default function Pass({
 
   return (
     <>
+
       <AreaCourtMenu areaCourtId={areaCourtId} setAreaCourtId={setAreaCourtId} inTheBox={inTheBox} setInTheBox={setInTheBox} />
 
       <PlayerSelector
@@ -104,6 +105,7 @@ export default function Pass({
         selected={offensivePlayer}
         onSelect={(player) => setOffensivePlayer(player)}
       />
+
       <SubBox>
         <List header="Type">
           {[
@@ -115,6 +117,7 @@ export default function Pass({
             { id: 11, name: FREE_KICK },
             { id: 15, name: PASS_FOR_A_SHOT },
           ].map((r, i) => (
+
             <ListItemButton key={r.id}
               selected={actionTypeId === r.id}
               onClick={() => {
@@ -131,8 +134,11 @@ export default function Pass({
 
               }}
             >
+
               <ListItemText primary={r.name} />
+
             </ListItemButton>
+
           ))}
         </List>
       </SubBox>
@@ -147,6 +153,7 @@ export default function Pass({
             { id: 15, name: OFFSIDE },
             { id: 9, name: ASSIST },
           ].map((r, i) => (
+
             <ListItemButton key={r.id}
               selected={result?.id === r.id}
               onClick={() => {
@@ -164,11 +171,15 @@ export default function Pass({
                 if (r.name === ASSIST) taggingState([{ ...d, action_id: r.id, action_result_id: 3, }])
               }}
             >
+
               <ListItemText primary={r.name} />
+
             </ListItemButton>
+
           ))}
         </List>
       </SubBox>
+
       {(result.name === STOLE_BY) &&
         <PlayerSelector
           title="Defensive Player List"
@@ -178,6 +189,7 @@ export default function Pass({
           onSelect={(player) => { defensivePlayerClicked(player) }}
         />
       }
+
       {(result.name === BLOCKED_BY) &&
         <PlayerSelector
           title="Defensive Player List"
@@ -187,6 +199,7 @@ export default function Pass({
           onSelect={(player) => { defensivePlayerClickedBlockedBy(player) }}
         />
       }
+
       {
         result.name === OFFSIDE &&
         <PlayerSelector
@@ -215,6 +228,7 @@ export default function Pass({
             }])
           }}
         />
+
       }
 
     </>
