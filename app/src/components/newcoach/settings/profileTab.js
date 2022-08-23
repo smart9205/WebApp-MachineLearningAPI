@@ -1,27 +1,13 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import S3 from 'react-aws-s3';
-import { FormControl, Typography, Box, TextField, CircularProgress } from '@mui/material';
+import { FormControl, Typography, Box, TextField } from '@mui/material';
 
 import CameraIcon from '@mui/icons-material/PhotoCameraOutlined';
 
-import { SaveButton } from '../components';
+import { LoadingProgress, SaveButton } from '../components';
 import { updateProfile2 } from '../../../actions/auth';
 import { USER_IMAGE_DEFAULT } from '../../../common/staticData';
-
-const styles = {
-    loader: {
-        position: 'absolute',
-        left: '0px',
-        top: '0px',
-        width: '100%',
-        height: '100%',
-        zIndex: 9999,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-};
 
 const profileList = [
     {
@@ -154,11 +140,7 @@ const PrfileTab = () => {
                         <CameraIcon />
                     </Box>
                 </label>
-                {loading && (
-                    <div style={styles.loader}>
-                        <CircularProgress />
-                    </div>
-                )}
+                {loading && <LoadingProgress />}
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                 {profileList.map((item) => (

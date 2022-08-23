@@ -40,6 +40,12 @@ module.exports = app => {
 	);
 
 	app.get(
+		"/coach_team/team_players/:teamId/:seasonId",
+		[authJwt.isCoach],
+		controller.getCoachTeamPlayers
+	);
+
+	app.get(
 		"/coach_team/players",
 		[authJwt.isCoach],
 		controller.getAllPlayers

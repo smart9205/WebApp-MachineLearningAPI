@@ -55,7 +55,7 @@ const getAllGamesByCoach = (coachId) => {
     return axios.get(API_URL + `game/getbycoach/${coachId}`, { headers: authHeader(), data: { coachId } }).then((response) => {
         return response.data;
     });
-}
+};
 
 const getAllMyCoachTeam = () => {
     return axios.get(API_URL + 'coach_team/mine', { headers: authHeader() }).then((response) => {
@@ -69,6 +69,12 @@ const getAllMyCoachPlayer = () => {
 };
 const getCoachPlayerGames = (playerId) => {
     return axios.get(API_URL + `coach_team/player_games/${playerId}`, { headers: authHeader(), data: { id: playerId } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getCoachTeamPlayers = (teamId, seasonId) => {
+    return axios.get(API_URL + `coach_team/team_players/${teamId}/${seasonId}`, { headers: authHeader(), data: { teamId, seasonId } }).then((response) => {
         return response.data;
     });
 };
@@ -348,11 +354,11 @@ const getPlayerById = (id) => {
     });
 };
 
-// const getPlayerTeams = (fname, lname) => {
-//     return axios.get(API_URL + `player/${fname}/${lname}`, { headers: authHeader(), data: { fname, lname } }).then((response) => {
-//         return response.data;
-//     });
-// };
+const getPlayerTeams = (fname, lname) => {
+    return axios.get(API_URL + `player/${fname}/${lname}`, { headers: authHeader(), data: { fname, lname } }).then((response) => {
+        return response.data;
+    });
+};
 
 const getAllHighlightByPlayerId = (id) => {
     return axios.get(API_URL + `player/highlight/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
@@ -476,13 +482,13 @@ const gameService = {
     getTeamByPlayerGame,
     getGameDetailsByPlayer,
     getPlayerTagsByActionName,
-    // getPlayerTeams,
     getGameScore,
     getScoreInGames,
     getAsyncNewStreamURL,
     getNewStreamURL,
     getPlayerActions,
     getCoachPlayerGames,
+    getCoachTeamPlayers,
     getAllPlayerTagsByCoachPlayer,
     getAllGameTeamPlayers,
 

@@ -1,5 +1,6 @@
-import { Button, InputBase, TextField } from '@mui/material';
+import { Button, InputBase, TextField, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import React from 'react';
 
 const StyleTextField = styled(TextField)(({ theme }) => ({
     '& label.Mui-focused': {
@@ -91,4 +92,12 @@ const SaveButton = styled(Button)(({ theme }) => ({
     '&:hover': { backgroundColor: 'orange' }
 }));
 
-export { StyleTextField, BootstrapInput, SearchText, SaveButton };
+const LoadingProgress = () => {
+    return (
+        <div style={{ position: 'absolute', left: '0px', top: '0px', width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <CircularProgress />
+        </div>
+    );
+};
+
+export { StyleTextField, BootstrapInput, SearchText, SaveButton, LoadingProgress };
