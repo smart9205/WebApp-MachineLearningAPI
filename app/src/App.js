@@ -39,6 +39,7 @@ import NewCoach from './components/newcoach';
 import Settings from './components/newcoach/settings';
 import Teams from './components/newcoach/teams';
 import Games from './components/newcoach/games';
+import Edits from './components/newcoach/edits';
 import TeamPage from './components/newcoach/teams/teampage';
 
 const CustomTheme = () => {
@@ -170,6 +171,14 @@ const App = () => {
                                         element={
                                             <NewCoach>
                                                 <Games />
+                                            </NewCoach>
+                                        }
+                                    />
+                                    <Route
+                                        path="/new_coach/edits"
+                                        element={
+                                            <NewCoach>
+                                                <Edits />
                                             </NewCoach>
                                         }
                                     />
