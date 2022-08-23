@@ -41,39 +41,32 @@ const UserEditList = ({
     }, [editList])
 
     return (
-        <TableContainer component={Paper} >
-            <Table aria-label="simple table">
-                <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <TableBody>
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="droppable">
+                {(provided, snapshot) => (
+                    <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                    >
+                        {items && items.map((item, index) => (
+                            <Draggable draggableId={item.name} index={index}>
+                                {(provided, snapshot) => (
+                                    <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                    >
+                                        <p style={{ color: 'black' }} >{item.name}</p>
+                                    </div>
+                                )}
+                            </Draggable>
+                        ))}
 
-                        <Droppable droppableId="droppable">
-                            {(provided, snapshot) => (
-                                <div
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                >
-                                    {items && items.map((item, index) => (
-                                        <Draggable draggableId={item.name} index={index}>
-                                            {(provided, snapshot) => (
-                                                <TableRow
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                >
-                                                    <TableCell style={{ color: 'black' }} >{item.name}</TableCell>
-                                                </TableRow>
-                                            )}
-                                        </Draggable>
-                                    ))}
+                    </div>
 
-                                </div>
-
-                            )}
-                        </Droppable>
-                    </TableBody>
-                </DragDropContext>
-            </Table>
-        </TableContainer>
+                )}
+            </Droppable>
+        </DragDropContext>
 
         // <TableContainer component={Paper}>
         // <Table aria-label="simple table">

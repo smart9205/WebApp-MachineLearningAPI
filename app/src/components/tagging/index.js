@@ -346,9 +346,14 @@ export default function Tagging() {
 
     if (ALL_ACTION_RESULTS.find(f => f.id === last?.action_result_id)?.end_possession) {
       /* saveTags() */
+      /* offensiveTeamClicked(state.offense === "home" ? "home" : "away") */
+      const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
+      /* console.log(st) */
+      setState({ start_time: st })
+
       if (temp_playerTag_list.find(t => ALL_ACTION_RESULTS.find(f => f.id === t?.action_result_id)?.change_possession)) {
-        /* offensiveTeamClicked(state.offense === "home" ? "away" : "home") */
         setTeamTag({ start_time: teamTag.start_time - 5 })
+
       }
     }
     setModalOpen(false)
