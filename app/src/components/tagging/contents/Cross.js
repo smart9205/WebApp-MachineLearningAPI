@@ -18,8 +18,8 @@ const SubBox = styled(Box)`
 const RESULT_LIST = [
   { id: 4, name: "Successful" },
   { id: 10, name: "Unsuccessful" },
-  { id: 7, name: "Blocked" },
-  { id: 8, name: "Cleared" },
+  { id: 7, name: "Blocked By" },
+  { id: 8, name: "Cleared By" },
   { id: 15, name: "Offside" },
 ]
 
