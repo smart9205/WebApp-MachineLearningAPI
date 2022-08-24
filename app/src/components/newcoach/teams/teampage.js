@@ -1,12 +1,12 @@
-import { Box, Divider, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeftOutlined';
-import { USER_IMAGE_DEFAULT } from '../../../common/staticData';
+import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
 
 import GameService from '../../../services/game.service';
-import { LoadingProgress } from '../components';
+import { LoadingProgress } from '../components/common';
 
 const Tabs = ['Players', 'Games'];
 
@@ -22,10 +22,6 @@ const TeamPage = () => {
 
     const handleClickTab = (idx) => {
         setValues({ ...values, tabSelected: idx });
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
     };
 
     useEffect(() => {
@@ -59,7 +55,7 @@ const TeamPage = () => {
                             </Box>
                         ))}
                     </Box>
-                    <Box sx={{ maxHeight: 'calc(85vh - 60px)', overflowY: 'scroll' }}>
+                    <Box sx={{ maxHeight: 'calc(85vh - 60px)', overflowY: 'auto' }}>
                         <Box sx={{ marginRight: '16px' }}>
                             <TableContainer>
                                 <Table>
@@ -84,7 +80,7 @@ const TeamPage = () => {
                                             values.players.map((player) => (
                                                 <TableRow height="70px">
                                                     <TableCell width="5%" align="center">
-                                                        <img style={{ height: '48px' }} alt="Player Logo" src={player.image.length > 0 ? player.image : USER_IMAGE_DEFAULT} />
+                                                        <img style={{ height: '48px' }} alt="Player Logo" src={player.image.length > 0 ? player.image : PLAYER_ICON_DEFAULT} />
                                                     </TableCell>
                                                     <TableCell width="50%">
                                                         <Box sx={{ paddingLeft: '16px' }}>

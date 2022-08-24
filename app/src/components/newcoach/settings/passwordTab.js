@@ -2,7 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, FormControl, Typography, InputAdornment, IconButton, TextField } from '@mui/material';
 
-import { SaveButton } from '../components';
+import { SaveButton } from '../components/common';
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { updatepassword } from '../../../actions/auth';

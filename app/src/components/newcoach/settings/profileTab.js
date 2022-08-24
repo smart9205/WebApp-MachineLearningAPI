@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useReducer, useRef } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import S3 from 'react-aws-s3';
 import { FormControl, Typography, Box, TextField } from '@mui/material';
 
-import CameraIcon from '@mui/icons-material/PhotoCameraOutlined';
-
-import { LoadingProgress, SaveButton } from '../components';
+import { SaveButton } from '../components/common';
 import { updateProfile2 } from '../../../actions/auth';
 import { USER_IMAGE_DEFAULT } from '../../../common/staticData';
+import UploadButton from '../components/uploadButton';
 
 const profileList = [
     {
@@ -49,8 +47,6 @@ const profileList = [
 
 const PrfileTab = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
-    const fileInput = useRef();
-    const [loading, setLoading] = useState(false);
     const [values, setValues] = useState({
         logo: '',
         firstName: '',
@@ -68,8 +64,6 @@ const PrfileTab = () => {
         confirm: false
     });
     const dispatch = useDispatch();
-    const dirName = process.env.REACT_APP_DIR_USER;
-    const fileName = '';
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -77,33 +71,6 @@ const PrfileTab = () => {
 
     const saveChanges = () => {
         dispatch(updateProfile2(values.firstName, values.lastName, values.phone, values.country, values.logo));
-    };
-
-    const getImage = () => {
-        return values.logo && values.logo.length > 0 ? values.logo : USER_IMAGE_DEFAULT;
-    };
-
-    const handleUpload = () => {
-        const file = fileInput.current.files[0];
-        if (!file) return;
-        const config = {
-            bucketName: process.env.REACT_APP_BUCKET_NAME,
-            dirName,
-            region: process.env.REACT_APP_REGION,
-            accessKeyId: process.env.REACT_APP_ACCESS_ID,
-            secretAccessKey: process.env.REACT_APP_ACCESS_KEY,
-            s3Url: process.env.REACT_APP_S3_URI
-        };
-        const ReactS3Client = new S3(config);
-        setLoading(true);
-        ReactS3Client.uploadFile(file, fileName)
-            .then((data) => {
-                if (data.status === 204) setValues({ ...values, logo: data.location });
-                setLoading(false);
-            })
-            .catch((e) => {
-                setLoading(false);
-            });
     };
 
     useEffect(() => {
@@ -132,16 +99,14 @@ const PrfileTab = () => {
 
     return (
         <Box sx={{ padding: '24px', backgroundColor: 'white', display: 'flex', gap: '24px', borderRadius: '10px', margin: '0 24px 24px', maxHeight: '700px', height: '750px', overflowY: 'scroll' }}>
-            <Box sx={{ width: '140px', height: '140px', borderRadius: '15px', background: `url(${getImage()}) center center / cover no-repeat silver` }}>
-                <input accept="image/*" id="photo" type="file" ref={fileInput} onChange={(e) => handleUpload()} style={{ display: 'none' }} />
-                <label htmlFor="photo" style={{ width: '100%', cursor: 'pointer' }}>
-                    <Box sx={{ background: 'transparent', height: '110px' }} />
-                    <Box sx={{ width: '100%', height: '30px', backgroundColor: 'black', borderRadius: '0 0 15px 15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <CameraIcon />
-                    </Box>
-                </label>
-                {loading && <LoadingProgress />}
-            </Box>
+            <UploadButton
+                class_name="upload-user-view"
+                id_name="user-logo"
+                dirName={process.env.REACT_APP_DIR_USER}
+                img={values.logo}
+                onURL={(url) => setValues({ ...values, logo: url })}
+                defaultImage={USER_IMAGE_DEFAULT}
+            />
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                 {profileList.map((item) => (
                     <FormControl sx={{ gap: '4px' }} key={item.id}>

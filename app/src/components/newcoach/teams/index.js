@@ -3,7 +3,7 @@ import { Typography, Box, InputAdornment, IconButton, Autocomplete, TextField } 
 
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 
-import { LoadingProgress } from '../components';
+import { LoadingProgress } from '../components/common';
 import GameService from '../../../services/game.service';
 import TeamListItem from './teamListItem';
 
@@ -53,6 +53,18 @@ const Teams = () => {
         return first.toLowerCase().includes(last.toLowerCase());
     };
 
+    const handleMouseEnter = (idx) => {
+        setState({ hoverIndex: idx });
+    };
+
+    const handleMouseLeave = () => {
+        setState({ hoverIndex: -1 });
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+
     useEffect(() => {
         setState({ loading: true });
         GameService.getAllMyCoachTeam().then((res) => {
@@ -66,14 +78,6 @@ const Teams = () => {
             setState({ seasonList: descArray, seasonFilter: descArray[0], loading: false });
         });
     }, []);
-
-    const handleMouseEnter = (idx) => {
-        setState({ hoverIndex: idx });
-    };
-
-    const handleMouseLeave = () => {
-        setState({ hoverIndex: -1 });
-    };
 
     console.log('Teams => ', seasonList, seasonFilter, searchText);
 
@@ -116,7 +120,10 @@ const Teams = () => {
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <IconButton sx={{ backgroundColor: '#F8F8F8', '&:hover': { backgroundColor: '#F8F8F8' }, '&:focus': { backgroundColor: '#F8F8F8' } }}>
+                                    <IconButton
+                                        onMouseDown={handleMouseDownPassword}
+                                        sx={{ backgroundColor: '#F8F8F8', '&:hover': { backgroundColor: '#F8F8F8' }, '&:focus': { backgroundColor: '#F8F8F8' } }}
+                                    >
                                         <SearchIcon />
                                     </IconButton>
                                 </InputAdornment>
@@ -125,7 +132,7 @@ const Teams = () => {
                     />
                 </Box>
             </Box>
-            <Box sx={{ overflowY: 'scroll', maxHeight: '70vh', margin: '0 24px' }}>
+            <Box sx={{ overflowY: 'auto', maxHeight: '70vh', margin: '0 24px' }}>
                 <Box sx={{ marginRight: '16px' }}>
                     {(searchText
                         ? teamsList.filter((item) => compareStrings(item.team_name, searchText) || compareStrings(item.league_name, searchText) || compareStrings(item.season_name, searchText))

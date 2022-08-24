@@ -63,6 +63,7 @@ exports.findAllMine = (req, res) => {
       public."Leagues".name as league_name,
       public."Teams".name as team_name,
       public."Teams".image as team_image,
+      public."Teams".*,
       player_count
     FROM public."Coach_Teams" 
     JOIN public."Users" on public."Users".id = public."Coach_Teams".user_id
