@@ -83,6 +83,10 @@ export function addSecToHHMMSS(str, sec) {
   return toHHMMSS(toSecond(str) + sec)
 }
 
+export function subSecToHHMMSS(str, sec) {
+  return toHHMMSS(toSecond(str) - sec)
+}
+
 export function toSecond(data) {
   if (!data || data === "") return 0
   let a = data.split(':'); // split it at the colons

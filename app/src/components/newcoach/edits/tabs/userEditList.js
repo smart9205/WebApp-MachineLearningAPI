@@ -21,6 +21,9 @@ import { useState } from 'react';
 
 import Tree from './tree';
 
+
+
+
 const UserEditList = ({
     editList, curEdit,
     handleUserEditDetail,
@@ -42,13 +45,13 @@ const UserEditList = ({
 
     useEffect(() => {
         setItems(editList)
-        console.log(items)
+        console.log(editList)
     }, [editList])
 
     return (
 
         <Box>
-            <Tree editList={items} />
+            <Tree editList={editList} />
 
         </Box>
         // <DragDropContext onDragEnd={handleOnDragEnd}>

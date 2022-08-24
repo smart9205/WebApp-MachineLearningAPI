@@ -1,8 +1,17 @@
 import { Box } from '@mui/material'
 import React from 'react'
+import { useEffect } from 'react'
 import { useState } from 'react'
 
-const Tree = ({ items }) => {
+const Tree = ({ editList }) => {
+
+    const [items, setItems] = useState(editList)
+
+    useEffect(() => {
+        setItems(editList)
+        console.log(editList)
+    }, [editList])
+
     return (
         <Box>
             <ul>
@@ -30,7 +39,9 @@ const TreeNode = ({ node }) => {
                 )}
 
                 <Box>
-                    {node.name}
+                    <p style={{ color: 'black' }}>
+                        {node.name}
+                    </p>
                 </Box>
             </Box>
 
@@ -38,7 +49,7 @@ const TreeNode = ({ node }) => {
 
                 <Box>
                     <ul>
-
+                        <Tree editList={node.chilldren} />
                     </ul>
                 </Box>
 

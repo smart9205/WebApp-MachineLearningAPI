@@ -23,7 +23,7 @@ import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { toHHMMSS, toSecond, getUser, setUser } from "../../common/utilities"
+import { toHHMMSS, toSecond, getUser, setUser, subSecToHHMMSS } from "../../common/utilities"
 import Shot from './contents/Shot';
 import ShortPass from './contents/ShortPass';
 import Pass from './contents/Pass';
@@ -349,17 +349,10 @@ export default function Tagging() {
 
     if (ALL_ACTION_RESULTS.find(f => f.id === last?.action_result_id)?.end_possession) {
       /* saveTags() */
-      /* offensiveTeamClicked(state.offense === "home" ? "home" : "away") */
-      const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
-
-      const [hh, mm, ss] = st.split(':')
-      let extractedStartTime = hh + ":" + mm + ":" + (ss - 5)
-
-      setState({ start_time: extractedStartTime })
+      offensiveTeamClicked(state.offense === "home" ? "home" : "away")
 
       if (temp_playerTag_list.find(t => ALL_ACTION_RESULTS.find(f => f.id === t?.action_result_id)?.change_possession)) {
         setTeamTag({ start_time: teamTag.start_time })
-
       }
       setPlay(true)
     }
@@ -369,7 +362,10 @@ export default function Tagging() {
 
   const offensiveTeamClicked = (team) => {
     const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
-    setState({ offense: team, start_time: st })
+
+    let extractedStartTime = subSecToHHMMSS(st, 5)
+
+    setState({ offense: team, start_time: extractedStartTime })
   }
 
   return (
