@@ -6,6 +6,7 @@ import CreateEditDialog from './tabs/createEditDialog';
 import UserEditList from './tabs/userEditList';
 import EditNameDialog from "../../../common/EditNameDialolg";
 import DeleteConfirmDialog from "../../../common/DeleteConfirmDialog";
+import DragableTeamTagTable from './tabs/DragableTeamTagTable';
 
 const Edits = () => {
 
@@ -36,6 +37,21 @@ const Edits = () => {
             setState({ teamList: res, team: res[0] })
         })
     }, [])
+
+    const handleSort = (rows) => {
+        gameService.updateEditClipsSort(rows).then(res => console.log(res))
+    }
+
+    const handleDeleteEditClips = (id) => {
+        gameService.deleteEditClip(id).then(res => {
+            handleUserEditDetail(curEdit)
+        })
+    }
+
+    const handleVideoData = (type, play, idx) => {
+        setCurTagIdx(idx)
+        setVideodata({ idx, autoPlay: true, videoPlay: play })
+    }
 
     const handleDeleteClose = (result) => {
         setDeleteOpen(false)
@@ -104,7 +120,7 @@ const Edits = () => {
             />
 
             <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
-                <Box sx={{ padding: '24px 24px 48px 48px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                <Box sx={{ padding: '24px 24px 18px 18px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Edits</Typography>
                     <Box sx={{ padding: '10px', backgroundColor: 'white', display: 'flex', flexDirection: 'column', gap: '18px', borderRadius: '10px', margin: '0 24px 24px', height: '100%' }}>
 
@@ -114,6 +130,10 @@ const Edits = () => {
                                 <Box>
                                     <UserEditList
                                         editList={editList}
+                                        tagList={tagList}
+                                        videoData={videoData}
+                                        onChangeClip={(idx) => setCurTagIdx(idx)}
+                                        drawOpen={showAccordion}
                                         curEdit={curEdit}
                                         handleUserEditDetail={handleUserEditDetail}
                                         setEditOpen={setEditOpen}
@@ -122,10 +142,22 @@ const Edits = () => {
                                     />
                                 </Box>
                             </Grid>
-                            <Grid item xs={4}>
-                                <h1 style={{ color: 'black' }}>Edits</h1>
+                            <Grid item xs={6}>
+                                {tagList.length === 0 && <p style={{ textAlign: 'center' }}>NoTags</p>}
+                                {tagList.filter(t => t.team_tag_id !== null).length > 0 &&
+                                    <DragableTeamTagTable
+                                        sx={{ height: "100%", p: 1, width: "100%" }}
+                                        rows={tagList}
+                                        onDelete={id => handleDeleteEditClips(id)}
+                                        handleSort={handleSort}
+                                        handleRowClick={({ row, idx }) => handleVideoData("teamTag", false, idx)}
+                                        selected={curTagIdx}
+                                        onPlay={({ row, idx }) => handleVideoData("teamTag", true, idx)}
+                                        initUserEdits={initUserEdits}
+                                    />
+                                }
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={2}>
                                 <h1 style={{ color: 'black' }}>Video</h1>
                             </Grid>
                         </Grid>

@@ -23,7 +23,7 @@ import { Button } from '@mui/material'; import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { toHHMMSS, toSecond, getUser, setUser, subSecToHHMMSS } from "../../common/utilities"
+import { toHHMMSS, toSecond, getUser, setUser, subSecToHHMMSS, addSecToHHMMSS } from "../../common/utilities"
 import Shot from './contents/Shot';
 import ShortPass from './contents/ShortPass';
 import Pass from './contents/Pass';
@@ -369,10 +369,7 @@ export default function Tagging() {
 
   const offensiveTeamClicked = (team) => {
     const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
-
-    let extractedStartTime = subSecToHHMMSS(st, 5)
-
-    setState({ offense: team, start_time: extractedStartTime })
+    setState({ offense: team, start_time: subSecToHHMMSS(st, 5) })
   }
 
   return (

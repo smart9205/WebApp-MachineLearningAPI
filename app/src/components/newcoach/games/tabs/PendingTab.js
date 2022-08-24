@@ -14,7 +14,7 @@ const PendingTab = ({ allGamesList, setUpdateGamesList }) => {
 
     useEffect(() => {
         allGamesList.map(data => {
-            if (data.video_url === "NO VIDEO") {
+            if (data.video_url === "no video") {
                 pendingGamesList.push(data)
             }
             setGamesByCoach({ ...gamesByCoach, pendingGamesList })

@@ -15,7 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { TeamTagRow } from './TeamTagRow';
 import DeleteConfirmDialog from '../../../../common/DeleteConfirmDialog';
 
-export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, onDelete, handleSort, initUserEdits, t, ...params }) {
+export default function DragableTeamTagTable({ rows, handleRowClick, selected, onPlay, onDelete, handleSort, initUserEdits, ...params }) {
   const [tableRows, setTableRows] = useState(rows);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -100,7 +100,7 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
   return (
     <Box {...params}>
       <Paper sx={{ position: 'relative', width: '100%', height: "100%", overflow: 'hidden', p: 0.5 }}>
-        <h5 style={{ textAlign: 'center' }}>{t("Team")} {t("Tag")}</h5>
+        <h5 style={{ textAlign: 'center' }}>Team Tag</h5>
         <DeleteConfirmDialog
           open={deleteOpen}
           handleDeleteClose={handleDeleteClose}
@@ -116,11 +116,11 @@ export default function DragableTeamTagTable({ rows, handleRowClick, selected, o
                       onChange={() => setSelectAll(!selectAll)}
                     />
                   </TableCell>
-                  <TableCell align="center">{t("Period")}</TableCell>
-                  <TableCell align="center">{t("OffensiveTeam")}</TableCell>
-                  <TableCell align="center">{t("DefensiveTeam")}</TableCell>
-                  <TableCell align="center">{t("StartTime")}</TableCell>
-                  <TableCell align="center">{t("EndTime")}</TableCell>
+                  <TableCell align="center">Period</TableCell>
+                  <TableCell align="center">OffensiveTeam</TableCell>
+                  <TableCell align="center">DefensiveTeam</TableCell>
+                  <TableCell align="center">StartTime</TableCell>
+                  <TableCell align="center">EndTime</TableCell>
                   <TableCell align="center">
                     {
                       !!selectedRef.current.length &&

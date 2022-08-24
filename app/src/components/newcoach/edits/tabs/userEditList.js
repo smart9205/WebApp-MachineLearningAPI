@@ -19,13 +19,16 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDrag, useDrop } from 'react-dnd'
 import { useState } from 'react';
 
-import Tree from './tree';
-
-
+import TreeView from '@mui/lab/TreeView';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import TreeItem from '@mui/lab/TreeItem'
+import VideoList from './videoList'
 
 
 const UserEditList = ({
-    editList, curEdit,
+    editList, tagList, curEdit, videoData,
+    onChangeClip,
     handleUserEditDetail,
     setEditOpen,
     setEditName,
@@ -45,15 +48,27 @@ const UserEditList = ({
 
     useEffect(() => {
         setItems(editList)
-        console.log(editList)
-    }, [editList])
+        console.log(tagList)
+    }, [tagList, editList])
 
     return (
 
-        <Box>
-            <Tree editList={editList} />
+        <TreeView
+            aria-label="file system navigator"
+            defaultCollapseIcon={<ExpandMoreIcon />}
+            defaultExpandIcon={<ChevronRightIcon />}
+            sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: 'auto', color: 'black' }}
+        >
+            {items && items.map((data, idx) => (
+                <TreeItem nodeId={String(idx)} label={data.name} key={idx} onClick={() => handleUserEditDetail(data)}>
+                    <>
+                        <VideoList tagList={tagList} videoData={videoData} onChangeClip={onChangeClip} />
+                    </>
+                </TreeItem>
+            ))
+            }
+        </TreeView >
 
-        </Box>
         // <DragDropContext onDragEnd={handleOnDragEnd}>
         //     <Droppable droppableId="droppable">
         //         {(provided, snapshot) => (
@@ -62,7 +77,7 @@ const UserEditList = ({
         //                 ref={provided.innerRef}
         //             >
         //                 {items && items.map((item, index) => (
-        //                     <Draggable draggableId={String(index)} index={index}>
+        //                     <Draggable draggableId={String(index)} index={index} key={index}>
         //                         {(provided, snapshot) => (
         //                             <div
         //                                 ref={provided.innerRef}
@@ -80,42 +95,6 @@ const UserEditList = ({
         //         )}
         //     </Droppable>
         // </DragDropContext>
-
-        // <TableContainer component={Paper}>
-        // <Table aria-label="simple table">
-        //         <TableBody>
-        //             {editList.map((userEdit, idx) =>
-        //                 <TableRow
-        //                     key={idx}
-        //                     hover
-        //                     selected={curEdit === userEdit}
-        //                     onClick={() => handleUserEditDetail(userEdit)}
-        //                 >
-        //                     <TableCell align="center">{userEdit.name}</TableCell>
-        //                     <TableCell align="center" sx={{ width: 30 }}>
-        //                         <IconButton
-        //                             onClick={() => {
-        //                                 setEditOpen(true)
-        //                                 setEditName(userEdit.name)
-        //                             }}
-        //                             size="small"
-        //                         >
-        //                             <EditIcon />
-        //                         </IconButton>
-        //                     </TableCell>
-        //                     <TableCell align="center" sx={{ width: 30 }}>
-        //                         <IconButton
-        //                             onClick={() => setDeleteOpen(true)}
-        //                             size="small"
-        //                         >
-        //                             <DeleteIcon />
-        //                         </IconButton>
-        //                     </TableCell>
-        //                 </TableRow>
-        //             )}
-        //         </TableBody>
-        //     </Table>
-        // </TableContainer>
     )
 }
 

@@ -35,7 +35,7 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
 
     useEffect(() => {
         allGamesList.map(data => {
-            if (data.video_url !== "NO VIDEO") {
+            if (data.video_url !== "no video") {
                 processedGamesList.push(data)
             }
             setGamesByCoach({ ...gamesByCoach, processedGamesList })
