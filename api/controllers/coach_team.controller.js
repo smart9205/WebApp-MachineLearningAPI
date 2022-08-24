@@ -52,7 +52,6 @@ exports.findAll = (req, res) => {
 
 };
 
-
 exports.findAllMine = (req, res) => {
 
   Sequelize.query(`
@@ -77,6 +76,60 @@ exports.findAllMine = (req, res) => {
           public."Team_Players".team_id,
           public."Team_Players".season_id
       ) AS tempTeamTable on tempTeamTable.temp_team_id = public."Coach_Teams".team_id and tempTeamTable.temp_season_id = public."Coach_Teams".season_id
+    WHERE public."Coach_Teams".user_id = ${req.userId}
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+};
+
+exports.getCoachTeamList = (req, res) => {
+  Sequelize.query(`
+    SELECT 
+      public."Coach_Teams".id,
+      public."Seasons".name as season_name,
+      public."Leagues".name as league_name,
+      public."Teams".name as team_name
+    FROM public."Coach_Teams" 
+    JOIN public."Teams" on public."Teams".id = public."Coach_Teams".team_id
+    JOIN public."Seasons" on public."Seasons".id = public."Coach_Teams".season_id
+    JOIN public."Leagues" on public."Leagues".id = public."Coach_Teams".league_id
+    WHERE public."Coach_Teams".user_id = ${req.userId}
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getCoachPlayers = (req, res) => {
+
+  Sequelize.query(`
+    SELECT 
+      public."Players".*,
+      CONCAT (public."Players".f_name,' ', public."Players".l_name) as name,
+      public."Teams".name as team_name,
+      public."Player_Positions".name as pos_name,
+      public."Coach_Teams".id as coach_id
+    FROM public."Coach_Teams" 
+    JOIN public."Teams" on public."Teams".id = public."Coach_Teams".team_id
+    join public."Team_Players" on
+      public."Team_Players".team_id = public."Coach_Teams".team_id and
+      public."Team_Players".season_id = public."Coach_Teams".season_id and
+      public."Team_Players".league_id = public."Coach_Teams".league_id
+    join public."Players" on public."Players".id = public."Team_Players".player_id
+    join public."Player_Positions" on public."Player_Positions".id = public."Players".position
     WHERE public."Coach_Teams".user_id = ${req.userId}
   `)
     .then(data => {

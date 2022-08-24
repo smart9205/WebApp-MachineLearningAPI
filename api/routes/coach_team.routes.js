@@ -34,6 +34,12 @@ module.exports = app => {
 	);
 
 	app.get(
+		"/coach_team/teams",
+		[authJwt.isCoach],
+		controller.getCoachTeamList
+	);
+
+	app.get(
 		"/coach_team/player_games/:id",
 		[authJwt.isCoach],
 		controller.getAllPlayerGames
@@ -43,6 +49,12 @@ module.exports = app => {
 		"/coach_team/team_players/:teamId/:seasonId",
 		[authJwt.isCoach],
 		controller.getCoachTeamPlayers
+	);
+
+	app.get(
+		"/coach_team/coach_players",
+		[authJwt.isCoach],
+		controller.getCoachPlayers
 	);
 
 	app.get(

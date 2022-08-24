@@ -62,6 +62,16 @@ const getAllMyCoachTeam = () => {
         return response.data;
     });
 };
+const getMyCoachTeamList = () => {
+    return axios.get(API_URL + 'coach_team/teams', { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+const getMyCoachPlayerList = () => {
+    return axios.get(API_URL + 'coach_team/coach_players', { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
 const getAllMyCoachPlayer = () => {
     return axios.get(API_URL + 'coach_team/players', { headers: authHeader() }).then((response) => {
         return response.data;
@@ -475,6 +485,8 @@ const gameService = {
     getAllCoachTeam,
     getAllGamesByCoach,
     getAllMyCoachTeam,
+    getMyCoachTeamList,
+    getMyCoachPlayerList,
     getAllMyCoachPlayer,
     getAllHighlightByPlayerId,
     getAllGamesByTeam,

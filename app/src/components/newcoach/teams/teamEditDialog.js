@@ -12,6 +12,17 @@ import UploadButton from '../components/uploadButton';
 import lang from '../../../assets/lang.json';
 import GameService from '../../../services/game.service';
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250
+        }
+    }
+};
+
 const TeamEditDialog = ({ open, onClose, team }) => {
     const navigate = useNavigate();
     const [values, setValues] = useState({
@@ -106,6 +117,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                         variant="outlined"
                         IconComponent={ExpandMoreIcon}
                         inputProps={{ 'aria-label': 'Without label' }}
+                        MenuProps={MenuProps}
                         sx={{ outline: 'none', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                     >
                         {lang.map((item, index) => (
