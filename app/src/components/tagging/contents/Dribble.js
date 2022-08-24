@@ -20,6 +20,7 @@ const RESULT_LIST = [
   { id: 10, name: "Unsuccessful" },
   { id: 16, name: "Draw Foul" },
   { id: 17, name: "Stolen By" },
+  { id: 15, name: "Deflected By" },
 ]
 
 const FOUL_RESULT_LIST = [
@@ -71,7 +72,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
               selected={result === r}
               onClick={() => {
                 setResult(r)
-                if (r.name !== "Draw Foul" && r.name !== "Stolen By")
+                if (r.name !== "Draw Foul" && r.name !== "Stolen By" && r.name !== "Deflected By")
                   taggingState([
                     {
                       action_type_id: actionTypeId,
@@ -114,6 +115,38 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                 team_id: defenseTeamId,
                 player_id: player.id,
                 action_id: 12, // Tackle
+                action_result_id: result.id,
+                court_area_id: areaCourtId,
+                inside_the_paint: inTheBox
+              },
+            ])
+          }}
+        />
+      }
+      {
+        result.name === "Deflected By" &&
+        <PlayerSelector
+          title="Defensive Player List"
+          playerList={defenseTeam}
+          editable={false}
+          selected={defensivePlayer}
+          onSelect={(player) => {
+            setDefensivePlayer(player)
+            taggingState([
+              {
+                action_type_id: actionTypeId,
+                team_id: offenseTeamId,
+                player_id: offensivePlayer.id,
+                action_id: 4,
+                action_result_id: result.id,
+                court_area_id: areaCourtId,
+                inside_the_paint: inTheBox
+              },
+              {
+                action_type_id: actionTypeId,
+                team_id: defenseTeamId,
+                player_id: player.id,
+                action_id: 14,
                 action_result_id: result.id,
                 court_area_id: areaCourtId,
                 inside_the_paint: inTheBox

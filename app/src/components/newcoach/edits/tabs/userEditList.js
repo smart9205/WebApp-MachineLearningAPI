@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
     Paper,
     IconButton,
@@ -14,7 +14,12 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { useDrag, useDrop } from 'react-dnd'
 import { useState } from 'react';
+
+import Tree from './tree';
 
 const UserEditList = ({
     editList, curEdit,
@@ -41,32 +46,37 @@ const UserEditList = ({
     }, [editList])
 
     return (
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                    <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                    >
-                        {items && items.map((item, index) => (
-                            <Draggable draggableId={item.name} index={index}>
-                                {(provided, snapshot) => (
-                                    <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                    >
-                                        <p style={{ color: 'black' }} >{item.name}</p>
-                                    </div>
-                                )}
-                            </Draggable>
-                        ))}
 
-                    </div>
+        <Box>
+            <Tree editList={items} />
 
-                )}
-            </Droppable>
-        </DragDropContext>
+        </Box>
+        // <DragDropContext onDragEnd={handleOnDragEnd}>
+        //     <Droppable droppableId="droppable">
+        //         {(provided, snapshot) => (
+        //             <div
+        //                 {...provided.droppableProps}
+        //                 ref={provided.innerRef}
+        //             >
+        //                 {items && items.map((item, index) => (
+        //                     <Draggable draggableId={String(index)} index={index}>
+        //                         {(provided, snapshot) => (
+        //                             <div
+        //                                 ref={provided.innerRef}
+        //                                 {...provided.draggableProps}
+        //                                 {...provided.dragHandleProps}
+        //                             >
+        //                                 <p style={{ color: 'black' }} >{item.name}</p>
+        //                             </div>
+        //                         )}
+        //                     </Draggable>
+        //                 ))}
+        //                 {provided.placeholder}
+        //             </div>
+
+        //         )}
+        //     </Droppable>
+        // </DragDropContext>
 
         // <TableContainer component={Paper}>
         // <Table aria-label="simple table">

@@ -574,7 +574,10 @@ export default function Tagging() {
                       key={t}
                       fullWidth
                       style={{ backgroundColor: t === state.offense && "darkblue", color: t === state.offense && "white" }}
-                      onClick={() => offensiveTeamClicked(t)}
+                      onClick={() => {
+                        offensiveTeamClicked(t)
+                        setPlay(true)
+                      }}
                     >
                       {state[`${t}_team_name`]}
                     </ControlButton>
