@@ -142,7 +142,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
           onSelect={(player) => {
             setDefensivePlayer(player)
 
-            if (result.name === "Blocked")
+            if (result.name === "Blocked By")
               taggingState([
                 {
                   action_type_id: actionTypeId,
@@ -165,7 +165,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                 },
               ])
 
-            if (result.name === "Cleared")
+            if (result.name === "Cleared By")
               taggingState([
                 {
                   action_type_id: actionTypeId,

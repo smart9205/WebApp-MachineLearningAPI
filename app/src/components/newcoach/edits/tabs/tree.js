@@ -2,6 +2,7 @@ import { Box } from '@mui/material'
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import FolderIcon from '@mui/icons-material/Folder';
 
 const Tree = ({ editList }) => {
 
@@ -15,8 +16,8 @@ const Tree = ({ editList }) => {
     return (
         <Box>
             <ul>
-                {items && items.map(tree => (
-                    <TreeNode node={tree} />
+                {items && items.map((tree, index) => (
+                    <TreeNode node={tree} key={index} />
                 ))}
 
             </ul>
@@ -38,8 +39,9 @@ const TreeNode = ({ node }) => {
                     </Box>
                 )}
 
-                <Box>
-                    <p style={{ color: 'black' }}>
+                <Box sx={{ color: 'black', display: 'flex' }}>
+                    <FolderIcon />
+                    <p>
                         {node.name}
                     </p>
                 </Box>

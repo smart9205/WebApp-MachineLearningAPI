@@ -157,6 +157,7 @@ export default function Tagging() {
   })
 
   const [gamePlayerRefresh, setGamePlayerRefresh] = React.useState(false)
+  const [cpClicked, setCpclicked] = React.useState(false)
 
   const offenseTeam = state.offense === "home" ? state.homePlayers : state.awayPlayers
   const defenseTeam = state.offense === "away" ? state.homePlayers : state.awayPlayers
@@ -357,7 +358,11 @@ export default function Tagging() {
       }
     }
 
-    setPlay(true)
+    if (cpClicked) {
+      setPlay(false)
+    } else {
+      setPlay(true)
+    }
     setModalOpen(false)
 
   }, [temp_playerTag_list])
@@ -530,7 +535,10 @@ export default function Tagging() {
                     Pause
                   </ControlButton>
                   :
-                  <ControlButton style={{ width: 100 }} startIcon={<PlayCircleOutlineIcon />} onClick={() => setPlay(true)}>
+                  <ControlButton style={{ width: 100 }} startIcon={<PlayCircleOutlineIcon />} onClick={() => {
+                    setPlay(true)
+                    setCpclicked(false)
+                  }}>
                     Play
                   </ControlButton>
                 }
@@ -575,6 +583,7 @@ export default function Tagging() {
                       onClick={() => {
                         offensiveTeamClicked(t)
                         setPlay(true)
+                        setCpclicked(false)
                       }}
                     >
                       {state[`${t}_team_name`]}
@@ -584,6 +593,7 @@ export default function Tagging() {
                     Start Time : {state.start_time}
                     <ControlButton sx={{ mr: 0 }} onClick={() => {
                       saveTags(true)
+                      setCpclicked(true)
                     }}>C.P.</ControlButton>
                   </Box>
                 </Box>
