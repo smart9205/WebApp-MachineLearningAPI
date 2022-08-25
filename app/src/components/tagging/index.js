@@ -349,10 +349,10 @@ export default function Tagging() {
     const last = temp_playerTag_list.slice(-1)[0]
 
     if (ALL_ACTION_RESULTS.find(f => f.id === last?.action_result_id)?.end_possession) {
-      offensiveTeamClicked(state.offense === "home" ? "home" : "away")
+      /* offensiveTeamClicked(state.offense === "home" ? "home" : "away") */
 
       if (temp_playerTag_list.find(t => ALL_ACTION_RESULTS.find(f => f.id === t?.action_result_id)?.change_possession)) {
-        offensiveTeamClicked(state.offense === "home" ? "home" : "away")
+        /* offensiveTeamClicked(state.offense === "home" ? "home" : "away") */
         setTeamTag({ start_time: teamTag.start_time })
 
       }

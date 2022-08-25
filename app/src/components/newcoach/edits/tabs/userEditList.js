@@ -57,7 +57,7 @@ const UserEditList = ({
             aria-label="file system navigator"
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
-            sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: 'auto', color: 'black' }}
+            sx={{ height: 100, flexGrow: 1, maxWidth: 400, overflowY: 'auto', color: 'black' }}
         >
             {items && items.map((data, idx) => (
                 <TreeItem nodeId={String(idx)} label={data.name} key={idx} onClick={() => handleUserEditDetail(data)}>
