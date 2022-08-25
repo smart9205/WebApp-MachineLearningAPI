@@ -1,23 +1,7 @@
 import React, { useEffect, useRef } from 'react'
-import {
-    Paper,
-    IconButton,
-    Table,
-    TableBody,
-    TableRow,
-    TableCell,
-    TableContainer,
-    Box,
-    ListItem
-} from '@mui/material'
-
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { useDrag, useDrop } from 'react-dnd'
 import { useState } from 'react';
+import DroppableSubItems from './DroppableSubItems'
 
 import TreeView from '@mui/lab/TreeView';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -25,9 +9,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem'
 import VideoList from './videoList'
 
-
 const UserEditList = ({
-    editList, tagList, curEdit, videoData,
+    editList, tagList, userEditsFolders, curEdit, videoData,
     onChangeClip,
     handleUserEditDetail,
     setEditOpen,
@@ -48,7 +31,6 @@ const UserEditList = ({
 
     useEffect(() => {
         setItems(editList)
-        console.log(tagList)
     }, [tagList, editList])
 
     return (
@@ -57,12 +39,12 @@ const UserEditList = ({
             aria-label="file system navigator"
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
-            sx={{ height: 100, flexGrow: 1, maxWidth: 400, overflowY: 'auto', color: 'black' }}
+            sx={{ height: '100%', flexGrow: 1, maxWidth: 400, overflowY: 'auto', color: 'black' }}
         >
             {items && items.map((data, idx) => (
                 <TreeItem nodeId={String(idx)} label={data.name} key={idx} onClick={() => handleUserEditDetail(data)}>
                     <>
-                        <VideoList tagList={tagList} videoData={videoData} onChangeClip={onChangeClip} />
+                        <VideoList tagList={userEditsFolders} videoData={videoData} onChangeClip={onChangeClip} />
                     </>
                 </TreeItem>
             ))
@@ -70,7 +52,7 @@ const UserEditList = ({
         </TreeView >
 
         // <DragDropContext onDragEnd={handleOnDragEnd}>
-        //     <Droppable droppableId="droppable">
+        //     <Droppable droppableId="droppable" type="droppableItem">
         //         {(provided, snapshot) => (
         //             <div
         //                 {...provided.droppableProps}
@@ -84,7 +66,8 @@ const UserEditList = ({
         //                                 {...provided.draggableProps}
         //                                 {...provided.dragHandleProps}
         //                             >
-        //                                 <p style={{ color: 'black' }} >{item.name}</p>
+        //                                 <p style={{ color: 'black' }} onClick={() => handleUserEditDetail(item)} >{item.name}</p>
+        //                                 <DroppableSubItems userEditsFolders={userEditsFolders} />
         //                             </div>
         //                         )}
         //                     </Draggable>

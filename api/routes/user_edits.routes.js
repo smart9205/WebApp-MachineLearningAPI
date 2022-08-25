@@ -16,9 +16,20 @@ module.exports = app => {
 		controller.create
 	);
 
+	app.post(
+		"/user_edits_folders",
+		[authJwt.isCoach],
+		controller.createFolder
+	);
+
 	app.get(
 		"/user_edits",
 		controller.findAll
+	);
+
+	app.get(
+		"/user_edits_folders/:id",
+		controller.findFolder
 	);
 
 	app.get(

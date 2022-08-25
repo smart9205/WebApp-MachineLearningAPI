@@ -7,6 +7,7 @@ import UserEditList from './tabs/userEditList';
 import EditNameDialog from "../../../common/EditNameDialolg";
 import DeleteConfirmDialog from "../../../common/DeleteConfirmDialog";
 import DragableTeamTagTable from './tabs/DragableTeamTagTable';
+import VideoPlayer from './tabs/UserEditVideoPlayer';
 
 const Edits = () => {
 
@@ -25,6 +26,8 @@ const Edits = () => {
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTagIdx, setCurTagIdx] = useState(0)
     const [tagList, setTagList] = useState([])
+    const [parentID, setParentID] = useState(0)
+    const [userEditsFolders, setUserEditsFolders] = useState([])
 
     const [videoData, setVideodata] = useState({
         idx: 0,
@@ -71,6 +74,7 @@ const Edits = () => {
     }
 
     const handleUserEditDetail = (edit) => {
+        setParentID(edit.id)
         if (!edit) return
         setCurEdit(edit)
         gameService.getEditClipsByUserEditId(edit?.id ?? -1).then(res => {
@@ -89,7 +93,18 @@ const Edits = () => {
             setCurEdit(res[0] ?? -1)
             handleUserEditDetail(res[0] ?? -1)
         })
+
     }
+
+    useEffect(() => {
+        gameService.getAllUserEditsFolders(parentID).then(res => {
+            setUserEditsFolders(res)
+        })
+    }, [parentID])
+
+    useEffect(() => {
+        console.log(userEditsFolders)
+    }, [userEditsFolders])
 
     useEffect(initUserEdits, [])
 
@@ -125,11 +140,12 @@ const Edits = () => {
                     <Box sx={{ padding: '10px', backgroundColor: 'white', display: 'flex', flexDirection: 'column', gap: '18px', borderRadius: '10px', margin: '0 24px 24px', height: '100%' }}>
 
                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                            <Grid item xs={3}>
+                            <Grid item xs={2}>
                                 <Button variant="outlined" style={{ marginBottom: '10px' }} onClick={() => handleEditOpen(true)}>Create Edits</Button>
                                 <Box>
                                     <UserEditList
                                         editList={editList}
+                                        userEditsFolders={userEditsFolders}
                                         tagList={tagList}
                                         videoData={videoData}
                                         onChangeClip={(idx) => setCurTagIdx(idx)}
@@ -142,7 +158,7 @@ const Edits = () => {
                                     />
                                 </Box>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={4}>
                                 {tagList.length === 0 && <p style={{ textAlign: 'center' }}>NoTags</p>}
                                 {tagList.filter(t => t.team_tag_id !== null).length > 0 &&
                                     <DragableTeamTagTable
@@ -157,8 +173,13 @@ const Edits = () => {
                                     />
                                 }
                             </Grid>
-                            <Grid item xs={2}>
-                                <h1 style={{ color: 'black' }}>Video</h1>
+                            <Grid item xs={6}>
+                                <VideoPlayer
+                                    videoData={videoData}
+                                    tagList={tagList}
+                                    onChangeClip={(idx) => setCurTagIdx(idx)}
+                                    drawOpen={showAccordion}
+                                />
                             </Grid>
                         </Grid>
                     </Box>

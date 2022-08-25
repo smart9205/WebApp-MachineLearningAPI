@@ -1,5 +1,6 @@
 const db = require("../models");
 const User_Edits = db.user_edits;
+const User_Edits_Folder = db.user_edits_folders;
 const Edit_Clips = db.edit_clips;
 const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
@@ -69,8 +70,40 @@ exports.create = async (req, res) => {
   });
 };
 
+exports.createFolder = async (req, res) => {
+  // if (!req.body.name) {
+  //   res.status(400).send({
+  //     message: "Name can not be empty!"
+  //   });
+  //   return;
+  // }
+
+  // const user_edits = {
+  //   name: req.body.name,
+  //   user_id: req.userId,
+  //   processed: 1,
+  // };
+
+  // const userEdits = await User_Edits.create(user_edits);
+}
+
 exports.findAll = (req, res) => {
   User_Edits.findAll({ where: { user_id: req.userId } })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving UserEdits."
+      });
+    });
+};
+
+exports.findFolder = (req, res) => {
+  let id = req.params.id
+
+  User_Edits_Folder.findAll({ where: { parent_id: id } })
     .then(data => {
       res.send(data);
     })

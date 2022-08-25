@@ -316,8 +316,20 @@ const addUserEdits = (req) => {
     });
 };
 
+const addUserEditsFolder = (req) => {
+    return axios.post(API_URL + 'user_edits_folders', req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
 const getAllUserEdits = () => {
     return axios.get(API_URL + 'user_edits', { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const getAllUserEditsFolders = (id) => {
+    return axios.get(API_URL + `user_edits_folders/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
         return response.data;
     });
 };
@@ -456,9 +468,11 @@ const gameService = {
     addHighlight,
 
     addUserEdits,
+    addUserEditsFolder,
 
     getGame,
     getAllUserEdits,
+    getAllUserEditsFolders,
     getEditClipsByUserEditId,
     getTeamById,
     getSeasonById,
