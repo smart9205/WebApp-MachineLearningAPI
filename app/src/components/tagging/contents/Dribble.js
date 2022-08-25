@@ -138,7 +138,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                 team_id: offenseTeamId,
                 player_id: offensivePlayer.id,
                 action_id: 4,
-                action_result_id: result.id,
+                action_result_id: 19,
                 court_area_id: areaCourtId,
                 inside_the_paint: inTheBox
               },
@@ -147,7 +147,7 @@ export default function Dribble({ defenseTeam, offenseTeam, taggingState, offens
                 team_id: defenseTeamId,
                 player_id: player.id,
                 action_id: 14,
-                action_result_id: result.id,
+                action_result_id: 19,
                 court_area_id: areaCourtId,
                 inside_the_paint: inTheBox
               },

@@ -85,7 +85,7 @@ const GameTab = ({ allTagList, game, playerList, playersInGameList, opponentTagL
                     style={{ position: "absolute", right: 10 }}
                     team={allTagList}
                     t={t}
-                />
+                />*/}
                 <SportCodeButton
                     style={{ position: "absolute", left: 35 }}
                     game={game}
@@ -93,7 +93,7 @@ const GameTab = ({ allTagList, game, playerList, playersInGameList, opponentTagL
                     teamId={teamId}
                     playerList={playerList}
                     playersInGameList={playersInGameList}
-        t={t} /> */}
+                    t={t} />
 
                 <TeamTagTable
                     sx={{ height: "70%", p: 1, width: "100%" }}

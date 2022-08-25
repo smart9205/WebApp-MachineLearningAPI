@@ -32,6 +32,7 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
     const [exportXML, setExportXML] = useState(false)
     const [excelData, setExcelData] = useState(false)
     const [gameList, setGameList] = useState()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         allGamesList.map(data => {
@@ -65,11 +66,27 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
         let selectedAwayTeamId = parseInt(game?.away_team_id)
 
         setGameState({ game: game })
+        let teams = []
+        let uniqueTeams = [];
 
         teamList.map(data => {
-            if (parseInt(data?.team_id) === selectedHomeTeamId || parseInt(data?.team_id) === selectedAwayTeamId) {
-                selectedTeamId.push(data)
+            teams.push(data)
+        })
+
+        const unique = teams.filter(element => {
+            const isDuplicate = uniqueTeams.includes(element.id);
+            if (!isDuplicate) {
+                uniqueTeams.push(element.id);
+                return true;
             }
+            return false;
+        });
+
+        unique.map(data => {
+            if (parseInt(data?.team_id) === selectedHomeTeamId || parseInt(data?.team_id) === selectedAwayTeamId) {
+                selectedTeamId.push(data.team_id)
+            }
+            return false;
         })
 
         if (selectedTeamId.length > 1) {
@@ -77,11 +94,11 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
         } else {
             if (!!selectedTeamId && !!game) {
 
-                gameService.getAllPlayerTagsByTeam(selectedTeamId[0]?.team_id, game?.id).then((res) => {
+                gameService.getAllPlayerTagsByTeam(selectedTeamId, game?.id).then((res) => {
                     setGameState({ allTagList: res })
                 })
 
-                gameService.getGameTeamPlayersByTeam(selectedTeamId[0]?.team_id, game?.id).then((res) => {
+                gameService.getGameTeamPlayersByTeam(selectedTeamId, game?.id).then((res) => {
                     setGameState({ playerList: res })
                 })
 
@@ -90,9 +107,12 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
                         playersInGameList: res
                     })
                 })
+                setLoading(true)
             }
-            setGameState({ teamId: selectedTeamId[0].team_id })
+            console.log('selectedTeamId : ', selectedTeamId)
+            setGameState({ teamId: selectedTeamId })
         }
+
     }
 
     const filterByTeam = async (gameListData) => {
@@ -229,16 +249,19 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
                                 <MenuItem onClick={handleClose} value="1"><EditIcon /> Edit</MenuItem>
                                 <hr style={{ margin: '1px' }} />
 
-                                <MenuItem onClick={() => {
-                                    setExportXML(true)
-                                    handleClose()
-                                }} value="2"><DownloadIcon />Export to Sportgate</MenuItem>
+                                {loading &&
+                                    <MenuItem onClick={() => {
+                                        setExportXML(true)
+                                        handleClose()
+                                    }} value="2"><DownloadIcon />Export to Sportgate</MenuItem>
+                                }
 
                                 <hr style={{ margin: '1px' }} />
                                 <MenuItem onClick={() => {
                                     setExcelData(true)
                                     handleClose()
                                 }} value="3"><DownloadIcon /> Export to Excel</MenuItem>
+
                             </Menu>
                         </Box>
                     </Box>
