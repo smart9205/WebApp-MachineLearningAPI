@@ -364,12 +364,6 @@ const getPlayerById = (id) => {
     });
 };
 
-const getPlayerTeams = (fname, lname) => {
-    return axios.get(API_URL + `player/${fname}/${lname}`, { headers: authHeader(), data: { fname, lname } }).then((response) => {
-        return response.data;
-    });
-};
-
 const getAllHighlightByPlayerId = (id) => {
     return axios.get(API_URL + `player/highlight/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
         return response.data;
@@ -381,7 +375,7 @@ const getAllGamesByPlayer = (id) => {
     });
 };
 
-const getGameDetailsByPlayer = (id) => {
+const getGameDetailssByPlayer = (id) => {
     return axios.get(API_URL + `player/gameDetailsByPlayerId/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
         return response.data;
     });
@@ -492,7 +486,7 @@ const gameService = {
     getAllGamesByTeam,
     getGameTeamPlayersByTeam,
     getTeamByPlayerGame,
-    getGameDetailsByPlayer,
+    getGameDetailssByPlayer,
     getPlayerTagsByActionName,
     getGameScore,
     getScoreInGames,

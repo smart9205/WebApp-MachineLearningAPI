@@ -99,8 +99,6 @@ export const updateProfile2 = (firstname, lastname, phonenumber, country, logo) 
                 payload: { user: data }
             });
 
-            console.log('auth => ', data);
-
             return Promise.resolve();
         },
         (error) => {

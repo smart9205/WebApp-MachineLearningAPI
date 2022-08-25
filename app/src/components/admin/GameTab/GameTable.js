@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -25,340 +25,305 @@ import Snackbar from '@mui/material/Snackbar';
 import EditIcon from '@mui/icons-material/Edit';
 import TagIcon from '@mui/icons-material/Tag';
 import { visuallyHidden } from '@mui/utils';
-import randomString from 'randomstring'
-import GameService from "../../../services/game.service";
+import randomString from 'randomstring';
+import GameService from '../../../services/game.service';
 import VIDEO_ICON from '../../../assets/video_icon.jpg';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
+    if (b[orderBy] < a[orderBy]) {
+        return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+        return 1;
+    }
+    return 0;
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
+    return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
 function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+        const order = comparator(a[0], b[0]);
+        if (order !== 0) {
+            return order;
+        }
+        return a[1] - b[1];
+    });
+    return stabilizedThis.map((el) => el[0]);
 }
 function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort, t } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-  const headCells = [
-    {
-      id: 'image',
-      numeric: false,
-      disablePadding: true,
-      label: t("Image"),
-    },
-    {
-      id: 'season_name',
-      numeric: false,
-      disablePadding: true,
-      label: t("Season"),
-    },
-    {
-      id: 'league_name',
-      numeric: false,
-      disablePadding: false,
-      label: t("League"),
-    },
-    {
-      id: 'home_team_name',
-      numeric: false,
-      disablePadding: false,
-      label: t("HomeTeam"),
-    },
-    {
-      id: 'away_team_name',
-      numeric: false,
-      disablePadding: false,
-      label: t("AwayTeam"),
-    },
-    {
-      id: 'date',
-      numeric: false,
-      disablePadding: false,
-      label: t("Date"),
-    },
-    {
-      id: 'video_url',
-      numeric: false,
-      disablePadding: false,
-      label: t("Video"),
-    },
-  ];
+    const { order, orderBy, onRequestSort, t } = props;
+    const createSortHandler = (property) => (event) => {
+        onRequestSort(event, property);
+    };
+    const headCells = [
+        {
+            id: 'image',
+            numeric: false,
+            disablePadding: true,
+            label: t('Image')
+        },
+        {
+            id: 'season_name',
+            numeric: false,
+            disablePadding: true,
+            label: t('Season')
+        },
+        {
+            id: 'league_name',
+            numeric: false,
+            disablePadding: false,
+            label: t('League')
+        },
+        {
+            id: 'home_team_name',
+            numeric: false,
+            disablePadding: false,
+            label: t('HomeTeam')
+        },
+        {
+            id: 'away_team_name',
+            numeric: false,
+            disablePadding: false,
+            label: t('AwayTeam')
+        },
+        {
+            id: 'date',
+            numeric: false,
+            disablePadding: false,
+            label: t('Date')
+        },
+        {
+            id: 'video_url',
+            numeric: false,
+            disablePadding: false,
+            label: t('Video')
+        }
+    ];
 
-  return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'center'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-        <TableCell> </TableCell>
-        <TableCell> </TableCell>
-        <TableCell> </TableCell>
-      </TableRow>
-    </TableHead>
-  );
+    return (
+        <TableHead>
+            <TableRow>
+                {headCells.map((headCell) => (
+                    <TableCell
+                        key={headCell.id}
+                        align={headCell.numeric ? 'right' : 'center'}
+                        padding={headCell.disablePadding ? 'none' : 'normal'}
+                        sortDirection={orderBy === headCell.id ? order : false}
+                    >
+                        <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={createSortHandler(headCell.id)}>
+                            {headCell.label}
+                            {orderBy === headCell.id ? (
+                                <Box component="span" sx={visuallyHidden}>
+                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                </Box>
+                            ) : null}
+                        </TableSortLabel>
+                    </TableCell>
+                ))}
+                <TableCell> </TableCell>
+                <TableCell> </TableCell>
+                <TableCell> </TableCell>
+            </TableRow>
+        </TableHead>
+    );
 }
 
 EnhancedTableHead.propTypes = {
-  onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
+    onRequestSort: PropTypes.func.isRequired,
+    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    orderBy: PropTypes.string.isRequired,
+    rowCount: PropTypes.number.isRequired
 };
 
 export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loading, setLoading, search, t }) {
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState({});
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [deleteOpen, setDeleteOpen] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [alertContent, setAlertContent] = React.useState("");
+    const [order, setOrder] = React.useState('asc');
+    const [orderBy, setOrderBy] = React.useState('calories');
+    const [selected, setSelected] = React.useState({});
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [deleteOpen, setDeleteOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
+    const [alertContent, setAlertContent] = React.useState('');
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+    const handleRequestSort = (event, property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
-  const handleDeleteClose = (result) => {
-    setDeleteOpen(false);
+    const handleDeleteClose = (result) => {
+        setDeleteOpen(false);
 
-    if (!result) return;
+        if (!result) return;
 
-    setLoading(true)
-    GameService.deleteGame(selected.id).then(
-      (res) => {
-        if (res.result === "success")
-          gameListUpdated();
-        else {
-          setOpen(true)
-          setAlertContent(res.message)
-          setLoading(false)
-        }
-      },
-      (error) => {
-        setOpen(true)
-        setAlertContent(error)
-        setLoading(false)
-      }
+        setLoading(true);
+        GameService.deleteGame(selected.id).then(
+            (res) => {
+                if (res.result === 'success') gameListUpdated();
+                else {
+                    setOpen(true);
+                    setAlertContent(res.message);
+                    setLoading(false);
+                }
+            },
+            (error) => {
+                setOpen(true);
+                setAlertContent(error);
+                setLoading(false);
+            }
+        );
+    };
+
+    return (
+        <Box sx={{ width: '100%' }}>
+            <Snackbar open={open} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={2000} onClose={() => setOpen(false)}>
+                <Alert onClose={() => setOpen(false)} severity="warning" sx={{ width: '100%' }}>
+                    {alertContent}
+                </Alert>
+            </Snackbar>
+            <Dialog open={deleteOpen} onClose={(e) => handleDeleteClose(false)}>
+                <DialogTitle>{t('confirmMsg')}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>{t('deleteConformMsg')}</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={(e) => handleDeleteClose(false)}>{t('Close')}</Button>
+                    <Button onClick={(e) => handleDeleteClose(true)}>{t('Delete')}</Button>
+                </DialogActions>
+            </Dialog>
+            <Paper sx={{ width: '100%', mb: 2 }}>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+                <TableContainer>
+                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={'small'}>
+                        <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} rowCount={rows.length} t={t} />
+                        <TableBody>
+                            {loading ? (
+                                <TableRow>
+                                    <TableCell colSpan={9} align="center">
+                                        <CircularProgress sx={{ my: '30vh' }} />
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                <>
+                                    {stableSort(
+                                        rows.filter(
+                                            (r) =>
+                                                r.season_name.toLowerCase().includes(search.toLowerCase()) ||
+                                                r.league_name.toLowerCase().includes(search.toLowerCase()) ||
+                                                r.away_team_name.toLowerCase().includes(search.toLowerCase()) ||
+                                                r.home_team_name.toLowerCase().includes(search.toLowerCase()) ||
+                                                r.date.slice(0, 10).toString().toLowerCase().includes(search.toLowerCase())
+                                        ),
+                                        getComparator(order, orderBy)
+                                    )
+                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .map((row, index) => {
+                                            const labelId = `enhanced-table-checkbox-${index}`;
+
+                                            return (
+                                                <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                                                    <TableCell component="th" id={labelId} scope="row" padding="none" align="center">
+                                                        <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt="Team" />
+                                                    </TableCell>
+                                                    <TableCell align="center">{row.season_name}</TableCell>
+                                                    <TableCell align="center">{row.league_name}</TableCell>
+                                                    <TableCell align="center">
+                                                        <Link
+                                                            variant="outlined"
+                                                            to={`/team/${btoa(`${row.home_team_id}|${row.season_id}|${row.league_id}`)}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            {row.home_team_name}
+                                                        </Link>
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        <Link
+                                                            variant="outlined"
+                                                            to={`/team/${btoa(`${row.away_team_id}|${row.season_id}|${row.league_id}`)}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            {row.away_team_name}
+                                                        </Link>
+                                                    </TableCell>
+                                                    <TableCell align="center">{row.date.slice(0, 10)}</TableCell>
+                                                    <TableCell align="center" sx={{ width: 40 }}>
+                                                        <a href={row.video_url} target="_blank" rel="noopener noreferrer">
+                                                            <Paper style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} elevation={3}>
+                                                                <img src={VIDEO_ICON} style={{ width: 40, height: 40, borderRadius: 5 }} alt="video" />
+                                                            </Paper>
+                                                        </a>
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={{ width: 100 }}>
+                                                        <Button variant="outlined" onClick={() => editCallBack(row)} startIcon={<EditIcon />}>
+                                                            {t('Edit')}
+                                                        </Button>
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={{ width: 100 }}>
+                                                        <Link
+                                                            variant="outlined"
+                                                            to={`/tagging/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            <Button variant="outlined" startIcon={<TagIcon />}>
+                                                                {t('Tag')}
+                                                            </Button>
+                                                        </Link>
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={{ width: 70 }}>
+                                                        <IconButton
+                                                            onClick={() => {
+                                                                setDeleteOpen(true);
+                                                                setSelected(row);
+                                                            }}
+                                                        >
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                </>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </Paper>
+        </Box>
     );
-  };
-
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Snackbar
-        open={open}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        autoHideDuration={2000}
-        onClose={() => setOpen(false)}
-      >
-        <Alert onClose={() => setOpen(false)} severity="warning" sx={{ width: '100%' }}>
-          {alertContent}
-        </Alert>
-      </Snackbar>
-      <Dialog open={deleteOpen} onClose={e => handleDeleteClose(false)}>
-        <DialogTitle>{t("confirmMsg")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{t("deleteConformMsg")}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={e => handleDeleteClose(false)}>{t("Close")}</Button>
-          <Button onClick={e => handleDeleteClose(true)}>{t("Delete")}</Button>
-        </DialogActions>
-      </Dialog>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={'small'}
-          >
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-              t={t}
-            />
-            <TableBody>
-              {loading ?
-                <TableRow >
-                  <TableCell colSpan={9} align="center">
-                    <CircularProgress sx={{ my: "30vh" }} />
-                  </TableCell>
-                </TableRow>
-                :
-                <>
-                  {stableSort(rows.filter(r =>
-                    r.season_name.toLowerCase().includes(search.toLowerCase())
-                    || r.league_name.toLowerCase().includes(search.toLowerCase())
-                    || r.away_team_name.toLowerCase().includes(search.toLowerCase())
-                    || r.home_team_name.toLowerCase().includes(search.toLowerCase())
-                    || r.date.slice(0, 10).toString().toLowerCase().includes(search.toLowerCase())
-                  ), getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row.id}
-                        >
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                            align="center"
-                          >
-                            <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt='Team' />
-                          </TableCell>
-                          <TableCell align="center">{row.season_name}</TableCell>
-                          <TableCell align="center">{row.league_name}</TableCell>
-                          <TableCell align="center">
-                            <Link
-                              variant="outlined"
-                              to={`/team/${btoa(`${row.home_team_id}|${row.season_id}|${row.league_id}`)}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {row.home_team_name}
-                            </Link>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Link
-                              variant="outlined"
-                              to={`/team/${btoa(`${row.away_team_id}|${row.season_id}|${row.league_id}`)}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {row.away_team_name}
-                            </Link>
-                          </TableCell>
-                          <TableCell align="center" >{row.date.slice(0, 10)}</TableCell>
-                          <TableCell align="center" sx={{ width: 40 }}>
-                            <a href={row.video_url} target="_blank" rel="noopener noreferrer">
-                              <Paper style={{ display: "flex", justifyContent: "center", alignItems: "center" }} elevation={3}>
-                                <img src={VIDEO_ICON} style={{ width: 40, height: 40, borderRadius: 5 }} alt="video" />
-                              </Paper>
-                            </a>
-                          </TableCell>
-                          <TableCell align="center" sx={{ width: 100 }}>
-                            <Button
-                              variant="outlined"
-                              onClick={() => editCallBack(row)}
-                              startIcon={<EditIcon />}
-                            >
-                              {t("Edit")}
-                            </Button>
-                          </TableCell>
-                          <TableCell align="center" sx={{ width: 100 }}>
-                            <Link
-                              variant="outlined"
-                              to={`/tagging/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`}
-                              target="_blank"
-                              rel="noopener noreferrer">
-                              <Button
-                                variant="outlined"
-                                startIcon={<TagIcon />}
-                              >
-                                {t("Tag")}
-                              </Button>
-                            </Link>
-                          </TableCell>
-                          <TableCell align="center" sx={{ width: 70 }}>
-                            <IconButton
-                              onClick={() => {
-                                setDeleteOpen(true)
-                                setSelected(row)
-                              }}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                </>
-              }
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </Box >
-  );
 }

@@ -356,7 +356,6 @@ exports.updatePassword = (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-  console.log('##################user Id##############', req.userId)
   const user = await User.findOne({ where: { id: req.userId } });
 
   if (!user) {
@@ -392,7 +391,6 @@ exports.updateProfile = async (req, res) => {
 
 exports.updateProfile1 = async (req, res) => {
   const user = await User.findOne({ where: { id: req.userId } });
-  console.log("********************user******************", user)
 
   if (!user) {
     return res.status(404).send({ message: "User Not found." });
@@ -443,7 +441,6 @@ exports.updateProfile2 = async (req, res) => {
   `);
 
   const user1 = await User.findOne({ where: { id: req.userId } });
-  console.log("********************user/updateprofile2******************", user1)
 
   sendSigninSuccessInfo(res, user1);
 };

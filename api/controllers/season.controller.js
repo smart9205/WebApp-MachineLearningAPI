@@ -29,7 +29,6 @@ exports.create =  (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  console.log("getSeason", req.body);
   const name = req.query.name;
   var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 

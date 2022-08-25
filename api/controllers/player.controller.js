@@ -146,44 +146,6 @@ exports.findOne = async (req, res) => {
   res.send({ ...player[0][0], ...team[0][0] });
 };
 
-exports.findTeams = async (req, res) => {
-  const fname = req.params.fname;
-  const lname = req.params.lname;
-
-  Sequelize.query(`
-      SELECT public."Teams".id as id,
-        public."Teams".image as team_image,
-        public."Teams".name as team_name,
-        public."Leagues".name as league_name,
-        public."Seasons".name as season_name,
-        player_count
-      FROM public."Teams" 
-      LEFT JOIN 
-        public."Team_Players" on public."Teams".id = public."Team_Players".team_id
-      LEFT JOIN 
-        public."Players" on public."Team_Players".player_id = public."Players".id
-      LEFT JOIN 
-        public."Leagues" on public."Team_Players".league_id = public."Leagues".id
-      LEFT JOIN 
-        public."Seasons" on public."Team_Players".season_id = public."Seasons".id
-      LEFT JOIN (
-        SELECT count(public."Team_Players".id) as player_count, public."Team_Players".team_id as temp_team_id
-        FROM public."Team_Players" 
-        GROUP BY
-          public."Team_Players".team_id
-      ) AS tempTeamTable on tempTeamTable.temp_team_id = public."Teams".id
-      WHERE public."Players".f_name = '${fname}' and public."Players".l_name = '${lname}'
-    `).then(data => {
-    res.send(data[0]);
-  })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
-      });
-    });
-}
-
 exports.gameByPlayerId = (req, res) => {
   const id = req.params.id;
 
@@ -222,45 +184,51 @@ exports.gameDetailsByPlayerId = (req, res) => {
   const id = req.params.id;
 
   Sequelize.query(`
-    SELECT 
-  	public."Games".*,
-  	HomeTeam.name as home_team_name,
-  	AwayTeam.name as away_team_name,
-    (CASE WHEN ${id} in (
-  		select player_id from public."Team_Players" 
-  		where season_id = public."Games".season_id and league_id = public."Games".league_id and public."Team_Players".team_id = public."Games".home_team_id
-  	) THEN true ELSE false END) as is_home_team,
-  	SUM(CASE WHEN action_result_id = 3 and player_id in (
-  		select player_id from public."Team_Players" 
-  		where season_id = public."Games".season_id and league_id = public."Games".league_id and public."Team_Players".team_id = public."Games".home_team_id
-  	) THEN 1 ELSE 0 END) as home_team_goal,
-  	SUM(CASE WHEN action_result_id = 3 and player_id in (
-  		select player_id from public."Team_Players" 
-  		where season_id = public."Games".season_id and league_id = public."Games".league_id and public."Team_Players".team_id = public."Games".away_team_id
-  	) THEN 1 ELSE 0 END) as away_team_goal,
-  	SUM(CASE WHEN action_result_id = 3 and player_id = ${id} THEN 1 ELSE 0 END) as goal,
-  	SUM(CASE WHEN action_id = 1 and player_id = ${id} THEN 1 ELSE 0 END) as shot,
-  	SUM(CASE WHEN action_id = 2 and player_id = ${id} THEN 1 ELSE 0 END) as pass,
-  	SUM(CASE WHEN action_id = 10 and player_id = ${id} THEN 1 ELSE 0 END) as interception,
-  	SUM(CASE WHEN action_result_id = 6 and player_id = ${id} THEN 1 ELSE 0 END) as saved,
-  	SUM(CASE WHEN action_id = 11 and player_id = ${id} THEN 1 ELSE 0 END) as clearance
-  FROM public."Player_Tags" LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
-  JOIN public."Games" on public."Games".id = game_id
-  LEFT JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id
-  LEFT JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
-  WHERE game_id in (
-  	SELECT public."Games".id FROM public."Team_Players" 
-  	JOIN public."Games" on 
-  		public."Games".season_id = public."Team_Players".season_id and
-  		public."Games".league_id = public."Team_Players".league_id and
-  		(
-  			public."Games".home_team_id = public."Team_Players".team_id or
-  			public."Games".away_team_id = public."Team_Players".team_id
-  		)
-  	where public."Team_Players".player_id = ${id} 
-  )
-  group by public."Games".id,home_team_name,away_team_name
-      `)
+  SELECT 
+	public."Games".*,
+	HomeTeam.name as home_team_name,
+  HomeTeam.image as home_team_image,
+	AwayTeam.name as away_team_name,
+  AwayTeam.image as away_team_image,
+  (CASE WHEN ${id} in (
+		select player_id from public."Team_Players" 
+		where season_id = public."Games".season_id and league_id = public."Games".league_id and public."Team_Players".team_id = public."Games".home_team_id
+	) THEN true ELSE false END) as is_home_team,
+	SUM(CASE WHEN action_result_id = 3 and player_id in (
+		select player_id from public."Team_Players" 
+		where season_id = public."Games".season_id and league_id = public."Games".league_id and public."Team_Players".team_id = public."Games".home_team_id
+	) THEN 1 ELSE 0 END) as home_team_goal,
+	SUM(CASE WHEN action_result_id = 3 and player_id in (
+		select player_id from public."Team_Players" 
+		where season_id = public."Games".season_id and league_id = public."Games".league_id and public."Team_Players".team_id = public."Games".away_team_id
+	) THEN 1 ELSE 0 END) as away_team_goal,
+	SUM(CASE WHEN action_result_id = 3 and player_id = ${id} THEN 1 ELSE 0 END) as goal,
+	SUM(CASE WHEN action_id = 1 and player_id = ${id} THEN 1 ELSE 0 END) as shot,
+	SUM(CASE WHEN action_id = 2 and player_id = ${id} THEN 1 ELSE 0 END) as pass,
+	SUM(CASE WHEN action_id = 10 and player_id = ${id} THEN 1 ELSE 0 END) as interception,
+	SUM(CASE WHEN action_result_id = 6 and player_id = ${id} THEN 1 ELSE 0 END) as saved,
+	SUM(CASE WHEN action_id = 11 and player_id = ${id} THEN 1 ELSE 0 END) as clearance,
+  public."Seasons".name as season_name,
+  public."Leagues".name as league_name
+FROM public."Player_Tags" LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Player_Tags".team_tag_id
+JOIN public."Games" on public."Games".id = game_id
+JOIN public."Seasons" on public."Seasons".id = public."Games".season_id
+JOIN public."Leagues" on public."Leagues".id = public."Games".league_id
+LEFT JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id
+LEFT JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
+WHERE game_id in (
+	SELECT public."Games".id FROM public."Team_Players" 
+	JOIN public."Games" on 
+		public."Games".season_id = public."Team_Players".season_id and
+		public."Games".league_id = public."Team_Players".league_id and
+		(
+			public."Games".home_team_id = public."Team_Players".team_id or
+			public."Games".away_team_id = public."Team_Players".team_id
+		)
+	where public."Team_Players".player_id = ${id} 
+)
+group by public."Games".id,home_team_name,away_team_name,season_name,league_name,home_team_image,away_team_image
+    `)
     .then(data => {
       res.send(data[0]);
     })

@@ -165,7 +165,6 @@ exports.getCoachTeamPlayers = (req, res) => {
     WHERE public."Coach_Teams".user_id = ${req.userId} and public."Coach_Teams".team_id = ${req.params.teamId} and public."Coach_Teams".season_id = ${req.params.seasonId}
   `)
     .then(data => {
-  console.log('++++++++++++++++ coach ++++++++++++', data[0]);
       res.send(data[0]);
     })
     .catch(err => {
