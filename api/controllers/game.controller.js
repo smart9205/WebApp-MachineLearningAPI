@@ -31,7 +31,7 @@ exports.getNewStreamURL = async (req, res) => {
     const response = await axios.post("https://api.newstream.ai/api/video/v1/youtube_download_link", req.body);
     return res.send(response?.data);
 
-  } catch (e) { console.log("NewStream Error", e); return res.send("error occured") }
+  } catch (e) { return res.send("error occured") }
 };
 
 exports.getbyTeam = (req, res) => {
@@ -90,7 +90,6 @@ exports.getbyCoach = (req, res) => {
   `)
     .then(data => {
       res.send(data[0]);
-      console.log(data)
     })
     .catch(err => {
       res.status(500).send({

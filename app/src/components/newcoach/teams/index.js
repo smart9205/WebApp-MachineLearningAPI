@@ -79,8 +79,6 @@ const Teams = () => {
         });
     }, []);
 
-    console.log('Teams => ', seasonList, seasonFilter, searchText);
-
     return (
         <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
             <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>

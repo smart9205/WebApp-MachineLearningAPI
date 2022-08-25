@@ -95,8 +95,6 @@ const PrfileTab = () => {
         });
     }, [values]);
 
-    console.log('Settings => ', currentUser, values);
-
     return (
         <Box sx={{ padding: '24px', backgroundColor: 'white', display: 'flex', gap: '24px', borderRadius: '10px', margin: '0 24px 24px', maxHeight: '700px', height: '750px', overflowY: 'scroll' }}>
             <UploadButton

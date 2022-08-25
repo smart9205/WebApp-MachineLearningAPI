@@ -35,8 +35,6 @@ const TeamPage = () => {
         }
     }, [params.teamId, params.seasonId]);
 
-    console.log('teampage => ', params.teamId, params.seasonId, values.players, values.teamName);
-
     return (
         <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
             <Box sx={{ width: '100%', padding: '24px', display: 'flex', alignItems: 'center', gap: '24px', 'svg path': { fill: 'black' } }}>

@@ -290,7 +290,6 @@ ul.nav.nav-tabs {
 }
 
 div.profileSection td h5,
-div.profileSection p,
 div.profileSection span {
     color: whitesmoke !important;
 }
@@ -327,10 +326,8 @@ div.profileSection td {
 .coach-actionlist-table p,
 .coach-actionlist-table td {
     margin: 0px !important;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
 }
 .coach-tag-table .Mui-selected {
     background-color: rgba(25, 118, 210, 0.38) !important;
@@ -361,7 +358,7 @@ div.profileSection td {
     margin: 0 4px;
 }
 
-@media(orientation: landscape) {
+@media (orientation: landscape) {
     .profileSection_tagvideo .MuiDialog-container.MuiDialog-scrollPaper {
         align-items: flex-start;
     }
