@@ -2,7 +2,7 @@ import React, { useEffect, useState, createContext, useMemo, useReducer } from '
 import { useParams } from 'react-router-dom';
 import i18next from 'i18next';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { IconButton, CircularProgress, Box, Typography } from '@mui/material';
+import { IconButton, CircularProgress, Box, Typography, Popover, List, ListItemButton, ListItemText } from '@mui/material';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import GameService from '../../services/game.service';
 import DialogContent from '@mui/material/DialogContent';
@@ -14,6 +14,7 @@ import GameDetailTab from './GameDetailTab';
 import './Profile.css';
 import { useTranslation } from 'react-i18next';
 import GameImage from '../../assets/game_image.png';
+import FilterIcon from '@mui/icons-material/FilterListOutlined';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -96,6 +97,14 @@ export default function Player() {
     const [language, setLanguage] = useState('en');
     const [hoverIndex, setHoverIndex] = useState(-1);
 
+    const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+    const filterPopoverOpen = Boolean(filterAnchorEl);
+    const filterPopoverId = filterPopoverOpen ? 'simple-popover' : undefined;
+
+    const [seasonList, setSeasonList] = useState([]);
+    const [seasonFilter, setSeasonFilter] = useState('');
+    const [selectedIndex, setSelectedIndex] = useState(0);
+
     const theme = useMemo(
         () =>
             createTheme({
@@ -109,27 +118,22 @@ export default function Player() {
 
     useEffect(() => {
         setLoading(true);
-        GameService.getGameDetailssByPlayer(playerId)
-            .then((res) => {
-                const ascArray = stableSort(res, getComparator('desc', 'date'));
+        GameService.getGameDetailssByPlayer(playerId).then((res) => {
+            const ascArray = stableSort(res, getComparator('desc', 'date'));
 
-                setGames(ascArray);
-                setLoading(false);
-            })
-            .catch(() => {
-                setLoading(false);
+            setGames(ascArray);
+            getSeasonList(res);
+        });
+
+        GameService.getPlayerById(playerId).then((res) => {
+            setContext({ player: res });
+            setPrimaryColor(res.team_color || defaultPrimaryColor);
+            setSecondColor(res.second_color || defaultSecondColor);
+            GameService.getTeamById(res.team_id).then((result) => {
+                setLanguage(result.team_language);
             });
-
-        GameService.getPlayerById(playerId)
-            .then((res) => {
-                setContext({ player: res });
-                setPrimaryColor(res.team_color || defaultPrimaryColor);
-                setSecondColor(res.second_color || defaultSecondColor);
-                GameService.getTeamById(res.team_id).then((result) => {
-                    setLanguage(result.team_language);
-                });
-            })
-            .catch(() => {});
+        });
+        setLoading(false);
     }, [playerId]);
 
     useEffect(() => {
@@ -158,6 +162,35 @@ export default function Player() {
         return `${array[2]} / ${array[1]} / ${array[0]}`;
     };
 
+    const handleListItemClick = (event, index) => {
+        if (index === 0) setSeasonFilter('');
+        else setSeasonFilter(seasonList[index - 1]);
+
+        setSelectedIndex(index);
+        setFilterAnchorEl(null);
+    };
+
+    const getGameList = () => {
+        return seasonFilter && seasonFilter.length > 0 ? games.filter((game) => game.season_name === seasonFilter) : games;
+    };
+
+    const getSeasonList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'season_name'));
+            let result = [];
+
+            desc.map((item) => {
+                const filter = result.filter((season) => season === item.season_name);
+
+                if (filter.length === 0) result = [...result, item.season_name];
+
+                console.log('Player => ', item.season_name, result);
+                return result;
+            });
+            setSeasonList(result);
+        }
+    };
+
     const { player: playerData, game: curGame } = context;
 
     return (
@@ -171,13 +204,36 @@ export default function Player() {
                 <Box className="profileSection">
                     <Dialog className="profileSection_tagvideo" classes={{ paper: classes.paper }} open={open} onClose={(e) => setOpen(false)}>
                         <DialogContent sx={{ p: 0 }}>
-                            <TagVideo tagList={playTags} url={game?.mobile_video_url ? game?.mobile_video_url : game?.video_url} setOpen={setOpen} />
+                            <TagVideo tagList={playTags} url={game?.mobile_video_url ? game?.mobile_video_url : game?.video_url} muteState={game?.mute_video} setOpen={setOpen} />
                         </DialogContent>
                     </Dialog>
                     {playerData && <PlayerDetailCard player={playerData} />}
-                    <div style={{ width: '100%', height: '24px' }} />
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', padding: '18px 20px' }}>
+                        <IconButton onClick={(e) => setFilterAnchorEl(e.currentTarget)}>
+                            <FilterIcon />
+                        </IconButton>
+                    </Box>
+                    <Popover
+                        id={filterPopoverId}
+                        open={filterPopoverOpen}
+                        anchorEl={filterAnchorEl}
+                        onClose={() => setFilterAnchorEl(null)}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                    >
+                        <List component="nav" aria-label="secondary mailbox folder">
+                            <ListItemButton key="0" selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 0)}>
+                                <ListItemText primary="All" />
+                            </ListItemButton>
+                            {seasonList.map((season, index) => (
+                                <ListItemButton key={index + 1} selected={selectedIndex === index + 1} onClick={(event) => handleListItemClick(event, index + 1)}>
+                                    <ListItemText primary={season} />
+                                </ListItemButton>
+                            ))}
+                        </List>
+                    </Popover>
                     {!curGame &&
-                        games.map((item, index) => (
+                        getGameList().map((item, index) => (
                             <Box
                                 key={index}
                                 onMouseEnter={() => setHoverIndex(index)}
