@@ -59,21 +59,20 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
         setanchorEl(event.currentTarget)
     }
 
-    const downloadXML = (game) => {
+    const downloadXML = async (game) => {
+
+        setLoading(false)
 
         let selectedTeamId = []
         let selectedHomeTeamId = parseInt(game?.home_team_id)
         let selectedAwayTeamId = parseInt(game?.away_team_id)
+        let gameId = parseInt(game?.id)
 
         setGameState({ game: game })
-        let teams = []
+
         let uniqueTeams = [];
 
-        teamList.map(data => {
-            teams.push(data)
-        })
-
-        const unique = teams.filter(element => {
+        const unique = teamList.filter(element => {
             const isDuplicate = uniqueTeams.includes(element.id);
             if (!isDuplicate) {
                 uniqueTeams.push(element.id);
@@ -83,35 +82,30 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
         });
 
         unique.map(data => {
+
             if (parseInt(data?.team_id) === selectedHomeTeamId || parseInt(data?.team_id) === selectedAwayTeamId) {
                 selectedTeamId.push(data.team_id)
             }
             return false;
+
         })
 
         if (selectedTeamId.length > 1) {
             console.log('Multiple Team Id Found : ', selectedTeamId)
-        } else {
-            if (!!selectedTeamId && !!game) {
+        } else if (!!selectedTeamId && !!gameId) {
 
-                gameService.getAllPlayerTagsByTeam(selectedTeamId, game?.id).then((res) => {
-                    setGameState({ allTagList: res })
-                })
+            await gameService.getAllPlayerTagsByTeam(selectedTeamId, gameId).then((res) => {
+                setGameState({ allTagList: res })
+            })
 
-                gameService.getGameTeamPlayersByTeam(selectedTeamId, game?.id).then((res) => {
-                    setGameState({ playerList: res })
-                })
+            await gameService.getAllGameTeamPlayers(gameId).then((res) => {
+                setGameState({ playersInGameList: res })
+            })
 
-                gameService.getAllGameTeamPlayers(game?.id).then((res) => {
-                    setGameState({
-                        playersInGameList: res
-                    })
-                })
-                setLoading(true)
-            }
-            console.log('selectedTeamId : ', selectedTeamId)
-            setGameState({ teamId: selectedTeamId })
+            setLoading(true)
         }
+
+        setGameState({ teamId: selectedTeamId })
 
     }
 
@@ -271,7 +265,7 @@ const ProcessedTab = ({ allGamesList, seasonFilter, teamFilter, leagueFilter, te
             {exportXML &&
                 <XmlDataFiltering
                     game={game}
-                    team={allTagList}
+                    tags={allTagList}
                     teamId={teamId}
                     playerList={playerList}
                     playersInGameList={playersInGameList}

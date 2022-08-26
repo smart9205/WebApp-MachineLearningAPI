@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 import { toXML } from 'jstoxml'
 import DownloadXML from './DownloadXML'
 import { redColor, greenColor } from "./Colors";
+import { useState } from 'react';
 
-const XmlDataFiltering = ({ game, team, teamId, playerList, playersInGameList, setExportXML }) => {
-
+const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML }) => {
 
     let GoalkeeperId = []
 
@@ -23,56 +23,36 @@ const XmlDataFiltering = ({ game, team, teamId, playerList, playersInGameList, s
     let HomeTeam = 0
     let AwayTeam = 0
 
-    // useEffect(() => {
-    //     console.log('game : ', game)
-    //     console.log('team : ', team)
-    //     console.log('teamId : ', teamId)
-    //     console.log('playersInGameList : ', playersInGameList)
-    // }, [game, team, teamId, playersInGameList])
+    playersInGameList.home_team.map(data => {
+        if (data.position === 16) {
+            GoalkeeperId.push(data.id)
+        }
+        if (data.player_id) {
+            HomeTeamPlayersID.push(data.player_id)
+        }
+        if (data.team_id) {
+            HomeTeam = data.team_id
+        }
+        return
+    })
 
-    const gettingPlayerData = async () => {
-        await playersInGameList.home_team.map(data => {
-            if (data.position === 16) {
-                GoalkeeperId.push(data.id)
-            }
-            if (data.player_id) {
-                HomeTeamPlayersID.push(data.player_id)
-            }
-            if (data.team_id) {
-                HomeTeam = data.team_id
-            }
-            return
-        })
-
-        await playersInGameList.away_team.map(data => {
-            if (data.position === 16) {
-                GoalkeeperId.push(data.id)
-            }
-            if (data.player_id) {
-                AwayTeamPlayersID.push(data.player_id)
-            }
-            if (data.team_id) {
-                AwayTeam = data.team_id
-            }
-            return
-        })
-    }
+    playersInGameList.away_team.map(data => {
+        if (data.position === 16) {
+            GoalkeeperId.push(data.id)
+        }
+        if (data.player_id) {
+            AwayTeamPlayersID.push(data.player_id)
+        }
+        if (data.team_id) {
+            AwayTeam = data.team_id
+        }
+        return
+    })
 
     useEffect(() => {
-        gettingPlayerData()
-    }, [])
-
-    // useEffect(() => {
-    //     console.log('GoalkeeperId : ', GoalkeeperId)
-    //     console.log('HomeTeamPlayersID : ', HomeTeamPlayersID)
-    //     console.log('HomeTeam : ', HomeTeam)
-    //     console.log('AwayTeamPlayersID : ', AwayTeamPlayersID)
-    //     console.log('AwayTeam : ', AwayTeam)
-    // }, [GoalkeeperId,
-    //     HomeTeamPlayersID,
-    //     HomeTeam,
-    //     AwayTeamPlayersID,
-    //     AwayTeam])
+        console.log('SelectedTeamId : ', selectedTeamID)
+        console.log('GoalkeeperId : ', GoalkeeperId)
+    }, [GoalkeeperId])
 
     const convertionIntoNumber = (numberTime) => {
         let array = numberTime.split(":")
@@ -98,16 +78,14 @@ const XmlDataFiltering = ({ game, team, teamId, playerList, playersInGameList, s
         return convertionIntoNumber(x.start_time) - convertionIntoNumber(y.start_time)
     }
 
-    let sortedStartTime = team.sort(sortByStartTime)
+    let sortedStartTime = tags.sort(sortByStartTime)
     let sortedPlayerId = sortedStartTime.sort(sortByPlayerId)
     let sortedPlayerData = sortedPlayerId.sort(sortByTeamId)
 
-
-    const playerData = sortedPlayerData.map(data => {
+    sortedPlayerData.map(data => {
         totalPlayer.push(data)
 
         if (selectedTeamID === HomeTeam && HomeTeamPlayersID.includes(parseInt(data.player_id))) {
-
             SelectedTeamPlayers.push(data)
         }
         else if (selectedTeamID === AwayTeam && AwayTeamPlayersID.includes(parseInt(data.player_id))) {
@@ -154,14 +132,12 @@ const XmlDataFiltering = ({ game, team, teamId, playerList, playersInGameList, s
     let prevTeamValue = []
     let lastActionID = 0
     let testArray = []
+    let testArray2 = []
 
-    console.log('selectedTeamID  :', selectedTeamID)
+    sortedByTeamTagId.map((data, index, arr) => {
 
-    const teamData = sortedByTeamTagId.map((data, index, arr) => {
+        let prevValue = arr[index - 1]
 
-        let prevValue = arr[index - 1] //it will give prev data
-
-        testArray.push(data)
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
             if (data.action_id !== 7 && data.action_id !== 8 && data.action_id !== 11 && data.action_id !== 12 && data.action_id !== 10 && data.action_result_id !== 4 && data.action_result_id !== 9 && data.action_result_id !== 13 && data.action_result_id !== 17 && data.action_result_id !== 18) {
                 Offense.push(data)
@@ -195,15 +171,16 @@ const XmlDataFiltering = ({ game, team, teamId, playerList, playersInGameList, s
             }
         }
 
-
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
-            if (GoalkeeperId.includes(parseInt(data.player_id))) {
+            testArray.push(data)
+            if (GoalkeeperId && GoalkeeperId?.includes(parseInt(data.player_id))) {//not working
                 if (data.action_id === 2 || data.action_id === 1) {
                     BuildUpGoalkeeperData.push(data)
                 }
             }
         } else {
-            if (GoalkeeperId.includes(parseInt(data.player_id))) {
+            testArray2.push(data)
+            if (GoalkeeperId && GoalkeeperId?.includes(parseInt(data.player_id))) {//not working
                 if (data.action_id === 2 || data.action_id === 1) {
                     OpponentBuildUpGoalkeeperData.push(data)
                 }
@@ -287,27 +264,32 @@ const XmlDataFiltering = ({ game, team, teamId, playerList, playersInGameList, s
         }
     })
 
-    console.log('testArray : ', testArray)
+
+    // console.log('SelectedId === offensive_team_id -> :', testArray)
+    // console.log('SelectedId != offensive_team_id -> :', testArray2)
+    // console.log('Total Player : ', totalPlayer)
     console.log('Offense : ', Offense)
     console.log('Defense : ', Defense)
-    // console.log('BuildUpGoalkeeperData : ,', BuildUpGoalkeeperData)
-    // console.log('OpponentBuildUpGoalkeeperData : ', OpponentBuildUpGoalkeeperData)
-    // console.log('BuildUpDefensiveHalfSelectedTeam : ', BuildUpDefensiveHalfSelectedTeam)
-    // console.log('BuildUpDefensiveHalfOpponentTeam : ', BuildUpDefensiveHalfOpponentTeam)
-    // console.log('BuildUpOfensiveHalfSelectedTeam : ', BuildUpOfensiveHalfSelectedTeam)
-    // console.log('BuildUpOfensiveHalfOpponentTeam : ', BuildUpOfensiveHalfOpponentTeam)
-    // console.log('BuildUpDefenseToOffenseSelectedTeam : ', BuildUpDefenseToOffenseSelectedTeam)
-    // console.log('BuildUpDefenseToOffenseOpponentTeam : ', BuildUpDefenseToOffenseOpponentTeam)
-    // console.log('GoalsSelectedTeam : ', GoalsSelectedTeam)
-    // console.log('GoalsOpponentTeam) : ', GoalsOpponentTeam)
-    // console.log('CrossesSelectedTeam : ', CrossesSelectedTeam)
-    // console.log('CrossesOpponentTeam : ', CrossesOpponentTeam)
-    // console.log('FreeKicksSelectedTeam : ', FreeKicksSelectedTeam)
-    // console.log('FreeKicksOpponentTeam : ', FreeKicksOpponentTeam)
-    // console.log('ShotsOnTargetSelectedTeam : ', ShotsOnTargetSelectedTeam)
-    // console.log('ShotsOnTargetOpponnetTeam : ', ShotsOnTargetOpponnetTeam)
-    // console.log('ShotsOfTargetSelectedTeam : ', ShotsOfTargetSelectedTeam)
-    // console.log('ShotsOfTargetOpponnetTeam :', ShotsOfTargetOpponnetTeam)
+    console.log('BuildUpGoalkeeperData : ,', BuildUpGoalkeeperData)
+    console.log('OpponentBuildUpGoalkeeperData : ', OpponentBuildUpGoalkeeperData)
+    console.log('BuildUpDefensiveHalfSelectedTeam : ', BuildUpDefensiveHalfSelectedTeam)
+    console.log('BuildUpDefensiveHalfOpponentTeam : ', BuildUpDefensiveHalfOpponentTeam)
+    console.log('BuildUpOfensiveHalfSelectedTeam : ', BuildUpOfensiveHalfSelectedTeam)
+    console.log('BuildUpOfensiveHalfOpponentTeam : ', BuildUpOfensiveHalfOpponentTeam)
+    console.log('BuildUpDefenseToOffenseSelectedTeam : ', BuildUpDefenseToOffenseSelectedTeam)
+    console.log('BuildUpDefenseToOffenseOpponentTeam : ', BuildUpDefenseToOffenseOpponentTeam)
+    console.log('GoalsSelectedTeam : ', GoalsSelectedTeam)
+    console.log('GoalsOpponentTeam) : ', GoalsOpponentTeam)
+    console.log('CrossesSelectedTeam : ', CrossesSelectedTeam)
+    console.log('CrossesOpponentTeam : ', CrossesOpponentTeam)
+    console.log('FreeKicksSelectedTeam : ', FreeKicksSelectedTeam)
+    console.log('FreeKicksOpponentTeam : ', FreeKicksOpponentTeam)
+    console.log('ShotsOnTargetSelectedTeam : ', ShotsOnTargetSelectedTeam)
+    console.log('ShotsOnTargetOpponnetTeam : ', ShotsOnTargetOpponnetTeam)
+    console.log('ShotsOfTargetSelectedTeam : ', ShotsOfTargetSelectedTeam)
+    console.log('ShotsOfTargetOpponnetTeam :', ShotsOfTargetOpponnetTeam) //20
+    console.log('SelectedTeamPlayers : ', SelectedTeamPlayers)
+    console.log('OpponentTeamPlayers : ', OpponentTeamPlayers)
 
     const OffenseDataForXML = Offense.map(data => {
         const XMLdata = {

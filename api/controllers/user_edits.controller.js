@@ -71,20 +71,34 @@ exports.create = async (req, res) => {
 };
 
 exports.createFolder = async (req, res) => {
-  // if (!req.body.name) {
-  //   res.status(400).send({
-  //     message: "Name can not be empty!"
-  //   });
-  //   return;
-  // }
 
-  // const user_edits = {
-  //   name: req.body.name,
-  //   user_id: req.userId,
-  //   processed: 1,
-  // };
+  if (!req.body.name) {
+    res.status(400).send({
+      message: "Name can not be empty!"
+    });
+    return;
+  }
 
-  // const userEdits = await User_Edits.create(user_edits);
+  // res.send(`Name: ${req.body.name} and ParentID: ${req.body.parentID} and UserID: ${req.userId}`)
+
+  const user_edits_folder = {
+    name: req.body.name,
+    user_id: req.userId,
+    parent_id: req.body.parentID,
+    order_num: 2
+  };
+
+  await User_Edits_Folder.create(user_edits_folder)
+    .then(data => {
+      res.send(data)
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating UserEditsFolder."
+      });
+    })
+
 }
 
 exports.findAll = (req, res) => {

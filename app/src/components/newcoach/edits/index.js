@@ -1,7 +1,13 @@
 import { Box, Typography } from '@mui/material';
 import React, { useEffect, useReducer, useState } from 'react';
 import gameService from '../../../services/game.service';
-import { Button, Grid } from '@mui/material';
+import {
+    Button, Grid, Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    TextField,
+} from '@mui/material';
 import CreateEditDialog from './tabs/createEditDialog';
 import UserEditList from './tabs/userEditList';
 import EditNameDialog from "../../../common/EditNameDialolg";
@@ -28,6 +34,9 @@ const Edits = () => {
     const [tagList, setTagList] = useState([])
     const [parentID, setParentID] = useState(0)
     const [userEditsFolders, setUserEditsFolders] = useState([])
+
+    const [createFolder, setCreateFolder] = useState(false)
+    const [name, setName] = useState("")
 
     const [videoData, setVideodata] = useState({
         idx: 0,
@@ -113,6 +122,15 @@ const Edits = () => {
         if (!flag) initUserEdits()
     }
 
+    const handleSave = () => {
+        gameService.addUserEditsFolder({
+            name,
+            parentID,
+        }).then(res => {
+            console.log('res - ', res)
+        })
+    }
+
     return (
         <>
 
@@ -134,6 +152,29 @@ const Edits = () => {
                 handleEditClose={handleEditClose}
             />
 
+            <Dialog
+                fullWidth
+                maxWidth={"sm"}
+                open={createFolder}
+                onClose={() => setCreateFolder(false)}
+            >
+                <DialogTitle>Name</DialogTitle>
+                <DialogContent>
+                    <Box sx={{ pt: 1 }}>
+                        <TextField
+                            fullWidth
+                            label='Name'
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setCreateFolder(false)}>Cancel</Button>
+                    <Button onClick={handleSave}>OK</Button>
+                </DialogActions>
+            </Dialog >
+
             <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
                 <Box sx={{ padding: '24px 24px 18px 18px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Edits</Typography>
@@ -142,6 +183,8 @@ const Edits = () => {
                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                             <Grid item xs={2}>
                                 <Button variant="outlined" style={{ marginBottom: '10px' }} onClick={() => handleEditOpen(true)}>Create Edits</Button>
+
+                                <Button variant="outlined" style={{ marginBottom: '10px' }} onClick={() => setCreateFolder(true)}>Create Folder</Button>
                                 <Box>
                                     <UserEditList
                                         editList={editList}
