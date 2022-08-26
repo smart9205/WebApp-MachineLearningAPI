@@ -51,7 +51,7 @@ const Games = () => {
 
     const gettingAllGamesByCoach = () => {
         if (!team) return;
-        gameService.getAllGamesByCoach(team.user_id).then((res) => {
+        gameService.getAllGamesByCoach(null, null, null, team.user_id, null).then((res) => {
             setState({ gameListByCoach: res, gameByCoach: res[0] });
         });
     };
