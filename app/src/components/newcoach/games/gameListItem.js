@@ -124,7 +124,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
             }}
         >
             <Box sx={{ display: 'flex', alignItems: 'center', flex: 15 }}>
-                <img style={{ height: '120px', width: '200px', borderRadius: '12px' }} src={row.image ? row.image : GameImage} alt="Game Logo" />
+                <img style={{ height: '100px', width: '160px', borderRadius: '12px' }} src={row.image ? row.image : GameImage} alt="Game Logo" />
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 8, padding: '0 32px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{getFormattedDate(row.date)}</Typography>
