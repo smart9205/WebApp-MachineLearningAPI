@@ -51,10 +51,12 @@ const getAllCoachTeam = () => {
     });
 };
 
-const getAllGamesByCoach = (coachId) => {
-    return axios.get(API_URL + `game/getbycoach/${coachId}`, { headers: authHeader(), data: { coachId } }).then((response) => {
-        return response.data;
-    });
+const getAllGamesByCoach = (seasonId, leagueId, teamId, coachId, datesBack) => {
+    return axios
+        .get(API_URL + `game/getbycoach/${seasonId}/${leagueId}/${teamId}/${coachId}/${datesBack}`, { headers: authHeader(), data: { seasonId, leagueId, teamId, coachId, datesBack } })
+        .then((response) => {
+            return response.data;
+        });
 };
 
 const getAllMyCoachTeam = () => {
@@ -316,20 +318,8 @@ const addUserEdits = (req) => {
     });
 };
 
-const addUserEditsFolder = (req) => {
-    return axios.post(API_URL + 'user_edits_folders', req, { headers: authHeader() }).then((response) => {
-        return response.data;
-    });
-};
-
 const getAllUserEdits = () => {
     return axios.get(API_URL + 'user_edits', { headers: authHeader() }).then((response) => {
-        return response.data;
-    });
-};
-
-const getAllUserEditsFolders = (id) => {
-    return axios.get(API_URL + `user_edits_folders/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
         return response.data;
     });
 };
@@ -462,11 +452,9 @@ const gameService = {
     addHighlight,
 
     addUserEdits,
-    addUserEditsFolder,
 
     getGame,
     getAllUserEdits,
-    getAllUserEditsFolders,
     getEditClipsByUserEditId,
     getTeamById,
     getSeasonById,
