@@ -39,11 +39,11 @@ import NewCoach from './components/newcoach';
 import Settings from './components/newcoach/settings';
 import Teams from './components/newcoach/teams';
 import Games from './components/newcoach/games';
-import Edits from './components/newcoach/edits';
 import TeamPage from './components/newcoach/teams/teampage';
 import Players from './components/newcoach/players';
-
-
+import Dashboard from './components/newcoach/dashboard';
+import Reports from './components/newcoach/reports';
+import Edits from './components/newcoach/edits';
 const CustomTheme = () => {
     const { pathname } = useLocation();
 
@@ -144,6 +144,22 @@ const App = () => {
 
                                 <Route path="/new_coach" element={<RoleRoute role="ROLE_COACH" />}>
                                     <Route path="/new_coach" element={<NewCoach />} />
+                                    <Route
+                                        path="/new_coach/dashboard"
+                                        element={
+                                            <NewCoach>
+                                                <Dashboard />
+                                            </NewCoach>
+                                        }
+                                    />
+                                    <Route
+                                        path="/new_coach/reports"
+                                        element={
+                                            <NewCoach>
+                                                <Reports />
+                                            </NewCoach>
+                                        }
+                                    />
                                     <Route
                                         path="/new_coach/settings"
                                         element={

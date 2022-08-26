@@ -87,9 +87,7 @@ exports.getPlayersByTeam = async (req, res) => {
   const teamId = req.params.team;
   const gameIds = req.params.game;
 
-  let team;
-  try {
-    team = await Sequelize.query(`
+  Sequelize.query(`
     select * from (  SELECT 
       DISTINCT ON(public."Players".id) *, public."Players".id as id,
       public."Player_Positions".name as position_name,
@@ -112,11 +110,7 @@ exports.getPlayersByTeam = async (req, res) => {
       team_id = ${teamId}
     order by public."Players".id) as a
   order by sort_order
-    `);
-
-  } catch (e) {
-  }
-  res.send(team?.[0]);
+    `).then(data => {res.send(data[0])});
 }
 
 exports.getAllGameTeamPlayers = async (req, res) => {

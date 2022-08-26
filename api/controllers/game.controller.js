@@ -67,19 +67,14 @@ exports.getbyTeam = (req, res) => {
 };
 
 exports.getbyCoach = (req, res) => {
-  const seasonId = req.params.seasonId;
-  const leagueId = req.params.leagueId;
-  const teamId = req.params.teamId;
-  const coachId = req.params.coachId;
-  const datesBack = req.params.teamId;
-
+  
   Sequelize.query(`
 SELECT * from public.fnc_get_games(
-	${seasonId}, 
-	${leagueId}, 
-	${teamId}, 
-	${coachId}, 
-	${teamId}
+	${req.params.seasonId}, 
+	${req.params.leagueId}, 
+	${req.params.teamId}, 
+	${req.userId}, 
+	${req.params.datesBack}
 )
   `)
     .then(data => {

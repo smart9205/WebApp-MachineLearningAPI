@@ -11,18 +11,18 @@ const MenuItem = ({ path, icon, title, isMinimized, isHover, isSelected }) => {
                         height: '100%',
                         padding: '9px 15px 9px 30px',
                         borderRadius: '0 20px 20px 0',
-                        backgroundColor: isSelected ? '#FFDFCC' : 'white',
+                        backgroundColor: isSelected ? '#C5EAC6' : 'white',
                         'svg path': {
-                            fill: isHover || isSelected ? '#FE5E00' : '#A5A5A8'
+                            fill: isHover || isSelected ? '#0A7304' : '#A5A5A8'
                         },
                         'svg circle': {
-                            fill: isHover || isSelected ? '#FE5E00' : '#A5A5A8'
+                            fill: isHover || isSelected ? '#0A7304' : '#A5A5A8'
                         }
                     }}
                 >
                     {icon}
                 </Box>
-                {!isMinimized && <Typography sx={{ fontWeight: 600, fontSize: '14px', fontWeight: 'DM Sans', color: isSelected ? '#444547' : isHover ? '#FE5E00' : '#A5A5A8' }}>{title}</Typography>}
+                {!isMinimized && <Typography sx={{ fontWeight: 600, fontSize: '14px', fontWeight: 'DM Sans', color: isSelected ? '#0A7304' : isHover ? '#0A7304' : '#A5A5A8' }}>{title}</Typography>}
             </Box>
         </Link>
     );

@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 import { toXML } from 'jstoxml'
 import DownloadXML from './DownloadXML'
 import { redColor, greenColor } from "./Colors";
-import { useState } from 'react';
 
-const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML }) => {
+const XmlDataFiltering = ({ game, team, teamId, playerList, playersInGameList, setExportXML }) => {
+
 
     let GoalkeeperId = []
 
@@ -22,6 +22,7 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
 
     let HomeTeam = 0
     let AwayTeam = 0
+
 
     playersInGameList.home_team.map(data => {
         if (data.position === 16) {
@@ -49,11 +50,6 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
         return
     })
 
-    useEffect(() => {
-        console.log('SelectedTeamId : ', selectedTeamID)
-        console.log('GoalkeeperId : ', GoalkeeperId)
-    }, [GoalkeeperId])
-
     const convertionIntoNumber = (numberTime) => {
         let array = numberTime.split(":")
         let hour = (parseInt(array[0], 10) * 3600)
@@ -78,14 +74,16 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
         return convertionIntoNumber(x.start_time) - convertionIntoNumber(y.start_time)
     }
 
-    let sortedStartTime = tags.sort(sortByStartTime)
+    let sortedStartTime = team.sort(sortByStartTime)
     let sortedPlayerId = sortedStartTime.sort(sortByPlayerId)
     let sortedPlayerData = sortedPlayerId.sort(sortByTeamId)
 
-    sortedPlayerData.map(data => {
+
+    const playerData = sortedPlayerData.map(data => {
         totalPlayer.push(data)
 
         if (selectedTeamID === HomeTeam && HomeTeamPlayersID.includes(parseInt(data.player_id))) {
+
             SelectedTeamPlayers.push(data)
         }
         else if (selectedTeamID === AwayTeam && AwayTeamPlayersID.includes(parseInt(data.player_id))) {
@@ -132,19 +130,19 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
     let prevTeamValue = []
     let lastActionID = 0
     let testArray = []
-    let testArray2 = []
 
-    sortedByTeamTagId.map((data, index, arr) => {
+    const teamData = sortedByTeamTagId.map((data, index, arr) => {
 
-        let prevValue = arr[index - 1]
+        let prevValue = arr[index - 1] //it will give prev data
 
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
-            if (data.action_id !== 7 && data.action_id !== 8 && data.action_id !== 11 && data.action_id !== 12 && data.action_id !== 10 && data.action_result_id !== 4 && data.action_result_id !== 9 && data.action_result_id !== 13 && data.action_result_id !== 17 && data.action_result_id !== 18) {
+            testArray.push(data)
+            if (data.action_id !== 5 && data.action_id !== 7 && data.action_id !== 8 && data.action_id !== 10 && data.action_id !== 11 && data.action_id !== 12 && data.action_id !== 13 && data.action_id !== 14 && data.action_result_id !== 4 && data.action_result_id !== 9 && data.action_result_id !== 13 && data.action_result_id !== 17 && data.action_result_id !== 18) {
                 Offense.push(data)
             }
         }
         else {
-            if (data.action_id !== 7 && data.action_id !== 8 && data.action_id !== 11 && data.action_id !== 12 && data.action_id !== 10 && data.action_result_id !== 4 && data.action_result_id !== 9 && data.action_result_id !== 13 && data.action_result_id !== 17 && data.action_result_id !== 18) {
+            if (data.action_id !== 5 && data.action_id !== 7 && data.action_id !== 8 && data.action_id !== 10 && data.action_id !== 11 && data.action_id !== 12 && data.action_id !== 13 && data.action_id !== 14 && data.action_result_id !== 4 && data.action_result_id !== 9 && data.action_result_id !== 13 && data.action_result_id !== 17 && data.action_result_id !== 18) {
                 Defense.push(data)
             }
         }
@@ -171,16 +169,15 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
             }
         }
 
+
         if (selectedTeamID === parseInt(data.offensive_team_id)) {
-            testArray.push(data)
-            if (GoalkeeperId && GoalkeeperId?.includes(parseInt(data.player_id))) {//not working
+            if (GoalkeeperId.includes(parseInt(data.player_id))) {
                 if (data.action_id === 2 || data.action_id === 1) {
                     BuildUpGoalkeeperData.push(data)
                 }
             }
         } else {
-            testArray2.push(data)
-            if (GoalkeeperId && GoalkeeperId?.includes(parseInt(data.player_id))) {//not working
+            if (GoalkeeperId.includes(parseInt(data.player_id))) {
                 if (data.action_id === 2 || data.action_id === 1) {
                     OpponentBuildUpGoalkeeperData.push(data)
                 }
@@ -264,34 +261,19 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
         }
     })
 
-
-    // console.log('SelectedId === offensive_team_id -> :', testArray)
-    // console.log('SelectedId != offensive_team_id -> :', testArray2)
-    // console.log('Total Player : ', totalPlayer)
-    console.log('Offense : ', Offense)
-    console.log('Defense : ', Defense)
-    console.log('BuildUpGoalkeeperData : ,', BuildUpGoalkeeperData)
-    console.log('OpponentBuildUpGoalkeeperData : ', OpponentBuildUpGoalkeeperData)
-    console.log('BuildUpDefensiveHalfSelectedTeam : ', BuildUpDefensiveHalfSelectedTeam)
-    console.log('BuildUpDefensiveHalfOpponentTeam : ', BuildUpDefensiveHalfOpponentTeam)
-    console.log('BuildUpOfensiveHalfSelectedTeam : ', BuildUpOfensiveHalfSelectedTeam)
-    console.log('BuildUpOfensiveHalfOpponentTeam : ', BuildUpOfensiveHalfOpponentTeam)
-    console.log('BuildUpDefenseToOffenseSelectedTeam : ', BuildUpDefenseToOffenseSelectedTeam)
-    console.log('BuildUpDefenseToOffenseOpponentTeam : ', BuildUpDefenseToOffenseOpponentTeam)
-    console.log('GoalsSelectedTeam : ', GoalsSelectedTeam)
-    console.log('GoalsOpponentTeam) : ', GoalsOpponentTeam)
-    console.log('CrossesSelectedTeam : ', CrossesSelectedTeam)
-    console.log('CrossesOpponentTeam : ', CrossesOpponentTeam)
-    console.log('FreeKicksSelectedTeam : ', FreeKicksSelectedTeam)
-    console.log('FreeKicksOpponentTeam : ', FreeKicksOpponentTeam)
-    console.log('ShotsOnTargetSelectedTeam : ', ShotsOnTargetSelectedTeam)
-    console.log('ShotsOnTargetOpponnetTeam : ', ShotsOnTargetOpponnetTeam)
-    console.log('ShotsOfTargetSelectedTeam : ', ShotsOfTargetSelectedTeam)
-    console.log('ShotsOfTargetOpponnetTeam :', ShotsOfTargetOpponnetTeam) //20
-    console.log('SelectedTeamPlayers : ', SelectedTeamPlayers)
-    console.log('OpponentTeamPlayers : ', OpponentTeamPlayers)
-
+    let label = ''
     const OffenseDataForXML = Offense.map(data => {
+        if (data.action_result_id===11){
+            label = 'Turnover' +  ' - ' + data.action_result_name
+        }else if (data.action_result_id===3) {
+            label = data.action_result_name
+        }else if (data.action_result_id===15) {
+            label = 'Turnover' +  ' - ' + data.action_result_name
+        }else if (data.action_id===4 && data.action_result_id===10) {
+            label = 'Turnover' +  ' - ' + data.action_result_name + ' ' + data.action_name
+        }else{
+            label = data.action_name + ' - ' + data.action_result_name
+        }
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -299,7 +281,7 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Offense',
                 label: {
-                    text: data.action_name + ' - ' + data.action_result_name
+                    text: label
                 },
             },
         }
@@ -316,6 +298,17 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
     })
 
     const DefenseDataForXML = Defense.map(data => {
+        if (data.action_result_id===11){
+            label = 'Turnover' +  ' - ' + data.action_result_name
+        }else if (data.action_result_id===3) {
+            label = data.action_result_name
+        }else if (data.action_result_id===15) {
+            label = 'Turnover' +  ' - ' + data.action_result_name
+        }else if (data.action_id===4 && data.action_result_id===10) {
+            label = 'Turnover' +  ' - ' + data.action_result_name + ' ' + data.action_name
+        }else{
+            label = data.action_name + ' - ' + data.action_result_name
+        }
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -323,7 +316,7 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponents Offense',
                 label: {
-                    text: data.action_name + ' - ' + data.action_result_name
+                    text: label
                 },
             },
         }
@@ -340,6 +333,11 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
     })
 
     const BuildUpGoalKeeperDataForXML = BuildUpGoalkeeperData.map(data => {
+        if (data.action_id===2){
+            label = data.action_type_name
+        }else{
+            label = data.action_name + ' - ' + data.action_type_name
+        }
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -347,7 +345,7 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Build Up - Goalkeeper',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name
+                    text: label
                 },
             },
         }
@@ -365,6 +363,11 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
     })
 
     const OpponentBuildUpGoalKeeperDataForXML = OpponentBuildUpGoalkeeperData.map(data => {
+        if (data.action_id===2){
+            label = data.action_type_name
+        }else{
+            label = data.action_name + ' - ' + data.action_type_name
+        }
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -372,7 +375,7 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponent Build Up - Goalkeeper',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name
+                    text: label
                 },
             },
         }
@@ -388,6 +391,15 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
     })
 
     const BuildUpDefensiveHalfSelectedTeamDataForXML = BuildUpDefensiveHalfSelectedTeam.map(data => {
+        if (data.action_id===4 || data.action_id===10 || data.action_id===12 ){
+            label = data.action_name
+        }else if (data.action_type_id===4 || data.action_type_id===5 || data.action_type_id===6 || data.action_type_id===7 || data.action_type_id===11 || data.action_type_id===14){
+            label = data.action_type_name
+        }else if (data.action_type_id===8 ){
+                label = data.action_name
+        }else{
+            label = data.action_name + ' - ' + data.action_type_name
+        }
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -395,7 +407,7 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Build Up - Defensive Half',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name
+                    text: label
                 },
             },
         }
@@ -411,6 +423,15 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
     })
 
     const BuildUpDefensiveHalfOpponentTeamDataFoxXML = BuildUpDefensiveHalfOpponentTeam.map(data => {
+        if (data.action_id===3 || data.action_id===4 || data.action_id===10 || data.action_id===12 ){
+            label = data.action_name
+        }else if (data.action_type_id===4 || data.action_type_id===5 || data.action_type_id===6 || data.action_type_id===7 || data.action_type_id===11 || data.action_type_id===14){
+            label = data.action_type_name
+        }else if (data.action_type_id===8 ){
+                label = data.action_name
+        }else{
+            label = data.action_name + ' - ' + data.action_type_name
+        }
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -418,7 +439,7 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponent Build Up - Defensive Half',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name
+                    text: label
                 },
             },
         }
@@ -434,6 +455,15 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
     })
 
     const BuildUpOfensiveHalfSelectedTeamDataForXML = BuildUpOfensiveHalfSelectedTeam.map(data => {
+        if (data.action_id===3 || data.action_id===4 || data.action_id===10 || data.action_id===12 ){
+            label = data.action_name
+        }else if (data.action_type_id===4 || data.action_type_id===5 || data.action_type_id===6 || data.action_type_id===7 || data.action_type_id===11 || data.action_type_id===14){
+            label = data.action_type_name
+        }else if (data.action_type_id===8 ){
+                label = data.action_name
+        }else{
+            label = data.action_name + ' - ' + data.action_type_name
+        }
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -441,7 +471,7 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Build Up - Offensive Half',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name
+                    text: label
                 },
             },
         }
@@ -457,6 +487,15 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
     })
 
     const BuildUpOfensiveHalfOpponentTeamDataForXML = BuildUpOfensiveHalfOpponentTeam.map(data => {
+        if (data.action_id===3 || data.action_id===4 || data.action_id===10 || data.action_id===12 ){
+            label = data.action_name
+        }else if (data.action_type_id===4 || data.action_type_id===5 || data.action_type_id===6 || data.action_type_id===7 || data.action_type_id===11 || data.action_type_id===14){
+            label = data.action_type_name
+        }else if (data.action_type_id===8 ){
+                label = data.action_name
+        }else{
+            label = data.action_name + ' - ' + data.action_type_name
+        }
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -464,7 +503,7 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponent Build Up - Offensive Half',
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name
+                    text: label
                 },
             },
         }
@@ -480,6 +519,13 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
     })
 
     const BuildUpDefenseToOffenseSelectedTeamDataForXML = BuildUpDefenseToOffenseSelectedTeam.map(data => {
+        if (data.action_id===2 ){
+            label = data.action_type_name
+        }else if(data.action_id===4){
+            label = data.action_name
+        }else{
+            label = data.action_name + ' ' + data.action_type_name + ' ' + data.action_result_name
+        }
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -487,7 +533,7 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Build Up - Defense To Offense',
                 label: {
-                    text: data.action_name + ' ' + data.action_type_name + ' ' + data.action_result_name
+                    text: label 
                 },
             },
         }
@@ -503,6 +549,13 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
     })
 
     const BuildUpDefenseToOffenseOpponentTeamDataForXML = BuildUpDefenseToOffenseOpponentTeam.map(data => {
+        if (data.action_id===2 ){
+            label = data.action_type_name
+        }else if(data.action_id===4){
+            label = data.action_name
+        }else{
+            label = data.action_name + ' ' + data.action_type_name + ' ' + data.action_result_name
+        }
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -510,7 +563,7 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponent Build Up - Defense To Offense',
                 label: {
-                    text: data.action_name + ' ' + data.action_type_name + ' ' + data.action_result_name
+                    text: label
                 },
             },
         }
@@ -533,8 +586,9 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Goals',
                 label: {
-                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
-                },
+                // text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                text: data.player_fname + ' ' + data.player_lname
+        },
             },
         }
         rowsForXML.push({
@@ -556,7 +610,8 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Opponent Goals',
                 label: {
-                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    //text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname               
                 },
             },
         }
@@ -579,7 +634,8 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Crosses',
                 label: {
-                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    // text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname
                 },
             },
         }
@@ -602,7 +658,8 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Opponent Crosses',
                 label: {
-                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    // text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname
                 },
             },
         }
@@ -625,7 +682,8 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Free Kicks',
                 label: {
-                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    // text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname
                 },
             },
         }
@@ -648,7 +706,8 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time) + 5,
                 code: 'Opponent Free Kicks',
                 label: {
-                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    // text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname
                 },
             },
         }
@@ -671,7 +730,8 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Shots On Target',
                 label: {
-                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
+                    // text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname
                 },
             },
         }
@@ -695,7 +755,8 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponent Shots On Target',
                 label: {
-                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
+                    // text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname
                 },
             },
         }
@@ -719,7 +780,8 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Shots Of Target',
                 label: {
-                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
+                    // text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname
                 },
             },
         }
@@ -743,7 +805,8 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.t_end_time),
                 code: 'Opponent Shots Of Target',
                 label: {
-                    text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
+                    // text: data.player_fname + ' ' + data.player_lname + ' - ' + data.action_name + ' - ' + data.action_result_name
+                    text: data.player_fname + ' ' + data.player_lname
                 },
             },
         }
@@ -759,7 +822,6 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
         return XMLdata
     })
 
-
     const SelectedTeamPlayersDataForXML = SelectedTeamPlayers.map(data => {
         const XMLdata = {
             instance: {
@@ -768,7 +830,8 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.end_time),
                 code: data.player_fname + ' ' + data.player_lname,
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    // text: data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.action_name
                 },
             },
         }
@@ -792,7 +855,8 @@ const XmlDataFiltering = ({ game, tags, teamId, playersInGameList, setExportXML 
                 end: convertionIntoNumber(data.end_time),
                 code: data.player_fname + ' ' + data.player_lname,
                 label: {
-                    text: data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    // text: data.action_name + ' - ' + data.action_type_name + ' - ' + data.action_result_name
+                    text: data.action_name
                 },
             },
         }

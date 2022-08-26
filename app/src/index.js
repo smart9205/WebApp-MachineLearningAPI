@@ -9,35 +9,35 @@ import store from "./store";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-import { CookiesProvider } from 'react-cookie';
+import { CookiesProvider } from "react-cookie";
 
 i18next
-  .use(HttpApi)
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    react: {
-      useSuspense: false //   <---- this will do the magic
-    },
-    fallbackLng: "en",
-    debug: false,
-    // Options for language detector
-    detection: {
-      order: ["path", "cookie", "htmlTag"],
-      caches: ["cookie"]
-    },
-    backend: {
-      loadPath: `/locales/{{lng}}/admin_coach.json`
-    },
-  });
+    .use(HttpApi)
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+        react: {
+            useSuspense: false, //   <---- this will do the magic
+        },
+        fallbackLng: "en",
+        debug: false,
+        // Options for language detector
+        detection: {
+            order: ["path", "cookie", "htmlTag"],
+            caches: ["cookie"],
+        },
+        backend: {
+            loadPath: `/locales/{{lng}}/admin_coach.json`,
+        },
+    });
 
 ReactDOM.render(
-  <Provider store={store}>
-    <CookiesProvider>
-      <App />
-    </CookiesProvider>
-  </Provider>,
-  document.getElementById("root")
+    <Provider store={store}>
+        <CookiesProvider>
+            <App />
+        </CookiesProvider>
+    </Provider>,
+    document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can chađinge

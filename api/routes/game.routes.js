@@ -69,7 +69,7 @@ module.exports = app => {
 	);
 
 	app.get(
-		"/game/getbycoach/:seasonId/:leagueId/:teamId/:coachId/:datesBack",
+		"/game/getbycoach/:seasonId/:leagueId/:teamId/:datesBack",
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getbyCoach
 	);

@@ -1,277 +1,322 @@
-import { Box, Typography } from '@mui/material';
-import React, { useState, useEffect, useReducer } from 'react';
-import ProcessedTab from './tabs/ProcessedTab';
-import PendingTab from './tabs/PendingTab';
-import gameService from '../../../services/game.service';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
+import { Box, MenuItem, Typography, Select } from '@mui/material';
+
+import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
+import GameService from '../../../services/game.service';
+import { LoadingProgress } from '../components/common';
+import GameListItem from './gameListItem';
+
+function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) return -1;
+
+    if (b[orderBy] > a[orderBy]) return 1;
+
+    return 0;
+}
+
+function descendingComparatorNew(a, b) {
+    if (b < a) return -1;
+
+    if (b > a) return 1;
+
+    return 0;
+}
+
+function getComparator(order, orderBy) {
+    return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function getComparatorNew(order) {
+    return order === 'desc' ? (a, b) => descendingComparatorNew(a, b) : (a, b) => -descendingComparatorNew(a, b);
+}
+
+function stableSort(array, comparator) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+
+    stabilizedThis.sort((a, b) => {
+        const order = comparator(a[0], b[0]);
+
+        if (order !== 0) return order;
+
+        return a[1] - b[1];
+    });
+
+    return stabilizedThis.map((el) => el[0]);
+}
 
 const Tabs = ['Processed', 'Pending'];
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 200
+        }
+    }
+};
+
 const Games = () => {
-    const { t } = useTranslation();
-
-    const [curTab, setCurTab] = useState(0);
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        team: null,
+    const [values, setValues] = useState({
+        loading: false,
+        hoverIndex: -1,
+        curTab: 0,
+        periodFilter: '0',
+        teamFilter: 'none',
+        seasonFilter: 'none',
+        leagueFilter: 'none',
+        gamesList: [],
         teamList: [],
-        gameListByCoach: [],
         seasonList: [],
-        playerList: [],
-        playersInGameList: [],
-        game: null,
-        allTagList: [],
-        opponentTagList: [],
-        gameList: []
+        leagueList: []
     });
-    const { team, gameListByCoach, teamList, seasonList } = state;
+    const [refreshPage, setRefreshPage] = useState(false);
 
-    const [updateGamesList, setUpdateGamesList] = useState(false);
+    const handleTabClick = (index) => {
+        setValues({ ...values, curTab: index });
+    };
 
-    const [period, setPeriod] = React.useState('all');
-    const [seasonFilter, setSeasonFilter] = useState(0);
-    const [teamFilter, setTeamFilter] = useState(0);
-    const [leagueFilter, setLeagueFilter] = useState(0);
+    const handleChange = (prop) => (e) => {
+        setValues({ ...values, [prop]: e.target.value });
+    };
 
-    const [teamSelectionOptions, setTeamSelectionOptions] = useState();
-    const [seasonSelectionOptions, setSeasonSelectionOptions] = useState();
-    const [leagueSelectionOptions, setLeagueSelectionOptions] = useState();
+    const handleMouseEnter = (idx) => {
+        setValues({ ...values, hoverIndex: idx });
+    };
 
-    useEffect(() => {
-        gameService.getAllMyCoachTeam().then((res) => {
-            setState({ teamList: res, team: res[0] });
-        });
-        gameService.getAllSeasons().then((res) => {
-            setState({ seasonList: res });
-            // setSeasonFilter(res[0]);
-        });
-    }, []);
+    const handleMouseLeave = () => {
+        setValues({ ...values, hoverIndex: -1 });
+    };
 
-    const gettingAllGamesByCoach = () => {
-        if (!team) return;
-        gameService.getAllGamesByCoach(null, null, null, team.user_id, null).then((res) => {
-            setState({ gameListByCoach: res, gameByCoach: res[0] });
-        });
+    const getDescGamesList = (array) => {
+        return stableSort(array, getComparator('desc', 'date'));
+    };
+
+    const getSeasonList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'season_name'));
+            let result = [];
+
+            desc.map((item) => {
+                const filter = result.filter((season) => season === item.season_name);
+
+                if (filter.length === 0) result = [...result, item.season_name];
+
+                return result;
+            });
+
+            return result;
+        }
+    };
+
+    const getTeamList = (array) => {
+        if (array.length > 0) {
+            let result = [];
+
+            array.map((item) => {
+                const filter = result.filter((team) => team === item.home_team_name);
+                const filter1 = result.filter((team) => team === item.away_team_name);
+
+                if (filter.length === 0) result = [...result, item.home_team_name];
+
+                if (filter1.length === 0) result = [...result, item.away_team_name];
+
+                return result;
+            });
+
+            return result;
+        }
+    };
+
+    const getLeagueList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'league_name'));
+            let result = [];
+
+            desc.map((item) => {
+                const filter = result.filter((league) => league === item.league_name);
+
+                if (filter.length === 0) result = [...result, item.league_name];
+
+                return result;
+            });
+
+            return result;
+        }
+    };
+
+    const getFilteredGamesList = (newList) => {
+        let array = [];
+
+        if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none') array = newList.filter((game) => game.season_name === values.seasonFilter);
+        else if (values.leagueFilter !== 'none' && values.seasonFilter === 'none' && values.teamFilter === 'none') array = newList.filter((game) => game.league_name === values.leagueFilter);
+        else if (values.teamFilter !== 'none' && values.seasonFilter === 'none' && values.leagueFilter === 'none')
+            array = newList.filter((game) => game.home_team_name === values.teamFilter || game.away_team_name === values.teamFilter);
+        else if (values.seasonFilter !== 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none')
+            array = newList.filter((game) => game.season_name === values.seasonFilter && game.league_name === values.leagueFilter);
+        else if (values.seasonFilter !== 'none' && values.teamFilter !== 'none' && values.leagueFilter === 'none')
+            array = newList.filter((game) => game.season_name === values.seasonFilter && (game.home_team_name === values.teamFilter || game.away_team_name === values.teamFilter));
+        else if (values.leagueFilter.length > 0 && values.teamFilter !== 'none' && values.seasonFilter === 'none')
+            array = newList.filter((game) => game.league_name === values.leagueFilter && (game.home_team_name === values.teamFilter || game.away_team_name === values.teamFilter));
+        else
+            array = newList.filter(
+                (game) =>
+                    game.league_name === values.leagueFilter && game.season_name === values.seasonFilter && (game.home_team_name === values.teamFilter || game.away_team_name === values.teamFilter)
+            );
+
+        console.log('Games => ', values.seasonFilter, values.leagueFilter, values.teamFilter, array);
+        return values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' ? newList : array;
+    };
+
+    const getDateFromGameDate = (date) => {
+        return new Date(date).getDate();
+    };
+
+    const getMonthFromGameDate = (date) => {
+        return new Date(date).getMonth() + 1;
+    };
+
+    const getBelongedGameList = (oldList) => {
+        const today = new Date();
+        const sunday = today.getDate() - today.getDay();
+        const saturday = today.getDate() + 6 - today.getDay();
+        const firstDate = new Date(today.getFullYear(), today.getMonth(), 1).getDate();
+        const lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        let newList = [];
+
+        if (values.periodFilter === '1')
+            newList = oldList.filter((game) => getMonthFromGameDate(game.date) === today.getMonth() + 1 && getDateFromGameDate(game.date) >= sunday && getDateFromGameDate(game.date) <= saturday);
+        else if (values.periodFilter === '2')
+            newList = oldList.filter((game) => getMonthFromGameDate(game.date) === today.getMonth() + 1 && getDateFromGameDate(game.date) >= firstDate && getDateFromGameDate(game.date) <= lastDate);
+
+        console.log('Games => ', lastDate);
+        return values.periodFilter === '0' ? oldList : newList;
+    };
+
+    const getGamesList = () => {
+        const newList =
+            values.curTab === 0 ? values.gamesList.filter((game) => game.video_url.toLowerCase() !== 'no video') : values.gamesList.filter((game) => game.video_url.toLowerCase() === 'no video');
+
+        return getFilteredGamesList(getBelongedGameList(newList));
     };
 
     useEffect(() => {
-        gettingAllGamesByCoach();
-    }, [updateGamesList, team]);
-
-    let teamSelectionFields = [];
-
-    const gettingTeamData = async () => {
-        await gameListByCoach.map((teamData) => {
-            if (teamData?.home_team_id && teamData?.away_team_id) {
-                const isFound = teamSelectionFields.some((el) => {
-                    if (el.value === teamData?.home_team_id || el.value === teamData?.away_team_id) {
-                        return true;
-                    }
-                });
-                if (isFound) {
-                    return;
-                } else {
-                    teamSelectionFields.push({
-                        value: teamData.home_team_id,
-                        name: teamData.home_team_name
-                    });
-                    teamSelectionFields.push({
-                        value: teamData.away_team_id,
-                        name: teamData.away_team_name
-                    });
-                }
-            }
+        setValues({ ...values, loading: true });
+        GameService.getAllGamesByCoach(null, null, null, null).then((res) => {
+            setValues({ ...values, gamesList: getDescGamesList(res), seasonList: getSeasonList(res), teamList: getTeamList(res), leagueList: getLeagueList(res), loading: false });
         });
-    };
-
-    let seasonSelectionFields = [];
-
-    const gettingSeasonData = async () => {
-        await gameListByCoach.map((seasonData) => {
-            if (seasonData?.season_name && seasonData?.season_id) {
-                const isFound = seasonSelectionFields.some((el) => {
-                    if (el.value === seasonData?.season_id) {
-                        return true;
-                    }
-                });
-                if (isFound) {
-                    return;
-                } else {
-                    seasonSelectionFields.push({
-                        value: seasonData.season_id,
-                        label: seasonData.season_name
-                    });
-                }
-            }
-        });
-    };
-
-    let leagueSelectionFields = [];
-
-    const gettingLeagueData = async () => {
-        await gameListByCoach.map((leagueData) => {
-            if (leagueData?.league_name && leagueData?.league_id) {
-                const isFound = leagueSelectionFields.some((el) => {
-                    if (el.value === leagueData?.league_id) {
-                        return true;
-                    }
-                });
-                if (isFound) {
-                    return;
-                } else {
-                    leagueSelectionFields.push({
-                        value: leagueData.league_id,
-                        label: leagueData.league_name
-                    });
-                }
-            }
-        });
-    };
-
-    useEffect(() => {
-        gettingTeamData();
-        gettingSeasonData();
-        gettingLeagueData();
-
-        setTeamSelectionOptions({ ...teamSelectionOptions, teamSelectionFields });
-        setSeasonSelectionOptions({ ...seasonSelectionOptions, seasonSelectionFields });
-        setLeagueSelectionOptions({ ...leagueSelectionOptions, leagueSelectionFields });
-    }, [gameListByCoach, teamFilter, seasonFilter, leagueFilter]);
-
-    const handleChange = (event) => {
-        setPeriod(event.target.value);
-    };
+    }, [refreshPage]);
 
     return (
-        <>
-            <Box sx={{ minWidth: '95%', margin: '0 auto' }}>
-                <Box sx={{ padding: '24px 24px 21px 48px' }}>
-                    <Typography sx={{ fontFamily: 'sans-serif', fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Games</Typography>
-                    <Box sx={{ display: 'flex', marginTop: '24px', alignItems: 'center', gap: '24px' }}>
-                        {Tabs.map((title, index) => (
-                            <Box
-                                sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: 'fit-content', gap: '4px', cursor: 'pointer', fontFamily: 'sans-serif' }}
-                                onClick={() => setCurTab(index)}
-                                key={index}
-                            >
-                                <Typography sx={{ fontFamily: 'sans-serif', fontSize: '16px', fontWeight: 500, color: curTab === index ? 'black' : '#A5A5A8' }}>{title}</Typography>
-                                <Box sx={{ height: '2px', width: '100%', backgroundColor: curTab === index ? 'red' : '#F8F8F8' }} />
-                            </Box>
-                        ))}
-
-                        <Box sx={{ display: 'flex', gap: '2rem', marginLeft: '4rem' }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography sx={{ fontFamily: 'sans-serif', fontSize: '16px', fontWeight: 500, color: '#A5A5A8' }}>Period</Typography>
-                                <FormControl sx={{ m: 1, minWidth: 120, border: 'none' }}>
-                                    <Select
-                                        value={period}
-                                        onChange={handleChange}
-                                        variant="outlined"
-                                        label=""
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                        sx={{ borderRadius: '5px', height: '36px', width: '160px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                                    >
-                                        <MenuItem value="all">All</MenuItem>
-                                        <MenuItem value={'last-week'}>Last week</MenuItem>
-                                        <MenuItem value={'last-month'}>Last month</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Box>
-
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography sx={{ fontFamily: 'sans-serif', fontSize: '16px', fontWeight: 500, color: '#A5A5A8' }}>Team</Typography>
-                                <FormControl sx={{ m: 1, minWidth: 120, border: 'none' }}>
-                                    <Select
-                                        value={teamFilter}
-                                        onChange={(e) => setTeamFilter(e.target.value)}
-                                        label=""
-                                        variant="outlined"
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                        sx={{ outline: 'none', height: '36px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                                    >
-                                        <MenuItem value="0">All</MenuItem>
-
-                                        {teamSelectionOptions?.teamSelectionFields &&
-                                            teamSelectionOptions?.teamSelectionFields?.map((option, index) => (
-                                                <MenuItem key={index} value={option.value}>
-                                                    {option.name}
-                                                </MenuItem>
-                                            ))}
-                                    </Select>
-                                </FormControl>
-                            </Box>
-
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography sx={{ fontFamily: 'sans-serif', fontSize: '16px', fontWeight: 500, color: '#A5A5A8' }}>Season</Typography>
-                                <FormControl sx={{ m: 1, minWidth: 120, border: 'none' }}>
-                                    <Select
-                                        value={seasonFilter}
-                                        onChange={(event) => {
-                                            setSeasonFilter(event.target.value);
-                                        }}
-                                        label=""
-                                        variant="outlined"
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                        sx={{ outline: 'none', height: '36px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                                    >
-                                        <MenuItem value="0">All</MenuItem>
-
-                                        {seasonSelectionOptions?.seasonSelectionFields &&
-                                            seasonSelectionOptions?.seasonSelectionFields?.map((option, index) => (
-                                                <MenuItem key={index} value={option.value}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                    </Select>
-                                </FormControl>
-                            </Box>
-
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography sx={{ fontFamily: 'sans-serif', fontSize: '16px', fontWeight: 500, color: '#A5A5A8' }}>League</Typography>
-                                <FormControl sx={{ m: 1, minWidth: 120, border: 'none' }}>
-                                    <Select
-                                        value={leagueFilter}
-                                        onChange={(e) => setLeagueFilter(e.target.value)}
-                                        label=""
-                                        variant="outlined"
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                        sx={{ outline: 'none', height: '36px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                                    >
-                                        <MenuItem value="0">All</MenuItem>
-
-                                        {leagueSelectionOptions?.leagueSelectionFields &&
-                                            leagueSelectionOptions?.leagueSelectionFields?.map((option, index) => (
-                                                <MenuItem key={index} value={option.value}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                    </Select>
-                                </FormControl>
-                            </Box>
+        <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
+            <Box sx={{ padding: '24px 24px 24px 48px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Games</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+                    {Tabs.map((tab, index) => (
+                        <Box onClick={() => handleTabClick(index)} sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '8px', width: 'fit-content', cursor: 'pointer' }}>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 700, color: '#1a1b1d' }}>{tab}</Typography>
+                            <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? 'red' : '#F8F8F8' }} />
                         </Box>
+                    ))}
+                </Box>
+                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '24px' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Period</Typography>
+                        <Select
+                            value={values.periodFilter}
+                            onChange={handleChange('periodFilter')}
+                            label=""
+                            variant="outlined"
+                            IconComponent={ExpandMoreIcon}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            MenuProps={MenuProps}
+                            sx={{ outline: 'none', height: '48px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                        >
+                            <MenuItem value="0">All</MenuItem>
+                            <MenuItem value="1">Last week</MenuItem>
+                            <MenuItem value="2">Last month</MenuItem>
+                        </Select>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Season</Typography>
+                        <Select
+                            value={values.seasonFilter}
+                            onChange={handleChange('seasonFilter')}
+                            label=""
+                            variant="outlined"
+                            IconComponent={ExpandMoreIcon}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            MenuProps={MenuProps}
+                            sx={{ outline: 'none', height: '48px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                        >
+                            <MenuItem key="0" value="none">
+                                All
+                            </MenuItem>
+                            {values.seasonList.map((season, index) => (
+                                <MenuItem key={index + 1} value={season}>
+                                    {season}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>League</Typography>
+                        <Select
+                            value={values.leagueFilter}
+                            onChange={handleChange('leagueFilter')}
+                            label=""
+                            variant="outlined"
+                            IconComponent={ExpandMoreIcon}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            MenuProps={MenuProps}
+                            sx={{ outline: 'none', height: '48px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                        >
+                            <MenuItem key="0" value="none">
+                                All
+                            </MenuItem>
+                            {values.leagueList.map((league, index) => (
+                                <MenuItem key={index + 1} value={league}>
+                                    {league}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Team</Typography>
+                        <Select
+                            value={values.teamFilter}
+                            onChange={handleChange('teamFilter')}
+                            label=""
+                            variant="outlined"
+                            IconComponent={ExpandMoreIcon}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            MenuProps={MenuProps}
+                            sx={{ outline: 'none', height: '48px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                        >
+                            <MenuItem key="0" value="none">
+                                All
+                            </MenuItem>
+                            {values.teamList.map((team, index) => (
+                                <MenuItem key={index + 1} value={team}>
+                                    {team}
+                                </MenuItem>
+                            ))}
+                        </Select>
                     </Box>
                 </Box>
-                {curTab === 0 && (
-                    <ProcessedTab
-                        allGamesList={gameListByCoach}
-                        period={period}
-                        seasonFilter={seasonFilter}
-                        teamFilter={teamFilter}
-                        leagueFilter={leagueFilter}
-                        setSeasonFilter={setSeasonFilter}
-                        setTeamFilter={setTeamFilter}
-                        setLeagueFilter={setLeagueFilter}
-                        teamList={teamList}
-                        setState={setState}
-                        t={t}
-                    />
-                )}
-
-                {curTab === 1 && <PendingTab allGamesList={gameListByCoach} setUpdateGamesList={setUpdateGamesList} />}
             </Box>
-        </>
+            <Box sx={{ overflowY: 'auto', maxHeight: '70vh', margin: '0 24px' }}>
+                <Box sx={{ marginRight: '16px' }}>
+                    {getGamesList().map((game, index) => (
+                        <Box key={index} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
+                            <GameListItem row={game} isHover={values.hoverIndex === index} isPending={values.curTab === 1} updateList={setRefreshPage} team={values.teamFilter} />
+                        </Box>
+                    ))}
+                </Box>
+            </Box>
+            {values.loading && <LoadingProgress />}
+        </Box>
     );
 };
 

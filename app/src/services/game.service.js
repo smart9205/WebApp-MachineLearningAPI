@@ -51,12 +51,10 @@ const getAllCoachTeam = () => {
     });
 };
 
-const getAllGamesByCoach = (seasonId, leagueId, teamId, coachId, datesBack) => {
-    return axios
-        .get(API_URL + `game/getbycoach/${seasonId}/${leagueId}/${teamId}/${coachId}/${datesBack}`, { headers: authHeader(), data: { seasonId, leagueId, teamId, coachId, datesBack } })
-        .then((response) => {
-            return response.data;
-        });
+const getAllGamesByCoach = (seasonId, leagueId, teamId, datesBack) => {
+    return axios.get(API_URL + `game/getbycoach/${seasonId}/${leagueId}/${teamId}/${datesBack}`, { headers: authHeader(), data: { seasonId, leagueId, teamId, datesBack } }).then((response) => {
+        return response.data;
+    });
 };
 
 const getAllMyCoachTeam = () => {
