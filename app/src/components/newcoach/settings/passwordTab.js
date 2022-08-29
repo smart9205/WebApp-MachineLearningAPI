@@ -66,7 +66,7 @@ const PasswordTab = () => {
     }, [values]);
 
     return (
-        <Box sx={{ padding: '24px', backgroundColor: 'white', display: 'flex', gap: '24px', borderRadius: '10px', margin: '0 24px 24px', maxHeight: '700px', height: '750px', overflowY: 'scroll' }}>
+        <Box sx={{ padding: '24px', backgroundColor: 'white', display: 'flex', gap: '24px', borderRadius: '10px', margin: '0 24px 24px', maxHeight: '700px', height: '750px', overflowY: 'auto' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                 {passwordList.map((pass) => (
                     <FormControl sx={{ gap: '4px' }} key={pass.id}>

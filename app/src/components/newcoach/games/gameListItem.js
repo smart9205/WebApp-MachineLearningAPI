@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, TextField, Divider, Popover } from '@mui/material';
 
 import SortIcon from '@mui/icons-material/SortOutlined';
@@ -23,7 +23,8 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
     const [teamId, setTeamId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [rowData, setRowData] = useState({
-        videoURL: ''
+        videoURL: '',
+        mobileURL: row.mobile_video_url
     });
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
@@ -40,7 +41,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
             away_team_id: row.away_team_time,
             date: row.date,
             video_url: rowData.videoURL,
-            mobile_video_url: row.mobile_video_url ? row.mobile_video_url : rowData.videoURL,
+            mobile_video_url: rowData.mobileURL,
             mute_video: row.mute_video
         }).then((res) => {
             updateList(true);
@@ -120,7 +121,8 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                 fontWeight: 500,
                 maxHeight: '200px',
                 width: '100%',
-                boxShadow: isHover ? '0px 4px 16px rgba(0, 0, 0, 0.1)' : 'none'
+                boxShadow: isHover ? '0px 4px 16px rgba(0, 0, 0, 0.1)' : 'none',
+                cursor: 'pointer'
             }}
         >
             <Box sx={{ display: 'flex', alignItems: 'center', flex: 15 }}>
@@ -175,7 +177,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickSportGate}>
                     <ExportIcon />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Export to Sportgate</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Export to Hudl</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '0 12px 12px 0', cursor: 'pointer' }} onClick={handleClickExcel}>
@@ -184,32 +186,51 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                 </Box>
             </Popover>
             {isPending && (
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', width: '350px', gap: '24px' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Video URL:</Typography>
-                        <TextField
-                            value={rowData.videoURL}
-                            label=""
-                            inputProps={{ 'aria-label': 'Without label' }}
-                            variant="outlined"
-                            placeholder="http://soccer.scouting4u.com"
-                            onChange={(e) => setRowData({ ...rowData, videoURL: e.target.value })}
-                            sx={{
-                                borderRadius: '10px',
-                                height: '32px',
-                                width: '300px',
-                                '& legend': { display: 'none' },
-                                '& fieldset': { top: 0 },
-                                '& .MuiOutlinedInput-input': { padding: '8px 16px' }
-                            }}
-                        />
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', width: '550px', gap: '24px' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Video URL:</Typography>
+                            <TextField
+                                value={rowData.videoURL}
+                                label=""
+                                inputProps={{ 'aria-label': 'Without label' }}
+                                variant="outlined"
+                                onChange={(e) => setRowData({ ...rowData, videoURL: e.target.value })}
+                                sx={{
+                                    borderRadius: '10px',
+                                    height: '32px',
+                                    width: '250px',
+                                    '& legend': { display: 'none' },
+                                    '& fieldset': { top: 0 },
+                                    '& .MuiOutlinedInput-input': { padding: '8px 16px' }
+                                }}
+                            />
+                        </Box>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Mobile Video URL:</Typography>
+                            <TextField
+                                value={rowData.mobileURL}
+                                label=""
+                                inputProps={{ 'aria-label': 'Without label' }}
+                                variant="outlined"
+                                onChange={(e) => setRowData({ ...rowData, mobileURL: e.target.value })}
+                                sx={{
+                                    borderRadius: '10px',
+                                    height: '32px',
+                                    width: '250px',
+                                    '& legend': { display: 'none' },
+                                    '& fieldset': { top: 0 },
+                                    '& .MuiOutlinedInput-input': { padding: '8px 16px' }
+                                }}
+                            />
+                        </Box>
                     </Box>
-                    <SaveButton disabled={rowData.videoURL.length === 0} onClick={saveChanges} sx={{ width: '300px', height: '32px', fontSize: '16px' }}>
+                    <SaveButton disabled={rowData.videoURL.length === 0 && rowData.mobileURL.length === 0} onClick={saveChanges} sx={{ width: '300px', height: '32px', fontSize: '16px' }}>
                         + Update
                     </SaveButton>
                 </Box>
             )}
-            <GameEditPage open={editOpen} onClose={handleCloseDialog} />
+            <GameEditPage open={editOpen} onClose={handleCloseDialog} game={row} />
             {exportGate && <XmlDataFiltering game={row} team={playerTagList} teamId={teamId} playerList={teamPlayerList} playersInGameList={gamePlayerList} setExportXML={setExportGate} />}
             {exportExcel && <ExcelDataFiltering team={playerTagList} setExcelData={setExportExcel} />}
         </Box>

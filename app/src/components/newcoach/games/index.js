@@ -169,28 +169,13 @@ const Games = () => {
         return values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' ? newList : array;
     };
 
-    const getDateFromGameDate = (date) => {
-        return new Date(date).getDate();
-    };
-
-    const getMonthFromGameDate = (date) => {
-        return new Date(date).getMonth() + 1;
-    };
-
     const getBelongedGameList = (oldList) => {
         const today = new Date();
-        const sunday = today.getDate() - today.getDay();
-        const saturday = today.getDate() + 6 - today.getDay();
-        const firstDate = new Date(today.getFullYear(), today.getMonth(), 1).getDate();
-        const lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
         let newList = [];
 
-        if (values.periodFilter === '1')
-            newList = oldList.filter((game) => getMonthFromGameDate(game.date) === today.getMonth() + 1 && getDateFromGameDate(game.date) >= sunday && getDateFromGameDate(game.date) <= saturday);
-        else if (values.periodFilter === '2')
-            newList = oldList.filter((game) => getMonthFromGameDate(game.date) === today.getMonth() + 1 && getDateFromGameDate(game.date) >= firstDate && getDateFromGameDate(game.date) <= lastDate);
+        if (values.periodFilter === '1') newList = oldList.filter((game) => new Date(game.date) >= new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000) && new Date(game.date) <= today);
+        else if (values.periodFilter === '2') newList = oldList.filter((game) => new Date(game.date) >= new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000) && new Date(game.date) <= today);
 
-        console.log('Games => ', lastDate);
         return values.periodFilter === '0' ? oldList : newList;
     };
 
@@ -208,8 +193,10 @@ const Games = () => {
         });
     }, [refreshPage]);
 
+    console.log('Games => ', refreshPage, values.gamesList);
+
     return (
-        <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
+        <Box sx={{ width: '98%', margin: '0 auto' }}>
             <Box sx={{ padding: '24px 24px 24px 48px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Games</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
@@ -306,8 +293,8 @@ const Games = () => {
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ overflowY: 'auto', maxHeight: '70vh', margin: '0 24px' }}>
-                <Box sx={{ marginRight: '16px' }}>
+            <Box sx={{ overflowY: 'auto', maxHeight: '70vh', marginLeft: '24px' }}>
+                <Box sx={{ marginRight: '4px' }}>
                     {getGamesList().map((game, index) => (
                         <Box key={index} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
                             <GameListItem row={game} isHover={values.hoverIndex === index} isPending={values.curTab === 1} updateList={setRefreshPage} team={values.teamFilter} />

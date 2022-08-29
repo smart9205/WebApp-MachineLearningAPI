@@ -66,14 +66,11 @@ const Players = () => {
     };
 
     const getPlayers = () => {
-        const players = searchText
+        return searchText
             ? playersList.filter((item) => compareStrings(item.team_name, searchText) || compareStrings(item.pos_name, searchText) || compareStrings(item.name, searchText))
             : teamFilter
             ? playersList.filter((item) => item.team_name === teamFilter.team_name)
             : playersList;
-
-        console.log('Players => ', players);
-        return players;
     };
 
     const getUniqueKey = (player) => {
@@ -95,7 +92,7 @@ const Players = () => {
     }, []);
 
     return (
-        <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
+        <Box sx={{ width: '98%', margin: '0 auto' }}>
             <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Players</Typography>
@@ -145,8 +142,8 @@ const Players = () => {
                     />
                 </Box>
             </Box>
-            <Box sx={{ overflowY: 'auto', maxHeight: '70vh', margin: '0 24px' }}>
-                <Box sx={{ marginRight: '16px' }}>
+            <Box sx={{ overflowY: 'auto', maxHeight: '70vh', marginLeft: '24px' }}>
+                <Box sx={{ marginRight: '4px' }}>
                     {getPlayers().map((player, index) => (
                         <Box key={getUniqueKey(player)} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
                             <PlayerListItem row={player} isHover={hoverIndex === index} />
