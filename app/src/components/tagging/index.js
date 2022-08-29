@@ -31,9 +31,7 @@ import Cross from './contents/Cross';
 import Foul from './contents/Foul';
 import Dribble from './contents/Dribble';
 import SelectMainPlayers from './contents/SelectMainPlayers';
-import moment from 'moment'
-import { compose } from '@mui/system';
-// import VIDEO from "../../assets/1.mp4"
+import Others from './contents/Others';
 const drawerWidth = "30%";
 
 const PLAYBACK_RATE = [
@@ -78,7 +76,6 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: '100%',
   display: 'flex',
-  // boxShadow: 24,
   justifyContent: 'center',
   p: 4,
 };
@@ -116,6 +113,7 @@ export default function Tagging() {
   const [temp_playerTag_list, setTempPlayerTagList] = React.useState([])
   const [play, setPlay] = React.useState(false)
   const [playRate, setPlayRate] = React.useState(3)
+  const [clicked, setClicked] = React.useState(false)
 
   const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
     url: "",
@@ -203,7 +201,6 @@ export default function Tagging() {
     GameTeamPlayer()
   }, [count, game_id])
 
-
   React.useEffect(() => {
     const timer = setTimeout(() => {
       GameTeamPlayer()
@@ -213,7 +210,6 @@ export default function Tagging() {
       setGamePlayerRefresh(false)
     }
   }, [gamePlayerRefresh])
-
 
   const updateTagList = () => setTagCnt(tagCnt + 1)
   const handleDrawerOpen = () => setOpen(!open)
@@ -276,6 +272,8 @@ export default function Tagging() {
   useHotkeys(TAGGING.dribble.hotkey, () => taggingButtonClicked(TAGGING.dribble.value), HOTKEY_OPTION);
   useHotkeys(TAGGING.foul.hotkey, () => taggingButtonClicked(TAGGING.foul.value));
   useHotkeys(TAGGING.cross.hotkey, () => taggingButtonClicked(TAGGING.cross.value), HOTKEY_OPTION);
+  useHotkeys("o", () => taggingButtonClicked("Others"), HOTKEY_OPTION);
+  useHotkeys("p", () => setClicked(true), HOTKEY_OPTION);
 
   useHotkeys('return', () => setPlay(v => !v), HOTKEY_OPTION);
   useHotkeys('n', () => setPlay(v => !v), HOTKEY_OPTION);
@@ -349,10 +347,9 @@ export default function Tagging() {
     const last = temp_playerTag_list.slice(-1)[0]
 
     if (ALL_ACTION_RESULTS.find(f => f.id === last?.action_result_id)?.end_possession) {
-      /* offensiveTeamClicked(state.offense === "home" ? "home" : "away") */
 
       if (temp_playerTag_list.find(t => ALL_ACTION_RESULTS.find(f => f.id === t?.action_result_id)?.change_possession)) {
-        /* offensiveTeamClicked(state.offense === "home" ? "home" : "away") */
+
         setTeamTag({ start_time: teamTag.start_time })
 
       }
@@ -366,6 +363,14 @@ export default function Tagging() {
     setModalOpen(false)
 
   }, [temp_playerTag_list])
+
+  React.useEffect(() => {
+    if (clicked) {
+      setCpclicked(true)
+      saveTags(true)
+      setClicked(false)
+    }
+  }, [clicked])
 
   const offensiveTeamClicked = (team) => {
     const st = toHHMMSS(`${player.current.getCurrentTime() ? player.current.getCurrentTime() : 0}`)
@@ -427,6 +432,15 @@ export default function Tagging() {
           }
           {modalContent === TAGGING.dribble.value &&
             <Dribble
+              offenseTeamId={offenseTeamId}
+              defenseTeamId={defenseTeamId}
+              offenseTeam={offenseTeam}
+              defenseTeam={defenseTeam}
+              taggingState={setTaggingState}
+            />
+          }
+          {modalContent === "Others" &&
+            <Others
               offenseTeamId={offenseTeamId}
               defenseTeamId={defenseTeamId}
               offenseTeam={offenseTeam}
@@ -595,13 +609,14 @@ export default function Tagging() {
                   </Box>
                 </Box>
 
-                <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 300 }}>
+                <Grid container spacing={0.5} sx={{ textAlign: 'center', mt: 1, mx: 2, maxWidth: 220 }}>
                   {Object.keys(TAGGING).map((key, i) => (
                     <Grid key={i} item xs={6} onClick={() => taggingButtonClicked(TAGGING[key].value)}>
-                      <TagButton style={{ textTransform: 'none' }}>{TAGGING[key].value} ({TAGGING[key].hotkey})</TagButton>
+                      <TagButton style={{ textTransform: 'none', fontSize: '10px' }}>{TAGGING[key].value} ({TAGGING[key].hotkey})</TagButton>
                     </Grid>
                   ))}
                 </Grid>
+                <TagButton onClick={(e) => taggingButtonClicked("Others")} style={{ textTransform: 'none', fontSize: '10px', writingMode: 'vertical-rl', maxWidth: 10, height: 125, marginTop: '12px' }}>Others (o)</TagButton>
 
                 <RadioGroup
                   sx={{ my: 0, mx: 2 }}

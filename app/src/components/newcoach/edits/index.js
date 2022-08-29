@@ -1,19 +1,17 @@
 import { Box, Typography } from '@mui/material';
 import React, { useEffect, useReducer, useState } from 'react';
 import gameService from '../../../services/game.service';
-import {
-    Button, Grid, Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    TextField,
-} from '@mui/material';
+import { Button, Grid } from '@mui/material';
+import { Paper, IconButton, Table, TableBody, TableRow, TableCell, TableContainer } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CreateEditDialog from './tabs/createEditDialog';
-import UserEditList from './tabs/userEditList';
 import EditNameDialog from "../../../common/EditNameDialolg";
 import DeleteConfirmDialog from "../../../common/DeleteConfirmDialog";
 import DragableTeamTagTable from './tabs/DragableTeamTagTable';
+import DragableIndividualTagTable from './tabs/DragableIndividualTagTable'
 import VideoPlayer from './tabs/UserEditVideoPlayer';
+import { createCommand, toSecond } from '../../../common/utilities';
 
 const Edits = () => {
 
@@ -32,11 +30,6 @@ const Edits = () => {
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTagIdx, setCurTagIdx] = useState(0)
     const [tagList, setTagList] = useState([])
-    const [parentID, setParentID] = useState(0)
-    const [userEditsFolders, setUserEditsFolders] = useState([])
-
-    const [createFolder, setCreateFolder] = useState(false)
-    const [name, setName] = useState("")
 
     const [videoData, setVideodata] = useState({
         idx: 0,
@@ -83,7 +76,6 @@ const Edits = () => {
     }
 
     const handleUserEditDetail = (edit) => {
-        setParentID(edit.id)
         if (!edit) return
         setCurEdit(edit)
         gameService.getEditClipsByUserEditId(edit?.id ?? -1).then(res => {
@@ -105,16 +97,6 @@ const Edits = () => {
 
     }
 
-    useEffect(() => {
-        gameService.getAllUserEditsFolders(parentID).then(res => {
-            setUserEditsFolders(res)
-        })
-    }, [parentID])
-
-    useEffect(() => {
-        console.log(userEditsFolders)
-    }, [userEditsFolders])
-
     useEffect(initUserEdits, [])
 
     const handleEditOpen = (flag) => {
@@ -122,14 +104,25 @@ const Edits = () => {
         if (!flag) initUserEdits()
     }
 
-    const handleSave = () => {
-        gameService.addUserEditsFolder({
-            name,
-            parentID,
-        }).then(res => {
-            console.log('res - ', res)
-        })
-    }
+    const handleRender = () => {
+        if (!tagList.length) return;
+
+        let newList = [];
+
+        tagList.forEach((tag, i) => {
+            let last = newList.at(-1);
+            if (last && toSecond(last?.end_time ?? 0) >= toSecond(tag.start_time) && toSecond(last?.start_time ?? 0) <= toSecond(tag.start_time)) {
+                last.end_time = last.end_time > tag.end_time ? last.end_time : tag.end_time;
+
+                if (last.action_name && !last.action_name?.includes(tag.action_name)) last.action_name += ` && ${tag.action_name}`;
+            } else {
+                newList.push({ ...tag });
+            }
+        });
+
+        createCommand(newList, curEdit.name);
+    };
+
 
     return (
         <>
@@ -152,29 +145,6 @@ const Edits = () => {
                 handleEditClose={handleEditClose}
             />
 
-            <Dialog
-                fullWidth
-                maxWidth={"sm"}
-                open={createFolder}
-                onClose={() => setCreateFolder(false)}
-            >
-                <DialogTitle>Name</DialogTitle>
-                <DialogContent>
-                    <Box sx={{ pt: 1 }}>
-                        <TextField
-                            fullWidth
-                            label='Name'
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setCreateFolder(false)}>Cancel</Button>
-                    <Button onClick={handleSave}>OK</Button>
-                </DialogActions>
-            </Dialog >
-
             <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
                 <Box sx={{ padding: '24px 24px 18px 18px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Edits</Typography>
@@ -184,22 +154,39 @@ const Edits = () => {
                             <Grid item xs={2}>
                                 <Button variant="outlined" style={{ marginBottom: '10px' }} onClick={() => handleEditOpen(true)}>Create Edits</Button>
 
-                                <Button variant="outlined" style={{ marginBottom: '10px' }} onClick={() => setCreateFolder(true)}>Create Folder</Button>
                                 <Box>
-                                    <UserEditList
-                                        editList={editList}
-                                        userEditsFolders={userEditsFolders}
-                                        tagList={tagList}
-                                        videoData={videoData}
-                                        onChangeClip={(idx) => setCurTagIdx(idx)}
-                                        drawOpen={showAccordion}
-                                        curEdit={curEdit}
-                                        handleUserEditDetail={handleUserEditDetail}
-                                        setEditOpen={setEditOpen}
-                                        setEditName={setEditName}
-                                        setDeleteOpen={setDeleteOpen}
-                                    />
+                                    <TableContainer component={Paper}>
+                                        <Table aria-label="simple table">
+                                            <TableBody>
+                                                {editList.map((userEdit, idx) => (
+                                                    <TableRow key={idx} hover selected={curEdit === userEdit} onClick={() => handleUserEditDetail(userEdit)}>
+                                                        <TableCell align="center">{userEdit.name}</TableCell>
+                                                        <TableCell align="center" sx={{ width: 30 }}>
+                                                            <IconButton
+                                                                onClick={() => {
+                                                                    setEditOpen(true);
+                                                                    setEditName(userEdit.name);
+                                                                }}
+                                                                size="small"
+                                                            >
+                                                                <EditIcon />
+                                                            </IconButton>
+                                                        </TableCell>
+                                                        <TableCell align="center" sx={{ width: 30 }}>
+                                                            <IconButton onClick={() => setDeleteOpen(true)} size="small">
+                                                                <DeleteIcon />
+                                                            </IconButton>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                    <Button variant="contained" style={{ margin: '1rem 0.5rem' }} onClick={handleRender}>
+                                        Render
+                                    </Button>
                                 </Box>
+
                             </Grid>
                             <Grid item xs={4}>
                                 {tagList.length === 0 && <p style={{ textAlign: 'center' }}>NoTags</p>}
@@ -215,6 +202,18 @@ const Edits = () => {
                                         initUserEdits={initUserEdits}
                                     />
                                 }
+                                {tagList.filter((t) => t.player_tag_id !== null).length > 0 && (
+                                    <DragableIndividualTagTable
+                                        sx={{ height: '100%', p: 1, width: '100%' }}
+                                        rows={tagList}
+                                        selected={curTagIdx}
+                                        handleSort={handleSort}
+                                        onDelete={(id) => handleDeleteEditClips(id)}
+                                        handleRowClick={({ row, idx }) => handleVideoData('playerTag', false, idx)}
+                                        onPlay={({ row, idx }) => handleVideoData('playerTag', true, idx)}
+                                        initUserEdits={initUserEdits}
+                                    />
+                                )}
                             </Grid>
                             <Grid item xs={6}>
                                 <VideoPlayer
