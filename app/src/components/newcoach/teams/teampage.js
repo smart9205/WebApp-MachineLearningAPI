@@ -36,74 +36,76 @@ const TeamPage = () => {
     }, [params.teamId, params.seasonId]);
 
     return (
-        <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
+        <Box sx={{ width: '98%', margin: '0 auto' }}>
             <Box sx={{ width: '100%', padding: '24px', display: 'flex', alignItems: 'center', gap: '24px', 'svg path': { fill: 'black' } }}>
                 <Link to="/new_coach/teams">
                     <ChevronLeftIcon sx={{ width: '32px', height: '32px' }} />
                 </Link>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>{values.teamName}</Typography>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '34px', fontWeight: 700, color: '#1a1b1d' }}>{values.teamName}</Typography>
             </Box>
             {values.loadingDone && (
                 <Box sx={{ maxHeight: '85vh', width: '80vh', backgroundColor: 'white', width: '100%', padding: '24px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
                         {Tabs.map((tab, index) => (
                             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px', width: 'fit-content', cursor: 'pointer' }} onClick={() => handleClickTab(index)}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{tab}</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d' }}>{tab}</Typography>
                                 <Box sx={{ height: '2px', width: '100%', backgroundColor: values.tabSelected === index ? 'red' : 'white' }} />
                             </Box>
                         ))}
                     </Box>
-                    <Box sx={{ maxHeight: 'calc(85vh - 60px)', overflowY: 'auto' }}>
-                        <Box sx={{ marginRight: '16px' }}>
-                            <TableContainer>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell width="55%" align="center" colSpan={2}>
-                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Name</Typography>
-                                            </TableCell>
-                                            <TableCell width="15%" align="center">
-                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Age</Typography>
-                                            </TableCell>
-                                            <TableCell width="15%" align="center">
-                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Position</Typography>
-                                            </TableCell>
-                                            <TableCell width="15%" align="center">
-                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Games</Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {values.players &&
-                                            values.players.map((player) => (
-                                                <TableRow height="70px">
-                                                    <TableCell width="5%" align="center">
-                                                        <img style={{ height: '48px' }} alt="Player Logo" src={player.image.length > 0 ? player.image : PLAYER_ICON_DEFAULT} />
-                                                    </TableCell>
-                                                    <TableCell width="50%">
-                                                        <Box sx={{ paddingLeft: '16px' }}>
-                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{player.name}</Typography>
-                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#a5a5a8' }}>
-                                                                #{player.jersey_number}
-                                                            </Typography>
-                                                        </Box>
-                                                    </TableCell>
-                                                    <TableCell width="15%" align="center">
-                                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>-</Typography>
-                                                    </TableCell>
-                                                    <TableCell width="15%" align="center">
-                                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{player.pos_name}</Typography>
-                                                    </TableCell>
-                                                    <TableCell width="15%" align="center">
-                                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>-</Typography>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                    {values.tabSelected === 0 && (
+                        <Box sx={{ maxHeight: 'calc(85vh - 60px)', overflowY: 'auto' }}>
+                            <Box sx={{ marginRight: '16px' }}>
+                                <TableContainer>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell width="55%" align="center" colSpan={2}>
+                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Name</Typography>
+                                                </TableCell>
+                                                <TableCell width="15%" align="center">
+                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Age</Typography>
+                                                </TableCell>
+                                                <TableCell width="15%" align="center">
+                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Position</Typography>
+                                                </TableCell>
+                                                <TableCell width="15%" align="center">
+                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Games</Typography>
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {values.players &&
+                                                values.players.map((player) => (
+                                                    <TableRow height="70px">
+                                                        <TableCell width="5%" align="center">
+                                                            <img style={{ height: '48px' }} alt="Player Logo" src={player.image.length > 0 ? player.image : PLAYER_ICON_DEFAULT} />
+                                                        </TableCell>
+                                                        <TableCell width="50%">
+                                                            <Box sx={{ paddingLeft: '16px' }}>
+                                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{player.name}</Typography>
+                                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#a5a5a8' }}>
+                                                                    #{player.jersey_number}
+                                                                </Typography>
+                                                            </Box>
+                                                        </TableCell>
+                                                        <TableCell width="15%" align="center">
+                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>-</Typography>
+                                                        </TableCell>
+                                                        <TableCell width="15%" align="center">
+                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{player.pos_name}</Typography>
+                                                        </TableCell>
+                                                        <TableCell width="15%" align="center">
+                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>-</Typography>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Box>
                         </Box>
-                    </Box>
+                    )}
                 </Box>
             )}
             {values.loading && <LoadingProgress />}

@@ -83,7 +83,7 @@ const Teams = () => {
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Teams</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '34px', fontWeight: 700, color: '#1a1b1d' }}>Teams</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', justifyContent: 'flex-end', width: '100%', height: '80px' }}>
                     <Box sx={{ width: '300px' }}>

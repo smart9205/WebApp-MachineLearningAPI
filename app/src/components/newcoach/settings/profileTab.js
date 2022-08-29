@@ -108,7 +108,7 @@ const PrfileTab = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                 {profileList.map((item) => (
                     <FormControl sx={{ gap: '4px' }} key={item.id}>
-                        <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>{item.title}</Typography>
+                        <Typography sx={{ fontSize: '16px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>{item.title}</Typography>
                         <TextField
                             value={values[item.id]}
                             label=""
@@ -126,7 +126,7 @@ const PrfileTab = () => {
                     <SaveButton
                         disabled={!(values.firstName.length > 0 && values.lastName.length > 0 && values.email.length > 0 && values.phone.length > 0 && values.country.length > 0)}
                         onClick={saveChanges}
-                        sx={{ width: '200px', fontSize: '16px' }}
+                        sx={{ width: '200px', fontSize: '18px' }}
                     >
                         Save changes
                     </SaveButton>

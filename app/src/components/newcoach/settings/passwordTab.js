@@ -70,7 +70,7 @@ const PasswordTab = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                 {passwordList.map((pass) => (
                     <FormControl sx={{ gap: '4px' }} key={pass.id}>
-                        <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 600 }}>{pass.title}</Typography>
+                        <Typography sx={{ fontSize: '16px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 600 }}>{pass.title}</Typography>
                         <TextField
                             type={values[pass.show] ? 'text' : 'password'}
                             value={values[pass.id]}
@@ -103,7 +103,7 @@ const PasswordTab = () => {
                     <SaveButton
                         disabled={!(values.oldPassword.length > 0 && values.newPassword.length > 0 && values.confirmPassword.length > 0)}
                         onClick={saveChanges}
-                        sx={{ width: '200px', fontSize: '16px' }}
+                        sx={{ width: '200px', fontSize: '18px' }}
                     >
                         Update Password
                     </SaveButton>

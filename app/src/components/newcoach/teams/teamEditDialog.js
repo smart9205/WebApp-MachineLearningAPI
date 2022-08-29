@@ -78,16 +78,16 @@ const TeamEditDialog = ({ open, onClose, team }) => {
         <Dialog open={open} onClose={onClose} maxWidth="1500px" maxheight="initial">
             <DialogTitle>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px', cursor: 'pointer' }} onClick={onClose}>
-                    <CloseIcon sx={{ width: '14px', height: '14px' }} />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>Close</Typography>
+                    <CloseIcon sx={{ width: '18px', height: '18px' }} />
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>Close</Typography>
                 </Box>
             </DialogTitle>
             <DialogContent style={{ display: 'flex', margin: '0 30px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '32px', paddingBottom: '42px' }}>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Edit Team</Typography>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Edit Team</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '64px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '48px' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '8px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 700, color: '#1a1b1d' }}>Team Logo</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '22px', fontWeight: 700, color: '#1a1b1d' }}>Team Logo</Typography>
                             <UploadButton
                                 class_name="upload-team-view"
                                 id_name="team-logo"
@@ -98,7 +98,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                             />
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '8px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 700, color: '#1a1b1d' }}>Sponsor Logo</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '22px', fontWeight: 700, color: '#1a1b1d' }}>Sponsor Logo</Typography>
                             <UploadButton
                                 class_name="upload-sponsor-view"
                                 id_name="sponsor-logo"
@@ -112,7 +112,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '80px', padding: '80px 0 48px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '32px', marginBottom: '32px' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Team Color</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Team Color</Typography>
                                 <ColorPicker
                                     defaultValue="transparent"
                                     value={values.team_color}
@@ -121,7 +121,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                                 />
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Second Color</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Second Color</Typography>
                                 <ColorPicker
                                     defaultValue="transparent"
                                     value={values.second_color}
@@ -131,7 +131,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                             </Box>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Sponsor URL</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Sponsor URL</Typography>
                             <TextField
                                 value={values.sponsor_url}
                                 onChange={handleChange('sponsor_url')}
@@ -152,7 +152,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Team Language</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Team Language</Typography>
                             <Select
                                 value={values.team_language}
                                 onChange={handleChange('team_language')}
@@ -194,7 +194,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                         />
                     </Box>
                 </Box>
-                <SaveButton onClick={saveChanges} sx={{ width: '300px', fontSize: '16px' }}>
+                <SaveButton onClick={saveChanges} sx={{ width: '300px', fontSize: '18px' }}>
                     Save changes
                 </SaveButton>
                 {loading && <LoadingProgress />}

@@ -86,10 +86,10 @@ const SaveButton = styled(Button)(({ theme }) => ({
     fontFamily: "'DM Sans', sans-serif",
     fontWeight: 600,
     fontSize: '14px',
-    backgroundColor: '#fe5e00',
+    backgroundColor: '#0A7304',
     color: 'white',
     '&:disabled': { backgroundColor: '#e8e8e8' },
-    '&:hover': { backgroundColor: 'orange' }
+    '&:hover': { backgroundColor: '#C5EAC6' }
 }));
 
 const LoadingProgress = () => {

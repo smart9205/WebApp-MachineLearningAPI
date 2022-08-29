@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, TextField, Divider, Popover } from '@mui/material';
 
 import SortIcon from '@mui/icons-material/SortOutlined';
@@ -14,6 +15,7 @@ import ExcelDataFiltering from '../../coach/ExcelDataFiltering';
 import XmlDataFiltering from '../../coach/XmlDataFiltering';
 
 const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => {
+    const navigate = useNavigate();
     const [editOpen, setEditOpen] = useState(false);
     const [exportExcel, setExportExcel] = useState(false);
     const [exportGate, setExportGate] = useState(false);
@@ -24,7 +26,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
     const [loading, setLoading] = useState(false);
     const [rowData, setRowData] = useState({
         videoURL: '',
-        mobileURL: row.mobile_video_url
+        mobileURL: ''
     });
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
@@ -106,6 +108,10 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
         setLoading(false);
     };
 
+    const handleChangePath = (gameId) => () => {
+        navigate(`/new_coach/games/${gameId}`);
+    };
+
     return (
         <Box
             sx={{
@@ -125,23 +131,23 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                 cursor: 'pointer'
             }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center', flex: 15 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flex: 15 }} onClick={handleChangePath(row.id)}>
                 <img style={{ height: '100px', width: '160px', borderRadius: '12px' }} src={row.image ? row.image : GameImage} alt="Game Logo" />
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 8, padding: '0 32px' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{getFormattedDate(row.date)}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{row.league_name}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{row.season_name}</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', width: '500px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{getFormattedDate(row.date)}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{row.league_name}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d', flex: 1, textAlign: 'center' }}>{row.season_name}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <img src={row.home_team_image ? row.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_goals}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_name}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_goals}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_name}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <img src={row.away_team_image ? row.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_goals}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_name}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_goals}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_name}</Typography>
                     </Box>
                 </Box>
             </Box>
@@ -154,7 +160,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                         cursor: loading ? 'wait' : 'pointer',
                         width: '48px',
                         'svg path': { fill: '#A5A5A8' },
-                        '&:hover': { 'svg path': { fill: '#1a1b1d' } }
+                        '&:hover': { 'svg path': { fill: '#0A7304' } }
                     }}
                     onClick={handleShowPopover}
                 >
@@ -172,24 +178,24 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
             >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '12px 0 0 12px', cursor: 'pointer' }} onClick={handleClickEdit}>
                     <EditIcon />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Edit Game</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 500, color: '#1a1b1d' }}>Edit Game</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickSportGate}>
                     <ExportIcon />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Export to Hudl</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 500, color: '#1a1b1d' }}>Export to Hudl</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '0 12px 12px 0', cursor: 'pointer' }} onClick={handleClickExcel}>
                     <ExportIcon />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Export to Excel</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 500, color: '#1a1b1d' }}>Export to Excel</Typography>
                 </Box>
             </Popover>
             {isPending && (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', width: '550px', gap: '24px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Video URL:</Typography>
+                            <Typography sx={{ fontSize: '16px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Video URL:</Typography>
                             <TextField
                                 value={rowData.videoURL}
                                 label=""
@@ -207,7 +213,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                             />
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <Typography sx={{ fontSize: '14px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Mobile Video URL:</Typography>
+                            <Typography sx={{ fontSize: '16px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Mobile Video URL:</Typography>
                             <TextField
                                 value={rowData.mobileURL}
                                 label=""
@@ -225,7 +231,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                             />
                         </Box>
                     </Box>
-                    <SaveButton disabled={rowData.videoURL.length === 0 && rowData.mobileURL.length === 0} onClick={saveChanges} sx={{ width: '300px', height: '32px', fontSize: '16px' }}>
+                    <SaveButton disabled={rowData.videoURL.length === 0 && rowData.mobileURL.length === 0} onClick={saveChanges} sx={{ width: '300px', height: '32px', fontSize: '18px' }}>
                         + Update
                     </SaveButton>
                 </Box>
