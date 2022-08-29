@@ -85,7 +85,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                 </Box>
             </DialogTitle>
             <DialogContent style={{ display: 'flex', margin: '0 30px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '32px', paddingBottom: '42px' }}>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Edit Player</Typography>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '28px', fontWeight: 700, color: '#1a1b1d' }}>Edit Player</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '64px' }}>
                     <UploadButton
                         class_name="upload-player-view"
@@ -98,7 +98,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>First Name</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>First Name</Typography>
                                 <TextField
                                     value={values.f_name}
                                     onChange={handleChange('f_name')}
@@ -110,7 +110,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                                 />
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Last Name</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Last Name</Typography>
                                 <TextField
                                     value={values.l_name}
                                     onChange={handleChange('l_name')}
@@ -124,7 +124,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Birthday</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Birthday</Typography>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DatePicker
                                         label=""
@@ -139,7 +139,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                                 </LocalizationProvider>
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Jersey Number</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Jersey Number</Typography>
                                 <TextField
                                     value={values.jersey_number}
                                     onChange={handleChange('jersey_number')}
@@ -153,7 +153,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                             </Box>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Position</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Position</Typography>
                             <Select
                                 value={values.position}
                                 onChange={handleChange('position')}
@@ -173,7 +173,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                         </Box>
                     </Box>
                 </Box>
-                <SaveButton onClick={saveChanges} sx={{ width: '300px', fontSize: '18px' }}>
+                <SaveButton onClick={saveChanges} sx={{ width: '300px', fontSize: '14px' }}>
                     Save changes
                 </SaveButton>
                 {loading && <LoadingProgress />}

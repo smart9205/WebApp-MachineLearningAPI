@@ -16,6 +16,7 @@ const GameEditPage = ({ open, onClose, game, updateGameList }) => {
     });
 
     const saveChanges = () => {
+        onClose();
         setValues({ ...values, loading: true });
         GameService.updateGame({
             id: game.id,
@@ -51,7 +52,7 @@ const GameEditPage = ({ open, onClose, game, updateGameList }) => {
                 </Box>
             </DialogTitle>
             <DialogContent style={{ display: 'flex', margin: '0 200px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '32px', paddingBottom: '42px' }}>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Edit Game</Typography>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '28px', fontWeight: 700, color: '#1a1b1d' }}>Edit Game</Typography>
                 <UploadButton
                     class_name="upload-game-view"
                     id_name="game-logo"
@@ -65,7 +66,7 @@ const GameEditPage = ({ open, onClose, game, updateGameList }) => {
                     control={<Switch checked={values.mute} onChange={() => setValues({ ...values, mute: !values.mute })} inputProps={{ 'aria-label': 'controlled' }} />}
                     label="Mute Video"
                 />
-                <SaveButton disabled={values.image === game.image && values.mute === game.mute_video} onClick={saveChanges} sx={{ width: '300px', fontSize: '18px' }}>
+                <SaveButton disabled={values.image === game.image && values.mute === game.mute_video} onClick={saveChanges} sx={{ width: '300px', fontSize: '14px' }}>
                     Save changes
                 </SaveButton>
                 {values.loading && <LoadingProgress />}

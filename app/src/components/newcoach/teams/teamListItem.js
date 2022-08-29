@@ -44,19 +44,19 @@ const TeamListItem = ({ row, isHover }) => {
                     <img style={{ height: '48px' }} src={row.team_image ? row.team_image : TEAM_ICON_DEFAULT} alt="Team Logo" />
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', flex: 3, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d' }}>{row.team_name}</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.team_name}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', flex: 4, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d' }}>{row.league_name}</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.league_name}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', flex: 7, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d' }}>{row.season_name}</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.season_name}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', 'svg path': { fill: '#FE5E00' }, marginLeft: '8px', flex: 1.5 }}>
                     <PlayersIcon />
                     <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#a5a5a8' }}>Players</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{row.player_count}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#a5a5a8' }}>Players</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>{row.player_count}</Typography>
                     </Box>
                 </Box>
             </Box>

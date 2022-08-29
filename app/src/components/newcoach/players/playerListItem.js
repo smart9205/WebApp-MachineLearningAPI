@@ -37,14 +37,14 @@ const PlayerListItem = ({ row, isHover }) => {
                     <img style={{ height: '48px' }} src={row.image ? row.image : PLAYER_ICON_DEFAULT} alt="Player Logo" />
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 3, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d' }}>{row.name}</Typography>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d' }}>#{row.jersey_number}</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.name}</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>#{row.jersey_number}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', flex: 4, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d' }}>{row.team_name}</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.team_name}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', flex: 7, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d' }}>{row.pos_name}</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.pos_name}</Typography>
                 </Box>
             </Box>
             <Box

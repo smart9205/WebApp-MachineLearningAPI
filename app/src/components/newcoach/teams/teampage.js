@@ -41,15 +41,15 @@ const TeamPage = () => {
                 <Link to="/new_coach/teams">
                     <ChevronLeftIcon sx={{ width: '32px', height: '32px' }} />
                 </Link>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '34px', fontWeight: 700, color: '#1a1b1d' }}>{values.teamName}</Typography>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>{values.teamName}</Typography>
             </Box>
             {values.loadingDone && (
                 <Box sx={{ maxHeight: '85vh', width: '80vh', backgroundColor: 'white', width: '100%', padding: '24px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
                         {Tabs.map((tab, index) => (
                             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px', width: 'fit-content', cursor: 'pointer' }} onClick={() => handleClickTab(index)}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 600, color: '#1a1b1d' }}>{tab}</Typography>
-                                <Box sx={{ height: '2px', width: '100%', backgroundColor: values.tabSelected === index ? 'red' : 'white' }} />
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{tab}</Typography>
+                                <Box sx={{ height: '2px', width: '100%', backgroundColor: values.tabSelected === index ? '#0A7304' : 'white' }} />
                             </Box>
                         ))}
                     </Box>
@@ -61,16 +61,16 @@ const TeamPage = () => {
                                         <TableHead>
                                             <TableRow>
                                                 <TableCell width="55%" align="center" colSpan={2}>
-                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Name</Typography>
+                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Name</Typography>
                                                 </TableCell>
                                                 <TableCell width="15%" align="center">
-                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Age</Typography>
+                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Age</Typography>
                                                 </TableCell>
                                                 <TableCell width="15%" align="center">
-                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Position</Typography>
+                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Position</Typography>
                                                 </TableCell>
                                                 <TableCell width="15%" align="center">
-                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Games</Typography>
+                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Games</Typography>
                                                 </TableCell>
                                             </TableRow>
                                         </TableHead>
@@ -83,20 +83,20 @@ const TeamPage = () => {
                                                         </TableCell>
                                                         <TableCell width="50%">
                                                             <Box sx={{ paddingLeft: '16px' }}>
-                                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{player.name}</Typography>
-                                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#a5a5a8' }}>
+                                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>{player.name}</Typography>
+                                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#a5a5a8' }}>
                                                                     #{player.jersey_number}
                                                                 </Typography>
                                                             </Box>
                                                         </TableCell>
                                                         <TableCell width="15%" align="center">
-                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>-</Typography>
+                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>-</Typography>
                                                         </TableCell>
                                                         <TableCell width="15%" align="center">
-                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{player.pos_name}</Typography>
+                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{player.pos_name}</Typography>
                                                         </TableCell>
                                                         <TableCell width="15%" align="center">
-                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>-</Typography>
+                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>-</Typography>
                                                         </TableCell>
                                                     </TableRow>
                                                 ))}
