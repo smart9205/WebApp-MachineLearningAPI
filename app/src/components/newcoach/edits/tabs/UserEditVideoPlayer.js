@@ -41,6 +41,7 @@ const styles = {
         color: "white", backgroundColor: "#80808069"
     }
 }
+
 export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen = true }) {
     const handle = useFullScreenHandle();
     const { autoPlay, idx, videoPlay, cnt = null } = videoData

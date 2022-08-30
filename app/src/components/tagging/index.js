@@ -522,14 +522,14 @@ export default function Tagging() {
                 playbackRate={PLAYBACK_RATE[playRate].rate}
                 controls={true}
                 width='100%'
-                height='100%'
+                height='97%'
               />
             </div>
           </div>
           {
             open &&
             <>
-              <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
+              <Box sx={{ flexGrow: 1, textAlign: 'center', marginTop: '-10px' }}>
                 <IconButton sx={{ my: 1 }}
                   onClick={() => {
                     setCount(count + 1)
@@ -585,7 +585,7 @@ export default function Tagging() {
                     >Select Players</Button>
                   </div>
                 </Box>
-                <Box sx={{ textAlign: "center", mt: 2 }}>
+                <Box sx={{ textAlign: "center", mt: 1 }}>
                   {["home", "away"].map(t =>
                     <ControlButton
                       key={t}
