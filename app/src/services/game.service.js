@@ -57,6 +57,30 @@ const getAllGamesByCoach = (seasonId, leagueId, teamId, datesBack) => {
     });
 };
 
+const getCleanGame = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getcleangame/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamGoals = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteamgoals/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getOpponentGoals = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponentgoals/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getGameById = (gameId) => {
+    return axios.get(API_URL + `game/getgamebyid/${gameId}`, { headers: authHeader(), data: { gameId } }).then((response) => {
+        return response.data;
+    });
+};
+
 const getAllMyCoachTeam = () => {
     return axios.get(API_URL + 'coach_team/mine', { headers: authHeader() }).then((response) => {
         return response.data;
@@ -316,20 +340,8 @@ const addUserEdits = (req) => {
     });
 };
 
-const addUserEditsFolder = (req) => {
-    return axios.post(API_URL + 'user_edits_folders', req, { headers: authHeader() }).then((response) => {
-        return response.data;
-    });
-};
-
 const getAllUserEdits = () => {
     return axios.get(API_URL + 'user_edits', { headers: authHeader() }).then((response) => {
-        return response.data;
-    });
-};
-
-const getAllUserEditsFolders = (id) => {
-    return axios.get(API_URL + `user_edits_folders/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
         return response.data;
     });
 };
@@ -462,11 +474,9 @@ const gameService = {
     addHighlight,
 
     addUserEdits,
-    addUserEditsFolder,
 
     getGame,
     getAllUserEdits,
-    getAllUserEditsFolders,
     getEditClipsByUserEditId,
     getTeamById,
     getSeasonById,
@@ -492,6 +502,10 @@ const gameService = {
     getAllCoach,
     getAllCoachTeam,
     getAllGamesByCoach,
+    getGameById,
+    getCleanGame,
+    getTeamGoals,
+    getOpponentGoals,
     getAllMyCoachTeam,
     getMyCoachTeamList,
     getMyCoachPlayerList,

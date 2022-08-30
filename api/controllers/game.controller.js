@@ -69,13 +69,13 @@ exports.getbyTeam = (req, res) => {
 exports.getbyCoach = (req, res) => {
   
   Sequelize.query(`
-SELECT * from public.fnc_get_games(
-	${req.params.seasonId}, 
-	${req.params.leagueId}, 
-	${req.params.teamId}, 
-	${req.userId}, 
-	${req.params.datesBack}
-)
+    SELECT * from public.fnc_get_games(
+      ${req.params.seasonId}, 
+      ${req.params.leagueId}, 
+      ${req.params.teamId}, 
+      ${req.userId}, 
+      ${req.params.datesBack}
+    )
   `)
     .then(data => {
       res.send(data[0]);
@@ -88,6 +88,59 @@ SELECT * from public.fnc_get_games(
     });
 };
 
+exports.getCleanGame = (req, res) => {  
+  Sequelize.query(`
+    SELECT * from public.fnc_get_clean_game(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+};
+
+exports.getTeamGoals = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_goals(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getOpponentGoals = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_goals(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
 
 exports.deleteGames = (req, res) => {
   Sequelize.query(`
@@ -145,6 +198,35 @@ exports.findOne = (req, res) => {
     JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id
     JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
     where public."Games".id = ${id}
+  `)
+    .then(data => {
+      res.send(data[0][0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+
+};
+
+exports.getGameById = (req, res) => {
+  Sequelize.query(`
+    SELECT 
+      public."Games".*,
+      public."Seasons".name as season_name,
+      public."Leagues".name as league_name,
+      HomeTeam.name as home_team_name,
+      HomeTeam.image as home_team_image,
+      AwayTeam.name as away_team_name,
+      AwayTeam.image as away_team_image
+    FROM public."Games" 
+    JOIN public."Seasons" on public."Games".season_id = public."Seasons".id
+    JOIN public."Leagues" on public."Games".league_id = public."Leagues".id
+    JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id
+    JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
+    where public."Games".id = ${req.params.gameId}
   `)
     .then(data => {
       res.send(data[0][0]);

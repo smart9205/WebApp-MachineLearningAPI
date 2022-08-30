@@ -73,4 +73,28 @@ module.exports = app => {
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getbyCoach
 	);
+
+	app.get(
+		"/game/getgamebyid/:gameId",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getGameById
+	);
+
+	app.get(
+		"/game/getcleangame/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getCleanGame
+	);
+
+	app.get(
+		"/game/getteamgoals/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamGoals
+	);
+
+	app.get(
+		"/game/getopponentgoals/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentGoals
+	);
 };
