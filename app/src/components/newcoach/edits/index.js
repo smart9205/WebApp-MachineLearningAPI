@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import React, { useEffect, useReducer, useState } from 'react';
 import gameService from '../../../services/game.service';
 import { Button, Grid } from '@mui/material';
-import { Paper, IconButton, Table, TableBody, TableRow, TableCell, TableContainer } from '@mui/material';
+import { Paper, IconButton, Table, TableBody, TableRow, TableCell, TableContainer, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateEditDialog from './tabs/createEditDialog';
@@ -30,6 +30,11 @@ const Edits = () => {
     const [showAccordion, setShowAccordion] = useState(true)
     const [curTagIdx, setCurTagIdx] = useState(0)
     const [tagList, setTagList] = useState([])
+
+    const [parentId, setParentId] = useState(0)
+    const [folder, setFolder] = useState([])
+    const [name, setName] = useState("")
+    const [nameOpen, setNameOpen] = useState(false)
 
     const [videoData, setVideodata] = useState({
         idx: 0,
@@ -76,6 +81,7 @@ const Edits = () => {
     }
 
     const handleUserEditDetail = (edit) => {
+        setParentId(edit?.id)
         if (!edit) return
         setCurEdit(edit)
         gameService.getEditClipsByUserEditId(edit?.id ?? -1).then(res => {
@@ -123,6 +129,25 @@ const Edits = () => {
         createCommand(newList, curEdit.name);
     };
 
+    useEffect(() => {
+        const gettingFolder = async () => {
+            await gameService.getAllUserEditsFolders(parentId).then(res => {
+                setFolder(res)
+                console.log('Folder -> ', res)
+            }).catch(e => console.log(e))
+        }
+        gettingFolder()
+    }, [parentId])
+
+    const handleCreateFolder = () => {
+        gameService.addUserEditsFolder({ name, parentId }).then(res => {
+            console.log('Response -> ', res)
+        }).catch(e => console.log(e))
+    }
+
+    useEffect(() => {
+        console.log(folder)
+    }, [folder])
 
     return (
         <>
@@ -145,6 +170,29 @@ const Edits = () => {
                 handleEditClose={handleEditClose}
             />
 
+            <Dialog
+                fullWidth
+                maxWidth={"sm"}
+                open={nameOpen}
+                onClose={() => setNameOpen(false)}
+            >
+                <DialogTitle>Name</DialogTitle>
+                <DialogContent>
+                    <Box sx={{ pt: 1 }}>
+                        <TextField
+                            fullWidth
+                            label='Name'
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setNameOpen(false)}>Cancel</Button>
+                    <Button onClick={handleCreateFolder}>OK</Button>
+                </DialogActions>
+            </Dialog >
+
             <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
                 <Box sx={{ padding: '24px 24px 18px 18px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Edits</Typography>
@@ -153,6 +201,8 @@ const Edits = () => {
                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                             <Grid item xs={2}>
                                 <Button variant="outlined" style={{ marginBottom: '10px' }} onClick={() => handleEditOpen(true)}>Create Edits</Button>
+
+                                <Button variant="outlined" style={{ marginBottom: '10px' }} onClick={() => setNameOpen(true)}>Create Folder</Button>
 
                                 <Box>
                                     <TableContainer component={Paper}>

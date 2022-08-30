@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook'
+import hotkeys from 'hotkeys-js';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
@@ -238,7 +239,7 @@ export default function Tagging() {
   }
 
   const changePlayRate = (flag) => {
-    let newRate = flag ? (playRate + 1) : (playRate - 1);
+    let newRate = flag ? (playRate + 1) : (playRate - 1)
     if (newRate < 0) newRate = 0;
     if (newRate > PLAYBACK_RATE.length - 1) newRate = PLAYBACK_RATE.length - 1;
     setPlayRate(newRate)
@@ -254,12 +255,30 @@ export default function Tagging() {
     })
   }, [offenseTeamId, defenseTeamId, state.start_time, game_id])
 
-  useHotkeys('left', () => seekTo(-3), HOTKEY_OPTION);
-  useHotkeys('b', () => seekTo(-5), HOTKEY_OPTION);
-  useHotkeys('shift+left', () => seekTo(10), HOTKEY_OPTION);
-  useHotkeys('right', () => seekTo(3), HOTKEY_OPTION);
-  useHotkeys('m', () => seekTo(5), HOTKEY_OPTION);
-  useHotkeys('shift+right', () => seekTo(10), HOTKEY_OPTION);
+  let i = 0
+  document.addEventListener('keydown', function (event) {
+    if (i <= 1) {
+      if (event.key === 'm') {
+        changePlayRate(true)
+        i++
+      }
+      if (event.key === 'b') {
+        changePlayRate(false)
+        i++
+      }
+    }
+    return
+  })
+
+  useHotkeys('h', () => seekTo(-1), HOTKEY_OPTION);
+  useHotkeys('g', () => seekTo(-3), HOTKEY_OPTION);
+  useHotkeys('shift+g', () => seekTo(-5), HOTKEY_OPTION);
+  useHotkeys('alt+g', () => seekTo(-10), HOTKEY_OPTION);
+
+  useHotkeys('j', () => seekTo(1), HOTKEY_OPTION);
+  useHotkeys('k', () => seekTo(3), HOTKEY_OPTION);
+  useHotkeys('shift+k', () => seekTo(5), HOTKEY_OPTION);
+  useHotkeys('alt+k', () => seekTo(10), HOTKEY_OPTION);
 
   useHotkeys('esc', () => setModalOpen(false), HOTKEY_OPTION);
 
