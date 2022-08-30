@@ -8,12 +8,12 @@ import PlayerSelector from './basic/PlayerSelector';
 import AreaCourtMenu from './AreaCourtMenu';
 
 const SubBox = styled(Box)`
-  margin: 6px;
-  & nav {
-    padding: 6px;
-    border-radius: 6px;
-  }
-  `;
+    margin: 6px;
+    & nav {
+        padding: 6px;
+        border-radius: 6px;
+    }
+    `;
 
 export default function Others({ defenseTeam, offenseTeam, taggingState, offenseTeamId, defenseTeamId }) {
 
@@ -31,9 +31,9 @@ export default function Others({ defenseTeam, offenseTeam, taggingState, offense
                         { id: 10, name: "Red Card" },
                         { id: 9, name: "Yellow Card" },
                         { id: 7, name: "Clearance" },
-                        { id: 11, name: "Offensive Foul" },
-                        { id: 14, name: "Hand-ball" },
-                        { id: 15, name: "Own Goal" },
+                        { id: 8, name: "Offensive Foul" },
+                        { id: 13, name: "Hand-Ball" },
+                        { id: 16, name: "Own Goal" },
                     ].map((r, i) => (
                         <ListItemButton key={r.id}
                             selected={actionTypeId === r.id}
@@ -45,7 +45,90 @@ export default function Others({ defenseTeam, offenseTeam, taggingState, offense
                 </List>
             </SubBox>
 
-            {(actionTypeId === 10 || actionTypeId === 9 || actionTypeId === 14) &&
+            {(actionTypeId === 10 || actionTypeId === 9) &&
+                <>
+                    <PlayerSelector
+                        title="Offensive Player List"
+                        playerList={offenseTeam}
+                        editable={false}
+                        onSelect={(player) => {
+                            taggingState([
+                                {
+                                    action_type_id: actionTypeId,
+                                    team_id: offenseTeamId,
+                                    player_id: player.id,
+                                    action_id: 5,
+                                    action_result_id: inTheBox === "No" ? 13 : 14,
+                                    court_area_id: areaCourtId,
+                                    inside_the_paint: inTheBox
+                                },
+                            ])
+                        }}
+                    />
+                    <PlayerSelector
+                        title="Defensive Player List"
+                        playerList={defenseTeam}
+                        editable={false}
+                        onSelect={(player) => {
+                            taggingState([
+                                {
+                                    action_type_id: actionTypeId,
+                                    team_id: defenseTeamId,
+                                    player_id: player.id,
+                                    action_id: 5,
+                                    action_result_id: inTheBox === "No" ? 13 : 14,
+                                    court_area_id: areaCourtId,
+                                    inside_the_paint: inTheBox
+                                },
+                            ])
+                        }}
+                    />
+                </>
+            }
+
+            {(actionTypeId === 13) &&
+                <>
+                    <PlayerSelector
+                        title="Offensive Player List"
+                        playerList={offenseTeam}
+                        editable={false}
+                        onSelect={(player) => {
+                            taggingState([
+                                {
+                                    action_type_id: inTheBox === "No" ? 8 : actionTypeId,
+                                    team_id: offenseTeamId,
+                                    player_id: player.id,
+                                    action_id: 15,
+                                    action_result_id: inTheBox === "No" ? 13 : 14,
+                                    court_area_id: areaCourtId,
+                                    inside_the_paint: inTheBox
+                                },
+                            ])
+                        }}
+                    />
+                    <PlayerSelector
+                        title="Defensive Player List"
+                        playerList={defenseTeam}
+                        editable={false}
+                        onSelect={(player) => {
+                            taggingState([
+                                {
+                                    action_type_id: inTheBox === "No" ? 8 : actionTypeId,
+                                    team_id: defenseTeamId,
+                                    player_id: player.id,
+                                    action_id: 15,
+                                    action_result_id: inTheBox === "No" ? 13 : 14,
+                                    court_area_id: areaCourtId,
+                                    inside_the_paint: inTheBox
+                                },
+                            ])
+                        }}
+                    />
+                </>
+            }
+
+
+            {actionTypeId === 8 &&
                 <PlayerSelector
                     title="Offensive Player List"
                     playerList={offenseTeam}
@@ -57,49 +140,7 @@ export default function Others({ defenseTeam, offenseTeam, taggingState, offense
                                 team_id: offenseTeamId,
                                 player_id: player.id,
                                 action_id: 5,
-                                action_result_id: 14,
-                                court_area_id: areaCourtId,
-                                inside_the_paint: inTheBox
-                            },
-                        ])
-                    }}
-                />
-            }
-
-            {(actionTypeId === 10 || actionTypeId === 9 || actionTypeId === 14) &&
-                <PlayerSelector
-                    title="Defensive Player List"
-                    playerList={defenseTeam}
-                    editable={false}
-                    onSelect={(player) => {
-                        taggingState([
-                            {
-                                action_type_id: actionTypeId,
-                                team_id: defenseTeamId,
-                                player_id: player.id,
-                                action_id: 5,
-                                action_result_id: 14,
-                                court_area_id: areaCourtId,
-                                inside_the_paint: inTheBox
-                            },
-                        ])
-                    }}
-                />
-            }
-
-            {actionTypeId === 11 &&
-                <PlayerSelector
-                    title="Offensive Player List"
-                    playerList={offenseTeam}
-                    editable={false}
-                    onSelect={(player) => {
-                        taggingState([
-                            {
-                                action_type_id: actionTypeId,
-                                team_id: offenseTeamId,
-                                player_id: player.id,
-                                action_id: 5,
-                                action_result_id: 8,
+                                action_result_id: 13,
                                 court_area_id: areaCourtId,
                                 inside_the_paint: inTheBox
                             },
@@ -129,7 +170,7 @@ export default function Others({ defenseTeam, offenseTeam, taggingState, offense
                 />
             }
 
-            {actionTypeId === 15 &&
+            {actionTypeId === 16 &&
                 <PlayerSelector
                     title="Defensive Player List"
                     playerList={defenseTeam}
@@ -137,10 +178,10 @@ export default function Others({ defenseTeam, offenseTeam, taggingState, offense
                     onSelect={(player) => {
                         taggingState([
                             {
-                                action_type_id: actionTypeId,
+                                action_type_id: 8,
                                 team_id: defenseTeamId,
                                 player_id: player.id,
-                                action_id: 1,
+                                action_id: 16,
                                 action_result_id: 3,
                                 court_area_id: areaCourtId,
                                 inside_the_paint: inTheBox

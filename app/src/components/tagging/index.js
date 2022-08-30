@@ -272,8 +272,8 @@ export default function Tagging() {
   useHotkeys(TAGGING.dribble.hotkey, () => taggingButtonClicked(TAGGING.dribble.value), HOTKEY_OPTION);
   useHotkeys(TAGGING.foul.hotkey, () => taggingButtonClicked(TAGGING.foul.value));
   useHotkeys(TAGGING.cross.hotkey, () => taggingButtonClicked(TAGGING.cross.value), HOTKEY_OPTION);
-  useHotkeys("o", () => taggingButtonClicked("Others"), HOTKEY_OPTION);
-  useHotkeys("p", () => setClicked(true), HOTKEY_OPTION);
+  useHotkeys("x", () => taggingButtonClicked("Others"), HOTKEY_OPTION);
+  useHotkeys("v", () => setClicked(true), HOTKEY_OPTION);
 
   useHotkeys('return', () => setPlay(v => !v), HOTKEY_OPTION);
   useHotkeys('n', () => setPlay(v => !v), HOTKEY_OPTION);
@@ -605,7 +605,7 @@ export default function Tagging() {
                     <ControlButton sx={{ mr: 0 }} onClick={() => {
                       saveTags(true)
                       setCpclicked(true)
-                    }}>C.P.</ControlButton>
+                    }}>C.P. (v)</ControlButton>
                   </Box>
                 </Box>
 
@@ -616,7 +616,7 @@ export default function Tagging() {
                     </Grid>
                   ))}
                 </Grid>
-                <TagButton onClick={(e) => taggingButtonClicked("Others")} style={{ textTransform: 'none', fontSize: '10px', writingMode: 'vertical-rl', maxWidth: 10, height: 125, marginTop: '12px' }}>Others (o)</TagButton>
+                <TagButton onClick={(e) => taggingButtonClicked("Others")} style={{ textTransform: 'none', fontSize: '10px', writingMode: 'vertical-rl', maxWidth: 10, height: 125, marginTop: '12px' }}>Others (x)</TagButton>
 
                 <RadioGroup
                   sx={{ my: 0, mx: 2 }}

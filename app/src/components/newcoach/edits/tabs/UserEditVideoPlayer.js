@@ -14,7 +14,6 @@ import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import { toSecond } from "../../../../common/utilities"
 import gameService from '../../../../services/game.service';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
-// import VIDEO from '../../../../assets/1.mp4'
 
 const styles = {
     action: {
@@ -65,7 +64,6 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
 
         playTagByIdx(idx)
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tagList, videoData, videoURL, ready])
 
     useEffect(() => {
@@ -87,7 +85,7 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
             onChangeClip(curIdx)
 
         playTagByIdx(curIdx)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [tagList, curIdx])
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec)
@@ -98,10 +96,10 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
         const endTime = toSecond(tagList[curIdx]?.end_time);
 
         if (currentTime >= endTime) {
-            if (tagList.length <= curIdx + 1) {// last tag
+            if (tagList.length <= curIdx + 1) {
                 setPlay(false)
             }
-            else if (canNext) { // is auto play, next clip
+            else if (canNext) {
                 setCurIdx(c => c + 1)
                 PlayVideo(1)
             } else {
@@ -131,7 +129,6 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
                         <ReactPlayer
                             className="react-player"
                             url={videoURL}
-                            // url={VIDEO}
                             ref={player}
                             onPlay={() => setPlay(true)}
                             onPause={() => setPlay(false)}
