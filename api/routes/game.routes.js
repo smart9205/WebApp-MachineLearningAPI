@@ -97,4 +97,124 @@ module.exports = app => {
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getOpponentGoals
 	);
+
+	app.get(
+		"/game/getteamoffensivepossession/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamOffensivePossession
+	);
+
+	app.get(
+		"/game/getopponentoffensivepossession/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentOffensivePossession
+	);
+
+	app.get(
+		"/game/getteambuildupgoalkeeper/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamBuildUpGoalkeeper
+	);
+
+	app.get(
+		"/game/getteambuildondefensivehalf/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamBuildOnDefensiveHalf
+	);
+
+	app.get(
+		"/game/getteaminterception/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamStartedFromInterception
+	);
+
+	app.get(
+		"/game/getopponentinterception/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentStartedFromInterception
+	);
+
+	app.get(
+		"/game/getteamtackle/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamStartedFromTackle
+	);
+
+	app.get(
+		"/game/getopponenttackle/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentStartedFromTackle
+	);
+
+	app.get(
+		"/game/getteamfreekick/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamFreeKick
+	);
+
+	app.get(
+		"/game/getopponentfreekick/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentFreeKick
+	);
+
+	app.get(
+		"/game/getteamcorner/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamCorner
+	);
+
+	app.get(
+		"/game/getopponentcorner/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentCorner
+	);
+
+	app.get(
+		"/game/getteamcross/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamCross
+	);
+
+	app.get(
+		"/game/getopponentcross/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentCross
+	);
+
+	app.get(
+		"/game/getteampenalty/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamPenaltyGained
+	);
+
+	app.get(
+		"/game/getopponentpenalty/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentPenaltyGained
+	);
+
+	app.get(
+		"/game/getteamdrawfoul/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamDrawFoul
+	);
+
+	app.get(
+		"/game/getopponentdrawfoul/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentDrawFoul
+	);
+
+	app.get(
+		"/game/getteamoffside/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamOffside
+	);
+
+	app.get(
+		"/game/getopponentoffside/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentOffside
+	);
 };

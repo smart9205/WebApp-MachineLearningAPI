@@ -75,6 +75,126 @@ const getOpponentGoals = (teamId, gameIds) => {
     });
 };
 
+const getTeamOffensivePossession = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteamoffensivepossession/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getOpponentOffensivePossession = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponentoffensivepossession/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamBuildupGoalkeeper = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteambuildupgoalkeeper/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamBuildonDefensiveHalf = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteambuildondefensivehalf/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamInterception = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteaminterception/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getOpponentInterception = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponentinterception/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamTackle = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteamtackle/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getOpponentTackle = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponenttackle/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamFreekick = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteamfreekick/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getOpponentFreekick = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponentfreekick/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamCorner = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteamcorner/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getOpponentCorner = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponentcorner/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamCross = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteamcross/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getOpponentCross = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponentcross/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamPenalty = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteampenalty/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getOpponentPenalty = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponentpenalty/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamDrawfoul = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteamdrawfoul/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getOpponentDrawfoul = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponentdrawfoul/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamOffside = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteamoffside/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getOpponentOffside = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponentoffside/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
 const getGameById = (gameId) => {
     return axios.get(API_URL + `game/getgamebyid/${gameId}`, { headers: authHeader(), data: { gameId } }).then((response) => {
         return response.data;
@@ -506,6 +626,26 @@ const gameService = {
     getCleanGame,
     getTeamGoals,
     getOpponentGoals,
+    getTeamOffensivePossession,
+    getOpponentOffensivePossession,
+    getTeamBuildupGoalkeeper,
+    getTeamBuildonDefensiveHalf,
+    getTeamInterception,
+    getOpponentInterception,
+    getTeamTackle,
+    getOpponentTackle,
+    getTeamFreekick,
+    getOpponentFreekick,
+    getTeamCorner,
+    getOpponentCorner,
+    getTeamCross,
+    getOpponentCross,
+    getTeamPenalty,
+    getOpponentPenalty,
+    getTeamDrawfoul,
+    getOpponentDrawfoul,
+    getTeamOffside,
+    getOpponentOffside,
     getAllMyCoachTeam,
     getMyCoachTeamList,
     getMyCoachPlayerList,

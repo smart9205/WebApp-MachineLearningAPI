@@ -13,7 +13,7 @@ const TeamListItem = ({ row, isHover }) => {
     const [open, setOpen] = useState(false);
 
     const handleChangePath = (teamId, seasonId) => () => {
-        navigate(`/new_coach/teams/${teamId}/${seasonId}`);
+        navigate(`/new_coach/teams/${btoa(`${teamId}|${seasonId}`)}`);
     };
 
     const handleCloseDialog = () => {

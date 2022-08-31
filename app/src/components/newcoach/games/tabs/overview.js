@@ -1,8 +1,8 @@
-import { Box, Typography, Divider, Popover } from '@mui/material';
+import { Box, Typography, Divider, Popover, Checkbox } from '@mui/material';
 import React, { useEffect, useReducer, useState } from 'react';
 
 import ForwardIcon from '@mui/icons-material/ForwardTwoTone';
-import PlayIcon from '@mui/icons-material/PlayCircleOutlined';
+import MenuIcon from '@mui/icons-material/MenuOutlined';
 import UpIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
 import ExportIcon from '@mui/icons-material/FileDownloadOutlined';
 import RefreshIcon from '@mui/icons-material/RefreshOutlined';
@@ -37,32 +37,34 @@ const Tags = [
 ];
 
 const GameOverview = ({ game }) => {
-    const [curTeamTagIdx, setCurTeamTagIdx] = useState(-1);
+    const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
     const [videoData, setVideoData] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
         autoPlay: true,
         tagList: [],
-        videoPlay: false
+        videoPlay: true
     });
     const [values, setValues] = useState({
         isOur: true,
         expandButtons: true,
-        selectIndex: -1,
         playList: [],
-        teamList: [],
         teamId: -1,
-        opponentTeamId: -1
+        opponentTeamId: -1,
+        selectAll: false
     });
     const [tagIndex, setTagIndex] = useState(-1);
     const [loadData, setLoadData] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [checkArray, setCheckArray] = useState([]);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const menuPopoverOpen = Boolean(menuAnchorEl);
     const menuPopoverId = menuPopoverOpen ? 'simple-popover' : undefined;
 
     const handleChangeTeam = (flag) => {
-        setValues({ ...values, isOur: flag });
+        setValues({ ...values, isOur: flag, playList: [] });
+        setVideoData({ ...videoData, idx: 0, tagList: [] });
+        setTagIndex(-1);
     };
 
     const handleShowPopover = (idx) => (e) => {
@@ -98,16 +100,30 @@ const GameOverview = ({ game }) => {
 
     const handleShowVideo = (index) => {
         setCurTeamTagIdx(index);
-        setVideoData({
-            idx: index,
-            tagList: values.playList.map((item) => {
-                return {
-                    start_time: item.team_tag_start_time,
-                    end_time: item.team_tag_end_time
-                };
-            }),
-            autoPlay: true,
-            videoPlay: false
+        setVideoData({ ...videoData, idx: index });
+    };
+
+    const getPlayTagList = (func) => {
+        func.then((res) => {
+            console.log('Game/Overview => ', res);
+            setValues({ ...values, playList: res });
+            setLoading(false);
+            setLoadData(false);
+            setVideoData({
+                ...videoData,
+                tagList: res.map((item) => {
+                    return {
+                        start_time: item.team_tag_start_time,
+                        end_time: item.team_tag_end_time
+                    };
+                })
+            });
+
+            let checks = [];
+
+            for (let i = 0; i < res.length; i++) checks.push(false);
+
+            setCheckArray(checks);
         });
     };
 
@@ -116,28 +132,71 @@ const GameOverview = ({ game }) => {
             setLoading(true);
             setValues({ ...values, playList: [] });
 
-            if (tagIndex === 1) {
+            if (tagIndex === 0) {
+            } else if (tagIndex === 1) {
                 GameService.getCleanGame(values.isOur ? values.teamId : values.opponentTeamId, `${game.id}`).then((res) => {
                     console.log('Game/Overview => ', res);
                     setLoading(false);
                     setLoadData(false);
                 });
+            } else if (tagIndex === 2) {
+                if (values.isOur) getPlayTagList(GameService.getTeamOffensivePossession(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentOffensivePossession(values.teamId, `${game.id}`));
+            } else if (tagIndex === 3) {
+                setLoading(false);
+                setLoadData(false);
             } else if (tagIndex === 4) {
-                if (values.isOur) {
-                    GameService.getTeamGoals(values.teamId, `${game.id}`).then((res) => {
-                        console.log('Game/Overview => ', res);
-                        setValues({ ...values, playList: res });
-                        setLoading(false);
-                        setLoadData(false);
-                    });
-                } else {
-                    GameService.getTeamGoals(values.opponentTeamId, `${game.id}`).then((res) => {
-                        console.log('Game/Overview => ', res);
-                        setValues({ ...values, playList: res });
-                        setLoading(false);
-                        setLoadData(false);
-                    });
-                }
+                if (values.isOur) getPlayTagList(GameService.getTeamGoals(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentGoals(values.teamId, `${game.id}`));
+            } else if (tagIndex === 5) {
+                setLoading(false);
+                setLoadData(false);
+            } else if (tagIndex === 6) {
+                if (values.isOur) getPlayTagList(GameService.getTeamBuildupGoalkeeper(values.teamId, `${game.id}`));
+            } else if (tagIndex === 7) {
+                if (values.isOur) getPlayTagList(GameService.getTeamBuildonDefensiveHalf(values.teamId, `${game.id}`));
+            } else if (tagIndex === 8) {
+                setLoading(false);
+                setLoadData(false);
+            } else if (tagIndex === 9) {
+                setLoading(false);
+                setLoadData(false);
+            } else if (tagIndex === 10) {
+                if (values.isOur) getPlayTagList(GameService.getTeamInterception(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentInterception(values.teamId, `${game.id}`));
+            } else if (tagIndex === 11) {
+                if (values.isOur) getPlayTagList(GameService.getTeamTackle(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentTackle(values.teamId, `${game.id}`));
+            } else if (tagIndex === 12) {
+                setLoading(false);
+                setLoadData(false);
+            } else if (tagIndex === 13) {
+                setLoading(false);
+                setLoadData(false);
+            } else if (tagIndex === 14) {
+                setLoading(false);
+                setLoadData(false);
+            } else if (tagIndex === 15) {
+                if (values.isOur) getPlayTagList(GameService.getTeamFreekick(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentFreekick(values.teamId, `${game.id}`));
+            } else if (tagIndex === 16) {
+                if (values.isOur) getPlayTagList(GameService.getTeamCorner(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentCorner(values.teamId, `${game.id}`));
+            } else if (tagIndex === 17) {
+                if (values.isOur) getPlayTagList(GameService.getTeamCross(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentCross(values.teamId, `${game.id}`));
+            } else if (tagIndex === 18) {
+                if (values.isOur) getPlayTagList(GameService.getTeamPenalty(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentPenalty(values.teamId, `${game.id}`));
+            } else if (tagIndex === 19) {
+                if (values.isOur) getPlayTagList(GameService.getTeamDrawfoul(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentDrawfoul(values.teamId, `${game.id}`));
+            } else if (tagIndex === 20) {
+                if (values.isOur) getPlayTagList(GameService.getTeamOffside(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentOffside(values.teamId, `${game.id}`));
+            } else {
+                setLoading(false);
+                setLoadData(false);
             }
         }
     }, [tagIndex, loadData]);
@@ -145,16 +204,25 @@ const GameOverview = ({ game }) => {
     useEffect(() => {
         setLoading(true);
         GameService.getAllMyCoachTeam().then((res) => {
-            const filtered = res.filter((item) => item.season_name === game.season_name && item.league_name === game.league_name);
+            const filtered = res.filter(
+                (item) => item.season_name === game.season_name && item.league_name === game.league_name && (item.team_id === game.home_team_id || item.team_id === game.away_team_id)
+            );
             const team = filtered[0].team_id;
             const opponent = team === game.home_team_id ? game.away_team_id : game.home_team_id;
 
-            setValues({ ...values, teamList: filtered, teamId: team, opponentTeamId: opponent });
+            setValues({ ...values, teamId: team, opponentTeamId: opponent });
             setLoading(false);
         });
     }, []);
 
-    console.log('GameOverview => ', values.playList, game);
+    useEffect(() => {
+        setCheckArray([]);
+        values.playList.map((item) => {
+            setCheckArray((oldRows) => [...oldRows, values.selectAll]);
+        });
+    }, [values.selectAll]);
+
+    console.log('GameOverview => ', values.playList, game, values.teamId);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '85vh', height: '80vh', overflowY: 'auto', display: 'flex' }}>
@@ -186,8 +254,11 @@ const GameOverview = ({ game }) => {
                         <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
                             {Tags.slice(0, 6).map((tag, index) => (
                                 <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: '280px' }}>
-                                    <Box sx={{ cursor: 'pointer', 'svg path': { fill: 'blue' } }} onClick={handleShowPopover(index)}>
-                                        <PlayIcon fontSize="large" />
+                                    <Box
+                                        sx={{ cursor: 'pointer', 'svg path': { fill: tagIndex === index ? '#0A7304' : '#C5EAC6' }, '&:hover': { 'svg path': { fill: '#0A7304' } } }}
+                                        onClick={handleShowPopover(index)}
+                                    >
+                                        <MenuIcon />
                                     </Box>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{tag}</Typography>
                                 </Box>
@@ -197,8 +268,11 @@ const GameOverview = ({ game }) => {
                         <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
                             {Tags.slice(6, 14).map((tag, index) => (
                                 <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: '280px' }}>
-                                    <Box sx={{ cursor: 'pointer', 'svg path': { fill: 'blue' } }} onClick={handleShowPopover(index + 6)}>
-                                        <PlayIcon fontSize="large" />
+                                    <Box
+                                        sx={{ cursor: 'pointer', 'svg path': { fill: tagIndex - 6 === index ? '#0A7304' : '#C5EAC6' }, '&:hover': { 'svg path': { fill: '#0A7304' } } }}
+                                        onClick={handleShowPopover(index + 6)}
+                                    >
+                                        <MenuIcon />
                                     </Box>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{tag}</Typography>
                                 </Box>
@@ -208,8 +282,11 @@ const GameOverview = ({ game }) => {
                         <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
                             {Tags.slice(14, 22).map((tag, index) => (
                                 <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: '280px' }}>
-                                    <Box sx={{ cursor: 'pointer', 'svg path': { fill: 'blue' } }} onClick={handleShowPopover(index + 14)}>
-                                        <PlayIcon fontSize="large" />
+                                    <Box
+                                        sx={{ cursor: 'pointer', 'svg path': { fill: tagIndex - 14 === index ? '#0A7304' : '#C5EAC6' }, '&:hover': { 'svg path': { fill: '#0A7304' } } }}
+                                        onClick={handleShowPopover(index + 14)}
+                                    >
+                                        <MenuIcon />
                                     </Box>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{tag}</Typography>
                                 </Box>
@@ -253,36 +330,50 @@ const GameOverview = ({ game }) => {
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to "My Edits"</Typography>
                     </Box>
                 </Popover>
-                <Box sx={{ overflowY: 'auto', maxHeight: values.expandButtons ? '30vh' : '60vh' }}>
+                <Box sx={{ overflowY: 'auto', maxHeight: values.expandButtons ? '30vh' : '60vh', minHeight: '30vh' }}>
                     <Box sx={{ marginRight: '4px' }}>
+                        {values.playList.length > 0 && (
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%', paddingRight: '36px' }}>
+                                    <Checkbox value={values.selectAll} onChange={(e) => setValues({ ...values, selectAll: e.target.checked })} />
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Select All</Typography>
+                                </Box>
+                            </Box>
+                        )}
                         {values.playList.map((item, index) => (
-                            <Box key={index} sx={{ padding: '4px 4px 4px 0', display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => handleShowVideo(index)}>
-                                <Box
-                                    sx={{
-                                        width: 0,
-                                        height: 0,
-                                        borderTop: '25px solid transparent',
-                                        borderLeft: curTeamTagIdx === index ? '20px solid blue' : '20px solid transparent',
-                                        borderBottom: '25px solid transparent'
-                                    }}
-                                />
-                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <Box sx={{ background: 'blue', borderRadius: '4px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: 'white' }}>{index + 1}</Typography>
+                            <Box key={index} sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px', padding: '4px 0', justifyContent: 'space-between' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={() => handleShowVideo(index)}>
+                                    <Box
+                                        sx={{
+                                            background: curTeamTagIdx === index ? '#0A7304' : '#C5EAC6',
+                                            borderRadius: '8px',
+                                            width: '32px',
+                                            height: '32px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}
+                                    >
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: 'white' }}>{index + 1}</Typography>
                                     </Box>
-                                    <Box sx={{ marginLeft: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>
-                                            {`${getPeriod(item.period)} - ${item.time_in_game} - ${item.court_area_name} - ${item.player_name}`}
-                                        </Typography>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>
+                                                {`${getPeriod(item.period)} - ${item.time_in_game}' - ${item.court_area_name} - ${item.player_name} - `}
+                                            </Typography>
+                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>
+                                                {`${item.team_tag_start_time} - ${item.team_tag_end_time}`}
+                                            </Typography>
+                                        </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{item.home_team_name}</Typography>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{item.away_team_name}</Typography>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{item.game_date}</Typography>
-                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{item.team_tag_start_time}</Typography>
-                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{item.team_tag_end_time}</Typography>
+                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{item.season_name}</Typography>
                                         </Box>
                                     </Box>
                                 </Box>
+                                <Checkbox value={checkArray[index]} onChange={(e) => setCheckArray({ ...checkArray, [index]: e.target.checked })} />
                             </Box>
                         ))}
                     </Box>

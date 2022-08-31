@@ -142,6 +142,366 @@ exports.getOpponentGoals = (req, res) => {
     });
 }
 
+exports.getTeamOffensivePossession = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_offensive_possession(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getOpponentOffensivePossession = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_offensive_possession(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getTeamBuildUpGoalkeeper = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_build_up_goalkeeper(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getTeamBuildOnDefensiveHalf = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_build_on_defensive_half(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getTeamStartedFromInterception = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_interceptions(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getOpponentStartedFromInterception = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_interceptions(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getTeamStartedFromTackle = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_tackles(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getOpponentStartedFromTackle = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_tackles(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getTeamFreeKick = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_free_kicks(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getOpponentFreeKick = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_free_kicks(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getTeamCorner = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_corners(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getOpponentCorner = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_corners(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getTeamCross = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_crosses(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getOpponentCross = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_crosses(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getTeamPenaltyGained = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_penalty_gained(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getOpponentPenaltyGained = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_penalty_gained(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getTeamDrawFoul = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_draw_foul(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getOpponentDrawFoul = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_draw_foul(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getTeamOffside = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_offside(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getOpponentOffside = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_offside(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
 exports.deleteGames = (req, res) => {
   Sequelize.query(`
     DELETE FROM public."Games" WHERE id IN (${req.body.games.map((id) => id)})

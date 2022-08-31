@@ -22,7 +22,7 @@ const MenuItem = ({ path, icon, title, isMinimized, isHover, isSelected }) => {
                 >
                     {icon}
                 </Box>
-                {!isMinimized && <Typography sx={{ fontWeight: 600, fontSize: '12px', fontWeight: 'DM Sans', color: isSelected ? '#0A7304' : isHover ? '#0A7304' : '#A5A5A8' }}>{title}</Typography>}
+                {!isMinimized && <Typography sx={{ fontWeight: 600, fontSize: '16px', fontWeight: 'DM Sans', color: isSelected ? '#0A7304' : isHover ? '#0A7304' : '#A5A5A8' }}>{title}</Typography>}
             </Box>
         </Link>
     );

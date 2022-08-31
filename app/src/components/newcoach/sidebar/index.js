@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 
@@ -11,7 +11,8 @@ import MenuIcon from '@mui/icons-material/MenuOutlined';
 const Sidebar = () => {
     const [minimum, setMinimum] = useState(false);
     const [hoverIndex, setHoverIndex] = useState(undefined);
-    const [selectIndex, setSelectIndex] = useState(undefined);
+    const [selectIndex, setSelectIndex] = useState(0);
+    const [pathname, setPathname] = useState(window.location.pathname);
 
     const handleMenuControl = () => {
         if (minimum) setMinimum(false);
@@ -25,6 +26,18 @@ const Sidebar = () => {
     const handleMouseLeave = () => {
         setHoverIndex(undefined);
     };
+
+    useEffect(() => {
+        setPathname(window.location.pathname);
+
+        if (pathname.includes('/new_coach/dashboard')) setSelectIndex(0);
+        else if (pathname.includes('/new_coach/games')) setSelectIndex(1);
+        else if (pathname.includes('/new_coach/reports')) setSelectIndex(2);
+        else if (pathname.includes('/new_coach/edits')) setSelectIndex(3);
+        else if (pathname.includes('/new_coach/teams')) setSelectIndex(4);
+        else if (pathname.includes('/new_coach/players')) setSelectIndex(5);
+        else if (pathname.includes('/new_coach/settings')) setSelectIndex(6);
+    }, [pathname]);
 
     return (
         <Box sx={{ backgroundColor: 'white', height: '100%', width: minimum ? '80px' : '180px', paddingTop: '32px', display: 'flex', flexDirection: 'column', gap: '64px' }}>

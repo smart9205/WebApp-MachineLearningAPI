@@ -84,9 +84,9 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>Close</Typography>
                 </Box>
             </DialogTitle>
-            <DialogContent style={{ display: 'flex', margin: '0 30px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '32px', paddingBottom: '42px' }}>
+            <DialogContent style={{ display: 'flex', margin: '0 30px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '24px' }}>
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '28px', fontWeight: 700, color: '#1a1b1d' }}>Edit Player</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '64px' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
                     <UploadButton
                         class_name="upload-player-view"
                         id_name="player-logo"
@@ -96,7 +96,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                         defaultImage={PLAYER_ICON_DEFAULT}
                     />
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>First Name</Typography>
                                 <TextField
@@ -122,7 +122,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                                 />
                             </Box>
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Birthday</Typography>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>

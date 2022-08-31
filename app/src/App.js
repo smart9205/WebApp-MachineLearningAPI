@@ -144,7 +144,7 @@ const App = () => {
                                 </Route>
 
                                 <Route path="/new_coach" element={<RoleRoute role="ROLE_COACH" />}>
-                                    <Route path="/new_coach" element={<NewCoach />} />
+                                    <Route path="/new_coach" element={<Navigate to="/new_coach/dashboard" replace />} />
                                     <Route
                                         path="/new_coach/dashboard"
                                         element={
@@ -178,7 +178,7 @@ const App = () => {
                                         }
                                     />
                                     <Route
-                                        path="/new_coach/teams/:teamId/:seasonId"
+                                        path="/new_coach/teams/:teamId"
                                         element={
                                             <NewCoach>
                                                 <TeamPage />

@@ -29,11 +29,11 @@ const TeamPage = () => {
 
         if (pathname.match(/\/new_coach\/teams\//) !== null) {
             setValues({ ...values, loading: true });
-            GameService.getCoachTeamPlayers(params.teamId, params.seasonId).then((res) => {
+            GameService.getCoachTeamPlayers(atob(params.teamId).split('|')[0], atob(params.teamId).split('|')[1]).then((res) => {
                 setValues({ ...values, players: res, teamName: res[0].team_name, loading: false, loadingDone: true });
             });
         }
-    }, [params.teamId, params.seasonId]);
+    }, [params]);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
@@ -47,7 +47,11 @@ const TeamPage = () => {
                 <Box sx={{ maxHeight: '85vh', width: '80vh', backgroundColor: 'white', width: '100%', padding: '24px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
                         {Tabs.map((tab, index) => (
-                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px', width: 'fit-content', cursor: 'pointer' }} onClick={() => handleClickTab(index)}>
+                            <Box
+                                key={index}
+                                sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px', width: 'fit-content', cursor: 'pointer' }}
+                                onClick={() => handleClickTab(index)}
+                            >
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{tab}</Typography>
                                 <Box sx={{ height: '2px', width: '100%', backgroundColor: values.tabSelected === index ? '#0A7304' : 'white' }} />
                             </Box>
@@ -76,8 +80,8 @@ const TeamPage = () => {
                                         </TableHead>
                                         <TableBody>
                                             {values.players &&
-                                                values.players.map((player) => (
-                                                    <TableRow height="70px">
+                                                values.players.map((player, index) => (
+                                                    <TableRow key={index} height="70px">
                                                         <TableCell width="5%" align="center">
                                                             <img style={{ height: '48px' }} alt="Player Logo" src={player.image.length > 0 ? player.image : PLAYER_ICON_DEFAULT} />
                                                         </TableCell>

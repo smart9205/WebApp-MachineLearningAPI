@@ -82,11 +82,11 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>Close</Typography>
                 </Box>
             </DialogTitle>
-            <DialogContent style={{ display: 'flex', margin: '0 30px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '32px', paddingBottom: '42px' }}>
+            <DialogContent style={{ display: 'flex', margin: '0 30px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '28px', fontWeight: 700, color: '#1a1b1d' }}>Edit Team</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '64px' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '48px' }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '8px' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '4px' }}>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>Team Logo</Typography>
                             <UploadButton
                                 class_name="upload-team-view"
@@ -97,7 +97,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                                 defaultImage={TEAM_ICON_DEFAULT}
                             />
                         </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '8px' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '4px' }}>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>Sponsor Logo</Typography>
                             <UploadButton
                                 class_name="upload-sponsor-view"
@@ -109,7 +109,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                             />
                         </Box>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '80px', padding: '80px 0 48px' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '80px', padding: '24px 0' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '32px', marginBottom: '32px' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Team Color</Typography>
@@ -150,7 +150,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                             />
                         </Box>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '64px' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Team Language</Typography>
                             <Select

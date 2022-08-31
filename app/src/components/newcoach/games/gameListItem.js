@@ -174,7 +174,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                 onClose={() => setMenuAnchorEl(null)}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                sx={{ '& .MuiPopover-paper': { width: '250px', borderRadius: '12px', border: '1px solid #E8E8E8' } }}
+                sx={{ '& .MuiPopover-paper': { width: '200px', borderRadius: '12px', border: '1px solid #E8E8E8' } }}
             >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '12px 0 0 12px', cursor: 'pointer' }} onClick={handleClickEdit}>
                     <EditIcon />
