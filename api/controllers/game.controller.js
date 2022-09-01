@@ -502,6 +502,42 @@ exports.getOpponentOffside = (req, res) => {
     });
 }
 
+exports.getTeamShots = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_team_shots(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
+exports.getOpponentShots = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_shots(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
 exports.deleteGames = (req, res) => {
   Sequelize.query(`
     DELETE FROM public."Games" WHERE id IN (${req.body.games.map((id) => id)})

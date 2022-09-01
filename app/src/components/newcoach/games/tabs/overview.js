@@ -176,8 +176,8 @@ const GameOverview = ({ game }) => {
                 setLoading(false);
                 setLoadData(false);
             } else if (tagIndex === 14) {
-                setLoading(false);
-                setLoadData(false);
+                if (values.isOur) getPlayTagList(GameService.getTeamShots(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentShots(values.teamId, `${game.id}`));
             } else if (tagIndex === 15) {
                 if (values.isOur) getPlayTagList(GameService.getTeamFreekick(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentFreekick(values.teamId, `${game.id}`));
@@ -227,7 +227,7 @@ const GameOverview = ({ game }) => {
         } else setCheckArray([]);
     }, [values.selectAll]);
 
-    console.log('GameOverview => ', videoData);
+    console.log('GameOverview => ', values.playList);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
@@ -355,7 +355,7 @@ const GameOverview = ({ game }) => {
                         </Box>
                     </Box>
                 )}
-                <Box sx={{ overflowY: 'auto', maxHeight: values.expandButtons ? '35vh' : '60vh', minHeight: '30vh' }}>
+                <Box sx={{ overflowY: 'auto', maxHeight: values.expandButtons ? '30vh' : '60vh', minHeight: '25vh' }}>
                     <Box sx={{ margin: '0 4px 8px 0' }}>
                         {values.playList.map((item, index) => (
                             <Box key={index} sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px', padding: '4px 0', justifyContent: 'space-between' }}>
@@ -376,7 +376,7 @@ const GameOverview = ({ game }) => {
                                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>
-                                                {`${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_name} - `}
+                                                {`${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names} - `}
                                             </Typography>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>
                                                 {`${item.team_tag_start_time} - ${item.team_tag_end_time}`}

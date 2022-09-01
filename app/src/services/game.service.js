@@ -195,6 +195,18 @@ const getOpponentOffside = (teamId, gameIds) => {
     });
 };
 
+const getTeamShots = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getteamshots/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getOpponentShots = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponentshots/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
 const getGameById = (gameId) => {
     return axios.get(API_URL + `game/getgamebyid/${gameId}`, { headers: authHeader(), data: { gameId } }).then((response) => {
         return response.data;
@@ -646,6 +658,8 @@ const gameService = {
     getOpponentDrawfoul,
     getTeamOffside,
     getOpponentOffside,
+    getTeamShots,
+    getOpponentShots,
     getAllMyCoachTeam,
     getMyCoachTeamList,
     getMyCoachPlayerList,

@@ -217,4 +217,16 @@ module.exports = app => {
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getOpponentOffside
 	);
+
+	app.get(
+		"/game/getteamshots/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamShots
+	);
+
+	app.get(
+		"/game/getopponentshots/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentShots
+	);
 };
