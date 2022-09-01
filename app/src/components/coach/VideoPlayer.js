@@ -7,6 +7,8 @@ import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlin
 import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
 import { toSecond } from '../../common/utilities';
 import gameService from '../../services/game.service';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
@@ -50,6 +52,7 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, is
     const [curIdx, setCurIdx] = useState(0);
     const [videoURL, setVideoURL] = useState('');
     const [canNext, setCanNext] = useState(true);
+    const [currentTime, setCurrentTime] = useState(0);
 
     useEffect(() => {
         if (url?.startsWith('https://www.youtube.com')) {
@@ -81,15 +84,17 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, is
 
     const playTagByIdx = (i) => seekTo(toSecond(tagList[i]?.start_time));
 
-    const onProgress = (currentTime) => {
+    const onProgress = (current) => {
         const startTime = toSecond(tagList[curIdx]?.start_time);
         const endTime = toSecond(tagList[curIdx]?.end_time);
 
-        if (currentTime < startTime) {
+        setCurrentTime(current);
+
+        if (current < startTime) {
             seekTo(startTime);
         }
 
-        if (currentTime > endTime) {
+        if (current > endTime) {
             if (tagList.length <= curIdx) {
                 // last tag
                 setPlay(false);
@@ -115,6 +120,20 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, is
         setCurIdx(index);
     };
 
+    const fastVideo = (param) => {
+        seekTo(currentTime + param);
+    };
+
+    const handlePause = () => {
+        setPlay(false);
+    };
+
+    const handlePlay = () => {
+        setPlay(true);
+    };
+
+    console.log('videoplayer => ', currentTime);
+
     return (
         <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
             <FullScreen handle={handle}>
@@ -126,8 +145,8 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, is
                                 url={tagList.length > 0 ? videoURL : ''}
                                 // url={VIDEO}
                                 ref={player}
-                                onPlay={() => setPlay(true)}
-                                onPause={() => setPlay(false)}
+                                onPlay={handlePlay}
+                                onPause={handlePause}
                                 onReady={() => setReady(true)}
                                 onProgress={(p) => onProgress(p.playedSeconds)}
                                 playing={play}
@@ -145,8 +164,16 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, is
                         <SkipPreviousSharpIcon color="white" />
                     </IconButton>
 
+                    <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
+                        <FastRewindIcon color="white" />
+                    </IconButton>
+
                     <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
                         {play ? <PauseIcon /> : <PlayArrowIcon />}
+                    </IconButton>
+
+                    <IconButton style={styles.button} onClick={() => fastVideo(3)}>
+                        <FastForwardIcon color="white" />
                     </IconButton>
 
                     <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
