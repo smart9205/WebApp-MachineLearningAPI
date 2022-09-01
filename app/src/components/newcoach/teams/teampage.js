@@ -1,11 +1,10 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, CircularProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeftOutlined';
 
 import GameService from '../../../services/game.service';
-import { LoadingProgress } from '../components/common';
 import TeamPlayers from './tabs/players';
 import TeamGames from './tabs/games';
 import TeamOverview from './tabs/overview';
@@ -39,6 +38,11 @@ const TeamPage = () => {
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
+            {values.loading && (
+                <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                </div>
+            )}
             <Box sx={{ width: '100%', padding: '24px', display: 'flex', alignItems: 'center', gap: '24px', 'svg path': { fill: 'black' } }}>
                 <Link to="/new_coach/teams">
                     <ChevronLeftIcon sx={{ width: '32px', height: '32px' }} />
@@ -64,7 +68,6 @@ const TeamPage = () => {
                     {values.tabSelected === 4 && <TeamPlayers playerList={values.players} />}
                 </Box>
             )}
-            {values.loading && <LoadingProgress />}
         </Box>
     );
 };

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box, MenuItem, Typography, Select } from '@mui/material';
+import { Box, MenuItem, Typography, Select, CircularProgress } from '@mui/material';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
+
 import GameService from '../../../services/game.service';
-import { LoadingProgress } from '../components/common';
 import GameListItem from './gameListItem';
 
 function descendingComparator(a, b, orderBy) {
@@ -194,6 +194,11 @@ const Games = () => {
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
+            {values.loading && (
+                <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                </div>
+            )}
             <Box sx={{ padding: '24px 24px 24px 48px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Games</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
@@ -303,7 +308,6 @@ const Games = () => {
                     ))}
                 </Box>
             </Box>
-            {values.loading && <LoadingProgress />}
         </Box>
     );
 };

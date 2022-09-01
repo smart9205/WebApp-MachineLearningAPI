@@ -196,6 +196,24 @@ exports.getTeamBuildUpGoalkeeper = (req, res) => {
     });
 }
 
+exports.getOpponentBuildUpGoalkeeper = (req, res) => {
+  Sequelize.query(`
+    SELECT * from public.fnc_get_opponent_build_up_goalkeeper(
+      ${req.params.teamId}, 
+      '${req.params.gameIds}'
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
 exports.getTeamBuildOnDefensiveHalf = (req, res) => {
   Sequelize.query(`
     SELECT * from public.fnc_get_team_build_on_defensive_half(

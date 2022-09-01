@@ -117,6 +117,12 @@ module.exports = app => {
 	);
 
 	app.get(
+		"/game/getopponentbuildupgoalkeeper/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentBuildUpGoalkeeper
+	);
+
+	app.get(
 		"/game/getteambuildondefensivehalf/:teamId/:gameIds",
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getTeamBuildOnDefensiveHalf

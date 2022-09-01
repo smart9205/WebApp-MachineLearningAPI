@@ -1,9 +1,8 @@
 import React, { useReducer, useEffect } from 'react';
-import { Typography, Box, InputAdornment, IconButton, Autocomplete, TextField } from '@mui/material';
+import { Typography, Box, InputAdornment, IconButton, Autocomplete, TextField, CircularProgress } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 
-import { LoadingProgress } from '../components/common';
 import GameService from '../../../services/game.service';
 import TeamListItem from './teamListItem';
 
@@ -81,6 +80,11 @@ const Teams = () => {
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
+            {loading && (
+                <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                </div>
+            )}
             <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Teams</Typography>
@@ -144,7 +148,6 @@ const Teams = () => {
                     ))}
                 </Box>
             </Box>
-            {loading && <LoadingProgress />}
         </Box>
     );
 };

@@ -1,7 +1,7 @@
-import { Dialog, DialogContent, DialogTitle, Box, Typography, FormControlLabel, Switch } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Box, Typography, FormControlLabel, Switch, CircularProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import { SaveButton, LoadingProgress } from '../components/common';
+import { SaveButton } from '../components/common';
 import UploadButton from '../components/uploadButton';
 import GameService from '../../../services/game.service';
 
@@ -52,6 +52,11 @@ const GameEditPage = ({ open, onClose, game, updateGameList }) => {
                 </Box>
             </DialogTitle>
             <DialogContent style={{ display: 'flex', margin: '0 200px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
+                {values.loading && (
+                    <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <CircularProgress />
+                    </div>
+                )}
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '28px', fontWeight: 700, color: '#1a1b1d' }}>Edit Game</Typography>
                 <UploadButton
                     class_name="upload-game-view"
@@ -69,7 +74,6 @@ const GameEditPage = ({ open, onClose, game, updateGameList }) => {
                 <SaveButton disabled={values.image === game.image && values.mute === game.mute_video} onClick={saveChanges} sx={{ width: '300px', fontSize: '14px' }}>
                     Save changes
                 </SaveButton>
-                {values.loading && <LoadingProgress />}
             </DialogContent>
         </Dialog>
     );

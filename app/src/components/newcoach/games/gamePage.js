@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, CircularProgress } from '@mui/material';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeftOutlined';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 
 import GameService from '../../../services/game.service';
-import { LoadingProgress } from '../components/common';
 import GameOverview from './tabs/overview';
 
 const Tabs = ['Overview', 'Summary', 'Stats', 'Players'];
@@ -47,6 +46,11 @@ const GamePage = () => {
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
+            {values.loading && (
+                <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                </div>
+            )}
             {values.loadingDone && (
                 <>
                     <Box sx={{ padding: '24px 24px 24px 48px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -90,7 +94,6 @@ const GamePage = () => {
                     {values.curTab === 0 && <GameOverview game={values.game} />}
                 </>
             )}
-            {values.loading && <LoadingProgress />}
         </Box>
     );
 };

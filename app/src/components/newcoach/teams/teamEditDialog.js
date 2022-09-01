@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Dialog, DialogContent, DialogTitle, TextField, Select, MenuItem, FormControlLabel, Switch } from '@mui/material';
+import { Box, Typography, Dialog, DialogContent, DialogTitle, TextField, Select, MenuItem, FormControlLabel, Switch, CircularProgress } from '@mui/material';
 import { ColorPicker } from 'material-ui-color';
 
 import CloseIcon from '@mui/icons-material/CloseOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
-
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
-import { SaveButton, LoadingProgress } from '../components/common';
+
+import { SaveButton } from '../components/common';
 import UploadButton from '../components/uploadButton';
 import lang from '../../../assets/lang.json';
 import GameService from '../../../services/game.service';
@@ -83,6 +83,11 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                 </Box>
             </DialogTitle>
             <DialogContent style={{ display: 'flex', margin: '0 30px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
+                {values.loading && (
+                    <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <CircularProgress />
+                    </div>
+                )}
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '28px', fontWeight: 700, color: '#1a1b1d' }}>Edit Team</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
@@ -197,7 +202,6 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                 <SaveButton onClick={saveChanges} sx={{ width: '300px', fontSize: '14px' }}>
                     Save changes
                 </SaveButton>
-                {loading && <LoadingProgress />}
             </DialogContent>
         </Dialog>
     );

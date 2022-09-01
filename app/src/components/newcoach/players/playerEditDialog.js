@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Dialog, DialogContent, DialogTitle, TextField, Select, MenuItem } from '@mui/material';
+import { Box, Typography, Dialog, DialogContent, DialogTitle, TextField, Select, MenuItem, CircularProgress } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import CloseIcon from '@mui/icons-material/CloseOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
-
 import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
-import { SaveButton, LoadingProgress } from '../components/common';
+
+import { SaveButton } from '../components/common';
 import UploadButton from '../components/uploadButton';
 import GameService from '../../../services/game.service';
 
@@ -85,6 +85,11 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                 </Box>
             </DialogTitle>
             <DialogContent style={{ display: 'flex', margin: '0 30px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '24px' }}>
+                {values.loading && (
+                    <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <CircularProgress />
+                    </div>
+                )}
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '28px', fontWeight: 700, color: '#1a1b1d' }}>Edit Player</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
                     <UploadButton
@@ -176,7 +181,6 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                 <SaveButton onClick={saveChanges} sx={{ width: '300px', fontSize: '14px' }}>
                     Save changes
                 </SaveButton>
-                {loading && <LoadingProgress />}
             </DialogContent>
         </Dialog>
     );

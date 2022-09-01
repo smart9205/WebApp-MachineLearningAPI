@@ -130,7 +130,7 @@ const GameTab = ({ allTagList, game, playerList, playersInGameList, opponentTagL
                     t={t}
                 />
             </Paper>
-            <VideoPlayer videoData={videoData} url={game?.video_url ?? ''} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={showAccordion} isSpecial={false} logoUrl="" />
+            <VideoPlayer videoData={videoData} url={game?.video_url ?? ''} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={showAccordion} isSpecial={false} />
         </>
     );
 };

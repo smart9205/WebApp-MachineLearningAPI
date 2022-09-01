@@ -93,6 +93,12 @@ const getTeamBuildupGoalkeeper = (teamId, gameIds) => {
     });
 };
 
+const getOpponentBuildupGoalkeeper = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/getopponentbuildupgoalkeeper/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
 const getTeamBuildonDefensiveHalf = (teamId, gameIds) => {
     return axios.get(API_URL + `game/getteambuildondefensivehalf/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
         return response.data;
@@ -641,6 +647,7 @@ const gameService = {
     getTeamOffensivePossession,
     getOpponentOffensivePossession,
     getTeamBuildupGoalkeeper,
+    getOpponentBuildupGoalkeeper,
     getTeamBuildonDefensiveHalf,
     getTeamInterception,
     getOpponentInterception,

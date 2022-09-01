@@ -10,7 +10,7 @@ import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import { toSecond } from '../../common/utilities';
 import gameService from '../../services/game.service';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import GameImage from '../../assets/game_image.png';
+import GameImage from '../../assets/Game.png';
 // import VIDEO from '../../assets/1.mp4'
 
 const styles = {
@@ -40,7 +40,7 @@ const styles = {
         backgroundColor: '#80808069'
     }
 };
-export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, isSpecial = false, logoUrl = '' }) {
+export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, isSpecial = false }) {
     const handle = useFullScreenHandle();
     const { tagList, autoPlay, idx, videoPlay, cnt = null } = videoData;
 
@@ -136,9 +136,7 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, is
                                 height="100%"
                             />
                         )}
-                        {tagList.length === 0 && isSpecial && (
-                            <img src={logoUrl ? logoUrl : GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />
-                        )}
+                        {tagList.length === 0 && isSpecial && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                     </div>
                 </div>
 

@@ -1,10 +1,8 @@
 import React, { useState, useRef } from 'react';
 import S3 from 'react-aws-s3';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 import CameraIcon from '@mui/icons-material/PhotoCameraOutlined';
-
-import { LoadingProgress } from '../components/common';
 
 const UploadButton = ({ class_name, id_name, dirName, img, onURL, defaultImage }) => {
     const [loading, setLoading] = useState(false);
@@ -47,6 +45,11 @@ const UploadButton = ({ class_name, id_name, dirName, img, onURL, defaultImage }
 
     return (
         <Box className={class_name} sx={{ width: '140px', height: '140px', borderRadius: '15px', background: `url(${getImage()}) center center / cover no-repeat silver` }}>
+            {loading && (
+                <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                </div>
+            )}
             <input accept="image/*" id={id_name} type="file" ref={fileInput} onChange={(e) => handleUpload()} style={{ display: 'none' }} />
             <label htmlFor={id_name} style={{ width: '100%', cursor: 'pointer' }}>
                 <Box sx={{ background: 'transparent', height: '110px' }} />
@@ -65,7 +68,6 @@ const UploadButton = ({ class_name, id_name, dirName, img, onURL, defaultImage }
                     <CameraIcon />
                 </Box>
             </label>
-            {loading && <LoadingProgress />}
         </Box>
     );
 };
