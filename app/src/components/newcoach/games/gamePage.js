@@ -37,19 +37,19 @@ const GamePage = () => {
 
         if (pathname.match(/\/new_coach\/games\//) !== null) {
             setValues({ ...values, loading: true });
-            GameService.getGameById(params.gameId).then((res) => {
+            GameService.getGameById(atob(params.gameId)).then((res) => {
                 setValues({ ...values, game: res, loading: false, loadingDone: true });
             });
         }
     }, [params.gameId]);
 
-    console.log('GamePage => ', values.game);
+    console.log('GamePage => ', params);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             {values.loadingDone && (
                 <>
-                    <Box sx={{ padding: '24px 24px 24px 48px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                    <Box sx={{ padding: '24px 24px 24px 48px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', 'svg path': { fill: 'black' } }}>
                                 <Link to="/new_coach/games">
@@ -79,7 +79,7 @@ const GamePage = () => {
                                 <Box
                                     key={index}
                                     onClick={() => handleTabClick(index)}
-                                    sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '8px', width: 'fit-content', cursor: 'pointer' }}
+                                    sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
                                 >
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>{tab}</Typography>
                                     <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? '#0A7304' : '#F8F8F8' }} />

@@ -5,8 +5,8 @@ import { Box, Typography, TextField, Divider, Popover } from '@mui/material';
 import SortIcon from '@mui/icons-material/SortOutlined';
 import EditIcon from '@mui/icons-material/EditOutlined';
 import ExportIcon from '@mui/icons-material/FileDownloadOutlined';
-
 import GameImage from '../../../assets/game_image.png';
+
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 import { SaveButton } from '../components/common';
 import GameService from '../../../services/game.service';
@@ -109,7 +109,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
     };
 
     const handleChangePath = (gameId) => () => {
-        navigate(`/new_coach/games/${gameId}`);
+        navigate(`/new_coach/games/${btoa(gameId)}`);
     };
 
     return (
@@ -176,7 +176,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 sx={{ '& .MuiPopover-paper': { width: '200px', borderRadius: '12px', border: '1px solid #E8E8E8' } }}
             >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '12px 0 0 12px', cursor: 'pointer' }} onClick={handleClickEdit}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickEdit}>
                     <EditIcon />
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Edit Game</Typography>
                 </Box>
@@ -186,7 +186,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Hudl</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '0 12px 12px 0', cursor: 'pointer' }} onClick={handleClickExcel}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickExcel}>
                     <ExportIcon />
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Excel</Typography>
                 </Box>

@@ -21,7 +21,7 @@ const Settings = () => {
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Settings</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
                     {Tabs.map((tab, index) => (
-                        <Box onClick={() => handleTabClick(index)} sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '8px', width: 'fit-content', cursor: 'pointer' }}>
+                        <Box onClick={() => handleTabClick(index)} sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: 'fit-content', cursor: 'pointer' }}>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{tab}</Typography>
                             <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? '#0A7304' : '#F8F8F8' }} />
                         </Box>

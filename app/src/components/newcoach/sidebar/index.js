@@ -40,7 +40,7 @@ const Sidebar = () => {
     }, [pathname]);
 
     return (
-        <Box sx={{ backgroundColor: 'white', height: '100%', width: minimum ? '80px' : '180px', paddingTop: '32px', display: 'flex', flexDirection: 'column', gap: '64px' }}>
+        <Box sx={{ backgroundColor: 'white', width: minimum ? '80px' : '180px', paddingTop: '32px', display: 'flex', flexDirection: 'column', gap: '64px' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: minimum ? 'none' : 'space-between', 'svg path': { fill: 'black' }, padding: '0 24px 0 30px', height: '40px' }}>
                 <MenuIcon sx={{ cursor: 'pointer' }} onClick={() => handleMenuControl()} />
                 {!minimum && (

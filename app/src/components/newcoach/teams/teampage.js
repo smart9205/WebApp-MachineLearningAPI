@@ -1,14 +1,16 @@
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeftOutlined';
-import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
 
 import GameService from '../../../services/game.service';
 import { LoadingProgress } from '../components/common';
+import TeamPlayers from './tabs/players';
+import TeamGames from './tabs/games';
+import TeamOverview from './tabs/overview';
 
-const Tabs = ['Players', 'Games'];
+const Tabs = ['Overview', 'Summary', 'Stats', 'Games', 'Players'];
 
 const TeamPage = () => {
     const params = useParams();
@@ -44,12 +46,12 @@ const TeamPage = () => {
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>{values.teamName}</Typography>
             </Box>
             {values.loadingDone && (
-                <Box sx={{ maxHeight: '85vh', width: '80vh', backgroundColor: 'white', width: '100%', padding: '24px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                <Box sx={{ maxHeight: '85vh', width: '80vh', backgroundColor: 'white', width: '100%', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
                         {Tabs.map((tab, index) => (
                             <Box
                                 key={index}
-                                sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px', width: 'fit-content', cursor: 'pointer' }}
+                                sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
                                 onClick={() => handleClickTab(index)}
                             >
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{tab}</Typography>
@@ -57,59 +59,9 @@ const TeamPage = () => {
                             </Box>
                         ))}
                     </Box>
-                    {values.tabSelected === 0 && (
-                        <Box sx={{ maxHeight: 'calc(85vh - 60px)', overflowY: 'auto' }}>
-                            <Box sx={{ marginRight: '16px' }}>
-                                <TableContainer>
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell width="55%" align="center" colSpan={2}>
-                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Name</Typography>
-                                                </TableCell>
-                                                <TableCell width="15%" align="center">
-                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Age</Typography>
-                                                </TableCell>
-                                                <TableCell width="15%" align="center">
-                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Position</Typography>
-                                                </TableCell>
-                                                <TableCell width="15%" align="center">
-                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Games</Typography>
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {values.players &&
-                                                values.players.map((player, index) => (
-                                                    <TableRow key={index} height="70px">
-                                                        <TableCell width="5%" align="center">
-                                                            <img style={{ height: '48px' }} alt="Player Logo" src={player.image.length > 0 ? player.image : PLAYER_ICON_DEFAULT} />
-                                                        </TableCell>
-                                                        <TableCell width="50%">
-                                                            <Box sx={{ paddingLeft: '16px' }}>
-                                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>{player.name}</Typography>
-                                                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#a5a5a8' }}>
-                                                                    #{player.jersey_number}
-                                                                </Typography>
-                                                            </Box>
-                                                        </TableCell>
-                                                        <TableCell width="15%" align="center">
-                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>-</Typography>
-                                                        </TableCell>
-                                                        <TableCell width="15%" align="center">
-                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{player.pos_name}</Typography>
-                                                        </TableCell>
-                                                        <TableCell width="15%" align="center">
-                                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>-</Typography>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </Box>
-                        </Box>
-                    )}
+                    {values.tabSelected === 0 && <TeamOverview />}
+                    {values.tabSelected === 3 && <TeamGames />}
+                    {values.tabSelected === 4 && <TeamPlayers playerList={values.players} />}
                 </Box>
             )}
             {values.loading && <LoadingProgress />}

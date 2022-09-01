@@ -5,7 +5,7 @@ import ForwardIcon from '@mui/icons-material/ForwardTwoTone';
 import MenuIcon from '@mui/icons-material/MenuOutlined';
 import UpIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
 import ExportIcon from '@mui/icons-material/FileDownloadOutlined';
-import RefreshIcon from '@mui/icons-material/RefreshOutlined';
+import VideoIcon from '@mui/icons-material/SlideshowOutlined';
 
 import VideoPlayer from '../../../coach/VideoPlayer';
 import GameService from '../../../../services/game.service';
@@ -111,6 +111,7 @@ const GameOverview = ({ game }) => {
             setLoadData(false);
             setVideoData({
                 ...videoData,
+                idx: 0,
                 tagList: res.map((item) => {
                     return {
                         start_time: item.team_tag_start_time,
@@ -131,6 +132,7 @@ const GameOverview = ({ game }) => {
         if (loadData) {
             setLoading(true);
             setValues({ ...values, playList: [] });
+            setVideoData({ ...videoData, tagList: [] });
 
             if (tagIndex === 0) {
             } else if (tagIndex === 1) {
@@ -217,15 +219,18 @@ const GameOverview = ({ game }) => {
 
     useEffect(() => {
         setCheckArray([]);
-        values.playList.map((item) => {
-            setCheckArray((oldRows) => [...oldRows, values.selectAll]);
-        });
+
+        if (values.selectAll) {
+            values.playList.map((item, index) => {
+                setCheckArray((oldRows) => [...oldRows, values.selectAll]);
+            });
+        } else setCheckArray([]);
     }, [values.selectAll]);
 
-    console.log('GameOverview => ', values.playList, game, values.teamId);
+    console.log('GameOverview => ', videoData);
 
     return (
-        <Box sx={{ width: '100%', background: 'white', maxHeight: '85vh', height: '80vh', overflowY: 'auto', display: 'flex' }}>
+        <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', minWidth: '600px', flexDirection: 'column', gap: '8px', padding: '24px 16px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>
@@ -310,8 +315,8 @@ const GameOverview = ({ game }) => {
                     transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                     sx={{ '& .MuiPopover-paper': { width: '220px', borderRadius: '12px', border: '1px solid #E8E8E8' } }}
                 >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '12px 0 0 12px', cursor: 'pointer' }} onClick={handleClickEdit}>
-                        <RefreshIcon />
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickEdit}>
+                        <VideoIcon />
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>View Clips</Typography>
                     </Box>
                     <Divider sx={{ width: '100%' }} />
@@ -320,26 +325,38 @@ const GameOverview = ({ game }) => {
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Hudl</Typography>
                     </Box>
                     <Divider sx={{ width: '100%' }} />
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '0 12px 12px 0', cursor: 'pointer' }} onClick={handleClickExcel}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickExcel}>
                         <ExportIcon />
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Render</Typography>
                     </Box>
                     <Divider sx={{ width: '100%' }} />
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '0 12px 12px 0', cursor: 'pointer' }} onClick={handleClickExcel}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickExcel}>
                         <ExportIcon />
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to "My Edits"</Typography>
                     </Box>
                 </Popover>
-                <Box sx={{ overflowY: 'auto', maxHeight: values.expandButtons ? '30vh' : '60vh', minHeight: '30vh' }}>
-                    <Box sx={{ marginRight: '4px' }}>
-                        {values.playList.length > 0 && (
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%', paddingRight: '36px' }}>
-                                    <Checkbox value={values.selectAll} onChange={(e) => setValues({ ...values, selectAll: e.target.checked })} />
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Select All</Typography>
-                                </Box>
-                            </Box>
-                        )}
+                {values.playList.length > 0 && (
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Checkbox value={values.selectAll} onChange={(e) => setValues({ ...values, selectAll: e.target.checked })} />
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Select All</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', 'svg path': { fill: '#1a1b1d' } }} onClick={handleClickSportGate}>
+                            <ExportIcon />
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Export to Hudl</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', 'svg path': { fill: '#1a1b1d' } }} onClick={handleClickExcel}>
+                            <ExportIcon />
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Export to Render</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', 'svg path': { fill: '#1a1b1d' } }} onClick={handleClickExcel}>
+                            <ExportIcon />
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Export to "My Edits"</Typography>
+                        </Box>
+                    </Box>
+                )}
+                <Box sx={{ overflowY: 'auto', maxHeight: values.expandButtons ? '35vh' : '60vh', minHeight: '30vh' }}>
+                    <Box sx={{ margin: '0 4px 8px 0' }}>
                         {values.playList.map((item, index) => (
                             <Box key={index} sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px', padding: '4px 0', justifyContent: 'space-between' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={() => handleShowVideo(index)}>
@@ -359,7 +376,7 @@ const GameOverview = ({ game }) => {
                                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>
-                                                {`${getPeriod(item.period)} - ${item.time_in_game}' - ${item.court_area_name} - ${item.player_name} - `}
+                                                {`${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_name} - `}
                                             </Typography>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>
                                                 {`${item.team_tag_start_time} - ${item.team_tag_end_time}`}
@@ -373,13 +390,25 @@ const GameOverview = ({ game }) => {
                                         </Box>
                                     </Box>
                                 </Box>
-                                <Checkbox value={checkArray[index]} onChange={(e) => setCheckArray({ ...checkArray, [index]: e.target.checked })} />
+                                <input
+                                    key={index}
+                                    type="checkbox"
+                                    value={checkArray[index]}
+                                    checked={checkArray[index] ? true : false}
+                                    style={{ width: '18px', height: '18px' }}
+                                    onChange={(e) => setCheckArray({ ...checkArray, [index]: e.target.checked })}
+                                />
                             </Box>
                         ))}
                     </Box>
+                    {values.playList.length === 0 && (
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '80%' }}>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 700, color: '#1a1b1d' }}>No Data to Display</Typography>
+                        </Box>
+                    )}
                 </Box>
             </Box>
-            <VideoPlayer videoData={videoData} url={game.video_url ?? ''} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />
+            <VideoPlayer videoData={videoData} url={game.video_url ?? ''} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} isSpecial={true} logoUrl={game.image} />
         </Box>
     );
 };

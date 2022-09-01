@@ -194,14 +194,14 @@ const Games = () => {
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
-            <Box sx={{ padding: '24px 24px 24px 48px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            <Box sx={{ padding: '24px 24px 24px 48px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Games</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
                     {Tabs.map((tab, index) => (
                         <Box
                             key={index}
                             onClick={() => handleTabClick(index)}
-                            sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '8px', width: 'fit-content', cursor: 'pointer' }}
+                            sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
                         >
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{tab}</Typography>
                             <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? '#0A7304' : '#F8F8F8' }} />
@@ -219,7 +219,7 @@ const Games = () => {
                             IconComponent={ExpandMoreIcon}
                             inputProps={{ 'aria-label': 'Without label' }}
                             MenuProps={MenuProps}
-                            sx={{ outline: 'none', height: '48px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                            sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                         >
                             <MenuItem value="0">All</MenuItem>
                             <MenuItem value="1">Last week</MenuItem>
@@ -236,7 +236,7 @@ const Games = () => {
                             IconComponent={ExpandMoreIcon}
                             inputProps={{ 'aria-label': 'Without label' }}
                             MenuProps={MenuProps}
-                            sx={{ outline: 'none', height: '48px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                            sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                         >
                             <MenuItem key="0" value="none">
                                 All
@@ -258,7 +258,7 @@ const Games = () => {
                             IconComponent={ExpandMoreIcon}
                             inputProps={{ 'aria-label': 'Without label' }}
                             MenuProps={MenuProps}
-                            sx={{ outline: 'none', height: '48px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                            sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                         >
                             <MenuItem key="0" value="none">
                                 All
@@ -280,7 +280,7 @@ const Games = () => {
                             IconComponent={ExpandMoreIcon}
                             inputProps={{ 'aria-label': 'Without label' }}
                             MenuProps={MenuProps}
-                            sx={{ outline: 'none', height: '48px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                            sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                         >
                             <MenuItem key="0" value="none">
                                 All
