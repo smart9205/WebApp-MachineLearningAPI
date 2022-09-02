@@ -99,6 +99,18 @@ module.exports = app => {
 	);
 
 	app.get(
+		"/game/getteamgoalopportunity/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamGoalOpportunity
+	);
+
+	app.get(
+		"/game/getopponentgoalopportunity/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentGoalOpportunity
+	);
+
+	app.get(
 		"/game/getteamoffensivepossession/:teamId/:gameIds",
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getTeamOffensivePossession
@@ -108,6 +120,18 @@ module.exports = app => {
 		"/game/getopponentoffensivepossession/:teamId/:gameIds",
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getOpponentOffensivePossession
+	);
+
+	app.get(
+		"/game/getteamdefensivepossession/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamDefensivePossession
+	);
+
+	app.get(
+		"/game/getopponentdefensivepossession/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentDefensivePossession
 	);
 
 	app.get(
@@ -123,9 +147,27 @@ module.exports = app => {
 	);
 
 	app.get(
+		"/game/getteambuildupgoalkeeperkick/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamBuildUpGoalkeeperKick
+	);
+
+	app.get(
+		"/game/getopponentbuildupgoalkeeperkick/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentBuildUpGoalkeeperKick
+	);
+
+	app.get(
 		"/game/getteambuildondefensivehalf/:teamId/:gameIds",
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getTeamBuildOnDefensiveHalf
+	);
+
+	app.get(
+		"/game/getopponentbuildondefensivehalf/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentBuildOnDefensiveHalf
 	);
 
 	app.get(
@@ -150,6 +192,18 @@ module.exports = app => {
 		"/game/getopponenttackle/:teamId/:gameIds",
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getOpponentStartedFromTackle
+	);
+
+	app.get(
+		"/game/getteamthrowin/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamStartedFromThrowIn
+	);
+
+	app.get(
+		"/game/getopponentthrowin/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentStartedFromThrowIn
 	);
 
 	app.get(
@@ -234,5 +288,83 @@ module.exports = app => {
 		"/game/getopponentshots/:teamId/:gameIds",
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getOpponentShots
+	);
+
+	app.get(
+		"/game/getgamehighlight/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getGameHighlight
+	);
+
+	app.get(
+		"/game/getteambuildonoffensivehalf/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamBuildOnOffensiveHalf
+	);
+
+	app.get(
+		"/game/getopponentbuildonoffensivehalf/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentBuildOnOffensiveHalf
+	);
+
+	app.get(
+		"/game/getteamcouterattack/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamCounterAttack
+	);
+
+	app.get(
+		"/game/getopponentcounterattack/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentCounterAttack
+	);
+
+	app.get(
+		"/game/getteamturnover/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamTurnovers
+	);
+
+	app.get(
+		"/game/getopponentturnover/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentTurnovers
+	);
+
+	app.get(
+		"/game/getteamsaved/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamSaved
+	);
+
+	app.get(
+		"/game/getopponentsaved/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentSaved
+	);
+
+	app.get(
+		"/game/getteamclearance/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamClearance
+	);
+
+	app.get(
+		"/game/getopponentclearance/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentClearance
+	);
+
+	app.get(
+		"/game/getteamblocked/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getTeamBlocked
+	);
+
+	app.get(
+		"/game/getopponentblocked/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.getOpponentBlocked
 	);
 };

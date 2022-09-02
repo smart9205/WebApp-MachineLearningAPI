@@ -15,24 +15,27 @@ const Tags = [
     'Clean Game',
     'All Offensive Possessions',
     'All Defensive Possessions',
-    'Goals',
-    'Goal Opportunities',
-    "Goalkeeper's Build Up",
-    'Defensive Half Build Up',
     'Offensive Half Build Up',
+    'Defensive Half Build Up',
+    "Goalkeeper's Build Up",
+    "Goalkeeper's Build Up (Kick)",
     'Counter-Attacks',
     'Started From Interception',
     'Started From Tackle',
     'Started From Throw In',
-    'Started From Pick Up',
+    'Goals',
+    'Goal Opportunities',
     'Goal Kicks',
     'Free Kicks',
-    'Corners',
     'Crosses',
-    'Penalties Gained',
-    'Draw Fouls',
+    'Corners',
     'Offsides',
-    'Fouls'
+    'Turnovers',
+    'Draw Fouls',
+    'Penalties Gained',
+    'Saved',
+    'Clearance',
+    'Blocked'
 ];
 
 const GameOverview = ({ game }) => {
@@ -51,7 +54,7 @@ const GameOverview = ({ game }) => {
         opponentTeamId: -1,
         selectAll: false
     });
-    const [tagIndex, setTagIndex] = useState(-1);
+    const [tagIndex, setTagIndex] = useState('');
     const [loadData, setLoadData] = useState(false);
     const [loading, setLoading] = useState(false);
     const [checkArray, setCheckArray] = useState([]);
@@ -67,7 +70,6 @@ const GameOverview = ({ game }) => {
     };
 
     const handleShowPopover = (idx) => (e) => {
-        console.log('Game/Overview => ', idx);
         setTagIndex(idx);
         setMenuAnchorEl(e.currentTarget);
     };
@@ -133,72 +135,79 @@ const GameOverview = ({ game }) => {
             setValues({ ...values, playList: [] });
             setVideoData({ ...videoData, tagList: [] });
 
-            if (tagIndex === 0) {
-            } else if (tagIndex === 1) {
-                GameService.getCleanGame(values.isOur ? values.teamId : values.opponentTeamId, `${game.id}`).then((res) => {
-                    console.log('Game/Overview => ', res);
-                    setLoading(false);
-                    setLoadData(false);
-                });
-            } else if (tagIndex === 2) {
+            if (tagIndex === 'Game Highlight') {
+                getPlayTagList(GameService.getGameHighlight(values.isOur ? values.teamId : values.opponentTeamId, `${game.id}`));
+            } else if (tagIndex === 'Clean Game') {
+                getPlayTagList(GameService.getCleanGame(values.isOur ? values.teamId : values.opponentTeamId, `${game.id}`));
+            } else if (tagIndex === 'All Offensive Possessions') {
                 if (values.isOur) getPlayTagList(GameService.getTeamOffensivePossession(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentOffensivePossession(values.teamId, `${game.id}`));
-            } else if (tagIndex === 3) {
-                setLoading(false);
-                setLoadData(false);
-            } else if (tagIndex === 4) {
+            } else if (tagIndex === 'All Defensive Possessions') {
+                if (values.isOur) getPlayTagList(GameService.getTeamDefensivePossession(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentDefensivePossession(values.teamId, `${game.id}`));
+            } else if (tagIndex === 'Goals') {
                 if (values.isOur) getPlayTagList(GameService.getTeamGoals(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentGoals(values.teamId, `${game.id}`));
-            } else if (tagIndex === 5) {
-                setLoading(false);
-                setLoadData(false);
-            } else if (tagIndex === 6) {
+            } else if (tagIndex === 'Goal Opportunities') {
+                if (values.isOur) getPlayTagList(GameService.getTeamGoalOpportunity(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentGoalOpportunity(values.teamId, `${game.id}`));
+            } else if (tagIndex === "Goalkeeper's Build Up") {
                 if (values.isOur) getPlayTagList(GameService.getTeamBuildupGoalkeeper(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentBuildupGoalkeeper(values.teamId, `${game.id}`));
-            } else if (tagIndex === 7) {
+            } else if (tagIndex === 'Defensive Half Build Up') {
                 if (values.isOur) getPlayTagList(GameService.getTeamBuildonDefensiveHalf(values.teamId, `${game.id}`));
-            } else if (tagIndex === 8) {
-                setLoading(false);
-                setLoadData(false);
-            } else if (tagIndex === 9) {
-                setLoading(false);
-                setLoadData(false);
-            } else if (tagIndex === 10) {
+                else getPlayTagList(GameService.getOpponentBuildonDefensiveHalf(values.teamId, `${game.id}`));
+            } else if (tagIndex === 'Offensive Half Build Up') {
+                if (values.isOur) getPlayTagList(GameService.getTeamBuildOnOffensiveHalf(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentBuildOnOffensiveHalf(values.teamId, `${game.id}`));
+            } else if (tagIndex === "Goalkeeper's Build Up (Kick)") {
+                if (values.isOur) getPlayTagList(GameService.getTeamBuildupGoalkeeperKick(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentBuildupGoalkeeperKick(values.teamId, `${game.id}`));
+            } else if (tagIndex === 'Started From Interception') {
                 if (values.isOur) getPlayTagList(GameService.getTeamInterception(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentInterception(values.teamId, `${game.id}`));
-            } else if (tagIndex === 11) {
+            } else if (tagIndex === 'Started From Tackle') {
                 if (values.isOur) getPlayTagList(GameService.getTeamTackle(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentTackle(values.teamId, `${game.id}`));
-            } else if (tagIndex === 12) {
-                setLoading(false);
-                setLoadData(false);
-            } else if (tagIndex === 13) {
-                setLoading(false);
-                setLoadData(false);
-            } else if (tagIndex === 14) {
+            } else if (tagIndex === 'Counter-Attacks') {
+                if (values.isOur) getPlayTagList(GameService.getTeamCounterAttack(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentCounterAttack(values.teamId, `${game.id}`));
+            } else if (tagIndex === 'Started From Throw In') {
+                if (values.isOur) getPlayTagList(GameService.getTeamThrowIn(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentThrowIn(values.teamId, `${game.id}`));
+            } else if (tagIndex === 'Goal Kicks') {
                 if (values.isOur) getPlayTagList(GameService.getTeamShots(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentShots(values.teamId, `${game.id}`));
-            } else if (tagIndex === 15) {
+            } else if (tagIndex === 'Free Kicks') {
                 if (values.isOur) getPlayTagList(GameService.getTeamFreekick(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentFreekick(values.teamId, `${game.id}`));
-            } else if (tagIndex === 16) {
+            } else if (tagIndex === 'Corners') {
                 if (values.isOur) getPlayTagList(GameService.getTeamCorner(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentCorner(values.teamId, `${game.id}`));
-            } else if (tagIndex === 17) {
+            } else if (tagIndex === 'Crosses') {
                 if (values.isOur) getPlayTagList(GameService.getTeamCross(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentCross(values.teamId, `${game.id}`));
-            } else if (tagIndex === 18) {
+            } else if (tagIndex === 'Penalties Gained') {
                 if (values.isOur) getPlayTagList(GameService.getTeamPenalty(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentPenalty(values.teamId, `${game.id}`));
-            } else if (tagIndex === 19) {
+            } else if (tagIndex === 'Draw Fouls') {
                 if (values.isOur) getPlayTagList(GameService.getTeamDrawfoul(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentDrawfoul(values.teamId, `${game.id}`));
-            } else if (tagIndex === 20) {
+            } else if (tagIndex === 'Offsides') {
                 if (values.isOur) getPlayTagList(GameService.getTeamOffside(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentOffside(values.teamId, `${game.id}`));
-            } else {
-                setLoading(false);
-                setLoadData(false);
+            } else if (tagIndex === 'Turnovers') {
+                if (values.isOur) getPlayTagList(GameService.getTeamTurnover(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentTurnover(values.teamId, `${game.id}`));
+            } else if (tagIndex === 'Saved') {
+                if (values.isOur) getPlayTagList(GameService.getTeamSaved(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentSaved(values.teamId, `${game.id}`));
+            } else if (tagIndex === 'Clearance') {
+                if (values.isOur) getPlayTagList(GameService.getTeamClearance(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentClearance(values.teamId, `${game.id}`));
+            } else if (tagIndex === 'Blocked') {
+                if (values.isOur) getPlayTagList(GameService.getTeamBlocked(values.teamId, `${game.id}`));
+                else getPlayTagList(GameService.getOpponentBlocked(values.teamId, `${game.id}`));
             }
         }
     }, [tagIndex, loadData]);
@@ -257,43 +266,29 @@ const GameOverview = ({ game }) => {
                 {values.expandButtons && (
                     <>
                         <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
-                            {Tags.slice(0, 6).map((tag, index) => (
+                            {Tags.slice(0, 12).map((tag, index) => (
                                 <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: '280px' }}>
                                     <Box
-                                        sx={{ cursor: 'pointer', 'svg path': { fill: tagIndex === index ? '#0A7304' : '#C5EAC6' }, '&:hover': { 'svg path': { fill: '#0A7304' } } }}
-                                        onClick={handleShowPopover(index)}
+                                        sx={{ cursor: 'pointer', 'svg path': { fill: tagIndex === tag ? '#0A7304' : '#C5EAC6' }, '&:hover': { 'svg path': { fill: '#0A7304' } } }}
+                                        onClick={handleShowPopover(tag)}
                                     >
                                         <MenuIcon />
                                     </Box>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{tag}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{tag}</Typography>
                                 </Box>
                             ))}
                         </Box>
                         <Box sx={{ width: '100%', height: '1px', background: 'black' }} />
                         <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
-                            {Tags.slice(6, 14).map((tag, index) => (
+                            {Tags.slice(12, 25).map((tag, index) => (
                                 <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: '280px' }}>
                                     <Box
-                                        sx={{ cursor: 'pointer', 'svg path': { fill: tagIndex - 6 === index ? '#0A7304' : '#C5EAC6' }, '&:hover': { 'svg path': { fill: '#0A7304' } } }}
-                                        onClick={handleShowPopover(index + 6)}
+                                        sx={{ cursor: 'pointer', 'svg path': { fill: tagIndex === tag ? '#0A7304' : '#C5EAC6' }, '&:hover': { 'svg path': { fill: '#0A7304' } } }}
+                                        onClick={handleShowPopover(tag)}
                                     >
                                         <MenuIcon />
                                     </Box>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{tag}</Typography>
-                                </Box>
-                            ))}
-                        </Box>
-                        <Box sx={{ width: '100%', height: '1px', background: 'black' }} />
-                        <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
-                            {Tags.slice(14, 22).map((tag, index) => (
-                                <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: '280px' }}>
-                                    <Box
-                                        sx={{ cursor: 'pointer', 'svg path': { fill: tagIndex - 14 === index ? '#0A7304' : '#C5EAC6' }, '&:hover': { 'svg path': { fill: '#0A7304' } } }}
-                                        onClick={handleShowPopover(index + 14)}
-                                    >
-                                        <MenuIcon />
-                                    </Box>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{tag}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{tag}</Typography>
                                 </Box>
                             ))}
                         </Box>
@@ -355,7 +350,7 @@ const GameOverview = ({ game }) => {
                         </Box>
                     </Box>
                 )}
-                <Box sx={{ overflowY: 'auto', maxHeight: values.expandButtons ? '30vh' : '60vh', minHeight: '25vh' }}>
+                <Box sx={{ overflowY: 'auto', maxHeight: values.expandButtons ? '15vh' : '50vh', minHeight: '15vh' }}>
                     {loading && (
                         <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <CircularProgress />

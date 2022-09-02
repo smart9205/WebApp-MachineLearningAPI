@@ -5,6 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
 import GameService from '../../../services/game.service';
 import GameListItem from './gameListItem';
+import { MenuProps } from '../components/common';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -14,20 +15,8 @@ function descendingComparator(a, b, orderBy) {
     return 0;
 }
 
-function descendingComparatorNew(a, b) {
-    if (b < a) return -1;
-
-    if (b > a) return 1;
-
-    return 0;
-}
-
 function getComparator(order, orderBy) {
     return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function getComparatorNew(order) {
-    return order === 'desc' ? (a, b) => descendingComparatorNew(a, b) : (a, b) => -descendingComparatorNew(a, b);
 }
 
 function stableSort(array, comparator) {
@@ -45,17 +34,6 @@ function stableSort(array, comparator) {
 }
 
 const Tabs = ['Processed', 'Pending'];
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 200
-        }
-    }
-};
 
 const Games = () => {
     const [values, setValues] = useState({

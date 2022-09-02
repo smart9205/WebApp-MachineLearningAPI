@@ -97,7 +97,7 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, is
         if (current > endTime) {
             if (tagList.length <= curIdx) {
                 // last tag
-                setPlay(false);
+                PlayVideo(0);
             } else if (canNext) {
                 // is auto play, next clip
                 setCurIdx((c) => c + 1);
