@@ -432,7 +432,7 @@ exports.getOpponentStartedFromInterception = (req, res) => {
 
 exports.getTeamStartedFromTackle = (req, res) => {
   Sequelize.query(`
-    SELECT * from public.fnc_get_team_possessions_started_of_tackles(
+    SELECT * from public.fnc_get_team_possessions_started_of_tackle(
       ${req.params.teamId}, 
       '${req.params.gameIds}'
     )
@@ -450,7 +450,7 @@ exports.getTeamStartedFromTackle = (req, res) => {
 
 exports.getOpponentStartedFromTackle = (req, res) => {
   Sequelize.query(`
-    SELECT * from public.fnc_get_opponent_possessions_started_of_tackles(
+    SELECT * from public.fnc_get_opponent_possessions_started_of_tackle(
       ${req.params.teamId}, 
       '${req.params.gameIds}'
     )
