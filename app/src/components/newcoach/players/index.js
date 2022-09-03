@@ -146,7 +146,7 @@ const Players = () => {
                     />
                 </Box>
             </Box>
-            <Box sx={{ overflowY: 'auto', maxHeight: '70vh', marginLeft: '24px' }}>
+            <Box sx={{ overflowY: 'auto', maxHeight: '75vh', marginLeft: '24px' }}>
                 <Box sx={{ marginRight: '4px' }}>
                     {getPlayers().map((player, index) => (
                         <Box key={getUniqueKey(player)} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>

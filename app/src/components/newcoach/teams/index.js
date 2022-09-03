@@ -134,7 +134,7 @@ const Teams = () => {
                     />
                 </Box>
             </Box>
-            <Box sx={{ overflowY: 'auto', maxHeight: '70vh', marginLeft: '24px' }}>
+            <Box sx={{ overflowY: 'auto', maxHeight: '75vh', marginLeft: '24px' }}>
                 <Box sx={{ marginRight: '4px' }}>
                     {(searchText
                         ? teamsList.filter((item) => compareStrings(item.team_name, searchText) || compareStrings(item.league_name, searchText) || compareStrings(item.season_name, searchText))
