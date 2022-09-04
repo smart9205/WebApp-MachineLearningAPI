@@ -309,7 +309,7 @@ module.exports = app => {
 	);
 
 	app.get(
-		"/game/getteamcouterattack/:teamId/:gameIds",
+		"/game/getteamcounterattack/:teamId/:gameIds",
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getTeamCounterAttack
 	);

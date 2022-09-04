@@ -240,8 +240,8 @@ const GameOverview = ({ game }) => {
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
-            <Box sx={{ display: 'flex', minWidth: '600px', flexDirection: 'column', gap: '8px', padding: '24px 16px' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+            <Box sx={{ display: 'flex', minWidth: '600px', flexDirection: 'column', padding: '24px 16px' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '8px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>
                         {values.teamId === game.home_team_id ? game.home_team_name : game.away_team_name}
                     </Typography>
@@ -274,11 +274,14 @@ const GameOverview = ({ game }) => {
                                     >
                                         <MenuIcon />
                                     </Box>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{tag}</Typography>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2px', justifyContent: 'center', width: 'fit-content' }}>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: tagIndex === tag ? '#0A7304' : '#1a1b1d' }}>{tag}</Typography>
+                                        <Box sx={{ width: '100%', height: '2px', background: tagIndex === tag ? '#0A7304' : 'white' }} />
+                                    </Box>
                                 </Box>
                             ))}
                         </Box>
-                        <Box sx={{ width: '100%', height: '1px', background: 'black' }} />
+                        <Box sx={{ width: '100%', height: '1px', background: 'black', margin: '2px 0' }} />
                         <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
                             {Tags.slice(12, 25).map((tag, index) => (
                                 <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: '280px' }}>
@@ -330,7 +333,7 @@ const GameOverview = ({ game }) => {
                     </Box>
                 </Popover>
                 {values.playList.length > 0 && (
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 8px' }}>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{values.playList.length} Clips</Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '12px' }}>
                             <Checkbox value={values.selectAll} onChange={(e) => setValues({ ...values, selectAll: e.target.checked })} />
@@ -358,7 +361,19 @@ const GameOverview = ({ game }) => {
                     )}
                     <Box sx={{ margin: '0 4px 8px 0' }}>
                         {values.playList.map((item, index) => (
-                            <Box key={index} sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px', padding: '4px 0', justifyContent: 'space-between' }}>
+                            <Box
+                                key={index}
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    cursor: 'pointer',
+                                    gap: '8px',
+                                    padding: '4px',
+                                    justifyContent: 'space-between',
+                                    border: '1px solid #e8e8e8',
+                                    borderRadius: '8px'
+                                }}
+                            >
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={() => handleShowVideo(index)}>
                                     <Box
                                         sx={{
@@ -377,29 +392,31 @@ const GameOverview = ({ game }) => {
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>
                                                 {tagIndex !== 6
-                                                    ? `${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names} - `
-                                                    : `${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names} - ${item.action_type_names} - `}
-                                            </Typography>
-                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>
-                                                {`${item.team_tag_start_time} - ${item.team_tag_end_time}`}
+                                                    ? `${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names}`
+                                                    : `${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names} - ${item.action_type_names}`}
                                             </Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{item.home_team_name}</Typography>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{item.away_team_name}</Typography>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{item.game_date}</Typography>
-                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{item.season_name}</Typography>
                                         </Box>
                                     </Box>
                                 </Box>
-                                <input
-                                    key={index}
-                                    type="checkbox"
-                                    value={checkArray[index]}
-                                    checked={checkArray[index] ? true : false}
-                                    style={{ width: '18px', height: '18px' }}
-                                    onChange={(e) => setCheckArray({ ...checkArray, [index]: e.target.checked })}
-                                />
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.team_tag_start_time}</Typography>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.team_tag_end_time}</Typography>
+                                    </Box>
+                                    <input
+                                        key={index}
+                                        type="checkbox"
+                                        value={checkArray[index]}
+                                        checked={checkArray[index] ? true : false}
+                                        style={{ width: '18px', height: '18px' }}
+                                        onChange={(e) => setCheckArray({ ...checkArray, [index]: e.target.checked })}
+                                    />
+                                </Box>
                             </Box>
                         ))}
                     </Box>
