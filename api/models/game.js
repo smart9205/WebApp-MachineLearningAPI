@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     mobile_video_url: DataTypes.STRING,
     image: DataTypes.STRING,
     mute_video: DataTypes.BOOLEAN,
+    done_tagging: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Game',

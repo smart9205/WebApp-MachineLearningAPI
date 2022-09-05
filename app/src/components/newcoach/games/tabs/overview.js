@@ -10,7 +10,7 @@ import VideoIcon from '@mui/icons-material/SlideshowOutlined';
 import VideoPlayer from '../../../coach/VideoPlayer';
 import GameService from '../../../../services/game.service';
 import { createCommand } from '../../components/utilities';
-import XmlDataFiltering from '../../../coach/XmlDataFiltering';
+import XmlDataFilter from '../../components/xmldata';
 
 const Tags = [
     'Game Highlight',
@@ -54,7 +54,9 @@ const GameOverview = ({ game }) => {
         playList: [],
         teamId: -1,
         opponentTeamId: -1,
-        selectAll: false
+        selectAll: false,
+        clickRender: false,
+        clickHudl: false
     });
     const [tagIndex, setTagIndex] = useState('');
     const [loadData, setLoadData] = useState(false);
@@ -62,7 +64,6 @@ const GameOverview = ({ game }) => {
     const [checkArray, setCheckArray] = useState([]);
     const [exportHudl, setExportHudl] = useState(false);
     const [playerTagList, setPlayerTagList] = useState([]);
-    const [gamePlayerList, setGamePlayerList] = useState([]);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const menuPopoverOpen = Boolean(menuAnchorEl);
@@ -84,46 +85,36 @@ const GameOverview = ({ game }) => {
         setMenuAnchorEl(null);
     };
 
-    const getAllInfosByGame = async (isMenu) => {
-        setLoading(true);
+    const handleClickHudlFromButton = () => {
+        const newList = values.playList.filter((item, index) => checkArray[index] === true);
 
-        if (values.teamId !== -1) {
-            await GameService.getAllPlayerTagsByTeam(values.isOur ? values.teamId : values.opponentTeamId, game.id).then((res) => {
-                console.log('PlayerTags => ', playerTagList);
-                setPlayerTagList(res);
-            });
-            await GameService.getAllGameTeamPlayers(game.id).then((res) => {
-                setGamePlayerList(res);
-            });
+        setPlayerTagList(newList);
+        setExportHudl(true);
+    };
+
+    const handleClickHudlFromMenu = () => {
+        setMenuAnchorEl(null);
+
+        if (values.playList.length === 0) {
+            setValues({ ...values, clickHudl: true });
+            setLoadData(true);
+        } else {
+            setPlayerTagList(values.playList);
+            setExportHudl(true);
         }
-
-        setLoading(false);
-    };
-
-    const handleClickHudlFromButton = async () => {
-        await getAllInfosByGame(false);
-        setMenuAnchorEl(null);
-        setExportHudl(true);
-    };
-
-    const handleClickHudlFromMenu = async () => {
-        await getAllInfosByGame(true);
-        setMenuAnchorEl(null);
-        setExportHudl(true);
     };
 
     const handleClickRenderFromMenu = () => {
-        if (!values.playList.length) return;
-
         setMenuAnchorEl(null);
-        createCommand(values.playList, tagIndex, game.video_url);
+
+        if (values.playList.length === 0) {
+            setValues({ ...values, clickRender: true });
+            setLoadData(true);
+        } else createCommand(values.playList, tagIndex, game.video_url);
     };
 
     const handleClickRenderFromButton = () => {
-        if (!values.playList.length) return;
-        if (!checkArray.length) return;
-
-        const newList = values.playList.map((item, index) => checkArray[index] === true);
+        const newList = values.playList.filter((item, index) => checkArray[index] === true);
 
         createCommand(newList, tagIndex, game.video_url);
     };
@@ -148,7 +139,6 @@ const GameOverview = ({ game }) => {
     const getPlayTagList = (func) => {
         func.then((res) => {
             console.log('Game/Overview => ', res);
-            setValues({ ...values, playList: res });
             setLoading(false);
             setLoadData(false);
             setVideoData({
@@ -161,6 +151,14 @@ const GameOverview = ({ game }) => {
                     };
                 })
             });
+
+            if (values.clickRender) createCommand(res, tagIndex, game.video_url);
+            if (values.clickHudl) {
+                setPlayerTagList(res);
+                setExportHudl(true);
+            }
+
+            setValues({ ...values, playList: res, clickRender: false, clickHudl: false });
 
             let checks = [];
 
@@ -472,9 +470,7 @@ const GameOverview = ({ game }) => {
                 </Box>
             </Box>
             <VideoPlayer videoData={videoData} url={game.video_url ?? ''} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} isSpecial={true} />
-            {exportHudl && (
-                <XmlDataFiltering game={game} team={playerTagList} teamId={values.isOur ? values.teamId : values.opponentTeamId} playersInGameList={gamePlayerList} setExportXML={setExportHudl} />
-            )}
+            {exportHudl && <XmlDataFilter game={game} tagList={playerTagList} isOur={values.isOur} tag_name={tagIndex} setExportXML={setExportHudl} />}
         </Box>
     );
 };

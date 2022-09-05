@@ -78,7 +78,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
     const [videoUrl, setVideoUrl] = useState('');
     const [mobileVideoUrl, setMobileVideoUrl] = useState('');
 
-    const [muteVideoList, setMuteVideoList] = useState('');
+    const [doneTagging, setDoneTagging] = useState(false);
     const [muteVideo, setMuteVideo] = useState(true);
 
     useEffect(() => {
@@ -111,6 +111,7 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
         setGameDate(editData.date);
         setVideoUrl(editData.video_url);
         setMobileVideoUrl(editData.mobile_video_url);
+        setDoneTagging(editData.done_tagging);
     }, [editData, seasonList, leagueList, actionType]);
 
     const getTeamList = () => GameService.getAllTeams().then((res) => setTeamList(res));
@@ -155,7 +156,8 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
                 date: gameDate,
                 video_url: videoUrl,
                 mobile_video_url: mobileVideoUrl ? mobileVideoUrl : videoUrl,
-                mute_video: muteVideo
+                mute_video: muteVideo,
+                done_tagging: doneTagging
             })
                 .then((res) => {
                     gameListUpdated();
@@ -176,7 +178,8 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
                 date: gameDate,
                 video_url: videoUrl,
                 mobile_video_url: mobileVideoUrl ? mobileVideoUrl : videoUrl,
-                mute_video: muteVideo
+                mute_video: muteVideo,
+                done_tagging: doneTagging
             })
                 .then((res) => {
                     gameListUpdated();
@@ -269,11 +272,16 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
                                 {t('Player')}
                             </Button>
                         </div>
-                        <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                             <FormControlLabel
                                 sx={{ mt: 1 }}
                                 control={<Switch checked={muteVideo} onChange={() => setMuteVideo(!muteVideo)} inputProps={{ 'aria-label': 'controlled' }} />}
                                 label={`${t('Mute Video')}`}
+                            />
+                            <FormControlLabel
+                                sx={{ mt: 1 }}
+                                control={<Switch checked={doneTagging} onChange={() => setDoneTagging(!doneTagging)} inputProps={{ 'aria-label': 'controlled' }} />}
+                                label={`${t('Done Tagging')}`}
                             />
                         </div>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
