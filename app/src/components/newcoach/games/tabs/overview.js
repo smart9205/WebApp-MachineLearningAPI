@@ -9,6 +9,8 @@ import VideoIcon from '@mui/icons-material/SlideshowOutlined';
 
 import VideoPlayer from '../../../coach/VideoPlayer';
 import GameService from '../../../../services/game.service';
+import { createCommand } from '../../components/utilities';
+import XmlDataFiltering from '../../../coach/XmlDataFiltering';
 
 const Tags = [
     'Game Highlight',
@@ -58,6 +60,9 @@ const GameOverview = ({ game }) => {
     const [loadData, setLoadData] = useState(false);
     const [loading, setLoading] = useState(false);
     const [checkArray, setCheckArray] = useState([]);
+    const [exportHudl, setExportHudl] = useState(false);
+    const [playerTagList, setPlayerTagList] = useState([]);
+    const [gamePlayerList, setGamePlayerList] = useState([]);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const menuPopoverOpen = Boolean(menuAnchorEl);
@@ -74,20 +79,56 @@ const GameOverview = ({ game }) => {
         setMenuAnchorEl(e.currentTarget);
     };
 
-    const handleClickEdit = () => {
+    const handleClickView = () => {
         setLoadData(true);
         setMenuAnchorEl(null);
     };
 
-    const handleClickSportGate = async () => {
-        // await getAllInfosByGame(row);
-        // setExportGate(true);
-        setMenuAnchorEl(null);
+    const getAllInfosByGame = async (isMenu) => {
+        setLoading(true);
+
+        if (values.teamId !== -1) {
+            await GameService.getAllPlayerTagsByTeam(values.isOur ? values.teamId : values.opponentTeamId, game.id).then((res) => {
+                console.log('PlayerTags => ', playerTagList);
+                setPlayerTagList(res);
+            });
+            await GameService.getAllGameTeamPlayers(game.id).then((res) => {
+                setGamePlayerList(res);
+            });
+        }
+
+        setLoading(false);
     };
 
-    const handleClickExcel = async () => {
-        // await getAllInfosByGame(row);
-        // setExportExcel(true);
+    const handleClickHudlFromButton = async () => {
+        await getAllInfosByGame(false);
+        setMenuAnchorEl(null);
+        setExportHudl(true);
+    };
+
+    const handleClickHudlFromMenu = async () => {
+        await getAllInfosByGame(true);
+        setMenuAnchorEl(null);
+        setExportHudl(true);
+    };
+
+    const handleClickRenderFromMenu = () => {
+        if (!values.playList.length) return;
+
+        setMenuAnchorEl(null);
+        createCommand(values.playList, tagIndex, game.video_url);
+    };
+
+    const handleClickRenderFromButton = () => {
+        if (!values.playList.length) return;
+        if (!checkArray.length) return;
+
+        const newList = values.playList.map((item, index) => checkArray[index] === true);
+
+        createCommand(newList, tagIndex, game.video_url);
+    };
+
+    const handleClickExcel = () => {
         setMenuAnchorEl(null);
     };
 
@@ -291,7 +332,10 @@ const GameOverview = ({ game }) => {
                                     >
                                         <MenuIcon />
                                     </Box>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{tag}</Typography>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2px', justifyContent: 'center', width: 'fit-content' }}>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: tagIndex === tag ? '#0A7304' : '#1a1b1d' }}>{tag}</Typography>
+                                        <Box sx={{ width: '100%', height: '2px', background: tagIndex === tag ? '#0A7304' : 'white' }} />
+                                    </Box>
                                 </Box>
                             ))}
                         </Box>
@@ -312,17 +356,17 @@ const GameOverview = ({ game }) => {
                     transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                     sx={{ '& .MuiPopover-paper': { width: '220px', borderRadius: '12px', border: '1px solid #E8E8E8' } }}
                 >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickEdit}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickView}>
                         <VideoIcon />
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>View Clips</Typography>
                     </Box>
                     <Divider sx={{ width: '100%' }} />
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickSportGate}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickHudlFromMenu}>
                         <ExportIcon />
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Hudl</Typography>
                     </Box>
                     <Divider sx={{ width: '100%' }} />
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickExcel}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickRenderFromMenu}>
                         <ExportIcon />
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Render</Typography>
                     </Box>
@@ -339,11 +383,11 @@ const GameOverview = ({ game }) => {
                             <Checkbox value={values.selectAll} onChange={(e) => setValues({ ...values, selectAll: e.target.checked })} />
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Select All</Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', 'svg path': { fill: '#1a1b1d' } }} onClick={handleClickSportGate}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', 'svg path': { fill: '#1a1b1d' } }} onClick={handleClickHudlFromButton}>
                             <ExportIcon />
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Hudl</Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', 'svg path': { fill: '#1a1b1d' } }} onClick={handleClickExcel}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', 'svg path': { fill: '#1a1b1d' } }} onClick={handleClickRenderFromButton}>
                             <ExportIcon />
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Render</Typography>
                         </Box>
@@ -428,6 +472,9 @@ const GameOverview = ({ game }) => {
                 </Box>
             </Box>
             <VideoPlayer videoData={videoData} url={game.video_url ?? ''} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} isSpecial={true} />
+            {exportHudl && (
+                <XmlDataFiltering game={game} team={playerTagList} teamId={values.isOur ? values.teamId : values.opponentTeamId} playersInGameList={gamePlayerList} setExportXML={setExportHudl} />
+            )}
         </Box>
     );
 };
