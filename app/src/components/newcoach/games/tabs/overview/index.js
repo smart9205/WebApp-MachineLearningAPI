@@ -1,7 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import React, { useEffect, useReducer, useState } from 'react';
 
-import ForwardIcon from '@mui/icons-material/ForwardTwoTone';
 import UpIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
 
 import VideoPlayer from '../../../../coach/VideoPlayer';
@@ -12,6 +11,7 @@ import GameTagButtonList from './tagButtonList';
 import GameTagList from './tagList';
 import GameTagControlSection from './tagControlSection';
 import GameTagMenu from './tagMenu';
+import GameOverviewHeader from './header';
 
 const GameOverview = ({ game, hasPadding, isSub }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
@@ -251,28 +251,7 @@ const GameOverview = ({ game, hasPadding, isSub }) => {
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: isSub ? 'none' : 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', minWidth: '600px', flexDirection: 'column', padding: hasPadding ? '24px 16px' : 0 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>
-                        {values.teamId === game.home_team_id ? game.home_team_name : game.away_team_name}
-                    </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Box
-                            sx={{ 'svg path:last-of-type': { fill: 'black' }, 'svg path:first-of-type': { fill: values.isOur ? 'green' : 'white', opacity: 1 }, cursor: 'pointer' }}
-                            onClick={() => handleChangeTeam(true)}
-                        >
-                            <ForwardIcon sx={{ transform: 'rotate(180deg)' }} fontSize="large" />
-                        </Box>
-                        <Box
-                            sx={{ 'svg path:last-of-type': { fill: 'black' }, 'svg path:first-of-type': { fill: values.isOur ? 'white' : 'green', opacity: 1 }, cursor: 'pointer' }}
-                            onClick={() => handleChangeTeam(false)}
-                        >
-                            <ForwardIcon fontSize="large" />
-                        </Box>
-                    </Box>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>
-                        {values.opponentTeamId === game.home_team_id ? game.home_team_name : game.away_team_name}
-                    </Typography>
-                </Box>
+                <GameOverviewHeader isOur={values.isOur} our={values.teamId} opponent={values.opponentTeamId} game={game} onChangeTeam={handleChangeTeam} />
                 {values.expandButtons && <GameTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
