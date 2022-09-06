@@ -20,6 +20,7 @@ const TeamPage = () => {
         loading: false,
         loadingDone: false
     });
+    const [gameList, setGameList] = useState([]);
 
     const handleClickTab = (idx) => {
         setValues({ ...values, tabSelected: idx });
@@ -30,6 +31,9 @@ const TeamPage = () => {
 
         if (pathname.match(/\/new_coach\/teams\//) !== null) {
             setValues({ ...values, loading: true });
+            GameService.getAllGamesByCoach(null, null, null, null).then((res) => {
+                setGameList(res);
+            });
             GameService.getCoachTeamPlayers(atob(params.teamId).split('|')[0], atob(params.teamId).split('|')[1]).then((res) => {
                 setValues({ ...values, players: res, teamName: res[0].team_name, loading: false, loadingDone: true });
             });
@@ -63,7 +67,7 @@ const TeamPage = () => {
                             </Box>
                         ))}
                     </Box>
-                    {values.tabSelected === 0 && <TeamOverview />}
+                    {values.tabSelected === 0 && <TeamOverview games={gameList} />}
                     {values.tabSelected === 3 && <TeamGames />}
                     {values.tabSelected === 4 && <TeamPlayers playerList={values.players} />}
                 </Box>
