@@ -28,7 +28,7 @@ exports.create = (req, res) => {
 
 exports.getNewStreamURL = async (req, res) => {
   try {
-    const response = await axios.post("https://api.newstream.ai/api/video/v1/youtube_download_link", req.body);
+    const response = await axios.post("https://api.sportgate.ai/api/video/v1/youtube_download_link", req.body);
     return res.send(response?.data);
 
   } catch (e) { return res.send("error occured") }

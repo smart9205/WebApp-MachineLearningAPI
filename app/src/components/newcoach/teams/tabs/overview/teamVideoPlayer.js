@@ -58,12 +58,13 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
     const [currentTime, setCurrentTime] = useState(0);
 
     useEffect(() => {
+        setVideoList([]);
         games.map((game) => {
             if (game.video_url.startsWith('https://www.youtube.com')) {
                 gameService.getNewStreamURL(game.video_url).then((res) => {
                     setVideoList((old) => [...old, { id: game.id, url: res }]);
                 });
-            } else setVideoList((old) => [...old, { id: game.id, url: game.video_url }]);
+            } else if (game.video_url.toLowerCase() !== 'no video') setVideoList((old) => [...old, { id: game.id, url: game.video_url }]);
         });
 
         if (videoList.length > 0) setVideoURL(videoList[0].url);
@@ -90,7 +91,7 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
     const seekTo = (sec) => player.current && player.current.seekTo(sec);
 
     const playTagByIdx = (i) => {
-        const video = videoList.filter((item) => item.id === tagList[i].game_id).map((item) => item.url);
+        const video = videoList.filter((item) => item.id === tagList[i].game_id).map((item) => item.url)[0];
 
         if (video !== videoURL) setVideoURL(video);
 
@@ -108,19 +109,15 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
         }
 
         if (current > endTime) {
-            if (tagList.length <= curIdx) {
-                // last tag
-                PlayVideo(0);
-            } else if (canNext) {
-                // is auto play, next clip
-                const video = videoList.filter((item) => item.id === tagList[curIdx + 1].game_id).map((item) => item.url);
+            if (curIdx < tagList.length - 1) {
+                if (canNext) {
+                    const video = videoList.filter((item) => item.id === tagList[curIdx + 1].game_id).map((item) => item.url)[0];
 
-                if (video !== videoURL) setVideoURL(video);
+                    if (video !== videoURL) setVideoURL(video);
 
-                setCurIdx((c) => c + 1);
-            } else {
-                setPlay(false);
-            }
+                    setCurIdx((c) => c + 1);
+                } else setPlay(false);
+            } else PlayVideo(1);
         }
     };
 
@@ -148,6 +145,8 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
     const handlePlay = () => {
         setPlay(true);
     };
+
+    console.log('TeamVideo => ', curIdx, videoURL);
 
     return (
         <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
@@ -195,7 +194,7 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                         <SkipNextSharpIcon />
                     </IconButton>
 
-                    {autoPlay && <FormControlLabel control={<Switch defaultChecked onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
+                    {autoPlay && <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
 
                     <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
                         {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
