@@ -16,6 +16,7 @@ const TeamPage = () => {
     const [values, setValues] = useState({
         players: [],
         teamName: '',
+        teamId: -1,
         tabSelected: 0,
         loading: false,
         loadingDone: false
@@ -30,12 +31,14 @@ const TeamPage = () => {
         const pathname = window.location.pathname;
 
         if (pathname.match(/\/new_coach\/teams\//) !== null) {
+            const ids = atob(params.teamId).split('|');
+
             setValues({ ...values, loading: true });
-            GameService.getAllGamesByCoach(null, null, null, null).then((res) => {
+            GameService.getAllGamesByCoach(ids[1], ids[2], ids[0], null).then((res) => {
                 setGameList(res);
             });
-            GameService.getCoachTeamPlayers(atob(params.teamId).split('|')[0], atob(params.teamId).split('|')[1]).then((res) => {
-                setValues({ ...values, players: res, teamName: res[0].team_name, loading: false, loadingDone: true });
+            GameService.getCoachTeamPlayers(ids[0], ids[1]).then((res) => {
+                setValues({ ...values, players: res, teamName: res[0].team_name, loading: false, loadingDone: true, teamId: ids[0] });
             });
         }
     }, [params]);
@@ -47,30 +50,32 @@ const TeamPage = () => {
                     <CircularProgress />
                 </div>
             )}
-            <Box sx={{ width: '100%', padding: '24px', display: 'flex', alignItems: 'center', gap: '24px', 'svg path': { fill: 'black' } }}>
-                <Link to="/new_coach/teams">
-                    <ChevronLeftIcon sx={{ width: '32px', height: '32px' }} />
-                </Link>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>{values.teamName}</Typography>
-            </Box>
             {values.loadingDone && (
-                <Box sx={{ maxHeight: '85vh', width: '80vh', backgroundColor: 'white', width: '100%', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
-                        {Tabs.map((tab, index) => (
-                            <Box
-                                key={index}
-                                sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
-                                onClick={() => handleClickTab(index)}
-                            >
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{tab}</Typography>
-                                <Box sx={{ height: '2px', width: '100%', backgroundColor: values.tabSelected === index ? '#0A7304' : 'white' }} />
-                            </Box>
-                        ))}
+                <>
+                    <Box sx={{ padding: '24px 24px 24px 48px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', 'svg path': { fill: 'black' } }}>
+                            <Link to="/new_coach/teams">
+                                <ChevronLeftIcon sx={{ width: '32px', height: '32px' }} />
+                            </Link>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>{values.teamName}</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '32px', paddingLeft: '56px' }}>
+                            {Tabs.map((tab, index) => (
+                                <Box
+                                    key={index}
+                                    sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
+                                    onClick={() => handleClickTab(index)}
+                                >
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{tab}</Typography>
+                                    <Box sx={{ height: '2px', width: '100%', backgroundColor: values.tabSelected === index ? '#0A7304' : '#F8F8F8' }} />
+                                </Box>
+                            ))}
+                        </Box>
                     </Box>
-                    {values.tabSelected === 0 && <TeamOverview games={gameList} />}
+                    {values.tabSelected === 0 && <TeamOverview games={gameList} teamname={values.teamName} teamId={values.teamId} />}
                     {values.tabSelected === 3 && <TeamGames />}
                     {values.tabSelected === 4 && <TeamPlayers playerList={values.players} />}
-                </Box>
+                </>
             )}
         </Box>
     );

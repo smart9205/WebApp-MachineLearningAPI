@@ -4,8 +4,7 @@ import fileDownload from 'js-file-download';
 
 import gameService from '../../../services/game.service';
 
-export const createCommand = async (tagList, name, videoURL) => {
-    let rawVideoList = [videoURL];
+export const createCommand = async (tagList, name, rawVideoList) => {
     let videoList = await Promise.all(
         rawVideoList.map(async (url) => {
             if (url?.startsWith('https://www.youtube.com')) {

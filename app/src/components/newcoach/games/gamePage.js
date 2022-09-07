@@ -91,7 +91,7 @@ const GamePage = () => {
                             ))}
                         </Box>
                     </Box>
-                    {values.curTab === 0 && <GameOverview game={values.game} hasPadding={true} isSub={false} />}
+                    {values.curTab === 0 && <GameOverview game={values.game} />}
                 </>
             )}
         </Box>

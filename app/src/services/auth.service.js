@@ -58,7 +58,6 @@ const updateProfile2 = (first_name, last_name, phone_number, country, logo) => {
             { headers: authHeader() }
         )
         .then((response) => {
-            console.log('updateprofile2 => ', response.data);
             if (response.data.accessToken) {
                 setUser(response.data);
             }

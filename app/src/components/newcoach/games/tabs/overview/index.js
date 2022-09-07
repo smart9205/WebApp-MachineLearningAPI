@@ -13,7 +13,7 @@ import GameTagControlSection from './tagControlSection';
 import GameTagMenu from './tagMenu';
 import GameOverviewHeader from './header';
 
-const GameOverview = ({ game, hasPadding, isSub }) => {
+const GameOverview = ({ game }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
     const [videoData, setVideoData] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -81,13 +81,13 @@ const GameOverview = ({ game, hasPadding, isSub }) => {
         if (values.playList.length === 0) {
             setValues({ ...values, clickRender: true });
             setLoadData(true);
-        } else createCommand(values.playList, tagIndex, game.video_url);
+        } else createCommand(values.playList, tagIndex, [game.video_url]);
     };
 
     const handleClickRenderFromButton = () => {
         const newList = values.playList.filter((item, index) => checkArray[index] === true);
 
-        createCommand(newList, tagIndex, game.video_url);
+        createCommand(newList, tagIndex, [game.video_url]);
     };
 
     const handleClickExcel = () => {
@@ -123,19 +123,17 @@ const GameOverview = ({ game, hasPadding, isSub }) => {
                 })
             });
 
-            if (values.clickRender) createCommand(res, tagIndex, game.video_url);
+            if (values.clickRender) createCommand(res, tagIndex, [game.video_url]);
             if (values.clickHudl) {
                 setPlayerTagList(res);
                 setExportHudl(true);
             }
 
             setValues({ ...values, playList: res, clickRender: false, clickHudl: false });
-
-            let checks = [];
-
-            for (let i = 0; i < res.length; i++) checks.push(false);
-
-            setCheckArray(checks);
+            setCheckArray([]);
+            res.map((item, index) => {
+                setCheckArray((oldRows) => [...oldRows, false]);
+            });
         });
     };
 
@@ -238,20 +236,23 @@ const GameOverview = ({ game, hasPadding, isSub }) => {
 
     useEffect(() => {
         setCheckArray([]);
-
-        if (values.selectAll) {
-            values.playList.map((item, index) => {
-                setCheckArray((oldRows) => [...oldRows, values.selectAll]);
-            });
-        } else setCheckArray([]);
+        values.playList.map((item, index) => {
+            setCheckArray((oldRows) => [...oldRows, values.selectAll]);
+        });
     }, [values.selectAll]);
 
     console.log('GameOverview => ', values.playList);
 
     return (
-        <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: isSub ? 'none' : 'auto', display: 'flex' }}>
-            <Box sx={{ display: 'flex', minWidth: '600px', flexDirection: 'column', padding: hasPadding ? '24px 16px' : 0 }}>
-                <GameOverviewHeader isOur={values.isOur} our={values.teamId} opponent={values.opponentTeamId} game={game} onChangeTeam={handleChangeTeam} />
+        <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
+            <Box sx={{ display: 'flex', minWidth: '600px', flexDirection: 'column', padding: '24px 16px' }}>
+                <GameOverviewHeader
+                    isOur={values.isOur}
+                    ourname={values.teamId === game.home_team_id ? game.home_team_name : game.away_team_name}
+                    enemyname={values.opponentTeamId === game.home_team_id ? game.home_team_name : game.away_team_name}
+                    onChangeTeam={handleChangeTeam}
+                    mb="8px"
+                />
                 {values.expandButtons && <GameTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />

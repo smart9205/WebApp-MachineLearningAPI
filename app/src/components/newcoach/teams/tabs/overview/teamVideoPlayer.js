@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import { IconButton, Switch, FormControlLabel } from '@mui/material';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
+
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlined';
@@ -9,10 +11,10 @@ import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
-import { toSecond } from '../../common/utilities';
-import gameService from '../../services/game.service';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import GameImage from '../../assets/Game.png';
+
+import { toSecond } from '../../../components/utilities';
+import gameService from '../../../../../services/game.service';
+import GameImage from '../../../../../assets/TeamOverview.png';
 // import VIDEO from '../../assets/1.mp4'
 
 const styles = {
@@ -42,7 +44,7 @@ const styles = {
         backgroundColor: '#80808069'
     }
 };
-export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, isSpecial = false }) {
+export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOpen }) {
     const handle = useFullScreenHandle();
     const { tagList, autoPlay, idx, videoPlay, cnt = null } = videoData;
 
@@ -51,16 +53,21 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, is
     const [ready, setReady] = useState(false);
     const [curIdx, setCurIdx] = useState(0);
     const [videoURL, setVideoURL] = useState('');
+    const [videoList, setVideoList] = useState([]);
     const [canNext, setCanNext] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
 
     useEffect(() => {
-        if (url?.startsWith('https://www.youtube.com')) {
-            gameService.getNewStreamURL(url).then((res) => {
-                setVideoURL(res.url);
-            });
-        } else setVideoURL(url);
-    }, [url]);
+        games.map((game) => {
+            if (game.video_url.startsWith('https://www.youtube.com')) {
+                gameService.getNewStreamURL(game.video_url).then((res) => {
+                    setVideoList((old) => [...old, { id: game.id, url: res }]);
+                });
+            } else setVideoList((old) => [...old, { id: game.id, url: game.video_url }]);
+        });
+
+        if (videoList.length > 0) setVideoURL(videoList[0].url);
+    }, [games]);
 
     useEffect(() => {
         if (!ready) return;
@@ -82,11 +89,17 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, is
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec);
 
-    const playTagByIdx = (i) => seekTo(toSecond(tagList[i]?.start_time));
+    const playTagByIdx = (i) => {
+        const video = videoList.filter((item) => item.id === tagList[i].game_id).map((item) => item.url);
+
+        if (video !== videoURL) setVideoURL(video);
+
+        seekTo(toSecond(tagList[i]?.team_tag_start_time));
+    };
 
     const onProgress = (current) => {
-        const startTime = toSecond(tagList[curIdx]?.start_time);
-        const endTime = toSecond(tagList[curIdx]?.end_time);
+        const startTime = toSecond(tagList[curIdx]?.team_tag_start_time);
+        const endTime = toSecond(tagList[curIdx]?.team_tag_end_time);
 
         setCurrentTime(current);
 
@@ -100,6 +113,10 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, is
                 PlayVideo(0);
             } else if (canNext) {
                 // is auto play, next clip
+                const video = videoList.filter((item) => item.id === tagList[curIdx + 1].game_id).map((item) => item.url);
+
+                if (video !== videoURL) setVideoURL(video);
+
                 setCurIdx((c) => c + 1);
             } else {
                 setPlay(false);
@@ -153,7 +170,7 @@ export default function VideoPlayer({ videoData, url, onChangeClip, drawOpen, is
                                 height="100%"
                             />
                         )}
-                        {tagList.length === 0 && isSpecial && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
+                        {tagList.length === 0 && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                     </div>
                 </div>
 

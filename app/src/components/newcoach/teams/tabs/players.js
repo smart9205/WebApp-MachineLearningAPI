@@ -5,8 +5,8 @@ import { PLAYER_ICON_DEFAULT } from '../../../../common/staticData';
 
 const TeamPlayers = ({ playerList }) => {
     return (
-        <Box sx={{ maxHeight: 'calc(85vh - 60px)', minHeight: '75vh', overflowY: 'auto' }}>
-            <Box sx={{ marginRight: '16px' }}>
+        <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', minHeight: '65vh', overflowY: 'auto', display: 'flex' }}>
+            <Box sx={{ marginRight: '4px' }}>
                 <TableContainer>
                     <Table>
                         <TableHead>

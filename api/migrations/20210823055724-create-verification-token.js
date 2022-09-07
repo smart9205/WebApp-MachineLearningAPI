@@ -29,7 +29,7 @@ module.exports = {
         DO
         DELETE FROM verification_tokens WHERE createdAt < DATE_SUB(NOW(), INTERVAL 1 DAY);
         `)
-    }).then(() => { console.log('expireToken event created') });
+    });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('VerificationTokens');

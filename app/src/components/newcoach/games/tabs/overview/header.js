@@ -3,12 +3,10 @@ import { Box, Typography } from '@mui/material';
 
 import ForwardIcon from '@mui/icons-material/ForwardTwoTone';
 
-const GameOverviewHeader = ({ isOur, our, opponent, game, onChangeTeam }) => {
+const GameOverviewHeader = ({ isOur, ourname, enemyname, onChangeTeam, mb }) => {
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '8px' }}>
-            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>
-                {our === game.home_team_id ? game.home_team_name : game.away_team_name}
-            </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', marginBottom: mb }}>
+            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{ourname}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Box
                     sx={{ 'svg path:last-of-type': { fill: 'black' }, 'svg path:first-of-type': { fill: isOur ? 'green' : 'white', opacity: 1 }, cursor: 'pointer' }}
@@ -23,9 +21,7 @@ const GameOverviewHeader = ({ isOur, our, opponent, game, onChangeTeam }) => {
                     <ForwardIcon fontSize="large" />
                 </Box>
             </Box>
-            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>
-                {opponent === game.home_team_id ? game.home_team_name : game.away_team_name}
-            </Typography>
+            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{enemyname}</Typography>
         </Box>
     );
 };

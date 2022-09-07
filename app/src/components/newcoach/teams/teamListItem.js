@@ -12,8 +12,8 @@ const TeamListItem = ({ row, isHover }) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
 
-    const handleChangePath = (teamId, seasonId) => () => {
-        navigate(`/new_coach/teams/${btoa(`${teamId}|${seasonId}`)}`);
+    const handleChangePath = (teamId, seasonId, leagueId) => () => {
+        navigate(`/new_coach/teams/${btoa(`${teamId}|${seasonId}|${leagueId}`)}`);
     };
 
     const handleCloseDialog = () => {
@@ -39,7 +39,7 @@ const TeamListItem = ({ row, isHover }) => {
                 boxShadow: isHover ? '0px 4px 16px rgba(0, 0, 0, 0.1)' : 'none'
             }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center', flex: 16.5 }} onClick={handleChangePath(row.team_id, row.season_id)}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flex: 16.5 }} onClick={handleChangePath(row.team_id, row.season_id, row.league_id)}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
                     <img style={{ height: '48px' }} src={row.team_image ? row.team_image : TEAM_ICON_DEFAULT} alt="Team Logo" />
                 </Box>
