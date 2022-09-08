@@ -129,6 +129,34 @@ exports.findFolder = (req, res) => {
     });
 };
 
+exports.findAllFolders = (req, res) => {
+  let result = {};
+
+  Sequelize.query(`
+    SELECT * FROM public."User_Edits" WHERE public."User_Edits".user_id=${req.userId}
+  `).then(data => {
+    result = data[0];
+  }).catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving UserEdits."
+      });
+    });
+
+  Sequelize.query(`
+    SELECT * FROM public."User_Edits_Folders" WHERE public."User_Edits_Folders".user_id=${req.userId}
+  `).then(data => {
+    let result1 = data[0];
+
+    res.send([...result, ...result1])
+  }).catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving UserEdits."
+      });
+    });
+}
+
 exports.findOne = (req, res) => {
   const id = req.params.id;
 

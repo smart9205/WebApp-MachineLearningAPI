@@ -27,7 +27,7 @@ export const menuData = [
     {
         path: '/new_coach/edits',
         icon: <EditsIcon />,
-        title: 'Edits'
+        title: 'My Edits'
     },
     {
         path: '/new_coach/teams',

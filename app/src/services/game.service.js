@@ -732,6 +732,12 @@ const getTeamByPlayerGame = (playerId, gameId) => {
     });
 };
 
+const getAllFolders = () => {
+    return axios.get(API_URL + 'user_edits_folders', { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
 const gameService = {
     addTeamPlayer,
     addTeam,
@@ -840,6 +846,7 @@ const gameService = {
     getCoachTeamPlayers,
     getAllPlayerTagsByCoachPlayer,
     getAllGameTeamPlayers,
+    getAllFolders,
 
     updateJersey,
     updateGame,

@@ -170,6 +170,13 @@ export default function Navbar() {
                                     </Link>
                                 </li>
                             )}
+                            {currentUser && currentUser?.roles.includes('ROLE_COACH') && (
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/new_coach">
+                                        {t('New Coach (Beta)')}
+                                    </Link>
+                                </li>
+                            )}
                             {currentUser && currentUser?.roles.includes('ROLE_ADMIN') && (
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/admin">

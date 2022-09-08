@@ -1,283 +1,219 @@
-import { Box, Typography } from '@mui/material';
-import React, { useEffect, useReducer, useState } from 'react';
-import gameService from '../../../services/game.service';
-import { Button, Grid } from '@mui/material';
-import { Paper, IconButton, Table, TableBody, TableRow, TableCell, TableContainer, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CreateEditDialog from './tabs/createEditDialog';
-import EditNameDialog from "../../../common/EditNameDialolg";
-import DeleteConfirmDialog from "../../../common/DeleteConfirmDialog";
-import DragableTeamTagTable from './tabs/DragableTeamTagTable';
-import DragableIndividualTagTable from './tabs/DragableIndividualTagTable'
-import VideoPlayer from './tabs/UserEditVideoPlayer';
-import { createCommand, toSecond } from '../../../common/utilities';
+import React, { useEffect, useState, ReactElement } from 'react';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { TreeView, TreeItem, treeItemClasses } from '@mui/lab';
+import { styled } from '@mui/material/styles';
+import PropTypes from 'prop-types';
 
-const Edits = () => {
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import FolderIcon from '../../../assets/Folder.svg';
+import EditsIcon from '../../../assets/Edits.svg';
 
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        teamList: [],
-        team: []
-    })
-    const { teamList, team } = state
+import GameService from '../../../services/game.service';
 
-    const [open, setOpen] = useState(false)
-    const [curEdit, setCurEdit] = useState(null)
-    const [deleteOpen, setDeleteOpen] = useState(false)
-    const [editName, setEditName] = useState("")
-    const [editOpen, setEditOpen] = useState(false)
-    const [editList, setEditList] = useState([])
-    const [showAccordion, setShowAccordion] = useState(true)
-    const [curTagIdx, setCurTagIdx] = useState(0)
-    const [tagList, setTagList] = useState([])
+function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) return -1;
 
-    const [parentId, setParentId] = useState(0)
-    const [folder, setFolder] = useState([])
-    const [name, setName] = useState("")
-    const [nameOpen, setNameOpen] = useState(false)
+    if (b[orderBy] > a[orderBy]) return 1;
 
-    const [videoData, setVideodata] = useState({
-        idx: 0,
-        autoPlay: true,
-        videoPlay: false,
-    })
+    return 0;
+}
 
-    useEffect(() => {
-        gameService.getAllMyCoachTeam().then((res) => {
-            setState({ teamList: res, team: res[0] })
-        })
-    }, [])
+function getComparator(order, orderBy) {
+    return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+}
 
-    const handleSort = (rows) => {
-        gameService.updateEditClipsSort(rows).then(res => console.log(res))
-    }
+function stableSort(array, comparator) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
 
-    const handleDeleteEditClips = (id) => {
-        gameService.deleteEditClip(id).then(res => {
-            handleUserEditDetail(curEdit)
-        })
-    }
+    stabilizedThis.sort((a, b) => {
+        const order = comparator(a[0], b[0]);
 
-    const handleVideoData = (type, play, idx) => {
-        setCurTagIdx(idx)
-        setVideodata({ idx, autoPlay: true, videoPlay: play })
-    }
+        if (order !== 0) return order;
 
-    const handleDeleteClose = (result) => {
-        setDeleteOpen(false)
-        if (result) {
-            gameService.deleteUserEdit(curEdit.id).then(res => {
-                initUserEdits()
-            }).catch(e => console.log(e))
+        return a[1] - b[1];
+    });
+
+    return stabilizedThis.map((el) => el[0]);
+}
+
+const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
+    color: 'var(--bs-dark)',
+    [`& .${treeItemClasses.content}`]: {
+        color: 'var(--bs-dark)',
+        borderTopRightRadius: theme.spacing(2),
+        borderBottomRightRadius: theme.spacing(2),
+        paddingRight: theme.spacing(1),
+        fontWeight: theme.typography.fontWeightMedium,
+        '&.Mui-expanded': {
+            fontWeight: theme.typography.fontWeightRegular
+        },
+        '&:hover': {
+            backgroundColor: theme.palette.action.hover
+        },
+        '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
+            backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
+            color: 'var(--bs-dark)'
+        },
+        [`& .${treeItemClasses.label}`]: {
+            fontWeight: 'inherit',
+            color: 'inherit'
+        }
+    },
+    [`& .${treeItemClasses.group}`]: {
+        marginLeft: 0,
+        [`& .${treeItemClasses.content}`]: {
+            paddingLeft: theme.spacing(2)
         }
     }
+}));
 
-    const handleEditClose = (name) => {
-        setEditOpen(false)
-        if (name.length === 0) return
-        gameService.updateUserEdit({ id: curEdit.id, name }).then(res => {
-            initUserEdits()
-        })
-    }
-
-    const handleUserEditDetail = (edit) => {
-        setParentId(edit?.id)
-        if (!edit) return
-        setCurEdit(edit)
-        gameService.getEditClipsByUserEditId(edit?.id ?? -1).then(res => {
-            setCurTagIdx(0)
-            const ttag = res.filter(t => t.team_tag_id !== null)
-            const ptag = res.filter(t => t.player_tag_id !== null)
-            setTagList(ttag.length > 0 ? ttag : ptag,)
-            setVideodata({ idx: 0, autoPlay: true, videoPlay: false })
-        })
-    }
-
-    const initUserEdits = () => {
-        gameService.getAllUserEdits().then(res => {
-            console.log("res-", res[0] ?? -1)
-            setEditList(res)
-            setCurEdit(res[0] ?? -1)
-            handleUserEditDetail(res[0] ?? -1)
-        })
-
-    }
-
-    useEffect(initUserEdits, [])
-
-    const handleEditOpen = (flag) => {
-        setOpen(flag)
-        if (!flag) initUserEdits()
-    }
-
-    const handleRender = () => {
-        if (!tagList.length) return;
-
-        let newList = [];
-
-        tagList.forEach((tag, i) => {
-            let last = newList.at(-1);
-            if (last && toSecond(last?.end_time ?? 0) >= toSecond(tag.start_time) && toSecond(last?.start_time ?? 0) <= toSecond(tag.start_time)) {
-                last.end_time = last.end_time > tag.end_time ? last.end_time : tag.end_time;
-
-                if (last.action_name && !last.action_name?.includes(tag.action_name)) last.action_name += ` && ${tag.action_name}`;
-            } else {
-                newList.push({ ...tag });
-            }
-        });
-
-        createCommand(newList, curEdit.name);
-    };
-
-    useEffect(() => {
-        const gettingFolder = async () => {
-            await gameService.getAllUserEditsFolders(parentId).then(res => {
-                setFolder(res)
-                console.log('Folder -> ', res)
-            }).catch(e => console.log(e))
-        }
-        gettingFolder()
-    }, [parentId])
-
-    const handleCreateFolder = () => {
-        gameService.addUserEditsFolder({ name, parentId }).then(res => {
-            console.log('Response -> ', res)
-        }).catch(e => console.log(e))
-    }
-
-    useEffect(() => {
-        console.log(folder)
-    }, [folder])
+function StyledTreeItem(props) {
+    const { bgColor, color, labelIcon: LabelIcon, labelInfo, labelText, ...other } = props;
 
     return (
-        <>
+        <StyledTreeItemRoot
+            label={
+                <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+                    <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
+                    <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+                        {labelText}
+                    </Typography>
+                    <Typography variant="caption" color="inherit">
+                        {labelInfo}
+                    </Typography>
+                </Box>
+            }
+            style={{
+                '--tree-view-color': color,
+                '--tree-view-bg-color': bgColor
+            }}
+            {...other}
+        />
+    );
+}
 
-            <CreateEditDialog
-                open={open}
-                handleEditOpen={handleEditOpen}
-                teamList={teamList}
-            />
+StyledTreeItem.propTypes = {
+    bgColor: PropTypes.string,
+    color: PropTypes.string,
+    labelIcon: PropTypes.elementType.isRequired,
+    labelInfo: PropTypes.string,
+    labelText: PropTypes.string.isRequired
+};
 
-            <DeleteConfirmDialog
-                open={deleteOpen}
-                handleDeleteClose={handleDeleteClose}
-            />
+const Edits = () => {
+    const [values, setValues] = useState({
+        loading: false
+    });
+    const [folders, setFolders] = useState([]);
 
-            <EditNameDialog
-                open={editOpen}
-                name={editName}
-                setName={setEditName}
-                handleEditClose={handleEditClose}
-            />
+    const getChilds = (folders, parent_id) => {
+        const children = folders.filter((item) => item.parent_id === parent_id);
+        let trees = [];
 
-            <Dialog
-                fullWidth
-                maxWidth={"sm"}
-                open={nameOpen}
-                onClose={() => setNameOpen(false)}
-            >
-                <DialogTitle>Name</DialogTitle>
-                <DialogContent>
-                    <Box sx={{ pt: 1 }}>
-                        <TextField
-                            fullWidth
-                            label='Name'
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setNameOpen(false)}>Cancel</Button>
-                    <Button onClick={handleCreateFolder}>OK</Button>
-                </DialogActions>
-            </Dialog >
+        if (children.length > 0) {
+            children.map((item) => {
+                const childs = getChilds(folders, item.id);
+                let tree = { id: String(item.id), name: item.name };
 
-            <Box sx={{ minWidth: '1400px', margin: '0 auto', maxWidth: '1320px' }}>
-                <Box sx={{ padding: '24px 24px 18px 18px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '32px', fontWeight: 700, color: '#1a1b1d' }}>Edits</Typography>
-                    <Box sx={{ padding: '10px', backgroundColor: 'white', display: 'flex', flexDirection: 'column', gap: '18px', borderRadius: '10px', margin: '0 24px 24px', height: '100%' }}>
+                if (childs.length > 0) tree = { id: String(item.id), name: item.name, children: childs };
 
-                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                            <Grid item xs={2}>
-                                <Button variant="outlined" style={{ marginBottom: '10px' }} onClick={() => handleEditOpen(true)}>Create Edits</Button>
+                trees = [...trees, tree];
 
-                                <Button variant="outlined" style={{ marginBottom: '10px' }} onClick={() => setNameOpen(true)}>Create Folder</Button>
+                return trees;
+            });
+        }
 
-                                <Box>
-                                    <TableContainer component={Paper}>
-                                        <Table aria-label="simple table">
-                                            <TableBody>
-                                                {editList.map((userEdit, idx) => (
-                                                    <TableRow key={idx} hover selected={curEdit === userEdit} onClick={() => handleUserEditDetail(userEdit)}>
-                                                        <TableCell align="center">{userEdit.name}</TableCell>
-                                                        <TableCell align="center" sx={{ width: 30 }}>
-                                                            <IconButton
-                                                                onClick={() => {
-                                                                    setEditOpen(true);
-                                                                    setEditName(userEdit.name);
-                                                                }}
-                                                                size="small"
-                                                            >
-                                                                <EditIcon />
-                                                            </IconButton>
-                                                        </TableCell>
-                                                        <TableCell align="center" sx={{ width: 30 }}>
-                                                            <IconButton onClick={() => setDeleteOpen(true)} size="small">
-                                                                <DeleteIcon />
-                                                            </IconButton>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                    <Button variant="contained" style={{ margin: '1rem 0.5rem' }} onClick={handleRender}>
-                                        Render
-                                    </Button>
-                                </Box>
+        return trees;
+    };
 
-                            </Grid>
-                            <Grid item xs={4}>
-                                {tagList.length === 0 && <p style={{ textAlign: 'center' }}>NoTags</p>}
-                                {tagList.filter(t => t.team_tag_id !== null).length > 0 &&
-                                    <DragableTeamTagTable
-                                        sx={{ height: "100%", p: 1, width: "100%" }}
-                                        rows={tagList}
-                                        onDelete={id => handleDeleteEditClips(id)}
-                                        handleSort={handleSort}
-                                        handleRowClick={({ row, idx }) => handleVideoData("teamTag", false, idx)}
-                                        selected={curTagIdx}
-                                        onPlay={({ row, idx }) => handleVideoData("teamTag", true, idx)}
-                                        initUserEdits={initUserEdits}
-                                    />
-                                }
-                                {tagList.filter((t) => t.player_tag_id !== null).length > 0 && (
-                                    <DragableIndividualTagTable
-                                        sx={{ height: '100%', p: 1, width: '100%' }}
-                                        rows={tagList}
-                                        selected={curTagIdx}
-                                        handleSort={handleSort}
-                                        onDelete={(id) => handleDeleteEditClips(id)}
-                                        handleRowClick={({ row, idx }) => handleVideoData('playerTag', false, idx)}
-                                        onPlay={({ row, idx }) => handleVideoData('playerTag', true, idx)}
-                                        initUserEdits={initUserEdits}
-                                    />
-                                )}
-                            </Grid>
-                            <Grid item xs={6}>
-                                <VideoPlayer
-                                    videoData={videoData}
-                                    tagList={tagList}
-                                    onChangeClip={(idx) => setCurTagIdx(idx)}
-                                    drawOpen={showAccordion}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Box>
+    const getTreeViewData = (res) => {
+        const parents = res.filter((item) => item.parent_id === null);
+        const other = res.filter((item) => item.parent_id !== null);
+        let trees = [];
+
+        if (parents.length > 0) {
+            parents.map((item) => {
+                const child = getChilds(other, item.id);
+                let tree = { id: String(item.id), name: item.name };
+
+                if (child.length > 0) tree = { id: String(item.id), name: item.name, children: child };
+
+                trees = [...trees, tree];
+
+                return trees;
+            });
+        } else {
+            let childs = [];
+            let node = {};
+
+            other.map((item) => {
+                const tree = { id: String(item.id), name: item.name };
+
+                childs = [...childs, tree];
+
+                return childs;
+            });
+            node = { id: 0, name: 'root', children: childs };
+
+            return node;
+        }
+
+        return trees;
+    };
+
+    const renderTree = (nodes) => (
+        <TreeItem
+            key={nodes.id}
+            nodeId={nodes.id}
+            label={
+                <Box sx={{ display: 'flex', alignItems: 'center', padding: '2px 0', gap: '4px' }}>
+                    {Array.isArray(nodes.children) ? <img src={FolderIcon} style={{ height: '24px' }} /> : <img src={EditsIcon} style={{ height: '24px' }} />}
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
+                </Box>
+            }
+        >
+            {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
+        </TreeItem>
+    );
+
+    useEffect(() => {
+        setValues({ ...values, loading: true });
+        GameService.getAllFolders().then((res) => {
+            const ascArray = stableSort(res, getComparator('asc', 'id'));
+
+            setFolders(getTreeViewData(ascArray));
+            setValues({ ...values, loading: false });
+        });
+    }, []);
+
+    console.log('Edits => ', folders);
+
+    return (
+        <Box sx={{ width: '98%', margin: '0 auto' }}>
+            {values.loading && (
+                <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                </div>
+            )}
+            <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', height: '80vh', background: 'white', padding: '24px' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #E8E8E8', height: '100%', width: '300px', padding: '16px 8px' }}>
+                    <TreeView
+                        aria-label="rich object"
+                        defaultCollapseIcon={<ExpandMoreIcon />}
+                        defaultExpanded={['root']}
+                        defaultExpandIcon={<ChevronRightIcon />}
+                        defaultEndIcon={<div style={{ width: 24 }} />}
+                        sx={{ height: '100%', flexGrow: 1, width: '100%', overflowY: 'auto', color: '#1a1b1d' }}
+                    >
+                        {folders.length > 0 && folders.map((data) => renderTree(data))}
+                    </TreeView>
                 </Box>
             </Box>
-        </>
+        </Box>
     );
 };
 
