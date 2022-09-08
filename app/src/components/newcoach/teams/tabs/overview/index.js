@@ -39,7 +39,6 @@ const TeamOverview = ({ games, teamname, teamId }) => {
     const [exportHudl, setExportHudl] = useState(false);
     const [playerTagList, setPlayerTagList] = useState([]);
     const [gameIds, setGameIds] = useState([]);
-    const [videoList, setVideoList] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
@@ -79,29 +78,22 @@ const TeamOverview = ({ games, teamname, teamId }) => {
 
     const handleClickHudlFromMenu = () => {
         setMenuAnchorEl(null);
-
-        if (values.playList.length === 0) {
-            setValues({ ...values, clickHudl: true });
-            setLoadData(true);
-        } else {
-            setPlayerTagList(values.playList);
-            setExportHudl(true);
-        }
+        setValues({ ...values, clickHudl: true });
+        setLoadData(true);
     };
 
     const handleClickRenderFromMenu = () => {
         setMenuAnchorEl(null);
-
-        if (values.playList.length === 0) {
-            setValues({ ...values, clickRender: true });
-            setLoadData(true);
-        } else createCommand(values.playList, tagIndex, videoList);
+        setValues({ ...values, clickRender: true });
+        setLoadData(true);
     };
 
     const handleClickRenderFromButton = () => {
         const newList = values.playList.filter((item, index) => checkArray[index] === true);
+        const ids = newList.map((item) => item.game_id);
+        const newVideos = games.filter((game) => ids.includes(game.id)).map((item) => item.video_url);
 
-        createCommand(newList, tagIndex, videoList);
+        createCommand(newList, tagIndex, newVideos, ids);
     };
 
     const handleClickExcel = () => {
@@ -128,7 +120,12 @@ const TeamOverview = ({ games, teamname, teamId }) => {
                 tagList: res
             });
 
-            if (values.clickRender) createCommand(res, tagIndex, videoList);
+            if (values.clickRender) {
+                const newList = games.filter((item) => gameIds.includes(item.id)).map((game) => game.video_url);
+
+                createCommand(res, tagIndex, newList, gameIds);
+            }
+
             if (values.clickHudl) {
                 setPlayerTagList(res);
                 setExportHudl(true);
@@ -232,14 +229,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
         });
     }, [values.selectAll]);
 
-    useEffect(() => {
-        setVideoList([]);
-        games.map((item) => {
-            setVideoList((old) => [...old, item.video_url]);
-        });
-    }, [games]);
-
-    console.log('TeamOverview => ', values.playList);
+    console.log('TeamOverview => ', values.playList, gameIds);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', minHeight: '65vh', overflowY: 'auto', display: 'flex' }}>

@@ -4,7 +4,7 @@ import fileDownload from 'js-file-download';
 
 import gameService from '../../../services/game.service';
 
-export const createCommand = async (tagList, name, rawVideoList) => {
+export const createCommand = async (tagList, name, rawVideoList, gameIds) => {
     let videoList = await Promise.all(
         rawVideoList.map(async (url) => {
             if (url?.startsWith('https://www.youtube.com')) {
@@ -25,7 +25,7 @@ export const createCommand = async (tagList, name, rawVideoList) => {
         const period = tag.period === 1 ? 'H1' : tag.period === 2 ? 'H2' : 'OT';
 
         return {
-            Video: 1,
+            Video: gameIds.indexOf(tag.game_id) + 1,
             Trim: `${toSecond(tag.team_tag_start_time)}:${toSecond(tag.team_tag_end_time)}`,
             FirstBoxText: `${period} - ${tag.time_in_game}`
         };
