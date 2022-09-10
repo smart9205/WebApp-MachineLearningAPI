@@ -81,13 +81,13 @@ const GameOverview = ({ game }) => {
         if (values.playList.length === 0) {
             setValues({ ...values, clickRender: true });
             setLoadData(true);
-        } else createCommand(values.playList, tagIndex, [game.video_url]);
+        } else createCommand(values.playList, tagIndex, [game.video_url], [game.id]);
     };
 
     const handleClickRenderFromButton = () => {
         const newList = values.playList.filter((item, index) => checkArray[index] === true);
 
-        createCommand(newList, tagIndex, [game.video_url]);
+        createCommand(newList, tagIndex, [game.video_url], [game.id]);
     };
 
     const handleClickExcel = () => {
@@ -123,7 +123,7 @@ const GameOverview = ({ game }) => {
                 })
             });
 
-            if (values.clickRender) createCommand(res, tagIndex, [game.video_url]);
+            if (values.clickRender) createCommand(res, tagIndex, [game.video_url], [game.id]);
             if (values.clickHudl) {
                 setPlayerTagList(res);
                 setExportHudl(true);
