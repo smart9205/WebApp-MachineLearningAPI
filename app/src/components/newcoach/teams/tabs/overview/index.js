@@ -5,7 +5,6 @@ import UpIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
 
 import { SaveButton } from '../../../components/common';
 import GameOverviewHeader from '../../../games/tabs/overview/header';
-import GameTagButtonList from '../../../games/tabs/overview/tagButtonList';
 import GameTagMenu from '../../../games/tabs/overview/tagMenu';
 import GameTagControlSection from '../../../games/tabs/overview/tagControlSection';
 import GameTagList from '../../../games/tabs/overview/tagList';
@@ -14,6 +13,7 @@ import XmlDataFilter from '../../../components/xmldata';
 import TeamGameSelectDialog from './gameSelectDialog';
 import GameService from '../../../../../services/game.service';
 import TeamVideoPlayer from './teamVideoPlayer';
+import TeamTagButtonList from './tagButtonList';
 
 const TeamOverview = ({ games, teamname, teamId }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
@@ -145,11 +145,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
             setValues({ ...values, playList: [] });
             setVideoData({ ...videoData, tagList: [] });
 
-            if (tagIndex === 'Game Highlight') {
-                getPlayTagList(GameService.getGameHighlight(values.isOur ? teamId : values.opponentTeamId, gameIds.join(',')));
-            } else if (tagIndex === 'Clean Game') {
-                getPlayTagList(GameService.getCleanGame(values.isOur ? teamId : values.opponentTeamId, gameIds.join(',')));
-            } else if (tagIndex === 'All Offensive Possessions') {
+            if (tagIndex === 'All Offensive Possessions') {
                 if (values.isOur) getPlayTagList(GameService.getTeamOffensivePossession(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentOffensivePossession(teamId, gameIds.join(',')));
             } else if (tagIndex === 'All Defensive Possessions') {
@@ -244,7 +240,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
                         </SaveButton>
                     </Box>
                 </Box>
-                {values.expandButtons && <GameTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
+                {values.expandButtons && <TeamTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
                     <Box sx={{ 'svg path': { fill: 'black' }, cursor: 'pointer' }} onClick={handleExpandButtons}>

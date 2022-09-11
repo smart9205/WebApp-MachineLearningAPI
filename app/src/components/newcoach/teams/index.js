@@ -1,10 +1,12 @@
 import React, { useReducer, useEffect } from 'react';
-import { Typography, Box, InputAdornment, IconButton, Autocomplete, TextField, CircularProgress } from '@mui/material';
+import { Typography, Box, InputAdornment, IconButton, Select, TextField, CircularProgress, MenuItem } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/SearchOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
 import GameService from '../../../services/game.service';
 import TeamListItem from './teamListItem';
+import { MenuProps } from '../components/common';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -34,15 +36,16 @@ function stableSort(array, comparator) {
 
 const Teams = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        searchText: '',
         hoverIndex: -1,
         teamsList: [],
         seasonList: [],
-        seasonFilter: {},
+        seasonFilter: 'none',
+        leagueList: [],
+        leagueFilter: 'none',
         loading: false
     });
 
-    const { searchText, hoverIndex, teamsList, seasonList, seasonFilter, loading } = state;
+    const { hoverIndex, teamsList, seasonList, seasonFilter, leagueList, leagueFilter, loading } = state;
 
     const handleChange = (prop) => (e) => {
         setState({ [prop]: e.target.value });
@@ -64,19 +67,60 @@ const Teams = () => {
         event.preventDefault();
     };
 
+    const getSeasonList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'season_name'));
+            let result = [];
+
+            desc.map((item) => {
+                const filter = result.filter((season) => season === item.season_name);
+
+                if (filter.length === 0) result = [...result, item.season_name];
+
+                return result;
+            });
+
+            return result;
+        }
+    };
+
+    const getLeagueList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'league_name'));
+            let result = [];
+
+            desc.map((item) => {
+                const filter = result.filter((season) => season === item.league_name);
+
+                if (filter.length === 0) result = [...result, item.league_name];
+
+                return result;
+            });
+
+            return result;
+        }
+    };
+
+    const getTeamsList = () => {
+        let array = [];
+
+        if (seasonFilter !== 'none' && leagueFilter === 'none') array = teamsList.filter((game) => game.season_name === seasonFilter);
+        else if (leagueFilter !== 'none' && seasonFilter === 'none') array = teamsList.filter((game) => game.league_name === leagueFilter);
+        else array = teamsList.filter((game) => game.league_name === leagueFilter && game.season_name === seasonFilter);
+
+        return seasonFilter === 'none' && leagueFilter === 'none' ? teamsList : array;
+    };
+
     useEffect(() => {
         setState({ loading: true });
         GameService.getAllMyCoachTeam().then((res) => {
             const ascArray = stableSort(res, getComparator('asc', 'team_name'));
 
-            setState({ teamsList: ascArray });
-        });
-        GameService.getAllSeasons().then((res) => {
-            const descArray = stableSort(res, getComparator('desc', 'id'));
-
-            setState({ seasonList: descArray, seasonFilter: descArray[0], loading: false });
+            setState({ teamsList: ascArray, seasonList: getSeasonList(res), leagueList: getLeagueList(res), loading: false });
         });
     }, []);
+
+    console.log('Teams => ', teamsList);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
@@ -89,60 +133,57 @@ const Teams = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Teams</Typography>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', justifyContent: 'flex-end', width: '100%', height: '80px' }}>
-                    <Box sx={{ width: '300px' }}>
-                        <Autocomplete
-                            id="combo-box-demo"
-                            options={seasonList}
-                            fullWidth
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', justifyContent: 'flex-end', width: '100%' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Season</Typography>
+                        <Select
                             value={seasonFilter}
-                            isOptionEqualToValue={(option, value) => option && option.name}
-                            getOptionLabel={(option) => (!option.name ? '' : option.name)}
-                            renderOption={(props, option) => {
-                                return (
-                                    <li {...props} key={option.id}>
-                                        {option.name}
-                                    </li>
-                                );
-                            }}
-                            renderInput={(params) => <TextField {...params} label="Season" sx={{ my: 1 }} />}
-                            onChange={(event, newValue) => {
-                                setState({ seasonFilter: newValue });
-                            }}
-                        />
+                            onChange={handleChange('seasonFilter')}
+                            label=""
+                            variant="outlined"
+                            IconComponent={ExpandMoreIcon}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            MenuProps={MenuProps}
+                            sx={{ borderRadius: '10px', outline: 'none', height: '36px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                        >
+                            <MenuItem key="0" value="none">
+                                All
+                            </MenuItem>
+                            {seasonList.map((season, index) => (
+                                <MenuItem key={index + 1} value={season}>
+                                    {season}
+                                </MenuItem>
+                            ))}
+                        </Select>
                     </Box>
-                    <TextField
-                        value={searchText}
-                        onChange={handleChange('searchText')}
-                        placeholder="Search"
-                        label=""
-                        inputProps={{ 'aria-label': 'Without label' }}
-                        variant="outlined"
-                        sx={{ borderRadius: '10px', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <IconButton
-                                        onMouseDown={handleMouseDownPassword}
-                                        sx={{ backgroundColor: '#F8F8F8', '&:hover': { backgroundColor: '#F8F8F8' }, '&:focus': { backgroundColor: '#F8F8F8' } }}
-                                    >
-                                        <SearchIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            )
-                        }}
-                    />
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>League</Typography>
+                        <Select
+                            value={leagueFilter}
+                            onChange={handleChange('leagueFilter')}
+                            label=""
+                            variant="outlined"
+                            IconComponent={ExpandMoreIcon}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            MenuProps={MenuProps}
+                            sx={{ borderRadius: '10px', outline: 'none', height: '36px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                        >
+                            <MenuItem key="0" value="none">
+                                All
+                            </MenuItem>
+                            {leagueList.map((league, index) => (
+                                <MenuItem key={index + 1} value={league}>
+                                    {league}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </Box>
                 </Box>
             </Box>
-            <Box sx={{ overflowY: 'auto', maxHeight: '70vh', marginLeft: '24px' }}>
+            <Box sx={{ overflowY: 'auto', maxHeight: '80vh', marginLeft: '24px' }}>
                 <Box sx={{ marginRight: '4px' }}>
-                    {(searchText
-                        ? teamsList.filter((item) => compareStrings(item.team_name, searchText) || compareStrings(item.league_name, searchText) || compareStrings(item.season_name, searchText))
-                        : seasonFilter
-                        ? teamsList.filter((item) => item.season_name === seasonFilter.name)
-                        : teamsList
-                    ).map((team, index) => (
-                        <Box key={team.id} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
+                    {getTeamsList().map((team, index) => (
+                        <Box key={index} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
                             <TeamListItem row={team} isHover={hoverIndex === index} />
                         </Box>
                     ))}
