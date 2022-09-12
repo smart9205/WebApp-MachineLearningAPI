@@ -174,7 +174,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                 onClose={() => setMenuAnchorEl(null)}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                sx={{ '& .MuiPopover-paper': { width: '200px', borderRadius: '12px', border: '1px solid #E8E8E8' } }}
+                sx={{ '& .MuiPopover-paper': { width: '250px', borderRadius: '12px', border: '1px solid #E8E8E8' } }}
             >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickEdit}>
                     <EditIcon />
@@ -237,7 +237,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                 </Box>
             )}
             <GameEditPage open={editOpen} onClose={handleCloseDialog} game={row} />
-            {exportGate && <XmlDataFiltering game={row} team={playerTagList} teamId={teamId} playerList={teamPlayerList} playersInGameList={gamePlayerList} setExportXML={setExportGate} />}
+            {exportGate && <XmlDataFiltering game={row} team={playerTagList} teamId={teamId} playersInGameList={gamePlayerList} setExportXML={setExportGate} />}
             {exportExcel && <ExcelDataFiltering team={playerTagList} setExcelData={setExportExcel} />}
         </Box>
     );

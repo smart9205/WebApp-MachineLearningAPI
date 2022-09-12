@@ -58,7 +58,7 @@ export default function Pass({
       team_id: defenseTeamId,
       player_id: player.id,
       action_id: 10,
-      action_result_id: 11,  //Bad Pass
+      action_result_id: 11, //Bad Pass
       court_area_id: areaCourtId,
       inside_the_paint: inTheBox
     }, {
@@ -66,7 +66,7 @@ export default function Pass({
       player_id: offensivePlayer.id,
       team_id: offenseTeamId,
       action_id: 2,
-      action_result_id: 11,  //Bad Pass
+      action_result_id: 11, //Bad Pass
       court_area_id: areaCourtId,
       inside_the_paint: inTheBox
     }])
@@ -95,7 +95,6 @@ export default function Pass({
 
   return (
     <>
-
       <AreaCourtMenu areaCourtId={areaCourtId} setAreaCourtId={setAreaCourtId} inTheBox={inTheBox} setInTheBox={setInTheBox} />
 
       <PlayerSelector
@@ -105,7 +104,6 @@ export default function Pass({
         selected={offensivePlayer}
         onSelect={(player) => setOffensivePlayer(player)}
       />
-
       <SubBox>
         <List header="Type">
           {[
@@ -117,7 +115,6 @@ export default function Pass({
             { id: 11, name: FREE_KICK },
             { id: 15, name: PASS_FOR_A_SHOT },
           ].map((r, i) => (
-
             <ListItemButton key={r.id}
               selected={actionTypeId === r.id}
               onClick={() => {
@@ -134,11 +131,8 @@ export default function Pass({
 
               }}
             >
-
               <ListItemText primary={r.name} />
-
             </ListItemButton>
-
           ))}
         </List>
       </SubBox>
@@ -153,7 +147,6 @@ export default function Pass({
             { id: 15, name: OFFSIDE },
             { id: 9, name: ASSIST },
           ].map((r, i) => (
-
             <ListItemButton key={r.id}
               selected={result?.id === r.id}
               onClick={() => {
@@ -171,15 +164,11 @@ export default function Pass({
                 if (r.name === ASSIST) taggingState([{ ...d, action_id: r.id, action_result_id: 3, }])
               }}
             >
-
               <ListItemText primary={r.name} />
-
             </ListItemButton>
-
           ))}
         </List>
       </SubBox>
-
       {(result.name === STOLE_BY) &&
         <PlayerSelector
           title="Defensive Player List"
@@ -228,7 +217,6 @@ export default function Pass({
             }])
           }}
         />
-
       }
 
     </>
