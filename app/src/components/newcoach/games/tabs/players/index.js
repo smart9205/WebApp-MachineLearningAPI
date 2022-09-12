@@ -169,7 +169,7 @@ const GamePlayers = ({ game }) => {
             setVideoData({ ...videoData, tagList: [] });
             getPlayTagList(
                 GameService.getGamePlayerTags(
-                    values.teamId,
+                    values.isOur ? values.teamId : values.opponentTeamId,
                     playerIds.length === 0 ? null : playerIds.join(','),
                     `${game.id}`,
                     ActionData[tagIndex.id].action_id,

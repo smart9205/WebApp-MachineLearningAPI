@@ -53,7 +53,7 @@ const GamePlayerLogoList = ({ game, teamId, our, setIds }) => {
             )}
             <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto auto auto auto auto', gap: '2px' }}>
                 {playerList.map((item, index) => (
-                    <Box key={index} sx={{ borderRadius: '10px', border: selectArray[index] ? '4px solid #0A7304' : '4px solid white' }} onClick={() => handleSelectPlayer(index)}>
+                    <Box key={index} sx={{ borderRadius: '10px', border: selectArray[index] ? '4px solid #0A7304' : '4px solid white', cursor: 'pointer' }} onClick={() => handleSelectPlayer(index)}>
                         <GamePlayerLogo player={item} />
                     </Box>
                 ))}

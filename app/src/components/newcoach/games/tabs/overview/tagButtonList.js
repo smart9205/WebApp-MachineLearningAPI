@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 
 import GameTagButton from './tagButton';
 
@@ -39,7 +39,7 @@ const GameTagButtonList = ({ selectedTag, onShow }) => {
                     <GameTagButton key={index} isSelected={selectedTag === tag} tagname={tag} onShow={onShow} />
                 ))}
             </Box>
-            <Box sx={{ width: '100%', height: '1px', background: 'black', margin: '2px 0' }} />
+            <Divider sx={{ width: '100%', backgroundColor: 'black', opacity: 1, border: 'none', marginTop: '2px' }} />
             <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
                 {Tags.slice(12, 25).map((tag, index) => (
                     <GameTagButton key={index} isSelected={selectedTag === tag} tagname={tag} onShow={onShow} />
