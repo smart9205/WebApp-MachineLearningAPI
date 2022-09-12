@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useReducer } from 'react';
-import { Box, Checkbox, Popover, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 
 import UpIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
 
@@ -12,7 +12,7 @@ import { gameCreateCommand } from '../../../components/utilities';
 import TeamGameSelectDialog from './gameSelectDialog';
 import GameService from '../../../../../services/game.service';
 import TeamVideoPlayer from './teamVideoPlayer';
-import TeamTagButtonList from './tagButtonList';
+import GameTagButtonList from '../../../games/tabs/overview/tagButtonList';
 
 const TeamOverview = ({ games, teamname, teamId }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
@@ -273,7 +273,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
                         </SaveButton>
                     </Box>
                 </Box>
-                {values.expandButtons && <TeamTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
+                {values.expandButtons && <GameTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
                     <Box sx={{ 'svg path': { fill: 'black' }, cursor: 'pointer' }} onClick={handleExpandButtons}>

@@ -9,14 +9,20 @@ const GamePlayerLogo = ({ player }) => {
     };
 
     const getDisplayName = () => {
-        let first = player.first_name.slice(0, 1);
-        let last = player.last_name.slice(0, 1);
+        if (player.first_name === null && player.last_name !== null) return player.last_name;
+        else if (player.first_name !== null && player.last_name === null) return player.first_name;
+        else if (player.first_name === null && player.last_name === null) return 'No Name';
+
+        let first = player.first_name.length > 0 ? player.first_name.slice(0, 1) : '';
+        let last = player.last_name.length > 0 ? player.last_name.slice(0, 1) : '';
 
         first = first === ' ' ? player.first_name.slice(1, 2) : first;
         last = last === ' ' ? player.last_name.slice(1, 2) : last;
 
         return player.last_name.length >= 13 ? `${first}. ${last}.` : `${first}. ${player.last_name}`;
     };
+
+    console.log('PlayLogo => ', player);
 
     return (
         <Box sx={{ width: '80px', height: '100px', borderRadius: '8px', background: `url(${getImage()}) center center / cover no-repeat silver`, position: 'relative' }}>
