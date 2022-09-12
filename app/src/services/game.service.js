@@ -383,6 +383,18 @@ const getCoachTeamPlayers = (teamId, seasonId) => {
     });
 };
 
+const getGameCoachTeamPlayers = (teamId, gameIds) => {
+    return axios.get(API_URL + `coach_team/game_team_players/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getGameOpponentPlayers = (teamId, gameIds) => {
+    return axios.get(API_URL + `coach_team/game_opponent_players/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
 const addCoachTeam = (req) => {
     return axios.post(API_URL + 'coach_team', req, { headers: authHeader() }).then((response) => {
         return response.data;
@@ -693,6 +705,17 @@ const getAllPlayerTagsByTeam = (teamId, gameId) => {
     });
 };
 
+const getGamePlayerTags = (teamId, playerId, gameId, actionId, actionTypeId, actionResultId) => {
+    return axios
+        .get(API_URL + `coach_team/game_player_tags/${teamId}/${playerId}/${gameId}/${actionId}/${actionTypeId}/${actionResultId}`, {
+            headers: authHeader(),
+            data: { teamId, playerId, gameId, actionId, actionTypeId, actionResultId }
+        })
+        .then((response) => {
+            return response.data;
+        });
+};
+
 const getGameScore = (gameId) => {
     return axios.get(API_URL + `player_tag/getgamescore/${gameId}`, { headers: authHeader(), data: { gameId } }).then((response) => {
         return response.data;
@@ -775,6 +798,7 @@ const gameService = {
     getAllGamesByPlayer,
     getAllPlayerTagsByPlayer,
     getAllPlayerTagsByTeam,
+    getGamePlayerTags,
     getAllCoach,
     getAllCoachTeam,
     getAllGamesByCoach,
@@ -844,6 +868,8 @@ const gameService = {
     getPlayerActions,
     getCoachPlayerGames,
     getCoachTeamPlayers,
+    getGameCoachTeamPlayers,
+    getGameOpponentPlayers,
     getAllPlayerTagsByCoachPlayer,
     getAllGameTeamPlayers,
     getAllFolders,

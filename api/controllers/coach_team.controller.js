@@ -154,6 +154,68 @@ exports.getCoachTeamPlayers = (req, res) => {
     });
 };
 
+exports.getGameCoachTeamPlayers = (req, res) => {
+  Sequelize.query(`
+    SELECT * FROM public.fnc_get_team_players_in_games(
+      ${req.params.teamId},
+      '${req.params.gameIds}')
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+};
+
+exports.getGameOpponentPlayers = (req, res) => {
+  Sequelize.query(`
+    SELECT * FROM public.fnc_get_opponent_players_in_games(
+      ${req.params.teamId},
+      '${req.params.gameIds}')
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+};
+
+exports.getGamePlayerTags = (req, res) => {
+  const teamId = req.params.teamId === 'null' ? null : parseInt(req.params.teamId);
+  const playerIds = req.params.playerId === 'null' ? null : `'${req.params.playerId}'`;
+  const actionId = req.params.actionId === 'null' ? null : `'${req.params.actionId}'`;
+  const actionTypeId = req.params.actionTypeId === 'null' ? null : `'${req.params.actionTypeId}'`;
+  const actionResultId = req.params.actionResultId === 'null' ? null : `'${req.params.actionResultId}'`;
+
+  Sequelize.query(`
+    SELECT * FROM public.fnc_get_players_tags(
+      ${req.userId},
+      ${teamId},
+      ${playerIds},
+      '${req.params.gameId}',
+      ${actionId},
+      ${actionTypeId},
+      ${actionResultId}
+    )
+  `).then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
 exports.getTagsByPlayer = (req, res) => {
   const playerId = req.body.player_id
   const gameIds = req.body.gameIds

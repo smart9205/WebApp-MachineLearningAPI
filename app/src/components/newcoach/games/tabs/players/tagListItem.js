@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 
-const GameTagListItem = ({ item, isSelected, displayAction, idx, isChecked, onChecked, onShowVideo }) => {
+const GamePlayerTagListItem = ({ item, isSelected, idx, isChecked, onChecked, onShowVideo }) => {
     const getPeriod = (id) => {
         return id === 1 ? 'H1' : id === 2 ? 'H2' : 'OT';
     };
@@ -36,9 +36,7 @@ const GameTagListItem = ({ item, isSelected, displayAction, idx, isChecked, onCh
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>
-                            {displayAction
-                                ? `${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names}`
-                                : `${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names} - ${item.action_type_names}`}
+                            {`${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names} - ${item.action_names} - ${item.action_type_names} - ${item.action_result_names}`}
                         </Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -49,8 +47,8 @@ const GameTagListItem = ({ item, isSelected, displayAction, idx, isChecked, onCh
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.team_tag_start_time}</Typography>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.team_tag_end_time}</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.player_tag_start_time}</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.player_tag_end_time}</Typography>
                 </Box>
                 <input key={idx} type="checkbox" value={isChecked} checked={isChecked ? true : false} style={{ width: '18px', height: '18px' }} onChange={onChecked(idx)} />
             </Box>
@@ -58,4 +56,4 @@ const GameTagListItem = ({ item, isSelected, displayAction, idx, isChecked, onCh
     );
 };
 
-export default GameTagListItem;
+export default GamePlayerTagListItem;

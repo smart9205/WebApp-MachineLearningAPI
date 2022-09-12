@@ -8,8 +8,7 @@ import GameOverviewHeader from '../../../games/tabs/overview/header';
 import GameTagMenu from '../../../games/tabs/overview/tagMenu';
 import GameTagControlSection from '../../../games/tabs/overview/tagControlSection';
 import GameTagList from '../../../games/tabs/overview/tagList';
-import { createCommand } from '../../../components/utilities';
-import XmlDataFilter from '../../../components/xmldata';
+import { gameCreateCommand } from '../../../components/utilities';
 import TeamGameSelectDialog from './gameSelectDialog';
 import GameService from '../../../../../services/game.service';
 import TeamVideoPlayer from './teamVideoPlayer';
@@ -93,7 +92,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
         const ids = newList.map((item) => item.game_id);
         const newVideos = games.filter((game) => ids.includes(game.id)).map((item) => item.video_url);
 
-        createCommand(newList, tagIndex, newVideos, ids);
+        gameCreateCommand(newList, tagIndex, newVideos, ids);
     };
 
     const handleClickExcel = () => {
@@ -123,7 +122,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
             if (values.clickRender) {
                 const newList = games.filter((item) => gameIds.includes(item.id)).map((game) => game.video_url);
 
-                createCommand(res, tagIndex, newList, gameIds);
+                gameCreateCommand(res, tagIndex, newList, gameIds);
             }
 
             if (values.clickHudl) {

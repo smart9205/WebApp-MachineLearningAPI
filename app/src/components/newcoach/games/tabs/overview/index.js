@@ -1,12 +1,12 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useEffect, useReducer, useState } from 'react';
 
 import UpIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
 
 import VideoPlayer from '../../../../coach/VideoPlayer';
 import GameService from '../../../../../services/game.service';
-import { createCommand } from '../../../components/utilities';
-import XmlDataFilter from '../../../components/xmldata';
+import { gameCreateCommand } from '../../../components/utilities';
+import { XmlDataFilterGame } from '../../../components/xmldata';
 import GameTagButtonList from './tagButtonList';
 import GameTagList from './tagList';
 import GameTagControlSection from './tagControlSection';
@@ -81,13 +81,13 @@ const GameOverview = ({ game }) => {
         if (values.playList.length === 0) {
             setValues({ ...values, clickRender: true });
             setLoadData(true);
-        } else createCommand(values.playList, tagIndex, [game.video_url], [game.id]);
+        } else gameCreateCommand(values.playList, tagIndex, [game.video_url], [game.id]);
     };
 
     const handleClickRenderFromButton = () => {
         const newList = values.playList.filter((item, index) => checkArray[index] === true);
 
-        createCommand(newList, tagIndex, [game.video_url], [game.id]);
+        gameCreateCommand(newList, tagIndex, [game.video_url], [game.id]);
     };
 
     const handleClickExcel = () => {
@@ -123,7 +123,7 @@ const GameOverview = ({ game }) => {
                 })
             });
 
-            if (values.clickRender) createCommand(res, tagIndex, [game.video_url], [game.id]);
+            if (values.clickRender) gameCreateCommand(res, tagIndex, [game.video_url], [game.id]);
             if (values.clickHudl) {
                 setPlayerTagList(res);
                 setExportHudl(true);
@@ -248,7 +248,7 @@ const GameOverview = ({ game }) => {
             <Box sx={{ display: 'flex', minWidth: '600px', flexDirection: 'column', padding: '24px 16px' }}>
                 <GameOverviewHeader
                     isOur={values.isOur}
-                    ourname={values.teamId === game.home_team_id ? game.home_team_name : game.away_team_name}
+                    ourname={values.teamId === game.away_team_id ? game.away_team_name : game.home_team_name}
                     enemyname={values.opponentTeamId === game.home_team_id ? game.home_team_name : game.away_team_name}
                     onChangeTeam={handleChangeTeam}
                     mb="8px"
@@ -290,7 +290,7 @@ const GameOverview = ({ game }) => {
                 />
             </Box>
             <VideoPlayer videoData={videoData} url={game.video_url ?? ''} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} isSpecial={true} />
-            {exportHudl && <XmlDataFilter game={game} tagList={playerTagList} isOur={values.isOur} tag_name={tagIndex} setExportXML={setExportHudl} />}
+            {exportHudl && <XmlDataFilterGame game={game} tagList={playerTagList} isOur={values.isOur} tag_name={tagIndex} setExportXML={setExportHudl} />}
         </Box>
     );
 };

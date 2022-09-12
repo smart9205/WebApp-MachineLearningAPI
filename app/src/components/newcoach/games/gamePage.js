@@ -7,6 +7,7 @@ import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 
 import GameService from '../../../services/game.service';
 import GameOverview from './tabs/overview';
+import GamePlayers from './tabs/players';
 
 const Tabs = ['Overview', 'Summary', 'Stats', 'Players'];
 
@@ -92,6 +93,7 @@ const GamePage = () => {
                         </Box>
                     </Box>
                     {values.curTab === 0 && <GameOverview game={values.game} />}
+                    {values.curTab === 3 && <GamePlayers game={values.game} />}
                 </>
             )}
         </Box>
