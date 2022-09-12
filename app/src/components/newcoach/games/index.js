@@ -177,115 +177,119 @@ const Games = () => {
                     <CircularProgress />
                 </div>
             )}
-            <Box sx={{ padding: '24px 24px 24px 48px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Games</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-                    {Tabs.map((tab, index) => (
-                        <Box
-                            key={index}
-                            onClick={() => handleTabClick(index)}
-                            sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
-                        >
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{tab}</Typography>
-                            <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? '#0A7304' : '#F8F8F8' }} />
+            {!values.loading && (
+                <>
+                    <Box sx={{ padding: '24px 24px 24px 48px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Games</Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+                            {Tabs.map((tab, index) => (
+                                <Box
+                                    key={index}
+                                    onClick={() => handleTabClick(index)}
+                                    sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
+                                >
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{tab}</Typography>
+                                    <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? '#0A7304' : '#F8F8F8' }} />
+                                </Box>
+                            ))}
                         </Box>
-                    ))}
-                </Box>
-                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '24px' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Period</Typography>
-                        <Select
-                            value={values.periodFilter}
-                            onChange={handleChange('periodFilter')}
-                            label=""
-                            variant="outlined"
-                            IconComponent={ExpandMoreIcon}
-                            inputProps={{ 'aria-label': 'Without label' }}
-                            MenuProps={MenuProps}
-                            sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                        >
-                            <MenuItem value="0">All</MenuItem>
-                            <MenuItem value="1">Last week</MenuItem>
-                            <MenuItem value="2">Last month</MenuItem>
-                        </Select>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Season</Typography>
-                        <Select
-                            value={values.seasonFilter}
-                            onChange={handleChange('seasonFilter')}
-                            label=""
-                            variant="outlined"
-                            IconComponent={ExpandMoreIcon}
-                            inputProps={{ 'aria-label': 'Without label' }}
-                            MenuProps={MenuProps}
-                            sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                        >
-                            <MenuItem key="0" value="none">
-                                All
-                            </MenuItem>
-                            {values.seasonList.map((season, index) => (
-                                <MenuItem key={index + 1} value={season}>
-                                    {season}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>League</Typography>
-                        <Select
-                            value={values.leagueFilter}
-                            onChange={handleChange('leagueFilter')}
-                            label=""
-                            variant="outlined"
-                            IconComponent={ExpandMoreIcon}
-                            inputProps={{ 'aria-label': 'Without label' }}
-                            MenuProps={MenuProps}
-                            sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                        >
-                            <MenuItem key="0" value="none">
-                                All
-                            </MenuItem>
-                            {values.leagueList.map((league, index) => (
-                                <MenuItem key={index + 1} value={league}>
-                                    {league}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Team</Typography>
-                        <Select
-                            value={values.teamFilter}
-                            onChange={handleChange('teamFilter')}
-                            label=""
-                            variant="outlined"
-                            IconComponent={ExpandMoreIcon}
-                            inputProps={{ 'aria-label': 'Without label' }}
-                            MenuProps={MenuProps}
-                            sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                        >
-                            <MenuItem key="0" value="none">
-                                All
-                            </MenuItem>
-                            {values.teamList.map((team, index) => (
-                                <MenuItem key={index + 1} value={team}>
-                                    {team}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </Box>
-                </Box>
-            </Box>
-            <Box sx={{ overflowY: 'auto', maxHeight: '70vh', marginLeft: '24px' }}>
-                <Box sx={{ marginRight: '4px' }}>
-                    {getGamesList().map((game, index) => (
-                        <Box key={index} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
-                            <GameListItem row={game} isHover={values.hoverIndex === index} isPending={values.curTab === 1} updateList={setRefreshPage} team={values.teamFilter} />
+                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '24px' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Period</Typography>
+                                <Select
+                                    value={values.periodFilter}
+                                    onChange={handleChange('periodFilter')}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem value="0">All</MenuItem>
+                                    <MenuItem value="1">Last week</MenuItem>
+                                    <MenuItem value="2">Last month</MenuItem>
+                                </Select>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Season</Typography>
+                                <Select
+                                    value={values.seasonFilter}
+                                    onChange={handleChange('seasonFilter')}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem key="0" value="none">
+                                        All
+                                    </MenuItem>
+                                    {values.seasonList.map((season, index) => (
+                                        <MenuItem key={index + 1} value={season}>
+                                            {season}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>League</Typography>
+                                <Select
+                                    value={values.leagueFilter}
+                                    onChange={handleChange('leagueFilter')}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem key="0" value="none">
+                                        All
+                                    </MenuItem>
+                                    {values.leagueList.map((league, index) => (
+                                        <MenuItem key={index + 1} value={league}>
+                                            {league}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Team</Typography>
+                                <Select
+                                    value={values.teamFilter}
+                                    onChange={handleChange('teamFilter')}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem key="0" value="none">
+                                        All
+                                    </MenuItem>
+                                    {values.teamList.map((team, index) => (
+                                        <MenuItem key={index + 1} value={team}>
+                                            {team}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </Box>
                         </Box>
-                    ))}
-                </Box>
-            </Box>
+                    </Box>
+                    <Box sx={{ overflowY: 'auto', maxHeight: '70vh', marginLeft: '24px' }}>
+                        <Box sx={{ marginRight: '4px' }}>
+                            {getGamesList().map((game, index) => (
+                                <Box key={index} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
+                                    <GameListItem row={game} isHover={values.hoverIndex === index} isPending={values.curTab === 1} updateList={setRefreshPage} team={values.teamFilter} />
+                                </Box>
+                            ))}
+                        </Box>
+                    </Box>
+                </>
+            )}
         </Box>
     );
 };

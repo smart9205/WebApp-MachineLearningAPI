@@ -287,7 +287,7 @@ const GameOverview = ({ game }) => {
                     onChangeTeam={handleChangeTeam}
                     mb="8px"
                 />
-                {values.expandButtons && <GameTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
+                {values.expandButtons && <GameTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} isTeams={false} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
                     <Box sx={{ 'svg path': { fill: 'black' }, cursor: 'pointer' }} onClick={handleExpandButtons}>

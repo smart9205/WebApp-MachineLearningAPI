@@ -97,64 +97,68 @@ const Players = () => {
                     <CircularProgress />
                 </div>
             )}
-            <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Players</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', justifyContent: 'flex-end', width: '100%', height: '80px' }}>
-                    <Box sx={{ width: '300px' }}>
-                        <Autocomplete
-                            id="combo-box-team-filter"
-                            options={teamList}
-                            fullWidth
-                            value={teamFilter}
-                            isOptionEqualToValue={(option, value) => option && option.team_name}
-                            getOptionLabel={(option) => (!option.team_name ? '' : option.team_name)}
-                            renderOption={(props, option) => {
-                                return (
-                                    <li {...props} key={option.id}>
-                                        {option.team_name}
-                                    </li>
-                                );
-                            }}
-                            renderInput={(params) => <TextField {...params} label="Team" sx={{ my: 1 }} />}
-                            onChange={(event, newValue) => {
-                                setState({ teamFilter: newValue, hoverIndex: -1 });
-                            }}
-                        />
-                    </Box>
-                    <TextField
-                        value={searchText}
-                        onChange={handleChange('searchText')}
-                        placeholder="Search"
-                        label=""
-                        inputProps={{ 'aria-label': 'Without label' }}
-                        variant="outlined"
-                        sx={{ borderRadius: '10px', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <IconButton
-                                        onMouseDown={handleMouseDownPassword}
-                                        sx={{ backgroundColor: '#F8F8F8', '&:hover': { backgroundColor: '#F8F8F8' }, '&:focus': { backgroundColor: '#F8F8F8' } }}
-                                    >
-                                        <SearchIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            )
-                        }}
-                    />
-                </Box>
-            </Box>
-            <Box sx={{ overflowY: 'auto', maxHeight: '70vh', marginLeft: '24px' }}>
-                <Box sx={{ marginRight: '4px' }}>
-                    {getPlayers().map((player, index) => (
-                        <Box key={getUniqueKey(player)} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
-                            <PlayerListItem row={player} isHover={hoverIndex === index} />
+            {!loading && (
+                <>
+                    <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Players</Typography>
                         </Box>
-                    ))}
-                </Box>
-            </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', justifyContent: 'flex-end', width: '100%', height: '80px' }}>
+                            <Box sx={{ width: '300px' }}>
+                                <Autocomplete
+                                    id="combo-box-team-filter"
+                                    options={teamList}
+                                    fullWidth
+                                    value={teamFilter}
+                                    isOptionEqualToValue={(option, value) => option && option.team_name}
+                                    getOptionLabel={(option) => (!option.team_name ? '' : option.team_name)}
+                                    renderOption={(props, option) => {
+                                        return (
+                                            <li {...props} key={option.id}>
+                                                {option.team_name}
+                                            </li>
+                                        );
+                                    }}
+                                    renderInput={(params) => <TextField {...params} label="Team" sx={{ my: 1 }} />}
+                                    onChange={(event, newValue) => {
+                                        setState({ teamFilter: newValue, hoverIndex: -1 });
+                                    }}
+                                />
+                            </Box>
+                            <TextField
+                                value={searchText}
+                                onChange={handleChange('searchText')}
+                                placeholder="Search"
+                                label=""
+                                inputProps={{ 'aria-label': 'Without label' }}
+                                variant="outlined"
+                                sx={{ borderRadius: '10px', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <IconButton
+                                                onMouseDown={handleMouseDownPassword}
+                                                sx={{ backgroundColor: '#F8F8F8', '&:hover': { backgroundColor: '#F8F8F8' }, '&:focus': { backgroundColor: '#F8F8F8' } }}
+                                            >
+                                                <SearchIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                        </Box>
+                    </Box>
+                    <Box sx={{ overflowY: 'auto', maxHeight: '70vh', marginLeft: '24px' }}>
+                        <Box sx={{ marginRight: '4px' }}>
+                            {getPlayers().map((player, index) => (
+                                <Box key={getUniqueKey(player)} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
+                                    <PlayerListItem row={player} isHover={hoverIndex === index} />
+                                </Box>
+                            ))}
+                        </Box>
+                    </Box>
+                </>
+            )}
         </Box>
     );
 };

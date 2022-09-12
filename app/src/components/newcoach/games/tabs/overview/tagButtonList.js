@@ -31,11 +31,11 @@ const Tags = [
     'Blocked'
 ];
 
-const GameTagButtonList = ({ selectedTag, onShow }) => {
+const GameTagButtonList = ({ selectedTag, onShow, isTeams }) => {
     return (
         <>
             <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
-                {Tags.slice(0, 12).map((tag, index) => (
+                {Tags.slice(isTeams ? 2 : 0, 12).map((tag, index) => (
                     <GameTagButton key={index} isSelected={selectedTag === tag} tagname={tag} onShow={onShow} />
                 ))}
             </Box>
