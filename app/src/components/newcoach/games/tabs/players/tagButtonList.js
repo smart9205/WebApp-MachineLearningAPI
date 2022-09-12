@@ -23,7 +23,7 @@ const Tags = [
     { id: 'Interception', name: 'Interceptions' },
     { id: 'Tackle', name: 'Tackles' },
     { id: 'Foul', name: 'Fouls' },
-    { id: 'Card', name: 'Cards' }
+    { id: 'All', name: 'All Actions' }
 ];
 
 const GamePlayerTagButtonList = ({ selectedTag, onShow }) => {

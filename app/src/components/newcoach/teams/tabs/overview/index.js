@@ -199,7 +199,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
             } else if (tagIndex === 'Offensive Half Build Up') {
                 if (values.isOur) getPlayTagList(GameService.getTeamBuildOnOffensiveHalf(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentBuildOnOffensiveHalf(teamId, gameIds.join(',')));
-            } else if (tagIndex === "Goalkeeper's Build Up (Kick)") {
+            } else if (tagIndex === 'Started From Goalkeeper') {
                 if (values.isOur) getPlayTagList(GameService.getTeamBuildupGoalkeeperKick(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentBuildupGoalkeeperKick(teamId, gameIds.join(',')));
             } else if (tagIndex === 'Started From Interception') {

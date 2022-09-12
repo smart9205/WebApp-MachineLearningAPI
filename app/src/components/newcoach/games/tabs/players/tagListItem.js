@@ -49,8 +49,8 @@ const GamePlayerTagListItem = ({ item, isSelected, idx, isChecked, onChecked, on
                 </Box>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <div>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div style={{ width: '115px' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <Box onClick={() => onChangeTime(idx, true, -5)} sx={{ 'svg path': { fill: 'lightgrey' } }}>
                             <MinusIcon fontSize="small" />
                         </Box>
@@ -59,7 +59,7 @@ const GamePlayerTagListItem = ({ item, isSelected, idx, isChecked, onChecked, on
                             <AddIcon fontSize="small" />
                         </Box>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <Box onClick={() => onChangeTime(idx, false, -5)} sx={{ 'svg path': { fill: 'lightgrey' } }}>
                             <MinusIcon fontSize="small" />
                         </Box>

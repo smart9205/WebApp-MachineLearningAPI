@@ -11,7 +11,7 @@ const Tags = [
     'Offensive Half Build Up',
     'Defensive Half Build Up',
     "Goalkeeper's Build Up",
-    "Goalkeeper's Build Up (Kick)",
+    'Started From Goalkeeper',
     'Counter-Attacks',
     'Started From Interception',
     'Started From Tackle',

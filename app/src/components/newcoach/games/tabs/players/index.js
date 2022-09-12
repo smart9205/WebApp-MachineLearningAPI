@@ -34,7 +34,7 @@ const ActionData = {
     Interception: { action_id: null, action_type_id: null, action_result_id: null },
     Tackle: { action_id: null, action_type_id: null, action_result_id: null },
     Foul: { action_id: null, action_type_id: null, action_result_id: null },
-    Card: { action_id: null, action_type_id: null, action_result_id: null }
+    All: { action_id: null, action_type_id: null, action_result_id: null }
 };
 
 const GamePlayers = ({ game }) => {

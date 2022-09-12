@@ -25,7 +25,17 @@ export const XmlDataFilterGame = ({ game, tagList, isOur, tag_name, setExportXML
 
     const sortedStartTime = tagList.sort(sortByStartTime);
     const sortedByTeamTagId = sortedStartTime.sort(sortByTeamTagId);
-    const TagDataForXML = sortedByTeamTagId.map((data) => {
+    let TagDataForXML = [
+        {
+            instance: {
+                ID: 0,
+                start: 0,
+                end: 10,
+                code: 'Begining of Video'
+            }
+        }
+    ];
+    const data = sortedByTeamTagId.map((data) => {
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -47,6 +57,8 @@ export const XmlDataFilterGame = ({ game, tagList, isOur, tag_name, setExportXML
         });
         return XMLdata;
     });
+
+    TagDataForXML = [...TagDataForXML, ...data];
 
     const XMLData = {
         file: {
@@ -96,7 +108,17 @@ export const XmlDataFilterGamePlayer = ({ game, tagList, isOur, tag_name, setExp
 
     const sortedStartTime = tagList.sort(sortByStartTime);
     const sortedByTeamTagId = sortedStartTime.sort(sortByTeamTagId);
-    const TagDataForXML = sortedByTeamTagId.map((data) => {
+    let TagDataForXML = [
+        {
+            instance: {
+                ID: 0,
+                start: 0,
+                end: 10,
+                code: 'Begining of Video'
+            }
+        }
+    ];
+    const data = sortedByTeamTagId.map((data) => {
         const XMLdata = {
             instance: {
                 ID: data.team_tag_id,
@@ -118,6 +140,8 @@ export const XmlDataFilterGamePlayer = ({ game, tagList, isOur, tag_name, setExp
         });
         return XMLdata;
     });
+
+    TagDataForXML = [...TagDataForXML, ...data];
 
     const XMLData = {
         file: {
