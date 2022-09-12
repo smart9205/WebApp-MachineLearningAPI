@@ -1,7 +1,10 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 
-const GamePlayerTagListItem = ({ item, isSelected, idx, isChecked, onChecked, onShowVideo }) => {
+import MinusIcon from '@mui/icons-material/IndeterminateCheckBox';
+import AddIcon from '@mui/icons-material/AddBox';
+
+const GamePlayerTagListItem = ({ item, isSelected, idx, isChecked, onChecked, onShowVideo, onChangeTime }) => {
     const getPeriod = (id) => {
         return id === 1 ? 'H1' : id === 2 ? 'H2' : 'OT';
     };
@@ -45,11 +48,27 @@ const GamePlayerTagListItem = ({ item, isSelected, idx, isChecked, onChecked, on
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.player_tag_start_time}</Typography>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.player_tag_end_time}</Typography>
-                </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Box onClick={() => onChangeTime(idx, true, -5)} sx={{ 'svg path': { fill: 'lightgrey' } }}>
+                            <MinusIcon fontSize="small" />
+                        </Box>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.player_tag_start_time}</Typography>
+                        <Box onClick={() => onChangeTime(idx, true, 5)} sx={{ 'svg path': { fill: 'lightgrey' } }}>
+                            <AddIcon fontSize="small" />
+                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Box onClick={() => onChangeTime(idx, false, -5)} sx={{ 'svg path': { fill: 'lightgrey' } }}>
+                            <MinusIcon fontSize="small" />
+                        </Box>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.player_tag_end_time}</Typography>
+                        <Box onClick={() => onChangeTime(idx, false, 5)} sx={{ 'svg path': { fill: 'lightgrey' } }}>
+                            <AddIcon fontSize="small" />
+                        </Box>
+                    </Box>
+                </div>
                 <input key={idx} type="checkbox" value={isChecked} checked={isChecked ? true : false} style={{ width: '18px', height: '18px' }} onChange={onChecked(idx)} />
             </Box>
         </Box>

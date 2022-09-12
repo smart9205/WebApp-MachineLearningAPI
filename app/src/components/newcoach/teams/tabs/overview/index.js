@@ -108,6 +108,40 @@ const TeamOverview = ({ games, teamname, teamId }) => {
         setCheckArray({ ...checkArray, [idx]: e.target.checked });
     };
 
+    const getTime = (time, delta) => {
+        const items = time.split(':');
+        const changedTime = parseInt(items[0]) * 3600 + parseInt(items[1]) * 60 + parseInt(items[2]) + delta;
+        let hour = Math.floor(changedTime / 3600);
+        let minute = Math.floor((changedTime - hour * 3600) / 60);
+        let second = changedTime - hour * 3600 - minute * 60;
+
+        if (hour < 10) hour = '0' + hour;
+        if (minute < 10) minute = '0' + minute;
+        if (second < 10) second = '0' + second;
+
+        return hour + ':' + minute + ':' + second;
+    };
+
+    const handleChangeTime = (index, isStart, direction) => {
+        let array = [...values.playList];
+        let data = [...videoData.tagList];
+
+        if (isStart) {
+            const changed = getTime(array[index].team_tag_start_time, direction);
+
+            array[index].team_tag_start_time = changed;
+            data[index].start_time = changed;
+        } else {
+            const changed = getTime(array[index].team_tag_end_time, direction);
+
+            array[index].team_tag_end_time = changed;
+            data[index].end_time = changed;
+        }
+
+        setValues({ ...values, playList: array });
+        setVideoData({ ...videoData, tagList: data });
+    };
+
     const getPlayTagList = (func) => {
         func.then((res) => {
             console.log('Game/Overview => ', res);
@@ -273,6 +307,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
                     checkArr={checkArray}
                     onChecked={handleCheckChange}
                     onVideo={handleShowVideo}
+                    onTime={handleChangeTime}
                 />
             </Box>
             <TeamVideoPlayer videoData={videoData} games={games} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />

@@ -8,24 +8,37 @@ const GamePlayerLogo = ({ player }) => {
         return player.image && player.image.length > 0 ? player.image : USER_IMAGE_DEFAULT;
     };
 
+    const getDisplayName = () => {
+        let first = player.first_name.slice(0, 1);
+        let last = player.last_name.slice(0, 1);
+
+        first = first === ' ' ? player.first_name.slice(1, 2) : first;
+        last = last === ' ' ? player.last_name.slice(1, 2) : last;
+
+        return player.last_name.length >= 13 ? `${first}. ${last}.` : `${first}. ${player.last_name}`;
+    };
+
     return (
         <Box sx={{ width: '80px', height: '100px', borderRadius: '8px', background: `url(${getImage()}) center center / cover no-repeat silver`, position: 'relative' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', width: '100%' }}>
+                <Box sx={{ borderRadius: '8px 0', width: '18px', height: '18px', background: '#C5EAC6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>{player.jersey_number}</Typography>
+                </Box>
+            </Box>
             <Box
                 sx={{
                     width: '100%',
-                    height: '30px',
+                    height: '20px',
                     backgroundColor: 'silver',
                     borderRadius: '0 0 8px 8px',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    flexDirection: 'column',
                     bottom: 0,
                     position: 'absolute'
                 }}
             >
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 500, color: '#1a1b1d' }}>{player.first_name}</Typography>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 500, color: '#1a1b1d' }}>{player.last_name}</Typography>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 500, color: '#1a1b1d' }}>{getDisplayName()}</Typography>
             </Box>
         </Box>
     );

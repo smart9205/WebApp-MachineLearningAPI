@@ -3,12 +3,21 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 
 import GamePlayerTagListItem from './tagListItem';
 
-const GamePlayerTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onChecked, onVideo }) => {
+const GamePlayerTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onChecked, onVideo, onTime }) => {
     return tagList.length > 0 ? (
         <Box sx={{ overflowY: 'auto', maxHeight: expand ? '15vh' : '50vh', minHeight: '15vh' }}>
             <Box sx={{ margin: '0 4px 8px 0', width: 'calc(100% - 4px)' }}>
                 {tagList.map((tag, index) => (
-                    <GamePlayerTagListItem key={index} item={tag} isSelected={curTagListIdx === index} idx={index} isChecked={checkArr[index]} onChecked={onChecked} onShowVideo={onVideo} />
+                    <GamePlayerTagListItem
+                        key={index}
+                        item={tag}
+                        isSelected={curTagListIdx === index}
+                        idx={index}
+                        isChecked={checkArr[index]}
+                        onChecked={onChecked}
+                        onShowVideo={onVideo}
+                        onChangeTime={onTime}
+                    />
                 ))}
             </Box>
         </Box>

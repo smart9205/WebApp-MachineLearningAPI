@@ -5,7 +5,7 @@ import MenuIcon from '@mui/icons-material/MenuOutlined';
 
 const GamePlayerTagButton = ({ isSelected, tag, onShow }) => {
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: '280px' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: '170px' }}>
             <Box sx={{ cursor: 'pointer', 'svg path': { fill: isSelected ? '#0A7304' : '#C5EAC6' }, '&:hover': { 'svg path': { fill: '#0A7304' } } }} onClick={onShow(tag)}>
                 <MenuIcon />
             </Box>
