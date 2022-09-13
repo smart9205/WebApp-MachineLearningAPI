@@ -1,8 +1,6 @@
-import React, { useEffect, useState, ReactElement } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import { TreeView, TreeItem, treeItemClasses } from '@mui/lab';
-import { styled } from '@mui/material/styles';
-import PropTypes from 'prop-types';
+import { TreeView, TreeItem } from '@mui/lab';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -10,6 +8,8 @@ import FolderIcon from '../../../assets/Folder.svg';
 import EditsIcon from '../../../assets/Edits.svg';
 
 import GameService from '../../../services/game.service';
+import EditTagTable from './tagTable';
+import VideoPlayer from '../../coach/Tabs/myEditsTab/UserEditVideoPlayer';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -37,75 +37,19 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
-    color: 'var(--bs-dark)',
-    [`& .${treeItemClasses.content}`]: {
-        color: 'var(--bs-dark)',
-        borderTopRightRadius: theme.spacing(2),
-        borderBottomRightRadius: theme.spacing(2),
-        paddingRight: theme.spacing(1),
-        fontWeight: theme.typography.fontWeightMedium,
-        '&.Mui-expanded': {
-            fontWeight: theme.typography.fontWeightRegular
-        },
-        '&:hover': {
-            backgroundColor: theme.palette.action.hover
-        },
-        '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
-            backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
-            color: 'var(--bs-dark)'
-        },
-        [`& .${treeItemClasses.label}`]: {
-            fontWeight: 'inherit',
-            color: 'inherit'
-        }
-    },
-    [`& .${treeItemClasses.group}`]: {
-        marginLeft: 0,
-        [`& .${treeItemClasses.content}`]: {
-            paddingLeft: theme.spacing(2)
-        }
-    }
-}));
-
-function StyledTreeItem(props) {
-    const { bgColor, color, labelIcon: LabelIcon, labelInfo, labelText, ...other } = props;
-
-    return (
-        <StyledTreeItemRoot
-            label={
-                <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-                    <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
-                    <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
-                        {labelText}
-                    </Typography>
-                    <Typography variant="caption" color="inherit">
-                        {labelInfo}
-                    </Typography>
-                </Box>
-            }
-            style={{
-                '--tree-view-color': color,
-                '--tree-view-bg-color': bgColor
-            }}
-            {...other}
-        />
-    );
-}
-
-StyledTreeItem.propTypes = {
-    bgColor: PropTypes.string,
-    color: PropTypes.string,
-    labelIcon: PropTypes.elementType.isRequired,
-    labelInfo: PropTypes.string,
-    labelText: PropTypes.string.isRequired
-};
-
 const Edits = () => {
-    const [values, setValues] = useState({
-        loading: false
-    });
     const [folders, setFolders] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [editTagList, setEditTagList] = useState([]);
+    const [curEdit, setCurEdit] = useState(null);
+    const [tagLoading, setTagLoading] = useState(false);
+    const [curTagIdx, setCurTagIdx] = useState(0);
+    const [playTagList, setPlayTagList] = useState([]);
+    const [videoData, setVideodata] = useState({
+        idx: 0,
+        autoPlay: true,
+        videoPlay: false
+    });
 
     const getChilds = (folders, parent_id) => {
         const children = folders.filter((item) => item.parent_id === parent_id);
@@ -172,47 +116,73 @@ const Edits = () => {
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
                 </Box>
             }
+            onClick={() => {
+                if (!Array.isArray(nodes.children)) setCurEdit(nodes);
+            }}
         >
             {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
         </TreeItem>
     );
 
+    const handleClickRow = (index) => {
+        setVideodata({ ...videoData, idx: index });
+        setCurTagIdx(index);
+    };
+
     useEffect(() => {
-        setValues({ ...values, loading: true });
+        setLoading(true);
         GameService.getAllFolders().then((res) => {
             const ascArray = stableSort(res, getComparator('asc', 'id'));
 
             setFolders(getTreeViewData(ascArray));
-            setValues({ ...values, loading: false });
+            setLoading(false);
         });
     }, []);
 
-    console.log('Edits => ', folders);
+    useEffect(() => {
+        if (curEdit !== null) {
+            setTagLoading(true);
+            GameService.getEditClipsByUserEditId(curEdit.id).then((res) => {
+                setEditTagList(res);
+                setTagLoading(false);
+            });
+        }
+    }, [curEdit]);
+
+    console.log('Edits => ', editTagList);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
-            {values.loading && (
+            {loading && (
                 <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <CircularProgress />
                 </div>
             )}
-            <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', height: '80vh', background: 'white', padding: '24px' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #E8E8E8', height: '100%', width: '300px', padding: '16px 8px' }}>
-                    <TreeView
-                        aria-label="rich object"
-                        defaultCollapseIcon={<ExpandMoreIcon />}
-                        defaultExpanded={['root']}
-                        defaultExpandIcon={<ChevronRightIcon />}
-                        defaultEndIcon={<div style={{ width: 24 }} />}
-                        sx={{ height: '100%', flexGrow: 1, width: '100%', overflowY: 'auto', color: '#1a1b1d' }}
-                    >
-                        {folders.length > 0 && folders.map((data) => renderTree(data))}
-                    </TreeView>
-                </Box>
-            </Box>
+            {!loading && (
+                <>
+                    <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', padding: '24px 0', overflowY: 'auto' }}>
+                        <div style={{ display: 'flex' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #E8E8E8', height: '100%', width: '250px', padding: '16px 8px' }}>
+                                <TreeView
+                                    aria-label="rich object"
+                                    defaultCollapseIcon={<ExpandMoreIcon />}
+                                    defaultExpanded={['root']}
+                                    defaultExpandIcon={<ChevronRightIcon />}
+                                    defaultEndIcon={<div style={{ width: 24 }} />}
+                                    sx={{ height: '100%', flexGrow: 1, width: '100%', overflowY: 'auto', color: '#1a1b1d' }}
+                                >
+                                    {folders.length > 0 && folders.map((data) => renderTree(data))}
+                                </TreeView>
+                            </Box>
+                            <EditTagTable loading={tagLoading} tagList={editTagList} setList={setPlayTagList} setIdx={handleClickRow} selected={curTagIdx} />
+                        </div>
+                        <VideoPlayer videoData={videoData} tagList={playTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
+                    </Box>
+                </>
+            )}
         </Box>
     );
 };
