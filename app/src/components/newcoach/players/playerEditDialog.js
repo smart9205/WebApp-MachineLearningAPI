@@ -9,20 +9,9 @@ import CloseIcon from '@mui/icons-material/CloseOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
 
-import { SaveButton } from '../components/common';
+import { SaveButton, MenuProps } from '../components/common';
 import UploadButton from '../components/uploadButton';
 import GameService from '../../../services/game.service';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250
-        }
-    }
-};
 
 const PlayerEditDialog = ({ open, onClose, player }) => {
     const navigate = useNavigate();

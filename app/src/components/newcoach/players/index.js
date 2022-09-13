@@ -1,10 +1,12 @@
-import { Box, Typography, Autocomplete, TextField, InputAdornment, IconButton, CircularProgress } from '@mui/material';
+import { Box, Typography, TextField, InputAdornment, IconButton, CircularProgress, Select, MenuItem } from '@mui/material';
 import React, { useEffect, useReducer } from 'react';
 
 import SearchIcon from '@mui/icons-material/SearchOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
 import GameService from '../../../services/game.service';
 import PlayerListItem from './playerListItem';
+import { MenuProps } from '../components/common';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -37,7 +39,7 @@ const Players = () => {
         searchText: '',
         playersList: [],
         teamList: [],
-        teamFilter: {},
+        teamFilter: 'none',
         loading: false,
         hoverIndex: -1
     });
@@ -64,11 +66,28 @@ const Players = () => {
         setState({ hoverIndex: -1 });
     };
 
+    const getTeamList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'team_name'));
+            let result = [];
+
+            desc.map((item) => {
+                const filter = result.filter((team) => team === item.team_name);
+
+                if (filter.length === 0) result = [...result, item.team_name];
+
+                return result;
+            });
+
+            return result;
+        }
+    };
+
     const getPlayers = () => {
         return searchText
             ? playersList.filter((item) => compareStrings(item.team_name, searchText) || compareStrings(item.pos_name, searchText) || compareStrings(item.name, searchText))
-            : teamFilter
-            ? playersList.filter((item) => item.team_name === teamFilter.team_name)
+            : teamFilter !== 'none'
+            ? playersList.filter((item) => item.team_name === teamFilter)
             : playersList;
     };
 
@@ -81,12 +100,7 @@ const Players = () => {
         GameService.getMyCoachPlayerList().then((res) => {
             const ascArray = stableSort(res, getComparator('asc', 'name'));
 
-            setState({ playersList: ascArray });
-        });
-        GameService.getMyCoachTeamList().then((res) => {
-            const ascArray = stableSort(res, getComparator('asc', 'team_name'));
-
-            setState({ teamList: ascArray, teamFilter: ascArray[0], loading: false });
+            setState({ playersList: ascArray, loading: false, teamList: getTeamList(res) });
         });
     }, []);
 
@@ -99,31 +113,30 @@ const Players = () => {
             )}
             {!loading && (
                 <>
-                    <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Players</Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', justifyContent: 'flex-end', width: '100%', height: '80px' }}>
-                            <Box sx={{ width: '300px' }}>
-                                <Autocomplete
-                                    id="combo-box-team-filter"
-                                    options={teamList}
-                                    fullWidth
+                    <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Players</Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Team</Typography>
+                                <Select
                                     value={teamFilter}
-                                    isOptionEqualToValue={(option, value) => option && option.team_name}
-                                    getOptionLabel={(option) => (!option.team_name ? '' : option.team_name)}
-                                    renderOption={(props, option) => {
-                                        return (
-                                            <li {...props} key={option.id}>
-                                                {option.team_name}
-                                            </li>
-                                        );
-                                    }}
-                                    renderInput={(params) => <TextField {...params} label="Team" sx={{ my: 1 }} />}
-                                    onChange={(event, newValue) => {
-                                        setState({ teamFilter: newValue, hoverIndex: -1 });
-                                    }}
-                                />
+                                    onChange={handleChange('teamFilter')}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ borderRadius: '10px', outline: 'none', height: '36px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem key="0" value="none">
+                                        All
+                                    </MenuItem>
+                                    {teamList.map((team, index) => (
+                                        <MenuItem key={index + 1} value={team}>
+                                            {team}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
                             </Box>
                             <TextField
                                 value={searchText}
@@ -132,7 +145,13 @@ const Players = () => {
                                 label=""
                                 inputProps={{ 'aria-label': 'Without label' }}
                                 variant="outlined"
-                                sx={{ borderRadius: '10px', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                sx={{
+                                    width: '300px',
+                                    '& legend': { display: 'none' },
+                                    '& fieldset': { top: 0 },
+                                    '& .MuiOutlinedInput-root': { borderRadius: '10px' },
+                                    '& .MuiOutlinedInput-input': { padding: 0, height: '36px' }
+                                }}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
@@ -148,7 +167,7 @@ const Players = () => {
                             />
                         </Box>
                     </Box>
-                    <Box sx={{ overflowY: 'auto', maxHeight: '70vh', marginLeft: '24px' }}>
+                    <Box sx={{ overflowY: 'auto', maxHeight: '85vh', marginLeft: '24px' }}>
                         <Box sx={{ marginRight: '4px' }}>
                             {getPlayers().map((player, index) => (
                                 <Box key={getUniqueKey(player)} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>

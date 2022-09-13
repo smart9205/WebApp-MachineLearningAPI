@@ -131,10 +131,8 @@ const Teams = () => {
             )}
             {!loading && (
                 <>
-                    <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Teams</Typography>
-                        </Box>
+                    <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Teams</Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', justifyContent: 'flex-end', width: '100%' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Season</Typography>
@@ -182,7 +180,7 @@ const Teams = () => {
                             </Box>
                         </Box>
                     </Box>
-                    <Box sx={{ overflowY: 'auto', maxHeight: '80vh', marginLeft: '24px' }}>
+                    <Box sx={{ overflowY: 'auto', maxHeight: '85vh', marginLeft: '24px' }}>
                         <Box sx={{ marginRight: '4px' }}>
                             {getTeamsList().map((team, index) => (
                                 <Box key={index} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
