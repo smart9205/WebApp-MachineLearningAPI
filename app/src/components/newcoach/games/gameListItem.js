@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, TextField, Divider, Popover } from '@mui/material';
+import { Box, Typography, TextField, Divider, Popover, CircularProgress } from '@mui/material';
 
 import SortIcon from '@mui/icons-material/SortOutlined';
 import EditIcon from '@mui/icons-material/EditOutlined';
@@ -12,7 +12,7 @@ import { SaveButton } from '../components/common';
 import GameService from '../../../services/game.service';
 import GameEditPage from './gameEditPage';
 import ExcelDataFiltering from '../../coach/ExcelDataFiltering';
-import XmlDataFiltering from '../../coach/XmlDataFiltering';
+import { XmlDataFilterGames } from '../components/xmldata';
 
 const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => {
     const navigate = useNavigate();
@@ -20,9 +20,6 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
     const [exportExcel, setExportExcel] = useState(false);
     const [exportGate, setExportGate] = useState(false);
     const [playerTagList, setPlayerTagList] = useState([]);
-    const [teamPlayerList, setTeamPlayerList] = useState([]);
-    const [gamePlayerList, setGamePlayerList] = useState([]);
-    const [teamId, setTeamId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [rowData, setRowData] = useState({
         videoURL: '',
@@ -63,8 +60,8 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
         setMenuAnchorEl(null);
     };
 
-    const handleClickSportGate = async () => {
-        await getAllInfosByGame(row);
+    const handleClickSportGate = () => {
+        setLoading(true);
         setExportGate(true);
         setMenuAnchorEl(null);
     };
@@ -90,19 +87,10 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
         if (team === 'none') team_id = game.home_team_id;
         else team_id = game.home_team_name === team ? game.home_team_id : game.away_team_id;
 
-        console.log('GameList1 => ', team_id);
-
         if (team_id !== null) {
             await GameService.getAllPlayerTagsByTeam(parseInt(team_id), parseInt(game.id)).then((res) => {
                 setPlayerTagList(res);
             });
-            await GameService.getGameTeamPlayersByTeam(parseInt(team_id), parseInt(game.id)).then((res) => {
-                setTeamPlayerList(res);
-            });
-            await GameService.getAllGameTeamPlayers(parseInt(game.id)).then((res) => {
-                setGamePlayerList(res);
-            });
-            setTeamId(team_id);
         }
 
         setLoading(false);
@@ -157,7 +145,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        cursor: loading ? 'wait' : 'pointer',
+                        cursor: 'pointer',
                         width: '48px',
                         'svg path': { fill: '#A5A5A8' },
                         '&:hover': { 'svg path': { fill: '#0A7304' } }
@@ -237,8 +225,26 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                 </Box>
             )}
             <GameEditPage open={editOpen} onClose={handleCloseDialog} game={row} />
-            {exportGate && <XmlDataFiltering game={row} team={playerTagList} teamId={teamId} playersInGameList={gamePlayerList} setExportXML={setExportGate} />}
+            {exportGate && <XmlDataFilterGames game={row} setXML={setExportGate} setLoading={setLoading} />}
             {exportExcel && <ExcelDataFiltering team={playerTagList} setExcelData={setExportExcel} />}
+            {loading && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        height: '100vh',
+                        background: 'rgba(0, 0, 0, 0.5)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 9999
+                    }}
+                >
+                    <CircularProgress />
+                </div>
+            )}
         </Box>
     );
 };

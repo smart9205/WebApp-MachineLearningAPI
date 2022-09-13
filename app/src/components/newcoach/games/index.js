@@ -279,7 +279,7 @@ const Games = () => {
                             </Box>
                         </Box>
                     </Box>
-                    <Box sx={{ overflowY: 'auto', maxHeight: '70vh', marginLeft: '24px' }}>
+                    <Box sx={{ overflowY: 'auto', maxHeight: '75vh', marginLeft: '24px' }}>
                         <Box sx={{ marginRight: '4px' }}>
                             {getGamesList().map((game, index) => (
                                 <Box key={index} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
