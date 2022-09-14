@@ -9,7 +9,7 @@ const Tags = [
     { id: 'GoalKick', name: 'Goal Kicks' },
     { id: 'FreeKick', name: 'Free Kicks' },
     { id: 'KeyPass', name: 'Key Passes' },
-    { id: 'ThroughPass', name: 'Key Passes' },
+    { id: 'ThroughPass', name: 'Through Passes' },
     { id: 'Cross', name: 'Crosses' },
     { id: 'Dribble', name: 'Dribbles' },
     { id: 'Offside', name: 'Offsides' },

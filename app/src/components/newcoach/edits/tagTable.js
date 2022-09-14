@@ -4,7 +4,7 @@ import { Box, Typography, CircularProgress } from '@mui/material';
 import CoachTeamTagTable from './teamTagTable';
 import CoachPlayerTagTable from './playerTagList';
 
-const EditTagTable = ({ loading, tagList, setList, setIdx, selected }) => {
+const EditTagTable = ({ loading, tagList, setList, setIdx, selected, sort }) => {
     const [teamTagList, setTeamTagList] = useState([]);
     const [playerTagList, setPlayerTagList] = useState([]);
 
@@ -35,8 +35,8 @@ const EditTagTable = ({ loading, tagList, setList, setIdx, selected }) => {
                     <Box sx={{ width: '100%', height: '5vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{getDisplayName()}</Typography>
                     </Box>
-                    {tagList.length > 0 && teamTagList.length > 0 && <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} />}
-                    {tagList.length > 0 && playerTagList.length > 0 && <CoachPlayerTagTable tagList={playerTagList} setIndex={setIdx} selectIdx={selected} />}
+                    {tagList.length > 0 && teamTagList.length > 0 && <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} />}
+                    {tagList.length > 0 && playerTagList.length > 0 && <CoachPlayerTagTable tagList={playerTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} />}
                 </>
             )}
         </Box>

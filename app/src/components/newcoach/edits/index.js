@@ -127,6 +127,11 @@ const Edits = () => {
     const handleClickRow = (index) => {
         setVideodata({ ...videoData, idx: index });
         setCurTagIdx(index);
+        console.log('Team Table1 => ', index);
+    };
+
+    const handleSort = (rows) => {
+        GameService.updateEditClipsSort(rows);
     };
 
     useEffect(() => {
@@ -145,6 +150,8 @@ const Edits = () => {
             GameService.getEditClipsByUserEditId(curEdit.id).then((res) => {
                 setEditTagList(res);
                 setTagLoading(false);
+                setVideodata({ ...videoData, idx: 0 });
+                setCurTagIdx(0);
             });
         }
     }, [curEdit]);
@@ -177,7 +184,7 @@ const Edits = () => {
                                     {folders.length > 0 && folders.map((data) => renderTree(data))}
                                 </TreeView>
                             </Box>
-                            <EditTagTable loading={tagLoading} tagList={editTagList} setList={setPlayTagList} setIdx={handleClickRow} selected={curTagIdx} />
+                            <EditTagTable loading={tagLoading} tagList={editTagList} setList={setPlayTagList} setIdx={handleClickRow} selected={curTagIdx} sort={handleSort} />
                         </div>
                         <VideoPlayer videoData={videoData} tagList={playTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
                     </Box>

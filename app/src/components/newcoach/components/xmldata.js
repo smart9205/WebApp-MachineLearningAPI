@@ -378,8 +378,8 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
         const OpponentTurnover = await getTeamTagList(GameService.getOpponentTurnover(teamIds.teamId, `${game.id}`), 'Turnovers', false);
         const OpponentPenalty = await getTeamTagList(GameService.getOpponentPenalty(teamIds.teamId, `${game.id}`), 'Penalties Gained', false);
 
-        const OurPlayerTags = await getPlayerTagList(teamIds.teamId);
-        const OpponentPlayerTags = await getPlayerTagList(teamIds.opponentTeamId);
+        const OurPlayerTags = await getPlayerTagList(teamIds.teamId, true);
+        const OpponentPlayerTags = await getPlayerTagList(teamIds.opponentTeamId, false);
 
         const XMLData = {
             file: {

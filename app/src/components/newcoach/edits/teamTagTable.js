@@ -1,55 +1,70 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Table, TableCell, TableContainer, TableHead, TableRow, TableBody } from '@mui/material';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import update from 'immutability-helper';
 
-const CoachTeamTagTable = ({ tagList, setIndex, selectIdx }) => {
-    const getPeriod = (period) => {
-        return period === 1 ? '1st Half' : period === 2 ? '2nd Half' : 'Overtime';
-    };
+import { EditDraggableTableRow } from './draggableTableRow';
+
+const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort }) => {
+    const [tableRows, setTableRows] = useState(tagList);
+
+    useEffect(() => {
+        setTableRows(tagList);
+    }, [tagList]);
+
+    const moveRow = useCallback((dragIndex, hoverIndex) => {
+        setTableRows((prevCards) => {
+            const newRow = update(prevCards, {
+                $splice: [
+                    [dragIndex, 1],
+                    [hoverIndex, 0, prevCards[dragIndex]]
+                ]
+            });
+            const start = dragIndex < hoverIndex ? dragIndex : hoverIndex;
+            const end = (dragIndex > hoverIndex ? dragIndex : hoverIndex) + 1;
+
+            handleSort(
+                newRow.slice(start, end).map((row, i) => {
+                    return { ...row, sort: start + i };
+                })
+            );
+
+            return newRow;
+        });
+    }, []);
+
+    const renderRow = useCallback((tag, index, selected) => {
+        console.log('Team Table => ', selected);
+        return <EditDraggableTableRow key={tag.id} id={tag.id} row={tag} index={index} moveRow={moveRow} selected={index === selected} onClick={() => setIndex(index)} isTeam={true} />;
+    }, []);
 
     return (
         <TableContainer style={{ height: '100%', width: '100%' }}>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell align="center" style={{ height: '36px' }}>
-                            Period
-                        </TableCell>
-                        <TableCell align="center" style={{ height: '36px' }}>
-                            Offensive Team
-                        </TableCell>
-                        <TableCell align="center" style={{ height: '36px' }}>
-                            Defensive Team
-                        </TableCell>
-                        <TableCell align="center" style={{ height: '36px' }}>
-                            Start Time
-                        </TableCell>
-                        <TableCell align="center" style={{ height: '36px' }}>
-                            End Time
-                        </TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {tagList.map((tag, index) => (
-                        <TableRow key={index} style={{ cursor: 'pointer' }} onClick={() => setIndex(index)} selected={selectIdx === index}>
+            <DndProvider backend={HTML5Backend}>
+                <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
+                        <TableRow>
                             <TableCell align="center" style={{ height: '36px' }}>
-                                {getPeriod(tag.period)}
+                                Period
                             </TableCell>
                             <TableCell align="center" style={{ height: '36px' }}>
-                                {tag.offensive_team_name}
+                                Offensive Team
                             </TableCell>
                             <TableCell align="center" style={{ height: '36px' }}>
-                                {tag.defensive_team_name}
+                                Defensive Team
                             </TableCell>
                             <TableCell align="center" style={{ height: '36px' }}>
-                                {tag.start_time}
+                                Start Time
                             </TableCell>
                             <TableCell align="center" style={{ height: '36px' }}>
-                                {tag.end_time}
+                                End Time
                             </TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>{tableRows.map((tag, index) => renderRow(tag, index, selectIdx))}</TableBody>
+                </Table>
+            </DndProvider>
         </TableContainer>
     );
 };
