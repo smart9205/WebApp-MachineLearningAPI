@@ -131,8 +131,8 @@ export default function Tagging() {
     });
 
     const [config, setConfig] = React.useReducer((old, action) => ({ ...old, ...action }), {
-        sec_before: 7,
-        sec_after: 10
+        sec_before: 10,
+        sec_after: 8
     });
 
     const [teamTag, setTeamTag] = React.useReducer((old, action) => ({ ...old, ...action }), {
