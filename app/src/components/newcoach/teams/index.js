@@ -1,7 +1,6 @@
 import React, { useReducer, useEffect } from 'react';
-import { Typography, Box, InputAdornment, IconButton, Select, TextField, CircularProgress, MenuItem } from '@mui/material';
+import { Typography, Box, Select, CircularProgress, MenuItem } from '@mui/material';
 
-import SearchIcon from '@mui/icons-material/SearchOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
 import GameService from '../../../services/game.service';
@@ -51,20 +50,12 @@ const Teams = () => {
         setState({ [prop]: e.target.value });
     };
 
-    const compareStrings = (first, last) => {
-        return first.toLowerCase().includes(last.toLowerCase());
-    };
-
     const handleMouseEnter = (idx) => {
         setState({ hoverIndex: idx });
     };
 
     const handleMouseLeave = () => {
         setState({ hoverIndex: -1 });
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
     };
 
     const getSeasonList = (array) => {

@@ -1,15 +1,13 @@
-import React from 'react'
+import React from 'react';
 
 const DownloadXML = ({ blob, game }) => {
+    const getActualDate = new Date(game.date);
+    const date = getActualDate.getDate();
+    const month = getActualDate.getMonth() + 1;
+    const year = getActualDate.getFullYear();
+    const gameDate = '(' + date + '-' + month + '-' + year + ')';
 
-    const getActualDate = new Date(game.date)
-    const date = getActualDate.getDate()
-    const month = getActualDate.getMonth() + 1
-    const year = getActualDate.getFullYear()
-    const gameDate = '(' + date + '-' + month + '-' + year + ')'
-
-
-    const fileName = game.home_team_name.split('_').join(' ') + ' vs ' + game.away_team_name + ' ' + gameDate;
+    const fileName = game.home_team_name.split('_').join(' ') + ' vs ' + game.away_team_name + ' ' + gameDate + '.xml';
     var pom = document.createElement('a');
     pom.setAttribute('href', window.URL.createObjectURL(blob));
     pom.setAttribute('download', fileName);
@@ -18,8 +16,7 @@ const DownloadXML = ({ blob, game }) => {
     pom.classList.add('dragout');
     pom.click();
 
+    return <></>;
+};
 
-    return <></>
-}
-
-export default DownloadXML
+export default DownloadXML;
