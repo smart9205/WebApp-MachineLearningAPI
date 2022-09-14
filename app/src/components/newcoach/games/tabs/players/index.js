@@ -27,13 +27,13 @@ const ActionData = {
     Corner: { action_id: '2,3', action_type_id: '12', action_result_id: null },
     DrawFoul: { action_id: '6', action_type_id: null, action_result_id: null },
     Turnover: { action_id: '2,7', action_type_id: null, action_result_id: '5,11,12,15' },
-    Saved: { action_id: null, action_type_id: null, action_result_id: null },
-    Penalty: { action_id: null, action_type_id: null, action_result_id: null },
-    Blocked: { action_id: null, action_type_id: null, action_result_id: null },
-    Clearance: { action_id: null, action_type_id: null, action_result_id: null },
-    Interception: { action_id: null, action_type_id: null, action_result_id: null },
-    Tackle: { action_id: null, action_type_id: null, action_result_id: null },
-    Foul: { action_id: null, action_type_id: null, action_result_id: null },
+    Saved: { action_id: '8', action_type_id: null, action_result_id: null },
+    Penalty: { action_id: '4', action_type_id: null, action_result_id: '14' },
+    Blocked: { action_id: '13', action_type_id: null, action_result_id: '7,19' },
+    Clearance: { action_id: '11', action_type_id: null, action_result_id: null },
+    Interception: { action_id: '10', action_type_id: null, action_result_id: null },
+    Tackle: { action_id: '12', action_type_id: null, action_result_id: null },
+    Foul: { action_id: '5', action_type_id: null, action_result_id: null },
     All: { action_id: null, action_type_id: null, action_result_id: null }
 };
 
