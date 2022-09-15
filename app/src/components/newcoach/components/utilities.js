@@ -16,8 +16,7 @@ export const gameCreateCommand = async (tagList, name, rawVideoList, gameIds) =>
 
     let videos = videoList.map((tag, i) => {
         return {
-            url: tag,
-            SecondBoxText: name
+            url: tag
         };
     });
 
@@ -34,7 +33,6 @@ export const gameCreateCommand = async (tagList, name, rawVideoList, gameIds) =>
     let obj = {
         Render: {
             FileData: {
-                Name: name,
                 Format: 'mp4',
                 Resolution: '1280x720',
                 FPS: '60',
@@ -72,8 +70,7 @@ export const gamePlayerCreateCommand = async (tagList, name, rawVideoList, gameI
 
     let videos = videoList.map((tag, i) => {
         return {
-            url: tag,
-            SecondBoxText: name
+            url: tag
         };
     });
 
@@ -90,7 +87,6 @@ export const gamePlayerCreateCommand = async (tagList, name, rawVideoList, gameI
     let obj = {
         Render: {
             FileData: {
-                Name: name,
                 Format: 'mp4',
                 Resolution: '1280x720',
                 FPS: '60',

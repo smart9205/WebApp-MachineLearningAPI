@@ -9,7 +9,7 @@ import EditsIcon from '../../../assets/Edits.svg';
 
 import GameService from '../../../services/game.service';
 import EditTagTable from './tagTable';
-import VideoPlayer from '../../coach/Tabs/myEditsTab/UserEditVideoPlayer';
+import EditVideoPlayer from './editVideoPlayer';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -186,7 +186,7 @@ const Edits = () => {
                             </Box>
                             <EditTagTable loading={tagLoading} tagList={editTagList} setList={setPlayTagList} setIdx={handleClickRow} selected={curTagIdx} sort={handleSort} />
                         </div>
-                        <VideoPlayer videoData={videoData} tagList={playTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
+                        <EditVideoPlayer videoData={videoData} tagList={playTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
                     </Box>
                 </>
             )}
