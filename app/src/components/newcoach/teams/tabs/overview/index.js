@@ -13,6 +13,7 @@ import TeamGameSelectDialog from './gameSelectDialog';
 import GameService from '../../../../../services/game.service';
 import TeamVideoPlayer from './teamVideoPlayer';
 import GameTagButtonList from '../../../games/tabs/overview/tagButtonList';
+import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 
 const TeamOverview = ({ games, teamname, teamId }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
@@ -39,6 +40,8 @@ const TeamOverview = ({ games, teamname, teamId }) => {
     const [playerTagList, setPlayerTagList] = useState([]);
     const [gameIds, setGameIds] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [exportEditOpen, setExportEditOpen] = useState(false);
+    const [exportList, setExportList] = useState([]);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
@@ -95,8 +98,20 @@ const TeamOverview = ({ games, teamname, teamId }) => {
         gameCreateCommand(newList, tagIndex, newVideos, ids);
     };
 
-    const handleClickExcel = () => {
+    const handleClickEditFromMenu = () => {
         setMenuAnchorEl(null);
+
+        if (values.playList.length > 0) {
+            setExportList(values.playList);
+            setExportEditOpen(true);
+        }
+    };
+
+    const handleClickEditFromButton = () => {
+        const newList = values.playList.filter((item, index) => checkArray[index] === true);
+
+        setExportList(newList);
+        setExportEditOpen(true);
     };
 
     const handleShowVideo = (index) => {
@@ -286,7 +301,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
                     onView={handleClickView}
                     onHudl={handleClickHudlFromMenu}
                     onRender={handleClickRenderFromMenu}
-                    onEdits={handleClickExcel}
+                    onEdits={handleClickEditFromMenu}
                 />
                 {values.playList.length > 0 && (
                     <GameTagControlSection
@@ -295,7 +310,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
                         onAll={(e) => setValues({ ...values, selectAll: e.target.checked })}
                         onHudl={handleClickHudlFromButton}
                         onRender={handleClickRenderFromButton}
-                        onEdits={handleClickExcel}
+                        onEdits={handleClickEditFromButton}
                     />
                 )}
                 <GameTagList
@@ -312,6 +327,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
             </Box>
             <TeamVideoPlayer videoData={videoData} games={games} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />
             <TeamGameSelectDialog open={dialogOpen} onClose={() => setDialogOpen(false)} gameList={games} setIds={setGameIds} />
+            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} />
         </Box>
     );
 };

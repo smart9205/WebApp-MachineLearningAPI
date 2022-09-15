@@ -415,6 +415,11 @@ const updateUserEdit = (req) => {
         return response.data;
     });
 };
+const addNewEditClips = (req) => {
+    return axios.put(API_URL + `user_edit_clip/add/${req.id}`, req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
 const deleteUserEdit = (id) => {
     return axios.delete(API_URL + `user_edits/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
         return response.data;
@@ -884,6 +889,7 @@ const gameService = {
     updatePlayer,
     updateCoachTeam,
     updateUserEdit,
+    addNewEditClips,
     updateEditClipsSort,
     updateEditClip,
 

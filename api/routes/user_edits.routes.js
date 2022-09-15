@@ -61,6 +61,12 @@ module.exports = app => {
 		controller.updateEditClip
 	);
 
+	app.put(
+		"/user_edit_clip/add/:id",
+		[authJwt.isCoach],
+		controller.addNewEditClips
+	);
+
 	app.delete(
 		"/user_edits/:id",
 		[authJwt.isCoach],

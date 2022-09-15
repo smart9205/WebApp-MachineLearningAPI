@@ -12,6 +12,7 @@ import GameTagList from './tagList';
 import GameTagControlSection from './tagControlSection';
 import GameTagMenu from './tagMenu';
 import GameOverviewHeader from './header';
+import GameExportToEdits from './exportEdits';
 
 const GameOverview = ({ game }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
@@ -37,6 +38,8 @@ const GameOverview = ({ game }) => {
     const [checkArray, setCheckArray] = useState([]);
     const [exportHudl, setExportHudl] = useState(false);
     const [playerTagList, setPlayerTagList] = useState([]);
+    const [exportEditOpen, setExportEditOpen] = useState(false);
+    const [exportList, setExportList] = useState([]);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
@@ -90,8 +93,20 @@ const GameOverview = ({ game }) => {
         gameCreateCommand(newList, tagIndex, [game.video_url], [game.id]);
     };
 
-    const handleClickExcel = () => {
+    const handleClickEditFromMenu = () => {
         setMenuAnchorEl(null);
+
+        if (values.playList.length > 0) {
+            setExportList(values.playList);
+            setExportEditOpen(true);
+        }
+    };
+
+    const handleClickEditFromButton = () => {
+        const newList = values.playList.filter((item, index) => checkArray[index] === true);
+
+        setExportList(newList);
+        setExportEditOpen(true);
     };
 
     const handleExpandButtons = () => {
@@ -300,7 +315,7 @@ const GameOverview = ({ game }) => {
                     onView={handleClickView}
                     onHudl={handleClickHudlFromMenu}
                     onRender={handleClickRenderFromMenu}
-                    onEdits={handleClickExcel}
+                    onEdits={handleClickEditFromMenu}
                 />
                 {values.playList.length > 0 && (
                     <GameTagControlSection
@@ -309,7 +324,7 @@ const GameOverview = ({ game }) => {
                         onAll={(e) => setValues({ ...values, selectAll: e.target.checked })}
                         onHudl={handleClickHudlFromButton}
                         onRender={handleClickRenderFromButton}
-                        onEdits={handleClickExcel}
+                        onEdits={handleClickEditFromButton}
                     />
                 )}
                 <GameTagList
@@ -326,6 +341,7 @@ const GameOverview = ({ game }) => {
             </Box>
             <VideoPlayer videoData={videoData} url={game.video_url ?? ''} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} isSpecial={true} />
             {exportHudl && <XmlDataFilterGame game={game} tagList={playerTagList} isOur={values.isOur} tag_name={tagIndex} setExportXML={setExportHudl} />}
+            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} />
         </Box>
     );
 };

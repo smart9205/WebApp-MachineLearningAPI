@@ -221,6 +221,26 @@ exports.updateEditClipsSort = (req, res) => {
   });
 }
 
+exports.addNewEditClips = (req, res) => {
+  console.log('+++++++++++ ', req);
+  req.body.rows.forEach(async (row, idx) => {
+    const clip = {
+      start_time: row.start_time,
+      end_time: row.end_time,
+      team_tag_id: row.team_tag_id,
+      player_tag_id: row.player_tag_id,
+      sort: idx,
+      edit_id: req.params.id
+    };
+
+    await Edit_Clips.create(clip);
+  })
+
+  res.send({
+    message: "Edit_clips are saved successfully."
+  });
+}
+
 exports.updateEditClip = (req, res) => {
   const id = req.params.id;
 
@@ -255,14 +275,13 @@ exports.updateEditClip = (req, res) => {
     });
 }
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const id = req.params.id;
 
-  User_Edits.update(req.body, {
-    where: { id: id }
-  })
-    .then(num => {
-      if (num == 1) {
+  const num = await User_Edits.update(req.body, { where: { id: id } })
+  const num1 = await User_Edits_Folder.update(req.body, { where: { id: id } })
+
+  if (num == 1 || num1 == 1) {
         res.send({
           message: "User_Edits was updated successfully."
         });
@@ -271,22 +290,17 @@ exports.update = (req, res) => {
           message: `Cannot update User_Edits with id=${id}. Maybe User_Edits was not found or req.body is empty!`
         });
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating User_Edits with id=" + id
-      });
-    });
 };
 
 exports.delete = async (req, res) => {
   const id = req.params.id;
 
   const num = await User_Edits.destroy({ where: { id: id } })
+  const num1 = await User_Edits_Folder.destroy({ where: { id: id } })
 
   await Edit_Clips.destroy({ where: { edit_id: id } })
 
-  if (num == 1) {
+  if (num == 1 || num1 == 1) {
     res.send({
       message: "User_Edits was deleted successfully!"
     });
