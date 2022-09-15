@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { TableCell, TableRow } from '@mui/material';
+import { TableCell, TableRow, Checkbox } from '@mui/material';
 
-export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTeam, ...rest }) => {
+export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTeam, rowChecked, onCheck, ...rest }) => {
     const ref = useRef(null);
     const [{ handlerId }, drop] = useDrop({
         accept: 'TeamTagRow',
@@ -66,7 +66,10 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
     };
 
     return (
-        <TableRow hover ref={ref} data-handler-id={handlerId} tabIndex={-1} selected={selected} {...rest}>
+        <TableRow hover ref={ref} data-handler-id={handlerId} tabIndex={-1} role="checkbox" selected={selected} {...rest}>
+            <TableCell>
+                <Checkbox checked={rowChecked} onChange={() => onCheck(id)} />
+            </TableCell>
             <TableCell align="center" style={{ height: '36px' }}>
                 {isTeam ? getPeriod(row.period) : row.action_name}
             </TableCell>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
@@ -8,9 +8,16 @@ import { EditDraggableTableRow } from './draggableTableRow';
 
 const CoachPlayerTagTable = ({ tagList, setIndex, selectIdx, handleSort }) => {
     const [tableRows, setTableRows] = useState(tagList);
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [selectAll, setSelectAll] = useState(false);
+    const selectedRef = useRef();
+
+    selectedRef.current = selectedRows;
 
     useEffect(() => {
         setTableRows(tagList);
+        setSelectedRows([]);
+        setSelectAll(false);
     }, [tagList]);
 
     const moveRow = useCallback((dragIndex, hoverIndex) => {
@@ -34,10 +41,43 @@ const CoachPlayerTagTable = ({ tagList, setIndex, selectIdx, handleSort }) => {
         });
     }, []);
 
+    const handleRowSelection = (id) => {
+        if (selectedRef.current.includes(id)) {
+            setSelectAll(false);
+            setSelectedRows(selectedRef.current.filter((item) => item !== id));
+        } else {
+            setSelectedRows((oldSelectedRows) => [...oldSelectedRows, id]);
+        }
+    };
+
     const renderRow = useCallback((tag, index, selected) => {
-        console.log('Team Table => ', selected);
-        return <EditDraggableTableRow key={tag.id} id={tag.id} row={tag} index={index} moveRow={moveRow} selected={index === selected} onClick={() => setIndex(index)} isTeam={false} />;
+        return (
+            <EditDraggableTableRow
+                key={tag.id}
+                id={tag.id}
+                row={tag}
+                index={index}
+                moveRow={moveRow}
+                selected={index === selected}
+                onClick={() => setIndex(index)}
+                isTeam={false}
+                rowChecked={selectedRef.current.includes(tag.id)}
+                onCheck={handleRowSelection}
+            />
+        );
     }, []);
+
+    useEffect(() => {
+        setSelectedRows([]);
+
+        if (selectAll) tableRows.map((item) => setSelectedRows((old) => [...old, item.id]));
+    }, [selectAll]);
+
+    useEffect(() => {
+        if (selectedRows.length === tableRows.length) setSelectAll(true);
+    }, [selectedRows]);
+
+    console.log(selectedRef.current);
 
     return (
         <TableContainer style={{ height: '100%', width: '100%' }}>
@@ -45,6 +85,9 @@ const CoachPlayerTagTable = ({ tagList, setIndex, selectIdx, handleSort }) => {
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
+                            <TableCell>
+                                <Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} />
+                            </TableCell>
                             <TableCell align="center" style={{ height: '36px' }}>
                                 Action
                             </TableCell>

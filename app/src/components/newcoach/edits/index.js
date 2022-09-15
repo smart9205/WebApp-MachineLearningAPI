@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import { TreeView, TreeItem } from '@mui/lab';
+import { TreeItem, TreeView } from '@mui/lab';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FolderIcon from '../../../assets/Folder.svg';
 import EditsIcon from '../../../assets/Edits.svg';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import GameService from '../../../services/game.service';
 import EditTagTable from './tagTable';
 import EditVideoPlayer from './editVideoPlayer';
+import EditNameDialog from './editNameDialog';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -45,6 +48,11 @@ const Edits = () => {
     const [tagLoading, setTagLoading] = useState(false);
     const [curTagIdx, setCurTagIdx] = useState(0);
     const [playTagList, setPlayTagList] = useState([]);
+    const [updateEdit, setUpdateEdit] = useState({});
+    const [refreshList, setRefreshList] = useState(false);
+    const [hoverIndex, setHoverIndex] = useState(-1);
+    const [hoverControl, setHoverControl] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
     const [videoData, setVideodata] = useState({
         idx: 0,
         autoPlay: true,
@@ -106,33 +114,55 @@ const Edits = () => {
         return trees;
     };
 
-    const renderTree = (nodes) => (
-        <TreeItem
-            key={nodes.id}
-            nodeId={nodes.id}
-            label={
-                <Box sx={{ display: 'flex', alignItems: 'center', padding: '2px 0', gap: '4px' }}>
-                    {Array.isArray(nodes.children) ? <img src={FolderIcon} style={{ height: '24px' }} /> : <img src={EditsIcon} style={{ height: '24px' }} />}
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
-                </Box>
-            }
-            onClick={() => {
-                if (!Array.isArray(nodes.children)) setCurEdit(nodes);
-            }}
-        >
-            {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
-        </TreeItem>
-    );
-
     const handleClickRow = (index) => {
         setVideodata({ ...videoData, idx: index });
         setCurTagIdx(index);
-        console.log('Team Table1 => ', index);
     };
 
     const handleSort = (rows) => {
         GameService.updateEditClipsSort(rows);
     };
+
+    const handleEditName = (node) => {
+        setUpdateEdit({ edit: node, isFolder: Array.isArray(node.children) });
+        setEditOpen(true);
+    };
+
+    const handleDeleteEdit = (id) => {
+        setLoading(true);
+        GameService.deleteUserEdit(id).then((res) => {
+            setLoading(false);
+            setRefreshList(true);
+        });
+    };
+
+    const renderTree = (nodes) => (
+        <TreeItem
+            key={nodes.id}
+            nodeId={nodes.id}
+            label={
+                <Box sx={{ display: 'flex', alignItems: 'center', padding: '2px 0', gap: '4px' }} onMouseEnter={() => setHoverIndex(nodes.id)} onMouseLeave={() => setHoverIndex(-1)}>
+                    {Array.isArray(nodes.children) ? <img src={FolderIcon} style={{ height: '24px' }} /> : <img src={EditsIcon} style={{ height: '24px' }} />}
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
+                    {hoverIndex === nodes.id && (
+                        <Box sx={{ display: 'flex', alignItems: 'center' }} onMouseEnter={() => setHoverControl(true)} onMouseLeave={() => setHoverControl(false)}>
+                            <Box onClick={() => handleEditName(nodes)}>
+                                <EditIcon fontSize="small" />
+                            </Box>
+                            <Box onClick={() => handleDeleteEdit(nodes.id)}>
+                                <DeleteIcon fontSize="small" />
+                            </Box>
+                        </Box>
+                    )}
+                </Box>
+            }
+            onClick={() => {
+                if (!Array.isArray(nodes.children) && !hoverControl) setCurEdit(nodes);
+            }}
+        >
+            {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
+        </TreeItem>
+    );
 
     useEffect(() => {
         setLoading(true);
@@ -141,13 +171,16 @@ const Edits = () => {
 
             setFolders(getTreeViewData(ascArray));
             setLoading(false);
+            setRefreshList(false);
         });
-    }, []);
+    }, [refreshList]);
 
     useEffect(() => {
         if (curEdit !== null) {
             setTagLoading(true);
             GameService.getEditClipsByUserEditId(curEdit.id).then((res) => {
+                if (res.length === 0) setPlayTagList([]);
+
                 setEditTagList(res);
                 setTagLoading(false);
                 setVideodata({ ...videoData, idx: 0 });
@@ -156,7 +189,7 @@ const Edits = () => {
         }
     }, [curEdit]);
 
-    console.log('Edits => ', editTagList);
+    console.log('Edits => ', curEdit);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
@@ -170,9 +203,10 @@ const Edits = () => {
                     <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
                     </Box>
+                    <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} updateList={setRefreshList} />
                     <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', padding: '24px 0', overflowY: 'auto' }}>
                         <div style={{ display: 'flex' }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #E8E8E8', height: '100%', width: '250px', padding: '16px 8px' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #E8E8E8', height: '100%', width: '270px', padding: '16px 8px' }}>
                                 <TreeView
                                     aria-label="rich object"
                                     defaultCollapseIcon={<ExpandMoreIcon />}
@@ -184,7 +218,15 @@ const Edits = () => {
                                     {folders.length > 0 && folders.map((data) => renderTree(data))}
                                 </TreeView>
                             </Box>
-                            <EditTagTable loading={tagLoading} tagList={editTagList} setList={setPlayTagList} setIdx={handleClickRow} selected={curTagIdx} sort={handleSort} />
+                            <EditTagTable
+                                loading={tagLoading}
+                                tagList={editTagList}
+                                setList={setPlayTagList}
+                                setIdx={handleClickRow}
+                                selected={curTagIdx}
+                                sort={handleSort}
+                                name={curEdit?.name ?? ''}
+                            />
                         </div>
                         <EditVideoPlayer videoData={videoData} tagList={playTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
                     </Box>
