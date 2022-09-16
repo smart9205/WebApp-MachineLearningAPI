@@ -13,6 +13,7 @@ import GameService from '../../../services/game.service';
 import EditTagTable from './tagTable';
 import EditVideoPlayer from './editVideoPlayer';
 import EditNameDialog from './editNameDialog';
+import EditCreateUserFolder from './createFolder';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -58,6 +59,8 @@ const Edits = () => {
         autoPlay: true,
         videoPlay: false
     });
+
+    const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
     const getChilds = (folders, parent_id) => {
         const children = folders.filter((item) => item.parent_id === parent_id);
@@ -171,7 +174,6 @@ const Edits = () => {
 
             setFolders(getTreeViewData(ascArray));
             setLoading(false);
-            setRefreshList(false);
         });
     }, [refreshList]);
 
@@ -204,6 +206,7 @@ const Edits = () => {
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
                     </Box>
                     <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} updateList={setRefreshList} />
+                    <EditCreateUserFolder anchor={menuAnchorEl} onClose={() => setMenuAnchorEl(null)} updateList={setRefreshList} />
                     <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', padding: '24px 0', overflowY: 'auto' }}>
                         <div style={{ display: 'flex' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #E8E8E8', height: '100%', width: '270px', padding: '16px 8px' }}>
@@ -214,6 +217,10 @@ const Edits = () => {
                                     defaultExpandIcon={<ChevronRightIcon />}
                                     defaultEndIcon={<div style={{ width: 24 }} />}
                                     sx={{ height: '100%', flexGrow: 1, width: '100%', overflowY: 'auto', color: '#1a1b1d' }}
+                                    onContextMenu={(e) => {
+                                        e.preventDefault();
+                                        setMenuAnchorEl(e.currentTarget);
+                                    }}
                                 >
                                     {folders.length > 0 && folders.map((data) => renderTree(data))}
                                 </TreeView>

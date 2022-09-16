@@ -761,7 +761,13 @@ const getTeamByPlayerGame = (playerId, gameId) => {
 };
 
 const getAllFolders = () => {
-    return axios.get(API_URL + 'user_edits_folders', { headers: authHeader() }).then((response) => {
+    return axios.get(API_URL + 'user_edits_folders_all', { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const createUserFolder = (req) => {
+    return axios.post(API_URL + 'user_edits_folders', req, { headers: authHeader() }).then((response) => {
         return response.data;
     });
 };
@@ -778,6 +784,7 @@ const gameService = {
     addHighlight,
 
     addUserEdits,
+    createUserFolder,
 
     getGame,
     getAllUserEdits,

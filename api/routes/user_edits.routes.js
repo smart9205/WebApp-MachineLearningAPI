@@ -33,7 +33,7 @@ module.exports = app => {
 	);
 
 	app.get(
-		"/user_edits_folders",
+		"/user_edits_folders_all",
 		[authJwt.isCoach],
 		controller.findAllFolders
 	)

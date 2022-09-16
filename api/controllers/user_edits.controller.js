@@ -222,7 +222,6 @@ exports.updateEditClipsSort = (req, res) => {
 }
 
 exports.addNewEditClips = (req, res) => {
-  console.log('+++++++++++ ', req);
   req.body.rows.forEach(async (row, idx) => {
     const clip = {
       start_time: row.start_time,
@@ -276,6 +275,7 @@ exports.updateEditClip = (req, res) => {
 }
 
 exports.update = async (req, res) => {
+  console.log('+++++++++++++ ', req.body);
   const id = req.params.id;
 
   const num = await User_Edits.update(req.body, { where: { id: id } })
