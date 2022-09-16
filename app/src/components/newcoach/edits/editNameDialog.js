@@ -3,21 +3,42 @@ import React, { useEffect, useState } from 'react';
 
 import GameService from '../../../services/game.service';
 
-const EditNameDialog = ({ open, onClose, node, updateList }) => {
+const EditNameDialog = ({ open, onClose, node, nodes, updateList }) => {
     const [name, setName] = useState('');
+    let folders = [...nodes];
+
+    const renameFolderEdit = (item, id, new_name) => {
+        if (item.id === id) item.name = new_name;
+        else {
+            if (Array.isArray(item.children))
+                item.children.map((child) => {
+                    return renameFolderEdit(child, id, new_name);
+                });
+        }
+
+        return item;
+    };
+
+    const updateData = () => {
+        if (folders) {
+            const newlist = folders.map((folder) => {
+                return renameFolderEdit(folder, node.edit.id, name);
+            });
+
+            updateList(newlist);
+        }
+    };
 
     const handleSave = () => {
         GameService.updateUserEdit({ id: node.edit.id, name }).then((res) => {
             onClose();
-            updateList((old) => !old);
+            updateData();
         });
     };
 
     useEffect(() => {
         if (node.edit) setName(node.edit.name);
     }, [node]);
-
-    console.log(name);
 
     return (
         <Dialog open={open} onClose={onClose}>

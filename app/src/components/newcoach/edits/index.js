@@ -135,7 +135,7 @@ const Edits = () => {
         setLoading(true);
         GameService.deleteUserEdit(id).then((res) => {
             setLoading(false);
-            setRefreshList(!refreshList);
+            setRefreshList(true);
         });
     };
 
@@ -175,7 +175,7 @@ const Edits = () => {
             setFolders(getTreeViewData(ascArray));
             setLoading(false);
         });
-    }, [refreshList]);
+    }, []);
 
     useEffect(() => {
         if (curEdit !== null) {
@@ -191,8 +191,6 @@ const Edits = () => {
         }
     }, [curEdit]);
 
-    console.log('Edits => ', curEdit);
-
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             {loading && (
@@ -205,7 +203,7 @@ const Edits = () => {
                     <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
                     </Box>
-                    <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} updateList={setRefreshList} />
+                    <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={setFolders} />
                     <EditCreateUserFolder anchor={menuAnchorEl} onClose={() => setMenuAnchorEl(null)} updateList={setRefreshList} />
                     <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', padding: '24px 0', overflowY: 'auto' }}>
                         <div style={{ display: 'flex' }}>
