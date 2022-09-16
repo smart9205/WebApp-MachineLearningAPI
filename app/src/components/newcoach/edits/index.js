@@ -135,7 +135,7 @@ const Edits = () => {
         setLoading(true);
         GameService.deleteUserEdit(id).then((res) => {
             setLoading(false);
-            setRefreshList(true);
+            setRefreshList(!refreshList);
         });
     };
 

@@ -58,9 +58,11 @@ const EditTagTable = ({ loading, tagList, setList, setIdx, selected, sort, name 
                     </Box>
                     {tagList.length > 0 && teamTagList.length > 0 && <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} />}
                     {tagList.length > 0 && playerTagList.length > 0 && <CoachPlayerTagTable tagList={playerTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} />}
-                    <Button variant="contained" style={{ margin: '1rem 0.5rem' }} onClick={handleRender}>
-                        Render
-                    </Button>
+                    {(teamTagList.length > 0 || playerTagList.length > 0) && (
+                        <Button variant="contained" style={{ margin: '1rem 0.5rem' }} onClick={handleRender}>
+                            Render
+                        </Button>
+                    )}
                 </>
             )}
         </Box>
