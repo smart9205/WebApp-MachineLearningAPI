@@ -49,6 +49,12 @@ const EditNameDialog = ({ open, onClose, node, nodes, updateList }) => {
                 <TextField
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleSave();
+                        }
+                    }}
                     label=""
                     autoFocus
                     inputProps={{ 'aria-label': 'Without label' }}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import { TreeItem, TreeView } from '@mui/lab';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -13,7 +13,7 @@ import GameService from '../../../services/game.service';
 import EditTagTable from './tagTable';
 import EditVideoPlayer from './editVideoPlayer';
 import EditNameDialog from './editNameDialog';
-import EditCreateUserFolder from './createFolder';
+import EditCreateUserFolderEdit from './createFolder';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -54,13 +54,13 @@ const Edits = () => {
     const [hoverIndex, setHoverIndex] = useState(-1);
     const [hoverControl, setHoverControl] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
+    const [folderDialog, setFolderDialog] = useState(false);
+    const [createFolderEdit, setCreateFolderEdit] = useState(false);
     const [videoData, setVideodata] = useState({
         idx: 0,
         autoPlay: true,
         videoPlay: false
     });
-
-    const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
     const getChilds = (folders, parent_id) => {
         const children = folders.filter((item) => item.parent_id === parent_id);
@@ -175,7 +175,7 @@ const Edits = () => {
             setFolders(getTreeViewData(ascArray));
             setLoading(false);
         });
-    }, []);
+    }, [refreshList]);
 
     useEffect(() => {
         if (curEdit !== null) {
@@ -204,10 +204,30 @@ const Edits = () => {
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
                     </Box>
                     <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={setFolders} />
-                    <EditCreateUserFolder anchor={menuAnchorEl} onClose={() => setMenuAnchorEl(null)} updateList={setRefreshList} />
+                    <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setRefreshList} isFolder={createFolderEdit} />
                     <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', padding: '24px 0', overflowY: 'auto' }}>
                         <div style={{ display: 'flex' }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #E8E8E8', height: '100%', width: '270px', padding: '16px 8px' }}>
+                            <Box sx={{ borderRight: '1px solid #E8E8E8', height: '100%', width: '270px', padding: '16px 8px' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', padding: '8px 0 24px' }}>
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => {
+                                            setFolderDialog(true);
+                                            setCreateFolderEdit(true);
+                                        }}
+                                    >
+                                        New Folder
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => {
+                                            setFolderDialog(true);
+                                            setCreateFolderEdit(false);
+                                        }}
+                                    >
+                                        New Edit
+                                    </Button>
+                                </Box>
                                 <TreeView
                                     aria-label="rich object"
                                     defaultCollapseIcon={<ExpandMoreIcon />}
@@ -215,10 +235,6 @@ const Edits = () => {
                                     defaultExpandIcon={<ChevronRightIcon />}
                                     defaultEndIcon={<div style={{ width: 24 }} />}
                                     sx={{ height: '100%', flexGrow: 1, width: '100%', overflowY: 'auto', color: '#1a1b1d' }}
-                                    onContextMenu={(e) => {
-                                        e.preventDefault();
-                                        setMenuAnchorEl(e.currentTarget);
-                                    }}
                                 >
                                     {folders.length > 0 && folders.map((data) => renderTree(data))}
                                 </TreeView>

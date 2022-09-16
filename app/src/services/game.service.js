@@ -772,6 +772,12 @@ const createUserFolder = (req) => {
     });
 };
 
+const createUserEdit = (req) => {
+    return axios.post(API_URL + 'user_edits_create', req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
 const gameService = {
     addTeamPlayer,
     addTeam,
@@ -785,6 +791,7 @@ const gameService = {
 
     addUserEdits,
     createUserFolder,
+    createUserEdit,
 
     getGame,
     getAllUserEdits,

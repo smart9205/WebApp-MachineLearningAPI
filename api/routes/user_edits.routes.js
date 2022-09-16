@@ -22,6 +22,12 @@ module.exports = app => {
 		controller.createFolder
 	);
 
+	app.post(
+		"/user_edits_create",
+		[authJwt.isCoach],
+		controller.createEdit
+	);
+
 	app.get(
 		"/user_edits",
 		controller.findAll

@@ -5,6 +5,8 @@ const Edit_Clips = db.edit_clips;
 const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
 
+var bcrypt = require("bcryptjs");
+
 exports.create = async (req, res) => {
   if (!req.body.name) {
     res.status(400).send({
@@ -13,10 +15,13 @@ exports.create = async (req, res) => {
     return;
   }
 
+  const date = new Date();
   const user_edits = {
     name: req.body.name,
     user_id: req.userId,
-    processed: 1,
+    parent_id: null,
+    share_id: bcrypt.hashSync(date.toString(), 8),
+    order_num: 2
   };
 
   const userEdits = await User_Edits.create(user_edits);
@@ -49,13 +54,11 @@ exports.create = async (req, res) => {
         {
           start_time: tag.p_start_time,
           end_time: tag.p_end_time,
-          player_tag_id: tag.player_tag_id,
           edit_id: userEdits.id,
           sort: idx
         } : {
           start_time: tag.t_start_time,
           end_time: tag.t_end_time,
-          team_tag_id: tag.team_tag_id,
           edit_id: userEdits.id,
           sort: idx
         }
@@ -89,6 +92,39 @@ exports.createFolder = async (req, res) => {
   };
 
   await User_Edits_Folder.create(user_edits_folder)
+    .then(data => {
+      res.send(data)
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating UserEditsFolder."
+      });
+    })
+
+}
+
+exports.createEdit = async (req, res) => {
+
+  if (!req.body.name) {
+    res.status(400).send({
+      message: "Name can not be empty!"
+    });
+    return;
+  }
+
+  // res.send(`Name: ${req.body.name} and ParentID: ${req.body.parentID} and UserID: ${req.userId}`)
+
+  const date = new Date();
+  const user_edits = {
+    name: req.body.name,
+    user_id: req.userId,
+    parent_id: null,
+    share_id: bcrypt.hashSync(date.toString(), 8),
+    order_num: 2
+  };
+
+  await User_Edits.create(user_edits)
     .then(data => {
       res.send(data)
     })
@@ -226,8 +262,6 @@ exports.addNewEditClips = (req, res) => {
     const clip = {
       start_time: row.start_time,
       end_time: row.end_time,
-      team_tag_id: row.team_tag_id,
-      player_tag_id: row.player_tag_id,
       sort: idx,
       edit_id: req.params.id
     };
@@ -248,8 +282,6 @@ exports.updateEditClip = (req, res) => {
     edit_id: req.body.edit_id,
     start_time: req.body.start_time,
     end_time: req.body.end_time,
-    team_tag_id: req.body.team_tag_id,
-    player_tag_id: req.body.player_tag_id,
     sort: req.body.sort,
   }
 

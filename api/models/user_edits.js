@@ -16,8 +16,9 @@ module.exports = (sequelize, DataTypes) => {
   User_Edits.init({
     name: DataTypes.STRING,
     user_id: DataTypes.INTEGER,
-    processed: DataTypes.INTEGER,
-    video_url: DataTypes.STRING,
+    parent_id: DataTypes.INTEGER,
+    share_id: DataTypes.STRING,
+    order_num: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'User_Edits',
