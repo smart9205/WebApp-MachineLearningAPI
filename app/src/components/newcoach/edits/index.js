@@ -8,6 +8,8 @@ import FolderIcon from '../../../assets/Folder.svg';
 import EditsIcon from '../../../assets/Edits.svg';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ShareIcon from '@mui/icons-material/Share';
+import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows';
 
 import GameService from '../../../services/game.service';
 import EditTagTable from './tagTable';
@@ -155,6 +157,16 @@ const Edits = () => {
                             <Box onClick={() => handleDeleteEdit(nodes.id)}>
                                 <DeleteIcon fontSize="small" />
                             </Box>
+                            {!Array.isArray(nodes.children) && (
+                                <>
+                                    <Box>
+                                        <ShareIcon fontSize="small" />
+                                    </Box>
+                                    <Box>
+                                        <DesktopWindowsIcon fontSize="small" />
+                                    </Box>
+                                </>
+                            )}
                         </Box>
                     )}
                 </Box>
