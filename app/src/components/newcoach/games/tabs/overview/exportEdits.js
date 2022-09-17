@@ -35,7 +35,7 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-const GameExportToEdits = ({ open, onClose, tagList }) => {
+const GameExportToEdits = ({ open, onClose, tagList, game }) => {
     const [folders, setFolders] = useState([]);
     const [curEdit, setCurEdit] = useState(null);
 
@@ -116,13 +116,19 @@ const GameExportToEdits = ({ open, onClose, tagList }) => {
         </TreeItem>
     );
 
+    const getName = (item) => {
+        return `${item.action_names} - ${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names}`;
+    };
+
     const handleSave = async () => {
-        const newList = tagList.map((item) => {
+        const newList = tagList.map((item, index) => {
             return {
                 start_time: item.team_tag_start_time,
                 end_time: item.team_tag_end_time,
-                team_tag_id: item.team_tag_id,
-                player_tag_id: null
+                edit_id: curEdit.id,
+                sort: index,
+                game_id: game.id,
+                name: getName(item)
             };
         });
 
@@ -159,7 +165,19 @@ const GameExportToEdits = ({ open, onClose, tagList }) => {
                 <Box sx={{ overflowY: 'auto', maxHeight: '400px', width: '600px', paddingLeft: '16px' }}>
                     <Box sx={{ margin: '0 4px 8px 0', width: 'calc(100% - 4px)' }}>
                         {tagList.map((item, index) => (
-                            <Box key={index} sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px', padding: '4px', border: '1px solid #e8e8e8', borderRadius: '8px' }}>
+                            <Box
+                                key={index}
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    cursor: 'pointer',
+                                    gap: '8px',
+                                    padding: '4px',
+                                    border: '1px solid #e8e8e8',
+                                    borderRadius: '8px'
+                                }}
+                            >
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <Box sx={{ background: '#C5EAC6', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: 'white' }}>{index + 1}</Typography>
