@@ -116,6 +116,61 @@ export const gamePlayerCreateCommand = async (tagList, name, rawVideoList, gameI
     fileDownload(command, `${name}.xml`);
 };
 
+export const editCreateCommand = async (tagList, name) => {
+    let rawVideoList = [...new Set(tagList.map((tag) => tag.video_url))];
+    let videoList = await Promise.all(
+        rawVideoList.map(async (url) => {
+            if (url?.startsWith('https://www.youtube.com')) {
+                return (await gameService.getAsyncNewStreamURL(url)).url;
+            }
+            return url;
+        })
+    );
+
+    let videos = videoList.map((tag, i) => {
+        return {
+            url: tag,
+            SecondBoxText: name
+        };
+    });
+
+    let clips = tagList.map((tag) => {
+        return {
+            Video: rawVideoList.indexOf(tag.video_url) + 1,
+            Trim: `${toSecond(tag.start_time)}:${toSecond(tag.end_time)}`,
+            FirstBoxText: tag.name
+        };
+    });
+
+    let obj = {
+        Render: {
+            FileData: {
+                Name: name,
+                Format: 'mp4',
+                Resolution: '1280x720',
+                FPS: '60',
+                Preset: 'ultrafast',
+                FontFile: 'ArialBold.ttf',
+                FontColor: 'White',
+                FontSize: '35',
+                FirstBoxSize: '300x60',
+                FirstBoxColor: '#808080@0.7',
+                FirstBoxFormat: 'rgba',
+                SeconBoxSize: '500x60',
+                SecondBoxColor: '#FFA500@0.7',
+                SecondBoxFormat: 'rgba',
+                LogoURL: 'https://s3.eu-west-1.amazonaws.com/scouting4u.com/IMG/JustSmallLogo.png'
+            },
+            Videos: { Video: videos },
+            Clips: { Clip: clips }
+        }
+    };
+
+    const command = builder.create(obj).end({ pretty: true });
+
+    fileDownload(command, `${name}.xml`);
+};
+
 export function toSecond(data) {
     if (!data || data === '') return 0;
     let a = data.split(':'); // split it at the colons

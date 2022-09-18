@@ -50,7 +50,6 @@ const Edits = () => {
     const [curEdit, setCurEdit] = useState(null);
     const [tagLoading, setTagLoading] = useState(false);
     const [curTagIdx, setCurTagIdx] = useState(0);
-    const [playTagList, setPlayTagList] = useState([]);
     const [updateEdit, setUpdateEdit] = useState({});
     const [refreshList, setRefreshList] = useState(false);
     const [hoverIndex, setHoverIndex] = useState(-1);
@@ -209,8 +208,6 @@ const Edits = () => {
         if (curEdit !== null && curEdit.type === 'edit') {
             setTagLoading(true);
             GameService.getEditClipsByUserEditId(curEdit.id).then((res) => {
-                if (res.length === 0) setPlayTagList([]);
-
                 setEditTagList(res);
                 setTagLoading(false);
                 setVideodata({ ...videoData, idx: 0 });
@@ -269,17 +266,9 @@ const Edits = () => {
                                     {folders.length > 0 && folders.map((data) => renderTree(data))}
                                 </TreeView>
                             </Box>
-                            <EditTagTable
-                                loading={tagLoading}
-                                tagList={editTagList}
-                                setList={setPlayTagList}
-                                setIdx={handleClickRow}
-                                selected={curTagIdx}
-                                sort={handleSort}
-                                name={curEdit?.name ?? ''}
-                            />
+                            <EditTagTable loading={tagLoading} tagList={editTagList} setIdx={handleClickRow} selected={curTagIdx} sort={handleSort} name={curEdit?.name ?? ''} />
                         </div>
-                        <EditVideoPlayer videoData={videoData} tagList={playTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
+                        <EditVideoPlayer videoData={videoData} tagList={editTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
                     </Box>
                 </>
             )}

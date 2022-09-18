@@ -184,38 +184,10 @@ exports.findOne = (req, res) => {
   Sequelize.query(`
   SELECT 
     public."Edit_Clips".*,
-    OffensiveTeam.name as offensive_team_name,
-    DefensiveTeam.name as defensive_team_name,
-    public."Players".f_name as player_fname,
-    public."Players".l_name as player_lname,
-    public."Players".jersey_number as jersey,
-    public."Team_Tags".period,
-    CASE
-      WHEN public."Team_Tags".period = 1 THEN '1st Half'
-      WHEN public."Team_Tags".period = 2 THEN '2nd Half'
-      ELSE 'Overtime'
-    END 
-    AS period_name,
-    public."Team_Tags".start_time as t_start_time,
-    public."Team_Tags".end_time as t_end_time,
-    public."Actions".name as action_name,
-    public."Action_Types".name as action_type_name,
-    public."Action_Results".name as action_result_name,
     public."Games".video_url
   FROM public."Edit_Clips"
-  
-  LEFT JOIN public."Player_Tags" on public."Player_Tags".id = public."Edit_Clips".player_tag_id
-  
-  LEFT JOIN public."Team_Tags" on public."Team_Tags".id = public."Edit_Clips".team_tag_id or public."Team_Tags".id = public."Player_Tags".team_tag_id
-  LEFT JOIN public."Teams" as OffensiveTeam on public."Team_Tags".offensive_team_id = OffensiveTeam.id
-  LEFT JOIN public."Teams" as DefensiveTeam on public."Team_Tags".defensive_team_id = DefensiveTeam.id 
- 
-  LEFT JOIN public."Actions" on public."Actions".id = public."Player_Tags".action_id
-  LEFT JOIN public."Action_Types" on public."Action_Types".id = public."Player_Tags".action_type_id
-  LEFT JOIN public."Action_Results" on public."Action_Results".id = public."Player_Tags".action_result_id
-  LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
-  LEFT JOIN public."Games" on public."Games".id = public."Team_Tags".game_id
-  WHERE edit_id = ${id}
+  JOIN public."Games" on public."Games".id = public."Edit_Clips".game_id
+  WHERE public."Edit_Clips".edit_id = ${id}
   order by sort
   `).then(data => {
     res.send(data[0]);

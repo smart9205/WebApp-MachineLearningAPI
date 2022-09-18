@@ -85,13 +85,7 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort }) => {
                                 <Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} />
                             </TableCell>
                             <TableCell align="center" style={{ height: '36px' }}>
-                                Period
-                            </TableCell>
-                            <TableCell align="center" style={{ height: '36px' }}>
-                                Offensive Team
-                            </TableCell>
-                            <TableCell align="center" style={{ height: '36px' }}>
-                                Defensive Team
+                                Clip Name
                             </TableCell>
                             <TableCell align="center" style={{ height: '36px' }}>
                                 Start Time

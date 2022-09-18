@@ -1,47 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, CircularProgress, Button } from '@mui/material';
 
+import DeleteIcon from '@mui/icons-material/Delete';
+import ExportIcon from '@mui/icons-material/FileDownloadOutlined';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentCutIcon from '@mui/icons-material/ContentCut';
+
 import CoachTeamTagTable from './teamTagTable';
-import CoachPlayerTagTable from './playerTagList';
-import { createCommand, toSecond } from '../../../common/utilities';
+import { editCreateCommand, toSecond } from '../components/utilities';
 
-const EditTagTable = ({ loading, tagList, setList, setIdx, selected, sort, name }) => {
+const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name }) => {
     const [teamTagList, setTeamTagList] = useState([]);
-    const [playerTagList, setPlayerTagList] = useState([]);
-
-    const getDisplayName = () => {
-        return tagList.length === 0 ? 'No Tags' : teamTagList.length > 0 ? 'Team Tags' : playerTagList.length > 0 ? 'Player Tags' : 'No Tags';
-    };
 
     const handleRender = () => {
-        if (!Array.isArray(tagList)) return;
-
         let newList = [];
-        const list = teamTagList.length > 0 ? [...teamTagList] : [...playerTagList];
 
-        list.forEach((tag, i) => {
+        teamTagList.map((tag) => {
             let last = newList.at(-1);
+
             if (last && toSecond(last?.end_time ?? 0) >= toSecond(tag.start_time) && toSecond(last?.start_time ?? 0) <= toSecond(tag.start_time)) {
                 last.end_time = last.end_time > tag.end_time ? last.end_time : tag.end_time;
-
-                if (last.action_name && !last.action_name?.includes(tag.action_name)) last.action_name += ` && ${tag.action_name}`;
             } else {
                 newList.push({ ...tag });
             }
         });
 
-        createCommand(newList, name);
+        editCreateCommand(newList, name);
     };
 
     useEffect(() => {
-        const teams = Array.isArray(tagList) ? tagList.filter((item) => item.team_tag_id !== null && item.player_tag_id === null) : [];
-        const players = Array.isArray(tagList) ? tagList.filter((item) => item.team_tag_id === null && item.player_tag_id !== null) : [];
-
-        setTeamTagList(teams);
-        setPlayerTagList(players);
-
-        if (teams.length > 0) setList(teams);
-        if (players.length > 0) setList(players);
+        setTeamTagList(tagList);
     }, [tagList]);
 
     return (
@@ -53,12 +41,33 @@ const EditTagTable = ({ loading, tagList, setList, setIdx, selected, sort, name 
             )}
             {!loading && (
                 <>
-                    <Box sx={{ width: '100%', height: '5vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{getDisplayName()}</Typography>
-                    </Box>
+                    {teamTagList.length === 0 && (
+                        <Box sx={{ width: '100%', height: '5vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>No Tags</Typography>
+                        </Box>
+                    )}
+                    {teamTagList.length > 0 && (
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '16px' }}>
+                            <Button variant="contained" sx={{ width: '110px' }} onClick={handleRender}>
+                                <ExportIcon />
+                                Render
+                            </Button>
+                            <Button variant="contained" sx={{ width: '110px' }}>
+                                <ContentCutIcon />
+                                Move
+                            </Button>
+                            <Button variant="contained" sx={{ width: '110px' }}>
+                                <ContentCopyIcon />
+                                Copy
+                            </Button>
+                            <Button variant="contained" sx={{ width: '110px' }}>
+                                <DeleteIcon />
+                                Delete
+                            </Button>
+                        </Box>
+                    )}
                     {tagList.length > 0 && teamTagList.length > 0 && <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} />}
-                    {tagList.length > 0 && playerTagList.length > 0 && <CoachPlayerTagTable tagList={playerTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} />}
-                    {(teamTagList.length > 0 || playerTagList.length > 0) && (
+                    {teamTagList.length > 0 && (
                         <Button variant="contained" style={{ margin: '1rem 0.5rem' }} onClick={handleRender}>
                             Render
                         </Button>

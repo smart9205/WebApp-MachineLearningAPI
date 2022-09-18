@@ -117,7 +117,7 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
     );
 
     const getName = (item) => {
-        return `${item.action_names} - ${getPeriod(item.period)} - ${item.time_in_game} - ${item.player_names}`;
+        return `${getPeriod(item.period)} - ${item.time_in_game} - ${item.player_names} - ${item.action_names} - ${item.action_type_names} - ${item.action_result_names}`;
     };
 
     const handleSave = async () => {

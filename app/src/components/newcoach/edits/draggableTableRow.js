@@ -61,29 +61,14 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
 
     drag(drop(ref));
 
-    const getPeriod = (period) => {
-        return period === 1 ? '1st Half' : period === 2 ? '2nd Half' : 'Overtime';
-    };
-
     return (
         <TableRow hover ref={ref} data-handler-id={handlerId} tabIndex={-1} role="checkbox" selected={selected} {...rest}>
             <TableCell>
                 <Checkbox checked={rowChecked} onChange={() => onCheck(id)} />
             </TableCell>
             <TableCell align="center" style={{ height: '36px' }}>
-                {isTeam ? getPeriod(row.period) : row.action_name}
+                {row.name}
             </TableCell>
-            <TableCell align="center" style={{ height: '36px' }}>
-                {isTeam ? row.offensive_team_name : row.action_type_name}
-            </TableCell>
-            <TableCell align="center" style={{ height: '36px' }}>
-                {isTeam ? row.defensive_team_name : row.action_result_name}
-            </TableCell>
-            {!isTeam && (
-                <TableCell align="center" style={{ height: '36px' }}>
-                    {`${row.player_fname} ${row.player_lname}`}
-                </TableCell>
-            )}
             <TableCell align="center" style={{ height: '36px' }}>
                 {row.start_time}
             </TableCell>
