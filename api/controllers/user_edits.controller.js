@@ -87,7 +87,7 @@ exports.createFolder = async (req, res) => {
   const user_edits_folder = {
     name: req.body.name,
     user_id: req.userId,
-    parent_id: req.body.parentID,
+    parent_id: req.body.parent_id,
     order_num: 2
   };
 
@@ -119,7 +119,7 @@ exports.createEdit = async (req, res) => {
   const user_edits = {
     name: req.body.name,
     user_id: req.userId,
-    parent_id: null,
+    parent_id: req.body.parent_id,
     share_id: bcrypt.hashSync(date.toString(), 8),
     order_num: 2
   };
@@ -166,25 +166,10 @@ exports.findFolder = (req, res) => {
 };
 
 exports.findAllFolders = (req, res) => {
-  let result = {};
-
   Sequelize.query(`
-    SELECT * FROM public."User_Edits" WHERE public."User_Edits".user_id=${req.userId}
+    SELECT * FROM public.fnc_get_user_edit_and_folder(${req.userId})
   `).then(data => {
-    result = data[0];
-  }).catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving UserEdits."
-      });
-    });
-
-  Sequelize.query(`
-    SELECT * FROM public."User_Edits_Folders" WHERE public."User_Edits_Folders".user_id=${req.userId}
-  `).then(data => {
-    let result1 = data[0];
-
-    res.send([...result, ...result1])
+    res.send(data[0]);
   }).catch(err => {
       res.status(500).send({
         message:
@@ -258,15 +243,8 @@ exports.updateEditClipsSort = (req, res) => {
 }
 
 exports.addNewEditClips = (req, res) => {
-  req.body.rows.forEach(async (row, idx) => {
-    const clip = {
-      start_time: row.start_time,
-      end_time: row.end_time,
-      sort: idx,
-      edit_id: req.params.id
-    };
-
-    await Edit_Clips.create(clip);
+  req.body.rows.forEach(async (row) => {
+    await Edit_Clips.create(row);
   })
 
   res.send({
@@ -325,22 +303,59 @@ exports.update = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  const id = req.params.id;
-
-  const num = await User_Edits.destroy({ where: { id: id } })
-  const num1 = await User_Edits_Folder.destroy({ where: { id: id } })
-
-  await Edit_Clips.destroy({ where: { edit_id: id } })
-
-  if (num == 1 || num1 == 1) {
+  Sequelize.query(`
+    select * from public.fnc_delete_edit(${req.params.id})
+  `).then(() => {
     res.send({
       message: "User_Edits was deleted successfully!"
     });
-  } else {
+  }).catch(() => {
     res.send({
-      message: `Cannot delete User_Edits with id=${id}. Maybe User_Edits was not found!`
+      message: `Cannot delete User_Edits with id=${req.params.id}. Maybe User_Edits was not found!`
     });
-  }
+  })
+};
+
+exports.deleteFolder = async (req, res) => {
+  Sequelize.query(`
+    select * from public.fnc_delete_folder(${req.params.id})
+  `).then(() => {
+    res.send({
+      message: "User_Edits_Folders was deleted successfully!"
+    });
+  }).catch(() => {
+    res.send({
+      message: `Cannot delete User_Edits_Folders with id=${req.params.id}. Maybe User_Edits_Folders was not found!`
+    });
+  })
+};
+
+exports.moveClips = async (req, res) => {
+  Sequelize.query(`
+    select * from public.fnc_move_clips('${req.params.clipIds}', ${req.params.editId})
+  `).then(() => {
+    res.send({
+      message: "User_Edits was deleted successfully!"
+    });
+  }).catch(() => {
+    res.send({
+      message: `Cannot delete User_Edits with id=${req.params.id}. Maybe User_Edits was not found!`
+    });
+  })
+};
+
+exports.copyClips = async (req, res) => {
+  Sequelize.query(`
+    select * from public.fnc_copy_clips('${req.params.clipIds}', ${req.params.editId})
+  `).then(() => {
+    res.send({
+      message: "User_Edits was deleted successfully!"
+    });
+  }).catch(() => {
+    res.send({
+      message: `Cannot delete User_Edits with id=${req.params.id}. Maybe User_Edits was not found!`
+    });
+  })
 };
 
 exports.deleteClip = async (req, res) => {

@@ -952,6 +952,25 @@ exports.getOpponentCounterAttack = (req, res) => {
     });
 }
 
+exports.gameExportSportcode = (req, res) => {
+  Sequelize.query(`
+    select * from public.fnc_export_game_to_sportcode(
+      ${req.params.teamId},
+      '${req.params.gameIds}',
+      ${req.userId}
+    )
+  `)
+    .then(data => {
+      res.send(data[0]);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving games."
+      });
+    });
+}
+
 exports.deleteGames = (req, res) => {
   Sequelize.query(`
     DELETE FROM public."Games" WHERE id IN (${req.body.games.map((id) => id)})

@@ -3,17 +3,17 @@ import { Typography, Dialog, DialogTitle, DialogContent, DialogActions, Button, 
 
 import GameService from '../../../services/game.service';
 
-const EditCreateUserFolderEdit = ({ open, onClose, updateList, isFolder }) => {
+const EditCreateUserFolderEdit = ({ open, onClose, updateList, isFolder, node }) => {
     const [folderName, setFolderName] = useState('');
 
     const handleCreateFolder = () => {
         if (isFolder) {
-            GameService.createUserFolder({ name: folderName, parent_id: null }).then((res) => {
+            GameService.createUserFolder({ name: folderName, parent_id: node !== null && node.type === 'folder' ? node.id : null }).then((res) => {
                 onClose();
                 updateList((old) => !old);
             });
         } else {
-            GameService.createUserEdit({ name: folderName }).then((res) => {
+            GameService.createUserEdit({ name: folderName, parent_id: node !== null && node.type === 'folder' ? node.id : null }).then((res) => {
                 onClose();
                 updateList((old) => !old);
             });

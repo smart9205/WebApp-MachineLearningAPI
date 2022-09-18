@@ -367,4 +367,10 @@ module.exports = app => {
 		[authJwt.verifyToken, authJwt.isCoach],
 		controller.getOpponentBlocked
 	);
+
+	app.get(
+		"/game/game_export_sportcode/:teamId/:gameIds",
+		[authJwt.verifyToken, authJwt.isCoach],
+		controller.gameExportSportcode
+	);
 };

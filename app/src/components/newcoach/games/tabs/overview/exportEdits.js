@@ -46,9 +46,9 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
         if (children.length > 0) {
             children.map((item) => {
                 const childs = getChilds(folders, item.id);
-                let tree = { id: String(item.id), name: item.name };
+                let tree = { id: String(item.id), name: item.name, order_num: item.order_number, type: item.type };
 
-                if (childs.length > 0) tree = { id: String(item.id), name: item.name, children: childs };
+                if (childs.length > 0) tree = { id: String(item.id), name: item.name, children: childs, order_num: item.order_number, type: item.type };
 
                 trees = [...trees, tree];
 
@@ -67,9 +67,9 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
         if (parents.length > 0) {
             parents.map((item) => {
                 const child = getChilds(other, item.id);
-                let tree = { id: String(item.id), name: item.name };
+                let tree = { id: String(item.id), name: item.name, order_num: item.order_number, type: item.type };
 
-                if (child.length > 0) tree = { id: String(item.id), name: item.name, children: child };
+                if (child.length > 0) tree = { id: String(item.id), name: item.name, children: stableSort(child, getComparator('asc', 'order_num')), order_num: item.order_number, type: item.type };
 
                 trees = [...trees, tree];
 
@@ -77,21 +77,19 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
             });
         } else {
             let childs = [];
-            let node = {};
 
             other.map((item) => {
-                const tree = { id: String(item.id), name: item.name };
+                const tree = { id: String(item.id), name: item.name, order_num: item.order_number, type: item.type };
 
                 childs = [...childs, tree];
 
                 return childs;
             });
-            node = { id: 0, name: 'root', children: childs };
 
-            return node;
+            return { id: 0, name: 'root', children: stableSort(childs, getComparator('asc', 'order_num')), type: 'folder' };
         }
 
-        return trees;
+        return stableSort(trees, getComparator('asc', 'order_num'));
     };
 
     const getPeriod = (id) => {
@@ -104,36 +102,36 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
             nodeId={nodes.id}
             label={
                 <Box sx={{ display: 'flex', alignItems: 'center', padding: '2px 0', gap: '4px' }}>
-                    {Array.isArray(nodes.children) ? <img src={FolderIcon} style={{ height: '24px' }} /> : <img src={EditsIcon} style={{ height: '24px' }} />}
+                    {nodes.type === 'folder' ? <img src={FolderIcon} style={{ height: '24px' }} /> : <img src={EditsIcon} style={{ height: '24px' }} />}
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
                 </Box>
             }
-            onClick={() => {
-                if (!Array.isArray(nodes.children)) setCurEdit(nodes);
-            }}
+            onClick={() => setCurEdit(nodes)}
         >
             {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
         </TreeItem>
     );
 
     const getName = (item) => {
-        return `${item.action_names} - ${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names}`;
+        return `${item.action_names} - ${getPeriod(item.period)} - ${item.time_in_game} - ${item.player_names}`;
     };
 
     const handleSave = async () => {
-        const newList = tagList.map((item, index) => {
-            return {
-                start_time: item.team_tag_start_time,
-                end_time: item.team_tag_end_time,
-                edit_id: curEdit.id,
-                sort: index,
-                game_id: game.id,
-                name: getName(item)
-            };
-        });
+        if (curEdit.type === 'edit') {
+            const newList = tagList.map((item, index) => {
+                return {
+                    start_time: item.team_tag_start_time,
+                    end_time: item.team_tag_end_time,
+                    edit_id: curEdit.id,
+                    sort: index + 1,
+                    game_id: game.id,
+                    name: getName(item)
+                };
+            });
 
-        await GameService.addNewEditClips({ id: curEdit.id, rows: newList });
-        onClose();
+            await GameService.addNewEditClips({ id: curEdit.id, rows: newList });
+            onClose();
+        }
     };
 
     useEffect(() => {

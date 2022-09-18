@@ -73,10 +73,28 @@ module.exports = app => {
 		controller.addNewEditClips
 	);
 
+	app.put(
+		"/user_edit_clip/move/:clipIds/:editId",
+		[authJwt.isCoach],
+		controller.moveClips
+	);
+
+	app.put(
+		"/user_edit_clip/copy/:clipIds/:editId",
+		[authJwt.isCoach],
+		controller.copyClips
+	);
+
 	app.delete(
 		"/user_edits/:id",
 		[authJwt.isCoach],
 		controller.delete
+	);
+
+	app.delete(
+		"/user_edits_folders/:id",
+		[authJwt.isCoach],
+		controller.deleteFolder
 	);
 
 	app.delete(

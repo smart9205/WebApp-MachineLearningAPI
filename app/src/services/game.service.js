@@ -345,6 +345,12 @@ const getOpponentBlocked = (teamId, gameIds) => {
     });
 };
 
+const gameExportSportcode = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/game_export_sportcode/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
 const getGameById = (gameId) => {
     return axios.get(API_URL + `game/getgamebyid/${gameId}`, { headers: authHeader(), data: { gameId } }).then((response) => {
         return response.data;
@@ -420,8 +426,23 @@ const addNewEditClips = (req) => {
         return response.data;
     });
 };
+const moveEditClips = (clipIds, editId) => {
+    return axios.put(API_URL + `user_edit_clip/move/${clipIds}/${editId}`, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+const copyEditClips = (clipIds, editId) => {
+    return axios.put(API_URL + `user_edit_clip/copy/${clipIds}/${editId}`, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
 const deleteUserEdit = (id) => {
     return axios.delete(API_URL + `user_edits/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+        return response.data;
+    });
+};
+const deleteUserFolder = (id) => {
+    return axios.delete(API_URL + `user_edits_folders/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
         return response.data;
     });
 };
@@ -870,6 +891,7 @@ const gameService = {
     getOpponentClearance,
     getTeamBlocked,
     getOpponentBlocked,
+    gameExportSportcode,
     getAllMyCoachTeam,
     getMyCoachTeamList,
     getMyCoachPlayerList,
@@ -917,7 +939,10 @@ const gameService = {
     deleteLeague,
     deletePlayer,
     deleteCoachTeam,
-    deleteUserEdit
+    deleteUserEdit,
+    deleteUserFolder,
+    moveEditClips,
+    copyEditClips
 };
 
 export default gameService;

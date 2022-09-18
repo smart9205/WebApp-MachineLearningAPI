@@ -71,9 +71,9 @@ const Edits = () => {
         if (children.length > 0) {
             children.map((item) => {
                 const childs = getChilds(folders, item.id);
-                let tree = { id: String(item.id), name: item.name };
+                let tree = { id: String(item.id), name: item.name, order_num: item.order_number, type: item.type };
 
-                if (childs.length > 0) tree = { id: String(item.id), name: item.name, children: childs };
+                if (childs.length > 0) tree = { id: String(item.id), name: item.name, children: childs, order_num: item.order_number, type: item.type };
 
                 trees = [...trees, tree];
 
@@ -92,9 +92,9 @@ const Edits = () => {
         if (parents.length > 0) {
             parents.map((item) => {
                 const child = getChilds(other, item.id);
-                let tree = { id: String(item.id), name: item.name };
+                let tree = { id: String(item.id), name: item.name, order_num: item.order_number, type: item.type };
 
-                if (child.length > 0) tree = { id: String(item.id), name: item.name, children: child };
+                if (child.length > 0) tree = { id: String(item.id), name: item.name, children: stableSort(child, getComparator('asc', 'order_num')), order_num: item.order_number, type: item.type };
 
                 trees = [...trees, tree];
 
@@ -102,21 +102,19 @@ const Edits = () => {
             });
         } else {
             let childs = [];
-            let node = {};
 
             other.map((item) => {
-                const tree = { id: String(item.id), name: item.name };
+                const tree = { id: String(item.id), name: item.name, order_num: item.order_number, type: item.type };
 
                 childs = [...childs, tree];
 
                 return childs;
             });
-            node = { id: 0, name: 'root', children: childs };
 
-            return node;
+            return { id: 0, name: 'root', children: stableSort(childs, getComparator('asc', 'order_num')), type: 'folder' };
         }
 
-        return trees;
+        return stableSort(trees, getComparator('asc', 'order_num'));
     };
 
     const handleClickRow = (index) => {
@@ -133,31 +131,48 @@ const Edits = () => {
         setEditOpen(true);
     };
 
-    const handleDeleteEdit = (id) => {
-        setLoading(true);
-        GameService.deleteUserEdit(id).then((res) => {
-            setLoading(false);
-            setRefreshList(true);
+    const deleteFolderEdit = (array, node) => {
+        const index = array.indexOf(node);
+
+        if (index > -1) return array.splice(index, 1);
+
+        return array.map((item) => {
+            if (Array.isArray(item.children)) {
+                const idx = item.children.indexOf(node);
+
+                if (idx > -1) return item.children.splice(idx, 1);
+                else return deleteFolderEdit(item.children, node);
+            }
         });
+    };
+
+    const handleDeleteEditFolder = async (node) => {
+        let array = [...folders];
+
+        deleteFolderEdit(array, node);
+        setFolders(array);
+
+        if (node.type === 'edit') await GameService.deleteUserEdit(node.id);
+        else await GameService.deleteUserFolder(node.id);
     };
 
     const renderTree = (nodes) => (
         <TreeItem
-            key={nodes.id}
+            key={`${nodes.id}_${nodes.type}`}
             nodeId={nodes.id}
             label={
                 <Box sx={{ display: 'flex', alignItems: 'center', padding: '2px 0', gap: '4px' }} onMouseEnter={() => setHoverIndex(nodes.id)} onMouseLeave={() => setHoverIndex(-1)}>
-                    {Array.isArray(nodes.children) ? <img src={FolderIcon} style={{ height: '24px' }} /> : <img src={EditsIcon} style={{ height: '24px' }} />}
+                    {nodes.type === 'folder' ? <img src={FolderIcon} style={{ height: '24px' }} /> : <img src={EditsIcon} style={{ height: '24px' }} />}
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
                     {hoverIndex === nodes.id && (
                         <Box sx={{ display: 'flex', alignItems: 'center' }} onMouseEnter={() => setHoverControl(true)} onMouseLeave={() => setHoverControl(false)}>
                             <Box onClick={() => handleEditName(nodes)}>
                                 <EditIcon fontSize="small" />
                             </Box>
-                            <Box onClick={() => handleDeleteEdit(nodes.id)}>
+                            <Box onClick={() => handleDeleteEditFolder(nodes)}>
                                 <DeleteIcon fontSize="small" />
                             </Box>
-                            {!Array.isArray(nodes.children) && (
+                            {nodes.type === 'edit' && (
                                 <>
                                     <Box>
                                         <ShareIcon fontSize="small" />
@@ -172,7 +187,7 @@ const Edits = () => {
                 </Box>
             }
             onClick={() => {
-                if (!Array.isArray(nodes.children) && !hoverControl) setCurEdit(nodes);
+                if (!hoverControl) setCurEdit(nodes);
             }}
         >
             {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
@@ -184,13 +199,14 @@ const Edits = () => {
         GameService.getAllFolders().then((res) => {
             const ascArray = stableSort(res, getComparator('asc', 'id'));
 
+            console.log(res);
             setFolders(getTreeViewData(ascArray));
             setLoading(false);
         });
     }, [refreshList]);
 
     useEffect(() => {
-        if (curEdit !== null) {
+        if (curEdit !== null && curEdit.type === 'edit') {
             setTagLoading(true);
             GameService.getEditClipsByUserEditId(curEdit.id).then((res) => {
                 if (res.length === 0) setPlayTagList([]);
@@ -202,6 +218,8 @@ const Edits = () => {
             });
         }
     }, [curEdit]);
+
+    console.log(folders);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
@@ -216,7 +234,7 @@ const Edits = () => {
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
                     </Box>
                     <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={setFolders} />
-                    <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setRefreshList} isFolder={createFolderEdit} />
+                    <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setRefreshList} isFolder={createFolderEdit} node={curEdit} />
                     <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', padding: '24px 0', overflowY: 'auto' }}>
                         <div style={{ display: 'flex' }}>
                             <Box sx={{ borderRight: '1px solid #E8E8E8', height: '100%', width: '270px', padding: '16px 8px' }}>

@@ -29,8 +29,7 @@ const GameOverview = ({ game }) => {
         teamId: -1,
         opponentTeamId: -1,
         selectAll: false,
-        clickRender: false,
-        clickHudl: false
+        clickEventName: ''
     });
     const [tagIndex, setTagIndex] = useState('');
     const [loadData, setLoadData] = useState(false);
@@ -70,7 +69,7 @@ const GameOverview = ({ game }) => {
         setMenuAnchorEl(null);
 
         if (values.playList.length === 0) {
-            setValues({ ...values, clickHudl: true });
+            setValues({ ...values, clickEventName: 'sportcode' });
             setLoadData(true);
         } else {
             setPlayerTagList(values.playList);
@@ -82,7 +81,7 @@ const GameOverview = ({ game }) => {
         setMenuAnchorEl(null);
 
         if (values.playList.length === 0) {
-            setValues({ ...values, clickRender: true });
+            setValues({ ...values, clickEventName: 'render' });
             setLoadData(true);
         } else gameCreateCommand(values.playList, tagIndex, [game.video_url], [game.id]);
     };
@@ -99,6 +98,9 @@ const GameOverview = ({ game }) => {
         if (values.playList.length > 0) {
             setExportList(values.playList);
             setExportEditOpen(true);
+        } else {
+            setValues({ ...values, clickEventName: 'my_edits' });
+            setLoadData(true);
         }
     };
 
@@ -161,28 +163,31 @@ const GameOverview = ({ game }) => {
             console.log('Game/Overview => ', res);
             setLoading(false);
             setLoadData(false);
-            setVideoData({
-                ...videoData,
-                idx: 0,
-                tagList: res.map((item) => {
-                    return {
-                        start_time: item.team_tag_start_time,
-                        end_time: item.team_tag_end_time
-                    };
-                })
-            });
 
-            if (values.clickRender) gameCreateCommand(res, tagIndex, [game.video_url], [game.id]);
-            if (values.clickHudl) {
+            if (values.clickEventName === 'render') gameCreateCommand(res, tagIndex, [game.video_url], [game.id]);
+            else if (values.clickEventName === 'sportcode') {
                 setPlayerTagList(res);
                 setExportHudl(true);
+            } else if (values.clickEventName === 'my_edits') {
+                setExportList(res);
+                setExportEditOpen(true);
+            } else {
+                setVideoData({
+                    ...videoData,
+                    idx: 0,
+                    tagList: res.map((item) => {
+                        return {
+                            start_time: item.team_tag_start_time,
+                            end_time: item.team_tag_end_time
+                        };
+                    })
+                });
+                setValues({ ...values, playList: res });
+                setCheckArray([]);
+                res.map((item, index) => {
+                    setCheckArray((oldRows) => [...oldRows, false]);
+                });
             }
-
-            setValues({ ...values, playList: res, clickRender: false, clickHudl: false });
-            setCheckArray([]);
-            res.map((item, index) => {
-                setCheckArray((oldRows) => [...oldRows, false]);
-            });
         });
     };
 
