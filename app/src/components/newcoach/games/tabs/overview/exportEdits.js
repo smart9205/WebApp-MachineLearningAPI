@@ -8,6 +8,7 @@ import FolderIcon from '../../../../../assets/Folder.svg';
 import EditsIcon from '../../../../../assets/Edits.svg';
 
 import GameService from '../../../../../services/game.service';
+import EditCreateUserFolderEdit from '../../../edits/createFolder';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -38,6 +39,9 @@ function stableSort(array, comparator) {
 const GameExportToEdits = ({ open, onClose, tagList, game }) => {
     const [folders, setFolders] = useState([]);
     const [curEdit, setCurEdit] = useState(null);
+    const [folderDialog, setFolderDialog] = useState(false);
+    const [createFolderEdit, setCreateFolderEdit] = useState(false);
+    const [refreshList, setRefreshList] = useState(false);
 
     const getChilds = (folders, parent_id) => {
         const children = folders.filter((item) => item.parent_id === parent_id);
@@ -131,7 +135,7 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
 
             await GameService.addNewEditClips({ id: curEdit.id, rows: newList });
             onClose();
-        }
+        } else window.alert('You selected folder. Please select edit to save clips.');
     };
 
     useEffect(() => {
@@ -140,7 +144,7 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
 
             setFolders(getTreeViewData(ascArray));
         });
-    }, []);
+    }, [refreshList]);
 
     return (
         <Dialog open={open} onClose={onClose} scroll="paper" maxWidth="lg">
@@ -148,7 +152,27 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>Export to My Edits</Typography>
             </DialogTitle>
             <DialogContent dividers={true} style={{ display: 'flex' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #E8E8E8', height: '400px', width: '270px', padding: '16px 8px' }}>
+                <Box sx={{ borderRight: '1px solid #E8E8E8', height: '400px', width: '270px', padding: '0 8px' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', paddingBottom: '16px' }}>
+                        <Button
+                            variant="outlined"
+                            onClick={() => {
+                                setFolderDialog(true);
+                                setCreateFolderEdit(true);
+                            }}
+                        >
+                            New Folder
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            onClick={() => {
+                                setFolderDialog(true);
+                                setCreateFolderEdit(false);
+                            }}
+                        >
+                            New Edit
+                        </Button>
+                    </Box>
                     <TreeView
                         aria-label="rich object"
                         defaultCollapseIcon={<ExpandMoreIcon />}
@@ -200,6 +224,7 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
                         ))}
                     </Box>
                 </Box>
+                <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setRefreshList} isFolder={createFolderEdit} node={curEdit} />
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => onClose()}>Cancel</Button>
