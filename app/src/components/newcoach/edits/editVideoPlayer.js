@@ -52,78 +52,81 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
     const [play, setPlay] = useState(false);
     const [ready, setReady] = useState(false);
     const [curIdx, setCurIdx] = useState(0);
-    const [curOriginURL, setCurOriginURL] = useState(null);
     const [videoURL, setVideoURL] = useState('');
+    const [videoList, setVideoList] = useState([]);
     const [canNext, setCanNext] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
+
+    useEffect(() => {
+        setVideoList([]);
+        tagList.map((tag) => {
+            if (tag.video_url.startsWith('https://www.youtube.com')) {
+                gameService.getNewStreamURL(tag.video_url).then((res) => {
+                    setVideoList((old) => [...old, res]);
+                });
+            } else setVideoList((old) => [...old, tag.video_url]);
+        });
+
+        if (videoList.length > 0) setVideoURL(videoList[0].url);
+    }, [tagList]);
 
     useEffect(() => {
         if (!ready) return;
 
         if (!tagList.length) return;
 
+        playTagByIdx(idx);
         setCurIdx(idx);
 
         setPlay(videoPlay);
 
-        playTagByIdx(idx);
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tagList, videoData, videoURL, ready]);
+    }, [tagList, idx, videoPlay, ready, cnt]);
 
     useEffect(() => {
-        const url = tagList[curIdx]?.video_url ?? '';
-
-        if (url !== curOriginURL) {
-            if (url?.startsWith('https://www.youtube.com')) {
-                gameService.getNewStreamURL(url).then((res) => {
-                    setVideoURL(res.url);
-                });
-            } else setVideoURL(url);
-            setCurOriginURL(url);
-        }
-
         if (autoPlay) onChangeClip(curIdx);
-
-        playTagByIdx(curIdx);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tagList, curIdx]);
+    }, [curIdx]);
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec);
 
-    const playTagByIdx = (i) => seekTo(toSecond(tagList[i]?.start_time));
+    const playTagByIdx = (i) => {
+        if (videoList[i] !== videoURL) setVideoURL(videoList[i]);
+
+        seekTo(toSecond(tagList[i]?.start_time));
+    };
 
     const onProgress = (current) => {
+        const startTime = toSecond(tagList[curIdx]?.start_time);
         const endTime = toSecond(tagList[curIdx]?.end_time);
 
         setCurrentTime(current);
 
-        if (current >= endTime) {
-            if (tagList.length <= curIdx + 1) {
-                // last tag
-                setPlay(false);
-            } else if (canNext) {
-                // is auto play, next clip
-                setCurIdx((c) => c + 1);
-                PlayVideo(1);
-            } else {
-                setPlay(false);
-            }
+        if (current < startTime) {
+            seekTo(startTime);
+        }
+
+        if (current > endTime) {
+            if (curIdx < tagList.length - 1) {
+                if (canNext) {
+                    if (videoList[curIdx + 1] !== videoURL) setVideoURL(videoList[curIdx + 1]);
+
+                    setCurIdx((c) => c + 1);
+                } else setPlay(false);
+            } else PlayVideo(1);
         }
     };
 
     const PlayVideo = (num) => {
         let index;
-        if (curIdx + num >= tagList.length) {
-            setPlay(false);
-        } else {
-            if (curIdx + num < 0) {
-                index = tagList.length - 1;
-            } else index = curIdx + num;
-            playTagByIdx(index);
-            setPlay(true);
-            setCurIdx(index);
-        }
+
+        if (curIdx + num >= tagList.length) index = 0;
+        else if (curIdx + num < 0) index = tagList.length - 1;
+        else index = curIdx + num;
+
+        playTagByIdx(index);
+        setPlay(true);
+        setCurIdx(index);
     };
 
     const fastVideo = (param) => {

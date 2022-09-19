@@ -6,7 +6,7 @@ import update from 'immutability-helper';
 
 import { EditDraggableTableRow } from './draggableTableRow';
 
-const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTable }) => {
+const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTable, setChecks }) => {
     const [tableRows, setTableRows] = useState(tagList);
     const [selectedRows, setSelectedRows] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
@@ -36,10 +36,19 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
     }, []);
 
     const handleRowSelection = (id) => {
+        let array = selectedRef.current;
+
         if (selectedRef.current.includes(id)) {
             setSelectAll(false);
-            setSelectedRows(selectedRef.current.filter((item) => item !== id));
-        } else setSelectedRows((oldSelectedRows) => [...oldSelectedRows, id]);
+            array = selectedRef.current.filter((item) => item !== id);
+            setSelectedRows(array);
+        } else {
+            array = [...array, id];
+            setSelectedRows(array);
+        }
+
+        console.log(array);
+        setChecks(array);
     };
 
     const handleUpdateTable = (index, data) => {
@@ -75,8 +84,13 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
 
     useEffect(() => {
         setSelectedRows([]);
+        setChecks([]);
 
-        if (selectAll) tableRows.map((item) => setSelectedRows((old) => [...old, item.id]));
+        if (selectAll)
+            tableRows.map((item) => {
+                setSelectedRows((old) => [...old, item.id]);
+                setChecks((old) => [...old, item.id]);
+            });
     }, [selectAll]);
 
     useEffect(() => {
@@ -89,7 +103,6 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                            <TableCell />
                             <TableCell>
                                 <Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} />
                             </TableCell>

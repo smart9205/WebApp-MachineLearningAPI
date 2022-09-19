@@ -2,8 +2,6 @@ import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { TableCell, TableRow, Checkbox } from '@mui/material';
 
-import OpenWithIcon from '@mui/icons-material/OpenWith';
-
 import GameService from '../../../../services/game.service';
 import TCellNameEdit from './cellEditName';
 import TCellTimeEdit from './cellEditTime';
@@ -75,9 +73,6 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
 
     return (
         <TableRow hover ref={ref} data-handler-id={handlerId} tabIndex={-1} role="checkbox" selected={selected} {...rest}>
-            <TableCell style={{ cursor: 'pointer' }}>
-                <OpenWithIcon />
-            </TableCell>
             <TableCell>
                 <Checkbox checked={rowChecked} onChange={() => onCheck(id)} />
             </TableCell>

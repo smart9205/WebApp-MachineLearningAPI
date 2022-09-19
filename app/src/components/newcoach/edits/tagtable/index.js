@@ -11,11 +11,13 @@ import { editCreateCommand, toSecond } from '../../components/utilities';
 
 const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }) => {
     const [teamTagList, setTeamTagList] = useState([]);
+    const [checkArray, setCheckArray] = useState([]);
 
     const handleRender = () => {
         let newList = [];
+        const temp = checkArray.length === 0 ? teamTagList : teamTagList.filter((item) => checkArray.includes(item.id) === true);
 
-        teamTagList.map((tag) => {
+        temp.map((tag) => {
             let last = newList.at(-1);
 
             if (last && toSecond(last?.end_time ?? 0) >= toSecond(tag.start_time) && toSecond(last?.start_time ?? 0) <= toSecond(tag.start_time)) {
@@ -31,6 +33,8 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }
     useEffect(() => {
         setTeamTagList(tagList);
     }, [tagList]);
+
+    console.log(checkArray);
 
     return (
         <Box sx={{ width: '500px', height: '100%', padding: '16px 8px', borderLeft: '1px solid #E8E8E8', textAlign: 'center' }}>
@@ -66,7 +70,9 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }
                             </Button>
                         </Box>
                     )}
-                    {tagList.length > 0 && teamTagList.length > 0 && <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} updateTable={update} />}
+                    {tagList.length > 0 && teamTagList.length > 0 && (
+                        <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} updateTable={update} setChecks={setCheckArray} />
+                    )}
                 </>
             )}
         </Box>
