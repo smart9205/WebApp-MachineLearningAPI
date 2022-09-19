@@ -233,6 +233,8 @@ exports.updateEditClip = (req, res) => {
     start_time: req.body.start_time,
     end_time: req.body.end_time,
     sort: req.body.sort,
+    name: req.body.name,
+    game_id: req.body.game_id
   }
 
   Edit_Clips.update(editClip, {
