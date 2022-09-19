@@ -2,12 +2,11 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Table, TableCell, TableContainer, TableHead, TableRow, TableBody, Checkbox } from '@mui/material';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-
-import OpenWithIcon from '@mui/icons-material/OpenWith';
+import update from 'immutability-helper';
 
 import { EditDraggableTableRow } from './draggableTableRow';
 
-const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, update }) => {
+const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTable }) => {
     const [tableRows, setTableRows] = useState(tagList);
     const [selectedRows, setSelectedRows] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
@@ -47,7 +46,7 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, update })
         let array = [...tableRows];
 
         array[index] = data;
-        update(array);
+        updateTable(array);
     };
 
     const renderRow = useCallback((tag, index, selected) => {
@@ -85,14 +84,12 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, update })
     }, [selectedRows]);
 
     return (
-        <TableContainer style={{ height: '100%', width: '100%' }}>
+        <TableContainer style={{ height: '95%', width: '100%' }}>
             <DndProvider backend={HTML5Backend}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>
-                                <OpenWithIcon />
-                            </TableCell>
+                            <TableCell />
                             <TableCell>
                                 <Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} />
                             </TableCell>

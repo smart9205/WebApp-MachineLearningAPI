@@ -4,9 +4,9 @@ import { TableCell, TableRow, Checkbox } from '@mui/material';
 
 import OpenWithIcon from '@mui/icons-material/OpenWith';
 
-import TCellEdit from '../../../tagging/TCellTimeEdit';
 import GameService from '../../../../services/game.service';
 import TCellNameEdit from './cellEditName';
+import TCellTimeEdit from './cellEditTime';
 
 export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTeam, rowChecked, onCheck, updateList, ...rest }) => {
     const ref = useRef(null);
@@ -88,7 +88,7 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
                     row.name = v;
                 }}
             />
-            <TCellEdit
+            <TCellTimeEdit
                 value={row.start_time}
                 update={(v) => {
                     update({ ...row, start_time: v });
@@ -97,7 +97,7 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
                 end={row.end_time}
                 style={{ height: '36px' }}
             />
-            <TCellEdit
+            <TCellTimeEdit
                 value={row.end_time}
                 update={(v) => {
                     update({ ...row, end_time: v });

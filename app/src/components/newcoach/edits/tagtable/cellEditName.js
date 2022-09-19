@@ -12,7 +12,7 @@ export default function TCellNameEdit({ value, update }) {
     };
 
     return (
-        <TableCell onClick={() => setEditable(true)} style={{ height: '36px' }}>
+        <TableCell onDoubleClick={() => setEditable(true)} style={{ height: '36px' }}>
             {editable ? (
                 <Input
                     value={temp}

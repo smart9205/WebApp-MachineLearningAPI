@@ -33,7 +33,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }
     }, [tagList]);
 
     return (
-        <Box sx={{ width: '500px', height: '100%', padding: '16px 8px', borderRight: '1px solid #E8E8E8', textAlign: 'center' }}>
+        <Box sx={{ width: '500px', height: '100%', padding: '16px 8px', borderLeft: '1px solid #E8E8E8', textAlign: 'center' }}>
             {loading && (
                 <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <CircularProgress />
@@ -66,7 +66,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }
                             </Button>
                         </Box>
                     )}
-                    {tagList.length > 0 && teamTagList.length > 0 && <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} update={update} />}
+                    {tagList.length > 0 && teamTagList.length > 0 && <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} updateTable={update} />}
                 </>
             )}
         </Box>

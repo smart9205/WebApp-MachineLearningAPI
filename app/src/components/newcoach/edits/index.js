@@ -235,31 +235,33 @@ const Edits = () => {
                     </Box>
                     <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={setFolders} />
                     <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setRefreshList} isFolder={createFolderEdit} node={curEdit} />
-                    <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', padding: '24px 0', overflowY: 'auto' }}>
-                        <div style={{ display: 'flex' }}>
-                            <Box sx={{ borderRight: '1px solid #E8E8E8', height: '100%', width: '270px', padding: '16px 8px' }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', paddingBottom: '24px' }}>
-                                    <Button
-                                        variant="contained"
-                                        sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
-                                        onClick={() => {
-                                            setFolderDialog(true);
-                                            setCreateFolderEdit(true);
-                                        }}
-                                    >
-                                        New Folder
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
-                                        onClick={() => {
-                                            setFolderDialog(true);
-                                            setCreateFolderEdit(false);
-                                        }}
-                                    >
-                                        New Edit
-                                    </Button>
-                                </Box>
+                    <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', overflowY: 'auto' }}>
+                        <div style={{ display: 'flex', padding: '24px 0' }}>
+                            <Box sx={{ height: '95%', width: '270px', padding: '16px 8px' }}>
+                                {folders.length > 0 && (
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', paddingBottom: '24px' }}>
+                                        <Button
+                                            variant="contained"
+                                            sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
+                                            onClick={() => {
+                                                setFolderDialog(true);
+                                                setCreateFolderEdit(true);
+                                            }}
+                                        >
+                                            New Folder
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
+                                            onClick={() => {
+                                                setFolderDialog(true);
+                                                setCreateFolderEdit(false);
+                                            }}
+                                        >
+                                            New Edit
+                                        </Button>
+                                    </Box>
+                                )}
                                 <TreeView
                                     aria-label="rich object"
                                     defaultCollapseIcon={<ExpandMoreIcon />}
