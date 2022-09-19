@@ -14,6 +14,7 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 
 import { toSecond } from '../components/utilities';
 import gameService from '../../../services/game.service';
+import GameImage from '../../../assets/MyEdits.png';
 // import VIDEO from '../../../../assets/1.mp4'
 
 const styles = {
@@ -134,20 +135,23 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
             <FullScreen handle={handle}>
                 <div style={{ width: drawOpen ? '100%' : '80%', margin: 'auto' }}>
                     <div className="player-wrapper">
-                        <ReactPlayer
-                            className="react-player"
-                            url={videoURL}
-                            // url={VIDEO}
-                            ref={player}
-                            onPlay={() => setPlay(true)}
-                            onPause={() => setPlay(false)}
-                            onReady={() => setReady(true)}
-                            onProgress={(p) => onProgress(p.playedSeconds)}
-                            playing={play}
-                            controls={false}
-                            width="100%"
-                            height="100%"
-                        />
+                        {tagList.length > 0 && (
+                            <ReactPlayer
+                                className="react-player"
+                                url={videoURL}
+                                // url={VIDEO}
+                                ref={player}
+                                onPlay={() => setPlay(true)}
+                                onPause={() => setPlay(false)}
+                                onReady={() => setReady(true)}
+                                onProgress={(p) => onProgress(p.playedSeconds)}
+                                playing={play}
+                                controls={false}
+                                width="100%"
+                                height="100%"
+                            />
+                        )}
+                        {tagList.length === 0 && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                     </div>
                 </div>
 

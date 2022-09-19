@@ -2,10 +2,16 @@ import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { TableCell, TableRow, Checkbox } from '@mui/material';
 
-export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTeam, rowChecked, onCheck, ...rest }) => {
+import OpenWithIcon from '@mui/icons-material/OpenWith';
+
+import TCellEdit from '../../../tagging/TCellTimeEdit';
+import GameService from '../../../../services/game.service';
+import TCellNameEdit from './cellEditName';
+
+export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTeam, rowChecked, onCheck, updateList, ...rest }) => {
     const ref = useRef(null);
     const [{ handlerId }, drop] = useDrop({
-        accept: 'TeamTagRow',
+        accept: 'EditDraggableTableRow',
         collect(monitor) {
             return {
                 handlerId: monitor.getHandlerId()
@@ -50,7 +56,7 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
         }
     });
     const [{ isDragging }, drag] = useDrag({
-        type: 'TeamTagRow',
+        type: 'EditDraggableTableRow',
         item: () => {
             return { id, index };
         },
@@ -61,18 +67,44 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
 
     drag(drop(ref));
 
+    const update = (data) => {
+        console.log('tablerow => ', data);
+        updateList(index, data);
+        GameService.updateEditClip(data);
+    };
+
     return (
         <TableRow hover ref={ref} data-handler-id={handlerId} tabIndex={-1} role="checkbox" selected={selected} {...rest}>
+            <TableCell style={{ cursor: 'pointer' }}>
+                <OpenWithIcon />
+            </TableCell>
             <TableCell>
                 <Checkbox checked={rowChecked} onChange={() => onCheck(id)} />
             </TableCell>
-            <TableCell style={{ height: '36px' }}>{row.name}</TableCell>
-            <TableCell align="center" style={{ height: '36px' }}>
-                {row.start_time}
-            </TableCell>
-            <TableCell align="center" style={{ height: '36px' }}>
-                {row.end_time}
-            </TableCell>
+            <TCellNameEdit
+                value={row.name}
+                update={(v) => {
+                    update({ ...row, name: v });
+                    row.name = v;
+                }}
+            />
+            <TCellEdit
+                value={row.start_time}
+                update={(v) => {
+                    update({ ...row, start_time: v });
+                    row.start_time = v;
+                }}
+                end={row.end_time}
+                style={{ height: '36px' }}
+            />
+            <TCellEdit
+                value={row.end_time}
+                update={(v) => {
+                    update({ ...row, end_time: v });
+                    row.end_time = v;
+                }}
+                start={row.start_time}
+            />
         </TableRow>
     );
 };

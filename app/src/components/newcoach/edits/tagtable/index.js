@@ -7,9 +7,9 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ContentCutIcon from '@mui/icons-material/ContentCut';
 
 import CoachTeamTagTable from './teamTagTable';
-import { editCreateCommand, toSecond } from '../components/utilities';
+import { editCreateCommand, toSecond } from '../../components/utilities';
 
-const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name }) => {
+const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }) => {
     const [teamTagList, setTeamTagList] = useState([]);
 
     const handleRender = () => {
@@ -66,12 +66,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name }) => {
                             </Button>
                         </Box>
                     )}
-                    {tagList.length > 0 && teamTagList.length > 0 && <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} />}
-                    {teamTagList.length > 0 && (
-                        <Button variant="contained" style={{ margin: '1rem 0.5rem' }} onClick={handleRender}>
-                            Render
-                        </Button>
-                    )}
+                    {tagList.length > 0 && teamTagList.length > 0 && <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} update={update} />}
                 </>
             )}
         </Box>

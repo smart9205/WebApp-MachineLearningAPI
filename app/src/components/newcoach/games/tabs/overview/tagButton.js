@@ -3,9 +3,9 @@ import { Box, Typography } from '@mui/material';
 
 import MenuIcon from '@mui/icons-material/MenuOutlined';
 
-const GameTagButton = ({ isSelected, tagname, onShow }) => {
+const GameTagButton = ({ isSelected, tagname, onShow, width }) => {
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: '280px' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: width }}>
             <Box sx={{ cursor: 'pointer', 'svg path': { fill: isSelected ? '#0A7304' : '#C5EAC6' }, '&:hover': { 'svg path': { fill: '#0A7304' } } }} onClick={onShow(tagname)}>
                 <MenuIcon />
             </Box>

@@ -17,18 +17,17 @@ const Tags = [
     'Started From Tackle',
     'Started From Throw In',
     'Goals',
-    'Goal Opportunities',
-    'Goal Kicks',
+    'Shots',
     'Free Kicks',
-    'Crosses',
     'Corners',
-    'Offsides',
-    'Turnovers',
+    'Crosses',
     'Draw Fouls',
+    'Turnovers',
+    'Offsides',
     'Penalties Gained',
     'Saved',
-    'Clearance',
-    'Blocked'
+    'Blocked',
+    'Clearance'
 ];
 
 const GameTagButtonList = ({ selectedTag, onShow, isTeams }) => {
@@ -36,13 +35,13 @@ const GameTagButtonList = ({ selectedTag, onShow, isTeams }) => {
         <>
             <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
                 {Tags.slice(isTeams ? 2 : 0, 12).map((tag, index) => (
-                    <GameTagButton key={index} isSelected={selectedTag === tag} tagname={tag} onShow={onShow} />
+                    <GameTagButton key={index} isSelected={selectedTag === tag} tagname={tag} onShow={onShow} width="280px" />
                 ))}
             </Box>
             <Divider sx={{ width: '100%', backgroundColor: 'black', opacity: 1, border: 'none', marginTop: '2px' }} />
-            <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
-                {Tags.slice(12, 25).map((tag, index) => (
-                    <GameTagButton key={index} isSelected={selectedTag === tag} tagname={tag} onShow={onShow} />
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto auto', gap: '4px' }}>
+                {Tags.slice(12, 24).map((tag, index) => (
+                    <GameTagButton key={index} isSelected={selectedTag === tag} tagname={tag} onShow={onShow} width="190px" />
                 ))}
             </Box>
         </>

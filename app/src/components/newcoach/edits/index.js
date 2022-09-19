@@ -12,7 +12,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows';
 
 import GameService from '../../../services/game.service';
-import EditTagTable from './tagTable';
+import EditTagTable from './tagtable';
 import EditVideoPlayer from './editVideoPlayer';
 import EditNameDialog from './editNameDialog';
 import EditCreateUserFolderEdit from './createFolder';
@@ -121,8 +121,11 @@ const Edits = () => {
         setCurTagIdx(index);
     };
 
-    const handleSort = (rows) => {
-        GameService.updateEditClipsSort(rows);
+    const handleSort = async (rows) => {
+        await GameService.updateEditClipsSort(rows);
+        await GameService.getEditClipsByUserEditId(curEdit.id).then((res) => {
+            setEditTagList(res);
+        });
     };
 
     const handleEditName = (node) => {
@@ -216,7 +219,7 @@ const Edits = () => {
         }
     }, [curEdit]);
 
-    console.log(folders);
+    console.log(editTagList);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
@@ -268,7 +271,15 @@ const Edits = () => {
                                     {folders.length > 0 && folders.map((data) => renderTree(data))}
                                 </TreeView>
                             </Box>
-                            <EditTagTable loading={tagLoading} tagList={editTagList} setIdx={handleClickRow} selected={curTagIdx} sort={handleSort} name={curEdit?.name ?? ''} />
+                            <EditTagTable
+                                loading={tagLoading}
+                                tagList={editTagList}
+                                setIdx={handleClickRow}
+                                selected={curTagIdx}
+                                sort={handleSort}
+                                name={curEdit?.name ?? ''}
+                                update={setEditTagList}
+                            />
                         </div>
                         <EditVideoPlayer videoData={videoData} tagList={editTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
                     </Box>

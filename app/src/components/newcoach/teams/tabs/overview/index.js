@@ -202,9 +202,6 @@ const TeamOverview = ({ games, teamname, teamId }) => {
             } else if (tagIndex === 'Goals') {
                 if (values.isOur) getPlayTagList(GameService.getTeamGoals(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentGoals(teamId, gameIds.join(',')));
-            } else if (tagIndex === 'Goal Opportunities') {
-                if (values.isOur) getPlayTagList(GameService.getTeamGoalOpportunity(teamId, gameIds.join(',')));
-                else getPlayTagList(GameService.getOpponentGoalOpportunity(teamId, gameIds.join(',')));
             } else if (tagIndex === "Goalkeeper's Build Up") {
                 if (values.isOur) getPlayTagList(GameService.getTeamBuildupGoalkeeper(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentBuildupGoalkeeper(teamId, gameIds.join(',')));
@@ -229,7 +226,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
             } else if (tagIndex === 'Started From Throw In') {
                 if (values.isOur) getPlayTagList(GameService.getTeamThrowIn(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentThrowIn(teamId, gameIds.join(',')));
-            } else if (tagIndex === 'Goal Kicks') {
+            } else if (tagIndex === 'Shots') {
                 if (values.isOur) getPlayTagList(GameService.getTeamShots(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentShots(teamId, gameIds.join(',')));
             } else if (tagIndex === 'Free Kicks') {
