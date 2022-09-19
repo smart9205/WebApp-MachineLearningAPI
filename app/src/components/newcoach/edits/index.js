@@ -235,9 +235,10 @@ const Edits = () => {
                     <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', padding: '24px 0', overflowY: 'auto' }}>
                         <div style={{ display: 'flex' }}>
                             <Box sx={{ borderRight: '1px solid #E8E8E8', height: '100%', width: '270px', padding: '16px 8px' }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', padding: '8px 0 24px' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', paddingBottom: '24px' }}>
                                     <Button
-                                        variant="outlined"
+                                        variant="contained"
+                                        sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
                                         onClick={() => {
                                             setFolderDialog(true);
                                             setCreateFolderEdit(true);
@@ -246,7 +247,8 @@ const Edits = () => {
                                         New Folder
                                     </Button>
                                     <Button
-                                        variant="outlined"
+                                        variant="contained"
+                                        sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
                                         onClick={() => {
                                             setFolderDialog(true);
                                             setCreateFolderEdit(false);

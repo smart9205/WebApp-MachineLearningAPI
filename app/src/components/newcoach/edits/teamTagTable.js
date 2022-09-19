@@ -84,9 +84,7 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort }) => {
                             <TableCell>
                                 <Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} />
                             </TableCell>
-                            <TableCell align="center" style={{ height: '36px' }}>
-                                Clip Name
-                            </TableCell>
+                            <TableCell style={{ height: '36px' }}>Clip Name</TableCell>
                             <TableCell align="center" style={{ height: '36px' }}>
                                 Start Time
                             </TableCell>

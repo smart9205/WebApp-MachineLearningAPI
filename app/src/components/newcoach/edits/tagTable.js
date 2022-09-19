@@ -48,19 +48,19 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name }) => {
                     )}
                     {teamTagList.length > 0 && (
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '16px' }}>
-                            <Button variant="contained" sx={{ width: '110px' }} onClick={handleRender}>
+                            <Button variant="contained" sx={{ width: '110px', background: '#C5EAC6', '&:hover': { background: '#0A7304' } }} onClick={handleRender}>
                                 <ExportIcon />
                                 Render
                             </Button>
-                            <Button variant="contained" sx={{ width: '110px' }}>
+                            <Button variant="contained" sx={{ width: '110px', background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}>
                                 <ContentCutIcon />
                                 Move
                             </Button>
-                            <Button variant="contained" sx={{ width: '110px' }}>
+                            <Button variant="contained" sx={{ width: '110px', background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}>
                                 <ContentCopyIcon />
                                 Copy
                             </Button>
-                            <Button variant="contained" sx={{ width: '110px' }}>
+                            <Button variant="contained" sx={{ width: '110px', background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}>
                                 <DeleteIcon />
                                 Delete
                             </Button>

@@ -66,9 +66,7 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
             <TableCell>
                 <Checkbox checked={rowChecked} onChange={() => onCheck(id)} />
             </TableCell>
-            <TableCell align="center" style={{ height: '36px' }}>
-                {row.name}
-            </TableCell>
+            <TableCell style={{ height: '36px' }}>{row.name}</TableCell>
             <TableCell align="center" style={{ height: '36px' }}>
                 {row.start_time}
             </TableCell>
