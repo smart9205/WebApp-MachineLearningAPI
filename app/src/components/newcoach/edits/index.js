@@ -221,6 +221,8 @@ const Edits = () => {
         }
     }, [curEdit]);
 
+    console.log('Edits => ', curTagIdx, editTagList);
+
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             {loading && (
@@ -284,7 +286,7 @@ const Edits = () => {
                                 folders={folders}
                             />
                         </div>
-                        <EditVideoPlayer videoData={videoData} tagList={editTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
+                        <EditVideoPlayer videoData={videoData} games={editTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
                     </Box>
                 </>
             )}

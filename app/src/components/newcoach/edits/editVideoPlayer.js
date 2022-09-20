@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { IconButton, Switch, FormControlLabel } from '@mui/material';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
@@ -15,7 +15,7 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import { toSecond } from '../components/utilities';
 import gameService from '../../../services/game.service';
 import GameImage from '../../../assets/MyEdits.png';
-// import VIDEO from '../../../../assets/1.mp4'
+// import VIDEO from '../../assets/1.mp4'
 
 const styles = {
     action: {
@@ -32,7 +32,7 @@ const styles = {
         position: 'absolute',
         bottom: 5,
         left: 0,
-        paddingInline: '7%',
+        paddingInline: '11%',
         minWidth: 300,
         display: 'flex',
         gap: '1rem',
@@ -44,7 +44,7 @@ const styles = {
         backgroundColor: '#80808069'
     }
 };
-export default function EditVideoPlayer({ videoData, onChangeClip, tagList, drawOpen = true }) {
+export default function EditVideoPlayer({ videoData, games, onChangeClip, drawOpen }) {
     const handle = useFullScreenHandle();
     const { autoPlay, idx, videoPlay, cnt = null } = videoData;
 
@@ -59,26 +59,19 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
 
     useEffect(() => {
         setVideoList([]);
-        tagList.map((tag, index) => {
-            if (tag.video_url.startsWith('https://www.youtube.com')) {
-                gameService.getNewStreamURL(tag.video_url).then((res) => {
-                    console.log('Dima => ', res);
-                    setVideoList((old) => [...old, res]);
-
-                    if (index === 0) setVideoURL(res);
+        games.map((game) => {
+            if (game.video_url.startsWith('https://www.youtube.com')) {
+                gameService.getNewStreamURL(game.video_url).then((res) => {
+                    setVideoList((old) => [...old, { id: game.game_id, url: res }]);
                 });
-            } else {
-                setVideoList((old) => [...old, tag.video_url]);
-
-                if (index === 0) setVideoURL(tag.video_url);
-            }
+            } else setVideoList((old) => [...old, { id: game.game_id, url: game.video_url }]);
         });
-    }, [tagList]);
+
+        if (videoList.length > 0) setVideoURL(videoList[0].url);
+    }, [games]);
 
     useEffect(() => {
         if (!ready) return;
-
-        if (tagList.length === 0) return;
 
         playTagByIdx(idx);
         setCurIdx(idx);
@@ -86,7 +79,7 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
         setPlay(videoPlay);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tagList, idx, videoPlay, ready, cnt]);
+    }, [idx, videoPlay, ready, cnt]);
 
     useEffect(() => {
         if (autoPlay) onChangeClip(curIdx);
@@ -96,14 +89,16 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
     const seekTo = (sec) => player.current && player.current.seekTo(sec);
 
     const playTagByIdx = (i) => {
-        if (videoList[i] !== videoURL) setVideoURL(videoList[i]);
+        const video = videoList.filter((item) => item.id === games[i].game_id).map((item) => item.url)[0];
 
-        seekTo(toSecond(tagList[i]?.start_time));
+        if (video !== videoURL) setVideoURL(video);
+
+        seekTo(toSecond(games[i]?.start_time));
     };
 
     const onProgress = (current) => {
-        const startTime = toSecond(tagList[curIdx]?.start_time);
-        const endTime = toSecond(tagList[curIdx]?.end_time);
+        const startTime = toSecond(games[curIdx]?.start_time);
+        const endTime = toSecond(games[curIdx]?.end_time);
 
         setCurrentTime(current);
 
@@ -112,9 +107,11 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
         }
 
         if (current > endTime) {
-            if (curIdx < tagList.length - 1) {
+            if (curIdx < games.length - 1) {
                 if (canNext) {
-                    if (videoList[curIdx + 1] !== videoURL) setVideoURL(videoList[curIdx + 1]);
+                    const video = videoList.filter((item) => item.id === games[curIdx + 1].game_id).map((item) => item.url)[0];
+
+                    if (video !== videoURL) setVideoURL(video);
 
                     setCurIdx((c) => c + 1);
                 } else setPlay(false);
@@ -124,10 +121,11 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
 
     const PlayVideo = (num) => {
         let index;
-
-        if (curIdx + num >= tagList.length) index = 0;
-        else if (curIdx + num < 0) index = tagList.length - 1;
-        else index = curIdx + num;
+        if (curIdx + num >= games.length) {
+            index = 0;
+        } else if (curIdx + num < 0) {
+            index = games.length - 1;
+        } else index = curIdx + num;
 
         playTagByIdx(index);
         setPlay(true);
@@ -138,21 +136,29 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
         seekTo(currentTime + param);
     };
 
-    console.log('editvideo => ', curIdx, videoURL);
+    const handlePause = () => {
+        setPlay(false);
+    };
+
+    const handlePlay = () => {
+        setPlay(true);
+    };
+
+    console.log('TeamVideo => ', curIdx, videoURL);
 
     return (
-        <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative', overflow: 'hidden' }}>
+        <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
             <FullScreen handle={handle}>
                 <div style={{ width: drawOpen ? '100%' : '80%', margin: 'auto' }}>
                     <div className="player-wrapper">
-                        {tagList.length > 0 && (
+                        {games.length > 0 && (
                             <ReactPlayer
                                 className="react-player"
-                                url={videoURL}
+                                url={games.length > 0 ? videoURL : ''}
                                 // url={VIDEO}
                                 ref={player}
-                                onPlay={() => setPlay(true)}
-                                onPause={() => setPlay(false)}
+                                onPlay={handlePlay}
+                                onPause={handlePause}
                                 onReady={() => setReady(true)}
                                 onProgress={(p) => onProgress(p.playedSeconds)}
                                 playing={play}
@@ -161,7 +167,7 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
                                 height="100%"
                             />
                         )}
-                        {tagList.length === 0 && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
+                        {games.length === 0 && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                     </div>
                 </div>
 
@@ -186,7 +192,7 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
                         <SkipNextSharpIcon />
                     </IconButton>
 
-                    {autoPlay && <FormControlLabel control={<Switch defaultChecked onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
+                    {autoPlay && <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
 
                     <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
                         {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
