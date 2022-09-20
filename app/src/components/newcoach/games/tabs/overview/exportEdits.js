@@ -151,8 +151,8 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
             <DialogTitle>
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>Export to My Edits</Typography>
             </DialogTitle>
-            <DialogContent dividers={true} style={{ display: 'flex' }}>
-                <Box sx={{ borderRight: '1px solid #E8E8E8', height: '400px', width: '270px', padding: '0 8px' }}>
+            <DialogContent dividers={true} style={{ display: 'flex', overflowY: 'hidden' }}>
+                <Box sx={{ borderRight: '1px solid #E8E8E8', height: '390px', width: '270px', padding: '0 8px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', paddingBottom: '16px' }}>
                         <Button
                             variant="outlined"
@@ -179,12 +179,12 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
                         defaultExpanded={['root']}
                         defaultExpandIcon={<ChevronRightIcon />}
                         defaultEndIcon={<div style={{ width: 24 }} />}
-                        sx={{ height: '100%', flexGrow: 1, width: '100%', overflowY: 'auto', color: '#1a1b1d' }}
+                        sx={{ height: '85%', flexGrow: 1, width: '100%', overflowY: 'auto', color: '#1a1b1d' }}
                     >
                         {folders.length > 0 && folders.map((data) => renderTree(data))}
                     </TreeView>
                 </Box>
-                <Box sx={{ overflowY: 'auto', maxHeight: '400px', width: '600px', paddingLeft: '16px' }}>
+                <Box sx={{ overflowY: 'auto', maxHeight: '390px', width: '600px', paddingLeft: '16px' }}>
                     <Box sx={{ margin: '0 4px 8px 0', width: 'calc(100% - 4px)' }}>
                         {tagList.map((item, index) => (
                             <Box
