@@ -59,21 +59,26 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
 
     useEffect(() => {
         setVideoList([]);
-        tagList.map((tag) => {
+        tagList.map((tag, index) => {
             if (tag.video_url.startsWith('https://www.youtube.com')) {
                 gameService.getNewStreamURL(tag.video_url).then((res) => {
+                    console.log('Dima => ', res);
                     setVideoList((old) => [...old, res]);
-                });
-            } else setVideoList((old) => [...old, tag.video_url]);
-        });
 
-        if (videoList.length > 0) setVideoURL(videoList[0].url);
+                    if (index === 0) setVideoURL(res);
+                });
+            } else {
+                setVideoList((old) => [...old, tag.video_url]);
+
+                if (index === 0) setVideoURL(tag.video_url);
+            }
+        });
     }, [tagList]);
 
     useEffect(() => {
         if (!ready) return;
 
-        if (!tagList.length) return;
+        if (tagList.length === 0) return;
 
         playTagByIdx(idx);
         setCurIdx(idx);
@@ -132,6 +137,8 @@ export default function EditVideoPlayer({ videoData, onChangeClip, tagList, draw
     const fastVideo = (param) => {
         seekTo(currentTime + param);
     };
+
+    console.log('editvideo => ', curIdx, videoURL);
 
     return (
         <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative', overflow: 'hidden' }}>

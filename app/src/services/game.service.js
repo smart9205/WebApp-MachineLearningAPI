@@ -427,12 +427,12 @@ const addNewEditClips = (req) => {
     });
 };
 const moveEditClips = (clipIds, editId) => {
-    return axios.put(API_URL + `user_edit_clip/move/${clipIds}/${editId}`, { headers: authHeader() }).then((response) => {
+    return axios.put(API_URL + `user_edit_clip/move/${clipIds}/${editId}`, { clipIds, editId }, { headers: authHeader() }).then((response) => {
         return response.data;
     });
 };
 const copyEditClips = (clipIds, editId) => {
-    return axios.put(API_URL + `user_edit_clip/copy/${clipIds}/${editId}`, { headers: authHeader() }).then((response) => {
+    return axios.put(API_URL + `user_edit_clip/copy/${clipIds}/${editId}`, { clipIds, editId }, { headers: authHeader() }).then((response) => {
         return response.data;
     });
 };

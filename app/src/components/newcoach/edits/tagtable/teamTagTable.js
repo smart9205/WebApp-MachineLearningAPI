@@ -67,7 +67,7 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
                 index={index}
                 moveRow={moveRow}
                 selected={index === selected}
-                onClick={() => setIndex(index)}
+                onSelect={setIndex}
                 isTeam={true}
                 rowChecked={selectedRef.current.includes(tag.id)}
                 onCheck={handleRowSelection}

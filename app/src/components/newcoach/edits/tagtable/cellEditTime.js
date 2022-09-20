@@ -18,7 +18,7 @@ const TextMaskCustom = React.forwardRef(function TextMaskCustom(props, ref) {
     );
 });
 
-export default function TCellTimeEdit({ value, update, start, end }) {
+export default function TCellTimeEdit({ value, update, start, end, ...other }) {
     const [editable, setEditable] = React.useState(false);
 
     const [temp, setTemp] = React.useState(value);
@@ -34,7 +34,7 @@ export default function TCellTimeEdit({ value, update, start, end }) {
     };
 
     return (
-        <TableCell align="center" onClick={() => setEditable(true)}>
+        <TableCell align="center" onClick={() => setEditable(true)} {...other}>
             {editable ? (
                 <Input
                     value={temp}

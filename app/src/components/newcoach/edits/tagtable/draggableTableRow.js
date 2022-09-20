@@ -6,7 +6,7 @@ import GameService from '../../../../services/game.service';
 import TCellNameEdit from './cellEditName';
 import TCellTimeEdit from './cellEditTime';
 
-export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTeam, rowChecked, onCheck, updateList, ...rest }) => {
+export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTeam, rowChecked, onCheck, updateList, onSelect, ...rest }) => {
     const ref = useRef(null);
     const [{ handlerId }, drop] = useDrop({
         accept: 'EditDraggableTableRow',
@@ -82,6 +82,8 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
                     update({ ...row, name: v });
                     row.name = v;
                 }}
+                style={{ height: '36px' }}
+                onClick={() => onSelect(index)}
             />
             <TCellTimeEdit
                 value={row.start_time}
@@ -91,6 +93,7 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
                 }}
                 end={row.end_time}
                 style={{ height: '36px' }}
+                onClick={() => onSelect(index)}
             />
             <TCellTimeEdit
                 value={row.end_time}
@@ -99,6 +102,8 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
                     row.end_time = v;
                 }}
                 start={row.start_time}
+                style={{ height: '36px' }}
+                onClick={() => onSelect(index)}
             />
         </TableRow>
     );

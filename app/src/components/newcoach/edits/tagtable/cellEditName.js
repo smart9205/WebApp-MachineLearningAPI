@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TableCell, Input } from '@mui/material';
 
-export default function TCellNameEdit({ value, update }) {
+export default function TCellNameEdit({ value, update, ...other }) {
     const [editable, setEditable] = React.useState(false);
 
     const [temp, setTemp] = React.useState(value);
@@ -12,7 +12,7 @@ export default function TCellNameEdit({ value, update }) {
     };
 
     return (
-        <TableCell onDoubleClick={() => setEditable(true)} style={{ height: '36px' }}>
+        <TableCell onDoubleClick={() => setEditable(true)} style={{ height: '36px' }} {...other}>
             {editable ? (
                 <Input
                     value={temp}

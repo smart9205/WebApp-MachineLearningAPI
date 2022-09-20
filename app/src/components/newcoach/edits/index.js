@@ -163,9 +163,9 @@ const Edits = () => {
             key={`${nodes.id}_${nodes.type}`}
             nodeId={nodes.id}
             label={
-                <Box sx={{ display: 'flex', alignItems: 'center', padding: '2px 0', gap: '4px' }} onMouseEnter={() => setHoverIndex(nodes.id)} onMouseLeave={() => setHoverIndex(-1)}>
+                <Box sx={{ display: 'flex', alignItems: 'center', padding: '2px 0', gap: '4px' }}>
                     {nodes.type === 'folder' ? <img src={FolderIcon} style={{ height: '24px' }} /> : <img src={EditsIcon} style={{ height: '24px' }} />}
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
                     {hoverIndex === nodes.id && (
                         <Box sx={{ display: 'flex', alignItems: 'center' }} onMouseEnter={() => setHoverControl(true)} onMouseLeave={() => setHoverControl(false)}>
                             <Box onClick={() => handleEditName(nodes)}>
@@ -189,6 +189,8 @@ const Edits = () => {
                 </Box>
             }
             onClick={() => {
+                setHoverIndex(nodes.id);
+
                 if (!hoverControl) setCurEdit(nodes);
             }}
         >
@@ -219,8 +221,6 @@ const Edits = () => {
         }
     }, [curEdit]);
 
-    console.log(editTagList);
-
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             {loading && (
@@ -237,9 +237,9 @@ const Edits = () => {
                     <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setRefreshList} isFolder={createFolderEdit} node={curEdit} />
                     <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', overflowY: 'auto' }}>
                         <div style={{ display: 'flex', padding: '24px 0' }}>
-                            <Box sx={{ height: '95%', width: '270px', padding: '16px 8px' }}>
+                            <Box sx={{ height: '95%', width: '300px', padding: '16px 8px' }}>
                                 {folders.length > 0 && (
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', paddingBottom: '24px' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 16px 24px' }}>
                                         <Button
                                             variant="contained"
                                             sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
@@ -281,6 +281,7 @@ const Edits = () => {
                                 sort={handleSort}
                                 name={curEdit?.name ?? ''}
                                 update={setEditTagList}
+                                folders={folders}
                             />
                         </div>
                         <EditVideoPlayer videoData={videoData} tagList={editTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
