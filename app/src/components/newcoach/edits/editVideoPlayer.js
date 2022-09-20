@@ -59,19 +59,27 @@ export default function EditVideoPlayer({ videoData, games, onChangeClip, drawOp
 
     useEffect(() => {
         setVideoList([]);
-        games.map((game) => {
+        setCurIdx(0);
+        setVideoURL('');
+        games.map((game, index) => {
             if (game.video_url.startsWith('https://www.youtube.com')) {
                 gameService.getNewStreamURL(game.video_url).then((res) => {
                     setVideoList((old) => [...old, { id: game.game_id, url: res }]);
-                });
-            } else setVideoList((old) => [...old, { id: game.game_id, url: game.video_url }]);
-        });
 
-        if (videoList.length > 0) setVideoURL(videoList[0].url);
+                    if (index === 0) setVideoURL(res);
+                });
+            } else {
+                setVideoList((old) => [...old, { id: game.game_id, url: game.video_url }]);
+
+                if (index === 0) setVideoURL(game.video_url);
+            }
+        });
     }, [games]);
 
     useEffect(() => {
         if (!ready) return;
+
+        if (games.length === 0) return;
 
         playTagByIdx(idx);
         setCurIdx(idx);

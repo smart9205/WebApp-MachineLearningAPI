@@ -49,9 +49,8 @@ const Edits = () => {
     const [editTagList, setEditTagList] = useState([]);
     const [curEdit, setCurEdit] = useState(null);
     const [tagLoading, setTagLoading] = useState(false);
-    const [curTagIdx, setCurTagIdx] = useState(0);
+    const [curTagIdx, setCurTagIdx] = useState(-1);
     const [updateEdit, setUpdateEdit] = useState({});
-    const [refreshList, setRefreshList] = useState(false);
     const [hoverIndex, setHoverIndex] = useState(-1);
     const [hoverControl, setHoverControl] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
@@ -207,15 +206,18 @@ const Edits = () => {
             setFolders(getTreeViewData(ascArray));
             setLoading(false);
         });
-    }, [refreshList]);
+    }, []);
 
     useEffect(() => {
+        setEditTagList([]);
+        setCurTagIdx(-1);
+        setVideodata({ ...videoData, idx: 0 });
+
         if (curEdit !== null && curEdit.type === 'edit') {
             setTagLoading(true);
             GameService.getEditClipsByUserEditId(curEdit.id).then((res) => {
                 setEditTagList(res);
                 setTagLoading(false);
-                setVideodata({ ...videoData, idx: 0 });
                 setCurTagIdx(0);
             });
         }
@@ -236,7 +238,7 @@ const Edits = () => {
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
                     </Box>
                     <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={setFolders} />
-                    <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setRefreshList} isFolder={createFolderEdit} node={curEdit} />
+                    <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setFolders} isFolder={createFolderEdit} node={curEdit} />
                     <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', overflowY: 'auto' }}>
                         <div style={{ display: 'flex', padding: '24px 0' }}>
                             <Box sx={{ height: '95%', width: '300px', padding: '16px 8px' }}>
