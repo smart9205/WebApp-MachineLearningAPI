@@ -57,7 +57,7 @@
         "react-imask": "^6.2.2",
         "react-modal-video": "^1.2.8",
         "react-multi-carousel": "^2.6.5",
-        
+        "react-perfect-scrollbar": "^1.5.8",
         "react-player": "^2.9.0",
         "react-redux": "^7.2.1",
         "react-router-dom": "^6.2.1",
