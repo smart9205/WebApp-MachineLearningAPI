@@ -7,7 +7,6 @@ import EditVideoPlayer from './editVideoPlayer';
 import EditFolderTreeView from './treeview';
 
 const Edits = () => {
-    const [folders, setFolders] = useState([]);
     const [editTagList, setEditTagList] = useState([]);
     const [curEdit, setCurEdit] = useState(null);
     const [tagLoading, setTagLoading] = useState(false);
@@ -54,17 +53,8 @@ const Edits = () => {
             </Box>
             <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', overflowY: 'auto' }}>
                 <div style={{ display: 'flex', padding: '24px 0' }}>
-                    <EditFolderTreeView setTree={setFolders} setEdit={setCurEdit} isMain={true} entireHeight="95%" treeHeight="90%" />
-                    <EditTagTable
-                        loading={tagLoading}
-                        tagList={editTagList}
-                        setIdx={handleClickRow}
-                        selected={curTagIdx}
-                        sort={handleSort}
-                        name={curEdit?.name ?? ''}
-                        update={setEditTagList}
-                        folders={folders}
-                    />
+                    <EditFolderTreeView setEdit={setCurEdit} isMain={true} entireHeight="95%" treeHeight="90%" />
+                    <EditTagTable loading={tagLoading} tagList={editTagList} setIdx={handleClickRow} selected={curTagIdx} sort={handleSort} name={curEdit?.name ?? ''} update={setEditTagList} />
                 </div>
                 <EditVideoPlayer videoData={videoData} games={editTagList} onChangeClip={(idx) => setCurTagIdx(idx)} drawOpen={true} />
             </Box>

@@ -88,7 +88,7 @@ exports.createFolder = async (req, res) => {
     name: req.body.name,
     user_id: req.userId,
     parent_id: req.body.parent_id,
-    order_num: 2
+    order_num: req.body.order
   };
 
   await User_Edits_Folder.create(user_edits_folder)
@@ -121,7 +121,7 @@ exports.createEdit = async (req, res) => {
     user_id: req.userId,
     parent_id: req.body.parent_id,
     share_id: bcrypt.hashSync(date.toString(), 8),
-    order_num: 2
+    order_num: req.body.order
   };
 
   await User_Edits.create(user_edits)

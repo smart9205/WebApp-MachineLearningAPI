@@ -4,7 +4,8 @@ import { Box, Typography, TextField, Divider, Popover, CircularProgress } from '
 
 import SortIcon from '@mui/icons-material/SortOutlined';
 import EditIcon from '@mui/icons-material/EditOutlined';
-import ExportIcon from '@mui/icons-material/FileDownloadOutlined';
+import ExportIcon from '../../../assets/Export.svg';
+import DownloadIcon from '@mui/icons-material/Download';
 import GameImage from '../../../assets/game_image.png';
 
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
@@ -69,6 +70,10 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
     const handleClickExcel = async () => {
         await getAllInfosByGame(row);
         setExportExcel(true);
+        setMenuAnchorEl(null);
+    };
+
+    const handleDownloadVideo = () => {
         setMenuAnchorEl(null);
     };
 
@@ -170,13 +175,18 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickSportGate}>
-                    <ExportIcon />
+                    <img src={ExportIcon} />
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Sportcode</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickExcel}>
-                    <ExportIcon />
+                    <img src={ExportIcon} />
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Excel</Typography>
+                </Box>
+                <Divider sx={{ width: '100%' }} />
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleDownloadVideo}>
+                    <DownloadIcon />
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Download Video</Typography>
                 </Box>
             </Popover>
             {isPending && (

@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, CircularProgress, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import { TreeView, TreeItem } from '@mui/lab';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import ExportIcon from '@mui/icons-material/FileDownloadOutlined';
+import ExportIcon from '../../../../assets/Export.svg';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ContentCutIcon from '@mui/icons-material/ContentCut';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import FolderIcon from '../../../../assets/Folder.svg';
-import EditsIcon from '../../../../assets/Edits.svg';
 
 import CoachTeamTagTable from './teamTagTable';
 import { editCreateCommand, toSecond } from '../../components/utilities';
 import GameService from '../../../../services/game.service';
+import EditFolderTreeView from '../treeview';
 
-const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, folders }) => {
+const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }) => {
     const [teamTagList, setTeamTagList] = useState([]);
     const [checkArray, setCheckArray] = useState([]);
     const [eventName, setEventName] = useState('');
@@ -86,6 +82,14 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
         }
 
         if (controlEdit === null) {
+            window.alert('Please select edit');
+            setDialogOpen(true);
+
+            return;
+        }
+
+        if (controlEdit.type !== 'edit') {
+            window.alert('You selected folder. Please select edit correctly.');
             setDialogOpen(true);
 
             return;
@@ -115,24 +119,6 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
         setDialogOpen(false);
     };
 
-    const renderTree = (nodes) => (
-        <TreeItem
-            key={nodes.id}
-            nodeId={nodes.id}
-            label={
-                <Box sx={{ display: 'flex', alignItems: 'center', padding: '2px 0', gap: '4px' }}>
-                    {nodes.type === 'folder' ? <img src={FolderIcon} style={{ height: '24px' }} /> : <img src={EditsIcon} style={{ height: '24px' }} />}
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
-                </Box>
-            }
-            onClick={() => {
-                if (nodes.type === 'edit') setControlEdit(nodes);
-            }}
-        >
-            {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
-        </TreeItem>
-    );
-
     useEffect(() => {
         setTeamTagList(tagList);
     }, [tagList]);
@@ -156,7 +142,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
                     {teamTagList.length > 0 && (
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '16px' }}>
                             <Button variant="contained" sx={{ width: '110px', background: '#C5EAC6', '&:hover': { background: '#0A7304' } }} onClick={handleRender}>
-                                <ExportIcon />
+                                <img src={ExportIcon} />
                                 Render
                             </Button>
                             <Button variant="contained" sx={{ width: '110px', background: '#C5EAC6', '&:hover': { background: '#0A7304' } }} onClick={handleMove}>
@@ -181,18 +167,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>Select Edit</Typography>
                         </DialogTitle>
                         <DialogContent dividers={true} style={{ display: 'flex' }}>
-                            <Box sx={{ height: '400px', width: '270px', padding: '0 8px' }}>
-                                <TreeView
-                                    aria-label="rich object"
-                                    defaultCollapseIcon={<ExpandMoreIcon />}
-                                    defaultExpanded={['root']}
-                                    defaultExpandIcon={<ChevronRightIcon />}
-                                    defaultEndIcon={<div style={{ width: 24 }} />}
-                                    sx={{ height: '100%', flexGrow: 1, width: '100%', overflowY: 'auto', color: '#1a1b1d' }}
-                                >
-                                    {folders.length > 0 && folders.map((data) => renderTree(data))}
-                                </TreeView>
-                            </Box>
+                            <EditFolderTreeView setEdit={setControlEdit} isMain={false} entireHeight="400px" treeHeight="100%" />
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={() => handleClose()}>Cancel</Button>

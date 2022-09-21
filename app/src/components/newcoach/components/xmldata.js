@@ -175,6 +175,7 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
     const [newBlob, setNewBlob] = useState(null);
     let allData = [];
     let rowsForXML = [];
+    let clipCounter = 0;
     const upperButtons = [
         'Game Highlight',
         'All Offensive Possessions',
@@ -205,7 +206,7 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
     const getTeamTagList = (name) => {
         const res = allData.filter((item) => item.instance_name === name);
 
-        return res.map((item) => {
+        return res.map((item, index) => {
             let display = '';
             const compareText = item.instance_name.replace('Opponent ', '');
             const isOur = item.instance_name.includes('Opponent');
@@ -245,10 +246,12 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
                 display = item.player_name;
             else display = item.action_name + ' - ' + item.action_result_name;
 
+            clipCounter += 1;
+
             return compareText === 'All Offensive Possessions' || compareText === 'All Defensive Possessions'
                 ? {
                       instance: {
-                          ID: item.team_id,
+                          ID: clipCounter,
                           start: upperButtons.includes(compareText) ? convertToNumber(item.start_time) : convertToNumber(item.start_time) - 5,
                           end: upperButtons.includes(compareText) ? convertToNumber(item.end_time) : convertToNumber(item.end_time) + 5,
                           code: item.instance_name
@@ -256,7 +259,7 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
                   }
                 : {
                       instance: {
-                          ID: item.team_id,
+                          ID: clipCounter,
                           start: upperButtons.includes(compareText) ? convertToNumber(item.start_time) : convertToNumber(item.start_time) - 5,
                           end: upperButtons.includes(compareText) ? convertToNumber(item.end_time) : convertToNumber(item.end_time) + 5,
                           code: item.instance_name,

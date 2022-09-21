@@ -45,6 +45,8 @@ import Dashboard from './components/newcoach/dashboard';
 import Reports from './components/newcoach/reports';
 import Edits from './components/newcoach/edits';
 import GamePage from './components/newcoach/games/gamePage';
+import Opponents from './components/newcoach/opponents';
+import Leaders from './components/newcoach/leaders';
 const CustomTheme = () => {
     const { pathname } = useLocation();
 
@@ -214,6 +216,22 @@ const App = () => {
                                         element={
                                             <NewCoach>
                                                 <Players />
+                                            </NewCoach>
+                                        }
+                                    />
+                                    <Route
+                                        path="/new_coach/opponents"
+                                        element={
+                                            <NewCoach>
+                                                <Opponents />
+                                            </NewCoach>
+                                        }
+                                    />
+                                    <Route
+                                        path="/new_coach/leaders"
+                                        element={
+                                            <NewCoach>
+                                                <Leaders />
                                             </NewCoach>
                                         }
                                     />

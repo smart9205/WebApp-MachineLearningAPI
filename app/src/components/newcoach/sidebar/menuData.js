@@ -7,6 +7,7 @@ import DashboardIcon from '@mui/icons-material/DashboardOutlined';
 import TeamsIcon from '@mui/icons-material/GroupsOutlined';
 import PlayersIcon from '@mui/icons-material/PersonOutlineOutlined';
 import EditsIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
+import LeadersIcon from '@mui/icons-material/PeopleAltOutlined';
 
 export const menuData = [
     {
@@ -33,6 +34,16 @@ export const menuData = [
         path: '/new_coach/teams',
         icon: <TeamsIcon />,
         title: 'Teams'
+    },
+    {
+        path: '/new_coach/opponents',
+        icon: <TeamsIcon />,
+        title: 'Opponents'
+    },
+    {
+        path: '/new_coach/leaders',
+        icon: <LeadersIcon />,
+        title: 'Leaders'
     },
     {
         path: '/new_coach/players',

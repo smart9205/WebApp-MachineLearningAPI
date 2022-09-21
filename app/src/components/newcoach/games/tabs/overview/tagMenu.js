@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Popover, Typography, Divider } from '@mui/material';
 
-import ExportIcon from '@mui/icons-material/FileDownloadOutlined';
+import ExportIcon from '../../../../../assets/Export.svg';
 import VideoIcon from '@mui/icons-material/SlideshowOutlined';
 
 const GameTagMenu = ({ anchor, onClose, onView, onHudl, onRender, onEdits }) => {
@@ -24,17 +24,17 @@ const GameTagMenu = ({ anchor, onClose, onView, onHudl, onRender, onEdits }) => 
             </Box>
             <Divider sx={{ width: '100%' }} />
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={onHudl}>
-                <ExportIcon />
+                <img src={ExportIcon} />
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Sportcode</Typography>
             </Box>
             <Divider sx={{ width: '100%' }} />
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={onRender}>
-                <ExportIcon />
+                <img src={ExportIcon} />
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Render</Typography>
             </Box>
             <Divider sx={{ width: '100%' }} />
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={onEdits}>
-                <ExportIcon />
+                <img src={ExportIcon} />
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to "My Edits"</Typography>
             </Box>
         </Popover>

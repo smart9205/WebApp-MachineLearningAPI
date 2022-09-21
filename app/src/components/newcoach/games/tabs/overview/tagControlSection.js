@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, Checkbox } from '@mui/material';
 
-import ExportIcon from '@mui/icons-material/FileDownloadOutlined';
+import ExportIcon from '../../../../../assets/Export.svg';
 
 const GameTagControlSection = ({ clipCount, isSelectAll, onAll, onHudl, onRender, onEdits }) => {
     return (
@@ -12,15 +12,15 @@ const GameTagControlSection = ({ clipCount, isSelectAll, onAll, onHudl, onRender
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Select All</Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', 'svg path': { fill: '#1a1b1d' } }} onClick={onHudl}>
-                <ExportIcon />
+                <img src={ExportIcon} />
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Sportcode</Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', 'svg path': { fill: '#1a1b1d' } }} onClick={onRender}>
-                <ExportIcon />
+                <img src={ExportIcon} />
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Render</Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', 'svg path': { fill: '#1a1b1d' } }} onClick={onEdits}>
-                <ExportIcon />
+                <img src={ExportIcon} />
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>My Edits</Typography>
             </Box>
         </Box>

@@ -37,8 +37,10 @@ const Sidebar = () => {
         else if (pathname.includes('/new_coach/reports')) setSelectIndex(2);
         else if (pathname.includes('/new_coach/edits')) setSelectIndex(3);
         else if (pathname.includes('/new_coach/teams')) setSelectIndex(4);
-        else if (pathname.includes('/new_coach/players')) setSelectIndex(5);
-        else if (pathname.includes('/new_coach/settings')) setSelectIndex(6);
+        else if (pathname.includes('/new_coach/opponents')) setSelectIndex(5);
+        else if (pathname.includes('/new_coach/leaders')) setSelectIndex(6);
+        else if (pathname.includes('/new_coach/players')) setSelectIndex(7);
+        else if (pathname.includes('/new_coach/settings')) setSelectIndex(8);
 
         GameService.getAllGamesByCoach(null, null, null, null).then((res) => {
             setGameCount(res.length);

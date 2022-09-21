@@ -33,7 +33,7 @@ function getChilds(folders, parent_id) {
         });
     }
 
-    return trees;
+    return stableSort(trees, getComparator('asc', 'order_num'));
 }
 
 export function getTreeViewData(res) {
@@ -77,7 +77,7 @@ export function getTreeViewData(res) {
     return stableSort(trees, getComparator('asc', 'order_num'));
 }
 
-const EditFolderTreeView = ({ setTree, setEdit, isMain, entireHeight, treeHeight }) => {
+const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
     const [folders, setFolders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [folderDialog, setFolderDialog] = useState(false);
@@ -87,11 +87,6 @@ const EditFolderTreeView = ({ setTree, setEdit, isMain, entireHeight, treeHeight
     const [hoverControl, setHoverControl] = useState(false);
     const [updateEdit, setUpdateEdit] = useState({});
     const [editOpen, setEditOpen] = useState(false);
-
-    const handleSetFolders = (array) => {
-        setFolders(array);
-        setTree(array);
-    };
 
     const handleSetCurEdit = (edit) => {
         setCurEdit(edit);
@@ -122,7 +117,7 @@ const EditFolderTreeView = ({ setTree, setEdit, isMain, entireHeight, treeHeight
         let array = [...folders];
 
         deleteFolderEdit(array, node);
-        handleSetFolders(array);
+        setFolders(array);
 
         if (node.type === 'edit') await GameService.deleteUserEdit(node.id);
         else await GameService.deleteUserFolder(node.id);
@@ -176,15 +171,15 @@ const EditFolderTreeView = ({ setTree, setEdit, isMain, entireHeight, treeHeight
             const ascArray = stableSort(res, getComparator('asc', 'id'));
             const array = getTreeViewData(ascArray);
 
-            handleSetFolders(array);
+            setFolders(array);
             setLoading(false);
         });
     }, []);
 
     return (
         <>
-            <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={handleSetFolders} />
-            <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={handleSetFolders} isFolder={createFolderEdit} node={curEdit} />
+            <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={setFolders} />
+            <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setFolders} isFolder={createFolderEdit} node={curEdit} />
             <Box sx={{ height: entireHeight, width: '300px', padding: '16px 8px' }}>
                 {loading ? (
                     <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

@@ -34,7 +34,7 @@ export default function TCellTimeEdit({ value, update, start, end, ...other }) {
     };
 
     return (
-        <TableCell align="center" onClick={() => setEditable(true)} {...other}>
+        <TableCell align="center" onDoubleClick={() => setEditable(true)} {...other}>
             {editable ? (
                 <Input
                     value={temp}
