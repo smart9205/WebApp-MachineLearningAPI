@@ -7,8 +7,6 @@ import EditFolderTreeView from '../../../edits/treeview';
 const GameExportToEdits = ({ open, onClose, tagList, isTeams }) => {
     const [curEdit, setCurEdit] = useState(null);
 
-    const handleSetFolders = (array) => {};
-
     const getPeriod = (id) => {
         return id === 1 ? 'H1' : id === 2 ? 'H2' : 'OT';
     };
@@ -19,9 +17,8 @@ const GameExportToEdits = ({ open, onClose, tagList, isTeams }) => {
 
     const handleSave = async () => {
         let bigSort = 0;
-        const type = curEdit.type.charAt(0).toUpperCase() + curEdit.type.slice(1);
 
-        await GameService.getBiggestSortNumber(type, curEdit.parent_id).then((res) => {
+        await GameService.getBiggestSortNumber('Edit', curEdit.parent_id).then((res) => {
             bigSort = res['biggest_order_num'];
         });
 
@@ -47,7 +44,7 @@ const GameExportToEdits = ({ open, onClose, tagList, isTeams }) => {
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>Export to My Edits</Typography>
             </DialogTitle>
             <DialogContent dividers={true} style={{ display: 'flex', overflowY: 'hidden' }}>
-                <EditFolderTreeView setTree={handleSetFolders} setEdit={setCurEdit} isMain={false} entireHeight="390px" treeHeight="85%" />
+                <EditFolderTreeView setEdit={setCurEdit} isMain={false} entireHeight="390px" treeHeight="85%" />
                 <Box sx={{ overflowY: 'auto', maxHeight: '390px', width: '600px', paddingLeft: '16px' }}>
                     <Box sx={{ margin: '0 4px 8px 0', width: 'calc(100% - 4px)' }}>
                         {tagList.map((item, index) => (
