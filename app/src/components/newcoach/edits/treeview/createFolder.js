@@ -10,7 +10,7 @@ const EditCreateUserFolderEdit = ({ open, onClose, updateList, isFolder, node })
 
     const handleCreateFolder = async () => {
         let bigSort = 0;
-        const type = node ? node.type.charAt(0).toUpperCase() + node.type.slice(1) : 'Folder';
+        const type = isFolder ? 'Folder' : 'Edit';
 
         await GameService.getBiggestSortNumber(type, node?.id ?? null).then((res) => {
             bigSort = res['biggest_order_num'] === null ? 0 : res['biggest_order_num'];
