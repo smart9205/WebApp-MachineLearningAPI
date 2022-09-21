@@ -12,13 +12,13 @@
         "@mui/material": "^5.0.0",
         "@mui/styles": "^5.2.1",
         "@mui/x-date-pickers": "^5.0.0-beta.5",
-        "@reduxjs/toolkit": "^1.8.4",
+        
         "@testing-library/jest-dom": "^5.16.2",
         "@testing-library/react": "^9.3.2",
         "@testing-library/user-event": "^7.1.2",
         "axios": "^0.21.4",
         "bootstrap": "^4.5.2",
-        "browserslist": "^4.21.3",
+        
         "crypto-js": "^4.1.1",
         "date-and-time": "^2.0.0",
         "date-fns": "^2.23.0",
@@ -57,7 +57,7 @@
         "react-imask": "^6.2.2",
         "react-modal-video": "^1.2.8",
         "react-multi-carousel": "^2.6.5",
-        "react-perfect-scrollbar": "^1.5.8",
+        
         "react-player": "^2.9.0",
         "react-redux": "^7.2.1",
         "react-router-dom": "^6.2.1",
