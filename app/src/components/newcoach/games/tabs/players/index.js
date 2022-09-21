@@ -13,6 +13,7 @@ import GameTagMenu from '../overview/tagMenu';
 import GameOverviewHeader from '../overview/header';
 import GamePlayerTagButtonList from './tagButtonList';
 import GamePlayerLogoList from './playerLogoList';
+import GameExportToEdits from '../overview/exportEdits';
 
 const ActionData = {
     Goal: { action_id: '1', action_type_id: null, action_result_id: '3' },
@@ -52,8 +53,7 @@ const GamePlayers = ({ game }) => {
         teamId: -1,
         opponentTeamId: -1,
         selectAll: false,
-        clickRender: false,
-        clickHudl: false
+        clickEventName: ''
     });
     const [tagIndex, setTagIndex] = useState({});
     const [loadData, setLoadData] = useState(false);
@@ -62,6 +62,7 @@ const GamePlayers = ({ game }) => {
     const [exportHudl, setExportHudl] = useState(false);
     const [playerTagList, setPlayerTagList] = useState([]);
     const [playerIds, setPlayerIds] = useState([]);
+    const [exportEditOpen, setExportEditOpen] = useState(false);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
@@ -77,8 +78,9 @@ const GamePlayers = ({ game }) => {
     };
 
     const handleClickView = () => {
-        setLoadData(true);
         setMenuAnchorEl(null);
+        setValues({ ...values, clickEventName: '' });
+        setLoadData(true);
     };
 
     const handleClickHudlFromButton = () => {
@@ -92,7 +94,7 @@ const GamePlayers = ({ game }) => {
         setMenuAnchorEl(null);
 
         if (values.playList.length === 0) {
-            setValues({ ...values, clickHudl: true });
+            setValues({ ...values, clickEventName: 'sportcode' });
             setLoadData(true);
         } else {
             setPlayerTagList(values.playList);
@@ -104,7 +106,7 @@ const GamePlayers = ({ game }) => {
         setMenuAnchorEl(null);
 
         if (values.playList.length === 0) {
-            setValues({ ...values, clickRender: true });
+            setValues({ ...values, clickEventName: 'render' });
             setLoadData(true);
         } else gamePlayerCreateCommand(values.playList, tagIndex.name, [game.video_url], [game.id]);
     };
@@ -115,8 +117,23 @@ const GamePlayers = ({ game }) => {
         gamePlayerCreateCommand(newList, tagIndex.name, [game.video_url], [game.id]);
     };
 
-    const handleClickExcel = () => {
+    const handleClickEditsFromButton = () => {
+        const newList = values.playList.filter((item, index) => checkArray[index] === true);
+
+        setPlayerTagList(newList);
+        setExportEditOpen(true);
+    };
+
+    const handleClickEditsFromMenu = () => {
         setMenuAnchorEl(null);
+
+        if (values.playList.length === 0) {
+            setValues({ ...values, clickEventName: 'my_edits' });
+            setLoadData(true);
+        } else {
+            setPlayerTagList(values.playList);
+            setExportEditOpen(true);
+        }
     };
 
     const handleExpandButtons = () => {
@@ -171,28 +188,31 @@ const GamePlayers = ({ game }) => {
             console.log('Game/Overview => ', res);
             setLoading(false);
             setLoadData(false);
-            setVideoData({
-                ...videoData,
-                idx: 0,
-                tagList: res.map((item) => {
-                    return {
-                        start_time: item.player_tag_start_time,
-                        end_time: item.player_tag_end_time
-                    };
-                })
-            });
 
-            if (values.clickRender) gamePlayerCreateCommand(res, tagIndex.name, [game.video_url], [game.id]);
-            if (values.clickHudl) {
+            if (values.clickEventName === 'render') gamePlayerCreateCommand(res, tagIndex.name, [game.video_url], [game.id]);
+            else if (values.clickEventName === 'sportcode') {
                 setPlayerTagList(res);
                 setExportHudl(true);
+            } else if (values.clickEventName === 'my_edits') {
+                setPlayerTagList(res);
+                setExportEditOpen(true);
+            } else {
+                setVideoData({
+                    ...videoData,
+                    idx: 0,
+                    tagList: res.map((item) => {
+                        return {
+                            start_time: item.player_tag_start_time,
+                            end_time: item.player_tag_end_time
+                        };
+                    })
+                });
+                setValues({ ...values, playList: res });
+                setCheckArray([]);
+                res.map((item, index) => {
+                    setCheckArray((oldRows) => [...oldRows, false]);
+                });
             }
-
-            setValues({ ...values, playList: res, clickRender: false, clickHudl: false });
-            setCheckArray([]);
-            res.map((item, index) => {
-                setCheckArray((oldRows) => [...oldRows, false]);
-            });
         });
     };
 
@@ -262,7 +282,7 @@ const GamePlayers = ({ game }) => {
                     onView={handleClickView}
                     onHudl={handleClickHudlFromMenu}
                     onRender={handleClickRenderFromMenu}
-                    onEdits={handleClickExcel}
+                    onEdits={handleClickEditsFromMenu}
                 />
                 {values.playList.length > 0 && (
                     <GameTagControlSection
@@ -271,7 +291,7 @@ const GamePlayers = ({ game }) => {
                         onAll={(e) => setValues({ ...values, selectAll: e.target.checked })}
                         onHudl={handleClickHudlFromButton}
                         onRender={handleClickRenderFromButton}
-                        onEdits={handleClickExcel}
+                        onEdits={handleClickEditsFromButton}
                     />
                 )}
                 <GamePlayerTagList
@@ -287,6 +307,7 @@ const GamePlayers = ({ game }) => {
             </Box>
             <VideoPlayer videoData={videoData} url={game.video_url ?? ''} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} isSpecial={true} />
             {exportHudl && <XmlDataFilterGamePlayer game={game} tagList={playerTagList} isOur={values.isOur} tag_name={tagIndex.name} setExportXML={setExportHudl} />}
+            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={playerTagList} isTeams={false} />
         </Box>
     );
 };

@@ -54,8 +54,9 @@ const GameOverview = ({ game }) => {
     };
 
     const handleClickView = () => {
-        setLoadData(true);
         setMenuAnchorEl(null);
+        setValues({ ...values, clickEventName: '' });
+        setLoadData(true);
     };
 
     const handleClickHudlFromButton = () => {
@@ -160,7 +161,6 @@ const GameOverview = ({ game }) => {
 
     const getPlayTagList = (func) => {
         func.then((res) => {
-            console.log('Game/Overview => ', res);
             setLoading(false);
             setLoadData(false);
 
@@ -292,7 +292,7 @@ const GameOverview = ({ game }) => {
         });
     }, [values.selectAll]);
 
-    console.log('GameOverview => ', values.playList);
+    console.log('GameOverview => ', values.playList[0]);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
@@ -343,7 +343,7 @@ const GameOverview = ({ game }) => {
             </Box>
             <VideoPlayer videoData={videoData} url={game.video_url ?? ''} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} isSpecial={true} />
             {exportHudl && <XmlDataFilterGame game={game} tagList={playerTagList} isOur={values.isOur} tag_name={tagIndex} setExportXML={setExportHudl} />}
-            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} game={game} />
+            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} isTeams={true} />
         </Box>
     );
 };

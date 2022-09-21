@@ -36,7 +36,7 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-const GameExportToEdits = ({ open, onClose, tagList, game }) => {
+const GameExportToEdits = ({ open, onClose, tagList, isTeams }) => {
     const [folders, setFolders] = useState([]);
     const [curEdit, setCurEdit] = useState(null);
     const [folderDialog, setFolderDialog] = useState(false);
@@ -124,11 +124,11 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
         if (curEdit.type === 'edit') {
             const newList = tagList.map((item, index) => {
                 return {
-                    start_time: item.team_tag_start_time,
-                    end_time: item.team_tag_end_time,
+                    start_time: isTeams ? item.team_tag_start_time : item.player_tag_start_time,
+                    end_time: isTeams ? item.team_tag_end_time : item.player_tag_end_time,
                     edit_id: curEdit.id,
                     sort: index + 1,
-                    game_id: game.id,
+                    game_id: item.game_id,
                     name: getName(item)
                 };
             });
@@ -206,7 +206,7 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
                                     </Box>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>
-                                            {`${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names}`}
+                                            {isTeams ? `${getPeriod(item.period)} - ${item.time_in_game}' - ${item.player_names}` : getName(item)}
                                         </Typography>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>
@@ -217,8 +217,8 @@ const GameExportToEdits = ({ open, onClose, tagList, game }) => {
                                     </Box>
                                 </Box>
                                 <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: '80px' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.team_tag_start_time}</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.team_tag_end_time}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.player_tag_start_time}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{item.player_tag_end_time}</Typography>
                                 </Box>
                             </Box>
                         ))}
