@@ -217,9 +217,9 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
                 rowsForXML.push({
                     row: {
                         code: item.instance_name,
-                        R: isOur ? greenColor[green_index].r : redColor[red_index].r,
-                        G: isOur ? greenColor[green_index].g : redColor[red_index].g,
-                        B: isOur ? greenColor[green_index].b : redColor[red_index].b
+                        R: !isOur ? greenColor[green_index].r : redColor[red_index].r,
+                        G: !isOur ? greenColor[green_index].g : redColor[red_index].g,
+                        B: !isOur ? greenColor[green_index].b : redColor[red_index].b
                     }
                 });
             }
@@ -324,6 +324,8 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
         await GameService.gameExportSportcode(teamIds.teamId, `${game.id}`).then((res) => {
             allData = res;
         });
+
+        console.log(allData);
 
         const OurGameHighlight = getTeamTagList('Game Highlight');
         const OurCleanGame = getTeamTagList('Clean Game');

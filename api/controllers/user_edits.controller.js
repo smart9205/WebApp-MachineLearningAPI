@@ -276,6 +276,52 @@ exports.update = async (req, res) => {
       }
 };
 
+exports.moveFolderNewPosition = (req, res) => {
+  Sequelize.query(`
+    select * from public.fnc_move_folder_new_position(
+      '${req.body.type}',
+      ${req.body.element_id},
+      ${req.body.parent_id},
+      ${req.body.order_num}
+    )
+  `).then((data) => {
+    res.send(data[0]);
+  }).catch(() => {
+    res.send({
+      message: `Cannot move folder. Maybe folder was not found!`
+    });
+  })
+};
+
+exports.getBiggestSortNumber = (req, res) => {
+  Sequelize.query(`
+    select * from public.fnc_get_biggest_sort_number(
+      '${req.params.type}',
+      ${req.params.parentId}
+    )
+  `).then((data) => {
+    res.send(data[0][0]);
+  }).catch(() => {
+    res.send({
+      message: 'Not Found Biggest Sort Number'
+    });
+  })
+};
+
+exports.getVideoSourceFromEdit = (req, res) => {
+  Sequelize.query(`
+    select * from public.fnc_get_video_source_of_an_edit(
+      ${req.params.parentId}
+    )
+  `).then((data) => {
+    res.send(data[0]);
+  }).catch(() => {
+    res.send({
+      message: 'Not Found Video Source'
+    });
+  })
+};
+
 exports.delete = async (req, res) => {
   Sequelize.query(`
     select * from public.fnc_delete_edit(${req.params.id})

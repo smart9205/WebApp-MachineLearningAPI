@@ -426,6 +426,11 @@ const addNewEditClips = (req) => {
         return response.data;
     });
 };
+const moveFolderNewPosition = (req) => {
+    return axios.put(API_URL + `user_edit_folders/move`, req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
 const moveEditClips = (clipIds, editId) => {
     return axios.put(API_URL + `user_edit_clip/move/${clipIds}/${editId}`, { clipIds, editId }, { headers: authHeader() }).then((response) => {
         return response.data;
@@ -781,6 +786,18 @@ const getTeamByPlayerGame = (playerId, gameId) => {
     });
 };
 
+const getBiggestSortNumber = (type, parentId) => {
+    return axios.get(API_URL + `user_edits/big_sort/${type}/${parentId}`, { headers: authHeader(), data: { type, parentId } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getVideoSourceFromEdit = (type, parentId) => {
+    return axios.get(API_URL + `user_edits/video_source/${parentId}`, { headers: authHeader(), data: { parentId } }).then((response) => {
+        return response.data;
+    });
+};
+
 const getAllFolders = () => {
     return axios.get(API_URL + 'user_edits_folders_all', { headers: authHeader() }).then((response) => {
         return response.data;
@@ -914,6 +931,8 @@ const gameService = {
     getAllPlayerTagsByCoachPlayer,
     getAllGameTeamPlayers,
     getAllFolders,
+    getBiggestSortNumber,
+    getVideoSourceFromEdit,
 
     updateJersey,
     updateGame,
@@ -942,7 +961,8 @@ const gameService = {
     deleteUserEdit,
     deleteUserFolder,
     moveEditClips,
-    copyEditClips
+    copyEditClips,
+    moveFolderNewPosition
 };
 
 export default gameService;

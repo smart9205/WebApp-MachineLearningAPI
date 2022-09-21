@@ -121,7 +121,7 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
     return (
         <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative', overflow: 'hidden' }}>
             <FullScreen handle={handle}>
-                <div style={{ width: drawOpen ? '100%' : '90%', margin: 'auto' }}>
+                <div style={{ width: drawOpen ? '100%' : '80%', margin: 'auto' }}>
                     <div className="player-wrapper">
                         <ReactPlayer
                             className="react-player"

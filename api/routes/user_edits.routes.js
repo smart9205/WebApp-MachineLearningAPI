@@ -49,6 +49,16 @@ module.exports = app => {
 		controller.findOne
 	);
 
+	app.get(
+		"/user_edits/big_sort/:type/:parentId",
+		controller.getBiggestSortNumber
+	);
+
+	app.get(
+		"/user_edits/video_source/:parentId",
+		controller.getVideoSourceFromEdit
+	);
+
 	app.put(
 		"/user_edits/:id",
 		[authJwt.isCoach],
@@ -83,6 +93,12 @@ module.exports = app => {
 		"/user_edit_clip/copy/:clipIds/:editId",
 		[authJwt.isCoach],
 		controller.copyClips
+	);
+
+	app.put(
+		"/user_edit_folders/move",
+		[authJwt.isCoach],
+		controller.moveFolderNewPosition
 	);
 
 	app.delete(
