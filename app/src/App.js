@@ -66,11 +66,13 @@ const CustomTheme = () => {
 
 const PrivateRoute = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
-    return currentUser && (currentUser.subscription.length > 0 || currentUser.roles.includes('ROLE_ADMIN')) ? <Outlet /> : <Navigate to="/" />;
+    return currentUser && (currentUser.subscription.includes('SUB_TAGGER') || currentUser.roles.includes('ROLE_TAGGER')) ? <Navigate to="/" /> : <Outlet />;
 };
 
 const RoleRoute = ({ role }) => {
     const { user: currentUser } = useSelector((state) => state.auth);
+
+    console.log('roles => ', currentUser.roles, currentUser.subscription);
 
     return currentUser && currentUser.roles.includes(role) ? <Outlet /> : <Navigate to="/" />;
 };
@@ -134,12 +136,14 @@ const App = () => {
                                 <Route path="/resetPwdVerify/:code" element={<ForgetPassword />} />
                                 <Route path="/verification/:code" element={<Login />} />
                                 <Route path="/register" element={<Register />} />
-                                <Route path="/team/:data" element={<Field />} />
-                                <Route path="/player/:data" element={<Player />} />
-
-                                <Route path="/tagging/:id" element={<PrivateRoute />}>
-                                    <Route path="/tagging/:id" element={<Tagging />} />
+                                <Route path="/team/:data" element={<PrivateRoute />}>
+                                    <Route path="/team/:data" element={<Field />} />
                                 </Route>
+                                <Route path="/player/:data" element={<PrivateRoute />}>
+                                    <Route path="/player/:data" element={<Player />} />
+                                </Route>
+
+                                <Route path="/tagging/:id" element={<Tagging />} />
 
                                 <Route path="/coach" element={<RoleRoute role="ROLE_COACH" />}>
                                     <Route path="/coach" element={<Coach />} />
