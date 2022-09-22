@@ -8,14 +8,14 @@ verifyToken = (req, res, next) => {
 
   if (!token) {
     return res.status(403).send({
-      message: "No token provided! Please login first"
+      message: "No token provided! Please login first",
     });
   }
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
       return res.status(401).send({
-        message: "Unauthorized!"
+        message: "Unauthorized!",
       });
     }
     req.userId = decoded.id;
@@ -24,8 +24,8 @@ verifyToken = (req, res, next) => {
 };
 
 isAdmin = (req, res, next) => {
-  User.findByPk(req.userId).then(user => {
-    user.getRoles().then(roles => {
+  User.findByPk(req.userId).then((user) => {
+    user.getRoles().then((roles) => {
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === "admin") {
           next();
@@ -34,7 +34,7 @@ isAdmin = (req, res, next) => {
       }
 
       res.status(403).send({
-        message: "Require Admin Role!"
+        message: "Require Admin Role!",
       });
       return;
     });
@@ -42,8 +42,8 @@ isAdmin = (req, res, next) => {
 };
 
 isLogger = (req, res, next) => {
-  User.findByPk(req.userId).then(user => {
-    user.getRoles().then(roles => {
+  User.findByPk(req.userId).then((user) => {
+    user.getRoles().then((roles) => {
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === "logger") {
           next();
@@ -52,15 +52,15 @@ isLogger = (req, res, next) => {
       }
 
       res.status(403).send({
-        message: "Require Logger Role!"
+        message: "Require Logger Role!",
       });
     });
   });
 };
 
 isCoach = (req, res, next) => {
-  User.findByPk(req.userId).then(user => {
-    user.getRoles().then(roles => {
+  User.findByPk(req.userId).then((user) => {
+    user.getRoles().then((roles) => {
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === "coach") {
           next();
@@ -69,15 +69,37 @@ isCoach = (req, res, next) => {
       }
 
       res.status(403).send({
-        message: "Require Coach Role!"
+        message: "Require Coach Role!",
+      });
+    });
+  });
+};
+
+isAdminOrCoach = (req, res, next) => {
+  User.findByPk(req.userId).then((user) => {
+    user.getRoles().then((roles) => {
+      for (let i = 0; i < roles.length; i++) {
+        if (roles[i].name === "coach") {
+          next();
+          return;
+        }
+
+        if (roles[i].name === "admin") {
+          next();
+          return;
+        }
+      }
+
+      res.status(403).send({
+        message: "Require Admin or Coach Role!",
       });
     });
   });
 };
 
 isLoggerOrAdmin = (req, res, next) => {
-  User.findByPk(req.userId).then(user => {
-    user.getRoles().then(roles => {
+  User.findByPk(req.userId).then((user) => {
+    user.getRoles().then((roles) => {
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === "logger") {
           next();
@@ -91,7 +113,7 @@ isLoggerOrAdmin = (req, res, next) => {
       }
 
       res.status(403).send({
-        message: "Require Logger or Admin Role!"
+        message: "Require Logger or Admin Role!",
       });
     });
   });
@@ -102,6 +124,7 @@ const authJwt = {
   isAdmin: isAdmin,
   isCoach: isCoach,
   isLogger: isLogger,
-  isLoggerOrAdmin: isLoggerOrAdmin
+  isLoggerOrAdmin: isLoggerOrAdmin,
+  isAdminOrCoach: isAdminOrCoach,
 };
 module.exports = authJwt;

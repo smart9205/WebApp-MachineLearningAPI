@@ -163,14 +163,14 @@ export default function Navbar() {
                                 </>
                             )}
 
-                            {currentUser && currentUser?.roles.includes('ROLE_COACH') && (
+                            {currentUser && (currentUser?.roles.includes('ROLE_COACH') || currentUser?.roles.includes('ROLE_ADMIN')) && (
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/coach">
                                         {t('Coach')}
                                     </Link>
                                 </li>
                             )}
-                            {currentUser && currentUser?.roles.includes('ROLE_COACH') && (
+                            {currentUser && (currentUser?.roles.includes('ROLE_COACH') || currentUser?.roles.includes('ROLE_ADMIN')) && (
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/new_coach">
                                         {t('New Coach (Beta)')}

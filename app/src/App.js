@@ -74,7 +74,7 @@ const RoleRoute = ({ role }) => {
 
     console.log('roles => ', currentUser.roles, currentUser.subscription);
 
-    return currentUser && currentUser.roles.includes(role) ? <Outlet /> : <Navigate to="/" />;
+    return currentUser && (currentUser.roles.includes(role) || currentUser.roles.includes('ROLE_ADMIN')) ? <Outlet /> : <Navigate to="/" />;
 };
 
 const ThemeContext = React.createContext({ theme: {} });

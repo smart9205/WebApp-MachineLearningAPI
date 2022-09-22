@@ -70,6 +70,12 @@ function EnhancedTableHead(props) {
             label: t('Image')
         },
         {
+            id: 'id',
+            numeric: false,
+            disablePadding: true,
+            label: t('ID')
+        },
+        {
             id: 'season_name',
             numeric: false,
             disablePadding: true,
@@ -190,6 +196,16 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
         );
     };
 
+    const getTaggingLink = (row) => {
+        if (row.done_tagging) {
+            window.alert('Game has been already tagged.');
+
+            return window.open('/');
+        }
+
+        return window.open(`/tagging/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`, '_blank');
+    };
+
     return (
         <Box sx={{ width: '100%' }}>
             <Snackbar open={open} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={2000} onClose={() => setOpen(false)}>
@@ -249,6 +265,7 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                                                     <TableCell component="th" id={labelId} scope="row" padding="none" align="center">
                                                         <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt="Team" />
                                                     </TableCell>
+                                                    <TableCell align="center">{row.id}</TableCell>
                                                     <TableCell align="center">{row.season_name}</TableCell>
                                                     <TableCell align="center">{row.league_name}</TableCell>
                                                     <TableCell align="center">
@@ -285,16 +302,9 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                                                         </Button>
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: 100 }}>
-                                                        <Link
-                                                            variant="outlined"
-                                                            to={`/tagging/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            <Button variant="outlined" startIcon={<TagIcon />}>
-                                                                {t('Tag')}
-                                                            </Button>
-                                                        </Link>
+                                                        <Button variant="outlined" startIcon={<TagIcon />} onClick={() => getTaggingLink(row)}>
+                                                            {t('Tag')}
+                                                        </Button>
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: 70 }}>
                                                         <IconButton
