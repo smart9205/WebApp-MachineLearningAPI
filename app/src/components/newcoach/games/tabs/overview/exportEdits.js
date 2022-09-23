@@ -16,13 +16,13 @@ const GameExportToEdits = ({ open, onClose, tagList, isTeams }) => {
     };
 
     const handleSave = async () => {
-        let bigSort = 0;
-
-        await GameService.getBiggestSortNumber('Edit', curEdit.parent_id).then((res) => {
-            bigSort = res['biggest_order_num'];
-        });
-
         if (curEdit.type === 'edit') {
+            let bigSort = 0;
+
+            await GameService.getBiggestSortNumber('Edit', curEdit.parent_id).then((res) => {
+                bigSort = res['biggest_order_num'] === null ? 0 : res['biggest_order_num'];
+            });
+
             const newList = tagList.map((item, index) => {
                 return {
                     start_time: isTeams ? item.team_tag_start_time : item.player_tag_start_time,

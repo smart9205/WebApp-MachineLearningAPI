@@ -5,7 +5,7 @@ import GameService from '../../../../services/game.service';
 
 const EditNameDialog = ({ open, onClose, node, nodes, updateList }) => {
     const [name, setName] = useState('');
-    let folders = [...nodes];
+    let folders = Array.isArray(nodes) ? [...nodes] : [];
 
     const renameFolderEdit = (item, id, new_name) => {
         if (item.id === id) item.name = new_name;

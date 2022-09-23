@@ -121,6 +121,8 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
 
         if (node.type === 'edit') await GameService.deleteUserEdit(node.id);
         else await GameService.deleteUserFolder(node.id);
+
+        handleSetCurEdit(null);
     };
 
     const renderTree = (nodes) => (
@@ -132,7 +134,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                     {nodes.type === 'folder' ? <img src={FolderIcon} style={{ height: '24px' }} /> : <img src={EditsIcon} style={{ height: '24px' }} />}
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
                     {isMain && hoverIndex === nodes.id && (
-                        <Box sx={{ display: 'flex', alignItems: 'center' }} onMouseEnter={() => setHoverControl(true)} onMouseLeave={() => setHoverControl(false)}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Box onClick={() => handleEditName(nodes)}>
                                 <EditIcon fontSize="small" />
                             </Box>
@@ -154,11 +156,9 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                 </Box>
             }
             onClick={() => {
-                if (isMain) {
-                    setHoverIndex(nodes.id);
+                if (isMain) setHoverIndex(nodes.id);
 
-                    if (!hoverControl) handleSetCurEdit(nodes);
-                } else handleSetCurEdit(nodes);
+                handleSetCurEdit(nodes);
             }}
         >
             {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
@@ -176,10 +176,10 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
         });
     }, []);
 
+    console.log(curEdit);
+
     return (
         <>
-            <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={setFolders} />
-            <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setFolders} isFolder={createFolderEdit} node={curEdit} />
             <Box sx={{ height: entireHeight, width: '300px', padding: '16px 8px' }}>
                 {loading ? (
                     <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -187,30 +187,28 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                     </div>
                 ) : (
                     <>
-                        {folders.length > 0 && (
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 16px 24px' }}>
-                                <Button
-                                    variant="contained"
-                                    sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
-                                    onClick={() => {
-                                        setFolderDialog(true);
-                                        setCreateFolderEdit(true);
-                                    }}
-                                >
-                                    New Folder
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
-                                    onClick={() => {
-                                        setFolderDialog(true);
-                                        setCreateFolderEdit(false);
-                                    }}
-                                >
-                                    New Edit
-                                </Button>
-                            </Box>
-                        )}
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 16px 24px' }}>
+                            <Button
+                                variant="contained"
+                                sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
+                                onClick={() => {
+                                    setFolderDialog(true);
+                                    setCreateFolderEdit(true);
+                                }}
+                            >
+                                New Folder
+                            </Button>
+                            <Button
+                                variant="contained"
+                                sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
+                                onClick={() => {
+                                    setFolderDialog(true);
+                                    setCreateFolderEdit(false);
+                                }}
+                            >
+                                New Edit
+                            </Button>
+                        </Box>
                         <TreeView
                             aria-label="rich object"
                             defaultCollapseIcon={<ExpandMoreIcon />}
@@ -224,6 +222,8 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                     </>
                 )}
             </Box>
+            <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={setFolders} />
+            <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setFolders} isFolder={createFolderEdit} node={curEdit} />
         </>
     );
 };
