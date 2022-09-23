@@ -12,12 +12,12 @@ const EditCreateUserFolderEdit = ({ open, onClose, updateList, isFolder, node })
         let bigSort = 0;
         const type = isFolder ? 'Folder' : 'Edit';
 
-        await GameService.getBiggestSortNumber(type, node?.id ?? null).then((res) => {
+        await GameService.getBiggestSortNumber(type, node?.id ?? 0).then((res) => {
             bigSort = res['biggest_order_num'] === null ? 0 : res['biggest_order_num'];
         });
 
-        if (isFolder) await GameService.createUserFolder({ name: folderName, parent_id: node !== null && node.type === 'folder' ? node.id : null, order: bigSort + 1 });
-        else await GameService.createUserEdit({ name: folderName, parent_id: node !== null && node.type === 'folder' ? node.id : null, order: bigSort + 1 });
+        if (isFolder) await GameService.createUserFolder({ name: folderName, parent_id: node !== null && node.type === 'folder' ? node.id : 0, order: bigSort + 1 });
+        else await GameService.createUserEdit({ name: folderName, parent_id: node !== null && node.type === 'folder' ? node.id : 0, order: bigSort + 1 });
 
         await GameService.getAllFolders().then((res) => {
             const ascArray = stableSort(res, getComparator('asc', 'id'));

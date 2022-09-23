@@ -19,7 +19,7 @@ const GameExportToEdits = ({ open, onClose, tagList, isTeams }) => {
         if (curEdit.type === 'edit') {
             let bigSort = 0;
 
-            await GameService.getBiggestSortNumber('Edit', curEdit.parent_id).then((res) => {
+            await GameService.getBiggestSortNumber('Clip', curEdit.id ?? 0).then((res) => {
                 bigSort = res['biggest_order_num'] === null ? 0 : res['biggest_order_num'];
             });
 

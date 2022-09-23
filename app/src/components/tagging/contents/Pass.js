@@ -28,6 +28,7 @@ const SHORT_PASS = "Short Pass"
 const THROW_IN = "Throw-In"
 const FREE_KICK = "Free Kick"
 const PASS_FOR_A_SHOT = "Pass For a Shot"
+const CORNER = "Corner"
 const ASSIST = "Assist"
 
 export default function Pass({
@@ -114,6 +115,7 @@ export default function Pass({
             { id: 14, name: THROW_IN },
             { id: 11, name: FREE_KICK },
             { id: 15, name: PASS_FOR_A_SHOT },
+            { id: 12, name: CORNER }
           ].map((r, i) => (
             <ListItemButton key={r.id}
               selected={actionTypeId === r.id}
