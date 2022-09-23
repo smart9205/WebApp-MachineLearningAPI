@@ -196,16 +196,6 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
         );
     };
 
-    const getTaggingLink = (row) => {
-        if (row.done_tagging) {
-            window.alert('Game has been already tagged.');
-
-            return window.open('/');
-        }
-
-        return window.open(`/tagging/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`, '_blank');
-    };
-
     return (
         <Box sx={{ width: '100%' }}>
             <Snackbar open={open} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={2000} onClose={() => setOpen(false)}>
@@ -302,9 +292,16 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                                                         </Button>
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: 100 }}>
-                                                        <Button variant="outlined" startIcon={<TagIcon />} onClick={() => getTaggingLink(row)}>
-                                                            {t('Tag')}
-                                                        </Button>
+                                                        <Link
+                                                            variant="outlined"
+                                                            to={`/tagging/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            <Button variant="outlined" startIcon={<TagIcon />}>
+                                                                {t('Tag')}
+                                                            </Button>
+                                                        </Link>
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: 70 }}>
                                                         <IconButton

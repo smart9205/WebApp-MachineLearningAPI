@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
 import hotkeys from 'hotkeys-js';
 import { styled } from '@mui/material/styles';
@@ -13,7 +14,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import IconButton from '@mui/material/IconButton';
 
 import TextField from '@mui/material/TextField';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import ReactPlayer from 'react-player';
@@ -98,8 +99,21 @@ const TAGGING = {
 const HOTKEY_OPTION = { enableOnContentEditable: true };
 
 export default function Tagging() {
+    const navigate = useNavigate();
     const { id } = useParams();
     const game_id = Number(atob(id).slice(3, -3));
+    const { user: currentUser } = useSelector((state) => state.auth);
+
+    React.useEffect(async () => {
+        await GameService.getGame(game_id).then((res) => {
+            console.log(res);
+            if (res.done_tagging && !currentUser.roles.includes('ROLE_ADMIN') && currentUser.roles.includes('ROLE_TAGGER')) {
+                navigate('/');
+                window.alert('Game has been already tagged');
+            }
+        });
+    }, [game_id]);
+
     const player = React.useRef(null);
 
     const seekTo = (sec) => player.current.seekTo(player.current.getCurrentTime() + sec);

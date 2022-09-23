@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter, Route, Routes, Navigate, Outlet, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -47,6 +47,8 @@ import Edits from './components/newcoach/edits';
 import GamePage from './components/newcoach/games/gamePage';
 import Opponents from './components/newcoach/opponents';
 import Leaders from './components/newcoach/leaders';
+import gameService from './services/game.service';
+
 const CustomTheme = () => {
     const { pathname } = useLocation();
 
