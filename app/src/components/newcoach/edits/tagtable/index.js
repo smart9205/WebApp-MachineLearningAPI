@@ -42,10 +42,12 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }
             return;
         }
 
-        const newList = teamTagList.filter((item) => checkArray.includes(item.id) === true);
+        const deleteList = teamTagList.filter((item) => checkArray.includes(item.id) === true);
+        const newList = teamTagList.filter((item) => checkArray.includes(item.id) === false);
 
-        setTeamTagList(teamTagList.filter((item) => checkArray.includes(item.id) === false));
-        newList.map(async (item) => await GameService.deleteEditClip(item.id));
+        setTeamTagList(newList);
+        update(newList);
+        deleteList.map(async (item) => await GameService.deleteEditClip(item.id));
     };
 
     const handleCopy = async () => {
@@ -95,10 +97,12 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }
             return;
         }
 
-        let newList = teamTagList.filter((item) => checkArray.includes(item.id) === true).map((item) => item.id);
+        const moveList = teamTagList.filter((item) => checkArray.includes(item.id) === true).map((item) => item.id);
+        const newList = teamTagList.filter((item) => checkArray.includes(item.id) === false);
 
-        setTeamTagList(teamTagList.filter((item) => checkArray.includes(item.id) === false));
-        await GameService.moveEditClips(newList.join(','), controlEdit.id);
+        setTeamTagList(newList);
+        update(newList);
+        await GameService.moveEditClips(moveList.join(','), controlEdit.id);
         setControlEdit(null);
         setEventName('');
     };
