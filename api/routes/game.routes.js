@@ -56,6 +56,12 @@ module.exports = (app) => {
   );
 
   app.get(
+    "/game/getadditional/:seasonId/:leagueId/:teamId/:datesBack",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getAdditionalGames
+  );
+
+  app.get(
     "/game/getgamebyid/:gameId",
     [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.getGameById

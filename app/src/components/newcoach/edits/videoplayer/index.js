@@ -37,12 +37,12 @@ const styles = {
         position: 'absolute',
         bottom: 5,
         left: 0,
-        paddingInline: '11%',
+        paddingLeft: '11%',
         minWidth: 300,
         display: 'flex',
-        flexDirection: 'column',
-        gap: '80%',
-        height: '97%'
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        gap: '1rem'
     },
     button: {
         color: 'white',
@@ -230,40 +230,35 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, onMo
     console.log('EditVideo => ', saveEdit, newClip);
 
     return (
-        <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
-            <FullScreen handle={handle}>
-                <div style={{ width: drawOpen ? '100%' : '80%', margin: 'auto' }}>
-                    <div className="player-wrapper">
-                        {videoURL !== '' && (
-                            <ReactPlayer
-                                className="react-player"
-                                url={videoURL}
-                                // url={VIDEO}
-                                ref={player}
-                                onPlay={handlePlay}
-                                onPause={handlePause}
-                                onReady={() => setReady(true)}
-                                onProgress={(p) => onProgress(p.playedSeconds)}
-                                playing={play}
-                                controls={false}
-                                width="100%"
-                                height="100%"
-                            />
-                        )}
-                        {videoURL === '' && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '40px', width: '100%' }}>
+            <Button variant="contained" sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' }, width: '200px' }} disabled={gameList.length === 0} onClick={() => handleSetMode('cutter')}>
+                Cutter
+            </Button>
+            <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
+                <FullScreen handle={handle}>
+                    <div style={{ width: drawOpen ? '100%' : '80%', margin: 'auto' }}>
+                        <div className="player-wrapper">
+                            {videoURL !== '' && (
+                                <ReactPlayer
+                                    className="react-player"
+                                    url={videoURL}
+                                    // url={VIDEO}
+                                    ref={player}
+                                    onPlay={handlePlay}
+                                    onPause={handlePause}
+                                    onReady={() => setReady(true)}
+                                    onProgress={(p) => onProgress(p.playedSeconds)}
+                                    playing={play}
+                                    controls={false}
+                                    width="100%"
+                                    height="100%"
+                                />
+                            )}
+                            {videoURL === '' && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
+                        </div>
                     </div>
-                </div>
 
-                <div style={styles.buttonBox}>
-                    <Button
-                        variant="contained"
-                        sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' }, width: '30%' }}
-                        disabled={gameList.length === 0}
-                        onClick={() => handleSetMode('cutter')}
-                    >
-                        Cutter
-                    </Button>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', gap: '1rem' }}>
+                    <div style={styles.buttonBox}>
                         {controlMode === 'play' && (
                             <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
                                 <SkipPreviousSharpIcon color="white" />
@@ -313,24 +308,24 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, onMo
                             {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
                         </IconButton>
                     </div>
-                </div>
-            </FullScreen>
-            <EditConfirmMessage
-                open={confirmOpen}
-                onClose={(v) => {
-                    setConfirmOpen(false);
+                </FullScreen>
+                <EditConfirmMessage
+                    open={confirmOpen}
+                    onClose={(v) => {
+                        setConfirmOpen(false);
 
-                    if (v) setCreateOpen(true);
-                }}
-            />
-            <EditCreateClipDialog
-                open={createOpen}
-                onClose={() => setCreateOpen(false)}
-                setMode={handleSetMode}
-                onCreate={(new_name) => setNewClip({ ...newClip, name: new_name })}
-                editNode={saveEdit}
-            />
-            <EditGameSelectDialog open={gamesOpen} onClose={() => setGamesOpen(false)} gameList={gameList} setGame={setSelectedGame} />
+                        if (v) setCreateOpen(true);
+                    }}
+                />
+                <EditCreateClipDialog
+                    open={createOpen}
+                    onClose={() => setCreateOpen(false)}
+                    setMode={handleSetMode}
+                    onCreate={(new_name) => setNewClip({ ...newClip, name: new_name })}
+                    editNode={saveEdit}
+                />
+                <EditGameSelectDialog open={gamesOpen} onClose={() => setGamesOpen(false)} gameList={gameList} setGame={setSelectedGame} />
+            </div>
         </div>
     );
 }

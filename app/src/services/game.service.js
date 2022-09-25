@@ -57,6 +57,12 @@ const getAllGamesByCoach = (seasonId, leagueId, teamId, datesBack) => {
     });
 };
 
+const getAdditionalGames = (seasonId, leagueId, teamId, datesBack) => {
+    return axios.get(API_URL + `game/getadditional/${seasonId}/${leagueId}/${teamId}/${datesBack}`, { headers: authHeader(), data: { seasonId, leagueId, teamId, datesBack } }).then((response) => {
+        return response.data;
+    });
+};
+
 const getCleanGame = (teamId, gameIds) => {
     return axios.get(API_URL + `game/getcleangame/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
         return response.data;
@@ -601,6 +607,11 @@ const getAllPositions = () => {
         return response.data;
     });
 };
+const getTeamInitialStanding = () => {
+    return axios.get(API_URL + 'team/standing', { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
 
 const updatePlayerTag = (req) => {
     return axios.put(API_URL + `player_tag/${req.id}`, req, { headers: authHeader(), data: { id: req.id } }).then((response) => {
@@ -859,6 +870,7 @@ const gameService = {
     getAllCoach,
     getAllCoachTeam,
     getAllGamesByCoach,
+    getAdditionalGames,
     getGameById,
     getCleanGame,
     getTeamGoals,
@@ -933,6 +945,7 @@ const gameService = {
     getAllFolders,
     getBiggestSortNumber,
     getVideoSourceFromEdit,
+    getTeamInitialStanding,
 
     updateJersey,
     updateGame,

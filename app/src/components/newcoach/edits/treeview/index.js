@@ -16,6 +16,8 @@ import { getComparator, stableSort } from '../../components/utilities';
 import EditCreateUserFolderEdit from './createFolder';
 import EditNameDialog from './editNameDialog';
 
+let child_ids = [];
+
 function getChilds(folders, parent_id) {
     const children = folders.filter((item) => item.parent_id === parent_id);
     let trees = [];
@@ -36,42 +38,37 @@ function getChilds(folders, parent_id) {
     return stableSort(trees, getComparator('asc', 'order_num'));
 }
 
+function getChildIds(array) {
+    array.map((item) => {
+        if (Array.isArray(item.children)) getChildIds(item.children);
+        else child_ids = [...child_ids, item.id];
+    });
+}
+
 export function getTreeViewData(res) {
-    const parents = res.filter((item) => item.parent_id === null);
-    const other = res.filter((item) => item.parent_id !== null);
+    let resCopy = stableSort(res, getComparator('asc', 'id'));
     let trees = [];
 
-    if (parents.length > 0) {
-        parents.map((item) => {
-            const child = getChilds(other, item.id);
-            let tree = { id: String(item.id), name: item.name, order_num: item.order_number, type: item.type, parent_id: item.parent_id };
+    for (let i = 0; i < resCopy.length; i += 1) {
+        const child = getChilds(resCopy, resCopy[i].id);
+        let tree = { id: String(resCopy[i].id), name: resCopy[i].name, order_num: resCopy[i].order_number, type: resCopy[i].type, parent_id: resCopy[i].parent_id };
 
-            if (child.length > 0)
-                tree = {
-                    id: String(item.id),
-                    name: item.name,
-                    children: stableSort(child, getComparator('asc', 'order_num')),
-                    order_num: item.order_number,
-                    type: item.type,
-                    parent_id: item.parent_id
-                };
+        if (child.length > 0)
+            tree = {
+                id: String(resCopy[i].id),
+                name: resCopy[i].name,
+                children: stableSort(child, getComparator('asc', 'order_num')),
+                order_num: resCopy[i].order_number,
+                type: resCopy[i].type,
+                parent_id: resCopy[i].parent_id
+            };
 
-            trees = [...trees, tree];
-
-            return trees;
-        });
-    } else {
-        let childs = [];
-
-        other.map((item) => {
-            const tree = { id: String(item.id), name: item.name, order_num: item.order_number, type: item.type, parent_id: item.parent_id };
-
-            childs = [...childs, tree];
-
-            return childs;
-        });
-
-        return { id: 0, name: 'root', children: stableSort(childs, getComparator('asc', 'order_num')), type: 'folder' };
+        trees = [...trees, tree];
+        getChildIds(child);
+        child_ids = [...child_ids, tree.id];
+        resCopy = resCopy.filter((data) => child_ids.includes(String(data.id)) === false);
+        i = 0;
+        console.log('getting tree => ', resCopy, child_ids);
     }
 
     return stableSort(trees, getComparator('asc', 'order_num'));
@@ -84,7 +81,6 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
     const [createFolderEdit, setCreateFolderEdit] = useState(false);
     const [curEdit, setCurEdit] = useState(null);
     const [hoverIndex, setHoverIndex] = useState(-1);
-    const [hoverControl, setHoverControl] = useState(false);
     const [updateEdit, setUpdateEdit] = useState({});
     const [editOpen, setEditOpen] = useState(false);
 
@@ -176,7 +172,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
         });
     }, []);
 
-    console.log(curEdit);
+    console.log(folders);
 
     return (
         <>
