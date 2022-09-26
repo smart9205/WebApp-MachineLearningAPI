@@ -73,6 +73,10 @@ function EnhancedTableHead(props) {
             label: t('Image')
         },
         {
+            id: 'id',
+            label: 'ID'
+        },
+        {
             id: 'name',
             label: t('Name')
         },
@@ -87,6 +91,10 @@ function EnhancedTableHead(props) {
         {
             id: 'day_of_birth',
             label: t('DOB')
+        },
+        {
+            id: 'team_latest_play',
+            label: 'Team Latest Played'
         }
     ];
     const createSortHandler = (property) => (event) => {
@@ -243,12 +251,13 @@ export default function PlayerTab({ t }) {
                                             )
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
                                         getComparator(order, orderBy)
-                                    ).map((row, index) => {
+                                    ).map((row) => {
                                         return (
                                             <TableRow hover key={row.id}>
                                                 <TableCell align="center">
                                                     <img width={40} src={row.image?.length > 0 ? row.image : PLAYER_ICON_DEFAULT} alt="Player" />
                                                 </TableCell>
+                                                <TableCell align="center">{row.id}</TableCell>
                                                 <TableCell align="center">
                                                     <Link to={`/player/${btoa(row.id)}`} target="_blank" rel="noopener noreferrer" className="name">
                                                         {row.player_name}
@@ -257,6 +266,7 @@ export default function PlayerTab({ t }) {
                                                 <TableCell align="center">{row.jersey_number}</TableCell>
                                                 <TableCell align="center">{row.player_position_name}</TableCell>
                                                 <TableCell align="center">{moment(row.date_of_birth).format('DD MMM, YYYY')}</TableCell>
+                                                <TableCell align="center">{row.team_latest_play}</TableCell>
                                                 <TableCell align="center" sx={{ width: 50 }}>
                                                     <IconButton
                                                         onClick={() => {
