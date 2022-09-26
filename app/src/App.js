@@ -48,6 +48,7 @@ import GamePage from './components/newcoach/games/gamePage';
 import Opponents from './components/newcoach/opponents';
 import Leaders from './components/newcoach/leaders';
 import gameService from './services/game.service';
+import OpponentPage from './components/newcoach/opponents/opponentPage';
 
 const CustomTheme = () => {
     const { pathname } = useLocation();
@@ -68,13 +69,12 @@ const CustomTheme = () => {
 
 const PrivateRoute = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
+
     return currentUser && (currentUser.subscription.includes('SUB_TAGGER') || currentUser.roles.includes('ROLE_TAGGER')) ? <Navigate to="/" /> : <Outlet />;
 };
 
 const RoleRoute = ({ role }) => {
     const { user: currentUser } = useSelector((state) => state.auth);
-
-    console.log('roles => ', currentUser.roles, currentUser.subscription);
 
     return currentUser && (currentUser.roles.includes(role) || currentUser.roles.includes('ROLE_ADMIN')) ? <Outlet /> : <Navigate to="/" />;
 };
@@ -230,6 +230,14 @@ const App = () => {
                                         element={
                                             <NewCoach>
                                                 <Opponents />
+                                            </NewCoach>
+                                        }
+                                    />
+                                    <Route
+                                        path="/new_coach/opponents/:gameId"
+                                        element={
+                                            <NewCoach>
+                                                <OpponentPage />
                                             </NewCoach>
                                         }
                                     />

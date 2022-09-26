@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const MenuItem = ({ path, icon, title, isMinimized, isHover, isSelected }) => {
     return (
         <Link to={path}>
-            <Box sx={{ display: 'flex', alignItems: 'center', height: '42px', gap: '8px', margin: '8px 0' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', height: '42px', gap: '8px' }}>
                 <Box
                     sx={{
                         height: '100%',
