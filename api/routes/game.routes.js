@@ -23,6 +23,8 @@ module.exports = (app) => {
 
   app.get("/game", controller.findAll);
 
+  app.get("/game/standing", controller.getTeamInitialStanding);
+
   app.get("/game/:id", controller.findOne);
 
   app.put(

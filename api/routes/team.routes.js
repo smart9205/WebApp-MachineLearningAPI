@@ -16,8 +16,6 @@ module.exports = (app) => {
 
   app.get("/team/:id", controller.findOne);
 
-  app.get("/team/standing", controller.getTeamInitialStanding);
-
   app.put(
     "/team/:id",
     [authJwt.verifyToken, authJwt.isAdmin],

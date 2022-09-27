@@ -141,17 +141,3 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
-
-exports.getTeamInitialStanding = (req, res) => {
-  Sequelize.query("select * from public.fnc_get_team_initial_standing()")
-    .then((data) => {
-      res.send(data[0]);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message ||
-          "Some error occurred while getting team initial standing.",
-      });
-    });
-};

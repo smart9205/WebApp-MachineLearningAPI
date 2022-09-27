@@ -239,6 +239,9 @@ const OpponentPlayers = ({ game }) => {
         });
     }, [values.selectAll]);
 
+    console.log('opponent => ', values.playList);
+    console.log('opponent => ', values.clickEventName);
+
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', padding: '24px 16px' }}>

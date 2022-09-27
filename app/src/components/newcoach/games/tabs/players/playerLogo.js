@@ -22,8 +22,6 @@ const GamePlayerLogo = ({ player }) => {
         return player.last_name.length >= 13 ? `${first}. ${last}.` : `${first}. ${player.last_name}`;
     };
 
-    console.log('PlayLogo => ', player);
-
     return (
         <Box sx={{ width: '80px', height: '100px', borderRadius: '8px', background: `url(${getImage()}) center center / cover no-repeat silver`, position: 'relative' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', width: '100%' }}>

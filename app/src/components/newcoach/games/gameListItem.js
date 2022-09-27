@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, TextField, Divider, Popover, CircularProgress } from '@mui/material';
+import fileDownload from 'js-file-download';
+import axios from 'axios';
 
 import SortIcon from '@mui/icons-material/SortOutlined';
 import EditIcon from '@mui/icons-material/EditOutlined';
@@ -73,8 +75,11 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
         setMenuAnchorEl(null);
     };
 
-    const handleDownloadVideo = () => {
+    const handleDownloadVideo = (url) => {
         setMenuAnchorEl(null);
+        axios.get(url, { responseType: 'blob' }).then((res) => {
+            fileDownload(res.data, '1.mp4');
+        });
     };
 
     const getFormattedDate = (date) => {
@@ -136,11 +141,13 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                         <img src={row.home_team_image ? row.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_goals}</Typography>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_name}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_standing_name}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <img src={row.away_team_image ? row.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_goals}</Typography>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_name}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_standing_name}</Typography>
                     </Box>
                 </Box>
             </Box>
@@ -184,7 +191,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Excel</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleDownloadVideo}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDownloadVideo(row.video_url)}>
                     <DownloadIcon />
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Download Video</Typography>
                 </Box>
@@ -234,7 +241,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                     </SaveButton>
                 </Box>
             )}
-            <GameEditPage open={editOpen} onClose={handleCloseDialog} game={row} />
+            <GameEditPage open={editOpen} onClose={handleCloseDialog} game={row} updateGameList={updateList} />
             {exportGate && <XmlDataFilterGames game={row} setXML={setExportGate} setLoading={setLoading} />}
             {exportExcel && <ExcelDataFiltering team={playerTagList} setExcelData={setExportExcel} />}
             {loading && (
