@@ -590,6 +590,11 @@ const getAllGames = () => {
         return response.data;
     });
 };
+const getTeamInitialStanding = () => {
+    return axios.get(API_URL + 'game/standing', { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
 
 const getAllPlayers = () => {
     return axios.get(API_URL + 'player', { headers: authHeader() }).then((response) => {
@@ -604,11 +609,6 @@ const getAllCoach = () => {
 };
 const getAllPositions = () => {
     return axios.get(API_URL + 'player/position', { headers: authHeader() }).then((response) => {
-        return response.data;
-    });
-};
-const getTeamInitialStanding = () => {
-    return axios.get(API_URL + 'team/standing', { headers: authHeader() }).then((response) => {
         return response.data;
     });
 };

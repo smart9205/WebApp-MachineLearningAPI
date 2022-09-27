@@ -107,7 +107,7 @@ const GameEditPage = ({ open, onClose, game, updateGameList, standingList }) => 
                                     </MenuItem>
                                 ))}
                             </Select>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #E8E8E8', borderRadius: '8px', width: '300px', height: '400px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #E8E8E8', borderRadius: '8px', width: '200px', height: '250px' }}>
                                 {values.homeStanding.image && values.homeStanding.image.length > 0 && (
                                     <img src={values.homeStanding.image} style={{ width: '100%', height: '100%', borderRadius: '8px' }} />
                                 )}
@@ -135,7 +135,7 @@ const GameEditPage = ({ open, onClose, game, updateGameList, standingList }) => 
                                     </MenuItem>
                                 ))}
                             </Select>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #E8E8E8', borderRadius: '8px', width: '300px', height: '400px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #E8E8E8', borderRadius: '8px', width: '200px', height: '250px' }}>
                                 {values.awayStanding.image && values.awayStanding.image.length > 0 && (
                                     <img src={values.awayStanding.image} style={{ width: '100%', height: '100%', borderRadius: '8px' }} />
                                 )}
