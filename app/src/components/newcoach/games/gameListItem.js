@@ -17,7 +17,7 @@ import GameEditPage from './gameEditPage';
 import ExcelDataFiltering from '../../coach/ExcelDataFiltering';
 import { XmlDataFilterGames } from '../components/xmldata';
 
-const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => {
+const GameListItem = ({ row, isHover, isPending = false, updateList, team, standing }) => {
     const navigate = useNavigate();
     const [editOpen, setEditOpen] = useState(false);
     const [exportExcel, setExportExcel] = useState(false);
@@ -137,17 +137,25 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{row.league_name}</Typography>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flex: 1, textAlign: 'center' }}>{row.season_name}</Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <img src={row.home_team_image ? row.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_goals}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_name}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_standing_name}</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', width: '400px' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 3 }}>
+                            <img src={row.home_team_image ? row.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_goals}</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_name}</Typography>
+                        </Box>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d', flex: 1 }}>
+                            {row.home_team_standing_name === 'Unknown' ? '' : row.home_team_standing_name}
+                        </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <img src={row.away_team_image ? row.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_goals}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_name}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_standing_name}</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', width: '400px' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 3 }}>
+                            <img src={row.away_team_image ? row.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_goals}</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_name}</Typography>
+                        </Box>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d', flex: 1 }}>
+                            {row.away_team_standing_name === 'Unknown' ? '' : row.away_team_standing_name}
+                        </Typography>
                     </Box>
                 </Box>
             </Box>
@@ -241,7 +249,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team }) => 
                     </SaveButton>
                 </Box>
             )}
-            <GameEditPage open={editOpen} onClose={handleCloseDialog} game={row} updateGameList={updateList} />
+            <GameEditPage open={editOpen} onClose={handleCloseDialog} game={row} updateGameList={updateList} standingList={standing} />
             {exportGate && <XmlDataFilterGames game={row} setXML={setExportGate} setLoading={setLoading} />}
             {exportExcel && <ExcelDataFiltering team={playerTagList} setExcelData={setExportExcel} />}
             {loading && (

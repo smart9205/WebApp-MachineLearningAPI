@@ -25,6 +25,7 @@ const Games = () => {
         leagueList: []
     });
     const [refreshPage, setRefreshPage] = useState(false);
+    const [standingList, setStandingList] = useState([]);
 
     const handleTabClick = (index) => {
         setValues({ ...values, curTab: index });
@@ -140,6 +141,9 @@ const Games = () => {
 
     useEffect(() => {
         setValues({ ...values, loading: true });
+        GameService.getTeamInitialStanding().then((res) => {
+            setStandingList(res);
+        });
         GameService.getAllGamesByCoach(null, null, null, null).then((res) => {
             setValues({ ...values, gamesList: getDescGamesList(res), seasonList: getSeasonList(res), teamList: getTeamList(res), leagueList: getLeagueList(res), loading: false });
         });
@@ -262,7 +266,14 @@ const Games = () => {
                         <Box sx={{ marginRight: '4px' }}>
                             {getGamesList().map((game, index) => (
                                 <Box key={index} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
-                                    <GameListItem row={game} isHover={values.hoverIndex === index} isPending={values.curTab === 1} updateList={setRefreshPage} team={values.teamFilter} />
+                                    <GameListItem
+                                        row={game}
+                                        isHover={values.hoverIndex === index}
+                                        isPending={values.curTab === 1}
+                                        updateList={setRefreshPage}
+                                        team={values.teamFilter}
+                                        standing={standingList}
+                                    />
                                 </Box>
                             ))}
                         </Box>

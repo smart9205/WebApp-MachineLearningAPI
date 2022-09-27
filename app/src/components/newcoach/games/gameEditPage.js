@@ -10,13 +10,12 @@ import CloseIcon from '@mui/icons-material/CloseOutlined';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
-const GameEditPage = ({ open, onClose, game, updateGameList }) => {
+const GameEditPage = ({ open, onClose, game, updateGameList, standingList }) => {
     const [values, setValues] = useState({
         image: '',
         mute: false,
         homeStanding: {},
-        awayStanding: {},
-        standingList: []
+        awayStanding: {}
     });
 
     const saveChanges = () => {
@@ -45,18 +44,17 @@ const GameEditPage = ({ open, onClose, game, updateGameList }) => {
     };
 
     useEffect(() => {
+        const home = standingList ? standingList.filter((item) => item.id === game.home_team_standing_id)[0] : null;
+        const away = standingList ? standingList.filter((item) => item.id === game.away_team_standing_id)[0] : null;
+
         setValues({
             ...values,
             image: game.image,
-            mute: game.mute_video
+            mute: game.mute_video,
+            homeStanding: home ?? {},
+            awayStanding: away ?? {}
         });
-    }, [game]);
-
-    useEffect(() => {
-        GameService.getTeamInitialStanding().then((res) => {
-            setValues({ ...values, standingList: res });
-        });
-    }, []);
+    }, [game, standingList]);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="2000px" maxheight="initial">
@@ -103,7 +101,7 @@ const GameEditPage = ({ open, onClose, game, updateGameList }) => {
                                 MenuProps={MenuProps}
                                 sx={{ outline: 'none', height: '36px', width: '200px', textAlign: 'center', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                             >
-                                {values.standingList.map((stand, index) => (
+                                {standingList.map((stand, index) => (
                                     <MenuItem key={index} value={stand}>
                                         {stand.name}
                                     </MenuItem>
@@ -131,7 +129,7 @@ const GameEditPage = ({ open, onClose, game, updateGameList }) => {
                                 MenuProps={MenuProps}
                                 sx={{ outline: 'none', height: '36px', width: '200px', textAlign: 'center', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                             >
-                                {values.standingList.map((stand, index) => (
+                                {standingList.map((stand, index) => (
                                     <MenuItem key={index} value={stand}>
                                         {stand.name}
                                     </MenuItem>
