@@ -4,11 +4,11 @@ import { Box, Typography } from '@mui/material';
 import MinusIcon from '@mui/icons-material/IndeterminateCheckBox';
 import AddIcon from '@mui/icons-material/AddBox';
 
-const GameTagListItem = ({ item, isSelected, displayAction, idx, isChecked, onChecked, onShowVideo, onChangeTime }) => {
-    const getPeriod = (id) => {
-        return id === 1 ? 'H1' : id === 2 ? 'H2' : 'OT';
-    };
+export function getPeriod(id) {
+    return id === 1 ? 'H1' : id === 2 ? 'H2' : 'OT';
+}
 
+const GameTagListItem = ({ item, isSelected, idx, isChecked, onChecked, onShowVideo, onChangeTime }) => {
     return (
         <Box
             sx={{

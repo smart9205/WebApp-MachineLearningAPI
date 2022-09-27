@@ -3,7 +3,6 @@ import React, { useEffect, useReducer, useState } from 'react';
 
 import UpIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
 
-import VideoPlayer from '../../../../coach/VideoPlayer';
 import GameService from '../../../../../services/game.service';
 import { gamePlayerCreateCommand } from '../../../components/utilities';
 import { XmlDataFilterGamePlayer } from '../../../components/xmldata';
@@ -14,6 +13,8 @@ import GameOverviewHeader from '../overview/header';
 import GamePlayerTagButtonList from './tagButtonList';
 import GamePlayerLogoList from './playerLogoList';
 import GameExportToEdits from '../overview/exportEdits';
+import { getPeriod } from '../overview/tagListItem';
+import GameVideoPlayer from '../../gameVideoPlayer';
 
 const ActionData = {
     Goal: { action_id: '1', action_type_id: null, action_result_id: '3' },
@@ -54,6 +55,15 @@ const GamePlayers = ({ game }) => {
         opponentTeamId: -1,
         selectAll: false,
         clickEventName: ''
+    });
+    const [gameTime, setGameTime] = useState({
+        period: 'H1',
+        time: 0,
+        video_url: '',
+        home_team_goals: 0,
+        away_team_goals: 0,
+        home_team_image: '',
+        away_team_image: ''
     });
     const [tagIndex, setTagIndex] = useState({});
     const [loadData, setLoadData] = useState(false);
@@ -183,6 +193,18 @@ const GamePlayers = ({ game }) => {
         setVideoData({ ...videoData, tagList: data });
     };
 
+    const changeGameTime = (array, idx) => {
+        setGameTime({
+            ...gameTime,
+            period: getPeriod(array[idx].period),
+            time: array[idx].time_in_game,
+            home_team_goals: array[idx].home_team_goal,
+            away_team_goals: array[idx].away_team_goal,
+            home_team_image: array[idx].home_team_logo,
+            away_team_image: array[idx].away_team_logo
+        });
+    };
+
     const getPlayTagList = (func) => {
         func.then((res) => {
             console.log('Game/Overview => ', res);
@@ -208,6 +230,7 @@ const GamePlayers = ({ game }) => {
                     })
                 });
                 setValues({ ...values, playList: res });
+                changeGameTime(res, 0);
                 setCheckArray([]);
                 res.map((item, index) => {
                     setCheckArray((oldRows) => [...oldRows, false]);
@@ -244,6 +267,7 @@ const GamePlayers = ({ game }) => {
             const opponent = team === game.home_team_id ? game.away_team_id : game.home_team_id;
 
             setValues({ ...values, teamId: team, opponentTeamId: opponent });
+            setGameTime({ ...gameTime, video_url: game.video_url });
             setLoading(false);
         });
     }, []);
@@ -254,6 +278,10 @@ const GamePlayers = ({ game }) => {
             setCheckArray((oldRows) => [...oldRows, values.selectAll]);
         });
     }, [values.selectAll]);
+
+    useEffect(() => {
+        if (values.playList.length > 0) changeGameTime(values.playList, curTeamTagIdx);
+    }, [curTeamTagIdx]);
 
     console.log('GamePlayer => ', values.playList, playerIds);
     // console.log(`GamePlayer => ${values.teamId}, ${values.opponentTeamId}`);
@@ -305,7 +333,7 @@ const GamePlayers = ({ game }) => {
                     onTime={handleChangeTime}
                 />
             </Box>
-            <VideoPlayer videoData={videoData} url={game.video_url ?? ''} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} isSpecial={true} />
+            <GameVideoPlayer videoData={videoData} game={gameTime} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />
             {exportHudl && <XmlDataFilterGamePlayer game={game} tagList={playerTagList} isOur={values.isOur} tag_name={tagIndex.name} setExportXML={setExportHudl} />}
             <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={playerTagList} isTeams={false} />
         </Box>
