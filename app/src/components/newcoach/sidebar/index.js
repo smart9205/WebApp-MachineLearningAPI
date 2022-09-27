@@ -33,12 +33,12 @@ const Sidebar = () => {
         setPathname(window.location.pathname);
 
         if (pathname.includes('/new_coach/dashboard')) setSelectIndex(0);
-        else if (pathname.includes('/new_coach/games')) setSelectIndex(1);
-        else if (pathname.includes('/new_coach/reports')) setSelectIndex(2);
-        else if (pathname.includes('/new_coach/edits')) setSelectIndex(3);
-        else if (pathname.includes('/new_coach/teams')) setSelectIndex(4);
-        else if (pathname.includes('/new_coach/opponents')) setSelectIndex(5);
-        else if (pathname.includes('/new_coach/leaders')) setSelectIndex(6);
+        else if (pathname.includes('/new_coach/games')) setSelectIndex(4);
+        else if (pathname.includes('/new_coach/reports')) setSelectIndex(6);
+        else if (pathname.includes('/new_coach/edits')) setSelectIndex(5);
+        else if (pathname.includes('/new_coach/teams')) setSelectIndex(2);
+        else if (pathname.includes('/new_coach/opponents')) setSelectIndex(3);
+        else if (pathname.includes('/new_coach/leaders')) setSelectIndex(1);
         else if (pathname.includes('/new_coach/players')) setSelectIndex(7);
         else if (pathname.includes('/new_coach/settings')) setSelectIndex(8);
 

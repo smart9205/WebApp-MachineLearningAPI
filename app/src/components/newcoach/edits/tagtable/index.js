@@ -47,7 +47,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }
 
         setTeamTagList(newList);
         update(newList);
-        deleteList.map(async (item) => await GameService.deleteEditClip(item.id));
+        GameService.deleteEditClip(deleteList.map((item) => item.id).join(','));
     };
 
     const handleCopy = async () => {

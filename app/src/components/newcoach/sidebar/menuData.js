@@ -16,19 +16,9 @@ export const menuData = [
         title: 'Dashboard'
     },
     {
-        path: '/new_coach/games',
-        icon: <GamesIcon />,
-        title: 'Games'
-    },
-    {
-        path: '/new_coach/reports',
-        icon: <ReportsIcon />,
-        title: 'Reports'
-    },
-    {
-        path: '/new_coach/edits',
-        icon: <EditsIcon />,
-        title: 'My Edits'
+        path: '/new_coach/leaders',
+        icon: <LeadersIcon />,
+        title: 'Leaders'
     },
     {
         path: '/new_coach/teams',
@@ -41,9 +31,19 @@ export const menuData = [
         title: 'Opponents'
     },
     {
-        path: '/new_coach/leaders',
-        icon: <LeadersIcon />,
-        title: 'Leaders'
+        path: '/new_coach/games',
+        icon: <GamesIcon />,
+        title: 'Games'
+    },
+    {
+        path: '/new_coach/edits',
+        icon: <EditsIcon />,
+        title: 'My Edits'
+    },
+    {
+        path: '/new_coach/reports',
+        icon: <ReportsIcon />,
+        title: 'Reports'
     },
     {
         path: '/new_coach/players',
