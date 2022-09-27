@@ -457,8 +457,8 @@ const deleteUserFolder = (id) => {
         return response.data;
     });
 };
-const deleteEditClip = (id) => {
-    return axios.delete(API_URL + `user_edits/edit_clip/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+const deleteEditClip = (clipIds) => {
+    return axios.delete(API_URL + `user_edits/edit_clip/${clipIds}`, { headers: authHeader(), data: { clipIds } }).then((response) => {
         return response.data;
     });
 };

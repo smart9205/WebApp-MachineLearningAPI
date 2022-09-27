@@ -93,7 +93,7 @@ module.exports = (app) => {
   );
 
   app.delete(
-    "/user_edits/edit_clip/:id",
+    "/user_edits/edit_clip/:clipIds",
     [authJwt.isAdminOrCoach],
     controller.deleteClip
   );

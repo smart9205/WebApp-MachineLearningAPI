@@ -46,8 +46,10 @@ function getChildIds(array) {
 }
 
 export function getTreeViewData(res) {
-    let resCopy = stableSort(res, getComparator('asc', 'id'));
+    let resCopy = [...res];
     let trees = [];
+
+    child_ids = [];
 
     for (let i = 0; i < resCopy.length; i += 1) {
         const child = getChilds(resCopy, resCopy[i].id);

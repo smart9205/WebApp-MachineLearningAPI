@@ -42,12 +42,12 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }
             return;
         }
 
-        const deleteList = teamTagList.filter((item) => checkArray.includes(item.id) === true);
+        const deleteList = teamTagList.filter((item) => checkArray.includes(item.id) === true).map((data) => data.id);
         const newList = teamTagList.filter((item) => checkArray.includes(item.id) === false);
 
         setTeamTagList(newList);
         update(newList);
-        GameService.deleteEditClip(deleteList.map((item) => item.id).join(','));
+        GameService.deleteEditClip(deleteList.join(','));
     };
 
     const handleCopy = async () => {
@@ -60,6 +60,13 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }
         }
 
         if (controlEdit === null) {
+            setDialogOpen(true);
+
+            return;
+        }
+
+        if (controlEdit.type !== 'edit') {
+            window.alert('You selected folder. Please select edit correctly.');
             setDialogOpen(true);
 
             return;
@@ -84,7 +91,6 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }
         }
 
         if (controlEdit === null) {
-            window.alert('Please select edit');
             setDialogOpen(true);
 
             return;
