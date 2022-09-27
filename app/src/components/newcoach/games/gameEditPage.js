@@ -19,6 +19,23 @@ const GameEditPage = ({ open, onClose, game, updateGameList, standingList }) => 
     });
 
     const saveChanges = () => {
+        const home = standingList.filter((item) => item.id === values.homeStanding.id)[0];
+        const away = standingList.filter((item) => item.id === values.awayStanding.id)[0];
+
+        updateGameList(
+            {
+                id: game.id,
+                image: values.image,
+                home_team_standing_id: home.id,
+                home_team_standing_image: home.image,
+                home_team_standing_name: home.name,
+                away_team_standing_id: away.id,
+                away_team_standing_image: away.image,
+                away_team_standing_name: away.name,
+                mute_video: values.mute
+            },
+            true
+        );
         GameService.updateGame({
             id: game.id,
             image: values.image,
@@ -26,7 +43,7 @@ const GameEditPage = ({ open, onClose, game, updateGameList, standingList }) => 
             league_id: game.league_id,
             home_team_id: game.home_team_id,
             home_team_standing_id: values.homeStanding.id,
-            away_team_id: game.away_team_time,
+            away_team_id: game.away_team_id,
             away_team_standing_id: values.awayStanding.id,
             date: game.date,
             video_url: game.video_url,
@@ -34,7 +51,6 @@ const GameEditPage = ({ open, onClose, game, updateGameList, standingList }) => 
             mute_video: values.mute
         }).then(() => {
             onClose();
-            updateGameList(true);
         });
     };
 

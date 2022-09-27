@@ -24,7 +24,6 @@ const Games = () => {
         seasonList: [],
         leagueList: []
     });
-    const [refreshPage, setRefreshPage] = useState(false);
     const [standingList, setStandingList] = useState([]);
 
     const handleTabClick = (index) => {
@@ -45,6 +44,33 @@ const Games = () => {
 
     const getDescGamesList = (array) => {
         return stableSort(array, getComparator('desc', 'date'));
+    };
+
+    const updateGameList = (item, isEdit) => {
+        let list = [...values.gamesList];
+
+        for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === item.id) {
+                if (isEdit) {
+                    list[i].image = item.image;
+                    list[i].mute_video = item.mute_video;
+                    list[i].home_team_standing_id = item.home_team_standing_id;
+                    list[i].home_team_standing_image = item.home_team_standing_image;
+                    list[i].home_team_standing_name = item.home_team_standing_name;
+                    list[i].away_team_standing_id = item.away_team_standing_id;
+                    list[i].away_team_standing_image = item.away_team_standing_image;
+                    list[i].away_team_standing_name = item.away_team_standing_name;
+                } else {
+                    list[i].video_url = item.video_url;
+                    list[i].mobile_video_url = item.mobile_video_url;
+                }
+
+                console.log('++++++++++ ', item, list[i]);
+                setValues({ ...values, gamesList: list });
+
+                return;
+            }
+        }
     };
 
     const getSeasonList = (array) => {
@@ -147,7 +173,7 @@ const Games = () => {
         GameService.getAllGamesByCoach(null, null, null, null).then((res) => {
             setValues({ ...values, gamesList: getDescGamesList(res), seasonList: getSeasonList(res), teamList: getTeamList(res), leagueList: getLeagueList(res), loading: false });
         });
-    }, [refreshPage]);
+    }, []);
 
     console.log('******** ', values.gamesList[0]);
 
@@ -270,7 +296,7 @@ const Games = () => {
                                         row={game}
                                         isHover={values.hoverIndex === index}
                                         isPending={values.curTab === 1}
-                                        updateList={setRefreshPage}
+                                        updateList={updateGameList}
                                         team={values.teamFilter}
                                         standing={standingList}
                                     />

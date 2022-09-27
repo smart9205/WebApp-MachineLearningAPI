@@ -34,19 +34,27 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
     const menuPopoverId = menuPopoverOpen ? 'simple-popover' : undefined;
 
     const saveChanges = () => {
+        updateList(
+            {
+                id: row.id,
+                video_url: rowData.videoURL,
+                mobile_video_url: rowData.mobileURL
+            },
+            false
+        );
         GameService.updateGame({
             id: row.id,
             image: row.image,
             season_id: row.season_id,
             league_id: row.league_id,
             home_team_id: row.home_team_id,
-            away_team_id: row.away_team_time,
+            home_team_standing_id: row.home_team_standing_id,
+            away_team_id: row.away_team_id,
+            away_team_standing_id: row.away_team_standing_id,
             date: row.date,
             video_url: rowData.videoURL,
             mobile_video_url: rowData.mobileURL,
             mute_video: row.mute_video
-        }).then((res) => {
-            updateList(true);
         });
     };
 
@@ -137,23 +145,23 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{row.league_name}</Typography>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flex: 1, textAlign: 'center' }}>{row.season_name}</Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', width: '400px' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', width: '500px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 3 }}>
                             <img src={row.home_team_image ? row.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_goals}</Typography>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_name}</Typography>
                         </Box>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d', flex: 1 }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d', flex: 2 }}>
                             {row.home_team_standing_name === 'Unknown' ? '' : row.home_team_standing_name}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', width: '400px' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', width: '500px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 3 }}>
                             <img src={row.away_team_image ? row.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_goals}</Typography>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_name}</Typography>
                         </Box>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d', flex: 1 }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d', flex: 2 }}>
                             {row.away_team_standing_name === 'Unknown' ? '' : row.away_team_standing_name}
                         </Typography>
                     </Box>
