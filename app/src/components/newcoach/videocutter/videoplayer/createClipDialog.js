@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, TextField } from '@mui/material';
 
-const EditCreateClipDialog = ({ open, onClose, setMode, onCreate, editNode }) => {
+const EditCreateClipDialog = ({ open, onClose, onCreate, editNode }) => {
     const [clipName, setClipName] = useState('');
 
     const handleCreateClip = () => {
@@ -15,11 +15,6 @@ const EditCreateClipDialog = ({ open, onClose, setMode, onCreate, editNode }) =>
                 onCreate(clipName);
             }
         }
-    };
-
-    const handleCancelCreate = () => {
-        onClose();
-        setMode('play');
     };
 
     return (
@@ -46,7 +41,7 @@ const EditCreateClipDialog = ({ open, onClose, setMode, onCreate, editNode }) =>
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => handleCancelCreate()}>Cancel</Button>
+                <Button onClick={() => onClose()}>Cancel</Button>
                 <Button variant="outlined" onClick={() => handleCreateClip()}>
                     Create
                 </Button>

@@ -11,8 +11,6 @@ const Edits = () => {
     const [curEdit, setCurEdit] = useState(null);
     const [tagLoading, setTagLoading] = useState(false);
     const [curTagIdx, setCurTagIdx] = useState(-1);
-    const [clipSaveEdit, setClipSaveEdit] = useState(null);
-    const [controlMode, setControlMode] = useState('play');
     const [videoData, setVideodata] = useState({
         idx: 0,
         autoPlay: true,
@@ -31,27 +29,20 @@ const Edits = () => {
         });
     };
 
-    const handleSelectEdit = (edit) => {
-        if (controlMode === 'play') setCurEdit(edit);
-        else setClipSaveEdit(edit);
-    };
-
     useEffect(() => {
-        if (controlMode === 'play') {
-            setEditTagList([]);
-            setCurTagIdx(-1);
-            setVideodata({ ...videoData, idx: 0 });
+        setEditTagList([]);
+        setCurTagIdx(-1);
+        setVideodata({ ...videoData, idx: 0 });
 
-            if (curEdit !== null && curEdit.type === 'edit') {
-                setTagLoading(true);
-                GameService.getEditClipsByUserEditId(curEdit.id).then((res) => {
-                    setEditTagList(res);
-                    setTagLoading(false);
-                    setCurTagIdx(0);
-                });
-            }
-        } else setClipSaveEdit(null);
-    }, [curEdit, controlMode]);
+        if (curEdit !== null && curEdit.type === 'edit') {
+            setTagLoading(true);
+            GameService.getEditClipsByUserEditId(curEdit.id).then((res) => {
+                setEditTagList(res);
+                setTagLoading(false);
+                setCurTagIdx(0);
+            });
+        }
+    }, [curEdit]);
 
     useEffect(() => {
         setCurTagIdx(0);
@@ -67,10 +58,10 @@ const Edits = () => {
             </Box>
             <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', overflowY: 'auto' }}>
                 <div style={{ display: 'flex', padding: '24px 0' }}>
-                    <EditFolderTreeView setEdit={handleSelectEdit} isMain={true} entireHeight="95%" treeHeight="90%" />
+                    <EditFolderTreeView setEdit={setCurEdit} isMain={true} entireHeight="95%" treeHeight="90%" />
                     <EditTagTable loading={tagLoading} tagList={editTagList} setIdx={handleClickRow} selected={curTagIdx} sort={handleSort} name={curEdit?.name ?? ''} update={setEditTagList} />
                 </div>
-                <EditVideoPlayer videoData={videoData} tagList={editTagList} onChangeClip={setCurTagIdx} onMode={setControlMode} saveEdit={clipSaveEdit} drawOpen={true} />
+                <EditVideoPlayer videoData={videoData} tagList={editTagList} onChangeClip={setCurTagIdx} drawOpen={true} />
             </Box>
         </Box>
     );

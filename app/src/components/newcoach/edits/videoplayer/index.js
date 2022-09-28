@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-import { IconButton, Switch, FormControlLabel, Button } from '@mui/material';
+import { IconButton, Switch, FormControlLabel } from '@mui/material';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -11,15 +11,10 @@ import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
-import SpaceBarIcon from '@mui/icons-material/SpaceBar';
 
 import { toSecond } from '../../components/utilities';
 import gameService from '../../../../services/game.service';
 import GameImage from '../../../../assets/MyEdits.png';
-import { toHHMMSS } from '../../../../common/utilities';
-import EditCreateClipDialog from './createClipDialog';
-import EditConfirmMessage from './confirmMessage';
-import EditGameSelectDialog from './gameDialog';
 // import VIDEO from '../../assets/1.mp4'
 
 const styles = {
@@ -49,7 +44,7 @@ const styles = {
         backgroundColor: '#80808069'
     }
 };
-export default function EditVideoPlayer({ videoData, tagList, onChangeClip, onMode, saveEdit, drawOpen }) {
+export default function EditVideoPlayer({ videoData, tagList, onChangeClip, drawOpen }) {
     const handle = useFullScreenHandle();
     const { autoPlay, idx, videoPlay, cnt = null } = videoData;
 
@@ -61,20 +56,6 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, onMo
     const [videoList, setVideoList] = useState([]);
     const [canNext, setCanNext] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
-    const [controlMode, setControlMode] = useState('play');
-    const [createOpen, setCreateOpen] = useState(false);
-    const [confirmOpen, setConfirmOpen] = useState(false);
-    const [gamesOpen, setGamesOpen] = useState(false);
-    const [selectedGame, setSelectedGame] = useState(null);
-    const [gameList, setGameList] = useState([]);
-    const [newClip, setNewClip] = useState({
-        start_time: '',
-        end_time: '',
-        edit_id: 0,
-        sort: 0,
-        game_id: 0,
-        name: ''
-    });
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec);
 
@@ -89,23 +70,21 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, onMo
     const onProgress = (current) => {
         setCurrentTime(current);
 
-        if (controlMode === 'play') {
-            const startTime = toSecond(tagList[curIdx]?.start_time);
-            const endTime = toSecond(tagList[curIdx]?.end_time);
+        const startTime = toSecond(tagList[curIdx]?.start_time);
+        const endTime = toSecond(tagList[curIdx]?.end_time);
 
-            if (current < startTime) seekTo(startTime);
+        if (current < startTime) seekTo(startTime);
 
-            if (current > endTime) {
-                if (curIdx < tagList.length - 1) {
-                    if (canNext) {
-                        const video = videoList.filter((item) => item.id === tagList[curIdx + 1].game_id).map((item) => item.url)[0];
+        if (current > endTime) {
+            if (curIdx < tagList.length - 1) {
+                if (canNext) {
+                    const video = videoList.filter((item) => item.id === tagList[curIdx + 1].game_id).map((item) => item.url)[0];
 
-                        if (video !== videoURL) setVideoURL(video);
+                    if (video !== videoURL) setVideoURL(video);
 
-                        setCurIdx((c) => c + 1);
-                    } else setPlay(false);
-                } else PlayVideo(1);
-            }
+                    setCurIdx((c) => c + 1);
+                } else setPlay(false);
+            } else PlayVideo(1);
         }
     };
 
@@ -134,56 +113,6 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, onMo
     const handlePlay = () => {
         setPlay(true);
     };
-
-    const handleSetMode = (mode) => {
-        setControlMode(mode);
-        onMode(mode);
-
-        if (mode === 'cutter') setGamesOpen(true);
-    };
-
-    useEffect(async () => {
-        await gameService.getAllGamesByCoach(null, null, null, null).then((res) => {
-            setGameList(res.filter((game) => game.video_url.toLowerCase() !== 'no video'));
-        });
-    }, []);
-
-    useEffect(async () => {
-        if (selectedGame === null) {
-            setVideoURL('');
-            setPlay(false);
-        }
-
-        if (controlMode === 'cutter') {
-            if (selectedGame !== null && videoURL === '') {
-                if (selectedGame.video_url.startsWith('https://www.youtube.com')) {
-                    await gameService.getNewStreamURL(selectedGame.video_url).then((res) => {
-                        setVideoURL(res);
-                    });
-                } else setVideoURL(selectedGame.video_url);
-
-                setNewClip({ ...newClip, game_id: selectedGame.id });
-                seekTo(0);
-                setPlay(true);
-            }
-
-            if (saveEdit !== null && saveEdit.type === 'edit') {
-                await gameService.getBiggestSortNumber('Clip', saveEdit.id).then((res) => {
-                    const bigSort = res['biggest_order_num'] === null ? 0 : res['biggest_order_num'];
-
-                    setNewClip({ ...newClip, sort: bigSort + 1, edit_id: saveEdit.id });
-                });
-            }
-
-            if (newClip.name !== '') {
-                await gameService.addNewEditClips({ id: saveEdit.id, rows: [newClip] }).then((res) => {
-                    handleSetMode('play');
-                    setNewClip({ ...newClip, name: '' });
-                    setSelectedGame(null);
-                });
-            }
-        }
-    }, [selectedGame, saveEdit, newClip]);
 
     useEffect(() => {
         setVideoList([]);
@@ -227,13 +156,8 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, onMo
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [curIdx]);
 
-    console.log('EditVideo => ', saveEdit, newClip);
-
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '40px', width: '100%' }}>
-            <Button variant="contained" sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' }, width: '200px' }} disabled={gameList.length === 0} onClick={() => handleSetMode('cutter')}>
-                Cutter
-            </Button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
             <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
                 <FullScreen handle={handle}>
                     <div style={{ width: drawOpen ? '100%' : '80%', margin: 'auto' }}>
@@ -259,18 +183,9 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, onMo
                     </div>
 
                     <div style={styles.buttonBox}>
-                        {controlMode === 'play' && (
-                            <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
-                                <SkipPreviousSharpIcon color="white" />
-                            </IconButton>
-                        )}
-
-                        {controlMode === 'cutter' && (
-                            <IconButton style={styles.button} onClick={() => setNewClip({ ...newClip, start_time: toHHMMSS(currentTime) })}>
-                                <SpaceBarIcon color="white" sx={{ transform: 'rotate(90deg)' }} />
-                            </IconButton>
-                        )}
-
+                        <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
+                            <SkipPreviousSharpIcon color="white" />
+                        </IconButton>
                         <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
                             <FastRewindIcon color="white" />
                         </IconButton>
@@ -282,25 +197,9 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, onMo
                         <IconButton style={styles.button} onClick={() => fastVideo(3)}>
                             <FastForwardIcon color="white" />
                         </IconButton>
-
-                        {controlMode === 'cutter' && (
-                            <IconButton
-                                style={styles.button}
-                                onClick={() => {
-                                    setPlay(false);
-                                    setNewClip({ ...newClip, end_time: toHHMMSS(currentTime) });
-                                    setConfirmOpen(true);
-                                }}
-                            >
-                                <SpaceBarIcon color="white" sx={{ transform: 'rotate(-90deg)' }} />
-                            </IconButton>
-                        )}
-
-                        {controlMode === 'play' && (
-                            <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
-                                <SkipNextSharpIcon />
-                            </IconButton>
-                        )}
+                        <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
+                            <SkipNextSharpIcon />
+                        </IconButton>
 
                         {autoPlay && <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
 
@@ -309,22 +208,6 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, onMo
                         </IconButton>
                     </div>
                 </FullScreen>
-                <EditConfirmMessage
-                    open={confirmOpen}
-                    onClose={(v) => {
-                        setConfirmOpen(false);
-
-                        if (v) setCreateOpen(true);
-                    }}
-                />
-                <EditCreateClipDialog
-                    open={createOpen}
-                    onClose={() => setCreateOpen(false)}
-                    setMode={handleSetMode}
-                    onCreate={(new_name) => setNewClip({ ...newClip, name: new_name })}
-                    editNode={saveEdit}
-                />
-                <EditGameSelectDialog open={gamesOpen} onClose={() => setGamesOpen(false)} gameList={gameList} setGame={setSelectedGame} />
             </div>
         </div>
     );
