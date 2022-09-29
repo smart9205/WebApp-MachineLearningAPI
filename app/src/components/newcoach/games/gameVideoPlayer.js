@@ -177,11 +177,17 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>{`${game.period} - ${game.time}'`}</Typography>
                     </div>
-                    <img src={game.home_team_image ? game.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}>{`${game.home_team_goals} : ${game.away_team_goals}`}</Typography>
-                    </div>
-                    <img src={game.away_team_image ? game.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                    {game.home_team_goals !== undefined && (
+                        <>
+                            <img src={game.home_team_image ? game.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
+                                <Typography
+                                    sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}
+                                >{`${game.home_team_goals} : ${game.away_team_goals}`}</Typography>
+                            </div>
+                            <img src={game.away_team_image ? game.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                        </>
+                    )}
                 </div>
                 <div style={styles.buttonBox}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{getTime()}</Typography>

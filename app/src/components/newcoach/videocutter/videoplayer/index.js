@@ -18,6 +18,7 @@ import { toHHMMSS } from '../../../../common/utilities';
 import EditCreateClipDialog from './createClipDialog';
 import EditConfirmMessage from './confirmMessage';
 import { MenuProps } from '../../components/common';
+import { useHotkeys } from 'react-hotkeys-hook';
 // import VIDEO from '../../assets/1.mp4'
 
 const styles = {
@@ -48,7 +49,6 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
     const [play, setPlay] = useState(false);
     const [ready, setReady] = useState(false);
     const [videoURL, setVideoURL] = useState('');
-    const [canNext, setCanNext] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
     const [createOpen, setCreateOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
@@ -56,6 +56,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
     const [gameList, setGameList] = useState([]);
     const [duration, setDuration] = useState(0);
     const [position, setPosition] = useState(0);
+    const [playRate, setPlayRate] = useState(1);
     const [newClip, setNewClip] = useState({
         start_time: '',
         end_time: '',
@@ -64,6 +65,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
         game_id: 0,
         name: ''
     });
+    const HOTKEY_OPTION = { enableOnContentEditable: true };
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec);
 
@@ -82,10 +84,20 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
         return `${array[2]} / ${array[1]} / ${array[0]}`;
     };
 
-    const handleSelectChange = (e) => {
+    const handleSelectChange = async (e) => {
         const game = gameList.filter((item) => item.id === e.target.value)[0];
 
         setSelectedGame(game);
+
+        if (game.video_url.startsWith('https://www.youtube.com')) {
+            await gameService.getNewStreamURL(game.video_url).then((res) => {
+                setVideoURL(res);
+            });
+        } else setVideoURL(game.video_url);
+
+        setNewClip({ ...newClip, game_id: game.id });
+        seekTo(0);
+        setPlay(true);
     };
 
     const handleSetName = (name) => {
@@ -94,9 +106,68 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
         if (saveEdit === null || (saveEdit && saveEdit.type === 'folder')) setConfirmOpen(true);
     };
 
+    const handleQS = () => {
+        if (currentTime <= 15) setNewClip({ ...newClip, start_time: toHHMMSS(0), end_time: toHHMMSS(currentTime) });
+        else setNewClip({ ...newClip, start_time: toHHMMSS(currentTime - 15), end_time: toHHMMSS(currentTime) });
+
+        setPlay(false);
+        setCreateOpen(true);
+    };
+
+    useHotkeys(
+        'i',
+        () => {
+            if (saveEdit && saveEdit.type === 'edit') setNewClip({ ...newClip, start_time: toHHMMSS(currentTime) });
+        },
+        HOTKEY_OPTION
+    );
+    useHotkeys(
+        'o',
+        () => {
+            if (saveEdit && saveEdit.type === 'edit') setNewClip({ ...newClip, end_time: toHHMMSS(currentTime) });
+        },
+        HOTKEY_OPTION
+    );
+    useHotkeys(
+        'n',
+        () => {
+            if (saveEdit && saveEdit.type === 'edit') setPlayRate(1);
+        },
+        HOTKEY_OPTION
+    );
+    useHotkeys(
+        'm',
+        () => {
+            if (saveEdit && saveEdit.type === 'edit') setPlayRate((s) => s + 0.5);
+        },
+        HOTKEY_OPTION
+    );
+    useHotkeys(
+        'b',
+        () => {
+            if (saveEdit && saveEdit.type === 'edit') setPlayRate(0.5);
+        },
+        HOTKEY_OPTION
+    );
+    useHotkeys(
+        'q',
+        () => {
+            if (saveEdit && saveEdit.type === 'edit') handleQS();
+        },
+        HOTKEY_OPTION
+    );
+
     useEffect(async () => {
+        let array = [];
+
         await gameService.getAllGamesByCoach(null, null, null, null).then((res) => {
-            setGameList(res.filter((game) => game.video_url.toLowerCase() !== 'no video'));
+            array = res.filter((game) => game.video_url.toLowerCase() !== 'no video');
+        });
+        await gameService.getAdditionalGames(null, null, null, null).then((res) => {
+            const filt = res.filter((game) => game.video_url.toLowerCase() !== 'no video');
+
+            array = [...array, ...filt];
+            setGameList(array);
         });
     }, []);
 
@@ -106,36 +177,18 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
             setPlay(false);
         }
 
-        if (selectedGame !== null && videoURL === '') {
-            if (selectedGame.video_url.startsWith('https://www.youtube.com')) {
-                await gameService.getNewStreamURL(selectedGame.video_url).then((res) => {
-                    setVideoURL(res);
-                });
-            } else setVideoURL(selectedGame.video_url);
+        if (saveEdit && saveEdit.type === 'edit' && newClip.name !== '' && newClip.edit_id !== 0) {
+            let bigSort = 0;
 
-            setNewClip({ ...newClip, game_id: selectedGame.id });
-            seekTo(0);
-
-            if (canNext) setPlay(true);
-        }
-
-        if (saveEdit !== null && saveEdit.type === 'edit' && newClip.name !== '' && newClip.edit_id !== 0) {
+            await gameService.getBiggestSortNumber('Clip', saveEdit.id).then((res) => {
+                bigSort = res['biggest_order_num'] === null ? 0 : res['biggest_order_num'];
+            });
             await gameService.addNewEditClips({ id: saveEdit.id, rows: [newClip] }).then((res) => {
-                setNewClip({ ...newClip, name: '' });
+                setNewClip({ ...newClip, name: '', sort: bigSort + 1, edit_id: saveEdit.id });
                 setPlay(true);
             });
         }
-    }, [selectedGame, newClip, ready]);
-
-    useEffect(async () => {
-        if (saveEdit !== null && saveEdit.type === 'edit') {
-            await gameService.getBiggestSortNumber('Clip', saveEdit.id).then((res) => {
-                const bigSort = res['biggest_order_num'] === null ? 0 : res['biggest_order_num'];
-
-                setNewClip({ ...newClip, sort: bigSort + 1, edit_id: saveEdit.id });
-            });
-        }
-    }, [saveEdit]);
+    }, [selectedGame, newClip, ready, saveEdit]);
 
     console.log('EditVideo => ', saveEdit, newClip);
 
@@ -176,6 +229,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
                                     onReady={() => setReady(true)}
                                     onProgress={(p) => setCurrentTime(p.playedSeconds)}
                                     onDuration={(p) => setDuration(p)}
+                                    playbackRate={playRate}
                                     playing={play}
                                     controls={false}
                                     width="100%"
@@ -225,20 +279,37 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
                         />
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingLeft: '40px' }}>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{toHHMMSS(currentTime)}</Typography>
-                            <IconButton style={styles.button} onClick={() => setNewClip({ ...newClip, start_time: toHHMMSS(currentTime) })}>
+                            <IconButton
+                                style={styles.button}
+                                onClick={() => setNewClip({ ...newClip, start_time: toHHMMSS(currentTime) })}
+                                disabled={saveEdit === null || (saveEdit && saveEdit.type === 'folder')}
+                            >
                                 <SpaceBarIcon color="white" sx={{ transform: 'rotate(90deg)' }} />
                             </IconButton>
                             <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
                                 <FastRewindIcon color="white" />
                             </IconButton>
-                            <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
-                                {play ? <PauseIcon /> : <PlayArrowIcon />}
+                            <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate(0.5)}>
+                                Slow
+                            </Button>
+                            <IconButton
+                                onClick={() => {
+                                    if (playRate === 1) setPlay((p) => !p);
+                                    else setPlayRate(1);
+                                }}
+                                style={styles.button}
+                            >
+                                {play && playRate === 1 ? <PauseIcon /> : <PlayArrowIcon />}
                             </IconButton>
+                            <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate((s) => s + 0.5)}>
+                                Fast
+                            </Button>
                             <IconButton style={styles.button} onClick={() => fastVideo(3)}>
                                 <FastForwardIcon color="white" />
                             </IconButton>
                             <IconButton
                                 style={styles.button}
+                                disabled={saveEdit === null || (saveEdit && saveEdit.type === 'folder')}
                                 onClick={() => {
                                     setNewClip({ ...newClip, end_time: toHHMMSS(currentTime) });
                                     setPlay(false);
@@ -249,15 +320,9 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
                             </IconButton>
                             <Button
                                 variant="outlined"
-                                disabled={(newClip.start_time === '' && newClip.end_time === '' && newClip.edit_id === 0) || newClip.edit_id === 0}
+                                disabled={saveEdit === null || (saveEdit && saveEdit.type === 'folder')}
                                 sx={{ width: '50px', color: 'white', fontSize: '16px' }}
-                                onClick={() => {
-                                    if (currentTime <= 15) setNewClip({ ...newClip, start_time: toHHMMSS(0), end_time: toHHMMSS(currentTime) });
-                                    else setNewClip({ ...newClip, start_time: toHHMMSS(currentTime - 15), end_time: toHHMMSS(currentTime) });
-
-                                    setPlay(false);
-                                    setCreateOpen(true);
-                                }}
+                                onClick={() => handleQS()}
                             >
                                 QS
                             </Button>

@@ -197,10 +197,10 @@ const OpponentPlayers = ({ game }) => {
             ...gameTime,
             period: getPeriod(array[idx].period),
             time: array[idx].time_in_game,
-            home_team_goals: array[idx].home_team_goal,
-            away_team_goals: array[idx].away_team_goal,
-            home_team_image: array[idx].home_team_logo,
-            away_team_image: array[idx].away_team_logo
+            home_team_goals: array[idx].home_team_goal ?? undefined,
+            away_team_goals: array[idx].away_team_goal ?? undefined,
+            home_team_image: array[idx].home_team_logo ?? undefined,
+            away_team_image: array[idx].away_team_logo ?? undefined
         });
     };
 
@@ -229,11 +229,12 @@ const OpponentPlayers = ({ game }) => {
                     })
                 });
                 setValues({ ...values, playList: res });
-                changeGameTime(res, 0);
                 setCheckArray([]);
                 res.map((item, index) => {
                     setCheckArray((oldRows) => [...oldRows, false]);
                 });
+
+                if (res.length > 0) changeGameTime(res, 0);
             }
         });
     };
