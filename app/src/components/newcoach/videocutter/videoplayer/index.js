@@ -35,7 +35,7 @@ const styles = {
         position: 'absolute',
         bottom: 5,
         left: 0,
-        paddingLeft: '11%',
+        paddingLeft: '40px',
         minWidth: 300,
         display: 'flex',
         alignItems: 'center',
@@ -138,7 +138,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
     console.log('EditVideo => ', saveEdit, newClip);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '28px', width: '100%' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '28px', width: '100%', marginLeft: '10%' }}>
             <Select
                 value={selectedGame?.id ?? 0}
                 onChange={handleSelectChange}
@@ -161,7 +161,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
             </Select>
             <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
                 <FullScreen handle={handle}>
-                    <div style={{ width: drawOpen ? '100%' : '80%', margin: 'auto' }}>
+                    <div style={{ width: drawOpen ? '100%' : '90%' }}>
                         <div className="player-wrapper">
                             {videoURL !== '' && (
                                 <ReactPlayer

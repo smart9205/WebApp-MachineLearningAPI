@@ -97,7 +97,7 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
         }
 
         if (current > endTime) {
-            if (tagList.length <= curIdx) {
+            if (tagList.length - 1 <= curIdx) {
                 // last tag
                 PlayVideo(0);
             } else if (canNext) {
@@ -111,7 +111,7 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
 
     const PlayVideo = (num) => {
         let index;
-        if (curIdx + num >= tagList.length) {
+        if (curIdx + num >= tagList.length - 1) {
             index = 0;
         } else if (curIdx + num < 0) {
             index = tagList.length - 1;

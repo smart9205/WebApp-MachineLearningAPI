@@ -16,7 +16,7 @@ const VideoCutter = () => {
                 <div style={{ display: 'flex', padding: '12px 0' }}>
                     <EditFolderTreeView setEdit={setCurEdit} isMain={true} entireHeight="95%" treeHeight="90%" />
                 </div>
-                <VCVideoPlayer saveEdit={curEdit} drawOpen={true} />
+                <VCVideoPlayer saveEdit={curEdit} drawOpen={false} />
             </Box>
         </Box>
     );

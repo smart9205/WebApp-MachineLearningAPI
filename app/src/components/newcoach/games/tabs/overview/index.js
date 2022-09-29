@@ -60,6 +60,7 @@ const GameOverview = ({ game }) => {
 
     const handleShowPopover = (idx) => (e) => {
         setTagIndex(idx);
+        setGameTime({ ...gameTime, period: 'H1', time: 0, home_team_goals: 0, away_team_goals: 0, home_team_image: '', away_team_image: '' });
         setMenuAnchorEl(e.currentTarget);
     };
 

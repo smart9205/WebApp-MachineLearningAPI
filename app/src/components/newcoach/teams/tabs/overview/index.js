@@ -14,6 +14,7 @@ import GameService from '../../../../../services/game.service';
 import TeamVideoPlayer from './teamVideoPlayer';
 import GameTagButtonList from '../../../games/tabs/overview/tagButtonList';
 import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
+import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 
 const TeamOverview = ({ games, teamname, teamId }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
@@ -30,6 +31,14 @@ const TeamOverview = ({ games, teamname, teamId }) => {
         opponentTeamId: -1,
         selectAll: false,
         clickEventName: ''
+    });
+    const [gameTime, setGameTime] = useState({
+        period: 'H1',
+        time: 0,
+        home_team_goals: 0,
+        away_team_goals: 0,
+        home_team_image: '',
+        away_team_image: ''
     });
     const [tagIndex, setTagIndex] = useState('');
     const [loadData, setLoadData] = useState(false);
@@ -58,6 +67,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
         }
 
         setTagIndex(idx);
+        setGameTime({ ...gameTime, period: 'H1', time: 0, home_team_goals: 0, away_team_goals: 0, home_team_image: '', away_team_image: '' });
         setMenuAnchorEl(e.currentTarget);
     };
 
@@ -160,6 +170,18 @@ const TeamOverview = ({ games, teamname, teamId }) => {
         setVideoData({ ...videoData, tagList: data });
     };
 
+    const changeGameTime = (array, idx) => {
+        setGameTime({
+            ...gameTime,
+            period: getPeriod(array[idx].period),
+            time: array[idx].time_in_game,
+            home_team_goals: array[idx].home_team_goal ?? 0,
+            away_team_goals: array[idx].away_team_goal ?? 0,
+            home_team_image: array[idx].home_team_logo ?? '',
+            away_team_image: array[idx].away_team_logo ?? ''
+        });
+    };
+
     const getPlayTagList = (func) => {
         func.then((res) => {
             console.log('Game/Overview => ', res);
@@ -183,6 +205,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
                     tagList: res
                 });
                 setValues({ ...values, playList: res });
+                changeGameTime(res, 0);
                 setCheckArray([]);
                 res.map((item, index) => {
                     setCheckArray((oldRows) => [...oldRows, false]);
@@ -274,6 +297,10 @@ const TeamOverview = ({ games, teamname, teamId }) => {
         });
     }, [values.selectAll]);
 
+    useEffect(() => {
+        if (values.playList.length > 0) changeGameTime(values.playList, curTeamTagIdx);
+    }, [curTeamTagIdx]);
+
     console.log('TeamOverview => ', values.playList, gameIds);
 
     return (
@@ -319,14 +346,13 @@ const TeamOverview = ({ games, teamname, teamId }) => {
                     expand={values.expandButtons}
                     tagList={values.playList}
                     curTagListIdx={curTeamTagIdx}
-                    isAction={tagIndex === 'Goals'}
                     checkArr={checkArray}
                     onChecked={handleCheckChange}
                     onVideo={handleShowVideo}
                     onTime={handleChangeTime}
                 />
             </Box>
-            <TeamVideoPlayer videoData={videoData} games={games} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />
+            <TeamVideoPlayer videoData={videoData} games={games} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} gameTime={gameTime} />
             <TeamGameSelectDialog open={dialogOpen} onClose={() => setDialogOpen(false)} gameList={games} setIds={setGameIds} />
             <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} />
         </Box>

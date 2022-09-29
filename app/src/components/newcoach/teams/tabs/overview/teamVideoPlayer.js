@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-import { IconButton, Switch, FormControlLabel } from '@mui/material';
+import { IconButton, Switch, FormControlLabel, Typography } from '@mui/material';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -15,6 +15,7 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import { toSecond } from '../../../components/utilities';
 import gameService from '../../../../../services/game.service';
 import GameImage from '../../../../../assets/TeamOverview.png';
+import { TEAM_ICON_DEFAULT } from '../../../../../common/staticData';
 // import VIDEO from '../../assets/1.mp4'
 
 const styles = {
@@ -32,19 +33,18 @@ const styles = {
         position: 'absolute',
         bottom: 5,
         left: 0,
-        paddingInline: '11%',
         minWidth: 300,
         display: 'flex',
-        gap: '1rem',
         alignItems: 'center',
-        justifyContent: 'space-evenly'
+        gap: '1rem',
+        paddingLeft: '16px'
     },
     button: {
         color: 'white',
         backgroundColor: '#80808069'
     }
 };
-export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOpen }) {
+export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOpen, gameTime }) {
     const handle = useFullScreenHandle();
     const { tagList, autoPlay, idx, videoPlay, cnt = null } = videoData;
 
@@ -146,6 +146,18 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
         setPlay(true);
     };
 
+    const getTime = () => {
+        let hour = Math.floor(currentTime / 3600);
+        let minute = Math.floor((currentTime - hour * 3600) / 60);
+        let second = Math.floor(currentTime - hour * 3600 - minute * 60);
+
+        if (hour < 10) hour = '0' + hour;
+        if (minute < 10) minute = '0' + minute;
+        if (second < 10) second = '0' + second;
+
+        return hour + ':' + minute + ':' + second;
+    };
+
     console.log('TeamVideo => ', curIdx, videoURL);
 
     return (
@@ -173,7 +185,21 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                     </div>
                 </div>
 
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>{`${gameTime.period} - ${gameTime.time}'`}</Typography>
+                    </div>
+                    <img src={gameTime.home_team_image ? gameTime.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '150px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}>
+                            {`${gameTime.home_team_goals} : ${gameTime.away_team_goals}`}
+                        </Typography>
+                    </div>
+                    <img src={gameTime.away_team_image ? gameTime.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                </div>
+
                 <div style={styles.buttonBox}>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{getTime()}</Typography>
                     <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
                         <SkipPreviousSharpIcon color="white" />
                     </IconButton>

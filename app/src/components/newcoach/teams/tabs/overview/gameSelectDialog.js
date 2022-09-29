@@ -32,14 +32,14 @@ const TeamGameSelectDialog = ({ open, onClose, gameList, setIds }) => {
         <Dialog open={open} onClose={handleCloseDialog} width="550px">
             <DialogTitle>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Checkbox value={selectAll} onChange={(e) => setSelectAll(e.target.checked)} />
+                    <Checkbox checked={selectAll} onChange={(e) => setSelectAll(e.target.checked)} />
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Select All</Typography>
                 </Box>
             </DialogTitle>
             <DialogContent style={{ display: 'flex', flexDirection: 'column', maxHeight: '30vh', overflowY: 'auto' }}>
                 {gameList.map((game, index) => (
                     <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Checkbox value={checkGames[index]} checked={checkGames[index] ? true : false} onChange={(e) => setCheckGames({ ...checkGames, [index]: e.target.checked })} />
+                        <Checkbox checked={checkGames[index]} onChange={(e) => setCheckGames({ ...checkGames, [index]: e.target.checked })} />
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>
                             {`${game.home_team_name}  VS  ${game.away_team_name} - `}
                         </Typography>

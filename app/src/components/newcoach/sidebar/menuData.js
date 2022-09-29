@@ -8,6 +8,7 @@ import TeamsIcon from '@mui/icons-material/GroupsOutlined';
 import PlayersIcon from '@mui/icons-material/PersonOutlineOutlined';
 import EditsIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import LeadersIcon from '@mui/icons-material/PeopleAltOutlined';
+import TheatersIcon from '@mui/icons-material/Theaters';
 
 export const menuData = [
     {
@@ -39,6 +40,11 @@ export const menuData = [
         path: '/new_coach/edits',
         icon: <EditsIcon />,
         title: 'My Edits'
+    },
+    {
+        path: '/new_coach/video_cutter',
+        icon: <TheatersIcon />,
+        title: 'Video Cutter'
     },
     {
         path: '/new_coach/reports',
