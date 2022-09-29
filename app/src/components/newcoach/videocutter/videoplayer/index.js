@@ -119,9 +119,10 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
             if (canNext) setPlay(true);
         }
 
-        if (saveEdit !== null && saveEdit.type === 'edit' && newClip.name !== '') {
+        if (saveEdit !== null && saveEdit.type === 'edit' && newClip.name !== '' && newClip.edit_id !== 0) {
             await gameService.addNewEditClips({ id: saveEdit.id, rows: [newClip] }).then((res) => {
                 setNewClip({ ...newClip, name: '' });
+                setPlay(true);
             });
         }
     }, [selectedGame, newClip, ready]);
@@ -248,7 +249,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
                             </IconButton>
                             <Button
                                 variant="outlined"
-                                disabled={newClip.edit_id === 0 && newClip.start_time === '' && newClip.end_time === ''}
+                                disabled={(newClip.start_time === '' && newClip.end_time === '' && newClip.edit_id === 0) || newClip.edit_id === 0}
                                 sx={{ width: '50px', color: 'white', fontSize: '16px' }}
                                 onClick={() => {
                                     if (currentTime <= 15) setNewClip({ ...newClip, start_time: toHHMMSS(0), end_time: toHHMMSS(currentTime) });
