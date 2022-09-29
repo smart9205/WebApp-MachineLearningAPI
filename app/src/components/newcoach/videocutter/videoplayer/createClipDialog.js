@@ -7,14 +7,11 @@ const EditCreateClipDialog = ({ open, onClose, onCreate, editNode }) => {
     const handleCreateClip = () => {
         if (editNode === null) window.alert('You did not select any Edit to save new clip. Please select Edit.');
         else {
-            if (editNode.type === 'folder') {
-                window.alert('You selected Folder. Please select correctly Edit to save new clip.');
-                onClose();
-            } else {
-                onClose();
-                onCreate(clipName);
-            }
+            if (editNode.type === 'folder') window.alert('You selected Folder. Please select correctly Edit to save new clip.');
+            else onCreate(clipName);
         }
+
+        onClose();
     };
 
     return (
@@ -35,7 +32,6 @@ const EditCreateClipDialog = ({ open, onClose, onCreate, editNode }) => {
                     label=""
                     autoFocus
                     inputProps={{ 'aria-label': 'Without label' }}
-                    placeholder="New Folder or Edit Name"
                     variant="outlined"
                     sx={{ borderRadius: '10px', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                 />

@@ -3,14 +3,15 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 
 const EditConfirmMessage = ({ open, onClose }) => {
     return (
-        <Dialog open={open} onClose={() => onClose(false)}>
+        <Dialog open={open} onClose={onClose}>
             <DialogTitle>Confirm</DialogTitle>
             <DialogContent>
-                <DialogContentText>Did you select correctly Edit to save new clip?</DialogContentText>
+                <DialogContentText>You did not select edit.</DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => onClose(true)}>Yes</Button>
-                <Button onClick={() => onClose(false)}>No</Button>
+                <Button variant="outlined" onClick={(e) => onClose()}>
+                    OK
+                </Button>
             </DialogActions>
         </Dialog>
     );

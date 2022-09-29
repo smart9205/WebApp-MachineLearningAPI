@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-import { IconButton, Switch, FormControlLabel, Select, MenuItem, Typography } from '@mui/material';
+import { IconButton, Slider, Select, MenuItem, Typography, Button } from '@mui/material';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -13,7 +13,7 @@ import SpaceBarIcon from '@mui/icons-material/SpaceBar';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
 import gameService from '../../../../services/game.service';
-import GameImage from '../../../../assets/MyEdits.png';
+import GameImage from '../../../../assets/VideoCutter.png';
 import { toHHMMSS } from '../../../../common/utilities';
 import EditCreateClipDialog from './createClipDialog';
 import EditConfirmMessage from './confirmMessage';
@@ -34,13 +34,8 @@ const styles = {
     buttonBox: {
         position: 'absolute',
         bottom: 5,
-        left: 0,
-        paddingLeft: '40px',
-        minWidth: 300,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        gap: '1rem'
+        left: 8,
+        width: '88%'
     },
     button: {
         color: 'white',
@@ -60,6 +55,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
     const [selectedGame, setSelectedGame] = useState(null);
     const [gameList, setGameList] = useState([]);
     const [duration, setDuration] = useState(0);
+    const [position, setPosition] = useState(0);
     const [newClip, setNewClip] = useState({
         start_time: '',
         end_time: '',
@@ -92,6 +88,12 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
         setSelectedGame(game);
     };
 
+    const handleSetName = (name) => {
+        setNewClip({ ...newClip, name: name });
+
+        if (saveEdit === null || (saveEdit && saveEdit.type === 'folder')) setConfirmOpen(true);
+    };
+
     useEffect(async () => {
         await gameService.getAllGamesByCoach(null, null, null, null).then((res) => {
             setGameList(res.filter((game) => game.video_url.toLowerCase() !== 'no video'));
@@ -120,7 +122,6 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
         if (saveEdit !== null && saveEdit.type === 'edit' && newClip.name !== '') {
             await gameService.addNewEditClips({ id: saveEdit.id, rows: [newClip] }).then((res) => {
                 setNewClip({ ...newClip, name: '' });
-                setSelectedGame(null);
             });
         }
     }, [selectedGame, newClip, ready]);
@@ -185,43 +186,88 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
                     </div>
 
                     <div style={styles.buttonBox}>
-                        <IconButton style={styles.button} onClick={() => setNewClip({ ...newClip, start_time: toHHMMSS(currentTime) })}>
-                            <SpaceBarIcon color="white" sx={{ transform: 'rotate(90deg)' }} />
-                        </IconButton>
-                        <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
-                            <FastRewindIcon color="white" />
-                        </IconButton>
-                        <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
-                            {play ? <PauseIcon /> : <PlayArrowIcon />}
-                        </IconButton>
-                        <IconButton style={styles.button} onClick={() => fastVideo(3)}>
-                            <FastForwardIcon color="white" />
-                        </IconButton>
-                        <IconButton
-                            style={styles.button}
-                            onClick={() => {
-                                setPlay(false);
-                                setNewClip({ ...newClip, end_time: toHHMMSS(currentTime) });
-                                setConfirmOpen(true);
+                        <Slider
+                            aria-label="time-indicator"
+                            size="small"
+                            value={position}
+                            min={0}
+                            step={1}
+                            max={Math.floor(duration)}
+                            onChange={(_, value) => {
+                                setPosition(value);
+                                seekTo(value);
                             }}
-                        >
-                            <SpaceBarIcon color="white" sx={{ transform: 'rotate(-90deg)' }} />
-                        </IconButton>
-                        <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />
-                        <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
-                            {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
-                        </IconButton>
+                            valueLabelFormat={(v) => toHHMMSS(v)}
+                            valueLabelDisplay="auto"
+                            sx={{
+                                color: '#FFF',
+                                height: 4,
+                                '& .MuiSlider-thumb': {
+                                    width: 8,
+                                    height: 8,
+                                    transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
+                                    '&:before': {
+                                        boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)'
+                                    },
+                                    '&:hover, &.Mui-focusVisible': {
+                                        boxShadow: '0px 0px 0px 8px rgb(0 0 0 / 16%)'
+                                    },
+                                    '&.Mui-active': {
+                                        width: 20,
+                                        height: 20
+                                    }
+                                },
+                                '& .MuiSlider-rail': {
+                                    opacity: 0.28
+                                }
+                            }}
+                        />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingLeft: '40px' }}>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{toHHMMSS(currentTime)}</Typography>
+                            <IconButton style={styles.button} onClick={() => setNewClip({ ...newClip, start_time: toHHMMSS(currentTime) })}>
+                                <SpaceBarIcon color="white" sx={{ transform: 'rotate(90deg)' }} />
+                            </IconButton>
+                            <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
+                                <FastRewindIcon color="white" />
+                            </IconButton>
+                            <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
+                                {play ? <PauseIcon /> : <PlayArrowIcon />}
+                            </IconButton>
+                            <IconButton style={styles.button} onClick={() => fastVideo(3)}>
+                                <FastForwardIcon color="white" />
+                            </IconButton>
+                            <IconButton
+                                style={styles.button}
+                                onClick={() => {
+                                    setNewClip({ ...newClip, end_time: toHHMMSS(currentTime) });
+                                    setPlay(false);
+                                    setCreateOpen(true);
+                                }}
+                            >
+                                <SpaceBarIcon color="white" sx={{ transform: 'rotate(-90deg)' }} />
+                            </IconButton>
+                            <Button
+                                variant="outlined"
+                                disabled={newClip.edit_id === 0 && newClip.start_time === '' && newClip.end_time === ''}
+                                sx={{ width: '50px', color: 'white', fontSize: '16px' }}
+                                onClick={() => {
+                                    if (currentTime <= 15) setNewClip({ ...newClip, start_time: toHHMMSS(0), end_time: toHHMMSS(currentTime) });
+                                    else setNewClip({ ...newClip, start_time: toHHMMSS(currentTime - 15), end_time: toHHMMSS(currentTime) });
+
+                                    setPlay(false);
+                                    setCreateOpen(true);
+                                }}
+                            >
+                                QS
+                            </Button>
+                            <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
+                                {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
+                            </IconButton>
+                        </div>
                     </div>
                 </FullScreen>
-                <EditConfirmMessage
-                    open={confirmOpen}
-                    onClose={(v) => {
-                        setConfirmOpen(false);
-
-                        if (v) setCreateOpen(true);
-                    }}
-                />
-                <EditCreateClipDialog open={createOpen} onClose={() => setCreateOpen(false)} onCreate={(new_name) => setNewClip({ ...newClip, name: new_name })} editNode={saveEdit} />
+                <EditConfirmMessage open={confirmOpen} onClose={() => setConfirmOpen(false)} />
+                <EditCreateClipDialog open={createOpen} onClose={() => setCreateOpen(false)} onCreate={handleSetName} editNode={saveEdit} />
             </div>
         </div>
     );
