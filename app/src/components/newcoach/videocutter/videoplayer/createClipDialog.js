@@ -1,21 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, TextField } from '@mui/material';
 
-const EditCreateClipDialog = ({ open, onClose, onCreate, editNode }) => {
+import gameService from '../../../../services/game.service';
+
+const EditCreateClipDialog = ({ open, onClose, editNode, clip, onPlay }) => {
     const [clipName, setClipName] = useState('');
 
-    const handleCreateClip = () => {
+    const handleCreateClip = async () => {
         if (editNode === null) window.alert('You did not select any Edit to save new clip. Please select Edit.');
         else {
             if (editNode.type === 'folder') window.alert('You selected Folder. Please select correctly Edit to save new clip.');
-            else onCreate(clipName);
+            else {
+                let newClip = { ...clip };
+
+                await gameService.getBiggestSortNumber('Clip', editNode.id).then((res) => {
+                    const bigSort = res['biggest_order_num'] === null ? 0 : res['biggest_order_num'];
+
+                    newClip.sort = bigSort + 1;
+                    newClip.edit_id = editNode.id;
+                    newClip.name = clipName;
+                });
+                console.log('clip_save => ', newClip);
+                await gameService.addNewEditClips({ id: editNode.id, rows: [newClip] }).then((res) => {
+                    onPlay(true);
+                });
+            }
         }
 
         onClose();
     };
 
+    useEffect(() => {
+        setClipName('');
+    }, [open]);
+
     return (
-        <Dialog open={open} onClose={onClose} scroll="paper">
+        <Dialog open={open} onClose={onClose} scroll="paper" style={{ zIndex: 99999 }}>
             <DialogTitle>
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Create New Clip</Typography>
             </DialogTitle>

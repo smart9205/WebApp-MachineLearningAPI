@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import { IconButton, Slider, Select, MenuItem, Typography, Button } from '@mui/material';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
@@ -16,9 +17,7 @@ import gameService from '../../../../services/game.service';
 import GameImage from '../../../../assets/VideoCutter.png';
 import { toHHMMSS } from '../../../../common/utilities';
 import EditCreateClipDialog from './createClipDialog';
-import EditConfirmMessage from './confirmMessage';
 import { MenuProps } from '../../components/common';
-import { useHotkeys } from 'react-hotkeys-hook';
 // import VIDEO from '../../assets/1.mp4'
 
 const styles = {
@@ -43,7 +42,8 @@ const styles = {
         backgroundColor: '#80808069'
     }
 };
-export default function VCVideoPlayer({ saveEdit, drawOpen }) {
+
+export default function VCVideoPlayer({ saveEdit, drawOpen, ...other }) {
     const handle = useFullScreenHandle();
     const player = useRef(null);
     const [play, setPlay] = useState(false);
@@ -51,7 +51,6 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
     const [videoURL, setVideoURL] = useState('');
     const [currentTime, setCurrentTime] = useState(0);
     const [createOpen, setCreateOpen] = useState(false);
-    const [confirmOpen, setConfirmOpen] = useState(false);
     const [selectedGame, setSelectedGame] = useState(null);
     const [gameList, setGameList] = useState([]);
     const [duration, setDuration] = useState(0);
@@ -65,7 +64,41 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
         game_id: 0,
         name: ''
     });
-    const HOTKEY_OPTION = { enableOnContentEditable: true };
+
+    useHotkeys(
+        'i',
+        () => {
+            if (saveEdit && saveEdit.type === 'edit') setNewClip({ ...newClip, start_time: toHHMMSS(currentTime) });
+        },
+        [newClip, setNewClip, currentTime, saveEdit]
+    );
+    useHotkeys(
+        'o',
+        () => {
+            if (saveEdit && saveEdit.type === 'edit') {
+                setNewClip({ ...newClip, end_time: toHHMMSS(currentTime) });
+                setPlay(false);
+                setCreateOpen(true);
+            }
+        },
+        [newClip, setNewClip, currentTime, saveEdit]
+    );
+    useHotkeys('n', () => setPlayRate(1));
+    useHotkeys(
+        'm',
+        () => {
+            if (saveEdit && saveEdit.type === 'edit') setPlayRate((s) => s + 0.5);
+        },
+        [saveEdit]
+    );
+    useHotkeys(
+        'b',
+        () => {
+            if (saveEdit && saveEdit.type === 'edit') setPlayRate(0.5);
+        },
+        [saveEdit]
+    );
+    useHotkeys('q', () => handleQS(), [newClip, setNewClip, currentTime, saveEdit]);
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec);
 
@@ -100,62 +133,27 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
         setPlay(true);
     };
 
-    const handleSetName = (name) => {
-        setNewClip({ ...newClip, name: name });
+    const handleSetName = async (name) => {
+        await gameService.getBiggestSortNumber('Clip', saveEdit.id).then((res) => {
+            const bigSort = res['biggest_order_num'] === null ? 0 : res['biggest_order_num'];
 
-        if (saveEdit === null || (saveEdit && saveEdit.type === 'folder')) setConfirmOpen(true);
+            setNewClip({ ...newClip, sort: bigSort + 1, edit_id: saveEdit.id, name: name });
+        });
+        await gameService.addNewEditClips({ id: saveEdit.id, rows: [newClip] }).then((res) => {
+            setNewClip({ ...newClip, name: '' });
+            setPlay(true);
+        });
     };
 
     const handleQS = () => {
-        if (currentTime <= 15) setNewClip({ ...newClip, start_time: toHHMMSS(0), end_time: toHHMMSS(currentTime) });
-        else setNewClip({ ...newClip, start_time: toHHMMSS(currentTime - 15), end_time: toHHMMSS(currentTime) });
+        if (saveEdit !== null && saveEdit.type === 'edit') {
+            if (currentTime <= 15) setNewClip({ ...newClip, start_time: toHHMMSS(0), end_time: toHHMMSS(currentTime) });
+            else setNewClip({ ...newClip, start_time: toHHMMSS(currentTime - 15), end_time: toHHMMSS(currentTime) });
 
-        setPlay(false);
-        setCreateOpen(true);
+            setPlay(false);
+            setCreateOpen(true);
+        }
     };
-
-    useHotkeys(
-        'i',
-        () => {
-            if (saveEdit && saveEdit.type === 'edit') setNewClip({ ...newClip, start_time: toHHMMSS(currentTime) });
-        },
-        HOTKEY_OPTION
-    );
-    useHotkeys(
-        'o',
-        () => {
-            if (saveEdit && saveEdit.type === 'edit') setNewClip({ ...newClip, end_time: toHHMMSS(currentTime) });
-        },
-        HOTKEY_OPTION
-    );
-    useHotkeys(
-        'n',
-        () => {
-            if (saveEdit && saveEdit.type === 'edit') setPlayRate(1);
-        },
-        HOTKEY_OPTION
-    );
-    useHotkeys(
-        'm',
-        () => {
-            if (saveEdit && saveEdit.type === 'edit') setPlayRate((s) => s + 0.5);
-        },
-        HOTKEY_OPTION
-    );
-    useHotkeys(
-        'b',
-        () => {
-            if (saveEdit && saveEdit.type === 'edit') setPlayRate(0.5);
-        },
-        HOTKEY_OPTION
-    );
-    useHotkeys(
-        'q',
-        () => {
-            if (saveEdit && saveEdit.type === 'edit') handleQS();
-        },
-        HOTKEY_OPTION
-    );
 
     useEffect(async () => {
         let array = [];
@@ -176,19 +174,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
             setVideoURL('');
             setPlay(false);
         }
-
-        if (saveEdit && saveEdit.type === 'edit' && newClip.name !== '' && newClip.edit_id !== 0) {
-            let bigSort = 0;
-
-            await gameService.getBiggestSortNumber('Clip', saveEdit.id).then((res) => {
-                bigSort = res['biggest_order_num'] === null ? 0 : res['biggest_order_num'];
-            });
-            await gameService.addNewEditClips({ id: saveEdit.id, rows: [newClip] }).then((res) => {
-                setNewClip({ ...newClip, name: '', sort: bigSort + 1, edit_id: saveEdit.id });
-                setPlay(true);
-            });
-        }
-    }, [selectedGame, newClip, ready, saveEdit]);
+    }, [selectedGame]);
 
     console.log('EditVideo => ', saveEdit, newClip);
 
@@ -227,7 +213,10 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
                                     onPlay={() => setPlay(true)}
                                     onPause={() => setPlay(false)}
                                     onReady={() => setReady(true)}
-                                    onProgress={(p) => setCurrentTime(p.playedSeconds)}
+                                    onProgress={(p) => {
+                                        setCurrentTime(p.playedSeconds);
+                                        setPosition(p.playedSeconds);
+                                    }}
                                     onDuration={(p) => setDuration(p)}
                                     playbackRate={playRate}
                                     playing={play}
@@ -332,8 +321,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
                         </div>
                     </div>
                 </FullScreen>
-                <EditConfirmMessage open={confirmOpen} onClose={() => setConfirmOpen(false)} />
-                <EditCreateClipDialog open={createOpen} onClose={() => setCreateOpen(false)} onCreate={handleSetName} editNode={saveEdit} />
+                <EditCreateClipDialog open={createOpen} onClose={() => setCreateOpen(false)} editNode={saveEdit} clip={newClip} onPlay={setPlay} />
             </div>
         </div>
     );

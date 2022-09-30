@@ -15,6 +15,7 @@ import GameService from '../../../../services/game.service';
 import { getComparator, stableSort } from '../../components/utilities';
 import EditCreateUserFolderEdit from './createFolder';
 import EditNameDialog from './editNameDialog';
+import DeleteConfirmDialog from '../../../../common/DeleteConfirmDialog';
 
 let child_ids = [];
 
@@ -85,6 +86,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
     const [hoverIndex, setHoverIndex] = useState(-1);
     const [updateEdit, setUpdateEdit] = useState({});
     const [editOpen, setEditOpen] = useState(false);
+    const [confirmOpen, setConfirmOpen] = useState(false);
 
     const handleSetCurEdit = (edit) => {
         setCurEdit(edit);
@@ -136,7 +138,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                             <Box onClick={() => handleEditName(nodes)}>
                                 <EditIcon fontSize="small" />
                             </Box>
-                            <Box onClick={() => handleDeleteEditFolder(nodes)}>
+                            <Box onClick={() => setConfirmOpen(true)}>
                                 <DeleteIcon fontSize="small" />
                             </Box>
                             {nodes.type === 'edit' && (
@@ -222,6 +224,14 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
             </Box>
             <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={setFolders} />
             <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setFolders} isFolder={createFolderEdit} node={curEdit} />
+            <DeleteConfirmDialog
+                open={confirmOpen}
+                handleDeleteClose={(flag) => {
+                    setConfirmOpen(false);
+
+                    if (flag) handleDeleteEditFolder(curEdit);
+                }}
+            />
         </>
     );
 };
