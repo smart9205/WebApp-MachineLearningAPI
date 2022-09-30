@@ -43,12 +43,15 @@ export default function PlayerFormDialog({ open, onResult, edit = null, t }) {
 
     useEffect(() => {
         if (!edit) return;
+
+        const names = edit?.player_name.split(' ');
+
         setPlayerData({
             id: edit?.id,
-            f_name: edit?.f_name,
-            l_name: edit?.l_name,
+            f_name: names[0],
+            l_name: names[1],
             date_of_birth: edit?.date_of_birth,
-            position: positionList.find((p) => p.id === edit?.position),
+            position: positionList.find((p) => p.id === edit?.player_position_id),
             jersey_number: edit?.jersey_number,
             image: edit?.image
         });
@@ -91,6 +94,8 @@ export default function PlayerFormDialog({ open, onResult, edit = null, t }) {
         setPlayerData(init);
         onResult({ open: false });
     };
+
+    console.log('playerdata => ', playerData);
 
     return (
         <Dialog open={open} onClose={(e) => handlePlayerClose(false)} maxWidth="lg">
