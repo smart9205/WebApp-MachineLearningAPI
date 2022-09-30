@@ -43,7 +43,7 @@ const styles = {
     }
 };
 
-export default function VCVideoPlayer({ saveEdit, drawOpen, ...other }) {
+export default function VCVideoPlayer({ saveEdit, drawOpen }) {
     const handle = useFullScreenHandle();
     const player = useRef(null);
     const [play, setPlay] = useState(false);
@@ -74,7 +74,10 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, ...other }) {
     );
     useHotkeys(
         'o',
-        () => {
+        (e, _) => {
+            e.stopPropagation();
+            e.preventDefault();
+
             if (saveEdit && saveEdit.type === 'edit') {
                 setNewClip({ ...newClip, end_time: toHHMMSS(currentTime) });
                 setPlay(false);
@@ -98,7 +101,15 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, ...other }) {
         },
         [saveEdit]
     );
-    useHotkeys('q', () => handleQS(), [newClip, setNewClip, currentTime, saveEdit]);
+    useHotkeys(
+        'q',
+        (e, _) => {
+            e.stopPropagation();
+            e.preventDefault();
+            handleQS();
+        },
+        [newClip, setNewClip, currentTime, saveEdit]
+    );
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec);
 
@@ -131,18 +142,6 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, ...other }) {
         setNewClip({ ...newClip, game_id: game.id });
         seekTo(0);
         setPlay(true);
-    };
-
-    const handleSetName = async (name) => {
-        await gameService.getBiggestSortNumber('Clip', saveEdit.id).then((res) => {
-            const bigSort = res['biggest_order_num'] === null ? 0 : res['biggest_order_num'];
-
-            setNewClip({ ...newClip, sort: bigSort + 1, edit_id: saveEdit.id, name: name });
-        });
-        await gameService.addNewEditClips({ id: saveEdit.id, rows: [newClip] }).then((res) => {
-            setNewClip({ ...newClip, name: '' });
-            setPlay(true);
-        });
     };
 
     const handleQS = () => {
