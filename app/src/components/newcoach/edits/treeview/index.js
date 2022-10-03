@@ -53,6 +53,7 @@ export function getTreeViewData(res) {
     child_ids = [];
 
     for (let i = 0; i < resCopy.length; i += 1) {
+        console.log('getting tree => ', i);
         const child = getChilds(resCopy, resCopy[i].id);
         let tree = { id: String(resCopy[i].id), name: resCopy[i].name, order_num: resCopy[i].order_number, type: resCopy[i].type, parent_id: resCopy[i].parent_id };
 
@@ -70,7 +71,7 @@ export function getTreeViewData(res) {
         getChildIds(child);
         child_ids = [...child_ids, tree.id];
         resCopy = resCopy.filter((data) => child_ids.includes(String(data.id)) === false);
-        i = 0;
+        i = -1;
         console.log('getting tree => ', resCopy, child_ids);
     }
 

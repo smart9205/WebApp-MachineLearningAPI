@@ -135,6 +135,36 @@ exports.findOne = async (req, res) => {
   res.send({ ...player[0][0], ...team[0][0] });
 };
 
+exports.getPlayersStats = (req, res) => {
+  const leagueId =
+    req.params.leagueId === null ? null : `${req.params.leagueId}`;
+  const gameId = req.params.gameId === null ? null : `${req.params.gameId}`;
+  const teamId = req.params.teamId === null ? null : `${req.params.teamId}`;
+  const playerId =
+    req.params.playerId === null ? null : `${req.params.playerId}`;
+
+  Sequelize.query(
+    `
+    SELECT * from public.fnc_get_players_stats(
+      ${req.params.seasonId},
+      ${leagueId},
+      ${gameId},
+      ${teamId},
+      ${playerId},
+      ${req.userId}
+    )
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((e) => {
+      res.status(500).send({
+        message: e.message || "Some error occurred while retrieving games.",
+      });
+    });
+};
+
 exports.gameByPlayerId = (req, res) => {
   const id = req.params.id;
 
