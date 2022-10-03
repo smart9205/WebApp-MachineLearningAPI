@@ -165,6 +165,40 @@ exports.getPlayersStats = (req, res) => {
     });
 };
 
+exports.addCorrectionRequest = (req, res) => {
+  Sequelize.query(
+    `
+    SELECT * from public.fnc_add_correction_request(
+      ${req.params.curPlayerId},
+      ${req.params.newPlayerId},
+      ${req.params.playerTagId}
+    )
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((e) => {
+      res.status(500).send({
+        message: e.message || "Some error occurred while retrieving games.",
+      });
+    });
+};
+
+exports.getCorrectionRequest = (req, res) => {
+  Sequelize.query(
+    `select * from public.fnc_get_correction_requests(${req.userId})`
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((e) => {
+      res.status(500).send({
+        message: e.message || "Some error occurred while retrieving games.",
+      });
+    });
+};
+
 exports.gameByPlayerId = (req, res) => {
   const id = req.params.id;
 

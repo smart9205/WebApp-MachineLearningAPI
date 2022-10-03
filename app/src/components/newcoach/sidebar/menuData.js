@@ -9,6 +9,7 @@ import PlayersIcon from '@mui/icons-material/PersonOutlineOutlined';
 import EditsIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import LeadersIcon from '@mui/icons-material/PeopleAltOutlined';
 import TheatersIcon from '@mui/icons-material/Theaters';
+import CheckIcon from '@mui/icons-material/Check';
 
 export const menuData = [
     {
@@ -60,5 +61,10 @@ export const menuData = [
         path: '/new_coach/settings',
         icon: <SettingsIcon />,
         title: 'Settings'
+    },
+    {
+        path: '/new_coach/corrections',
+        icon: <CheckIcon />,
+        title: 'Corrections'
     }
 ];

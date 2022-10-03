@@ -50,6 +50,7 @@ import Leaders from './components/newcoach/leaders';
 import gameService from './services/game.service';
 import OpponentPage from './components/newcoach/opponents/opponentPage';
 import VideoCutter from './components/newcoach/videocutter';
+import Corrections from './components/newcoach/corrections';
 
 const CustomTheme = () => {
     const { pathname } = useLocation();
@@ -255,6 +256,14 @@ const App = () => {
                                         element={
                                             <NewCoach>
                                                 <VideoCutter />
+                                            </NewCoach>
+                                        }
+                                    />
+                                    <Route
+                                        path="/new_coach/corrections"
+                                        element={
+                                            <NewCoach>
+                                                <Corrections />
                                             </NewCoach>
                                         }
                                     />

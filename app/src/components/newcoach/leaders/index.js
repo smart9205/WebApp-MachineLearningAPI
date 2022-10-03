@@ -33,7 +33,7 @@ const Leaders = () => {
                     <Box sx={{ display: 'flex', width: '100%', maxHeight: '80vh', overflowY: 'auto' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <LeadersPlayerStatColumn list={playerList} isTotal={true} option="game" title="Games Player" />
+                                <LeadersPlayerStatColumn list={playerList} isTotal={true} option="game" title="Games Played" />
                                 <LeadersPlayerStatColumn list={playerList} isTotal={true} option="goal" title="Goals" />
                                 <LeadersPlayerStatColumn list={playerList} isTotal={true} option="penalties" title="Penalties" />
                                 <LeadersPlayerStatColumn list={playerList} isTotal={true} option="penalties_missed" title="Penalties Missed" />
@@ -57,8 +57,8 @@ const Leaders = () => {
                                 <LeadersPlayerStatColumn list={playerList} isTotal={true} option="passes_for_shots" title="Passes For Shots" />
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <LeadersPlayerStatColumn list={playerList} isTotal={true} option="own_goals" title="Own Goals" />
                                 <LeadersPlayerStatColumn list={playerList} isTotal={true} option="key_passes" title="Key Passes" />
-                                <LeadersPlayerStatColumn list={playerList} isTotal={true} option="key_passes_successful" title="Key Passes Successful" />
                                 <LeadersPlayerStatColumn list={playerList} isTotal={true} option="through_passes" title="Through Passes" />
                                 <LeadersPlayerStatColumn list={playerList} isTotal={true} option="through_passes_successful" title="Through Passes Successful" />
                             </div>

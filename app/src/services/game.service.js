@@ -736,6 +736,16 @@ const getPlayersStats = (seasonId, leagueId, gameId, teamId, playerId) => {
             return response.data;
         });
 };
+const addCorrectionRequest = (curPlayerId, newPlayerId, playerTagId) => {
+    return axios.put(API_URL + `player/add_correction/${curPlayerId}/${newPlayerId}/${playerTagId}`, { curPlayerId, newPlayerId, playerTagId }, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+const getCorrectionRequest = () => {
+    return axios.get(API_URL + 'player/get_correction', { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
 
 const getAllPlayerTagsByPlayer = (playerId, gameId) => {
     return axios.get(API_URL + `player_tag/getbyplayer/${playerId}/${gameId}`, { headers: authHeader(), data: { playerId, gameId } }).then((response) => {
@@ -939,6 +949,8 @@ const gameService = {
     getTeamByPlayerGame,
     getGameDetailssByPlayer,
     getPlayersStats,
+    addCorrectionRequest,
+    getCorrectionRequest,
     getPlayerTagsByActionName,
     getGameScore,
     getScoreInGames,

@@ -39,6 +39,17 @@ module.exports = (app) => {
   );
 
   app.put(
+    "/player/add_correction/:curPlayerId/:newPlayerId/:playerTagId",
+    controller.addCorrectionRequest
+  );
+
+  app.get(
+    "/player/get_correction",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getCorrectionRequest
+  );
+
+  app.put(
     "/player/:id",
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.update

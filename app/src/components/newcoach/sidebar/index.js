@@ -42,6 +42,7 @@ const Sidebar = () => {
         else if (pathname.includes('/new_coach/players')) setSelectIndex(8);
         else if (pathname.includes('/new_coach/settings')) setSelectIndex(9);
         else if (pathname.includes('/new_coach/video_cutter')) setSelectIndex(6);
+        else setSelectIndex(10);
 
         GameService.getAllGamesByCoach(null, null, null, null).then((res) => {
             setGameCount(res.length);
