@@ -136,12 +136,13 @@ exports.findOne = async (req, res) => {
 };
 
 exports.getPlayersStats = (req, res) => {
+  console.log("########### ", req.params);
   const leagueId =
-    req.params.leagueId === null ? null : `${req.params.leagueId}`;
-  const gameId = req.params.gameId === null ? null : `${req.params.gameId}`;
-  const teamId = req.params.teamId === null ? null : `${req.params.teamId}`;
+    req.params.leagueId === "null" ? null : `'${req.params.leagueId}'`;
+  const gameId = req.params.gameId === "null" ? null : `'${req.params.gameId}'`;
+  const teamId = req.params.teamId === "null" ? null : `'${req.params.teamId}'`;
   const playerId =
-    req.params.playerId === null ? null : `${req.params.playerId}`;
+    req.params.playerId === "null" ? null : `'${req.params.playerId}'`;
 
   Sequelize.query(
     `

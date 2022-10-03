@@ -13,7 +13,7 @@ const LeadersPlayerStatItem = ({ player, option, isTotal }) => {
                 <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '2px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: '#1a1b1d' }}>{player.player_name}</Typography>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{`#${player.player_jersey_number} |`}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{`#${player.player_jersey_number}`}</Typography>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{player.player_position}</Typography>
                     </div>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{player.team_name}</Typography>
