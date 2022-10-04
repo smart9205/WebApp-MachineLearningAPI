@@ -6,6 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 import GameService from '../../../services/game.service';
 import LeadersPlayerStatColumn from './playerStatColumn';
 import { MenuProps } from '../components/common';
+import { getComparator, stableSort } from '../components/utilities';
 
 const Leaders = () => {
     const [playerList, setPlayerList] = useState([]);
@@ -26,36 +27,81 @@ const Leaders = () => {
         setValues({ ...values, [prop]: e.target.value });
     };
 
+    const getSeasonList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'season_name'));
+            let result = [];
+
+            desc.map((item) => {
+                const filter = result.filter((season) => season === item.season_name);
+
+                if (filter.length === 0) result = [...result, item.season_name];
+
+                return result;
+            });
+
+            return result;
+        }
+    };
+
+    const getTeamList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'team_name'));
+            let result = [];
+
+            desc.map((item) => {
+                const filter = result.filter((team) => team === item.team_name);
+
+                if (filter.length === 0) result = [...result, item.team_name];
+
+                return result;
+            });
+
+            return result;
+        }
+    };
+
+    const getLeagueList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'league_name'));
+            let result = [];
+
+            desc.map((item) => {
+                const filter = result.filter((league) => league === item.league_name);
+
+                if (filter.length === 0) result = [...result, item.league_name];
+
+                return result;
+            });
+
+            return result;
+        }
+    };
+
     const getFilteredList = () => {
         let array = [];
 
-        if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none') array = playerList.filter((item) => item.season_id === values.seasonFilter);
-        else if (values.leagueFilter !== 'none' && values.seasonFilter === 'none' && values.teamFilter === 'none') array = playerList.filter((item) => item.league_id === values.leagueFilter);
-        else if (values.teamFilter !== 'none' && values.seasonFilter === 'none' && values.leagueFilter === 'none') array = playerList.filter((item) => item.team_id === values.teamFilter);
+        if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none') array = playerList.filter((item) => item.season_name === values.seasonFilter);
+        else if (values.leagueFilter !== 'none' && values.seasonFilter === 'none' && values.teamFilter === 'none') array = playerList.filter((item) => item.league_name === values.leagueFilter);
+        else if (values.teamFilter !== 'none' && values.seasonFilter === 'none' && values.leagueFilter === 'none') array = playerList.filter((item) => item.team_name === values.teamFilter);
         else if (values.seasonFilter !== 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none')
-            array = playerList.filter((item) => item.season_id === values.seasonFilter && item.league_id === values.leagueFilter);
+            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.league_name === values.leagueFilter);
         else if (values.seasonFilter !== 'none' && values.teamFilter !== 'none' && values.leagueFilter === 'none')
-            array = playerList.filter((item) => item.season_id === values.seasonFilter && item.team_id === values.teamFilter);
+            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.team_name === values.teamFilter);
         else if (values.leagueFilter !== 'none' && values.teamFilter !== 'none' && values.seasonFilter === 'none')
-            array = playerList.filter((item) => item.league_id === values.leagueFilter && item.team_id === values.teamFilter);
-        else array = playerList.filter((item) => item.league_id === values.leagueFilter && item.season_id === values.seasonFilter && item.team_id === values.teamFilter);
+            array = playerList.filter((item) => item.league_name === values.leagueFilter && item.team_name === values.teamFilter);
+        else array = playerList.filter((item) => item.league_name === values.leagueFilter && item.season_name === values.seasonFilter && item.team_name === values.teamFilter);
 
         return values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' ? playerList : array;
     };
 
     useEffect(async () => {
         setLoading(true);
-        await GameService.getAllSeasons().then((res) => {
-            setSeasonList(res);
-        });
-        await GameService.getAllLeagues().then((res) => {
-            setLeagueList(res);
-        });
-        await GameService.getAllMyCoachTeam().then((res) => {
-            setTeamList(res);
-        });
         await GameService.getPlayersStats(null, null, null, null, null).then((res) => {
             setPlayerList(res);
+            setSeasonList(getSeasonList(res));
+            setLeagueList(getLeagueList(res));
+            setTeamList(getTeamList(res));
             setLoading(false);
         });
     }, []);
@@ -90,8 +136,8 @@ const Leaders = () => {
                                         All
                                     </MenuItem>
                                     {seasonList.map((season, index) => (
-                                        <MenuItem key={index + 1} value={season.id}>
-                                            {season.name}
+                                        <MenuItem key={index + 1} value={season}>
+                                            {season}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -112,8 +158,8 @@ const Leaders = () => {
                                         All
                                     </MenuItem>
                                     {leagueList.map((league, index) => (
-                                        <MenuItem key={index + 1} value={league.id}>
-                                            {league.name}
+                                        <MenuItem key={index + 1} value={league}>
+                                            {league}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -134,8 +180,8 @@ const Leaders = () => {
                                         All
                                     </MenuItem>
                                     {teamList.map((team, index) => (
-                                        <MenuItem key={index + 1} value={team.team_id}>
-                                            {team.team_name}
+                                        <MenuItem key={index + 1} value={team}>
+                                            {team}
                                         </MenuItem>
                                     ))}
                                 </Select>

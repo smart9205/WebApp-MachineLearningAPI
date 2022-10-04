@@ -69,7 +69,7 @@ export const PlayerContext = createContext({
         game: null,
         update_cnt: 0
     },
-    setContext: () => {}
+    setContext: () => { }
 });
 
 const useStyles = makeStyles(() => ({
@@ -204,11 +204,11 @@ export default function Player() {
                 <Box className="profileSection">
                     <Dialog className="profileSection_tagvideo" classes={{ paper: classes.paper }} open={open} onClose={(e) => setOpen(false)}>
                         <DialogContent sx={{ p: 0 }}>
-                            <TagVideo tagList={playTags} url={game?.mobile_video_url ? game?.mobile_video_url : game?.video_url} muteState={game?.mute_video} setOpen={setOpen} />
+                            <TagVideo tagList={playTags} url={game?.mobile_video_url ? game?.mobile_video_url : game?.video_url} muteState={game?.mute_video} setOpen={setOpen} gameId={game?.id} />
                         </DialogContent>
                     </Dialog>
                     {playerData && <PlayerDetailCard player={playerData} />}
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', padding: '18px 20px' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', padding: '18px 20px', position: 'absolute', top: '9rem' }}>
                         <IconButton onClick={(e) => setFilterAnchorEl(e.currentTarget)}>
                             <FilterIcon />
                         </IconButton>
@@ -243,10 +243,10 @@ export default function Player() {
                                     gap: '12px',
                                     borderRadius: '8px',
                                     border: '1px solid #F8F8F8',
-                                    margin: '2px 8px',
+                                    margin: '30px 8px',
                                     padding: '8px 16px 8px 8px',
                                     boxShadow: hoverIndex === index ? '0px 4px 16px rgba(0, 0, 0, 0.1)' : 'none',
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
                                 }}
                                 onClick={() => setContext({ game: item })}
                             >

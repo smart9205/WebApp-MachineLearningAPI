@@ -7,7 +7,9 @@ import SkipNextSharpIcon from '@mui/icons-material/SkipNextSharp';
 import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 import { toSecond } from '../../common/utilities';
 import gameService from '../../services/game.service';
-// import VIDEO from '../../assets/1.mp4'
+
+import PlayerSelector from './PlayerSelector';
+import EditIcon from '@mui/icons-material/Edit';
 
 const styles = {
     action: {
@@ -30,17 +32,46 @@ const styles = {
         justifyContent: 'space-between',
         margin: 'auto'
     },
+    correctionControl: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        display: 'flex',
+        justifyContent: 'space-between',
+        margin: 'auto'
+    },
+    correctionAction: {
+        border: '2px solid red',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItem: 'center',
+        fontSize: 16,
+        display: 'flex',
+        width: '30px',
+        height: '30px',
+        borderRadius: '50%'
+    },
     button: {
         color: 'white',
         backgroundColor: '#80808069'
     }
 };
-export default function TagVideo({ tagList, url, muteState, setOpen }) {
+export default function TagVideo({ tagList, url, muteState, setOpen, gameId }) {
     const player = useRef(null);
     const [play, setPlay] = useState(true);
     const [ready, setReady] = useState(false);
     const [curIdx, setCurIdx] = useState(0);
     const [videoURL, setVideoURL] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
+    const [playerList, setPlayerList] = useState([])
+    const [currPlayerId, setCurrPlayerId] = useState('')
+
+    const handleOpen = () => setModalOpen(true);
+    const handleClose = () => {
+        setModalOpen(false)
+        setPlay(true)
+    };
 
     useEffect(() => {
         if (url?.startsWith('https://www.youtube.com') || url?.startsWith('https://youtu.be')) {
@@ -96,9 +127,33 @@ export default function TagVideo({ tagList, url, muteState, setOpen }) {
         setCurIdx(index);
     };
 
+    const clipCorrections = async (tags) => {
+
+        let teamId
+
+        if (tags) {
+            tags.map((data) => {
+                teamId = data.team_id
+                setCurrPlayerId(data.player_id)
+            })
+        }
+
+        await gameService.getGameTeamPlayersByTeam(teamId, gameId)
+            .then((res) => {
+                setPlayerList(res)
+                setPlay(false)
+                handleOpen()
+            })
+
+    }
+
     return (
         <>
+
+            <PlayerSelector playerList={playerList} currPlayerId={currPlayerId} tagList={tagList} modalOpen={modalOpen} setModalOpen={setModalOpen} handleClose={handleClose} setPlay={setPlay} />
+
             <div className="player-wrapper tag-video">
+
                 <ReactPlayer
                     className="react-player"
                     url={videoURL}
@@ -115,6 +170,27 @@ export default function TagVideo({ tagList, url, muteState, setOpen }) {
                     height="100%"
                 />
             </div>
+
+            {ready && (
+                <div style={styles.correctionControl} className="play-action-controls">
+                    {!!tagList[curIdx] && (
+                        <div style={styles.correctionAction}>
+                            <EditIcon
+                                style={{
+                                    color: 'red',
+                                    padding: 3,
+                                    borderRadius: 60,
+                                    textAlign: 'center',
+                                    cursor: 'pointer'
+                                }}
+
+                                onClick={() => clipCorrections(tagList)}
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
+
             {ready && (
                 <div style={styles.actionControls} className="play-action-controls">
                     {!!tagList[curIdx] && (
@@ -156,7 +232,8 @@ export default function TagVideo({ tagList, url, muteState, setOpen }) {
                         </IconButton>
                     </div>
                 </div>
-            )}
+            )
+            }
         </>
     );
 }
