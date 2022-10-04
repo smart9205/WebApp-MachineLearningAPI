@@ -737,12 +737,12 @@ const getPlayersStats = (seasonId, leagueId, gameId, teamId, playerId) => {
         });
 };
 const addCorrectionRequest = (curPlayerId, newPlayerId, playerTagId) => {
-    return axios.put(API_URL + `player/add_correction/${curPlayerId}/${newPlayerId}/${playerTagId}`, { curPlayerId, newPlayerId, playerTagId }, { headers: authHeader() }).then((response) => {
+    return axios.put(API_URL + `player/addcorrection/${curPlayerId}/${newPlayerId}/${playerTagId}`, { curPlayerId, newPlayerId, playerTagId }, { headers: authHeader() }).then((response) => {
         return response.data;
     });
 };
 const getCorrectionRequest = () => {
-    return axios.get(API_URL + 'player/get_correction', { headers: authHeader() }).then((response) => {
+    return axios.get(API_URL + `player/request/getcorrection`, { headers: authHeader() }).then((response) => {
         return response.data;
     });
 };

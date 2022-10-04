@@ -38,15 +38,15 @@ module.exports = (app) => {
     controller.getPlayersStats
   );
 
-  app.put(
-    "/player/add_correction/:curPlayerId/:newPlayerId/:playerTagId",
-    controller.addCorrectionRequest
-  );
-
   app.get(
-    "/player/get_correction",
+    "/player/request/getcorrection",
     [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.getCorrectionRequest
+  );
+
+  app.put(
+    "/player/addcorrection/:curPlayerId/:newPlayerId/:playerTagId",
+    controller.addCorrectionRequest
   );
 
   app.put(
