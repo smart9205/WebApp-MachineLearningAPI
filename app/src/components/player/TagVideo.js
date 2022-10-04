@@ -150,7 +150,7 @@ export default function TagVideo({ tagList, url, muteState, setOpen, gameId }) {
     return (
         <>
 
-            <PlayerSelector playerList={playerList} currPlayerId={currPlayerId} tagList={tagList} modalOpen={modalOpen} setModalOpen={setModalOpen} handleClose={handleClose} setPlay={setPlay} />
+            <PlayerSelector playerList={playerList} currPlayerId={currPlayerId} tagList={tagList} modalOpen={modalOpen} setModalOpen={setModalOpen} handleClose={handleClose} setPlay={setPlay} curIdx={curIdx} />
 
             <div className="player-wrapper tag-video">
 

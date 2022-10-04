@@ -21,24 +21,15 @@ const Modalstyle = {
     maxHeight: '90%'
 };
 
-const PlayerSelector = ({ playerList, currPlayerId, tagList, modalOpen, handleClose, setModalOpen, setPlay }) => {
+const PlayerSelector = ({ playerList, currPlayerId, tagList, modalOpen, handleClose, setModalOpen, setPlay, curIdx }) => {
 
     const onSelect = (player) => {
 
-        let playerTagId = null
-
-        tagList.map(data => {
-            playerTagId = data.id
-        }, [tagList])
-
-        gameService.addCorrectionRequest(currPlayerId, player.player_id, playerTagId)
+        gameService.addCorrectionRequest(currPlayerId, player.player_id, tagList[curIdx].id)
             .then((res) => {
                 setModalOpen(false)
                 setPlay(true)
             })
-
-        console.log(`CurrentPlayerID: ${currPlayerId} and SelectedPlayerId: ${player.player_id} and PlayerTagId: ${playerTagId}`)
-
     }
 
     const sortByJerseyNumber = (x, y) => {
@@ -46,12 +37,6 @@ const PlayerSelector = ({ playerList, currPlayerId, tagList, modalOpen, handleCl
     };
 
     let filteredPlayerList = playerList.sort(sortByJerseyNumber)
-
-    useEffect(() => {
-        console.log('Normal: ', playerList)
-        console.log('Filtered: ', filteredPlayerList)
-    }, [playerList, filteredPlayerList])
-
 
     return (
 

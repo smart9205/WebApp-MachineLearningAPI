@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, fabClasses, IconButton, Typography } from '@mui/material';
 
 import PlayIcon from '@mui/icons-material/PlayArrowOutlined';
+import CheckIcon from '@mui/icons-material/Check';
 
 import GameService from '../../../services/game.service';
+import CorrectionsVideoPlayer from './videoDialog';
 
 const Corrections = () => {
     const [corrections, setCorrections] = useState([]);
+    const [playOpen, setPlayOpen] = useState(false);
+    const [correctItem, setCorrectItem] = useState(null);
 
     useEffect(() => {
         GameService.getCorrectionRequest().then((res) => {
@@ -38,15 +42,37 @@ const Corrections = () => {
                             marginBottom: '8px'
                         }}
                     >
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{item.current_player_name}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>Asked to change {item.action_name}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{item.new_player_name}</Typography>
-                        <IconButton sx={{ flex: 1 }}>
-                            <PlayIcon />
-                        </IconButton>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{item.current_player_name}</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>
+                                Asked to change {item.action_name} action to player{' '}
+                            </Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{item.new_player_name}</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
+                            <IconButton
+                                onClick={() => {
+                                    setCorrectItem(item);
+                                    setPlayOpen(true);
+                                }}
+                            >
+                                <PlayIcon />
+                            </IconButton>
+                            <IconButton>
+                                <CheckIcon />
+                            </IconButton>
+                        </Box>
                     </Box>
                 ))}
             </Box>
+            {playOpen && (
+                <CorrectionsVideoPlayer
+                    onClose={() => setPlayOpen(false)}
+                    video_url={correctItem?.video_url ?? ''}
+                    start={correctItem?.start_time ?? '00:00:00'}
+                    end={correctItem?.end_time ?? '00:00:00'}
+                />
+            )}
         </Box>
     );
 };
