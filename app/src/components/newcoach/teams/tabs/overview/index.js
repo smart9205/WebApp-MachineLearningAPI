@@ -229,13 +229,13 @@ const TeamOverview = ({ games, teamname, teamId }) => {
             } else if (tagIndex === 'Goals') {
                 if (values.isOur) getPlayTagList(GameService.getTeamGoals(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentGoals(teamId, gameIds.join(',')));
-            } else if (tagIndex === "Goalkeeper's Build Up") {
+            } else if (tagIndex === 'Build Up Goalkeeper') {
                 if (values.isOur) getPlayTagList(GameService.getTeamBuildupGoalkeeper(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentBuildupGoalkeeper(teamId, gameIds.join(',')));
-            } else if (tagIndex === 'Defensive Half Build Up') {
+            } else if (tagIndex === 'Build Up Own Half') {
                 if (values.isOur) getPlayTagList(GameService.getTeamBuildonDefensiveHalf(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentBuildonDefensiveHalf(teamId, gameIds.join(',')));
-            } else if (tagIndex === 'Offensive Half Build Up') {
+            } else if (tagIndex === 'Build Up Opponent Half') {
                 if (values.isOur) getPlayTagList(GameService.getTeamBuildOnOffensiveHalf(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentBuildOnOffensiveHalf(teamId, gameIds.join(',')));
             } else if (tagIndex === 'Started From Goalkeeper') {
@@ -253,7 +253,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
             } else if (tagIndex === 'Started From Throw In') {
                 if (values.isOur) getPlayTagList(GameService.getTeamThrowIn(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentThrowIn(teamId, gameIds.join(',')));
-            } else if (tagIndex === 'Shots') {
+            } else if (tagIndex === 'Chances') {
                 if (values.isOur) getPlayTagList(GameService.getTeamShots(teamId, gameIds.join(',')));
                 else getPlayTagList(GameService.getOpponentShots(teamId, gameIds.join(',')));
             } else if (tagIndex === 'Free Kicks') {

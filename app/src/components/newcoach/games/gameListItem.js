@@ -15,13 +15,14 @@ import { SaveButton } from '../components/common';
 import GameService from '../../../services/game.service';
 import GameEditPage from './gameEditPage';
 import ExcelDataFiltering from '../../coach/ExcelDataFiltering';
-import { XmlDataFilterGames } from '../components/xmldata';
+import { XmlDataFilterGames, XmlDataFilterGamesShort } from '../components/xmldata';
 
 const GameListItem = ({ row, isHover, isPending = false, updateList, team, standing }) => {
     const navigate = useNavigate();
     const [editOpen, setEditOpen] = useState(false);
     const [exportExcel, setExportExcel] = useState(false);
     const [exportGate, setExportGate] = useState(false);
+    const [exportSportShort, setExportSportShort] = useState(false);
     const [playerTagList, setPlayerTagList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [rowData, setRowData] = useState({
@@ -74,6 +75,12 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
     const handleClickSportGate = () => {
         setLoading(true);
         setExportGate(true);
+        setMenuAnchorEl(null);
+    };
+
+    const handleClickSportCodeShort = () => {
+        setLoading(true);
+        setExportSportShort(true);
         setMenuAnchorEl(null);
     };
 
@@ -195,22 +202,27 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 sx={{ '& .MuiPopover-paper': { width: '250px', borderRadius: '12px', border: '1px solid #E8E8E8' } }}
             >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickEdit}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickEdit}>
                     <EditIcon />
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Edit Game</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickSportGate}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickSportGate}>
                     <img src={ExportIcon} />
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Sportcode</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickExcel}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickSportCodeShort}>
+                    <img src={ExportIcon} />
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Sportcode Short Version</Typography>
+                </Box>
+                <Divider sx={{ width: '100%' }} />
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickExcel}>
                     <img src={ExportIcon} />
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Excel</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDownloadVideo(row.video_url)}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDownloadVideo(row.video_url)}>
                     <DownloadIcon />
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Download Video</Typography>
                 </Box>
@@ -262,6 +274,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
             )}
             <GameEditPage open={editOpen} onClose={handleCloseDialog} game={row} updateGameList={updateList} standingList={standing} />
             {exportGate && <XmlDataFilterGames game={row} setXML={setExportGate} setLoading={setLoading} />}
+            {exportSportShort && <XmlDataFilterGamesShort game={row} setXML={setExportSportShort} setLoading={setLoading} />}
             {exportExcel && <ExcelDataFiltering team={playerTagList} setExcelData={setExportExcel} />}
             {loading && (
                 <div

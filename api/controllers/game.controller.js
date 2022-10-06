@@ -1045,6 +1045,26 @@ exports.gameExportSportcode = (req, res) => {
     });
 };
 
+exports.gameExportSportcodeShort = (req, res) => {
+  Sequelize.query(
+    `
+    select * from public.fnc_export_game_to_sportcode_shorter_version(
+      ${req.params.teamId},
+      '${req.params.gameIds}',
+      ${req.userId}
+    )
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving games.",
+      });
+    });
+};
+
 exports.getTeamInitialStanding = (req, res) => {
   Sequelize.query(
     `

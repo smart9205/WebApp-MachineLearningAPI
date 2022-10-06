@@ -235,13 +235,13 @@ const GameOverview = ({ game }) => {
             } else if (tagIndex === 'Goals') {
                 if (values.isOur) getPlayTagList(GameService.getTeamGoals(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentGoals(values.teamId, `${game.id}`));
-            } else if (tagIndex === "Goalkeeper's Build Up") {
+            } else if (tagIndex === 'Build Up Goalkeeper') {
                 if (values.isOur) getPlayTagList(GameService.getTeamBuildupGoalkeeper(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentBuildupGoalkeeper(values.teamId, `${game.id}`));
-            } else if (tagIndex === 'Defensive Half Build Up') {
+            } else if (tagIndex === 'Build Up Own Half') {
                 if (values.isOur) getPlayTagList(GameService.getTeamBuildonDefensiveHalf(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentBuildonDefensiveHalf(values.teamId, `${game.id}`));
-            } else if (tagIndex === 'Offensive Half Build Up') {
+            } else if (tagIndex === 'Build Up Opponent Half') {
                 if (values.isOur) getPlayTagList(GameService.getTeamBuildOnOffensiveHalf(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentBuildOnOffensiveHalf(values.teamId, `${game.id}`));
             } else if (tagIndex === 'Started From Goalkeeper') {
@@ -259,7 +259,7 @@ const GameOverview = ({ game }) => {
             } else if (tagIndex === 'Started From Throw In') {
                 if (values.isOur) getPlayTagList(GameService.getTeamThrowIn(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentThrowIn(values.teamId, `${game.id}`));
-            } else if (tagIndex === 'Shots') {
+            } else if (tagIndex === 'Chances') {
                 if (values.isOur) getPlayTagList(GameService.getTeamShots(values.teamId, `${game.id}`));
                 else getPlayTagList(GameService.getOpponentShots(values.teamId, `${game.id}`));
             } else if (tagIndex === 'Free Kicks') {

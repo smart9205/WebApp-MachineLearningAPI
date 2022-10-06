@@ -463,6 +463,219 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
     return <>{newBlob !== null && <DownloadXML blob={newBlob} game={game} />}</>;
 };
 
+export const XmlDataFilterGamesShort = ({ game, setXML, setLoading }) => {
+    const [newBlob, setNewBlob] = useState(null);
+    let allData = [];
+    let rowsForXML = [];
+    let clipCounter = 0;
+    const whiteButtons = ['Corners', 'Free Kicks', 'Throw In', 'Corners Opp', 'Free Kicks Opp', 'Throw In Opp', 'Penalty Opp'];
+
+    const convertToNumber = (numberTime) => {
+        const array = numberTime.split(':');
+        const hour = parseInt(array[0], 10) * 3600;
+        const minute = parseInt(array[1], 10) * 60;
+        const seconds = parseInt(array[2], 10);
+
+        return hour + minute + seconds;
+    };
+
+    const getTeamTagList = (array, name, isOur, isOther) => {
+        const res = isOther ? array.filter((item) => item.instance_name.includes('#') === true) : array.filter((item) => item.instance_name === name);
+
+        return res.map((item) => {
+            let display = '';
+            const filtered = rowsForXML.filter((data) => data.row.code === item.instance_name);
+
+            if (filtered.length === 0) {
+                rowsForXML.push({
+                    row: {
+                        code: item.instance_name,
+                        R: isOther ? (isOur ? greenColor[1].r : redColor[1].r) : whiteButtons.includes(item.instance_name) ? 65535 : isOur ? greenColor[0].r : redColor[0].r,
+                        G: isOther ? (isOur ? greenColor[1].g : redColor[1].g) : whiteButtons.includes(item.instance_name) ? 65535 : isOur ? greenColor[0].g : redColor[0].g,
+                        B: isOther ? (isOur ? greenColor[1].b : redColor[1].b) : whiteButtons.includes(item.instance_name) ? 65535 : isOur ? greenColor[0].b : redColor[0].b
+                    }
+                });
+            }
+
+            clipCounter += 1;
+
+            if (isOther) {
+                if (item.action_name === 'Pass') display = item.action_type_name + ' - ' + item.action_result_name;
+                else if (item.action_name === 'Cross' || item.action_name === 'Blocked' || item.action_name === 'Interception') display = item.action_name + ' - ' + item.action_type_name;
+                else if (item.action_name === 'Dribble' || item.action_name === 'Shot' || item.action_name === 'Saved') display = item.action_name + ' - ' + item.action_result_name;
+                else if (item.action_name === 'Foul' || item.action_name === 'Draw Foul') display = item.action_name + ' - ' + item.action_type_name;
+                else if (item.action_name === 'Tackle' || item.action_name === 'Clearance' || item.action_name === 'Deflected') display = item.action_name;
+                else if (item.action_name === 'Turnover') display = item.action_result_name;
+                else display = item.action_name + ' - ' + item.action_result_name;
+            } else {
+                if (item.instance_name === 'All Offensive Possessions' || item.instance_name === 'All Offensive Possessions Opp') {
+                    if (item.action_name === 'Dribble') display = item.action_name + ' - ' + item.action_result_name;
+                    else if (item.action_name === 'Pass') display = item.action_type_name + ' - ' + item.action_result_name;
+                } else if (item.instance_name === 'Started Goalkeeper' || item.instance_name === 'Started Goalkeeper Opp') display = item.action_type_name + ' - ' + item.action_result_name;
+                else if (item.instance_name === 'Build Up 1' || item.instance_name === 'Build Up - Own Half' || item.instance_name === 'Build Up - Opp Half')
+                    display = item.action_type_name + ' - ' + item.action_result_name;
+                else if (item.instance_name === 'Crosses' || item.instance_name === 'Crosses Opp') display = item.action_result_name;
+                else if (item.instance_name === 'Loss Ball' || item.instance_name === 'Loss Ball Opp') display = item.action_result_name;
+                else if (item.instance_name === 'Goalkeeper Opp' || item.instance_name === 'Defense - Opp Half' || item.instance_name === 'Defense - Own Half')
+                    display = item.action_type_name + ' - ' + item.action_result_name;
+                else if (item.instance_name === 'Def > Off' || item.instance_name === 'Off > Def') {
+                    if (item.action_name === 'Dribble') display = item.action_name + ' - ' + item.action_result_name;
+                    else if (item.action_name === 'Pass') display = item.action_type_name + ' - ' + item.action_result_name;
+                } else if (item.instance_name === 'Chances' || item.instance_name === 'Chances Opp') display = item.action_type_name + ' - ' + item.action_result_name;
+                else if (item.instance_name === 'Corners' || item.instance_name === 'Corners Opp') display = item.action_name + ' - ' + item.action_result_name;
+                else if (item.instance_name === 'Free Kicks' || item.instance_name === 'Free Kicks Opp') {
+                    if (item.action_name === 'Pass') display = item.action_name + ' - ' + item.action_result_name;
+                    else if (item.action_name === 'Cross' || item.action_name === 'Shot') display = item.action_type_name + ' - ' + item.action_result_name;
+                } else if (item.instance_name === 'Throw In' || item.instance_name === 'Throw In Opp') display = item.action_name + ' - ' + item.action_result_name;
+                else if (item.instance_name === 'Penalty Opp') display = item.action_name + ' - ' + item.action_type_name;
+                else display = item.player_name;
+            }
+
+            return isOther
+                ? {
+                      instance: {
+                          ID: item.team_id,
+                          start: convertToNumber(item.start_time),
+                          end: convertToNumber(item.end_time),
+                          code: item.player_name,
+                          label: {
+                              text: display
+                          }
+                      }
+                  }
+                : {
+                      instance: {
+                          ID: clipCounter,
+                          start: whiteButtons.includes(item.instance_name) ? convertToNumber(item.start_time) : convertToNumber(item.start_time) - 5,
+                          end: whiteButtons.includes(item.instance_name) ? convertToNumber(item.end_time) : convertToNumber(item.end_time) + 5,
+                          code: item.instance_name,
+                          label: {
+                              text: display
+                          }
+                      }
+                  };
+        });
+    };
+
+    useEffect(async () => {
+        const teamIds = await GameService.getAllMyCoachTeam().then((res) => {
+            const filtered = res.filter(
+                (item) => item.season_name === game.season_name && item.league_name === game.league_name && (item.team_id === game.home_team_id || item.team_id === game.away_team_id)
+            );
+            const teamId = filtered[0].team_id;
+            const opponentTeamId = teamId === game.home_team_id ? game.away_team_id : game.home_team_id;
+
+            return {
+                teamId,
+                opponentTeamId
+            };
+        });
+
+        await GameService.gameExportSportcodeShort(teamIds.teamId, `${game.id}`).then((res) => {
+            allData = res;
+        });
+
+        console.log(allData);
+
+        const oppFirst = allData.filter((item) => item.instance_name === 'All Offensive Possessions Opp')[0];
+        const oppIndex = allData.indexOf(oppFirst);
+        const ownData = allData.slice(0, oppIndex);
+        const oppData = allData.slice(oppIndex, allData.length);
+
+        const OurOffensivePossession = getTeamTagList(ownData, 'All Offensive Possessions', true, false);
+        const OurStartedGoalkeeper = getTeamTagList(ownData, 'Started Goalkeeper', true, false);
+        const OurBuildUp1 = getTeamTagList(ownData, 'Build Up 1', true, false);
+        const OurBuildUpOwnHalf = getTeamTagList(ownData, 'Build Up - Own Half', true, false);
+        const OurBuildUpOppHalf = getTeamTagList(ownData, 'Build Up - Opp Half', true, false);
+        const OurCrosses = getTeamTagList(ownData, 'Crosses', true, false);
+        const OurLossBall = getTeamTagList(ownData, 'Loss Ball', true, false);
+        const OurDefOff = getTeamTagList(ownData, 'Def > Off', true, false);
+        const OurChances = getTeamTagList(ownData, 'Chances', true, false);
+        const OurGoals = getTeamTagList(ownData, 'Goals', true, false);
+        const OurCorners = getTeamTagList(ownData, 'Corners', true, false);
+        const OurFreeKicks = getTeamTagList(ownData, 'Free Kicks', true, false);
+        const OurThrowIn = getTeamTagList(ownData, 'Throw In', true, false);
+        const OurPlayerTags = getTeamTagList(ownData, '#', true, true);
+
+        const OpponentOffensivePossession = getTeamTagList(oppData, 'All Offensive Possessions Opp', false, false);
+        const OpponentStartedGoalkeeper = getTeamTagList(oppData, 'Started Goalkeeper Opp', false, false);
+        const OpponentGoalkeeper = getTeamTagList(oppData, 'Goalkeeper Opp', false, false);
+        const OpponentDefenseOppHalf = getTeamTagList(oppData, 'Defense - Opp Half', false, false);
+        const OpponentDefenseOwnHalf = getTeamTagList(oppData, 'Defense - Own Half', false, false);
+        const OpponentCrosses = getTeamTagList(oppData, 'Crosses Opp', false, false);
+        const OpponentOffDef = getTeamTagList(oppData, 'Off > Def', false, false);
+        const OpponentLossBall = getTeamTagList(oppData, 'Loss Ball Opp', false, false);
+        const OpponentChances = getTeamTagList(oppData, 'Chances Opp', false, false);
+        const OpponentGoals = getTeamTagList(oppData, 'Goals Opp', false, false);
+        const OpponentCorners = getTeamTagList(oppData, 'Corners Opp', false, false);
+        const OpponentFreeKicks = getTeamTagList(oppData, 'Free Kicks Opp', false, false);
+        const OpponentThrowIn = getTeamTagList(oppData, 'Throw In Opp', false, false);
+        const OpponentPenalty = getTeamTagList(oppData, 'Penalty Opp', false, false);
+        const OpponentPlayerTags = getTeamTagList(oppData, '#', false, true);
+
+        const XMLData = {
+            file: {
+                SESSION_INFO: {
+                    start_time: game.date
+                },
+                ALL_INSTANCES: {
+                    instance: {
+                        ID: 0,
+                        start: 0,
+                        end: 10,
+                        code: 'Begining of Video'
+                    },
+                    OurOffensivePossession,
+                    OurStartedGoalkeeper,
+                    OurBuildUp1,
+                    OurBuildUpOwnHalf,
+                    OurBuildUpOppHalf,
+                    OurCrosses,
+                    OurLossBall,
+                    OurDefOff,
+                    OurChances,
+                    OurGoals,
+                    OurCorners,
+                    OurFreeKicks,
+                    OurThrowIn,
+                    OurPlayerTags,
+
+                    OpponentOffensivePossession,
+                    OpponentStartedGoalkeeper,
+                    OpponentGoalkeeper,
+                    OpponentDefenseOppHalf,
+                    OpponentDefenseOwnHalf,
+                    OpponentCrosses,
+                    OpponentOffDef,
+                    OpponentLossBall,
+                    OpponentChances,
+                    OpponentGoals,
+                    OpponentCorners,
+                    OpponentFreeKicks,
+                    OpponentThrowIn,
+                    OpponentPenalty,
+                    OpponentPlayerTags
+                },
+                ROWS: rowsForXML
+            }
+        };
+
+        const config = {
+            indent: ' '
+        };
+
+        const newXMLData = toXML(XMLData, config);
+        const blob = new Blob([newXMLData], { type: 'text/xml' });
+
+        console.log(rowsForXML);
+        setNewBlob(blob);
+        setXML(false);
+        setLoading(false);
+    }, []);
+
+    return <>{newBlob !== null && <DownloadXML blob={newBlob} game={game} />}</>;
+};
+
 export const XmlDataFilterOpponents = ({ game, teamId, setXML, setLoading }) => {
     const [newBlob, setNewBlob] = useState(null);
     let allData = [];

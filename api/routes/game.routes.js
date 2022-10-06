@@ -362,4 +362,10 @@ module.exports = (app) => {
     [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.gameExportSportcode
   );
+
+  app.get(
+    "/game/game_export_sportcode_short/:teamId/:gameIds",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.gameExportSportcodeShort
+  );
 };

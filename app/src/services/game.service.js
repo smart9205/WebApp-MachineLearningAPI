@@ -357,6 +357,12 @@ const gameExportSportcode = (teamId, gameIds) => {
     });
 };
 
+const gameExportSportcodeShort = (teamId, gameIds) => {
+    return axios.get(API_URL + `game/game_export_sportcode_short/${teamId}/${gameIds}`, { headers: authHeader(), data: { teamId, gameIds } }).then((response) => {
+        return response.data;
+    });
+};
+
 const getGameById = (gameId) => {
     return axios.get(API_URL + `game/getgamebyid/${gameId}`, { headers: authHeader(), data: { gameId } }).then((response) => {
         return response.data;
@@ -741,6 +747,11 @@ const addCorrectionRequest = (curPlayerId, newPlayerId, playerTagId) => {
         return response.data;
     });
 };
+const doCorrection = (cId) => {
+    return axios.put(API_URL + `player/docorrection/${cId}`, { cId }, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
 const getCorrectionRequest = () => {
     return axios.get(API_URL + `player/request/getcorrection`, { headers: authHeader() }).then((response) => {
         return response.data;
@@ -939,6 +950,7 @@ const gameService = {
     getTeamBlocked,
     getOpponentBlocked,
     gameExportSportcode,
+    gameExportSportcodeShort,
     getAllMyCoachTeam,
     getMyCoachTeamList,
     getMyCoachPlayerList,
@@ -951,6 +963,7 @@ const gameService = {
     getPlayersStats,
     addCorrectionRequest,
     getCorrectionRequest,
+    doCorrection,
     getPlayerTagsByActionName,
     getGameScore,
     getScoreInGames,
