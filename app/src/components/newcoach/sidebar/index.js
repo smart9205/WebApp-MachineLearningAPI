@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import MenuItem from './menuItem';
 import { menuData } from './menuData';
@@ -8,6 +9,7 @@ import GameService from '../../../services/game.service';
 
 import LogoAlone from '../../../assets/logoAlone.png';
 import MenuIcon from '@mui/icons-material/MenuOutlined';
+import { getCorrectionCount } from '../../../actions/game';
 
 const Sidebar = () => {
     const [minimum, setMinimum] = useState(false);
@@ -15,6 +17,12 @@ const Sidebar = () => {
     const [selectIndex, setSelectIndex] = useState(0);
     const [pathname, setPathname] = useState(window.location.pathname);
     const [gameCount, setGameCount] = useState(0);
+    const [menuState, setMenuState] = useState({
+        corrections: false
+    });
+
+    const dispatch = useDispatch();
+    const currentGame = useSelector((state) => state.game);
 
     const handleMenuControl = () => {
         if (minimum) setMinimum(false);
@@ -29,7 +37,7 @@ const Sidebar = () => {
         setHoverIndex(undefined);
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         setPathname(window.location.pathname);
 
         if (pathname.includes('/new_coach/dashboard')) setSelectIndex(0);
@@ -44,10 +52,17 @@ const Sidebar = () => {
         else if (pathname.includes('/new_coach/video_cutter')) setSelectIndex(6);
         else setSelectIndex(10);
 
-        GameService.getAllGamesByCoach(null, null, null, null).then((res) => {
+        await GameService.getAllGamesByCoach(null, null, null, null).then((res) => {
             setGameCount(res.length);
         });
+        dispatch(getCorrectionCount());
     }, [pathname]);
+
+    useEffect(() => {
+        setMenuState({ ...menuState, corrections: currentGame.correctionCnt > 0 });
+    }, [currentGame]);
+
+    console.log('hello => ', currentGame);
 
     return (
         <Box sx={{ backgroundColor: 'white', width: minimum ? '80px' : '180px', paddingTop: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -70,6 +85,7 @@ const Sidebar = () => {
                                 isMinimized={minimum}
                                 isHover={idx === hoverIndex ? true : false}
                                 isSelected={idx === selectIndex ? true : false}
+                                isEnabled={menuState[menuItem.id]}
                             />
                         </Box>
                     ))}

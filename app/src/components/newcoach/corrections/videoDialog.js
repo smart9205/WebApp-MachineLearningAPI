@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import ReactPlayer from 'react-player';
+import { Button, IconButton } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/CloseOutlined';
 import PlayIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
-import { Button, IconButton } from '@mui/material';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
+
 import { toSecond } from '../components/utilities';
 
 const CorrectionsVideoPlayer = ({ onClose, video_url, start, end }) => {
@@ -13,8 +16,15 @@ const CorrectionsVideoPlayer = ({ onClose, video_url, start, end }) => {
     const player = useRef(null);
     const [playRate, setPlayRate] = useState(1);
     const [play, setPlay] = useState(true);
+    const [currentTime, setCurrentTime] = useState(0);
+
+    const fastVideo = (param) => {
+        player.current && player.current.seekTo(currentTime + param);
+    };
 
     const onProgress = (seconds) => {
+        setCurrentTime(seconds);
+
         if (seconds >= toSecond(end)) {
             setPlay(false);
             onClose();
@@ -71,6 +81,9 @@ const CorrectionsVideoPlayer = ({ onClose, video_url, start, end }) => {
                         <CloseIcon />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', left: 0, bottom: '16px', justifyContent: 'center', width: '100%', gap: '1rem' }}>
+                        <IconButton style={{ color: 'white', backgroundColor: '#80808069' }} onClick={() => fastVideo(-3)}>
+                            <FastRewindIcon color="white" />
+                        </IconButton>
                         <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate(0.5)}>
                             Slow
                         </Button>
@@ -86,6 +99,9 @@ const CorrectionsVideoPlayer = ({ onClose, video_url, start, end }) => {
                         <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate((s) => s + 0.5)}>
                             Fast
                         </Button>
+                        <IconButton style={{ color: 'white', backgroundColor: '#80808069' }} onClick={() => fastVideo(3)}>
+                            <FastForwardIcon color="white" />
+                        </IconButton>
                     </div>
                 </FullScreen>
             </div>

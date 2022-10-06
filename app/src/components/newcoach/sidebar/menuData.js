@@ -13,56 +13,67 @@ import CheckIcon from '@mui/icons-material/Check';
 
 export const menuData = [
     {
+        id: 'dashboard',
         path: '/new_coach/dashboard',
         icon: <DashboardIcon />,
         title: 'Dashboard'
     },
     {
+        id: 'leaders',
         path: '/new_coach/leaders',
         icon: <LeadersIcon />,
         title: 'Leaders'
     },
     {
+        id: 'teams',
         path: '/new_coach/teams',
         icon: <TeamsIcon />,
         title: 'Teams'
     },
     {
+        id: 'opponents',
         path: '/new_coach/opponents',
         icon: <TeamsIcon />,
         title: 'Opponents'
     },
     {
+        id: 'games',
         path: '/new_coach/games',
         icon: <GamesIcon />,
         title: 'Games'
     },
     {
+        id: 'edits',
         path: '/new_coach/edits',
         icon: <EditsIcon />,
         title: 'My Edits'
     },
     {
+        id: 'video',
         path: '/new_coach/video_cutter',
         icon: <TheatersIcon />,
         title: 'Video Cutter'
     },
     {
+        id: 'reports',
         path: '/new_coach/reports',
         icon: <ReportsIcon />,
         title: 'Reports'
     },
     {
+        id: 'players',
         path: '/new_coach/players',
         icon: <PlayersIcon />,
         title: 'Players'
     },
     {
+        id: 'settings',
         path: '/new_coach/settings',
         icon: <SettingsIcon />,
         title: 'Settings'
     },
     {
+        id: 'corrections',
         path: '/new_coach/corrections',
         icon: <CheckIcon />,
         title: 'Corrections'

@@ -50,6 +50,12 @@ module.exports = (app) => {
   );
 
   app.put(
+    "/player/docorrection/:cId",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.doCorrection
+  );
+
+  app.put(
     "/player/:id",
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.update
@@ -60,6 +66,8 @@ module.exports = (app) => {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.delete
   );
+
+  app.delete("/player/correction/:id", controller.deleteCorrection);
 
   app.delete("/player", [authJwt.isAdmin], controller.deleteAll);
 
