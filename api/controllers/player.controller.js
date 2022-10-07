@@ -5,6 +5,7 @@ const User_Config = db.user_config;
 const Highlight = db.highlight;
 const Sequelize = db.sequelize;
 const Op = db.Sequelize.Op;
+const Corrections = db.corrections
 
 exports.updateTaggerConfig = async (req, res) => {
   if (!req.body.sec_before || !req.body.sec_after)
@@ -205,7 +206,27 @@ exports.doCorrection = (req, res) => {
 }
 
 exports.deleteCorrection = (req, res) => {
-  res.send("deleteCorrection")
+  const correctionId = req.params.id
+
+  Corrections.destroy({
+    where: { id: correctionId },
+  })
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: "Correction was deleted successfully!",
+        });
+      } else {
+        res.send({
+          message: `Cannot delete Correction with id=${id}. Maybe Correction was not found!`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Could not delete Correction with id=" + id,
+      })
+    })
 }
 
 exports.gameByPlayerId = (req, res) => {

@@ -5,12 +5,15 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 
 import { EditDraggableTableRow } from './draggableTableRow';
+import CorrectionsVideoPlayer from '../../corrections/videoDialog';
 
-const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTable, setChecks }) => {
+const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTable, setChecks, showPlay }) => {
     const [tableRows, setTableRows] = useState(tagList);
     const [selectedRows, setSelectedRows] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
     const selectedRef = useRef();
+    const [playOpen, setPlayOpen] = useState(false);
+    const [correctItem, setCorrectItem] = useState(null);
 
     selectedRef.current = selectedRows;
 
@@ -58,7 +61,7 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
         updateTable(array);
     };
 
-    const renderRow = useCallback((tag, index, selected) => {
+    const renderRow = useCallback((tag, index, selected, play) => {
         return (
             <EditDraggableTableRow
                 key={tag.id}
@@ -72,6 +75,9 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
                 rowChecked={selectedRef.current.includes(tag.id)}
                 onCheck={handleRowSelection}
                 updateList={handleUpdateTable}
+                showPlay={play}
+                setItem={setCorrectItem}
+                onPlay={setPlayOpen}
             />
         );
     }, []);
@@ -98,27 +104,38 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
     }, [selectedRows]);
 
     return (
-        <TableContainer style={{ height: '95%', width: '100%' }}>
-            <DndProvider backend={HTML5Backend}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                <Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} />
-                            </TableCell>
-                            <TableCell style={{ height: '36px' }}>Clip Name</TableCell>
-                            <TableCell align="center" style={{ height: '36px' }}>
-                                Start Time
-                            </TableCell>
-                            <TableCell align="center" style={{ height: '36px' }}>
-                                End Time
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>{tableRows.map((tag, index) => renderRow(tag, index, selectIdx))}</TableBody>
-                </Table>
-            </DndProvider>
-        </TableContainer>
+        <>
+            <TableContainer style={{ height: '95%', width: '100%' }}>
+                <DndProvider backend={HTML5Backend}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>
+                                    <Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} />
+                                </TableCell>
+                                <TableCell style={{ height: '36px' }}>Clip Name</TableCell>
+                                <TableCell align="center" style={{ height: '36px' }}>
+                                    Start Time
+                                </TableCell>
+                                <TableCell align="center" style={{ height: '36px' }}>
+                                    End Time
+                                </TableCell>
+                                <TableCell />
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>{tableRows.map((tag, index) => renderRow(tag, index, selectIdx, showPlay))}</TableBody>
+                    </Table>
+                </DndProvider>
+            </TableContainer>
+            {playOpen && (
+                <CorrectionsVideoPlayer
+                    onClose={() => setPlayOpen(false)}
+                    video_url={correctItem?.video_url ?? ''}
+                    start={correctItem?.start_time ?? '00:00:00'}
+                    end={correctItem?.end_time ?? '00:00:00'}
+                />
+            )}
+        </>
     );
 };
 

@@ -68,6 +68,90 @@ exports.findAllMine = (req, res) => {
     });
 };
 
+exports.getAllPlayersByCoach = (req, res) => {
+  const user_id = req.params.id
+  Sequelize.query(`
+    SELECT * from public.fnc_get_all_players_by_coach(${user_id})
+  `).then(data => {
+    res.send(data[0])
+  }).catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving Players."
+    })
+  })
+}
+
+exports.getAllLeaguesByCoach = (req, res) => {
+  const user_id = req.params.id
+  Sequelize.query(`
+    select * from public.fnc_get_all_leagues_by_coach(${user_id})
+  `).then(data => {
+    res.send(data[0])
+  }).catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving Leagues."
+    })
+  })
+}
+
+exports.getAllTeamsByCoach = (req, res) => {
+  const user_id = req.params.id
+  Sequelize.query(`
+    select * from public.fnc_get_all_teams_by_coach(${user_id})
+  `).then(data => {
+    res.send(data[0])
+  }).catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving Teams."
+    })
+  })
+}
+
+exports.getAllLeaguesOfAdditionalGamesByCoach = (req, res) => {
+  const user_id = req.params.id
+  Sequelize.query(`
+    select * from public.fnc_get_all_leagues_of_additional_games_by_coach(${user_id})
+  `).then(data => {
+    res.send(data[0])
+  }).catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving Leagues of additional games."
+    })
+  })
+}
+
+exports.getAllTeamsOfAdditionalGamesByCoach = (req, res) => {
+  const user_id = req.params.id
+  Sequelize.query(`
+    select * from public.fnc_get_all_teams_of_additional_games_by_coach(${user_id})
+  `).then(data => {
+    res.send(data[0])
+  }).catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving Teams of additional games."
+    })
+  })
+}
+
+exports.getNumberOfGamesOrdered = (req, res) => {
+  const user_id = req.params.id
+  Sequelize.query(`
+    select * from public.fnc_get_number_of_games_ordered(${user_id})
+  `).then(data => {
+    res.send(data[0])
+  }).catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving number of games."
+    })
+  })
+}
+
 exports.getCoachTeamList = (req, res) => {
   Sequelize.query(`
     SELECT 
@@ -206,8 +290,8 @@ exports.getGamePlayerTags = (req, res) => {
       ${actionResultId}
     )
   `).then(data => {
-      res.send(data[0]);
-    })
+    res.send(data[0]);
+  })
     .catch(err => {
       res.status(500).send({
         message:

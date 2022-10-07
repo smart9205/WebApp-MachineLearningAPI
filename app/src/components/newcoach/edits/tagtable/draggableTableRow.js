@@ -1,12 +1,14 @@
 import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { TableCell, TableRow, Checkbox } from '@mui/material';
+import { TableCell, TableRow, Checkbox, IconButton } from '@mui/material';
+
+import PlayIcon from '@mui/icons-material/PlayArrowOutlined';
 
 import GameService from '../../../../services/game.service';
 import TCellNameEdit from './cellEditName';
 import TCellTimeEdit from './cellEditTime';
 
-export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTeam, rowChecked, onCheck, updateList, onSelect, ...rest }) => {
+export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTeam, rowChecked, onCheck, updateList, onSelect, showPlay, setItem, onPlay, ...rest }) => {
     const ref = useRef(null);
     const [{ handlerId }, drop] = useDrop({
         accept: 'EditDraggableTableRow',
@@ -105,6 +107,19 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
                 style={{ height: '36px' }}
                 onClick={() => onSelect(index)}
             />
+            {showPlay && (
+                <TableCell>
+                    <IconButton
+                        size="small"
+                        onClick={() => {
+                            setItem({ video_url: row.video_url, start_time: row.start_time, end_time: row.end_time });
+                            onPlay(true);
+                        }}
+                    >
+                        <PlayIcon />
+                    </IconButton>
+                </TableCell>
+            )}
         </TableRow>
     );
 };

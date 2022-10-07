@@ -11,7 +11,7 @@ import { editCreateCommand, toSecond } from '../../components/utilities';
 import GameService from '../../../../services/game.service';
 import EditFolderTreeView from '../treeview';
 
-const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }) => {
+const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, showPlay }) => {
     const [teamTagList, setTeamTagList] = useState([]);
     const [checkArray, setCheckArray] = useState([]);
     const [eventName, setEventName] = useState('');
@@ -170,7 +170,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update }
                         </Box>
                     )}
                     {tagList.length > 0 && teamTagList.length > 0 && (
-                        <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} updateTable={update} setChecks={setCheckArray} />
+                        <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} updateTable={update} setChecks={setCheckArray} showPlay={showPlay} />
                     )}
                     <Dialog open={dialogOpen} onClose={() => handleClose()} scroll="paper">
                         <DialogTitle>

@@ -35,6 +35,36 @@ module.exports = (app) => {
   );
 
   app.get(
+    "/coach_team/getAllPlayersByCoach/:id",
+    controller.getAllPlayersByCoach
+  )
+
+  app.get(
+    "/coach_team/getAllLeaguesByCoach/:id",
+    controller.getAllLeaguesByCoach
+  )
+
+  app.get(
+    "/coach_team/getAllTeamsByCoach/:id",
+    controller.getAllTeamsByCoach
+  )
+
+  app.get(
+    "/coach_team/getAllLeaguesOfAdditionalGamesByCoach/:id",
+    controller.getAllLeaguesOfAdditionalGamesByCoach
+  )
+
+  app.get(
+    "/coach_team/getAllTeamsOfAdditionalGamesByCoach/:id",
+    controller.getAllTeamsOfAdditionalGamesByCoach
+  )
+
+  app.get(
+    "/coach_team/getNumberOfGamesOrdered/:id",
+    controller.getNumberOfGamesOrdered
+  )
+
+  app.get(
     "/coach_team/team_players/:teamId/:seasonId",
     [authJwt.isAdminOrCoach],
     controller.getCoachTeamPlayers
