@@ -200,6 +200,14 @@ exports.getCorrectionRequest = (req, res) => {
     });
 };
 
+exports.doCorrection = (req, res) => {
+  res.send("doCorrection")
+}
+
+exports.deleteCorrection = (req, res) => {
+  res.send("deleteCorrection")
+}
+
 exports.gameByPlayerId = (req, res) => {
   const id = req.params.id;
 
