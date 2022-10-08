@@ -43,7 +43,7 @@ const styles = {
     }
 };
 
-export default function VCVideoPlayer({ saveEdit, drawOpen }) {
+export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
     const handle = useFullScreenHandle();
     const player = useRef(null);
     const [play, setPlay] = useState(false);
@@ -320,7 +320,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen }) {
                         </div>
                     </div>
                 </FullScreen>
-                <EditCreateClipDialog open={createOpen} onClose={() => setCreateOpen(false)} editNode={saveEdit} clip={newClip} onPlay={setPlay} />
+                <EditCreateClipDialog open={createOpen} onClose={() => setCreateOpen(false)} editNode={saveEdit} clip={newClip} onPlay={setPlay} updateList={updateList} />
             </div>
         </div>
     );

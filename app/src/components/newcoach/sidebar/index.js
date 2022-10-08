@@ -52,9 +52,10 @@ const Sidebar = () => {
         else if (pathname.includes('/new_coach/video_cutter')) setSelectIndex(6);
         else setSelectIndex(10);
 
-        await GameService.getAllGamesByCoach(null, null, null, null).then((res) => {
-            setGameCount(res.length);
-        });
+        await GameService.getNumberOfGamesOrdered(null).then((res) => {
+            setGameCount(res[0].total_game)
+        })
+
         dispatch(getCorrectionCount());
     }, [pathname]);
 

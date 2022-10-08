@@ -11,6 +11,7 @@ const VideoCutter = () => {
     const [editTagList, setEditTagList] = useState([]);
     const [tagLoading, setTagLoading] = useState(false);
     const [curTagIdx, setCurTagIdx] = useState(-1);
+    const [refresh, setRefresh] = useState(false);
 
     const handleClickRow = (index) => {
         setCurTagIdx(index);
@@ -37,6 +38,17 @@ const VideoCutter = () => {
         }
     }, [curEdit]);
 
+    useEffect(() => {
+        setEditTagList([]);
+
+        if (curEdit !== null && curEdit.type === 'edit') {
+            GameService.getEditClipsByUserEditId(curEdit.id).then((res) => {
+                setEditTagList(res);
+                setRefresh(false);
+            });
+        }
+    }, [refresh]);
+
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             <Box sx={{ padding: '24px 24px 48px 48px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
@@ -56,7 +68,7 @@ const VideoCutter = () => {
                         showPlay={true}
                     />
                 </div>
-                <VCVideoPlayer saveEdit={curEdit} drawOpen={true} />
+                <VCVideoPlayer saveEdit={curEdit} drawOpen={true} updateList={setRefresh} />
             </Box>
         </Box>
     );

@@ -100,10 +100,17 @@ const Leaders = () => {
         await GameService.getPlayersStats(null, null, null, null, null).then((res) => {
             setPlayerList(res);
             setSeasonList(getSeasonList(res));
-            setLeagueList(getLeagueList(res));
-            setTeamList(getTeamList(res));
             setLoading(false);
         });
+
+        await GameService.getAllLeaguesByCoach(null).then((res) => {
+            setLeagueList(getLeagueList(res));
+        })
+
+        await GameService.getAllTeamsByCoach(null).then((res) => {
+            setTeamList(getTeamList(res));
+        })
+
     }, []);
 
     console.log('leaders => ', playerList);

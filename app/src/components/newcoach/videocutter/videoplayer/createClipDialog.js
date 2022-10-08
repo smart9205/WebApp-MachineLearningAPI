@@ -3,7 +3,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, 
 
 import gameService from '../../../../services/game.service';
 
-const EditCreateClipDialog = ({ open, onClose, editNode, clip, onPlay }) => {
+const EditCreateClipDialog = ({ open, onClose, editNode, clip, onPlay, updateList }) => {
     const [clipName, setClipName] = useState('');
 
     const handleCreateClip = async () => {
@@ -23,6 +23,7 @@ const EditCreateClipDialog = ({ open, onClose, editNode, clip, onPlay }) => {
                 console.log('clip_save => ', newClip);
                 await gameService.addNewEditClips({ id: editNode.id, rows: [newClip] }).then((res) => {
                     onPlay(true);
+                    updateList(true);
                 });
             }
         }

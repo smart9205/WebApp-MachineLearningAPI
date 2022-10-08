@@ -35,32 +35,32 @@ module.exports = (app) => {
   );
 
   app.get(
-    "/coach_team/getAllPlayersByCoach/:id",
+    "/coach_team/getAllPlayersByCoach",
     controller.getAllPlayersByCoach
   )
 
   app.get(
-    "/coach_team/getAllLeaguesByCoach/:id",
+    "/coach_team/getAllLeaguesByCoach",
     controller.getAllLeaguesByCoach
   )
 
   app.get(
-    "/coach_team/getAllTeamsByCoach/:id",
+    "/coach_team/getAllTeamsByCoach",
     controller.getAllTeamsByCoach
   )
 
   app.get(
-    "/coach_team/getAllLeaguesOfAdditionalGamesByCoach/:id",
+    "/coach_team/getAllLeaguesOfAdditionalGamesByCoach",
     controller.getAllLeaguesOfAdditionalGamesByCoach
   )
 
   app.get(
-    "/coach_team/getAllTeamsOfAdditionalGamesByCoach/:id",
+    "/coach_team/getAllTeamsOfAdditionalGamesByCoach",
     controller.getAllTeamsOfAdditionalGamesByCoach
   )
 
   app.get(
-    "/coach_team/getNumberOfGamesOrdered/:id",
+    "/coach_team/getNumberOfGamesOrdered",
     controller.getNumberOfGamesOrdered
   )
 

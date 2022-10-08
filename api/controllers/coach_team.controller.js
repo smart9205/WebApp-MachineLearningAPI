@@ -69,9 +69,8 @@ exports.findAllMine = (req, res) => {
 };
 
 exports.getAllPlayersByCoach = (req, res) => {
-  const user_id = req.params.id
   Sequelize.query(`
-    SELECT * from public.fnc_get_all_players_by_coach(${user_id})
+    SELECT * from public.fnc_get_all_players_by_coach(${req.userId})
   `).then(data => {
     res.send(data[0])
   }).catch(err => {
@@ -83,9 +82,8 @@ exports.getAllPlayersByCoach = (req, res) => {
 }
 
 exports.getAllLeaguesByCoach = (req, res) => {
-  const user_id = req.params.id
   Sequelize.query(`
-    select * from public.fnc_get_all_leagues_by_coach(${user_id})
+    select * from public.fnc_get_all_leagues_by_coach(${req.userId})
   `).then(data => {
     res.send(data[0])
   }).catch(err => {
@@ -97,9 +95,8 @@ exports.getAllLeaguesByCoach = (req, res) => {
 }
 
 exports.getAllTeamsByCoach = (req, res) => {
-  const user_id = req.params.id
   Sequelize.query(`
-    select * from public.fnc_get_all_teams_by_coach(${user_id})
+    select * from public.fnc_get_all_teams_by_coach(${req.userId})
   `).then(data => {
     res.send(data[0])
   }).catch(err => {
@@ -111,9 +108,8 @@ exports.getAllTeamsByCoach = (req, res) => {
 }
 
 exports.getAllLeaguesOfAdditionalGamesByCoach = (req, res) => {
-  const user_id = req.params.id
   Sequelize.query(`
-    select * from public.fnc_get_all_leagues_of_additional_games_by_coach(${user_id})
+    select * from public.fnc_get_all_leagues_of_additional_games_by_coach(${req.userId})
   `).then(data => {
     res.send(data[0])
   }).catch(err => {
@@ -125,9 +121,8 @@ exports.getAllLeaguesOfAdditionalGamesByCoach = (req, res) => {
 }
 
 exports.getAllTeamsOfAdditionalGamesByCoach = (req, res) => {
-  const user_id = req.params.id
   Sequelize.query(`
-    select * from public.fnc_get_all_teams_of_additional_games_by_coach(${user_id})
+    select * from public.fnc_get_all_teams_of_additional_games_by_coach(${req.userId})
   `).then(data => {
     res.send(data[0])
   }).catch(err => {
@@ -139,9 +134,8 @@ exports.getAllTeamsOfAdditionalGamesByCoach = (req, res) => {
 }
 
 exports.getNumberOfGamesOrdered = (req, res) => {
-  const user_id = req.params.id
   Sequelize.query(`
-    select * from public.fnc_get_number_of_games_ordered(${user_id})
+    select * from public.fnc_get_number_of_games_ordered(${req.userId})
   `).then(data => {
     res.send(data[0])
   }).catch(err => {
