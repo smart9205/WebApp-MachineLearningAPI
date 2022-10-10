@@ -202,7 +202,18 @@ exports.getCorrectionRequest = (req, res) => {
 };
 
 exports.doCorrection = (req, res) => {
-  res.send("doCorrection")
+  const correctionId = req.params.cId
+  Sequelize.query(
+    `Select * from public.fnc_do_correction(${correctionId},${req.userId})`
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((e) => {
+      res.status(500).send({
+        message: e.message || "Some error occurred while Approve correction.",
+      });
+    });
 }
 
 exports.deleteCorrection = (req, res) => {

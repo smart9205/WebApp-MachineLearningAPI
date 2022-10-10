@@ -63,8 +63,6 @@ const Sidebar = () => {
         setMenuState({ ...menuState, corrections: currentGame.correctionCnt > 0 });
     }, [currentGame]);
 
-    console.log('hello => ', currentGame);
-
     return (
         <Box sx={{ backgroundColor: 'white', width: minimum ? '80px' : '180px', paddingTop: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '64px' }}>
@@ -95,11 +93,11 @@ const Sidebar = () => {
             {minimum ? (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', width: '100%', height: '5vh', gap: '4px', marginBottom: '8px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{gameCount}</Typography>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>Games</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>Games Ordered</Typography>
                 </Box>
             ) : (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '5vh', marginBottom: '8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{gameCount} Games</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{gameCount} Games Ordered</Typography>
                 </Box>
             )}
         </Box>
