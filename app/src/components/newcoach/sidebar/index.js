@@ -17,6 +17,7 @@ const Sidebar = () => {
     const [selectIndex, setSelectIndex] = useState(0);
     const [pathname, setPathname] = useState(window.location.pathname);
     const [gameCount, setGameCount] = useState(0);
+    const [menuList, setMenuList] = useState([]);
     const [menuState, setMenuState] = useState({
         corrections: false
     });
@@ -39,6 +40,7 @@ const Sidebar = () => {
 
     useEffect(async () => {
         setPathname(window.location.pathname);
+        setMenuList(menuData);
 
         if (pathname.includes('/new_coach/dashboard')) setSelectIndex(0);
         else if (pathname.includes('/new_coach/games')) setSelectIndex(4);
@@ -53,8 +55,10 @@ const Sidebar = () => {
         else setSelectIndex(10);
 
         await GameService.getNumberOfGamesOrdered(null).then((res) => {
-            setGameCount(res[0].total_game)
-        })
+            setGameCount(res[0].total_game);
+
+            if (res[0].total_game === 0) setMenuList(menuData.filter((item) => item.id !== 'dashboard'));
+        });
 
         dispatch(getCorrectionCount());
     }, [pathname]);

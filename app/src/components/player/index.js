@@ -15,32 +15,7 @@ import './Profile.css';
 import { useTranslation } from 'react-i18next';
 import GameImage from '../../assets/game_image.png';
 import FilterIcon from '@mui/icons-material/FilterListOutlined';
-
-function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) return -1;
-
-    if (b[orderBy] > a[orderBy]) return 1;
-
-    return 0;
-}
-
-function getComparator(order, orderBy) {
-    return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-
-        if (order !== 0) return order;
-
-        return a[1] - b[1];
-    });
-
-    return stabilizedThis.map((el) => el[0]);
-}
+import { getComparator, stableSort } from '../newcoach/components/utilities';
 
 const styles = {
     loader: {
@@ -69,7 +44,7 @@ export const PlayerContext = createContext({
         game: null,
         update_cnt: 0
     },
-    setContext: () => { }
+    setContext: () => {}
 });
 
 const useStyles = makeStyles(() => ({
@@ -156,7 +131,7 @@ export default function Player() {
     };
 
     const getFormattedDate = (date) => {
-        const old_format = date.match(/\d\d\d\d-\d\d-\d\d/) + '';
+        const old_format = date ? date.match(/\d\d\d\d-\d\d-\d\d/) + '' : '';
         const array = old_format.split('-');
 
         return `${array[2]} / ${array[1]} / ${array[0]}`;
@@ -192,6 +167,8 @@ export default function Player() {
     };
 
     const { player: playerData, game: curGame } = context;
+
+    console.log('player', games);
 
     return (
         <ThemeProvider theme={theme}>
@@ -246,7 +223,7 @@ export default function Player() {
                                     margin: '30px 8px',
                                     padding: '8px 16px 8px 8px',
                                     boxShadow: hoverIndex === index ? '0px 4px 16px rgba(0, 0, 0, 0.1)' : 'none',
-                                    cursor: 'pointer',
+                                    cursor: 'pointer'
                                 }}
                                 onClick={() => setContext({ game: item })}
                             >
@@ -263,7 +240,7 @@ export default function Player() {
                                 </Box>
                                 <Box sx={{ display: 'flex', gap: '2px', flexDirection: 'column', flex: 1 }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 500, color: '#1a1b1d' }}>{getFormattedDate(item.date)}</Typography>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 500, color: '#1a1b1d' }}>{getFormattedDate(item.game_date)}</Typography>
                                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 500, color: '#1a1b1d' }}>{item.season_name}</Typography>
                                     </Box>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 500, color: '#1a1b1d' }}>{item.league_name}</Typography>

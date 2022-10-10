@@ -81,36 +81,50 @@ const Leaders = () => {
     const getFilteredList = () => {
         let array = [];
 
-        if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none') array = playerList.filter((item) => item.season_name === values.seasonFilter);
-        else if (values.leagueFilter !== 'none' && values.seasonFilter === 'none' && values.teamFilter === 'none') array = playerList.filter((item) => item.league_name === values.leagueFilter);
-        else if (values.teamFilter !== 'none' && values.seasonFilter === 'none' && values.leagueFilter === 'none') array = playerList.filter((item) => item.team_name === values.teamFilter);
-        else if (values.seasonFilter !== 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none')
+        if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter === 'none')
+            array = playerList.filter((item) => item.season_name === values.seasonFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter === 'none')
+            array = playerList.filter((item) => item.league_name === values.leagueFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter === 'none')
+            array = playerList.filter((item) => item.team_name === values.teamFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter !== 'none')
+            array = playerList.filter((item) => item.player_name === values.playerFilter);
+        else if (values.seasonFilter !== 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter === 'none')
             array = playerList.filter((item) => item.season_name === values.seasonFilter && item.league_name === values.leagueFilter);
-        else if (values.seasonFilter !== 'none' && values.teamFilter !== 'none' && values.leagueFilter === 'none')
+        else if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter === 'none')
             array = playerList.filter((item) => item.season_name === values.seasonFilter && item.team_name === values.teamFilter);
-        else if (values.leagueFilter !== 'none' && values.teamFilter !== 'none' && values.seasonFilter === 'none')
+        else if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter !== 'none')
+            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.player_name === values.playerFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter !== 'none' && values.playerFilter === 'none')
             array = playerList.filter((item) => item.league_name === values.leagueFilter && item.team_name === values.teamFilter);
-        else array = playerList.filter((item) => item.league_name === values.leagueFilter && item.season_name === values.seasonFilter && item.team_name === values.teamFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter !== 'none')
+            array = playerList.filter((item) => item.league_name === values.leagueFilter && item.player_name === values.playerFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter !== 'none')
+            array = playerList.filter((item) => item.player_name === values.playerFilter && item.team_name === values.teamFilter);
+        else
+            array = playerList.filter(
+                (item) => item.league_name === values.leagueFilter && item.season_name === values.seasonFilter && item.team_name === values.teamFilter && item.player_name === values.playerFilter
+            );
 
-        return values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' ? playerList : array;
+        return values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter === 'none' ? playerList : array;
     };
 
     useEffect(async () => {
         setLoading(true);
+        await GameService.getAllLeaguesByCoach().then((res) => {
+            setLeagueList(getLeagueList(res));
+        });
+        await GameService.getAllTeamsByCoach().then((res) => {
+            setTeamList(getTeamList(res));
+        });
+        await GameService.getAllPlayersByCoach().then((res) => {
+            setPlayersList(res);
+        });
         await GameService.getPlayersStats(null, null, null, null, null).then((res) => {
             setPlayerList(res);
             setSeasonList(getSeasonList(res));
             setLoading(false);
         });
-
-        await GameService.getAllLeaguesByCoach(null).then((res) => {
-            setLeagueList(getLeagueList(res));
-        })
-
-        await GameService.getAllTeamsByCoach(null).then((res) => {
-            setTeamList(getTeamList(res));
-        })
-
     }, []);
 
     console.log('leaders => ', playerList);
@@ -209,7 +223,7 @@ const Leaders = () => {
                                         All
                                     </MenuItem>
                                     {playersList.map((player, index) => (
-                                        <MenuItem key={index + 1} value={player.id}>
+                                        <MenuItem key={index + 1} value={player.player_name}>
                                             {player.player_name}
                                         </MenuItem>
                                     ))}
