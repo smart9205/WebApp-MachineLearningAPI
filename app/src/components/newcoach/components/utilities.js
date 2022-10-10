@@ -4,20 +4,21 @@ import fileDownload from 'js-file-download';
 
 import gameService from '../../../services/game.service';
 
-export const gameCreateCommand = async (tagList, name, rawVideoList, gameIds) => {
+export const gameCreateCommand = async (tagList, name, games, gameIds) => {
     let videoList = await Promise.all(
-        rawVideoList.map(async (url) => {
-            if (url?.startsWith('https://www.youtube.com')) {
-                return (await gameService.getAsyncNewStreamURL(url)).url;
-            }
-            return url;
+        games.map(async (game) => {
+            if (game.video_url?.startsWith('https://www.youtube.com')) return (await gameService.getAsyncNewStreamURL(game.video_url)).url;
+
+            return { url: game.video_url, home: game.home_team_image, away: game.away_team_image };
         })
     );
 
-    let videos = videoList.map((tag, i) => {
+    let videos = videoList.map((tag) => {
         return {
-            url: tag,
-            SecondBoxText: name.replace("'", '')
+            url: tag.url,
+            SecondBoxText: name.replace("'", ''),
+            HomeTeamLogo: tag.home,
+            AwayTeamLogo: tag.away
         };
     });
 
@@ -27,7 +28,9 @@ export const gameCreateCommand = async (tagList, name, rawVideoList, gameIds) =>
         return {
             Video: gameIds.indexOf(tag.game_id) + 1,
             Trim: `${toSecond(tag.team_tag_start_time)}:${toSecond(tag.team_tag_end_time)}`,
-            FirstBoxText: `${period} - ${tag.time_in_game}`
+            GameTime: `${period} - ${tag.time_in_game}`,
+            GameScore: `${tag.home_team_goal} - ${tag.away_team_goal}`,
+            FirstBoxText: `Clip ${i + 1}`
         };
     });
 

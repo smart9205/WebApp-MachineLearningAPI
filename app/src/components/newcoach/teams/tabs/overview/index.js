@@ -103,7 +103,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
     const handleClickRenderFromButton = () => {
         const newList = values.playList.filter((item, index) => checkArray[index] === true);
         const ids = newList.map((item) => item.game_id);
-        const newVideos = games.filter((game) => ids.includes(game.id)).map((item) => item.video_url);
+        const newVideos = games.filter((game) => ids.includes(game.id) === true);
 
         gameCreateCommand(newList, tagIndex, newVideos, ids);
     };
@@ -189,7 +189,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
             setLoadData(false);
 
             if (values.clickEventName === 'render') {
-                const newList = games.filter((item) => gameIds.includes(item.id)).map((game) => game.video_url);
+                const newList = games.filter((item) => gameIds.includes(item.id) === true);
 
                 gameCreateCommand(res, tagIndex, newList, gameIds);
             } else if (values.clickEventName === 'sportcode') {

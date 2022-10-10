@@ -188,7 +188,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                 inputProps={{ 'aria-label': 'Without label' }}
                 MenuProps={MenuProps}
                 disabled={gameList.length === 0}
-                sx={{ outline: 'none', height: '36px', width: '50%', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                sx={{ outline: 'none', height: '36px', width: '100%', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
             >
                 {gameList.map((game, index) => (
                     <MenuItem key={index} value={game.id}>

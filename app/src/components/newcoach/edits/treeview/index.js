@@ -42,7 +42,8 @@ function getChilds(folders, parent_id) {
 function getChildIds(array) {
     array.map((item) => {
         if (Array.isArray(item.children)) getChildIds(item.children);
-        else child_ids = [...child_ids, item.id];
+
+        child_ids = [...child_ids, item.id];
     });
 }
 
@@ -72,7 +73,7 @@ export function getTreeViewData(res) {
         child_ids = [...child_ids, tree.id];
         resCopy = resCopy.filter((data) => child_ids.includes(String(data.id)) === false);
         i = -1;
-        console.log('getting tree => ', resCopy, child_ids);
+        console.log('getting tree => ', resCopy, child_ids, trees);
     }
 
     return stableSort(trees, getComparator('asc', 'order_num'));
