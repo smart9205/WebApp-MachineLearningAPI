@@ -6,9 +6,10 @@ import update from 'immutability-helper';
 
 import { EditDraggableTableRow } from './draggableTableRow';
 import CorrectionsVideoPlayer from '../../corrections/videoDialog';
+import GameService from '../../../../services/game.service';
 
 const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTable, setChecks, showPlay }) => {
-    const [tableRows, setTableRows] = useState(tagList);
+    const [tableRows, setTableRows] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
     const selectedRef = useRef();
@@ -17,25 +18,29 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
 
     selectedRef.current = selectedRows;
 
-    const moveRow = useCallback((dragIndex, hoverIndex) => {
-        setTableRows((prevCards) => {
-            const newRow = update(prevCards, {
-                $splice: [
-                    [dragIndex, 1],
-                    [hoverIndex, 0, prevCards[dragIndex]]
-                ]
+    const moveRow = useCallback((dragIndex, hoverIndex, isDropped) => {
+        console.log('dragging => ', isDropped);
+        if (!isDropped)
+            setTableRows((prevCards) => {
+                const newRow = update(prevCards, {
+                    $splice: [
+                        [dragIndex, 1],
+                        [hoverIndex, 0, prevCards[dragIndex]]
+                    ]
+                });
+                const start = dragIndex < hoverIndex ? dragIndex : hoverIndex;
+                const end = (dragIndex > hoverIndex ? dragIndex : hoverIndex) + 1;
+
+                handleSort(
+                    newRow.slice(start, end).map((row, i) => {
+                        return { ...row, sort: start + i };
+                    }),
+                    false
+                );
+
+                return newRow;
             });
-            const start = dragIndex < hoverIndex ? dragIndex : hoverIndex;
-            const end = (dragIndex > hoverIndex ? dragIndex : hoverIndex) + 1;
-
-            handleSort(
-                newRow.slice(start, end).map((row, i) => {
-                    return { ...row, sort: start + i };
-                })
-            );
-
-            return newRow;
-        });
+        else handleSort(null, true);
     }, []);
 
     const handleRowSelection = (id) => {
@@ -54,12 +59,11 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
         setChecks(array);
     };
 
-    const handleUpdateTable = (index, data) => {
-        let array = [...tableRows];
-
-        array[index] = data;
-        updateTable(array);
-    };
+    const handleUpdateTable = useCallback(async (index, data) => {
+        setTableRows((prev) => update(prev, { [index]: { $set: data } }));
+        await GameService.updateEditClip(data);
+        updateTable();
+    }, []);
 
     const renderRow = useCallback((tag, index, selected, play) => {
         return (
@@ -83,9 +87,11 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
     }, []);
 
     useEffect(() => {
-        setTableRows(tagList);
-        setSelectedRows([]);
-        setSelectAll(false);
+        if (tagList !== tableRows) {
+            setTableRows(tagList);
+            setSelectedRows([]);
+            setSelectAll(false);
+        }
     }, [tagList]);
 
     useEffect(() => {
@@ -100,7 +106,7 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
     }, [selectAll]);
 
     useEffect(() => {
-        if (selectedRows.length === tableRows.length) setSelectAll(true);
+        if (selectedRows.length === tableRows.length && tableRows.length > 0) setSelectAll(true);
     }, [selectedRows]);
 
     return (

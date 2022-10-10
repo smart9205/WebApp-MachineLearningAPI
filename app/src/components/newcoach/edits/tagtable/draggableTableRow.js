@@ -47,12 +47,15 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
                 return;
             }
             // Time to actually perform the action
-            moveRow(dragIndex, hoverIndex);
+            moveRow(dragIndex, hoverIndex, false);
             // Note: we're mutating the monitor item here!
             // Generally it's better to avoid mutations,
             // but it's good here for the sake of performance
             // to avoid expensive index searches.
             item.index = hoverIndex;
+        },
+        drop(item, monitor) {
+            moveRow(0, 0, true);
         }
     });
     const [{ isDragging }, drag] = useDrag({
@@ -67,12 +70,6 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
 
     drag(drop(ref));
 
-    const update = (data) => {
-        console.log('tablerow => ', data);
-        updateList(index, data);
-        GameService.updateEditClip(data);
-    };
-
     return (
         <TableRow hover ref={ref} data-handler-id={handlerId} tabIndex={-1} role="checkbox" selected={selected} {...rest}>
             <TableCell>
@@ -81,7 +78,7 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
             <TCellNameEdit
                 value={row.name}
                 update={(v) => {
-                    update({ ...row, name: v });
+                    updateList(index, { ...row, name: v });
                     row.name = v;
                 }}
                 style={{ height: '36px' }}
@@ -90,7 +87,7 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
             <TCellTimeEdit
                 value={row.start_time}
                 update={(v) => {
-                    update({ ...row, start_time: v });
+                    updateList(index, { ...row, start_time: v });
                     row.start_time = v;
                 }}
                 end={row.end_time}
@@ -100,7 +97,7 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
             <TCellTimeEdit
                 value={row.end_time}
                 update={(v) => {
-                    update({ ...row, end_time: v });
+                    updateList(index, { ...row, end_time: v });
                     row.end_time = v;
                 }}
                 start={row.start_time}

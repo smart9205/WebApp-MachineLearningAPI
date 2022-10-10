@@ -66,9 +66,12 @@ const GameListItem = ({ row, isHover }) => {
 
     const handleDownloadVideo = (url) => {
         setMenuAnchorEl(null);
-        axios.get(url, { responseType: 'blob' }).then((res) => {
-            fileDownload(res.data, '1.mp4');
-        });
+
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.target = '_blank';
+        link.click();
     };
 
     const getFormattedDate = (date) => {
