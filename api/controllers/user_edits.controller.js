@@ -210,8 +210,12 @@ exports.findOne = (req, res) => {
     `
   SELECT 
     public."Edit_Clips".*,
-    public."Games".video_url
+    public."Games".video_url,
+    hometeam.image as home_team_logo,
+    awayteam.image as away_team_logo
   FROM public."Edit_Clips"
+  JOIN public."Teams" as hometeam on hometeam.id = public."Games".home_team_id
+  JOIN public."Teams" as awayteam on awayteam.id = public."Games".away_team_id
   JOIN public."Games" on public."Games".id = public."Edit_Clips".game_id
   WHERE public."Edit_Clips".edit_id = ${id}
   order by sort

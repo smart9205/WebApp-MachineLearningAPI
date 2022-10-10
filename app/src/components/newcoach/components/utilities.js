@@ -7,7 +7,11 @@ import gameService from '../../../services/game.service';
 export const gameCreateCommand = async (tagList, name, games, gameIds) => {
     let videoList = await Promise.all(
         games.map(async (game) => {
-            if (game.video_url?.startsWith('https://www.youtube.com')) return (await gameService.getAsyncNewStreamURL(game.video_url)).url;
+            if (game.video_url?.startsWith('https://www.youtube.com')) {
+                const newUrl = (await gameService.getAsyncNewStreamURL(game.video_url)).url;
+
+                return { url: newUrl, home: game.home_team_image, away: game.away_team_image };
+            }
 
             return { url: game.video_url, home: game.home_team_image, away: game.away_team_image };
         })
@@ -22,15 +26,15 @@ export const gameCreateCommand = async (tagList, name, games, gameIds) => {
         };
     });
 
-    let clips = tagList.map((tag, i) => {
+    let clips = tagList.map((tag) => {
         const period = tag.period === 1 ? 'H1' : tag.period === 2 ? 'H2' : 'OT';
 
         return {
             Video: gameIds.indexOf(tag.game_id) + 1,
             Trim: `${toSecond(tag.team_tag_start_time)}:${toSecond(tag.team_tag_end_time)}`,
-            GameTime: `${period} - ${tag.time_in_game}`,
+            GameTime: `${period} ${tag.time_in_game}'`,
             GameScore: `${tag.home_team_goal} - ${tag.away_team_goal}`,
-            FirstBoxText: `Clip ${i + 1}`
+            FirstBoxText: `${tag.player_names} - ${tag.action_names} - ${tag.action_type_names} - ${tag.action_result_names}`
         };
     });
 
@@ -63,30 +67,37 @@ export const gameCreateCommand = async (tagList, name, games, gameIds) => {
     fileDownload(command, `${name}.xml`);
 };
 
-export const gamePlayerCreateCommand = async (tagList, name, rawVideoList, gameIds) => {
+export const gamePlayerCreateCommand = async (tagList, name, games, gameIds) => {
     let videoList = await Promise.all(
-        rawVideoList.map(async (url) => {
-            if (url?.startsWith('https://www.youtube.com')) {
-                return (await gameService.getAsyncNewStreamURL(url)).url;
+        games.map(async (game) => {
+            if (game.video_url?.startsWith('https://www.youtube.com')) {
+                const newUrl = (await gameService.getAsyncNewStreamURL(game.video_url)).url;
+
+                return { url: newUrl, home: game.home_team_image, away: game.away_team_image };
             }
-            return url;
+
+            return { url: game.video_url, home: game.home_team_image, away: game.away_team_image };
         })
     );
 
-    let videos = videoList.map((tag, i) => {
+    let videos = videoList.map((tag) => {
         return {
-            url: tag,
-            SecondBoxText: name.replace("'", '')
+            url: tag.url,
+            SecondBoxText: name.replace("'", ''),
+            HomeTeamLogo: tag.home,
+            AwayTeamLogo: tag.away
         };
     });
 
-    let clips = tagList.map((tag, i) => {
+    let clips = tagList.map((tag) => {
         const period = tag.period === 1 ? 'H1' : tag.period === 2 ? 'H2' : 'OT';
 
         return {
             Video: gameIds.indexOf(tag.game_id) + 1,
             Trim: `${toSecond(tag.player_tag_start_time)}:${toSecond(tag.player_tag_end_time)}`,
-            FirstBoxText: `${period} - ${tag.time_in_game}`
+            GameTime: `${period} ${tag.time_in_game}'`,
+            GameScore: `${tag.home_team_goal} - ${tag.away_team_goal}`,
+            FirstBoxText: `${tag.player_names} - ${tag.action_names} - ${tag.action_type_names} - ${tag.action_result_names}`
         };
     });
 
@@ -122,18 +133,23 @@ export const gamePlayerCreateCommand = async (tagList, name, rawVideoList, gameI
 export const editCreateCommand = async (tagList, name) => {
     let rawVideoList = [...new Set(tagList.map((tag) => tag.video_url))];
     let videoList = await Promise.all(
-        rawVideoList.map(async (url) => {
-            if (url?.startsWith('https://www.youtube.com')) {
-                return (await gameService.getAsyncNewStreamURL(url)).url;
+        tagList.map(async (game) => {
+            if (game.video_url?.startsWith('https://www.youtube.com')) {
+                const newUrl = (await gameService.getAsyncNewStreamURL(game.video_url)).url;
+
+                return { url: newUrl, home: game.home_team_logo, away: game.away_team_logo };
             }
-            return url;
+
+            return { url: game.video_url, home: game.home_team_logo, away: game.away_team_logo };
         })
     );
 
     let videos = videoList.map((tag, i) => {
         return {
             url: tag,
-            SecondBoxText: name
+            SecondBoxText: name,
+            HomeTeamLogo: tag.home,
+            AwayTeamLogo: tag.away
         };
     });
 

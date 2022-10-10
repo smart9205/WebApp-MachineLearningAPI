@@ -117,13 +117,13 @@ const OpponentPlayers = ({ game }) => {
         if (values.playList.length === 0) {
             setValues({ ...values, clickEventName: 'render' });
             setLoadData(true);
-        } else gamePlayerCreateCommand(values.playList, tagIndex.name, [game.video_url], [game.id]);
+        } else gamePlayerCreateCommand(values.playList, tagIndex.name, [game], [game.id]);
     };
 
     const handleClickRenderFromButton = () => {
         const newList = values.playList.filter((item, index) => checkArray[index] === true);
 
-        gamePlayerCreateCommand(newList, tagIndex.name, [game.video_url], [game.id]);
+        gamePlayerCreateCommand(newList, tagIndex.name, [game], [game.id]);
     };
 
     const handleClickEditsFromButton = () => {
@@ -210,7 +210,7 @@ const OpponentPlayers = ({ game }) => {
             setLoading(false);
             setLoadData(false);
 
-            if (values.clickEventName === 'render') gamePlayerCreateCommand(res, tagIndex.name, [game.video_url], [game.id]);
+            if (values.clickEventName === 'render') gamePlayerCreateCommand(res, tagIndex.name, [game], [game.id]);
             else if (values.clickEventName === 'sportcode') {
                 setPlayerTagList(res);
                 setExportHudl(true);
