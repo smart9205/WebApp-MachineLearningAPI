@@ -354,7 +354,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
             </Box>
             <TeamVideoPlayer videoData={videoData} games={games} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} gameTime={gameTime} />
             <TeamGameSelectDialog open={dialogOpen} onClose={() => setDialogOpen(false)} gameList={games} setIds={setGameIds} />
-            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} />
+            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} isTeams={true} />
         </Box>
     );
 };
