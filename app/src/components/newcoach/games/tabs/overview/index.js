@@ -201,7 +201,8 @@ const GameOverview = ({ game }) => {
                     tagList: res.map((item) => {
                         return {
                             start_time: item.team_tag_start_time,
-                            end_time: item.team_tag_end_time
+                            end_time: item.team_tag_end_time,
+                            name: `${item.player_names} - ${item.action_names} - ${item.action_type_names} - ${item.action_result_names}`
                         };
                     })
                 });

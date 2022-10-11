@@ -4,7 +4,6 @@ import { TableCell, TableRow, Checkbox, IconButton } from '@mui/material';
 
 import PlayIcon from '@mui/icons-material/PlayArrowOutlined';
 
-import GameService from '../../../../services/game.service';
 import TCellNameEdit from './cellEditName';
 import TCellTimeEdit from './cellEditTime';
 
@@ -109,7 +108,7 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
                     <IconButton
                         size="small"
                         onClick={() => {
-                            setItem({ video_url: row.video_url, start_time: row.start_time, end_time: row.end_time });
+                            setItem(row);
                             onPlay(true);
                         }}
                     >

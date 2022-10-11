@@ -146,7 +146,9 @@ export default function Player() {
     };
 
     const getGameList = () => {
-        return seasonFilter && seasonFilter.length > 0 ? games.filter((game) => game.season_name === seasonFilter) : games;
+        const newList = seasonFilter && seasonFilter.length > 0 ? games.filter((game) => game.season_name === seasonFilter) : games;
+
+        return stableSort(newList, getComparator('desc', 'game_date'));
     };
 
     const getSeasonList = (array) => {

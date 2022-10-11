@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-import { IconButton, Switch, FormControlLabel } from '@mui/material';
+import { IconButton, Switch, FormControlLabel, Typography } from '@mui/material';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -32,12 +32,10 @@ const styles = {
         position: 'absolute',
         bottom: 5,
         left: 0,
-        paddingLeft: '11%',
-        minWidth: 300,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
-        gap: '1rem'
+        justifyContent: 'space-between',
+        padding: '0 48px'
     },
     button: {
         color: 'white',
@@ -183,29 +181,32 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, draw
                     </div>
 
                     <div style={styles.buttonBox}>
-                        <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
-                            <SkipPreviousSharpIcon color="white" />
-                        </IconButton>
-                        <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
-                            <FastRewindIcon color="white" />
-                        </IconButton>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
+                                <SkipPreviousSharpIcon color="white" />
+                            </IconButton>
+                            <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
+                                <FastRewindIcon color="white" />
+                            </IconButton>
 
-                        <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
-                            {play ? <PauseIcon /> : <PlayArrowIcon />}
-                        </IconButton>
+                            <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
+                                {play ? <PauseIcon /> : <PlayArrowIcon />}
+                            </IconButton>
 
-                        <IconButton style={styles.button} onClick={() => fastVideo(3)}>
-                            <FastForwardIcon color="white" />
-                        </IconButton>
-                        <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
-                            <SkipNextSharpIcon />
-                        </IconButton>
+                            <IconButton style={styles.button} onClick={() => fastVideo(3)}>
+                                <FastForwardIcon color="white" />
+                            </IconButton>
+                            <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
+                                <SkipNextSharpIcon />
+                            </IconButton>
 
-                        {autoPlay && <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
+                            {autoPlay && <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
 
-                        <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
-                            {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
-                        </IconButton>
+                            <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
+                                {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
+                            </IconButton>
+                        </div>
+                        {handle.active && <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{tagList[curIdx].name}</Typography>}
                     </div>
                 </FullScreen>
             </div>

@@ -139,6 +139,7 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
                     video_url={correctItem?.video_url ?? ''}
                     start={correctItem?.start_time ?? '00:00:00'}
                     end={correctItem?.end_time ?? '00:00:00'}
+                    name={correctItem?.name ?? ''}
                 />
             )}
         </>

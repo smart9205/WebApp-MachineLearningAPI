@@ -33,11 +33,10 @@ const styles = {
         position: 'absolute',
         bottom: 5,
         left: 0,
-        minWidth: 300,
         display: 'flex',
         alignItems: 'center',
-        gap: '1rem',
-        paddingLeft: '16px'
+        justifyContent: 'space-between',
+        padding: '0 48px'
     },
     button: {
         color: 'white',
@@ -199,32 +198,39 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                 </div>
 
                 <div style={styles.buttonBox}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{getTime()}</Typography>
-                    <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
-                        <SkipPreviousSharpIcon color="white" />
-                    </IconButton>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{getTime()}</Typography>
+                        <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
+                            <SkipPreviousSharpIcon color="white" />
+                        </IconButton>
 
-                    <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
-                        <FastRewindIcon color="white" />
-                    </IconButton>
+                        <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
+                            <FastRewindIcon color="white" />
+                        </IconButton>
 
-                    <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
-                        {play ? <PauseIcon /> : <PlayArrowIcon />}
-                    </IconButton>
+                        <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
+                            {play ? <PauseIcon /> : <PlayArrowIcon />}
+                        </IconButton>
 
-                    <IconButton style={styles.button} onClick={() => fastVideo(3)}>
-                        <FastForwardIcon color="white" />
-                    </IconButton>
+                        <IconButton style={styles.button} onClick={() => fastVideo(3)}>
+                            <FastForwardIcon color="white" />
+                        </IconButton>
 
-                    <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
-                        <SkipNextSharpIcon />
-                    </IconButton>
+                        <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
+                            <SkipNextSharpIcon />
+                        </IconButton>
 
-                    {autoPlay && <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
+                        {autoPlay && <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
 
-                    <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
-                        {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
-                    </IconButton>
+                        <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
+                            {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
+                        </IconButton>
+                    </div>
+                    {handle.active && (
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>
+                            {`${tagList[curIdx].player_names} - ${tagList[curIdx].action_names} - ${tagList[curIdx].action_type_names} - ${tagList[curIdx].action_result_names}`}
+                        </Typography>
+                    )}
                 </div>
             </FullScreen>
         </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import ReactPlayer from 'react-player';
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, Typography } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/CloseOutlined';
 import PlayIcon from '@mui/icons-material/PlayArrow';
@@ -11,7 +11,7 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 
 import { toSecond } from '../components/utilities';
 
-const CorrectionsVideoPlayer = ({ onClose, video_url, start, end }) => {
+const CorrectionsVideoPlayer = ({ onClose, video_url, start, end, name }) => {
     const handle = useFullScreenHandle();
     const player = useRef(null);
     const [playRate, setPlayRate] = useState(1);
@@ -75,10 +75,20 @@ const CorrectionsVideoPlayer = ({ onClose, video_url, start, end }) => {
                         </div>
                     </div>
                     <div
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%', position: 'absolute', cursor: 'pointer', padding: '0 16px', top: '12px' }}
-                        onClick={onClose}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            width: '100%',
+                            position: 'absolute',
+                            padding: '0 16px',
+                            top: '12px',
+                            justifyContent: name !== '' ? 'space-between' : 'flex-end'
+                        }}
                     >
-                        <CloseIcon />
+                        {name !== '' && <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{name}</Typography>}
+                        <div style={{ cursor: 'pointer' }} onClick={onClose}>
+                            <CloseIcon />
+                        </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', left: 0, bottom: '16px', justifyContent: 'center', width: '100%', gap: '1rem' }}>
                         <IconButton style={{ color: 'white', backgroundColor: '#80808069' }} onClick={() => fastVideo(-3)}>
