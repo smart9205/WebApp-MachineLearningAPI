@@ -85,7 +85,7 @@ const CorrectionsVideoPlayer = ({ onClose, video_url, start, end, name }) => {
                             justifyContent: name !== '' ? 'space-between' : 'flex-end'
                         }}
                     >
-                        {name !== '' && <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{name}</Typography>}
+                        {name !== '' && <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{name}</Typography>}
                         <div style={{ cursor: 'pointer' }} onClick={onClose}>
                             <CloseIcon />
                         </div>

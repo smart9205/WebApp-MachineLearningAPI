@@ -227,7 +227,7 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                         </IconButton>
                     </div>
                     {handle.active && (
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>
                             {`${tagList[curIdx].player_names} - ${tagList[curIdx].action_names} - ${tagList[curIdx].action_type_names} - ${tagList[curIdx].action_result_names}`}
                         </Typography>
                     )}

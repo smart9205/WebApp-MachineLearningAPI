@@ -170,7 +170,7 @@ export default function Player() {
 
     const { player: playerData, game: curGame } = context;
 
-    console.log('player', games);
+    console.log('player', context);
 
     return (
         <ThemeProvider theme={theme}>
@@ -183,7 +183,13 @@ export default function Player() {
                 <Box className="profileSection">
                     <Dialog className="profileSection_tagvideo" classes={{ paper: classes.paper }} open={open} onClose={(e) => setOpen(false)}>
                         <DialogContent sx={{ p: 0 }}>
-                            <TagVideo tagList={playTags} url={game?.mobile_video_url ? game?.mobile_video_url : game?.video_url} muteState={game?.mute_video} setOpen={setOpen} gameId={game?.id} />
+                            <TagVideo
+                                tagList={playTags}
+                                url={game?.mobile_video_url ? game?.mobile_video_url : game?.video_url}
+                                muteState={game?.mute_video}
+                                setOpen={setOpen}
+                                gameId={game?.game_id}
+                            />
                         </DialogContent>
                     </Dialog>
                     {playerData && <PlayerDetailCard player={playerData} />}

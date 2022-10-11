@@ -217,7 +217,7 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
                             {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
                         </IconButton>
                     </div>
-                    {handle.active && <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{tagList[curIdx].name}</Typography>}
+                    {handle.active && <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{tagList[curIdx].name}</Typography>}
                 </div>
             </FullScreen>
         </div>
