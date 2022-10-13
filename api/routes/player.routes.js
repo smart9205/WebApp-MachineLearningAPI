@@ -38,6 +38,12 @@ module.exports = (app) => {
     controller.getPlayersStats
   );
 
+  app.post(
+    "/player/getplayersstats/advance",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getPlayersStatsAdvanced
+  );
+
   app.get(
     "/player/request/getcorrection",
     [authJwt.verifyToken, authJwt.isAdminOrCoach],
