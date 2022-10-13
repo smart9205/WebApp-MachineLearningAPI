@@ -120,7 +120,18 @@ const Leaders = () => {
         await GameService.getAllPlayersByCoach().then((res) => {
             setPlayersList(res);
         });
-        await GameService.getPlayersStats(null, null, null, null, null).then((res) => {
+        await GameService.getPlayersStatsAdvanced({
+            seasonId: null,
+            leagueId: null,
+            gameId: null,
+            teamId: null,
+            playerId: null,
+            gameTime: null,
+            courtAreaId: null,
+            insidePaint: null,
+            homeAway: null,
+            gameResult: null
+        }).then((res) => {
             setPlayerList(res);
             setSeasonList(getSeasonList(res));
             setLoading(false);
@@ -254,7 +265,7 @@ const Leaders = () => {
                     <Box sx={{ display: 'flex', width: '100%', maxHeight: '80vh', overflowY: 'auto' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={true} option="game" title="Games Played" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={true} option="player_games" title="Games Played" />
                                 <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="goal" title="Goals" />
                                 <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="penalties" title="Penalties" />
                                 <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="penalties_missed" title="Penalties Missed" />
