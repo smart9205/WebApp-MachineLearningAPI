@@ -89,10 +89,10 @@ const GamePlayerStatDialog = ({ open, onClose, player, initialState }) => {
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>MATCH PERIOD</Typography>
                             <div style={{ width: '100%', borderRadius: '8px', border: '1px solid #E8E8E8' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', width: '100%', borderBottom: '1px solid #E8E8E8', height: '32px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, borderRight: '1px solid #E8E8E8', height: '100%' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, borderRight: '1px solid #E8E8E8', height: '100%', cursor: 'pointer' }}>
                                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>1 HALF</Typography>
                                     </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, cursor: 'pointer' }}>
                                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>2 HALF</Typography>
                                     </div>
                                 </div>
@@ -120,29 +120,29 @@ const GamePlayerStatDialog = ({ open, onClose, player, initialState }) => {
                         </div>
                         <div style={{ display: 'flex', gap: '16px', height: '120px' }}>
                             <img src={MatchAll} style={{ borderRadius: '12px', height: '100%' }} />
-                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '100%', padding: '6px 0' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '100%', padding: '6px', borderRadius: '8px', border: '1px solid #E8E8E8' }}>
                                 <div style={{ width: '100%' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>MATCH SITUATION</Typography>
-                                    <div style={{ width: '100%', border: '1px solid grey', background: 'lightblue', display: 'flex', alignItems: 'center', height: '24px' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, cursor: 'pointer', borderRight: '1px solid grey', height: '100%' }}>
-                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>Winning</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>GAME RESULT</Typography>
+                                    <div style={{ width: '100%', border: '1px solid grey', background: 'lightgrey', display: 'flex', alignItems: 'center', height: '24px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, borderRight: '1px solid grey', height: '100%' }}>
+                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Won</Typography>
                                         </div>
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, cursor: 'pointer', borderRight: '1px solid grey', height: '100%' }}>
-                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>Draw</Typography>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, borderRight: '1px solid grey', height: '100%' }}>
+                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Draw</Typography>
                                         </div>
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, cursor: 'pointer' }}>
-                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>Losing</Typography>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Lose</Typography>
                                         </div>
                                     </div>
                                 </div>
                                 <div style={{ width: '100%' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>MATCH SIDE</Typography>
-                                    <div style={{ width: '100%', border: '1px solid grey', background: 'lightblue', display: 'flex', alignItems: 'center', height: '24px' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, cursor: 'pointer', borderRight: '1px solid grey', height: '100%' }}>
-                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>Home</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>GAME PLACE</Typography>
+                                    <div style={{ width: '100%', border: '1px solid grey', background: 'lightgrey', display: 'flex', alignItems: 'center', height: '24px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, borderRight: '1px solid grey', height: '100%' }}>
+                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Home</Typography>
                                         </div>
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, cursor: 'pointer' }}>
-                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>Away</Typography>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Away</Typography>
                                         </div>
                                     </div>
                                 </div>
@@ -166,7 +166,8 @@ const GamePlayerStatDialog = ({ open, onClose, player, initialState }) => {
                                     width: '160px',
                                     height: '60px',
                                     borderRadius: '12px',
-                                    border: '1px solid #E8E8E8'
+                                    border: '1px solid #E8E8E8',
+                                    background: playerState ? (playerState[`total_${item.id}`] > 0 ? '#F2F7F2' : 'white') : 'white'
                                 }}
                             >
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>

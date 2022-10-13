@@ -1,346 +1,328 @@
-import { Box } from '@mui/material';
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Box, CircularProgress, MenuItem, Select, Typography } from '@mui/material';
 
-import UpIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
-import GameService from '../../../../../services/game.service';
-import { gamePlayerCreateCommand } from '../../../components/utilities';
-import { XmlDataFilterGamePlayer } from '../../../components/xmldata';
-import GamePlayerTagList from './tagList';
-import GameTagControlSection from '../overview/tagControlSection';
-import GameTagMenu from '../overview/tagMenu';
-import GameOverviewHeader from '../overview/header';
-import GamePlayerTagButtonList from './tagButtonList';
-import GamePlayerLogoList from './playerLogoList';
-import GameExportToEdits from '../overview/exportEdits';
-import { getPeriod } from '../overview/tagListItem';
-import GameVideoPlayer from '../../gameVideoPlayer';
+import GameService from '../../../services/game.service';
+import LeadersPlayerStatColumn from './playerStatColumn';
+import { MenuProps } from '../components/common';
+import { getComparator, stableSort } from '../components/utilities';
 
-const ActionData = {
-    Goal: { action_id: '1', action_type_id: null, action_result_id: '3' },
-    GoalOpportunity: { action_id: '1', action_type_id: null, action_result_id: '1' },
-    GoalKick: { action_id: '1', action_type_id: null, action_result_id: null },
-    FreeKick: { action_id: '1,2,3', action_type_id: '11,13', action_result_id: null },
-    KeyPass: { action_id: '2', action_type_id: '7', action_result_id: null },
-    ThroughPass: { action_id: '2', action_type_id: '6', action_result_id: null },
-    Cross: { action_id: '3', action_type_id: '1,2,3,4,5,6,7,8,9,10,13,14,15', action_result_id: null },
-    Dribble: { action_id: '4', action_type_id: null, action_result_id: null },
-    Offside: { action_id: '7', action_type_id: null, action_result_id: '15' },
-    Corner: { action_id: '2,3', action_type_id: '12', action_result_id: null },
-    DrawFoul: { action_id: '6', action_type_id: null, action_result_id: null },
-    Turnover: { action_id: '2,7', action_type_id: null, action_result_id: '5,11,12,15' },
-    Saved: { action_id: '8', action_type_id: null, action_result_id: null },
-    Penalty: { action_id: '4', action_type_id: null, action_result_id: '14' },
-    Blocked: { action_id: '13', action_type_id: null, action_result_id: '7,19' },
-    Clearance: { action_id: '11', action_type_id: null, action_result_id: null },
-    Interception: { action_id: '10', action_type_id: null, action_result_id: null },
-    Tackle: { action_id: '12', action_type_id: null, action_result_id: null },
-    Foul: { action_id: '5', action_type_id: null, action_result_id: null },
-    All: { action_id: null, action_type_id: null, action_result_id: null }
-};
-
-const GamePlayers = ({ game }) => {
-    const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
-    const [videoData, setVideoData] = useReducer((old, action) => ({ ...old, ...action }), {
-        idx: 0,
-        autoPlay: true,
-        tagList: [],
-        videoPlay: true
-    });
-    const [values, setValues] = useState({
-        isOur: true,
-        expandButtons: true,
-        playList: [],
-        teamId: -1,
-        opponentTeamId: -1,
-        selectAll: false,
-        clickEventName: ''
-    });
-    const [gameTime, setGameTime] = useState({
-        period: 'H1',
-        time: 0,
-        video_url: '',
-        home_team_goals: 0,
-        away_team_goals: 0,
-        home_team_image: '',
-        away_team_image: ''
-    });
-    const [tagIndex, setTagIndex] = useState({});
-    const [loadData, setLoadData] = useState(false);
+const Leaders = () => {
+    const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [checkArray, setCheckArray] = useState([]);
-    const [exportHudl, setExportHudl] = useState(false);
-    const [playerTagList, setPlayerTagList] = useState([]);
-    const [playerIds, setPlayerIds] = useState([]);
-    const [exportEditOpen, setExportEditOpen] = useState(false);
+    const [teamList, setTeamList] = useState([]);
+    const [seasonList, setSeasonList] = useState([]);
+    const [leagueList, setLeagueList] = useState([]);
+    const [playersList, setPlayersList] = useState([]);
+    const [displayOption, setDisplayOption] = useState('total');
+    const [values, setValues] = useState({
+        teamFilter: 'none',
+        seasonFilter: 'none',
+        leagueFilter: 'none',
+        playerFilter: 'none'
+    });
 
-    const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-
-    const handleChangeTeam = (flag) => {
-        setValues({ ...values, isOur: flag, playList: [] });
-        setVideoData({ ...videoData, idx: 0, tagList: [] });
-        setTagIndex({});
+    const handleChange = (prop) => (e) => {
+        setValues({ ...values, [prop]: e.target.value });
     };
 
-    const handleShowPopover = (idx) => (e) => {
-        setTagIndex(idx);
-        setGameTime({ ...gameTime, period: 'H1', time: 0, home_team_goals: 0, away_team_goals: 0, home_team_image: '', away_team_image: '' });
-        setMenuAnchorEl(e.currentTarget);
-    };
+    const getSeasonList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'season_name'));
+            let result = [];
 
-    const handleClickView = () => {
-        setMenuAnchorEl(null);
-        setValues({ ...values, clickEventName: '' });
-        setLoadData(true);
-    };
+            desc.map((item) => {
+                const filter = result.filter((season) => season === item.season_name);
 
-    const handleClickHudlFromButton = () => {
-        const newList = values.playList.filter((item, index) => checkArray[index] === true);
+                if (filter.length === 0) result = [...result, item.season_name];
 
-        setPlayerTagList(newList);
-        setExportHudl(true);
-    };
+                return result;
+            });
 
-    const handleClickHudlFromMenu = () => {
-        setMenuAnchorEl(null);
-
-        if (values.playList.length === 0) {
-            setValues({ ...values, clickEventName: 'sportcode' });
-            setLoadData(true);
-        } else {
-            setPlayerTagList(values.playList);
-            setExportHudl(true);
+            return result;
         }
     };
 
-    const handleClickRenderFromMenu = () => {
-        setMenuAnchorEl(null);
+    const getTeamList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'team_name'));
+            let result = [];
 
-        if (values.playList.length === 0) {
-            setValues({ ...values, clickEventName: 'render' });
-            setLoadData(true);
-        } else gamePlayerCreateCommand(values.playList, tagIndex.name, [game], [game.id]);
-    };
+            desc.map((item) => {
+                const filter = result.filter((team) => team === item.team_name);
 
-    const handleClickRenderFromButton = () => {
-        const newList = values.playList.filter((item, index) => checkArray[index] === true);
+                if (filter.length === 0) result = [...result, item.team_name];
 
-        gamePlayerCreateCommand(newList, tagIndex.name, [game], [game.id]);
-    };
+                return result;
+            });
 
-    const handleClickEditsFromButton = () => {
-        const newList = values.playList.filter((item, index) => checkArray[index] === true);
-
-        setPlayerTagList(newList);
-        setExportEditOpen(true);
-    };
-
-    const handleClickEditsFromMenu = () => {
-        setMenuAnchorEl(null);
-
-        if (values.playList.length === 0) {
-            setValues({ ...values, clickEventName: 'my_edits' });
-            setLoadData(true);
-        } else {
-            setPlayerTagList(values.playList);
-            setExportEditOpen(true);
+            return result;
         }
     };
 
-    const handleExpandButtons = () => {
-        setValues({ ...values, expandButtons: !values.expandButtons });
-    };
+    const getLeagueList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'league_name'));
+            let result = [];
 
-    const handleShowVideo = (index) => {
-        setCurTeamTagIdx(index);
-        setVideoData({ ...videoData, idx: index });
-    };
+            desc.map((item) => {
+                const filter = result.filter((league) => league === item.league_name);
 
-    const handleCheckChange = (idx) => (e) => {
-        setCheckArray({ ...checkArray, [idx]: e.target.checked });
-    };
+                if (filter.length === 0) result = [...result, item.league_name];
 
-    const getTime = (time, delta) => {
-        const items = time.split(':');
-        const changedTime = parseInt(items[0]) * 3600 + parseInt(items[1]) * 60 + parseInt(items[2]) + delta;
-        let hour = Math.floor(changedTime / 3600);
-        let minute = Math.floor((changedTime - hour * 3600) / 60);
-        let second = changedTime - hour * 3600 - minute * 60;
+                return result;
+            });
 
-        if (hour < 10) hour = '0' + hour;
-        if (minute < 10) minute = '0' + minute;
-        if (second < 10) second = '0' + second;
-
-        return hour + ':' + minute + ':' + second;
-    };
-
-    const handleChangeTime = (index, isStart, direction) => {
-        let array = [...values.playList];
-        let data = [...videoData.tagList];
-
-        if (isStart) {
-            const changed = getTime(array[index].player_tag_start_time, direction);
-
-            array[index].player_tag_start_time = changed;
-            data[index].start_time = changed;
-        } else {
-            const changed = getTime(array[index].player_tag_end_time, direction);
-
-            array[index].player_tag_end_time = changed;
-            data[index].end_time = changed;
+            return result;
         }
-
-        setValues({ ...values, playList: array });
-        setVideoData({ ...videoData, tagList: data });
     };
 
-    const changeGameTime = (array, idx) => {
-        setGameTime({
-            ...gameTime,
-            period: getPeriod(array[idx].period),
-            time: array[idx].time_in_game,
-            home_team_goals: array[idx].home_team_goal ?? undefined,
-            away_team_goals: array[idx].away_team_goal ?? undefined,
-            home_team_image: array[idx].home_team_logo ?? undefined,
-            away_team_image: array[idx].away_team_logo ?? undefined
-        });
-    };
+    const getFilteredList = () => {
+        let array = [];
 
-    const getPlayTagList = (func) => {
-        func.then((res) => {
-            console.log('Game/Overview => ', res);
-            setLoading(false);
-            setLoadData(false);
-
-            if (values.clickEventName === 'render') gamePlayerCreateCommand(res, tagIndex.name, [game], [game.id]);
-            else if (values.clickEventName === 'sportcode') {
-                setPlayerTagList(res);
-                setExportHudl(true);
-            } else if (values.clickEventName === 'my_edits') {
-                setPlayerTagList(res);
-                setExportEditOpen(true);
-            } else {
-                setVideoData({
-                    ...videoData,
-                    idx: 0,
-                    tagList: res.map((item) => {
-                        return {
-                            start_time: item.player_tag_start_time,
-                            end_time: item.player_tag_end_time,
-                            name: `${item.player_names} - ${item.action_names} - ${item.action_type_names} - ${item.action_result_names}`
-                        };
-                    })
-                });
-                setValues({ ...values, playList: res });
-                setCheckArray([]);
-                res.map((item, index) => {
-                    setCheckArray((oldRows) => [...oldRows, false]);
-                });
-
-                if (res.length > 0) changeGameTime(res, 0);
-            }
-        });
-    };
-
-    useEffect(() => {
-        if (loadData) {
-            setLoading(true);
-            setValues({ ...values, playList: [] });
-            setVideoData({ ...videoData, tagList: [] });
-            getPlayTagList(
-                GameService.getGamePlayerTags(
-                    values.isOur ? values.teamId : values.opponentTeamId,
-                    playerIds.length === 0 ? null : playerIds.join(','),
-                    `${game.id}`,
-                    ActionData[tagIndex.id].action_id,
-                    ActionData[tagIndex.id].action_type_id,
-                    ActionData[tagIndex.id].action_result_id
-                )
+        if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter === 'none')
+            array = playerList.filter((item) => item.season_name === values.seasonFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter === 'none')
+            array = playerList.filter((item) => item.league_name === values.leagueFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter === 'none')
+            array = playerList.filter((item) => item.team_name === values.teamFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter !== 'none')
+            array = playerList.filter((item) => item.player_name === values.playerFilter);
+        else if (values.seasonFilter !== 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter === 'none')
+            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.league_name === values.leagueFilter);
+        else if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter === 'none')
+            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.team_name === values.teamFilter);
+        else if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter !== 'none')
+            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.player_name === values.playerFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter !== 'none' && values.playerFilter === 'none')
+            array = playerList.filter((item) => item.league_name === values.leagueFilter && item.team_name === values.teamFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter !== 'none')
+            array = playerList.filter((item) => item.league_name === values.leagueFilter && item.player_name === values.playerFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter !== 'none')
+            array = playerList.filter((item) => item.player_name === values.playerFilter && item.team_name === values.teamFilter);
+        else
+            array = playerList.filter(
+                (item) => item.league_name === values.leagueFilter && item.season_name === values.seasonFilter && item.team_name === values.teamFilter && item.player_name === values.playerFilter
             );
-        }
-    }, [tagIndex, loadData]);
 
-    useEffect(() => {
+        return values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter === 'none' ? playerList : array;
+    };
+
+    useEffect(async () => {
         setLoading(true);
-        GameService.getAllMyCoachTeam().then((res) => {
-            const filtered = res.filter(
-                (item) => item.season_name === game.season_name && item.league_name === game.league_name && (item.team_id === game.home_team_id || item.team_id === game.away_team_id)
-            );
-            const team = filtered[0].team_id;
-            const opponent = team === game.home_team_id ? game.away_team_id : game.home_team_id;
-
-            setValues({ ...values, teamId: team, opponentTeamId: opponent });
-            setGameTime({ ...gameTime, video_url: game.video_url });
+        await GameService.getAllLeaguesByCoach().then((res) => {
+            setLeagueList(getLeagueList(res));
+        });
+        await GameService.getAllTeamsByCoach().then((res) => {
+            setTeamList(getTeamList(res));
+        });
+        await GameService.getAllPlayersByCoach().then((res) => {
+            setPlayersList(res);
+        });
+        await GameService.getPlayersStats(null, null, null, null, null).then((res) => {
+            setPlayerList(res);
+            setSeasonList(getSeasonList(res));
             setLoading(false);
         });
     }, []);
 
-    useEffect(() => {
-        setCheckArray([]);
-        values.playList.map((item, index) => {
-            setCheckArray((oldRows) => [...oldRows, values.selectAll]);
-        });
-    }, [values.selectAll]);
-
-    useEffect(() => {
-        if (values.playList.length > 0) changeGameTime(values.playList, curTeamTagIdx);
-    }, [curTeamTagIdx]);
-
-    console.log('GamePlayer => ', values.playList, playerIds);
-    // console.log(`GamePlayer => ${values.teamId}, ${values.opponentTeamId}`);
+    console.log('leaders => ', playerList);
 
     return (
-        <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', padding: '24px 16px' }}>
-                <GameOverviewHeader
-                    isOur={values.isOur}
-                    ourname={values.teamId === game.away_team_id ? game.away_team_name : game.home_team_name}
-                    enemyname={values.opponentTeamId === game.home_team_id ? game.home_team_name : game.away_team_name}
-                    onChangeTeam={handleChangeTeam}
-                    mb="8px"
-                />
-                <GamePlayerLogoList game={game} teamId={values.teamId} our={values.isOur} setIds={setPlayerIds} />
-                {values.expandButtons && <GamePlayerTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
-                    <Box sx={{ 'svg path': { fill: 'black' }, cursor: 'pointer' }} onClick={handleExpandButtons}>
-                        <UpIcon sx={{ transform: values.expandButtons ? '' : 'rotate(180deg)' }} />
+        <Box sx={{ width: '98%', margin: '0 auto' }}>
+            {loading && (
+                <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                </div>
+            )}
+            {!loading && (
+                <>
+                    <Box sx={{ padding: '24px 24px 48px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Leaders</Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Season</Typography>
+                                <Select
+                                    value={values.seasonFilter}
+                                    onChange={handleChange('seasonFilter')}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ outline: 'none', height: '36px', width: '150px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem key="0" value="none">
+                                        All
+                                    </MenuItem>
+                                    {seasonList.map((season, index) => (
+                                        <MenuItem key={index + 1} value={season}>
+                                            {season}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>League</Typography>
+                                <Select
+                                    value={values.leagueFilter}
+                                    onChange={handleChange('leagueFilter')}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem key="0" value="none">
+                                        All
+                                    </MenuItem>
+                                    {leagueList.map((league, index) => (
+                                        <MenuItem key={index + 1} value={league}>
+                                            {league}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Team</Typography>
+                                <Select
+                                    value={values.teamFilter}
+                                    onChange={handleChange('teamFilter')}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ outline: 'none', height: '36px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem key="0" value="none">
+                                        All
+                                    </MenuItem>
+                                    {teamList.map((team, index) => (
+                                        <MenuItem key={index + 1} value={team}>
+                                            {team}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Player</Typography>
+                                <Select
+                                    value={values.playerFilter}
+                                    onChange={handleChange('playerFilter')}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem key="0" value="none">
+                                        All
+                                    </MenuItem>
+                                    {playersList.map((player, index) => (
+                                        <MenuItem key={index + 1} value={player.player_name}>
+                                            {player.player_name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Display</Typography>
+                                <Select
+                                    value={displayOption}
+                                    onChange={(e) => setDisplayOption(e.target.value)}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ outline: 'none', height: '36px', width: '150px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem key="0" value="total">
+                                        Total
+                                    </MenuItem>
+                                    <MenuItem key="1" value="average">
+                                        Average
+                                    </MenuItem>
+                                </Select>
+                            </Box>
+                        </Box>
                     </Box>
-                </Box>
-                <GameTagMenu
-                    anchor={menuAnchorEl}
-                    onClose={() => setMenuAnchorEl(null)}
-                    onView={handleClickView}
-                    onHudl={handleClickHudlFromMenu}
-                    onRender={handleClickRenderFromMenu}
-                    onEdits={handleClickEditsFromMenu}
-                />
-                {values.playList.length > 0 && (
-                    <GameTagControlSection
-                        clipCount={values.playList.length}
-                        isSelectAll={values.selectAll}
-                        onAll={(e) => setValues({ ...values, selectAll: e.target.checked })}
-                        onHudl={handleClickHudlFromButton}
-                        onRender={handleClickRenderFromButton}
-                        onEdits={handleClickEditsFromButton}
-                    />
-                )}
-                <GamePlayerTagList
-                    isLoading={loading}
-                    expand={values.expandButtons}
-                    tagList={values.playList}
-                    curTagListIdx={curTeamTagIdx}
-                    checkArr={checkArray}
-                    onChecked={handleCheckChange}
-                    onVideo={handleShowVideo}
-                    onTime={handleChangeTime}
-                />
-            </Box>
-            <GameVideoPlayer videoData={videoData} game={gameTime} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />
-            {exportHudl && <XmlDataFilterGamePlayer game={game} tagList={playerTagList} isOur={values.isOur} tag_name={tagIndex.name} setExportXML={setExportHudl} />}
-            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={playerTagList} isTeams={false} />
+                    <Box sx={{ display: 'flex', width: '100%', maxHeight: '80vh', overflowY: 'auto' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={true} option="player_games" title="Games Played" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="goal" title="Goals" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="penalties" title="Penalties" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="penalties_missed" title="Penalties Missed" />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="shot" title="Shots" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="shot_on_target" title="Shots On Target" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="shot_off_target" title="Shots Off Target" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="shot_on_box" title="Shots On Box" />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="free_kick" title="Free Kicks" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="crosses" title="Crosses" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="dribble" title="Dribbles" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="dribble_successful" title="Dribbles Successful" />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="passes" title="Passes" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="successful_passes" title="Passes Successful" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="passes_for_goals" title="Passes For Goals" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="passes_for_shots" title="Passes For Shots" />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="own_goals" title="Own Goals" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="key_passes" title="Key Passes" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="through_passes" title="Through Passes" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="through_passes_successful" title="Through Passes Successful" />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="offside" title="Offside" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="turnover" title="Turnovers" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="turnover_on_offensive_court" title="Turnovers on Offensive Court" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="turnover_on_defensive_court" title="Turnovers on Defensive Court" />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="saved" title="Saved" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="tackle" title="Tackles" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="tackle_on_offensive_court" title="Tackles on Offensive Court" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="tackle_on_defensive_court" title="Tackles on Defensive Court" />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="clearance" title="Clearance" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="interception" title="Interceptions" />
+                                <LeadersPlayerStatColumn
+                                    list={getFilteredList()}
+                                    isTotal={displayOption === 'total'}
+                                    option="interception_on_offensive_court"
+                                    title="Interceptions on Offensive Court"
+                                />
+                                <LeadersPlayerStatColumn
+                                    list={getFilteredList()}
+                                    isTotal={displayOption === 'total'}
+                                    option="interception_on_defensive_court"
+                                    title="Interceptions on Defensive Court"
+                                />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="fouls" title="Fouls" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="draw_fouls" title="Draw Fouls" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="red_cards" title="Red Cards" />
+                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="yellow_cards" title="Yellow Cards" />
+                            </div>
+                        </div>
+                    </Box>
+                </>
+            )}
         </Box>
     );
 };
 
-export default GamePlayers;
+export default Leaders;

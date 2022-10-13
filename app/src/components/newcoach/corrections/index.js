@@ -22,22 +22,26 @@ const Corrections = () => {
     const menuPopoverOpen = Boolean(menuAnchorEl);
     const menuPopoverId = menuPopoverOpen ? 'simple-popover' : undefined;
 
-    const handleDeny = (id) => {
-        const newList = corrections.filter((data) => data.correction_id !== id);
+    const handleDeny = () => {
+        if (!correctItem) return;
+
+        const newList = corrections.filter((data) => data.correction_id !== correctItem.correction_id);
 
         setMenuAnchorEl(null);
         setCorrections(newList);
         dispatch({ type: UPDATE_CORRECTION_COUNT, payload: newList.length });
-        GameService.deleteCorrection(id);
+        GameService.deleteCorrection(correctItem.correction_id);
     };
 
-    const handleAccept = (id) => {
-        const newList = corrections.filter((data) => data.correction_id !== id);
+    const handleAccept = () => {
+        if (!correctItem) return;
+
+        const newList = corrections.filter((data) => data.correction_id !== correctItem.correction_id);
 
         setMenuAnchorEl(null);
         setCorrections(newList);
         dispatch({ type: UPDATE_CORRECTION_COUNT, payload: newList.length });
-        GameService.doCorrection(id);
+        GameService.doCorrection(correctItem.correction_id);
     };
 
     useEffect(() => {
@@ -107,39 +111,38 @@ const Corrections = () => {
                                     >
                                         <PlayIcon />
                                     </IconButton>
-                                    <IconButton onClick={(e) => setMenuAnchorEl(e.currentTarget)}>
+                                    <IconButton
+                                        onClick={(e) => {
+                                            setCorrectItem(item);
+                                            setMenuAnchorEl(e.currentTarget);
+                                        }}
+                                    >
                                         <CheckIcon />
                                     </IconButton>
                                 </Box>
-                                <Popover
-                                    id={menuPopoverId}
-                                    open={menuPopoverOpen}
-                                    anchorEl={menuAnchorEl}
-                                    onClose={() => setMenuAnchorEl(null)}
-                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                                    transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-                                    sx={{ '& .MuiPopover-paper': { borderRadius: '12px', border: '1px solid #E8E8E8' } }}
-                                >
-                                    <Box sx={{ display: 'flex', alignItems: 'center', padding: '16px', gap: '16px' }}>
-                                        <Box
-                                            sx={{ 'svg path': { fill: '#C5EAC6' }, display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
-                                            onClick={() => handleAccept(item.correction_id)}
-                                        >
-                                            <CheckIcon />
-                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Accept</Typography>
-                                        </Box>
-                                        <Box
-                                            sx={{ 'svg path': { fill: '#FFCCCB' }, display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
-                                            onClick={() => handleDeny(item.correction_id)}
-                                        >
-                                            <CloseIcon />
-                                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Deny</Typography>
-                                        </Box>
-                                    </Box>
-                                </Popover>
                             </Box>
                         ))}
                     </Box>
+                    <Popover
+                        id={menuPopoverId}
+                        open={menuPopoverOpen}
+                        anchorEl={menuAnchorEl}
+                        onClose={() => setMenuAnchorEl(null)}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+                        sx={{ '& .MuiPopover-paper': { borderRadius: '12px', border: '1px solid #E8E8E8' } }}
+                    >
+                        <Box sx={{ display: 'flex', alignItems: 'center', padding: '16px', gap: '16px' }}>
+                            <Box sx={{ 'svg path': { fill: '#C5EAC6' }, display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }} onClick={() => handleAccept()}>
+                                <CheckIcon />
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Accept</Typography>
+                            </Box>
+                            <Box sx={{ 'svg path': { fill: '#FFCCCB' }, display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }} onClick={() => handleDeny()}>
+                                <CloseIcon />
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Deny</Typography>
+                            </Box>
+                        </Box>
+                    </Popover>
                     {playOpen && (
                         <CorrectionsVideoPlayer
                             onClose={() => setPlayOpen(false)}

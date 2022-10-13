@@ -430,8 +430,8 @@ const getCoachPlayerGames = (playerId) => {
     });
 };
 
-const getCoachTeamPlayers = (teamId, seasonId) => {
-    return axios.get(API_URL + `coach_team/team_players/${teamId}/${seasonId}`, { headers: authHeader(), data: { teamId, seasonId } }).then((response) => {
+const getCoachTeamPlayers = (teamId, seasonId, leagueId) => {
+    return axios.get(API_URL + `coach_team/team_players/${teamId}/${seasonId}/${leagueId}`, { headers: authHeader(), data: { teamId, seasonId, leagueId } }).then((response) => {
         return response.data;
     });
 };

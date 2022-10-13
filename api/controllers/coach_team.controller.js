@@ -13,21 +13,20 @@ exports.create = (req, res) => {
   };
 
   Coach_Team.create(coach_team)
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Coach_Team."
+          err.message || "Some error occurred while creating the Coach_Team.",
       });
     });
-
 };
 
 exports.findAll = (req, res) => {
-
-  Sequelize.query(`
+  Sequelize.query(
+    `
     SELECT 
       public."Coach_Teams".*,
       CONCAT (public."Users".first_name,' ', public."Users".last_name) as coach_name,
@@ -39,115 +38,139 @@ exports.findAll = (req, res) => {
     JOIN public."Teams" on public."Teams".id = public."Coach_Teams".team_id
     JOIN public."Seasons" on public."Seasons".id = public."Coach_Teams".season_id
     JOIN public."Leagues" on public."Leagues".id = public."Coach_Teams".league_id
-  `)
-    .then(data => {
+  `
+  )
+    .then((data) => {
       res.send(data[0]);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
+        message: err.message || "Some error occurred while retrieving games.",
       });
     });
-
 };
 
 exports.findAllMine = (req, res) => {
-
-  Sequelize.query(`
+  Sequelize.query(
+    `
     SELECT * from public.fnc_get_coach_teams(${req.userId})
-  `)
-    .then(data => {
+  `
+  )
+    .then((data) => {
       res.send(data[0]);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
+        message: err.message || "Some error occurred while retrieving games.",
       });
     });
 };
 
 exports.getAllPlayersByCoach = (req, res) => {
-  Sequelize.query(`
+  Sequelize.query(
+    `
     SELECT * from public.fnc_get_all_players_by_coach(${req.userId})
-  `).then(data => {
-    res.send(data[0])
-  }).catch(err => {
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while retrieving Players."
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
     })
-  })
-}
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving Players.",
+      });
+    });
+};
 
 exports.getAllLeaguesByCoach = (req, res) => {
-  Sequelize.query(`
+  Sequelize.query(
+    `
     select * from public.fnc_get_all_leagues_by_coach(${req.userId})
-  `).then(data => {
-    res.send(data[0])
-  }).catch(err => {
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while retrieving Leagues."
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
     })
-  })
-}
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving Leagues.",
+      });
+    });
+};
 
 exports.getAllTeamsByCoach = (req, res) => {
-  Sequelize.query(`
+  Sequelize.query(
+    `
     select * from public.fnc_get_all_teams_by_coach(${req.userId})
-  `).then(data => {
-    res.send(data[0])
-  }).catch(err => {
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while retrieving Teams."
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
     })
-  })
-}
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving Teams.",
+      });
+    });
+};
 
 exports.getAllLeaguesOfAdditionalGamesByCoach = (req, res) => {
-  Sequelize.query(`
+  Sequelize.query(
+    `
     select * from public.fnc_get_all_leagues_of_additional_games_by_coach(${req.userId})
-  `).then(data => {
-    res.send(data[0])
-  }).catch(err => {
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while retrieving Leagues of additional games."
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
     })
-  })
-}
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message ||
+          "Some error occurred while retrieving Leagues of additional games.",
+      });
+    });
+};
 
 exports.getAllTeamsOfAdditionalGamesByCoach = (req, res) => {
-  Sequelize.query(`
+  Sequelize.query(
+    `
     select * from public.fnc_get_all_teams_of_additional_games_by_coach(${req.userId})
-  `).then(data => {
-    res.send(data[0])
-  }).catch(err => {
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while retrieving Teams of additional games."
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
     })
-  })
-}
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message ||
+          "Some error occurred while retrieving Teams of additional games.",
+      });
+    });
+};
 
 exports.getNumberOfGamesOrdered = (req, res) => {
-  Sequelize.query(`
+  Sequelize.query(
+    `
     select * from public.fnc_get_number_of_games_ordered(${req.userId})
-  `).then(data => {
-    res.send(data[0])
-  }).catch(err => {
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while retrieving number of games."
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
     })
-  })
-}
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message ||
+          "Some error occurred while retrieving number of games.",
+      });
+    });
+};
 
 exports.getCoachTeamList = (req, res) => {
-  Sequelize.query(`
+  Sequelize.query(
+    `
     SELECT 
       public."Coach_Teams".id,
       public."Seasons".name as season_name,
@@ -158,21 +181,21 @@ exports.getCoachTeamList = (req, res) => {
     JOIN public."Seasons" on public."Seasons".id = public."Coach_Teams".season_id
     JOIN public."Leagues" on public."Leagues".id = public."Coach_Teams".league_id
     WHERE public."Coach_Teams".user_id = ${req.userId}
-  `)
-    .then(data => {
+  `
+  )
+    .then((data) => {
       res.send(data[0]);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
+        message: err.message || "Some error occurred while retrieving games.",
       });
     });
-}
+};
 
 exports.getCoachPlayers = (req, res) => {
-
-  Sequelize.query(`
+  Sequelize.query(
+    `
     SELECT 
       public."Players".*,
       CONCAT (public."Players".f_name,' ', public."Players".l_name) as name,
@@ -188,20 +211,21 @@ exports.getCoachPlayers = (req, res) => {
     join public."Players" on public."Players".id = public."Team_Players".player_id
     join public."Player_Positions" on public."Player_Positions".id = public."Players".position
     WHERE public."Coach_Teams".user_id = ${req.userId}
-  `)
-    .then(data => {
+  `
+  )
+    .then((data) => {
       res.send(data[0]);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
+        message: err.message || "Some error occurred while retrieving games.",
       });
     });
 };
 
 exports.getCoachTeamPlayers = (req, res) => {
-  Sequelize.query(`
+  Sequelize.query(
+    `
     SELECT 
       public."Players".*,
       CONCAT (public."Players".f_name,' ', public."Players".l_name) as name,
@@ -210,70 +234,84 @@ exports.getCoachTeamPlayers = (req, res) => {
     FROM public."Coach_Teams" 
     JOIN public."Teams" on public."Teams".id = public."Coach_Teams".team_id
     JOIN (
-        SELECT *, public."Team_Players".team_id as temp_team_id, public."Team_Players".season_id as temp_season_id
+        SELECT *, public."Team_Players".team_id as temp_team_id, public."Team_Players".season_id as temp_season_id, public."Team_Players".league_id as temp_league_id
         FROM public."Team_Players" 
         GROUP BY
           public."Team_Players".team_id,
           public."Team_Players".season_id,
-      public."Team_Players".id
-      ) AS tempTeamTable on tempTeamTable.temp_team_id = public."Coach_Teams".team_id and tempTeamTable.temp_season_id = public."Coach_Teams".season_id
+          public."Team_Players".league_id,
+          public."Team_Players".id
+      ) AS tempTeamTable on 
+          tempTeamTable.temp_team_id = public."Coach_Teams".team_id and
+          tempTeamTable.temp_season_id = public."Coach_Teams".season_id and
+          tempTeamTable.temp_league_id = public."Coach_Teams".league_id
     join public."Players" on public."Players".id = tempTeamTable.player_id
     join public."Player_Positions" on public."Player_Positions".id = public."Players".position
-    WHERE public."Coach_Teams".user_id = ${req.userId} and public."Coach_Teams".team_id = ${req.params.teamId} and public."Coach_Teams".season_id = ${req.params.seasonId}
-  `)
-    .then(data => {
+    WHERE public."Coach_Teams".user_id = ${req.userId} and public."Coach_Teams".team_id = ${req.params.teamId} and public."Coach_Teams".season_id = ${req.params.seasonId} and public."Coach_Teams".league_id = ${req.params.leagueId}
+  `
+  )
+    .then((data) => {
       res.send(data[0]);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
+        message: err.message || "Some error occurred while retrieving games.",
       });
     });
 };
 
 exports.getGameCoachTeamPlayers = (req, res) => {
-  Sequelize.query(`
+  Sequelize.query(
+    `
     SELECT * FROM public.fnc_get_team_players_in_games(
       ${req.params.teamId},
       '${req.params.gameIds}')
-  `)
-    .then(data => {
+  `
+  )
+    .then((data) => {
       res.send(data[0]);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
+        message: err.message || "Some error occurred while retrieving games.",
       });
     });
 };
 
 exports.getGameOpponentPlayers = (req, res) => {
-  Sequelize.query(`
+  Sequelize.query(
+    `
     SELECT * FROM public.fnc_get_opponent_players_in_games(
       ${req.params.teamId},
       '${req.params.gameIds}')
-  `)
-    .then(data => {
+  `
+  )
+    .then((data) => {
       res.send(data[0]);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
+        message: err.message || "Some error occurred while retrieving games.",
       });
     });
 };
 
 exports.getGamePlayerTags = (req, res) => {
-  const teamId = req.params.teamId === 'null' ? null : parseInt(req.params.teamId);
-  const playerIds = req.params.playerId === 'null' ? null : `'${req.params.playerId}'`;
-  const actionId = req.params.actionId === 'null' ? null : `'${req.params.actionId}'`;
-  const actionTypeId = req.params.actionTypeId === 'null' ? null : `'${req.params.actionTypeId}'`;
-  const actionResultId = req.params.actionResultId === 'null' ? null : `'${req.params.actionResultId}'`;
+  const teamId =
+    req.params.teamId === "null" ? null : parseInt(req.params.teamId);
+  const playerIds =
+    req.params.playerId === "null" ? null : `'${req.params.playerId}'`;
+  const actionId =
+    req.params.actionId === "null" ? null : `'${req.params.actionId}'`;
+  const actionTypeId =
+    req.params.actionTypeId === "null" ? null : `'${req.params.actionTypeId}'`;
+  const actionResultId =
+    req.params.actionResultId === "null"
+      ? null
+      : `'${req.params.actionResultId}'`;
 
-  Sequelize.query(`
+  Sequelize.query(
+    `
     SELECT * FROM public.fnc_get_players_tags(
       ${req.userId},
       ${teamId},
@@ -283,22 +321,24 @@ exports.getGamePlayerTags = (req, res) => {
       ${actionTypeId},
       ${actionResultId}
     )
-  `).then(data => {
-    res.send(data[0]);
-  })
-    .catch(err => {
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
+        message: err.message || "Some error occurred while retrieving games.",
       });
     });
-}
+};
 
 exports.getTagsByPlayer = (req, res) => {
-  const playerId = req.body.player_id
-  const gameIds = req.body.gameIds
+  const playerId = req.body.player_id;
+  const gameIds = req.body.gameIds;
 
-  Sequelize.query(`
+  Sequelize.query(
+    `
   SELECT 
     public."Player_Tags".*,
     public."Actions".name as action_name,
@@ -332,16 +372,18 @@ exports.getTagsByPlayer = (req, res) => {
     LEFT JOIN public."Players" on public."Players".id = public."Player_Tags".player_id
     JOIN public."Teams" as offenseTeam on public."Team_Tags".offensive_team_id = offenseTeam.id
     JOIN public."Teams" as defenseTeam on public."Team_Tags".defensive_team_id = defenseTeam.id
-  WHERE public."Team_Tags".game_id in (${gameIds ?? 0}) and public."Players".id = ${playerId}
+  WHERE public."Team_Tags".game_id in (${
+    gameIds ?? 0
+  }) and public."Players".id = ${playerId}
   ORDER BY public."Team_Tags".start_time, public."Player_Tags".start_time 
-`)
-    .then(data => {
+`
+  )
+    .then((data) => {
       res.send(data[0]);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
+        message: err.message || "Some error occurred while retrieving games.",
       });
     });
 };
@@ -349,7 +391,8 @@ exports.getTagsByPlayer = (req, res) => {
 exports.getAllPlayerGames = (req, res) => {
   const playerId = req.params.id;
 
-  Sequelize.query(`
+  Sequelize.query(
+    `
   select public."Games".*,
   HomeTeam.name as home_team_name,
   AwayTeam.name as away_team_name
@@ -369,20 +412,21 @@ exports.getAllPlayerGames = (req, res) => {
   
   where public."Coach_Teams".user_id = ${req.userId} and public."Team_Players".player_id = ${playerId}
   ORDER BY public."Games".date desc
-  `)
-    .then(data => {
+  `
+  )
+    .then((data) => {
       res.send(data[0]);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
+        message: err.message || "Some error occurred while retrieving games.",
       });
     });
 };
 
 exports.getAllPlayers = (req, res) => {
-  Sequelize.query(`
+  Sequelize.query(
+    `
     SELECT public."Players".*,
         public."Player_Positions".name as position_name,
         public."Player_Positions".short as position_short
@@ -399,14 +443,14 @@ exports.getAllPlayers = (req, res) => {
         public."Player_Positions" on public."Players".position = public."Player_Positions".id
     WHERE public."Coach_Teams".user_id = ${req.userId} 
     group by public."Players".id, public."Player_Positions".id
-  `)
-    .then(data => {
+  `
+  )
+    .then((data) => {
       res.send(data[0]);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving games."
+        message: err.message || "Some error occurred while retrieving games.",
       });
     });
 };
@@ -415,12 +459,12 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
 
   Coach_Team.findByPk(id)
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Error retrieving Coach_Team with id=" + id
+        message: "Error retrieving Coach_Team with id=" + id,
       });
     });
 };
@@ -429,22 +473,22 @@ exports.update = (req, res) => {
   const id = req.params.id;
 
   Coach_Team.update(req.body, {
-    where: { id: id }
+    where: { id: id },
   })
-    .then(num => {
+    .then((num) => {
       if (num == 1) {
         res.send({
-          message: "Coach_Team was updated successfully."
+          message: "Coach_Team was updated successfully.",
         });
       } else {
         res.send({
-          message: `Cannot update Coach_Team with id=${id}. Maybe Coach_Team was not found or req.body is empty!`
+          message: `Cannot update Coach_Team with id=${id}. Maybe Coach_Team was not found or req.body is empty!`,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Error updating Coach_Team with id=" + id
+        message: "Error updating Coach_Team with id=" + id,
       });
     });
 };
@@ -453,22 +497,22 @@ exports.delete = (req, res) => {
   const id = req.params.id;
 
   Coach_Team.destroy({
-    where: { id: id }
+    where: { id: id },
   })
-    .then(num => {
+    .then((num) => {
       if (num == 1) {
         res.send({
-          message: "Coach_Team was deleted successfully!"
+          message: "Coach_Team was deleted successfully!",
         });
       } else {
         res.send({
-          message: `Cannot delete Coach_Team with id=${id}. Maybe Coach_Team was not found!`
+          message: `Cannot delete Coach_Team with id=${id}. Maybe Coach_Team was not found!`,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Could not delete Coach_Team with id=" + id
+        message: "Could not delete Coach_Team with id=" + id,
       });
     });
 };
@@ -476,16 +520,15 @@ exports.delete = (req, res) => {
 exports.deleteAll = (req, res) => {
   Coach_Team.destroy({
     where: {},
-    truncate: false
+    truncate: false,
   })
-    .then(nums => {
+    .then((nums) => {
       res.send({ message: `${nums} Seasons were deleted successfully!` });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all Seasons."
+          err.message || "Some error occurred while removing all Seasons.",
       });
     });
 };
-

@@ -34,38 +34,29 @@ module.exports = (app) => {
     controller.getAllPlayerGames
   );
 
-  app.get(
-    "/coach_team/getAllPlayersByCoach",
-    controller.getAllPlayersByCoach
-  )
+  app.get("/coach_team/getAllPlayersByCoach", controller.getAllPlayersByCoach);
 
-  app.get(
-    "/coach_team/getAllLeaguesByCoach",
-    controller.getAllLeaguesByCoach
-  )
+  app.get("/coach_team/getAllLeaguesByCoach", controller.getAllLeaguesByCoach);
 
-  app.get(
-    "/coach_team/getAllTeamsByCoach",
-    controller.getAllTeamsByCoach
-  )
+  app.get("/coach_team/getAllTeamsByCoach", controller.getAllTeamsByCoach);
 
   app.get(
     "/coach_team/getAllLeaguesOfAdditionalGamesByCoach",
     controller.getAllLeaguesOfAdditionalGamesByCoach
-  )
+  );
 
   app.get(
     "/coach_team/getAllTeamsOfAdditionalGamesByCoach",
     controller.getAllTeamsOfAdditionalGamesByCoach
-  )
+  );
 
   app.get(
     "/coach_team/getNumberOfGamesOrdered",
     controller.getNumberOfGamesOrdered
-  )
+  );
 
   app.get(
-    "/coach_team/team_players/:teamId/:seasonId",
+    "/coach_team/team_players/:teamId/:seasonId/:leagueId",
     [authJwt.isAdminOrCoach],
     controller.getCoachTeamPlayers
   );

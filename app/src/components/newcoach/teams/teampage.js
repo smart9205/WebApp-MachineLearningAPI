@@ -39,15 +39,15 @@ const TeamPage = () => {
             await GameService.getAllGamesByCoach(ids[1], ids[2], ids[0], null).then((res) => {
                 setGameList(res);
             });
-            await GameService.getCoachTeamPlayers(ids[0], ids[1]).then((res) => {
+            await GameService.getCoachTeamPlayers(ids[0], ids[1], ids[2]).then((res) => {
                 stats = res;
             });
             await GameService.getPlayersStatsAdvanced({
                 seasonId: ids[1],
-                leagueId: null,
+                leagueId: `${ids[2]}`,
                 gameId: null,
                 teamId: `${ids[0]}`,
-                playerId: stats.map((item) => item.id).join(','),
+                playerId: null,
                 gameTime: null,
                 courtAreaId: null,
                 insidePaint: null,
