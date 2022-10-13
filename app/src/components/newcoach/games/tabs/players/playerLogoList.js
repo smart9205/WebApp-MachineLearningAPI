@@ -87,7 +87,7 @@ const GamePlayerLogoList = ({ game, teamId, our, setIds }) => {
                     </Box>
                 ))}
             </Box>
-            <GamePlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} initialState={playerState} />
+            <GamePlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} game={game} teamId={teamId} initialState={playerState} />
         </Box>
     );
 };
