@@ -15,6 +15,7 @@ const TeamPage = () => {
     const params = useParams();
     const [values, setValues] = useState({
         players: [],
+        playerStats: [],
         teamName: '',
         teamId: -1,
         tabSelected: 0,
@@ -27,21 +28,38 @@ const TeamPage = () => {
         setValues({ ...values, tabSelected: idx });
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         const pathname = window.location.pathname;
 
         if (pathname.match(/\/new_coach\/teams\//) !== null) {
             const ids = atob(params.teamId).split('|');
+            let stats = [];
 
             setValues({ ...values, loading: true });
-            GameService.getAllGamesByCoach(ids[1], ids[2], ids[0], null).then((res) => {
+            await GameService.getAllGamesByCoach(ids[1], ids[2], ids[0], null).then((res) => {
                 setGameList(res);
             });
-            GameService.getCoachTeamPlayers(ids[0], ids[1]).then((res) => {
-                setValues({ ...values, players: res, teamName: res[0].team_name, loading: false, loadingDone: true, teamId: ids[0] });
+            await GameService.getCoachTeamPlayers(ids[0], ids[1]).then((res) => {
+                stats = res;
+            });
+            await GameService.getPlayersStatsAdvanced({
+                seasonId: ids[1],
+                leagueId: null,
+                gameId: null,
+                teamId: `${ids[0]}`,
+                playerId: stats.map((item) => item.id).join(','),
+                gameTime: null,
+                courtAreaId: null,
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((data) => {
+                setValues({ ...values, players: stats, playerStats: data, teamName: stats[0].team_name, loading: false, loadingDone: true, teamId: ids[0] });
             });
         }
     }, [params]);
+
+    console.log('Team => ', values.playerStats);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
@@ -74,7 +92,7 @@ const TeamPage = () => {
                     </Box>
                     {values.tabSelected === 0 && <TeamOverview games={gameList} teamname={values.teamName} teamId={values.teamId} />}
                     {values.tabSelected === 3 && <TeamGames />}
-                    {values.tabSelected === 4 && <TeamPlayers playerList={values.players} />}
+                    {values.tabSelected === 4 && <TeamPlayers playerList={values.players} stats={values.playerStats} />}
                 </>
             )}
         </Box>

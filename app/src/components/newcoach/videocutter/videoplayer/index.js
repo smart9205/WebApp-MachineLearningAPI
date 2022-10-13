@@ -18,6 +18,7 @@ import GameImage from '../../../../assets/VideoCutter.png';
 import { toHHMMSS } from '../../../../common/utilities';
 import EditCreateClipDialog from './createClipDialog';
 import { MenuProps } from '../../components/common';
+import { getFormattedDate } from '../../components/utilities';
 // import VIDEO from '../../assets/1.mp4'
 
 const styles = {
@@ -119,13 +120,6 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
             seekTo(Math.floor(duration));
             setPlay(false);
         } else seekTo(currentTime + param);
-    };
-
-    const getFormattedDate = (date) => {
-        const old_format = date.match(/\d\d\d\d-\d\d-\d\d/) + '';
-        const array = old_format.split('-');
-
-        return `${array[2]} / ${array[1]} / ${array[0]}`;
     };
 
     const handleSelectChange = async (e) => {

@@ -40,24 +40,25 @@ const Sidebar = () => {
 
     useEffect(async () => {
         setPathname(window.location.pathname);
-        setMenuList(menuData);
+        setMenuList(menuData.filter((item) => item.id !== 'dashboard'));
 
-        if (pathname.includes('/new_coach/dashboard')) setSelectIndex(0);
-        else if (pathname.includes('/new_coach/games')) setSelectIndex(4);
-        else if (pathname.includes('/new_coach/reports')) setSelectIndex(7);
-        else if (pathname.includes('/new_coach/edits')) setSelectIndex(5);
-        else if (pathname.includes('/new_coach/teams')) setSelectIndex(2);
-        else if (pathname.includes('/new_coach/opponents')) setSelectIndex(3);
-        else if (pathname.includes('/new_coach/leaders')) setSelectIndex(1);
-        else if (pathname.includes('/new_coach/players')) setSelectIndex(8);
-        else if (pathname.includes('/new_coach/settings')) setSelectIndex(9);
-        else if (pathname.includes('/new_coach/video_cutter')) setSelectIndex(6);
-        else setSelectIndex(10);
+        const paths = menuData.filter((item) => item.id !== 'dashboard').map((item) => item.path);
+
+        if (pathname.includes('/new_coach/dashboard')) setSelectIndex(paths.indexOf('/new_coach/dashboard'));
+        else if (pathname.includes('/new_coach/games')) setSelectIndex(paths.indexOf('/new_coach/games'));
+        else if (pathname.includes('/new_coach/reports')) setSelectIndex(paths.indexOf('/new_coach/reports'));
+        else if (pathname.includes('/new_coach/edits')) setSelectIndex(paths.indexOf('/new_coach/edits'));
+        else if (pathname.includes('/new_coach/teams')) setSelectIndex(paths.indexOf('/new_coach/teams'));
+        else if (pathname.includes('/new_coach/opponents')) setSelectIndex(paths.indexOf('/new_coach/opponents'));
+        else if (pathname.includes('/new_coach/leaders')) setSelectIndex(paths.indexOf('/new_coach/leaders'));
+        else if (pathname.includes('/new_coach/players')) setSelectIndex(paths.indexOf('/new_coach/players'));
+        else if (pathname.includes('/new_coach/settings')) setSelectIndex(paths.indexOf('/new_coach/settings'));
+        else if (pathname.includes('/new_coach/video_cutter')) setSelectIndex(paths.indexOf('/new_coach/video_cutter'));
+        else setSelectIndex(paths.indexOf('/new_coach/corrections'));
 
         await GameService.getNumberOfGamesOrdered(null).then((res) => {
             setGameCount(res[0].total_game);
-
-            if (res[0].total_game === 0) setMenuList(menuData.filter((item) => item.id !== 'dashboard'));
+            setMenuList(menuData.filter((item) => item.id !== 'dashboard'));
         });
 
         dispatch(getCorrectionCount());
@@ -79,7 +80,7 @@ const Sidebar = () => {
                     )}
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {menuData.map((menuItem, idx) => (
+                    {menuList.map((menuItem, idx) => (
                         <Box key={idx} onMouseEnter={() => handleMouseEnter(idx)} onMouseLeave={handleMouseLeave} onClick={() => setSelectIndex(idx)}>
                             <MenuItem
                                 path={menuItem.path}

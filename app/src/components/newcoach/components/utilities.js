@@ -223,3 +223,10 @@ export function stableSort(array, comparator) {
 
     return stabilizedThis.map((el) => el[0]);
 }
+
+export function getFormattedDate(date) {
+    const old_format = date.match(/\d\d\d\d-\d\d-\d\d/) + '';
+    const array = old_format.split('-');
+
+    return `${array[2]} / ${array[1]} / ${array[0]}`;
+}

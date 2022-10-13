@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Divider, Popover, CircularProgress } from '@mui/material';
-import fileDownload from 'js-file-download';
-import axios from 'axios';
 
 import SortIcon from '@mui/icons-material/SortOutlined';
 import ExportIcon from '../../../assets/Export.svg';
@@ -13,6 +11,7 @@ import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 import GameService from '../../../services/game.service';
 import ExcelDataFiltering from '../../coach/ExcelDataFiltering';
 import { XmlDataFilterOpponents } from '../components/xmldata';
+import { getFormattedDate } from '../components/utilities';
 
 const GameListItem = ({ row, isHover }) => {
     const navigate = useNavigate();
@@ -72,13 +71,6 @@ const GameListItem = ({ row, isHover }) => {
         link.href = url;
         link.target = '_blank';
         link.click();
-    };
-
-    const getFormattedDate = (date) => {
-        const old_format = date.match(/\d\d\d\d-\d\d-\d\d/) + '';
-        const array = old_format.split('-');
-
-        return `${array[2]} / ${array[1]} / ${array[0]}`;
     };
 
     const handleChangePath = (gameId) => () => {

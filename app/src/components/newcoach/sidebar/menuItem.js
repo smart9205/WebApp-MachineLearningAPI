@@ -27,7 +27,7 @@ const MenuItem = ({ path, icon, title, isMinimized, isHover, isSelected, isEnabl
                     {icon}
                     {isEnabled && (
                         <div style={{ position: 'absolute', top: 0, right: '10px' }}>
-                            <img src={NotifyIcon} style={{ width: '24px', height: '24px' }} />
+                            <img src={NotifyIcon} style={{ height: '18px' }} />
                         </div>
                     )}
                 </Box>

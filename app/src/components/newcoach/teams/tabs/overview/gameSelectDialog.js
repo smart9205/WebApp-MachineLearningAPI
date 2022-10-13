@@ -1,16 +1,10 @@
 import { Box, Checkbox, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { getFormattedDate } from '../../../components/utilities';
 
 const TeamGameSelectDialog = ({ open, onClose, gameList, setIds }) => {
     const [selectAll, setSelectAll] = useState(false);
     const [checkGames, setCheckGames] = useState([]);
-
-    const getFormattedDate = (date) => {
-        const old_format = date.match(/\d\d\d\d-\d\d-\d\d/) + '';
-        const array = old_format.split('-');
-
-        return `${array[2]}/${array[1]}/${array[0]}`;
-    };
 
     const handleCloseDialog = () => {
         const ids = gameList.filter((game, index) => checkGames[index] === true).map((item) => item.id);

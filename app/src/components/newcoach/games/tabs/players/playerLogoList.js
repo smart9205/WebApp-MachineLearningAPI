@@ -3,14 +3,43 @@ import { Box, CircularProgress } from '@mui/material';
 
 import GameService from '../../../../../services/game.service';
 import GamePlayerLogo from './playerLogo';
+import GamePlayerStatDialog from './statDialog';
 
 const GamePlayerLogoList = ({ game, teamId, our, setIds }) => {
     const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectArray, setSelectArray] = useState([]);
+    const [statOpen, setStatOpen] = useState(false);
+    const [currentPlayer, setCurrentPlayer] = useState(null);
+    const [playerState, setPlayerState] = useState(null);
+
+    let statClick = false;
 
     const handleSelectPlayer = (index) => {
-        setSelectArray({ ...selectArray, [index]: !selectArray[index] });
+        if (!statClick) {
+            setSelectArray({ ...selectArray, [index]: !selectArray[index] });
+            statClick = false;
+        } else setSelectArray({ ...selectArray, [index]: false });
+    };
+
+    const handleDisplayList = (player) => {
+        statClick = true;
+        GameService.getPlayersStatsAdvanced({
+            seasonId: game.season_id,
+            leagueId: `${game.league_id}`,
+            gameId: `${game.id}`,
+            teamId: `${teamId}`,
+            playerId: `${player.player_id}`,
+            gameTime: null,
+            courtAreaId: null,
+            insidePaint: null,
+            homeAway: null,
+            gameResult: null
+        }).then((res) => {
+            setPlayerState(res[0]);
+            setStatOpen(true);
+            setCurrentPlayer(player);
+        });
     };
 
     useEffect(() => {
@@ -42,6 +71,8 @@ const GamePlayerLogoList = ({ game, teamId, our, setIds }) => {
         setIds(ids);
     }, [selectArray]);
 
+    console.log('playerlogo => ', playerList, game);
+
     return (
         <Box sx={{ minWidth: '600px' }}>
             {loading && (
@@ -52,10 +83,11 @@ const GamePlayerLogoList = ({ game, teamId, our, setIds }) => {
             <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto auto auto auto auto', gap: '2px' }}>
                 {playerList.map((item, index) => (
                     <Box key={index} sx={{ borderRadius: '10px', border: selectArray[index] ? '4px solid #0A7304' : '4px solid white', cursor: 'pointer' }} onClick={() => handleSelectPlayer(index)}>
-                        <GamePlayerLogo player={item} />
+                        <GamePlayerLogo player={item} onShow={handleDisplayList} />
                     </Box>
                 ))}
             </Box>
+            <GamePlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} initialState={playerState} />
         </Box>
     );
 };

@@ -15,7 +15,7 @@ import './Profile.css';
 import { useTranslation } from 'react-i18next';
 import GameImage from '../../assets/game_image.png';
 import FilterIcon from '@mui/icons-material/FilterListOutlined';
-import { getComparator, stableSort } from '../newcoach/components/utilities';
+import { getComparator, getFormattedDate, stableSort } from '../newcoach/components/utilities';
 
 const styles = {
     loader: {
@@ -128,13 +128,6 @@ export default function Player() {
 
     const getImage = (item) => {
         return item.image && item.image.length > 0 ? item.image : GameImage;
-    };
-
-    const getFormattedDate = (date) => {
-        const old_format = date ? date.match(/\d\d\d\d-\d\d-\d\d/) + '' : '';
-        const array = old_format.split('-');
-
-        return `${array[2]} / ${array[1]} / ${array[0]}`;
     };
 
     const handleListItemClick = (event, index) => {

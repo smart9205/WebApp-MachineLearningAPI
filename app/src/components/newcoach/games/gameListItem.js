@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, TextField, Divider, Popover, CircularProgress } from '@mui/material';
-import fileDownload from 'js-file-download';
-import axios from 'axios';
 
 import SortIcon from '@mui/icons-material/SortOutlined';
 import EditIcon from '@mui/icons-material/EditOutlined';
@@ -16,6 +14,7 @@ import GameService from '../../../services/game.service';
 import GameEditPage from './gameEditPage';
 import ExcelDataFiltering from '../../coach/ExcelDataFiltering';
 import { XmlDataFilterGames, XmlDataFilterGamesShort } from '../components/xmldata';
+import { getFormattedDate } from '../components/utilities';
 
 const GameListItem = ({ row, isHover, isPending = false, updateList, team, standing }) => {
     const navigate = useNavigate();
@@ -98,13 +97,6 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
         link.href = url;
         link.target = '_blank';
         link.click();
-    };
-
-    const getFormattedDate = (date) => {
-        const old_format = date.match(/\d\d\d\d-\d\d-\d\d/) + '';
-        const array = old_format.split('-');
-
-        return `${array[2]} / ${array[1]} / ${array[0]}`;
     };
 
     const getAllInfosByGame = async (game) => {

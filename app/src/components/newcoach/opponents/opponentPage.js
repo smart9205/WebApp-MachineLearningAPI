@@ -8,6 +8,7 @@ import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 import GameService from '../../../services/game.service';
 import OpponentOverview from './tabs/overview';
 import OpponentPlayers from './tabs/players';
+import { getFormattedDate } from '../components/utilities';
 
 const Tabs = ['Overview', 'Summary', 'Stats', 'Players'];
 
@@ -20,13 +21,6 @@ const OpponentPage = () => {
         loadingDone: false,
         curTab: 0
     });
-
-    const getFormattedDate = (date) => {
-        const old_format = date.match(/\d\d\d\d-\d\d-\d\d/) + '';
-        const array = old_format.split('-');
-
-        return `${array[2]} / ${array[1]} / ${array[0]}`;
-    };
 
     const handleTabClick = (idx) => {
         setValues({ ...values, curTab: idx });
