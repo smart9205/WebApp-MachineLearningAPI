@@ -1,13 +1,12 @@
 import { Box, Button, Dialog, DialogContent, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import MatchAll from '../../../../../assets/match_all.png';
-import MatchGrey from '../../../../../assets/match_grey.png';
-import MatchFirst from '../../../../../assets/match_first.png';
+import MatchAll from '../../../../../../assets/match_all.png';
 
-import { USER_IMAGE_DEFAULT } from '../../../../../common/staticData';
-import { getFormattedDate } from '../../../components/utilities';
-import GameService from '../../../../../services/game.service';
+import { USER_IMAGE_DEFAULT } from '../../../../../../common/staticData';
+import { getFormattedDate } from '../../../../components/utilities';
+import GameService from '../../../../../../services/game.service';
+import GamePlayerStatErrorMessage from './errorMessage';
 
 const statList = [
     { id: 'goal', title: 'Goals' },
@@ -44,6 +43,8 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initia
     const [gameHalf, setGameHalf] = useState(['first', 'second']);
     const [gameTime, setGameTime] = useState(['1', '2', '3', '4', '5', '6']);
     const [loading, setLoading] = useState(false);
+    const [courtArea, setCourtArea] = useState(['1', '2', '3', '4']);
+    const [errorOpen, setErrorOpen] = useState(false);
 
     const handleChangeGameHalf = (e, newHalf) => {
         setGameHalf(newHalf);
@@ -98,8 +99,22 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initia
         }
     };
 
+    const handleChangeCourtArea = (courtId) => {
+        let newList = [...courtArea];
+
+        if (newList.includes(courtId)) newList = newList.filter((item) => item !== courtId);
+        else newList = [...newList, courtId];
+
+        setCourtArea(newList);
+    };
+
     const handlePlayerStat = () => {
-        if (gameTime.length === 0) window.alert('No option selected');
+        if (gameTime.length === 0 || courtArea.length === 0) {
+            setErrorOpen(true);
+
+            return;
+        }
+
         setLoading(true);
         GameService.getPlayersStatsAdvanced({
             seasonId: game.season_id,
@@ -107,8 +122,8 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initia
             gameId: game.id,
             teamId: teamId,
             playerId: player.player_id,
-            gameTime: gameTime.length > 0 ? gameTime.join(',') : '1,2,3,4,5,6',
-            courtAreaId: null,
+            gameTime: gameTime.join(','),
+            courtAreaId: courtArea.join(','),
             insidePaint: null,
             homeAway: null,
             gameResult: null,
@@ -122,7 +137,10 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initia
 
     useEffect(() => {
         setPlayerState(initialState);
-    }, [initialState]);
+        setGameHalf(['first', 'second']);
+        setGameTime(['1', '2', '3', '4', '5', '6']);
+        setCourtArea(['1', '2', '3', '4']);
+    }, [initialState, open]);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="1500px">
@@ -184,9 +202,36 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initia
                                 </ToggleButtonGroup>
                             </div>
                         </div>
-                        <div style={{ display: 'flex', gap: '16px', height: '120px' }}>
-                            <img src={MatchAll} style={{ borderRadius: '12px', height: '100%' }} />
-                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '100%', padding: '6px', borderRadius: '8px', border: '1px solid #E8E8E8' }}>
+                        <div style={{ display: 'flex', gap: '16px' }}>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    height: '120px',
+                                    width: '220px',
+                                    borderRadius: '12px',
+                                    background: `url(${MatchAll}) center center / cover no-repeat silver`
+                                }}
+                            >
+                                {['4', '3', '2', '1'].map((court, index) => (
+                                    <div
+                                        key={`${index}-${court}`}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            flex: 1,
+                                            borderRadius: index === 0 ? '12px 0 0 12px' : index === 3 ? '0 12px 12px 0' : 0,
+                                            height: '100%',
+                                            cursor: 'pointer',
+                                            background: courtArea.includes(court) ? 'rgba(200, 200, 200, 0)' : 'rgba(200, 200, 200, 0.7)',
+                                            border: '1px solid white'
+                                        }}
+                                        onClick={() => handleChangeCourtArea(court)}
+                                    />
+                                ))}
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1, padding: '6px', borderRadius: '8px', border: '1px solid #E8E8E8' }}>
                                 <div style={{ width: '100%' }}>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>GAME RESULT</Typography>
                                     <div style={{ width: '100%', border: '1px solid grey', background: 'lightgrey', display: 'flex', alignItems: 'center', height: '24px' }}>
@@ -238,13 +283,14 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initia
                             >
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>
-                                    {!loading ? (playerState ? playerState[`total_${item.id}`] : '') : '0'}
+                                    {!loading ? (playerState ? playerState[`total_${item.id}`] : '0') : '0'}
                                 </Typography>
                             </div>
                         ))}
                     </div>
                 </Box>
             </DialogContent>
+            <GamePlayerStatErrorMessage open={errorOpen} onClose={() => setErrorOpen(false)} />
         </Dialog>
     );
 };

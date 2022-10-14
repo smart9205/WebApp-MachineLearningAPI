@@ -3,7 +3,7 @@ import { Box, CircularProgress } from '@mui/material';
 
 import GameService from '../../../../../services/game.service';
 import GamePlayerLogo from './playerLogo';
-import GamePlayerStatDialog from './statDialog';
+import GamePlayerStatDialog from './status';
 
 const GamePlayerLogoList = ({ game, teamId, opponent, our, setIds }) => {
     const [playerList, setPlayerList] = useState([]);
