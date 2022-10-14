@@ -177,6 +177,7 @@ exports.getPlayersStatsAdvanced = (req, res) => {
   const team_id = req.body.teamId === null ? null : `'${req.body.teamId}'`;
   const player_id =
     req.body.playerId === null ? null : `'${req.body.playerId}'`;
+  const user_id = req.body.our ? req.userId : null;
 
   Sequelize.query(
     `
@@ -186,7 +187,7 @@ exports.getPlayersStatsAdvanced = (req, res) => {
       ${game_id},
       ${team_id},
       ${player_id},
-      ${req.userId},
+      ${user_id},
       ${game_time},
       ${court},
       ${req.body.insidePaint},

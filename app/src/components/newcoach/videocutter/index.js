@@ -17,8 +17,12 @@ const VideoCutter = () => {
         setCurTagIdx(index);
     };
 
-    const handleSort = async (rows) => {
-        await GameService.updateEditClipsSort(rows);
+    const handleSort = async (rows, isDropped) => {
+        if (!isDropped) await GameService.updateEditClipsSort(rows);
+        else await handleUpdateTable();
+    };
+
+    const handleUpdateTable = async () => {
         await GameService.getEditClipsByUserEditId(curEdit.id).then((res) => {
             setEditTagList(res);
         });
@@ -64,7 +68,7 @@ const VideoCutter = () => {
                         selected={curTagIdx}
                         sort={handleSort}
                         name={curEdit?.name ?? ''}
-                        update={setEditTagList}
+                        update={handleUpdateTable}
                         showPlay={true}
                     />
                 </div>

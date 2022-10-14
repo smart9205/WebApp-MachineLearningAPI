@@ -46,7 +46,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
         const newList = teamTagList.filter((item) => checkArray.includes(item.id) === false);
 
         setTeamTagList(newList);
-        update(newList);
+        update();
         GameService.deleteEditClip(deleteList.join(','));
     };
 
@@ -107,7 +107,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
         const newList = teamTagList.filter((item) => checkArray.includes(item.id) === false);
 
         setTeamTagList(newList);
-        update(newList);
+        update();
         await GameService.moveEditClips(moveList.join(','), controlEdit.id);
         setControlEdit(null);
         setEventName('');
@@ -133,7 +133,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
         setTeamTagList(tagList);
     }, [tagList]);
 
-    console.log(checkArray);
+    console.log(teamTagList);
 
     return (
         <Box sx={{ width: '500px', height: '100%', padding: '16px 8px', borderLeft: '1px solid #E8E8E8', textAlign: 'center' }}>
@@ -169,7 +169,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
                             </Button>
                         </Box>
                     )}
-                    {tagList.length > 0 && teamTagList.length > 0 && (
+                    {teamTagList.length > 0 && (
                         <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} updateTable={update} setChecks={setCheckArray} showPlay={showPlay} />
                     )}
                     <Dialog open={dialogOpen} onClose={() => handleClose()} scroll="paper">

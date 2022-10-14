@@ -39,7 +39,7 @@ const statList = [
     { id: 'red_cards', title: 'Red Cards' }
 ];
 
-const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialState }) => {
+const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initialState }) => {
     const [playerState, setPlayerState] = useState(null);
     const [gameHalf, setGameHalf] = useState(['first', 'second']);
     const [gameTime, setGameTime] = useState(['1', '2', '3', '4', '5', '6']);
@@ -111,7 +111,8 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
             courtAreaId: null,
             insidePaint: null,
             homeAway: null,
-            gameResult: null
+            gameResult: null,
+            our: our
         }).then((res) => {
             console.log(res);
             setPlayerState(res[0]);

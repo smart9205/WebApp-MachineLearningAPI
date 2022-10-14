@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, MenuItem, Select, Typography } from '@mui/material';
+import { Autocomplete, Box, CircularProgress, MenuItem, Select, TextField, Typography } from '@mui/material';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
@@ -20,7 +20,7 @@ const Leaders = () => {
         teamFilter: 'none',
         seasonFilter: 'none',
         leagueFilter: 'none',
-        playerFilter: 'none'
+        playerFilter: null
     });
 
     const handleChange = (prop) => (e) => {
@@ -36,6 +36,25 @@ const Leaders = () => {
                 const filter = result.filter((season) => season === item.season_name);
 
                 if (filter.length === 0) result = [...result, item.season_name];
+
+                return result;
+            });
+
+            return result;
+        }
+
+        return [];
+    };
+
+    const getPlayersList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'player_name'));
+            let result = [];
+
+            desc.map((item, index) => {
+                const filter = result.filter((season) => season.name === item.player_name);
+
+                if (filter.length === 0) result = [...result, { id: index + 1, name: item.player_name }];
 
                 return result;
             });
@@ -123,32 +142,32 @@ const Leaders = () => {
     const getFilteredList = () => {
         let array = [];
 
-        if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter === 'none')
+        if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter === null)
             array = playerList.filter((item) => item.season_name === values.seasonFilter);
-        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter === 'none')
+        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter === null)
             array = playerList.filter((item) => item.league_name === values.leagueFilter);
-        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter === 'none')
+        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter === null)
             array = playerList.filter((item) => item.team_name === values.teamFilter);
-        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter !== 'none')
-            array = playerList.filter((item) => item.player_name === values.playerFilter);
-        else if (values.seasonFilter !== 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter === 'none')
+        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter !== null)
+            array = playerList.filter((item) => item.player_name === values.playerFilter.name);
+        else if (values.seasonFilter !== 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter === null)
             array = playerList.filter((item) => item.season_name === values.seasonFilter && item.league_name === values.leagueFilter);
-        else if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter === 'none')
+        else if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter === null)
             array = playerList.filter((item) => item.season_name === values.seasonFilter && item.team_name === values.teamFilter);
-        else if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter !== 'none')
-            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.player_name === values.playerFilter);
-        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter !== 'none' && values.playerFilter === 'none')
+        else if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter !== null)
+            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.player_name === values.playerFilter.name);
+        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter !== 'none' && values.playerFilter === null)
             array = playerList.filter((item) => item.league_name === values.leagueFilter && item.team_name === values.teamFilter);
-        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter !== 'none')
-            array = playerList.filter((item) => item.league_name === values.leagueFilter && item.player_name === values.playerFilter);
-        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter !== 'none')
-            array = playerList.filter((item) => item.player_name === values.playerFilter && item.team_name === values.teamFilter);
+        else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter !== null)
+            array = playerList.filter((item) => item.league_name === values.leagueFilter && item.player_name === values.playerFilter.name);
+        else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter !== null)
+            array = playerList.filter((item) => item.player_name === values.playerFilter.name && item.team_name === values.teamFilter);
         else
             array = playerList.filter(
-                (item) => item.league_name === values.leagueFilter && item.season_name === values.seasonFilter && item.team_name === values.teamFilter && item.player_name === values.playerFilter
+                (item) => item.league_name === values.leagueFilter && item.season_name === values.seasonFilter && item.team_name === values.teamFilter && item.player_name === values.playerFilter.name
             );
 
-        return values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter === 'none' ? playerList : array;
+        return values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter === null ? playerList : array;
     };
 
     useEffect(async () => {
@@ -167,7 +186,7 @@ const Leaders = () => {
             teamIds = getTeamIds(res);
         });
         await GameService.getAllPlayersByCoach().then((res) => {
-            setPlayersList(res);
+            setPlayersList(getPlayersList(res));
         });
         await GameService.getPlayersStatsAdvanced({
             seasonId: null,
@@ -187,7 +206,7 @@ const Leaders = () => {
         });
     }, []);
 
-    console.log('leaders => ', playerList);
+    console.log('leaders => ', values.playerFilter);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
@@ -267,28 +286,27 @@ const Leaders = () => {
                                     ))}
                                 </Select>
                             </Box>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Player</Typography>
-                                <Select
-                                    value={values.playerFilter}
-                                    onChange={handleChange('playerFilter')}
-                                    label=""
-                                    variant="outlined"
-                                    IconComponent={ExpandMoreIcon}
-                                    inputProps={{ 'aria-label': 'Without label' }}
-                                    MenuProps={MenuProps}
-                                    sx={{ outline: 'none', height: '36px', width: '200px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                                >
-                                    <MenuItem key="0" value="none">
-                                        All
-                                    </MenuItem>
-                                    {playersList.map((player, index) => (
-                                        <MenuItem key={index + 1} value={player.player_name}>
-                                            {player.player_name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </Box>
+                            <Autocomplete
+                                id="combo-box-demo"
+                                options={playersList}
+                                value={values.playerFilter}
+                                isOptionEqualToValue={(option, value) => option && option.name}
+                                getOptionLabel={(option) => (!option.name ? '' : option.name)}
+                                renderOption={(props, option) => {
+                                    return (
+                                        <li {...props} key={option.id}>
+                                            {option.name}
+                                        </li>
+                                    );
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Player" sx={{ my: 1 }} />}
+                                onChange={(event, newValue) => setValues({ ...values, playerFilter: newValue })}
+                                sx={{
+                                    width: '300px',
+                                    '& .MuiOutlinedInput-root': { padding: '0 0 0 9px' },
+                                    '& .MuiInputLabel-root': { top: '-8px' }
+                                }}
+                            />
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Display</Typography>
                                 <Select

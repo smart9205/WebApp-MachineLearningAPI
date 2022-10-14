@@ -61,7 +61,7 @@ const headCells = [
 
 const TeamPlayers = ({ playerList, stats }) => {
     const [playerIds, setPlayerIds] = useState([]);
-    const [order, setOrder] = useState('asc');
+    const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('total_player_games');
 
     const getPlayerStatus = (id) => {
@@ -71,9 +71,9 @@ const TeamPlayers = ({ playerList, stats }) => {
     };
 
     const handleRequestSort = (prop) => {
-        const isAsc = orderBy === prop && order === 'asc';
+        const isAsc = orderBy === prop && order === 'desc';
 
-        setOrder(isAsc ? 'desc' : 'asc');
+        setOrder(isAsc ? 'asc' : 'desc');
         setOrderBy(prop);
     };
 
