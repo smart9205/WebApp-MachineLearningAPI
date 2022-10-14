@@ -5,7 +5,7 @@ import GameService from '../../../../../services/game.service';
 import GamePlayerLogo from './playerLogo';
 import GamePlayerStatDialog from './statDialog';
 
-const GamePlayerLogoList = ({ game, teamId, our, setIds }) => {
+const GamePlayerLogoList = ({ game, teamId, opponent, our, setIds }) => {
     const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectArray, setSelectArray] = useState([]);
@@ -26,11 +26,11 @@ const GamePlayerLogoList = ({ game, teamId, our, setIds }) => {
         statClick = true;
         GameService.getPlayersStatsAdvanced({
             seasonId: game.season_id,
-            leagueId: `${game.league_id}`,
-            gameId: `${game.id}`,
-            teamId: `${teamId}`,
-            playerId: `${player.player_id}`,
-            gameTime: null,
+            leagueId: game.league_id,
+            gameId: game.id,
+            teamId: our ? teamId : opponent,
+            playerId: player.player_id,
+            gameTime: '1,2,3,4,5,6',
             courtAreaId: null,
             insidePaint: null,
             homeAway: null,
@@ -87,7 +87,7 @@ const GamePlayerLogoList = ({ game, teamId, our, setIds }) => {
                     </Box>
                 ))}
             </Box>
-            <GamePlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} game={game} teamId={teamId} initialState={playerState} />
+            <GamePlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} game={game} teamId={our ? teamId : opponent} initialState={playerState} />
         </Box>
     );
 };

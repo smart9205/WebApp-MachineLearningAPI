@@ -42,6 +42,8 @@ const Leaders = () => {
 
             return result;
         }
+
+        return [];
     };
 
     const getTeamList = (array) => {
@@ -59,6 +61,26 @@ const Leaders = () => {
 
             return result;
         }
+
+        return [];
+    };
+
+    const getTeamIds = (array) => {
+        if (array.length > 0) {
+            let result = [];
+
+            array.map((item) => {
+                const filter = result.filter((team) => team === item.team_id);
+
+                if (filter.length === 0) result = [...result, item.team_id];
+
+                return result;
+            });
+
+            return result;
+        }
+
+        return [];
     };
 
     const getLeagueList = (array) => {
@@ -76,6 +98,26 @@ const Leaders = () => {
 
             return result;
         }
+
+        return [];
+    };
+
+    const getLeagueIds = (array) => {
+        if (array.length > 0) {
+            let result = [];
+
+            array.map((item) => {
+                const filter = result.filter((league) => league === item.league_id);
+
+                if (filter.length === 0) result = [...result, item.league_id];
+
+                return result;
+            });
+
+            return result;
+        }
+
+        return [];
     };
 
     const getFilteredList = () => {
@@ -110,21 +152,28 @@ const Leaders = () => {
     };
 
     useEffect(async () => {
+        let leagueIds = [];
+        let teamIds = [];
+
         setLoading(true);
         await GameService.getAllLeaguesByCoach().then((res) => {
+            console.log(res);
             setLeagueList(getLeagueList(res));
+            leagueIds = getLeagueIds(res);
         });
         await GameService.getAllTeamsByCoach().then((res) => {
+            console.log(res);
             setTeamList(getTeamList(res));
+            teamIds = getTeamIds(res);
         });
         await GameService.getAllPlayersByCoach().then((res) => {
             setPlayersList(res);
         });
         await GameService.getPlayersStatsAdvanced({
             seasonId: null,
-            leagueId: null,
+            leagueId: leagueIds.length > 0 ? leagueIds.join(',') : null,
             gameId: null,
-            teamId: null,
+            teamId: teamIds.length > 0 ? teamIds.join(',') : null,
             playerId: null,
             gameTime: null,
             courtAreaId: null,

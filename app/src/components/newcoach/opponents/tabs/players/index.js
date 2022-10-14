@@ -280,7 +280,7 @@ const OpponentPlayers = ({ game }) => {
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', padding: '24px 16px' }}>
                 <GameOverviewHeader isOur={values.isOur} ourname={game.home_team_name} enemyname={game.away_team_name} onChangeTeam={handleChangeTeam} mb="8px" />
-                <GamePlayerLogoList game={game} teamId={game.home_team_id} our={values.isOur} setIds={setPlayerIds} />
+                <GamePlayerLogoList game={game} teamId={game.home_team_id} opponent={game.away_team_id} our={values.isOur} setIds={setPlayerIds} />
                 {values.expandButtons && <GamePlayerTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />

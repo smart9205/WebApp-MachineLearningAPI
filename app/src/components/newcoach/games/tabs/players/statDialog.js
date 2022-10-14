@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Dialog, DialogContent, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import MatchAll from '../../../../../assets/match_all.png';
@@ -41,38 +41,79 @@ const statList = [
 
 const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialState }) => {
     const [playerState, setPlayerState] = useState(null);
-    const [gameHalf, setGameHalf] = useState(['first']);
-    const [gameTime, setGameTime] = useState(['1', '2', '3']);
+    const [gameHalf, setGameHalf] = useState(['first', 'second']);
+    const [gameTime, setGameTime] = useState(['1', '2', '3', '4', '5', '6']);
     const [loading, setLoading] = useState(false);
 
     const handleChangeGameHalf = (e, newHalf) => {
         setGameHalf(newHalf);
 
-        if (newHalf.includes('first') && newHalf.includes('second')) setGameTime(['1', '2', '3', '4', '5', '6']);
-        else {
-            if (newHalf.includes('first')) setGameTime(['1', '2', '3']);
-            else if (newHalf.includes('second')) setGameTime(['4', '5', '6']);
+        if (newHalf.length === 2) setGameTime(['1', '2', '3', '4', '5', '6']);
+        else if (newHalf.length === 1) {
+            if (newHalf.includes('first')) {
+                let newList = [...gameTime];
+
+                newList = newList.filter((item) => item === '4' || item === '5' || item === '6');
+
+                if (newList.length === 3) newList = ['1', '2', '3'];
+                else {
+                    if (!newList.includes('1')) newList = [...newList, '1'];
+                    if (!newList.includes('2')) newList = [...newList, '2'];
+                    if (!newList.includes('3')) newList = [...newList, '3'];
+                }
+
+                setGameTime(newList);
+            } else if (newHalf.includes('second')) {
+                let newList = [...gameTime];
+
+                newList = newList.filter((item) => item === '1' || item === '2' || item === '3');
+
+                if (newList.length === 3) newList = ['4', '5', '6'];
+                else {
+                    if (!newList.includes('4')) newList = [...newList, '4'];
+                    if (!newList.includes('5')) newList = [...newList, '5'];
+                    if (!newList.includes('6')) newList = [...newList, '6'];
+                }
+
+                setGameTime(newList);
+            }
+        } else {
+            if (e.target.innerText === '1 HALF') setGameTime(gameTime.filter((item) => item === '4' || item === '5' || item === '6'));
+            else if (e.target.innerText === '2 HALF') setGameTime(gameTime.filter((item) => item === '1' || item === '2' || item === '3'));
         }
     };
 
     const handleChangeGameTime = (e, newTime) => {
         setGameTime(newTime);
+
+        if (newTime.length === 6) setGameHalf(['first', 'second']);
+        else if (newTime.length >= 0 && newTime.length <= 2) setGameHalf([]);
+        else if (newTime.length >= 3 && newTime.length <= 5) {
+            const diff1 = ['1', '2', '3'].filter((item) => !newTime.includes(item));
+            const diff2 = ['4', '5', '6'].filter((item) => !newTime.includes(item));
+
+            if (diff1.length === 0) setGameHalf(['first']);
+            if (diff2.length === 0) setGameHalf(['second']);
+            if (diff1.length !== 0 && diff2.length !== 0) setGameHalf([]);
+        }
     };
 
     const handlePlayerStat = () => {
+        if (gameTime.length === 0) window.alert('No option selected');
         setLoading(true);
         GameService.getPlayersStatsAdvanced({
             seasonId: game.season_id,
-            leagueId: `${game.league_id}`,
-            gameId: `${game.id}`,
-            teamId: `${teamId}`,
-            playerId: `${player.player_id}`,
-            gameTime: gameTime.join(','),
+            leagueId: game.league_id,
+            gameId: game.id,
+            teamId: teamId,
+            playerId: player.player_id,
+            gameTime: gameTime.length > 0 ? gameTime.join(',') : '1,2,3,4,5,6',
             courtAreaId: null,
             insidePaint: null,
             homeAway: null,
             gameResult: null
         }).then((res) => {
+            console.log(res);
             setPlayerState(res[0]);
             setLoading(false);
         });
@@ -81,8 +122,6 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
     useEffect(() => {
         setPlayerState(initialState);
     }, [initialState]);
-
-    console.log(playerState);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="1500px">
@@ -123,7 +162,7 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
                     <Box sx={{ border: '1px solid #E8E8E8', borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>FILTERS</Typography>
-                            <Button variant="outlined" onClick={() => handlePlayerStat()}>
+                            <Button variant="outlined" color="success" sx={{ textTransform: 'none' }} onClick={() => handlePlayerStat()}>
                                 Recalculate
                             </Button>
                         </div>
@@ -178,37 +217,31 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
                 </Box>
                 <Box sx={{ border: '1px solid #E8E8E8', borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>PLAYER STATS</Typography>
-                    {loading ? (
-                        <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <CircularProgress />
-                        </div>
-                    ) : (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '8px' }}>
-                            {statList.map((item, index) => (
-                                <div
-                                    key={index}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexDirection: 'column',
-                                        gap: '4px',
-                                        padding: '6px 0',
-                                        width: '160px',
-                                        height: '60px',
-                                        borderRadius: '12px',
-                                        border: '1px solid #E8E8E8',
-                                        background: playerState ? (playerState[`total_${item.id}`] > 0 ? '#F2F7F2' : 'white') : 'white'
-                                    }}
-                                >
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>
-                                        {playerState ? playerState[`total_${item.id}`] : ''}
-                                    </Typography>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '8px' }}>
+                        {statList.map((item, index) => (
+                            <div
+                                key={index}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexDirection: 'column',
+                                    gap: '4px',
+                                    padding: '6px 0',
+                                    width: '160px',
+                                    height: '60px',
+                                    borderRadius: '12px',
+                                    border: '1px solid #E8E8E8',
+                                    background: loading ? 'white' : playerState ? (playerState[`total_${item.id}`] > 0 ? '#F2F7F2' : 'white') : 'white'
+                                }}
+                            >
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>
+                                    {!loading ? (playerState ? playerState[`total_${item.id}`] : '') : '0'}
+                                </Typography>
+                            </div>
+                        ))}
+                    </div>
                 </Box>
             </DialogContent>
         </Dialog>
