@@ -52,7 +52,8 @@ const TeamPage = () => {
                 courtAreaId: null,
                 insidePaint: null,
                 homeAway: null,
-                gameResult: null
+                gameResult: null,
+                our: true
             }).then((data) => {
                 setValues({ ...values, players: stats, playerStats: data, teamName: stats[0].team_name, loading: false, loadingDone: true, teamId: ids[0] });
             });
@@ -75,7 +76,7 @@ const TeamPage = () => {
                             <Link to="/new_coach/teams">
                                 <ChevronLeftIcon sx={{ width: '32px', height: '32px' }} />
                             </Link>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>{values.teamName}</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Team {values.teamName}</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '32px', paddingLeft: '56px' }}>
                             {Tabs.map((tab, index) => (

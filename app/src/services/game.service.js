@@ -740,6 +740,12 @@ const getTeamById = (id) => {
     });
 };
 
+const getTeamsStatsAdvanced = (req) => {
+    return axios.post(API_URL + `team/getteamsstats/advance`, req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
 const getSeasonById = (id) => {
     return axios.get(API_URL + `season/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
         return response.data;
@@ -921,6 +927,7 @@ const gameService = {
     getAllUserEdits,
     getEditClipsByUserEditId,
     getTeamById,
+    getTeamsStatsAdvanced,
     getSeasonById,
     getLeagueById,
     getPlayerById,

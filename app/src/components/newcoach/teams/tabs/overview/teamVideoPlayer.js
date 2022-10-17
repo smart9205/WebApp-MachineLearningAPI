@@ -70,11 +70,10 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
     }, [games]);
 
     useEffect(() => {
-        if (!ready) return;
-
-        if (!tagList.length) return;
+        if (tagList.length === 0) return;
 
         playTagByIdx(idx);
+        console.log('TeamVideo => ', curIdx, videoURL, videoList);
         setCurIdx(idx);
 
         setPlay(videoPlay);
@@ -90,7 +89,8 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
     const seekTo = (sec) => player.current && player.current.seekTo(sec);
 
     const playTagByIdx = (i) => {
-        const video = videoList.filter((item) => item.id === tagList[i].game_id).map((item) => item.url)[0];
+        const video = videoList.filter((item) => item.id === tagList[i].game_id)[0].url;
+        console.log(videoURL, video);
 
         if (video !== videoURL) setVideoURL(video);
 
@@ -156,8 +156,6 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
 
         return hour + ':' + minute + ':' + second;
     };
-
-    console.log('TeamVideo => ', curIdx, videoURL);
 
     return (
         <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
