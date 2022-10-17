@@ -113,7 +113,7 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, leagueI
     const getPlayerStat = (id) => {
         if (id === 'player_games') return playerState[`total_${id}`];
 
-        return playerState[`average_${id}`] + ' / ' + playerState[`total_${id}`];
+        return playerState[`total_${id}`] + ' (' + playerState[`average_${id}`] + ')';
     };
 
     const handleChangeCourtArea = (courtId) => {

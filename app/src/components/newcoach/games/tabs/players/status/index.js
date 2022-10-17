@@ -122,7 +122,7 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initia
     const getPlayerStat = (id) => {
         if (id === 'player_games') return playerState[`total_${id}`];
 
-        return playerState[`average_${id}`] + ' / ' + playerState[`total_${id}`];
+        return playerState[`total_${id}`] + ' (' + playerState[`average_${id}`] + ')';
     };
 
     const handlePlayerStat = () => {
