@@ -305,7 +305,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', minHeight: '65vh', overflowY: 'auto', display: 'flex' }}>
-            <Box sx={{ display: 'flex', maxWidth: '600px', flexDirection: 'column', padding: '24px 16px' }}>
+            <Box sx={{ display: 'flex', minWidth: '600px', flexDirection: 'column', padding: '24px 16px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
                     <Box sx={{ display: 'flex', flex: 5, alignItems: 'center', justifyContent: 'center' }}>
                         <GameOverviewHeader isOur={values.isOur} ourname={teamname} enemyname="Opponents" onChangeTeam={handleChangeTeam} mb="0" />

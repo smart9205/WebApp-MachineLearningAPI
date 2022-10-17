@@ -18,6 +18,8 @@ const TeamPage = () => {
         playerStats: [],
         teamName: '',
         teamId: -1,
+        seasonId: -1,
+        leagueId: -1,
         tabSelected: 0,
         loading: false,
         loadingDone: false
@@ -55,7 +57,7 @@ const TeamPage = () => {
                 gameResult: null,
                 our: true
             }).then((data) => {
-                setValues({ ...values, players: stats, playerStats: data, teamName: stats[0].team_name, loading: false, loadingDone: true, teamId: ids[0] });
+                setValues({ ...values, players: stats, playerStats: data, teamName: stats[0].team_name, loading: false, loadingDone: true, teamId: ids[0], seasonId: ids[1], leagueId: ids[2] });
             });
         }
     }, [params]);
@@ -93,7 +95,7 @@ const TeamPage = () => {
                     </Box>
                     {values.tabSelected === 0 && <TeamOverview games={gameList} teamname={values.teamName} teamId={values.teamId} />}
                     {values.tabSelected === 3 && <TeamGames />}
-                    {values.tabSelected === 4 && <TeamPlayers playerList={values.players} stats={values.playerStats} />}
+                    {values.tabSelected === 4 && <TeamPlayers playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} leagueId={values.leagueId} />}
                 </>
             )}
         </Box>
