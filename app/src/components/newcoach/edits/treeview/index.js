@@ -194,18 +194,19 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                                 variant="contained"
                                 sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
                                 onClick={() => {
-                                    setFolderDialog(true);
                                     setCreateFolderEdit(true);
+                                    setFolderDialog(true);
                                 }}
                             >
                                 New Folder
                             </Button>
                             <Button
                                 variant="contained"
+                                disabled={curEdit === null || curEdit.type === 'edit' || (curEdit.type === 'folder' && curEdit.parent_id === 0)}
                                 sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
                                 onClick={() => {
-                                    setFolderDialog(true);
                                     setCreateFolderEdit(false);
+                                    setFolderDialog(true);
                                 }}
                             >
                                 New Edit

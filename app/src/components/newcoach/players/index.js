@@ -19,12 +19,14 @@ import React, { useEffect, useReducer, useState } from 'react';
 
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
+import SortIcon from '@mui/icons-material/SortOutlined';
 
 import GameService from '../../../services/game.service';
-import PlayerListItem from './playerListItem';
 import { MenuProps } from '../components/common';
 import { getComparator, stableSort } from '../components/utilities';
 import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
+import PlayerEditDialog from './playerEditDialog';
+import TeamPlayerStatDialog from '../teams/tabs/players/status';
 
 const headCells = [
     {
@@ -93,6 +95,10 @@ const Players = () => {
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('total_player_games');
     const [playerStats, setPlayerStats] = useState([]);
+    const [editOpen, setEditOpen] = useState(false);
+    const [currentPlayer, setCurrentPlayer] = useState(null);
+    const [statOpen, setStatOpen] = useState(false);
+    const [playerStat, setPlayerStat] = useState(null);
 
     const getPlayerStatus = (id) => {
         if (playerStats.length > 0) return playerStats.filter((item) => item.player_id === id)[0];
@@ -110,15 +116,14 @@ const Players = () => {
     const getSortedArray = () => {
         if (playersList.length > 0 && playerStats.length > 0) {
             const sortedStats = stableSort(playerStats, getComparator(order, orderBy));
-            const other = playersList.filter((item) => !playerIds.includes(item.id));
-            const inside = playersList.filter((item) => playerIds.includes(item.id));
+            const filteredList = getPlayers();
+            const other = filteredList.filter((item) => !playerIds.includes(item.id));
+            const inside = filteredList.filter((item) => playerIds.includes(item.id));
             let newList = [];
-
-            console.log('#########', inside, other);
 
             if (sortedStats.length === inside.length) {
                 sortedStats.map((item) => {
-                    const newItem = playersList.filter((data) => data.id === item.player_id)[0];
+                    const newItem = filteredList.filter((data) => data.id === item.player_id)[0];
 
                     newList = [...newList, newItem];
 
@@ -136,6 +141,7 @@ const Players = () => {
                     return newList;
                 });
             }
+
             other.map((item) => {
                 newList = [...newList, item];
 
@@ -148,7 +154,25 @@ const Players = () => {
         return [];
     };
 
-    const handleDisplayList = (player) => {};
+    const handleDisplayList = (player) => {
+        GameService.getPlayersStatsAdvanced({
+            seasonId: null,
+            leagueId: null,
+            gameId: null,
+            teamId: null,
+            playerId: player.id,
+            gameTime: '1,2,3,4,5,6',
+            courtAreaId: '1,2,3,4',
+            insidePaint: null,
+            homeAway: null,
+            gameResult: null,
+            our: true
+        }).then((res) => {
+            setCurrentPlayer(player);
+            setPlayerStat(res[0]);
+            setStatOpen(true);
+        });
+    };
 
     const { searchText, playersList, teamList, teamFilter, loading } = state;
 
@@ -303,6 +327,7 @@ const Players = () => {
                                                 </TableSortLabel>
                                             </TableCell>
                                         ))}
+                                        <TableCell key="menu" />
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -360,11 +385,23 @@ const Players = () => {
                                             <TableCell align="center">
                                                 {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_clearance'] : '-') : '-'}
                                             </TableCell>
+                                            <TableCell
+                                                align="center"
+                                                sx={{ cursor: 'pointer' }}
+                                                onClick={() => {
+                                                    setCurrentPlayer(player);
+                                                    setEditOpen(true);
+                                                }}
+                                            >
+                                                <SortIcon />
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
+                        <PlayerEditDialog open={editOpen} onClose={() => setEditOpen(false)} player={currentPlayer} />
+                        <TeamPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} teamId={null} seasonId={null} leagueId={null} initialState={playerStat} />
                     </Box>
                 </>
             )}

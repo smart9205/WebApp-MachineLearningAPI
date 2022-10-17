@@ -3,6 +3,7 @@ import builder from 'xmlbuilder';
 import fileDownload from 'js-file-download';
 
 import gameService from '../../../services/game.service';
+import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 
 export const gameCreateCommand = async (tagList, name, games, gameIds) => {
     let videoList = await Promise.all(
@@ -21,8 +22,8 @@ export const gameCreateCommand = async (tagList, name, games, gameIds) => {
         return {
             url: tag.url,
             SecondBoxText: name.replace("'", ''),
-            HomeTeamLogo: tag.home,
-            AwayTeamLogo: tag.away
+            HomeTeamLogo: tag.home ? tag.home : TEAM_ICON_DEFAULT,
+            AwayTeamLogo: tag.away ? tag.away : TEAM_ICON_DEFAULT
         };
     });
 
@@ -84,8 +85,8 @@ export const gamePlayerCreateCommand = async (tagList, name, games, gameIds) => 
         return {
             url: tag.url,
             SecondBoxText: name.replace("'", ''),
-            HomeTeamLogo: tag.home,
-            AwayTeamLogo: tag.away
+            HomeTeamLogo: tag.home ? tag.home : TEAM_ICON_DEFAULT,
+            AwayTeamLogo: tag.away ? tag.away : TEAM_ICON_DEFAULT
         };
     });
 

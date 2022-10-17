@@ -53,16 +53,18 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
     }, []);
 
     useEffect(() => {
-        setValues({
-            ...values,
-            id: player.id,
-            f_name: player.f_name,
-            l_name: player.l_name,
-            date_of_birth: player.date_of_birth,
-            position: player.position,
-            jersey_number: player.jersey_number,
-            image: player.image
-        });
+        if (player !== null) {
+            setValues({
+                ...values,
+                id: player.id,
+                f_name: player.f_name,
+                l_name: player.l_name,
+                date_of_birth: player.date_of_birth,
+                position: player.position,
+                jersey_number: player.jersey_number,
+                image: player.image
+            });
+        }
     }, [player, positions]);
 
     return (
