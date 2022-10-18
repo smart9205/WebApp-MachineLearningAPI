@@ -1,272 +1,477 @@
-import React, { useEffect, useState, createContext, useMemo, useReducer } from 'react';
-import { useParams } from 'react-router-dom';
-import i18next from 'i18next';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { IconButton, CircularProgress, Box, Typography, Popover, List, ListItemButton, ListItemText } from '@mui/material';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import GameService from '../../services/game.service';
-import DialogContent from '@mui/material/DialogContent';
-import Dialog from '@mui/material/Dialog';
-import TagVideo from './TagVideo';
-import { makeStyles } from '@mui/styles';
-import PlayerDetailCard from './PlayerDetailCard';
-import GameDetailTab from './GameDetailTab';
-import './Profile.css';
-import { useTranslation } from 'react-i18next';
-import GameImage from '../../assets/game_image.png';
-import FilterIcon from '@mui/icons-material/FilterListOutlined';
-import { getComparator, getFormattedDate, stableSort } from '../newcoach/components/utilities';
+import {
+    Box,
+    Typography,
+    TextField,
+    InputAdornment,
+    IconButton,
+    CircularProgress,
+    Select,
+    MenuItem,
+    TableContainer,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableSortLabel,
+    TableBody
+} from '@mui/material';
+import React, { useEffect, useReducer, useState } from 'react';
 
-const styles = {
-    loader: {
-        position: 'fixed',
-        left: '0px',
-        top: '0px',
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#fff',
-        zIndex: 9999,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
+import SearchIcon from '@mui/icons-material/SearchOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
+import SortIcon from '@mui/icons-material/SortOutlined';
+
+import GameService from '../../../services/game.service';
+import { MenuProps } from '../components/common';
+import { getComparator, stableSort } from '../components/utilities';
+import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
+import PlayerEditDialog from './playerEditDialog';
+import TeamPlayerStatDialog from '../teams/tabs/players/status';
+
+const headCells = [
+    {
+        id: 'total_player_games',
+        title: 'Games'
     },
-    play: {
-        color: '#07863d'
+    {
+        id: 'total_goal',
+        title: 'Goals'
     },
-    paper: { minWidth: '98%', maxHeight: 'none', backgroundColor: 'transparent' }
-};
-const defaultPrimaryColor = '#058240';
-const defaultSecondColor = '#e7f3e5';
-
-export const PlayerContext = createContext({
-    context: {
-        player: null,
-        game: null,
-        update_cnt: 0
+    {
+        id: 'total_shot',
+        title: 'Shots'
     },
-    setContext: () => {}
-});
+    {
+        id: 'total_dribble',
+        title: 'Dribbles'
+    },
+    {
+        id: 'total_crosses',
+        title: 'Crosses'
+    },
+    {
+        id: 'total_free_kick',
+        title: 'Free Kicks'
+    },
+    {
+        id: 'total_passes',
+        title: 'Passes'
+    },
+    {
+        id: 'total_turnover',
+        title: 'Turnovers'
+    },
+    {
+        id: 'total_draw_fouls',
+        title: 'Draw Fouls'
+    },
+    {
+        id: 'total_interception',
+        title: 'Interceptions'
+    },
+    {
+        id: 'total_tackle',
+        title: 'Tackles'
+    },
+    {
+        id: 'total_saved',
+        title: 'Saved'
+    },
+    {
+        id: 'total_clearance',
+        title: 'Clearance'
+    }
+];
 
-const useStyles = makeStyles(() => ({
-    paper: { minWidth: '98%', backgroundColor: 'transparent' }
-}));
+const Players = () => {
+    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
+        searchText: '',
+        playersList: [],
+        teamList: [],
+        teamFilter: 'none',
+        loading: false
+    });
+    const [playerIds, setPlayerIds] = useState([]);
+    const [order, setOrder] = useState('desc');
+    const [orderBy, setOrderBy] = useState('total_player_games');
+    const [playerStats, setPlayerStats] = useState([]);
+    const [editOpen, setEditOpen] = useState(false);
+    const [currentPlayer, setCurrentPlayer] = useState(null);
+    const [editPlayer, setEditPlayer] = useState(null);
+    const [statOpen, setStatOpen] = useState(false);
+    const [playerStat, setPlayerStat] = useState(null);
 
-export default function Player() {
-    const { t } = useTranslation();
-    const classes = useStyles();
-    const { data } = useParams();
-    const playerId = Number(atob(data));
-    const [loading, setLoading] = useState(true);
-    const [games, setGames] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [playTags, setPlayTags] = useState([]);
+    const getPlayerStatus = (id) => {
+        if (playerStats.length > 0) return playerStats.filter((item) => item.player_id === id)[0];
 
-    const [context, setContext] = useReducer((old, action) => ({ ...old, ...action }), {});
+        return null;
+    };
 
-    const game = context.game;
+    const handleRequestSort = (prop) => {
+        const isAsc = orderBy === prop && order === 'desc';
 
-    const value = useMemo(() => ({ context, setContext }), [context]);
+        setOrder(isAsc ? 'asc' : 'desc');
+        setOrderBy(prop);
+    };
 
-    const [primaryColor, setPrimaryColor] = useState(defaultPrimaryColor);
-    const [secondColor, setSecondColor] = useState(defaultSecondColor);
-    const [language, setLanguage] = useState('en');
-    const [hoverIndex, setHoverIndex] = useState(-1);
+    const getSortedArray = () => {
+        if (playersList.length > 0 && playerStats.length > 0) {
+            const sortedStats = stableSort(playerStats, getComparator(order, orderBy));
+            const filteredList = searchText ? playersList.filter((item) => compareStrings(item.player_position_name, searchText) || compareStrings(item.player_name, searchText)) : playersList;
+            const other = filteredList.filter((item) => !playerIds.includes(item.player_id));
+            const inside = filteredList.filter((item) => playerIds.includes(item.player_id));
+            let newList = [];
 
-    const [filterAnchorEl, setFilterAnchorEl] = useState(null);
-    const filterPopoverOpen = Boolean(filterAnchorEl);
-    const filterPopoverId = filterPopoverOpen ? 'simple-popover' : undefined;
+            if (sortedStats.length === inside.length) {
+                sortedStats.map((item) => {
+                    const newItem = filteredList.filter((data) => data.player_id === item.player_id)[0];
 
-    const [seasonList, setSeasonList] = useState([]);
-    const [seasonFilter, setSeasonFilter] = useState('');
-    const [selectedIndex, setSelectedIndex] = useState(0);
+                    newList = [...newList, newItem];
 
-    const theme = useMemo(
-        () =>
-            createTheme({
-                palette: {
-                    primary: { main: primaryColor },
-                    secondary: { main: secondColor }
-                }
-            }),
-        [primaryColor, secondColor]
-    );
+                    return newList;
+                });
+            } else {
+                const newIds = inside.map((item) => item.player_id);
+                const newStats = sortedStats.filter((item) => newIds.includes(item.player_id));
 
-    useEffect(() => {
-        setLoading(true);
-        GameService.getGameDetailssByPlayer(playerId).then((res) => {
-            const ascArray = stableSort(res, getComparator('desc', 'date'));
+                newStats.map((item) => {
+                    const newItem = inside.filter((data) => data.player_id === item.player_id)[0];
 
-            setGames(ascArray);
-            getSeasonList(res);
-        });
+                    newList = [...newList, newItem];
 
-        GameService.getPlayerById(playerId).then((res) => {
-            setContext({ player: res });
-            setPrimaryColor(res.team_color || defaultPrimaryColor);
-            setSecondColor(res.second_color || defaultSecondColor);
-            GameService.getTeamById(res.team_id).then((result) => {
-                setLanguage(result.team_language);
+                    return newList;
+                });
+            }
+
+            other.map((item) => {
+                newList = [...newList, item];
+
+                return newList;
             });
-        });
-        setLoading(false);
-    }, [playerId]);
 
-    useEffect(() => {
-        i18next.changeLanguage(language);
-        if (language == 'iw' || language == 'ar') {
-            document.body.style.direction = 'rtl';
-        } else {
-            document.body.style.direction = 'ltr';
+            return newList;
         }
-    }, [language]);
 
-    const numClicked = (gameId, key) => {
-        GameService.getPlayerTagsByActionName(playerId, gameId, key).then((res) => {
-            // setPlayTags(res); setOpen(true)
+        return [];
+    };
+
+    const handleDisplayList = (player) => {
+        GameService.getPlayersStatsAdvanced({
+            seasonId: null,
+            leagueId: null,
+            gameId: null,
+            teamId: null,
+            playerId: player.player_id,
+            gameTime: '1,2,3,4,5,6',
+            courtAreaId: '1,2,3,4',
+            insidePaint: null,
+            homeAway: null,
+            gameResult: null,
+            our: true
+        }).then((res) => {
+            setCurrentPlayer({
+                id: player.player_id,
+                f_name: player.player_name.split(' ')[0],
+                l_name: player.player_name.split(' ')[1],
+                pos_name: player.player_position_name,
+                date_of_birth: player.date_of_birth,
+                image: player.image,
+                jersey_number: player.jersey_number
+            });
+            setPlayerStat(res[0]);
+            setStatOpen(true);
         });
     };
 
-    const getImage = (item) => {
-        return item.image && item.image.length > 0 ? item.image : GameImage;
+    const { searchText, playersList, teamList, teamFilter, loading } = state;
+
+    const handleChange = (prop) => (e) => {
+        setState({ [prop]: e.target.value });
     };
 
-    const handleListItemClick = (event, index) => {
-        if (index === 0) setSeasonFilter('');
-        else setSeasonFilter(seasonList[index - 1]);
-
-        setSelectedIndex(index);
-        setFilterAnchorEl(null);
+    const compareStrings = (first, last) => {
+        return first.toLowerCase().includes(last.toLowerCase());
     };
 
-    const getGameList = () => {
-        const newList = seasonFilter && seasonFilter.length > 0 ? games.filter((game) => game.season_name === seasonFilter) : games;
-
-        return stableSort(newList, getComparator('desc', 'game_date'));
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
     };
 
-    const getSeasonList = (array) => {
+    const getTeamList = (array) => {
         if (array.length > 0) {
-            const desc = stableSort(array, getComparator('desc', 'season_name'));
+            const desc = stableSort(array, getComparator('desc', 'team_name'));
             let result = [];
 
             desc.map((item) => {
-                const filter = result.filter((season) => season === item.season_name);
+                const filter = result.filter((team) => team === item.team_name);
 
-                if (filter.length === 0) result = [...result, item.season_name];
+                if (filter.length === 0) result = [...result, item.team_name];
 
-                console.log('Player => ', item.season_name, result);
                 return result;
             });
-            setSeasonList(result);
+
+            return result;
         }
     };
 
-    const { player: playerData, game: curGame } = context;
+    const getPlayers = () => {
+        return searchText
+            ? playersList.filter((item) => compareStrings(item.player_position_name, searchText) || compareStrings(item.player_name, searchText))
+            : teamFilter !== 'none'
+            ? playersList.filter((item) => item.team_name === teamFilter)
+            : playersList;
+    };
 
-    console.log('player', context);
+    const getUniqueKey = (player) => {
+        return `${player.player_id}-${player.player_position_id}`;
+    };
+
+    useEffect(async () => {
+        setState({ loading: true });
+        await GameService.getPlayersStatsAdvanced({
+            seasonId: null,
+            leagueId: null,
+            gameId: null,
+            teamId: null,
+            playerId: null,
+            gameTime: null,
+            courtAreaId: null,
+            insidePaint: null,
+            homeAway: null,
+            gameResult: null,
+            our: true
+        }).then((data) => {
+            setPlayerStats(data);
+            setPlayerIds(data.map((item) => item.player_id));
+        });
+        await GameService.getAllPlayersByCoach().then((res) => {
+            const ascArray = stableSort(res, getComparator('asc', 'player_name'));
+
+            console.log(res);
+            setState({ playersList: ascArray, loading: false, teamList: getTeamList(res) });
+        });
+    }, []);
 
     return (
-        <ThemeProvider theme={theme}>
-            <PlayerContext.Provider value={value}>
-                {loading && (
-                    <div style={styles.loader}>
-                        <CircularProgress />
-                    </div>
-                )}
-                <Box className="profileSection">
-                    <Dialog className="profileSection_tagvideo" classes={{ paper: classes.paper }} open={open} onClose={(e) => setOpen(false)}>
-                        <DialogContent sx={{ p: 0 }}>
-                            <TagVideo
-                                tagList={playTags}
-                                url={game?.mobile_video_url ? game?.mobile_video_url : game?.video_url}
-                                muteState={game?.mute_video}
-                                setOpen={setOpen}
-                                gameId={game?.game_id}
-                            />
-                        </DialogContent>
-                    </Dialog>
-                    {playerData && <PlayerDetailCard player={playerData} />}
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', padding: '18px 20px', position: 'absolute', top: '9rem' }}>
-                        <IconButton onClick={(e) => setFilterAnchorEl(e.currentTarget)}>
-                            <FilterIcon />
-                        </IconButton>
-                    </Box>
-                    <Popover
-                        id={filterPopoverId}
-                        open={filterPopoverOpen}
-                        anchorEl={filterAnchorEl}
-                        onClose={() => setFilterAnchorEl(null)}
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-                    >
-                        <List component="nav" aria-label="secondary mailbox folder">
-                            <ListItemButton key="0" selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 0)}>
-                                <ListItemText primary="All" />
-                            </ListItemButton>
-                            {seasonList.map((season, index) => (
-                                <ListItemButton key={index + 1} selected={selectedIndex === index + 1} onClick={(event) => handleListItemClick(event, index + 1)}>
-                                    <ListItemText primary={season} />
-                                </ListItemButton>
-                            ))}
-                        </List>
-                    </Popover>
-                    {!curGame &&
-                        getGameList().map((item, index) => (
-                            <Box
-                                key={index}
-                                onMouseEnter={() => setHoverIndex(index)}
-                                onMouseLeave={() => setHoverIndex(-1)}
-                                sx={{
-                                    display: 'flex',
-                                    gap: '12px',
-                                    borderRadius: '8px',
-                                    border: '1px solid #F8F8F8',
-                                    margin: '30px 8px',
-                                    padding: '8px 16px 8px 8px',
-                                    boxShadow: hoverIndex === index ? '0px 4px 16px rgba(0, 0, 0, 0.1)' : 'none',
-                                    cursor: 'pointer'
-                                }}
-                                onClick={() => setContext({ game: item })}
-                            >
-                                <Box sx={{ borderRadius: '10px', background: `url(${getImage(item)}) center center / cover no-repeat silver`, width: '120px', height: '70px', marginBottom: '12px' }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '52px', width: '120px' }}>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                                            {item.home_team_image && <img src={item.home_team_image} style={{ width: '32px', height: '32px' }} />}
-                                            {item.away_team_image && <img src={item.away_team_image} style={{ width: '32px', height: '32px' }} />}
-                                        </Box>
-                                    </Box>
-                                    <IconButton color="primary" sx={{ padding: 0 }} onClick={() => setContext({ game: null })}>
-                                        <PlayCircleOutlineIcon sx={{ width: '36px', height: '36px' }} />
-                                    </IconButton>
-                                </Box>
-                                <Box sx={{ display: 'flex', gap: '2px', flexDirection: 'column', flex: 1 }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 500, color: '#1a1b1d' }}>{getFormattedDate(item.game_date)}</Typography>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 500, color: '#1a1b1d' }}>{item.season_name}</Typography>
-                                    </Box>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 500, color: '#1a1b1d' }}>{item.league_name}</Typography>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 700, color: '#1a1b1d' }}>{item.home_team_goal}</Typography>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 700, color: '#1a1b1d' }}>{item.home_team_name}</Typography>
-                                    </Box>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 700, color: '#1a1b1d' }}>{item.away_team_goal}</Typography>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 700, color: '#1a1b1d' }}>{item.away_team_name}</Typography>
-                                    </Box>
-                                </Box>
+        <Box sx={{ width: '98%', margin: '0 auto' }}>
+            {loading && (
+                <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                </div>
+            )}
+            {!loading && (
+                <>
+                    <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Players</Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Team</Typography>
+                                <Select
+                                    value={teamFilter}
+                                    onChange={handleChange('teamFilter')}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ borderRadius: '10px', outline: 'none', height: '36px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem key="0" value="none">
+                                        All
+                                    </MenuItem>
+                                    {teamList.map((team, index) => (
+                                        <MenuItem key={index + 1} value={team}>
+                                            {team}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
                             </Box>
-                        ))}
-                    {curGame && (
-                        <GameDetailTab
-                            playTags={(tags) => {
-                                setPlayTags(tags);
-                                setOpen(true);
-                            }}
-                            t={t}
-                        />
-                    )}
-                </Box>
-            </PlayerContext.Provider>
-        </ThemeProvider>
+                            <TextField
+                                value={searchText}
+                                onChange={handleChange('searchText')}
+                                placeholder="Search"
+                                label=""
+                                inputProps={{ 'aria-label': 'Without label' }}
+                                variant="outlined"
+                                sx={{
+                                    width: '300px',
+                                    '& legend': { display: 'none' },
+                                    '& fieldset': { top: 0 },
+                                    '& .MuiOutlinedInput-root': { borderRadius: '10px' },
+                                    '& .MuiOutlinedInput-input': { padding: 0, height: '36px' }
+                                }}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <IconButton
+                                                onMouseDown={handleMouseDownPassword}
+                                                sx={{ backgroundColor: '#F8F8F8', '&:hover': { backgroundColor: '#F8F8F8' }, '&:focus': { backgroundColor: '#F8F8F8' } }}
+                                            >
+                                                <SearchIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                        </Box>
+                    </Box>
+                    <Box sx={{ overflowY: 'auto', maxHeight: '85vh', marginLeft: '24px' }}>
+                        <TableContainer sx={{ maxHeight: '80vh' }}>
+                            <Table stickyHeader aria-label="sticky table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell key="none" />
+                                        <TableCell key="name" align="center">
+                                            Name
+                                        </TableCell>
+                                        <TableCell key="team" align="center">
+                                            Team
+                                        </TableCell>
+                                        {headCells.map((cell) => (
+                                            <TableCell key={cell.id} align="center" sortDirection={orderBy === cell.id ? order : false}>
+                                                <TableSortLabel active={orderBy === cell.id} direction={orderBy === cell.id ? order : 'asc'} onClick={() => handleRequestSort(cell.id)}>
+                                                    {cell.title}
+                                                </TableSortLabel>
+                                            </TableCell>
+                                        ))}
+                                        <TableCell key="menu" />
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {getSortedArray().map((player) => (
+                                        <TableRow key={getUniqueKey(player)} height="70px" hover>
+                                            <TableCell width="5%" align="center" sx={{ cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
+                                                <img style={{ height: '48px' }} alt="Player Logo" src={player ? (player.image.length > 0 ? player.image : PLAYER_ICON_DEFAULT) : PLAYER_ICON_DEFAULT} />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Box sx={{ paddingLeft: '16px', cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#a5a5a8' }}>
+                                                            #{player?.jersey_number ?? 0}
+                                                        </Typography>
+                                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>
+                                                            {player?.player_name ?? '-'}
+                                                        </Typography>
+                                                    </div>
+                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>
+                                                        {player?.player_position_name ?? '-'}
+                                                    </Typography>
+                                                </Box>
+                                            </TableCell>
+                                            <TableCell align="center">{player?.team_name ?? '-'}</TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_player_games']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_goal']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_shot']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_dribble']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_crosses']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_free_kick']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_passes']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_turnover']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_draw_fouls']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_interception']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_tackle']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_saved']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {playerIds.includes(player?.player_id ?? 0)
+                                                    ? getPlayerStatus(player?.player_id ?? 0)
+                                                        ? getPlayerStatus(player?.player_id ?? 0)['total_clearance']
+                                                        : '-'
+                                                    : '-'}
+                                            </TableCell>
+                                            <TableCell
+                                                align="center"
+                                                sx={{ cursor: 'pointer' }}
+                                                onClick={() => {
+                                                    setEditPlayer(player);
+                                                    setEditOpen(true);
+                                                }}
+                                            >
+                                                <SortIcon />
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <PlayerEditDialog open={editOpen} onClose={() => setEditOpen(false)} player={editPlayer} />
+                        <TeamPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} teamId={null} seasonId={null} leagueId={null} initialState={playerStat} />
+                    </Box>
+                </>
+            )}
+        </Box>
     );
-}
+};
+
+export default Players;

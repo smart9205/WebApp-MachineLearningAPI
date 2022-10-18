@@ -15,8 +15,6 @@ export default function GameDetailTab({ playTags, t }) {
     const playerId = context.player.id;
     const game = context.game;
 
-    const [tagList, setTagList] = useState([]);
-
     const [showHighlight, setShowHighlight] = useState(false);
 
     const [value, setValue] = React.useState(1);
@@ -28,9 +26,7 @@ export default function GameDetailTab({ playTags, t }) {
 
     useEffect(() => {
         if (!playerId || !game) return;
-        GameService.getAllPlayerTagsByPlayer(playerId, game?.game_id).then((res) => {
-            setTagList(res);
-        });
+
         GameService.getTeamByPlayerGame(playerId, game?.game_id).then((res) => {
             setShowHighlight(!!res.create_highlights);
         });
@@ -50,10 +46,10 @@ export default function GameDetailTab({ playTags, t }) {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={1}>
-                    <SkillTab tagList={tagList} playTags={playTags} onHighlight={() => setValue(3)} showHighlight={showHighlight} t={t} />
+                    <SkillTab playTags={playTags} onHighlight={() => setValue(3)} showHighlight={showHighlight} t={t} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <StatisticTab tagList={tagList} playTags={playTags} t={t} />
+                    <StatisticTab />
                 </TabPanel>
                 {showHighlight && (
                     <TabPanel value={value} index={3}>
