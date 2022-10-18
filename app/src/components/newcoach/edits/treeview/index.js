@@ -202,7 +202,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                             </Button>
                             <Button
                                 variant="contained"
-                                disabled={curEdit === null || curEdit.type === 'edit' || (curEdit.type === 'folder' && curEdit.parent_id === 0)}
+                                disabled={curEdit === null || curEdit.type === 'edit'}
                                 sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
                                 onClick={() => {
                                     setCreateFolderEdit(false);

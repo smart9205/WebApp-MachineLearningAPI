@@ -245,7 +245,8 @@ const Leaders = () => {
             courtAreaId: null,
             insidePaint: null,
             homeAway: null,
-            gameResult: null
+            gameResult: null,
+            our: true
         }).then((res) => {
             setPlayerList(res);
             setSeasonList(getSeasonList(res));
