@@ -5,7 +5,7 @@ import { PlayerContext } from '..';
 import GameService from '../../../services/game.service';
 import { statList } from './SkillTab';
 
-export default function StatisticTab() {
+export default function StatisticTab({ games }) {
     const { context, setContext } = useContext(PlayerContext);
     const [playerStat, setPlayerStat] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ export default function StatisticTab() {
         GameService.getPlayersStatsAdvanced({
             seasonId: null,
             leagueId: null,
-            gameId: null,
+            gameId: games ? games.map((item) => item.game_id).join(',') : null,
             teamId: null,
             playerId: context.player?.id ?? null,
             gameTime: null,

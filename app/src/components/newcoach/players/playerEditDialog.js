@@ -20,7 +20,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
         f_name: '',
         l_name: '',
         date_of_birth: new Date(),
-        position: null,
+        position: '',
         jersey_number: 1,
         image: ''
     });
@@ -59,13 +59,13 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                 id: player.player_id,
                 f_name: player.player_name.split(' ')[0],
                 l_name: player.player_name.split(' ')[1],
-                date_of_birth: player.date_of_birth,
-                position: player.player_position_id,
-                jersey_number: player.jersey_number,
-                image: player.image
+                date_of_birth: player.date_of_birth ?? new Date(),
+                position: player.player_position,
+                jersey_number: player.player_jersey_number,
+                image: player.image_url
             });
         }
-    }, [player, positions]);
+    }, [player]);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="1500px" maxheight="initial">
@@ -161,7 +161,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                                 sx={{ outline: 'none', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                             >
                                 {positions.map((item, index) => (
-                                    <MenuItem key={index} value={item.id}>
+                                    <MenuItem key={index} value={item.name}>
                                         {item.name}
                                     </MenuItem>
                                 ))}

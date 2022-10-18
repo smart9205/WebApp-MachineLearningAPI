@@ -262,6 +262,7 @@ export default function Player() {
                                 setPlayTags(tags);
                                 setOpen(true);
                             }}
+                            gameList={games}
                             t={t}
                         />
                     )}

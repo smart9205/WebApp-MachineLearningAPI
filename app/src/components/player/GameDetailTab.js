@@ -9,7 +9,7 @@ import StatisticTab from './Tabs/StatisticTab';
 import HighlightTab from './Tabs/HighlightTab';
 import { PlayerContext } from './index';
 
-export default function GameDetailTab({ playTags, t }) {
+export default function GameDetailTab({ playTags, gameList, t }) {
     const { context, setContext } = useContext(PlayerContext);
 
     const playerId = context.player.id;
@@ -49,7 +49,7 @@ export default function GameDetailTab({ playTags, t }) {
                     <SkillTab playTags={playTags} onHighlight={() => setValue(3)} showHighlight={showHighlight} t={t} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <StatisticTab />
+                    <StatisticTab games={gameList} />
                 </TabPanel>
                 {showHighlight && (
                     <TabPanel value={value} index={3}>
