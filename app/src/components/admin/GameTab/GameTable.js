@@ -29,34 +29,8 @@ import randomString from 'randomstring';
 import GameService from '../../../services/game.service';
 import VIDEO_ICON from '../../../assets/video_icon.jpg';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
+import { getComparator, stableSort } from '../../newcoach/components/utilities';
 
-function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-function getComparator(order, orderBy) {
-    return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
 function EnhancedTableHead(props) {
     const { order, orderBy, onRequestSort, t } = props;
     const createSortHandler = (property) => (event) => {
@@ -74,6 +48,12 @@ function EnhancedTableHead(props) {
             numeric: false,
             disablePadding: true,
             label: t('ID')
+        },
+        {
+            id: 'done_tagging',
+            numeric: false,
+            disablePadding: true,
+            label: 'Done Tagging'
         },
         {
             id: 'season_name',
@@ -123,7 +103,7 @@ function EnhancedTableHead(props) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={createSortHandler(headCell.id)}>
+                        <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'desc'} onClick={createSortHandler(headCell.id)}>
                             {headCell.label}
                             {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
@@ -148,19 +128,19 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired
 };
 
-export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loading, setLoading, search, t }) {
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loading, setLoading, search, show_done, t }) {
+    const [order, setOrder] = React.useState('desc');
+    const [orderBy, setOrderBy] = React.useState('date');
     const [selected, setSelected] = React.useState({});
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(25);
     const [deleteOpen, setDeleteOpen] = React.useState(false);
     const [open, setOpen] = React.useState(false);
     const [alertContent, setAlertContent] = React.useState('');
 
     const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
+        const isAsc = orderBy === property && order === 'desc';
+        setOrder(isAsc ? 'asc' : 'desc');
         setOrderBy(property);
     };
 
@@ -194,6 +174,22 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                 setLoading(false);
             }
         );
+    };
+
+    const getSortedList = () => {
+        const array = stableSort(
+            rows.filter(
+                (r) =>
+                    r.season_name.toLowerCase().includes(search.toLowerCase()) ||
+                    r.league_name.toLowerCase().includes(search.toLowerCase()) ||
+                    r.away_team_name.toLowerCase().includes(search.toLowerCase()) ||
+                    r.home_team_name.toLowerCase().includes(search.toLowerCase()) ||
+                    r.date.slice(0, 10).toString().toLowerCase().includes(search.toLowerCase())
+            ),
+            getComparator(order, orderBy)
+        ).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+        return show_done ? array.filter((item) => !item.done_tagging) : array;
     };
 
     return (
@@ -235,87 +231,64 @@ export default function EnhancedTable({ rows, gameListUpdated, editCallBack, loa
                                 </TableRow>
                             ) : (
                                 <>
-                                    {stableSort(
-                                        rows.filter(
-                                            (r) =>
-                                                r.season_name.toLowerCase().includes(search.toLowerCase()) ||
-                                                r.league_name.toLowerCase().includes(search.toLowerCase()) ||
-                                                r.away_team_name.toLowerCase().includes(search.toLowerCase()) ||
-                                                r.home_team_name.toLowerCase().includes(search.toLowerCase()) ||
-                                                r.date.slice(0, 10).toString().toLowerCase().includes(search.toLowerCase())
-                                        ),
-                                        getComparator(order, orderBy)
-                                    )
-                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        .map((row, index) => {
-                                            const labelId = `enhanced-table-checkbox-${index}`;
-
-                                            return (
-                                                <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                                    <TableCell component="th" id={labelId} scope="row" padding="none" align="center">
-                                                        <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt="Team" />
-                                                    </TableCell>
-                                                    <TableCell align="center">{row.id}</TableCell>
-                                                    <TableCell align="center">{row.season_name}</TableCell>
-                                                    <TableCell align="center">{row.league_name}</TableCell>
-                                                    <TableCell align="center">
-                                                        <Link
-                                                            variant="outlined"
-                                                            to={`/team/${btoa(`${row.home_team_id}|${row.season_id}|${row.league_id}`)}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            {row.home_team_name}
-                                                        </Link>
-                                                    </TableCell>
-                                                    <TableCell align="center">
-                                                        <Link
-                                                            variant="outlined"
-                                                            to={`/team/${btoa(`${row.away_team_id}|${row.season_id}|${row.league_id}`)}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            {row.away_team_name}
-                                                        </Link>
-                                                    </TableCell>
-                                                    <TableCell align="center">{row.date.slice(0, 10)}</TableCell>
-                                                    <TableCell align="center" sx={{ width: 40 }}>
-                                                        <a href={row.video_url} target="_blank" rel="noopener noreferrer">
-                                                            <Paper style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} elevation={3}>
-                                                                <img src={VIDEO_ICON} style={{ width: 40, height: 40, borderRadius: 5 }} alt="video" />
-                                                            </Paper>
-                                                        </a>
-                                                    </TableCell>
-                                                    <TableCell align="center" sx={{ width: 100 }}>
-                                                        <Button variant="outlined" onClick={() => editCallBack(row)} startIcon={<EditIcon />}>
-                                                            {t('Edit')}
+                                    {getSortedList().map((row, index) => {
+                                        return (
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                                                <TableCell component="th" id={`enhanced-table-checkbox-${index}`} scope="row" padding="none" align="center">
+                                                    <img width={40} src={row.image?.length > 0 ? row.image : TEAM_ICON_DEFAULT} alt="Team" />
+                                                </TableCell>
+                                                <TableCell align="center">{row.id}</TableCell>
+                                                <TableCell align="center">{row.done_tagging ? 'true' : 'false'}</TableCell>
+                                                <TableCell align="center">{row.season_name}</TableCell>
+                                                <TableCell align="center">{row.league_name}</TableCell>
+                                                <TableCell align="center">
+                                                    <Link variant="outlined" to={`/team/${btoa(`${row.home_team_id}|${row.season_id}|${row.league_id}`)}`} target="_blank" rel="noopener noreferrer">
+                                                        {row.home_team_name}
+                                                    </Link>
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <Link variant="outlined" to={`/team/${btoa(`${row.away_team_id}|${row.season_id}|${row.league_id}`)}`} target="_blank" rel="noopener noreferrer">
+                                                        {row.away_team_name}
+                                                    </Link>
+                                                </TableCell>
+                                                <TableCell align="center">{row.date.slice(0, 10)}</TableCell>
+                                                <TableCell align="center" sx={{ width: 40 }}>
+                                                    <a href={row.video_url} target="_blank" rel="noopener noreferrer">
+                                                        <Paper style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} elevation={3}>
+                                                            <img src={VIDEO_ICON} style={{ width: 40, height: 40, borderRadius: 5 }} alt="video" />
+                                                        </Paper>
+                                                    </a>
+                                                </TableCell>
+                                                <TableCell align="center" sx={{ width: 100 }}>
+                                                    <Button variant="outlined" onClick={() => editCallBack(row)} startIcon={<EditIcon />}>
+                                                        {t('Edit')}
+                                                    </Button>
+                                                </TableCell>
+                                                <TableCell align="center" sx={{ width: 100 }}>
+                                                    <Link
+                                                        variant="outlined"
+                                                        to={`/tagging/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        <Button variant="outlined" startIcon={<TagIcon />}>
+                                                            {t('Tag')}
                                                         </Button>
-                                                    </TableCell>
-                                                    <TableCell align="center" sx={{ width: 100 }}>
-                                                        <Link
-                                                            variant="outlined"
-                                                            to={`/tagging/${btoa(randomString.generate(3) + row.id + randomString.generate(3))}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            <Button variant="outlined" startIcon={<TagIcon />}>
-                                                                {t('Tag')}
-                                                            </Button>
-                                                        </Link>
-                                                    </TableCell>
-                                                    <TableCell align="center" sx={{ width: 70 }}>
-                                                        <IconButton
-                                                            onClick={() => {
-                                                                setDeleteOpen(true);
-                                                                setSelected(row);
-                                                            }}
-                                                        >
-                                                            <DeleteIcon />
-                                                        </IconButton>
-                                                    </TableCell>
-                                                </TableRow>
-                                            );
-                                        })}
+                                                    </Link>
+                                                </TableCell>
+                                                <TableCell align="center" sx={{ width: 70 }}>
+                                                    <IconButton
+                                                        onClick={() => {
+                                                            setDeleteOpen(true);
+                                                            setSelected(row);
+                                                        }}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
                                 </>
                             )}
                         </TableBody>

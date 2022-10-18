@@ -9,7 +9,7 @@ import TeamPlayers from './tabs/players';
 import TeamGames from './tabs/games';
 import TeamOverview from './tabs/overview';
 
-const Tabs = ['Overview', 'Summary', 'Stats', 'Games', 'Players'];
+const Tabs = ['Overview', 'Summary', 'Stats', 'Games', 'Players Overview', 'Players Stats'];
 
 const TeamPage = () => {
     const params = useParams();
@@ -95,7 +95,7 @@ const TeamPage = () => {
                     </Box>
                     {values.tabSelected === 0 && <TeamOverview games={gameList} teamname={values.teamName} teamId={values.teamId} />}
                     {values.tabSelected === 3 && <TeamGames />}
-                    {values.tabSelected === 4 && <TeamPlayers playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} leagueId={values.leagueId} />}
+                    {values.tabSelected === 5 && <TeamPlayers playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} leagueId={values.leagueId} />}
                 </>
             )}
         </Box>

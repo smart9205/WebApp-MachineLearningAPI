@@ -35,8 +35,7 @@ const statList = [
     { id: 'clearance', title: 'Clearance' },
     { id: 'fouls', title: 'Fouls' },
     { id: 'yellow_cards', title: 'Yellow Cards' },
-    { id: 'red_cards', title: 'Red Cards' },
-    { id: 'player_games', title: 'Games' }
+    { id: 'red_cards', title: 'Red Cards' }
 ];
 
 const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initialState, where }) => {

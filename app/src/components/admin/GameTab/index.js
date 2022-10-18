@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import GameTable from './GameTable';
 import GameFormDialog from './GameFormDialog';
 import gameService from '../../../services/game.service';
+import { FormControlLabel, Switch } from '@mui/material';
 
 export default function Game({ t }) {
     const [open, setOpen] = useState(false);
@@ -14,6 +15,7 @@ export default function Game({ t }) {
     const [editData, setEditData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [showDone, setShowDone] = useState(false);
 
     const handleClickOpen = () => () => {
         setOpen(true);
@@ -41,6 +43,8 @@ export default function Game({ t }) {
         setOpen(true);
     }, []);
 
+    console.log('##########', gameList);
+
     return (
         <div>
             <div style={{ position: 'absolute', zIndex: 10, padding: 10, display: 'flex' }}>
@@ -49,6 +53,11 @@ export default function Game({ t }) {
                     {t('Add')} {t('Game')}
                 </Button>
                 <Input sx={{ mx: 10 }} placeholder={t('Search')} value={search} onChange={(e) => setSearch(e.target.value)} />
+                <FormControlLabel
+                    sx={{ margin: 0 }}
+                    control={<Switch checked={showDone} onChange={() => setShowDone(!showDone)} inputProps={{ 'aria-label': 'controlled' }} />}
+                    label="Hide Done Tagged Games"
+                />
             </div>
             <GameFormDialog
                 open={open}
@@ -64,7 +73,7 @@ export default function Game({ t }) {
                 editData={editData}
                 t={t}
             />
-            <GameTable rows={gameList} gameListUpdated={gameListUpdated} editCallBack={editCallBack} search={search} loading={loading} setLoading={(v) => setLoading(v)} t={t} />
+            <GameTable rows={gameList} gameListUpdated={gameListUpdated} editCallBack={editCallBack} search={search} show_done={showDone} loading={loading} setLoading={(v) => setLoading(v)} t={t} />
         </div>
     );
 }
