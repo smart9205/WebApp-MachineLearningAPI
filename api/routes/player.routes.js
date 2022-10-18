@@ -40,7 +40,6 @@ module.exports = (app) => {
 
   app.post(
     "/player/getplayersstats/advance",
-    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.getPlayersStatsAdvanced
   );
 
