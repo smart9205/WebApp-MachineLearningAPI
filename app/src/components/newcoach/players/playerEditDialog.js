@@ -56,11 +56,11 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
         if (player !== null) {
             setValues({
                 ...values,
-                id: player.id,
-                f_name: player.f_name,
-                l_name: player.l_name,
+                id: player.player_id,
+                f_name: player.player_name.split(' ')[0],
+                l_name: player.player_name.split(' ')[1],
                 date_of_birth: player.date_of_birth,
-                position: player.position,
+                position: player.player_position_id,
                 jersey_number: player.jersey_number,
                 image: player.image
             });

@@ -56,7 +56,8 @@ export default function StatisticTab() {
                                 height: '60px',
                                 borderRadius: '12px',
                                 border: '1px solid #E8E8E8',
-                                background: context.player?.second_color ?? 'white'
+                                background: context.player?.second_color ?? 'white',
+                                direction: 'ltr'
                             }}
                         >
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
