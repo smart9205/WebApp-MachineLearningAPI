@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { getComparator, stableSort } from '../components/utilities';
 import LeadersPlayerStatItem from './playerStatItem';
 
-const LeadersPlayerStatColumn = ({ list, title, option, isTotal }) => {
+const LeadersPlayerStatColumn = ({ list, title, option, isTotal, onClick }) => {
     const sortedList = stableSort(list, getComparator('desc', isTotal ? `total_${option}` : `average_${option}`));
     const property = isTotal ? `total_${option}` : `average_${option}`;
     const filteredList = sortedList.filter((item) => item[property] !== 0);
@@ -18,7 +18,7 @@ const LeadersPlayerStatColumn = ({ list, title, option, isTotal }) => {
                 </div>
                 <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
                     {(isFull ? filteredList : filteredList.slice(0, 5)).map((item, index) => (
-                        <LeadersPlayerStatItem key={index} player={item} option={option} isTotal={isTotal} />
+                        <LeadersPlayerStatItem key={index} player={item} option={option} isTotal={isTotal} onShow={onClick} />
                     ))}
                 </div>
             </div>

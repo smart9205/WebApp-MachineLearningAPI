@@ -3,9 +3,9 @@ import React from 'react';
 
 import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
 
-const LeadersPlayerStatItem = ({ player, option, isTotal }) => {
+const LeadersPlayerStatItem = ({ player, option, isTotal, onShow }) => {
     return (
-        <div style={{ display: 'flex', alignItems: 'center', width: '100%', height: '120px', padding: '16px 8px', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', width: '100%', height: '120px', padding: '16px 8px', justifyContent: 'space-between', cursor: 'pointer' }} onClick={() => onShow(player)}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                 <div style={{ width: '88px', height: '88px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img src={player.image_url ? player.image_url : PLAYER_ICON_DEFAULT} style={{ height: '100%', borderRadius: '8px' }} />

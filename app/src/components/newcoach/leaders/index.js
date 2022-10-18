@@ -7,6 +7,46 @@ import GameService from '../../../services/game.service';
 import LeadersPlayerStatColumn from './playerStatColumn';
 import { MenuProps } from '../components/common';
 import { getComparator, stableSort } from '../components/utilities';
+import LeadersPlayerStatDialog from './status';
+
+const statCategory = [
+    { id: 'player_games', title: 'Games Played' },
+    { id: 'goal', title: 'Goals' },
+    { id: 'penalties', title: 'Penalties' },
+    { id: 'penalties_missed', title: 'Missed Penalties' },
+    { id: 'shot', title: 'Shots' },
+    { id: 'shot_on_target', title: 'Shots On Target' },
+    { id: 'shot_off_target', title: 'Shots Off Target' },
+    { id: 'shot_on_box', title: 'Shots On Box' },
+    { id: 'free_kick', title: 'Free Kicks' },
+    { id: 'crosses', title: 'Crosses' },
+    { id: 'dribble', title: 'Dribbles' },
+    { id: 'dribble_successful', title: 'Successful Dribbles' },
+    { id: 'passes', title: 'Passes' },
+    { id: 'successful_passes', title: 'Successful Passes' },
+    { id: 'passes_for_goals', title: 'Passes For Goals' },
+    { id: 'passes_for_shots', title: 'Passes For Shots' },
+    { id: 'own_goals', title: 'Own Goals' },
+    { id: 'key_passes', title: 'Key Passes' },
+    { id: 'through_passes', title: 'Through Passes' },
+    { id: 'through_passes_successful', title: 'Through Passes Successful' },
+    { id: 'offside', title: 'Offside' },
+    { id: 'turnover', title: 'Turnovers' },
+    { id: 'turnover_on_offensive_court', title: 'Turnovers on Offensive Court' },
+    { id: 'turnover_on_defensive_court', title: 'Turnovers on Defensive Court' },
+    { id: 'saved', title: 'Saved' },
+    { id: 'tackle', title: 'Tackles' },
+    { id: 'tackle_on_offensive_court', title: 'Tackles on Offensive Court' },
+    { id: 'tackle_on_defensive_court', title: 'Tackles on Defensive Court' },
+    { id: 'clearance', title: 'Clearance' },
+    { id: 'interception', title: 'Interceptions' },
+    { id: 'interception_on_offensive_court', title: 'Interceptions on Offensive Court' },
+    { id: 'interception_on_defensive_court', title: 'Interceptions on Defensive Court' },
+    { id: 'fouls', title: 'Fouls' },
+    { id: 'draw_fouls', title: 'Draw Fouls' },
+    { id: 'red_cards', title: 'Red Cards' },
+    { id: 'yellow_cards', title: 'Yellow Cards' }
+];
 
 const Leaders = () => {
     const [playerList, setPlayerList] = useState([]);
@@ -16,6 +56,8 @@ const Leaders = () => {
     const [leagueList, setLeagueList] = useState([]);
     const [playersList, setPlayersList] = useState([]);
     const [displayOption, setDisplayOption] = useState('total');
+    const [currentPlayer, setCurrentPlayer] = useState(null);
+    const [statOpen, setStatOpen] = useState(false);
     const [values, setValues] = useState({
         teamFilter: 'none',
         seasonFilter: 'none',
@@ -25,6 +67,11 @@ const Leaders = () => {
 
     const handleChange = (prop) => (e) => {
         setValues({ ...values, [prop]: e.target.value });
+    };
+
+    const handleDisplayStatDialog = (player) => {
+        setCurrentPlayer(player);
+        setStatOpen(true);
     };
 
     const getSeasonList = (array) => {
@@ -206,7 +253,7 @@ const Leaders = () => {
         });
     }, []);
 
-    console.log('leaders => ', values.playerFilter);
+    console.log('leaders => ', playerList);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
@@ -329,76 +376,21 @@ const Leaders = () => {
                             </Box>
                         </Box>
                     </Box>
-                    <Box sx={{ display: 'flex', width: '100%', maxHeight: '80vh', overflowY: 'auto' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={true} option="player_games" title="Games Played" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="goal" title="Goals" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="penalties" title="Penalties" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="penalties_missed" title="Penalties Missed" />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="shot" title="Shots" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="shot_on_target" title="Shots On Target" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="shot_off_target" title="Shots Off Target" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="shot_on_box" title="Shots On Box" />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="free_kick" title="Free Kicks" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="crosses" title="Crosses" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="dribble" title="Dribbles" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="dribble_successful" title="Dribbles Successful" />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="passes" title="Passes" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="successful_passes" title="Passes Successful" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="passes_for_goals" title="Passes For Goals" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="passes_for_shots" title="Passes For Shots" />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="own_goals" title="Own Goals" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="key_passes" title="Key Passes" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="through_passes" title="Through Passes" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="through_passes_successful" title="Through Passes Successful" />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="offside" title="Offside" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="turnover" title="Turnovers" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="turnover_on_offensive_court" title="Turnovers on Offensive Court" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="turnover_on_defensive_court" title="Turnovers on Defensive Court" />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="saved" title="Saved" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="tackle" title="Tackles" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="tackle_on_offensive_court" title="Tackles on Offensive Court" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="tackle_on_defensive_court" title="Tackles on Defensive Court" />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="clearance" title="Clearance" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="interception" title="Interceptions" />
-                                <LeadersPlayerStatColumn
-                                    list={getFilteredList()}
-                                    isTotal={displayOption === 'total'}
-                                    option="interception_on_offensive_court"
-                                    title="Interceptions on Offensive Court"
-                                />
-                                <LeadersPlayerStatColumn
-                                    list={getFilteredList()}
-                                    isTotal={displayOption === 'total'}
-                                    option="interception_on_defensive_court"
-                                    title="Interceptions on Defensive Court"
-                                />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="fouls" title="Fouls" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="draw_fouls" title="Draw Fouls" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="red_cards" title="Red Cards" />
-                                <LeadersPlayerStatColumn list={getFilteredList()} isTotal={displayOption === 'total'} option="yellow_cards" title="Yellow Cards" />
-                            </div>
-                        </div>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '16px', width: '100%', maxHeight: '80vh', overflowY: 'auto' }}>
+                        {statCategory.map((item) => (
+                            <LeadersPlayerStatColumn
+                                key={item.id}
+                                list={getFilteredList()}
+                                isTotal={item.id === 'player_games' ? true : displayOption === 'total'}
+                                option={item.id}
+                                title={item.title}
+                                onClick={handleDisplayStatDialog}
+                            />
+                        ))}
                     </Box>
                 </>
             )}
+            <LeadersPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} />
         </Box>
     );
 };

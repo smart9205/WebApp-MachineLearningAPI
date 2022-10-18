@@ -105,6 +105,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
         const ids = newList.map((item) => item.game_id);
         const newVideos = games.filter((game) => ids.includes(game.id) === true);
 
+        console.log('######', newVideos);
         gameCreateCommand(newList, tagIndex, newVideos, ids);
     };
 

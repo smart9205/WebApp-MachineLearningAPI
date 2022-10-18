@@ -317,9 +317,6 @@ const Players = () => {
                                         <TableCell key="team" align="center">
                                             Team
                                         </TableCell>
-                                        <TableCell key="pos" align="center">
-                                            Position
-                                        </TableCell>
                                         {headCells.map((cell) => (
                                             <TableCell key={cell.id} align="center" sortDirection={orderBy === cell.id ? order : false}>
                                                 <TableSortLabel active={orderBy === cell.id} direction={orderBy === cell.id ? order : 'asc'} onClick={() => handleRequestSort(cell.id)}>
@@ -338,14 +335,16 @@ const Players = () => {
                                             </TableCell>
                                             <TableCell>
                                                 <Box sx={{ paddingLeft: '16px', cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
-                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>{player?.name ?? '-'}</Typography>
-                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#a5a5a8' }}>
-                                                        #{player?.jersey_number ?? 0}
-                                                    </Typography>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#a5a5a8' }}>
+                                                            #{player?.jersey_number ?? 0}
+                                                        </Typography>
+                                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>{player?.name ?? '-'}</Typography>
+                                                    </div>
+                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{player?.pos_name ?? '-'}</Typography>
                                                 </Box>
                                             </TableCell>
                                             <TableCell align="center">{player?.team_name ?? '-'}</TableCell>
-                                            <TableCell align="center">{player?.pos_name ?? '-'}</TableCell>
                                             <TableCell align="center">
                                                 {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_player_games'] : '-') : '-'}
                                             </TableCell>
