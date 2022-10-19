@@ -192,7 +192,7 @@ exports.getPlayersStatsAdvanced = (req, res) => {
       ${game_id},
       ${team_id},
       ${player_id},
-      ${req.body.userId},
+      null,
       ${game_time},
       ${court},
       ${req.body.insidePaint},
