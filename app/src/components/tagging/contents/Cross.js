@@ -176,7 +176,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                   player_id: player.id,
                   action_id: 11, //clearance
                   action_result_id: result.id,
-                  court_area_id: areaCourtId,
+                  court_area_id: areaCourtId === 1 ? 4 : areaCourtId === 2 ? 3 : areaCourtId,
                   inside_the_paint: inTheBox
                 },
               ])

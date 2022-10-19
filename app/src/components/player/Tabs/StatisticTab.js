@@ -27,7 +27,7 @@ export default function StatisticTab({ games }) {
             insidePaint: null,
             homeAway: null,
             gameResult: null,
-            our: false
+            userId: null
         }).then((res) => {
             setPlayerStat(res[0]);
             setLoading(false);
@@ -62,7 +62,7 @@ export default function StatisticTab({ games }) {
                         >
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>
-                                {playerStat[`total_${item.id}`] + ' (' + playerStat[`average_${item.id}`] + ')'}
+                                {playerStat[`total_${item.id}`] + ' (' + playerStat[`average_${item.id}`] + ' avg)'}
                             </Typography>
                         </div>
                     ))}

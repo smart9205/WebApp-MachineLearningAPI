@@ -131,7 +131,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
             insidePaint: null,
             homeAway: null,
             gameResult: null,
-            our: false
+            userId: null
         }).then((res) => {
             setPlayerStat(res[0]);
             setLoading(false);

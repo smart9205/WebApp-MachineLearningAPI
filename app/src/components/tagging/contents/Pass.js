@@ -90,7 +90,7 @@ export default function Pass({
       team_id: offenseTeamId,
       action_id: 2,
       action_result_id: 7,  //Blocked
-      court_area_id: areaCourtId,
+      court_area_id: areaCourtId === 1 ? 4 : areaCourtId === 2 ? 3 : areaCourtId,
       inside_the_paint: inTheBox
     }])
   }

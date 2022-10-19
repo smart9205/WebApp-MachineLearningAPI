@@ -8,96 +8,99 @@ const Sequelize = db.sequelize;
 const Op = db.Sequelize.Op;
 
 exports.updateTaggerConfig = async (req, res) => {
-  if (!req.body.sec_before || !req.body.sec_after)
-    return res.send({ status: "fail" });
+    if (!req.body.sec_before || !req.body.sec_after)
+        return res.send({ status: "fail" });
 
-  await User_Config.findOrCreate({ where: { user_id: req.userId } });
+    await User_Config.findOrCreate({ where: { user_id: req.userId } });
 
-  const updated = await User_Config.update(
-    {
-      sec_before: req.body.sec_before,
-      sec_after: req.body.sec_after,
-    },
-    {
-      where: { user_id: req.userId },
-    }
-  );
+    const updated = await User_Config.update(
+        {
+            sec_before: req.body.sec_before,
+            sec_after: req.body.sec_after,
+        },
+        {
+            where: { user_id: req.userId },
+        }
+    );
 
-  return res.send({ status: "success", updated });
+    return res.send({ status: "success", updated });
 };
 
 exports.create = async (req, res) => {
-  // Validate request
-  if (!req.body.f_name) {
-    res.status(400).send({
-      message: "Name can not be empty!",
+    // Validate request
+    if (!req.body.f_name) {
+        res.status(400).send({
+            message: "Name can not be empty!",
+        });
+        return;
+    }
+
+    const newPlayer = {
+        f_name: req.body.f_name,
+        l_name: req.body.l_name,
+        date_of_birth: req.body.date_of_birth,
+        position: req.body.position,
+        jersey_number: req.body.jersey_number,
+        image: req.body.image,
+    };
+
+    const checkPlayer = await Player.findOne({
+        where: {
+            f_name: req.body.f_name,
+            l_name: req.body.l_name,
+            date_of_birth: req.body.date_of_birth,
+        },
     });
-    return;
-  }
 
-  const newPlayer = {
-    f_name: req.body.f_name,
-    l_name: req.body.l_name,
-    date_of_birth: req.body.date_of_birth,
-    position: req.body.position,
-    jersey_number: req.body.jersey_number,
-    image: req.body.image,
-  };
+    if (checkPlayer !== null) {
+        return res.send({ status: "error", data: "Player already exists" });
+    }
 
-  const checkPlayer = await Player.findOne({
-    where: {
-      f_name: req.body.f_name,
-      l_name: req.body.l_name,
-      date_of_birth: req.body.date_of_birth,
-    },
-  });
-
-  if (checkPlayer !== null) {
-    return res.send({ status: "error", data: "Player already exists" });
-  }
-
-  Player.create(newPlayer)
-    .then((data) => {
-      res.send({ status: "success", data });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Player.",
-      });
-    });
+    Player.create(newPlayer)
+        .then((data) => {
+            res.send({ status: "success", data });
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    err.message ||
+                    "Some error occurred while creating the Player.",
+            });
+        });
 };
 
 exports.findAll = (req, res) => {
-  Sequelize.query("select * from public.fnc_get_all_players()")
-    .then((data) => {
-      res.send(data[0]);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving games.",
-      });
-    });
+    Sequelize.query("select * from public.fnc_get_all_players()")
+        .then((data) => {
+            res.send(data[0]);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    err.message ||
+                    "Some error occurred while retrieving games.",
+            });
+        });
 };
 
 exports.findAllPosition = (req, res) => {
-  Player_Position.findAll()
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message ||
-          "Some error occurred while retrieving player_positions.",
-      });
-    });
+    Player_Position.findAll()
+        .then((data) => {
+            res.send(data);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    err.message ||
+                    "Some error occurred while retrieving player_positions.",
+            });
+        });
 };
 
 exports.findOne = async (req, res) => {
-  const id = req.params.id;
+    const id = req.params.id;
 
-  const player = await Sequelize.query(`
+    const player = await Sequelize.query(`
       SELECT *, 
         public."Players".id as id,
         public."Player_Positions".name as position_name,
@@ -111,7 +114,7 @@ exports.findOne = async (req, res) => {
         public."Players".f_name, 
         public."Players".l_name
     `);
-  const team = await Sequelize.query(`
+    const team = await Sequelize.query(`
     select 
       team_id, 
       name as team_name,
@@ -133,19 +136,21 @@ exports.findOne = async (req, res) => {
     ) g on g.team_id = public."Teams".id
   `);
 
-  res.send({ ...player[0][0], ...team[0][0] });
+    res.send({ ...player[0][0], ...team[0][0] });
 };
 
 exports.getPlayersStats = (req, res) => {
-  const leagueId =
-    req.params.leagueId === "null" ? null : `'${req.params.leagueId}'`;
-  const gameId = req.params.gameId === "null" ? null : `'${req.params.gameId}'`;
-  const teamId = req.params.teamId === "null" ? null : `'${req.params.teamId}'`;
-  const playerId =
-    req.params.playerId === "null" ? null : `'${req.params.playerId}'`;
+    const leagueId =
+        req.params.leagueId === "null" ? null : `'${req.params.leagueId}'`;
+    const gameId =
+        req.params.gameId === "null" ? null : `'${req.params.gameId}'`;
+    const teamId =
+        req.params.teamId === "null" ? null : `'${req.params.teamId}'`;
+    const playerId =
+        req.params.playerId === "null" ? null : `'${req.params.playerId}'`;
 
-  Sequelize.query(
-    `
+    Sequelize.query(
+        `
     SELECT * from public.fnc_get_players_stats(
       ${req.params.seasonId},
       ${leagueId},
@@ -155,39 +160,39 @@ exports.getPlayersStats = (req, res) => {
       ${req.userId}
     )
   `
-  )
-    .then((data) => {
-      res.send(data[0]);
-    })
-    .catch((e) => {
-      res.status(500).send({
-        message: e.message || "Some error occurred while retrieving games.",
-      });
-    });
+    )
+        .then((data) => {
+            res.send(data[0]);
+        })
+        .catch((e) => {
+            res.status(500).send({
+                message:
+                    e.message || "Some error occurred while retrieving games.",
+            });
+        });
 };
 
 exports.getPlayersStatsAdvanced = (req, res) => {
-  const game_time =
-    req.body.gameTime === null ? null : `'${req.body.gameTime}'`;
-  const court =
-    req.body.courtAreaId === null ? null : `'${req.body.courtAreaId}'`;
-  const game_id = req.body.gameId === null ? null : `'${req.body.gameId}'`;
-  const league_id =
-    req.body.leagueId === null ? null : `'${req.body.leagueId}'`;
-  const team_id = req.body.teamId === null ? null : `'${req.body.teamId}'`;
-  const player_id =
-    req.body.playerId === null ? null : `'${req.body.playerId}'`;
-  const user_id = req.body.our ? req.userId : null;
+    const game_time =
+        req.body.gameTime === null ? null : `'${req.body.gameTime}'`;
+    const court =
+        req.body.courtAreaId === null ? null : `'${req.body.courtAreaId}'`;
+    const game_id = req.body.gameId === null ? null : `'${req.body.gameId}'`;
+    const league_id =
+        req.body.leagueId === null ? null : `'${req.body.leagueId}'`;
+    const team_id = req.body.teamId === null ? null : `'${req.body.teamId}'`;
+    const player_id =
+        req.body.playerId === null ? null : `'${req.body.playerId}'`;
 
-  Sequelize.query(
-    `
+    Sequelize.query(
+        `
     SELECT * from public.fnc_get_players_stats_advance(
       ${req.body.seasonId},
       ${league_id},
       ${game_id},
       ${team_id},
       ${player_id},
-      ${user_id},
+      ${req.body.userId},
       ${game_time},
       ${court},
       ${req.body.insidePaint},
@@ -195,70 +200,74 @@ exports.getPlayersStatsAdvanced = (req, res) => {
       ${req.body.gameResult}
     )
   `
-  )
-    .then((data) => {
-      res.send(data[0]);
-    })
-    .catch((e) => {
-      res.status(500).send({
-        message: e.message || "Some error occurred while retrieving games.",
-      });
-    });
+    )
+        .then((data) => {
+            res.send(data[0]);
+        })
+        .catch((e) => {
+            res.status(500).send({
+                message:
+                    e.message || "Some error occurred while retrieving games.",
+            });
+        });
 };
 
 exports.addCorrectionRequest = (req, res) => {
-  Sequelize.query(
-    `
+    Sequelize.query(
+        `
     SELECT * from public.fnc_add_correction_request(
       ${req.params.curPlayerId},
       ${req.params.newPlayerId},
       ${req.params.playerTagId}
     )
   `
-  )
-    .then((data) => {
-      res.send(data[0]);
-    })
-    .catch((e) => {
-      res.status(500).send({
-        message: e.message || "Some error occurred while retrieving games.",
-      });
-    });
+    )
+        .then((data) => {
+            res.send(data[0]);
+        })
+        .catch((e) => {
+            res.status(500).send({
+                message:
+                    e.message || "Some error occurred while retrieving games.",
+            });
+        });
 };
 
 exports.getCorrectionRequest = (req, res) => {
-  Sequelize.query(
-    `select * from public.fnc_get_correction_requests(${req.userId})`
-  )
-    .then((data) => {
-      res.send(data[0]);
-    })
-    .catch((e) => {
-      res.status(500).send({
-        message: e.message || "Some error occurred while retrieving games.",
-      });
-    });
+    Sequelize.query(
+        `select * from public.fnc_get_correction_requests(${req.userId})`
+    )
+        .then((data) => {
+            res.send(data[0]);
+        })
+        .catch((e) => {
+            res.status(500).send({
+                message:
+                    e.message || "Some error occurred while retrieving games.",
+            });
+        });
 };
 
 exports.doCorrection = (req, res) => {
-  Sequelize.query(
-    `select * from fnc_do_correction(${req.params.cId}, ${req.userId})`
-  )
-    .then((data) => {
-      res.send(data[0]);
-    })
-    .catch((e) => {
-      res.status(500).send({
-        message: e.message || "Some error occurred while retrieving games.",
-      });
-    });
+    Sequelize.query(
+        `select * from fnc_do_correction(${req.params.cId}, ${req.userId})`
+    )
+        .then((data) => {
+            res.send(data[0]);
+        })
+        .catch((e) => {
+            res.status(500).send({
+                message:
+                    e.message || "Some error occurred while retrieving games.",
+            });
+        });
 };
 
 exports.gameByPlayerId = (req, res) => {
-  const id = req.params.id;
+    const id = req.params.id;
 
-  Sequelize.query(
-    `
+    Sequelize.query(
+        `
     SELECT 
       public."Games".id as game_id, 
       public."Games".*,
@@ -278,163 +287,168 @@ exports.gameByPlayerId = (req, res) => {
     JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
     where public."Team_Players".player_id = ${id} 
   `
-  )
-    .then((data) => {
-      res.send(data[0]);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving games.",
-      });
-    });
+    )
+        .then((data) => {
+            res.send(data[0]);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    err.message ||
+                    "Some error occurred while retrieving games.",
+            });
+        });
 };
 
 exports.gameDetailsByPlayerId = (req, res) => {
-  Sequelize.query(
-    `
+    Sequelize.query(
+        `
   select * from public.fnc_get_game_details_by_player_id(${req.params.id})
     `
-  )
-    .then((data) => {
-      res.send(data[0]);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving games.",
-      });
-    });
+    )
+        .then((data) => {
+            res.send(data[0]);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    err.message ||
+                    "Some error occurred while retrieving games.",
+            });
+        });
 };
 
 exports.update = (req, res) => {
-  const id = req.params.id;
+    const id = req.params.id;
 
-  Player.update(req.body, {
-    where: { id: id },
-  })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "Player was updated successfully.",
-        });
-      } else {
-        res.send({
-          message: `Cannot update Player with id=${id}. Maybe Player was not found or req.body is empty!`,
-        });
-      }
+    Player.update(req.body, {
+        where: { id: id },
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Error updating Player with id=" + id,
-      });
-    });
+        .then((num) => {
+            if (num == 1) {
+                res.send({
+                    message: "Player was updated successfully.",
+                });
+            } else {
+                res.send({
+                    message: `Cannot update Player with id=${id}. Maybe Player was not found or req.body is empty!`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: "Error updating Player with id=" + id,
+            });
+        });
 };
 
 exports.delete = (req, res) => {
-  const id = req.params.id;
+    const id = req.params.id;
 
-  Player.destroy({
-    where: { id: id },
-  })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "Player was deleted successfully!",
-        });
-      } else {
-        res.send({
-          message: `Cannot delete Player with id=${id}. Maybe Player was not found!`,
-        });
-      }
+    Player.destroy({
+        where: { id: id },
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Could not delete Player with id=" + id,
-      });
-    });
+        .then((num) => {
+            if (num == 1) {
+                res.send({
+                    message: "Player was deleted successfully!",
+                });
+            } else {
+                res.send({
+                    message: `Cannot delete Player with id=${id}. Maybe Player was not found!`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: "Could not delete Player with id=" + id,
+            });
+        });
 };
 
 exports.deleteCorrection = (req, res) => {
-  const id = req.params.id;
+    const id = req.params.id;
 
-  Corrections.destroy({
-    where: { id: id },
-  })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "Correction was deleted successfully!",
-        });
-      } else {
-        res.send({
-          message: `Cannot delete Correction with id=${id}. Maybe Correction was not found!`,
-        });
-      }
+    Corrections.destroy({
+        where: { id: id },
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Could not delete Correction with id=" + id,
-      });
-    });
+        .then((num) => {
+            if (num == 1) {
+                res.send({
+                    message: "Correction was deleted successfully!",
+                });
+            } else {
+                res.send({
+                    message: `Cannot delete Correction with id=${id}. Maybe Correction was not found!`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: "Could not delete Correction with id=" + id,
+            });
+        });
 };
 
 exports.deleteAll = (req, res) => {
-  Player.destroy({
-    where: {},
-    truncate: false,
-  })
-    .then((nums) => {
-      res.send({ message: `${nums} Seasons were deleted successfully!` });
+    Player.destroy({
+        where: {},
+        truncate: false,
     })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while removing all Seasons.",
-      });
-    });
+        .then((nums) => {
+            res.send({ message: `${nums} Seasons were deleted successfully!` });
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    err.message ||
+                    "Some error occurred while removing all Seasons.",
+            });
+        });
 };
 
 exports.addHighlight = async (req, res) => {
-  const highlight = await Highlight.findOrCreate({
-    where: {
-      [Op.and]: [
-        { player_id: req.body.player_id },
-        { game_id: req.body.game_id },
-      ],
-    },
-    defaults: {
-      player_id: req.body.player_id,
-      game_id: req.body.game_id,
-      status: 1,
-      video_url: btoa(new Date()) + ".mp4",
-    },
-  });
-  if (highlight[1]) {
-    return res.send({
-      result: "success",
-      msg: "Highlight is created successfully!",
+    const highlight = await Highlight.findOrCreate({
+        where: {
+            [Op.and]: [
+                { player_id: req.body.player_id },
+                { game_id: req.body.game_id },
+            ],
+        },
+        defaults: {
+            player_id: req.body.player_id,
+            game_id: req.body.game_id,
+            status: 1,
+            video_url: btoa(new Date()) + ".mp4",
+        },
     });
-  } else {
-    const updated = await Highlight.update(
-      {
-        ...highlight[0],
-        status: 1,
-      },
-      {
-        where: { id: highlight[0].id },
-      }
-    );
-    return res.send({
-      result: "success",
-      msg: "Highlight is already created!",
-    });
-  }
+    if (highlight[1]) {
+        return res.send({
+            result: "success",
+            msg: "Highlight is created successfully!",
+        });
+    } else {
+        const updated = await Highlight.update(
+            {
+                ...highlight[0],
+                status: 1,
+            },
+            {
+                where: { id: highlight[0].id },
+            }
+        );
+        return res.send({
+            result: "success",
+            msg: "Highlight is already created!",
+        });
+    }
 };
 
 exports.getAllHighlightByPlayerId = (req, res) => {
-  const id = req.params.id;
+    const id = req.params.id;
 
-  Sequelize.query(
-    `
+    Sequelize.query(
+        `
     SELECT 
       public."Games".*, 
       public."Games".image as game_image,
@@ -481,13 +495,15 @@ exports.getAllHighlightByPlayerId = (req, res) => {
   JOIN public."Players" on public."Players".id = public."Highlights".player_id 
     where public."Highlights".player_id = ${id} 
   `
-  )
-    .then((data) => {
-      res.send(data[0]);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving games.",
-      });
-    });
+    )
+        .then((data) => {
+            res.send(data[0]);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    err.message ||
+                    "Some error occurred while retrieving games.",
+            });
+        });
 };

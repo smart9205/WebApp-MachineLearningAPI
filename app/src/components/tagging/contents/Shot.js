@@ -160,7 +160,7 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
                 player_id: player.id,
                 action_id: 8,
                 action_result_id: 1,
-                court_area_id: areaCourtId,
+                court_area_id: 4,
                 inside_the_paint: inTheBox
               }
             ])
@@ -190,7 +190,7 @@ export default function Shot({ defenseTeam, offenseTeam, taggingState, offenseTe
                 player_id: player.id,
                 action_id: 13,
                 action_result_id: 7,
-                court_area_id: areaCourtId,
+                court_area_id: areaCourtId === 1 ? 4 : areaCourtId === 2 ? 3 : areaCourtId,
                 inside_the_paint: inTheBox
               }
             ])
