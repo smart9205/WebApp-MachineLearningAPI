@@ -313,7 +313,7 @@ exports.getGamePlayerTags = (req, res) => {
   Sequelize.query(
     `
     SELECT * FROM public.fnc_get_players_tags(
-      ${req.userId},
+      null,
       ${teamId},
       ${playerIds},
       '${req.params.gameId}',

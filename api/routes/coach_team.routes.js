@@ -75,7 +75,6 @@ module.exports = (app) => {
 
   app.get(
     "/coach_team/game_player_tags/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId",
-    [authJwt.isAdminOrCoach],
     controller.getGamePlayerTags
   );
 
