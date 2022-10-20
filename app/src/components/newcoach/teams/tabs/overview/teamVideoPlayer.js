@@ -43,7 +43,7 @@ const styles = {
         backgroundColor: '#80808069'
     }
 };
-export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOpen, gameTime }) {
+export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOpen, gameTime, isTeams }) {
     const handle = useFullScreenHandle();
     const { tagList, autoPlay, idx, videoPlay, cnt = null } = videoData;
 
@@ -98,8 +98,8 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
     };
 
     const onProgress = (current) => {
-        const startTime = toSecond(tagList[curIdx]?.team_tag_start_time);
-        const endTime = toSecond(tagList[curIdx]?.team_tag_end_time);
+        const startTime = toSecond(isTeams ? tagList[curIdx]?.team_tag_start_time : tagList[curIdx]?.player_tag_start_time);
+        const endTime = toSecond(isTeams ? tagList[curIdx]?.team_tag_end_time : tagList[curIdx]?.player_tag_end_time);
 
         setCurrentTime(current);
 
