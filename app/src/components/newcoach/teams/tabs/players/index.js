@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TableSortLabel } from '@mui/material';
-import { useSelector } from 'react-redux';
 
 import { PLAYER_ICON_DEFAULT } from '../../../../../common/staticData';
 import { getComparator, stableSort } from '../../../components/utilities';
@@ -69,7 +68,6 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
     const [statOpen, setStatOpen] = useState(false);
     const [playerStat, setPlayerStat] = useState(null);
     const [currentPlayer, setCurrentPlayer] = useState(null);
-    const { user: currentUser } = useSelector((state) => state.auth);
 
     const getPlayerStatus = (id) => {
         if (stats.length > 0) return stats.filter((item) => item.player_id === id)[0];
@@ -136,8 +134,7 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
             courtAreaId: '1,2,3,4',
             insidePaint: null,
             homeAway: null,
-            gameResult: null,
-            userId: currentUser.id
+            gameResult: null
         }).then((res) => {
             setCurrentPlayer(player);
             setPlayerStat(res[0]);

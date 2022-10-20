@@ -130,8 +130,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
             courtAreaId: null,
             insidePaint: null,
             homeAway: null,
-            gameResult: null,
-            userId: null
+            gameResult: null
         }).then((res) => {
             setPlayerStat(res[0]);
             setLoading(false);

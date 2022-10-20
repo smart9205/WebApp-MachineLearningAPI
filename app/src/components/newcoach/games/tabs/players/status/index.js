@@ -1,6 +1,5 @@
-import { Box, Button, Dialog, DialogContent, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import MatchAll from '../../../../../../assets/match_all.png';
 
@@ -39,7 +38,7 @@ const statList = [
     { id: 'red_cards', title: 'Red Cards' }
 ];
 
-const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initialState, where }) => {
+const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialState }) => {
     const [playerState, setPlayerState] = useState(null);
     const [gameHalf, setGameHalf] = useState(['first', 'second']);
     const [gameTime, setGameTime] = useState(['1', '2', '3', '4', '5', '6']);
@@ -48,7 +47,6 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initia
     const [errorOpen, setErrorOpen] = useState(false);
     const [gameResult, setGameResult] = useState(null);
     const [gamePlace, setGamePlace] = useState(null);
-    const { user: currentUser } = useSelector((state) => state.auth);
 
     const handleChangeGameHalf = (e, newHalf) => {
         setGameHalf(newHalf);
@@ -138,8 +136,7 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initia
             courtAreaId: courtArea.join(','),
             insidePaint: null,
             homeAway: null,
-            gameResult: null,
-            userId: where === 'Games' ? currentUser.id : null
+            gameResult: null
         }).then((res) => {
             console.log(res);
             setPlayerState(res[0]);

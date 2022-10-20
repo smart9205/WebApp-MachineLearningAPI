@@ -16,7 +16,6 @@ import {
     TableBody
 } from '@mui/material';
 import React, { useEffect, useReducer, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
@@ -60,7 +59,6 @@ const Players = () => {
     const [editPlayer, setEditPlayer] = useState(null);
     const [statOpen, setStatOpen] = useState(false);
     const [playerStat, setPlayerStat] = useState(null);
-    const { user: currentUser } = useSelector((state) => state.auth);
 
     const handleRequestSort = (prop) => {
         const isAsc = orderBy === prop && order === 'desc';
@@ -185,8 +183,7 @@ const Players = () => {
             courtAreaId: null,
             insidePaint: null,
             homeAway: null,
-            gameResult: null,
-            userId: currentUser.id
+            gameResult: null
         }).then((data) => {
             setPlayerStats(data);
             setState({ loading: false, teamList: getTeamList(data) });
