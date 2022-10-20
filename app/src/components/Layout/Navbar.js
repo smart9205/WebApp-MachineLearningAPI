@@ -162,18 +162,10 @@ export default function Navbar() {
                                     </li> */}
                                 </>
                             )}
-
-                            {currentUser && (currentUser?.roles.includes('ROLE_COACH') || currentUser?.roles.includes('ROLE_ADMIN')) && (
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/coach">
-                                        {t('Coach')}
-                                    </Link>
-                                </li>
-                            )}
                             {currentUser && (currentUser?.roles.includes('ROLE_COACH') || currentUser?.roles.includes('ROLE_ADMIN')) && (
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/new_coach">
-                                        {t('New Coach (Beta)')}
+                                        {t('Coach')}
                                     </Link>
                                 </li>
                             )}

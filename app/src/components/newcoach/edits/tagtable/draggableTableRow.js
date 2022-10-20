@@ -75,9 +75,9 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
                 <Checkbox checked={rowChecked} onChange={() => onCheck(id)} />
             </TableCell>
             <TCellNameEdit
-                value={row.name}
+                value={row.clip_name}
                 update={(v) => {
-                    updateList(index, { ...row, name: v });
+                    updateList(index, { ...row, clip_name: v }, { ...row, name: v });
                     row.name = v;
                 }}
                 style={{ height: '36px' }}

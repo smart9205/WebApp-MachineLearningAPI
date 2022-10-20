@@ -150,7 +150,7 @@ export const editCreateCommand = async (tagList, name) => {
         })
     );
 
-    let videos = videoList.map((tag, i) => {
+    let videos = videoList.map((tag) => {
         return {
             url: tag.url,
             SecondBoxText: name,
@@ -163,7 +163,9 @@ export const editCreateCommand = async (tagList, name) => {
         return {
             Video: rawVideoList.indexOf(tag.video_url) + 1,
             Trim: `${toSecond(tag.start_time)}:${toSecond(tag.end_time)}`,
-            FirstBoxText: tag.name
+            GameTime: `${tag.time_in_game}'`,
+            GameScore: `${tag.home_team_goal} - ${tag.away_team_goal}`,
+            FirstBoxText: tag.clip_name
         };
     });
 

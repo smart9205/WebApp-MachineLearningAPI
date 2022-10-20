@@ -59,9 +59,9 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
         setChecks(array);
     };
 
-    const handleUpdateTable = useCallback(async (index, data) => {
+    const handleUpdateTable = useCallback(async (index, data, newData) => {
         setTableRows((prev) => update(prev, { [index]: { $set: data } }));
-        await GameService.updateEditClip(data);
+        await GameService.updateEditClip(newData);
         updateTable();
     }, []);
 
