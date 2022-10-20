@@ -34,13 +34,16 @@ const headCells = [
     { id: 'total_shot', title: 'Shots' },
     { id: 'total_dribble', title: 'Dribbles' },
     { id: 'total_crosses', title: 'Crosses' },
+    { id: 'total_corner', title: 'Corners' },
     { id: 'total_free_kick', title: 'Free Kicks' },
     { id: 'total_passes', title: 'Passes' },
     { id: 'total_turnover', title: 'Turnovers' },
+    { id: 'total_fouls', title: 'Fouls' },
     { id: 'total_draw_fouls', title: 'Draw Fouls' },
     { id: 'total_interception', title: 'Interceptions' },
     { id: 'total_tackle', title: 'Tackles' },
     { id: 'total_saved', title: 'Saved' },
+    { id: 'total_blocked', title: 'Blocked' },
     { id: 'total_clearance', title: 'Clearance' }
 ];
 
@@ -306,13 +309,16 @@ const Players = () => {
                                             <TableCell align="center">{player['total_shot'] ?? '-'}</TableCell>
                                             <TableCell align="center">{player['total_dribble'] ?? '-'}</TableCell>
                                             <TableCell align="center">{player['total_crosses'] ?? '-'}</TableCell>
+                                            <TableCell align="center">{player['total_corner'] ?? '-'}</TableCell>
                                             <TableCell align="center">{player['total_free_kick'] ?? '-'}</TableCell>
                                             <TableCell align="center">{player['total_passes'] ?? '-'}</TableCell>
                                             <TableCell align="center">{player['total_turnover'] ?? '-'}</TableCell>
+                                            <TableCell align="center">{player['total_fouls'] ?? '-'}</TableCell>
                                             <TableCell align="center">{player['total_draw_fouls'] ?? '-'}</TableCell>
                                             <TableCell align="center">{player['total_interception'] ?? '-'}</TableCell>
                                             <TableCell align="center">{player['total_tackle'] ?? '-'}</TableCell>
                                             <TableCell align="center">{player['total_saved'] ?? '-'}</TableCell>
+                                            <TableCell align="center">{player['total_blocked'] ?? '-'}</TableCell>
                                             <TableCell align="center">{player['total_clearance'] ?? '-'}</TableCell>
                                             <TableCell
                                                 align="center"

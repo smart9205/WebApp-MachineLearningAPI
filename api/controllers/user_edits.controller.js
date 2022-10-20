@@ -208,17 +208,7 @@ exports.findOne = (req, res) => {
 
   Sequelize.query(
     `
-  SELECT 
-    public."Edit_Clips".*,
-    public."Games".video_url,
-    HomeTeam.image as home_team_logo,
-    AwayTeam.image as away_team_logo
-  FROM public."Edit_Clips"
-  JOIN public."Games" on public."Games".id = public."Edit_Clips".game_id
-  JOIN public."Teams" as HomeTeam on public."Games".home_team_id = HomeTeam.id
-  JOIN public."Teams" as AwayTeam on public."Games".away_team_id = AwayTeam.id
-  WHERE public."Edit_Clips".edit_id = ${id}
-  order by sort
+  select * from public.fnc_get_clips_in_edits(${id})
   `
   )
     .then((data) => {

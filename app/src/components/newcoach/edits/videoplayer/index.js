@@ -15,6 +15,8 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import { toSecond } from '../../components/utilities';
 import gameService from '../../../../services/game.service';
 import GameImage from '../../../../assets/MyEdits.png';
+import { getPeriod } from '../../games/tabs/overview/tagListItem';
+import { TEAM_ICON_DEFAULT } from '../../../../common/staticData';
 // import VIDEO from '../../assets/1.mp4'
 
 const styles = {
@@ -42,9 +44,8 @@ const styles = {
         backgroundColor: '#80808069'
     }
 };
-export default function EditVideoPlayer({ videoData, tagList, onChangeClip, drawOpen }) {
+export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }) {
     const handle = useFullScreenHandle();
-    const { autoPlay, idx, videoPlay, cnt = null } = videoData;
 
     const player = useRef(null);
     const [play, setPlay] = useState(false);
@@ -132,8 +133,6 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, draw
     }, [tagList]);
 
     useEffect(() => {
-        if (!ready) return;
-
         if (tagList.length === 0) {
             setVideoURL('');
             setCurIdx(0);
@@ -144,13 +143,13 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, draw
         playTagByIdx(idx);
         setCurIdx(idx);
 
-        setPlay(videoPlay);
+        setPlay(true);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [idx, videoPlay, ready, cnt]);
+    }, [idx]);
 
     useEffect(() => {
-        if (autoPlay) onChangeClip(curIdx);
+        if (idx !== curIdx) onChangeClip(curIdx);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [curIdx]);
 
@@ -179,6 +178,24 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, draw
                             {videoURL === '' && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                         </div>
                     </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>
+                                {`${getPeriod(tagList[curIdx]?.period)} - ${tagList[curIdx]?.time_in_game}'`}
+                            </Typography>
+                        </div>
+                        {tagList[curIdx]?.home_team_goal !== 0 && tagList[curIdx]?.away_team_goal !== 0 && (
+                            <>
+                                <img src={tagList[curIdx]?.home_team_logo ? tagList[curIdx]?.home_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
+                                    <Typography
+                                        sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}
+                                    >{`${tagList[curIdx]?.home_team_goal} : ${tagList[curIdx]?.away_team_goal}`}</Typography>
+                                </div>
+                                <img src={tagList[curIdx]?.away_team_logo ? tagList[curIdx]?.away_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                            </>
+                        )}
+                    </div>
 
                     <div style={styles.buttonBox}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -200,7 +217,7 @@ export default function EditVideoPlayer({ videoData, tagList, onChangeClip, draw
                                 <SkipNextSharpIcon />
                             </IconButton>
 
-                            {autoPlay && <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
+                            <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />
 
                             <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
                                 {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}

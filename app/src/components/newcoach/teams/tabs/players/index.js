@@ -7,58 +7,22 @@ import GameService from '../../../../../services/game.service';
 import TeamPlayerStatDialog from './status';
 
 const headCells = [
-    {
-        id: 'total_player_games',
-        title: 'Games'
-    },
-    {
-        id: 'total_goal',
-        title: 'Goals'
-    },
-    {
-        id: 'total_shot',
-        title: 'Shots'
-    },
-    {
-        id: 'total_dribble',
-        title: 'Dribbles'
-    },
-    {
-        id: 'total_crosses',
-        title: 'Crosses'
-    },
-    {
-        id: 'total_free_kick',
-        title: 'Free Kicks'
-    },
-    {
-        id: 'total_passes',
-        title: 'Passes'
-    },
-    {
-        id: 'total_turnover',
-        title: 'Turnovers'
-    },
-    {
-        id: 'total_draw_fouls',
-        title: 'Draw Fouls'
-    },
-    {
-        id: 'total_interception',
-        title: 'Interceptions'
-    },
-    {
-        id: 'total_tackle',
-        title: 'Tackles'
-    },
-    {
-        id: 'total_saved',
-        title: 'Saved'
-    },
-    {
-        id: 'total_clearance',
-        title: 'Clearance'
-    }
+    { id: 'total_player_games', title: 'Games' },
+    { id: 'total_goal', title: 'Goals' },
+    { id: 'total_shot', title: 'Shots' },
+    { id: 'total_dribble', title: 'Dribbles' },
+    { id: 'total_crosses', title: 'Crosses' },
+    { id: 'total_corner', title: 'Corners' },
+    { id: 'total_free_kick', title: 'Free Kicks' },
+    { id: 'total_passes', title: 'Passes' },
+    { id: 'total_turnover', title: 'Turnovers' },
+    { id: 'total_fouls', title: 'Fouls' },
+    { id: 'total_draw_fouls', title: 'Draw Fouls' },
+    { id: 'total_interception', title: 'Interceptions' },
+    { id: 'total_tackle', title: 'Tackles' },
+    { id: 'total_saved', title: 'Saved' },
+    { id: 'total_blocked', title: 'Blocked' },
+    { id: 'total_clearance', title: 'Clearance' }
 ];
 
 const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => {
@@ -199,6 +163,9 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
                                     {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_crosses'] : '-') : '-'}
                                 </TableCell>
                                 <TableCell align="center">
+                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_corner'] : '-') : '-'}
+                                </TableCell>
+                                <TableCell align="center">
                                     {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_free_kick'] : '-') : '-'}
                                 </TableCell>
                                 <TableCell align="center">
@@ -206,6 +173,9 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
                                 </TableCell>
                                 <TableCell align="center">
                                     {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_turnover'] : '-') : '-'}
+                                </TableCell>
+                                <TableCell align="center">
+                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_fouls'] : '-') : '-'}
                                 </TableCell>
                                 <TableCell align="center">
                                     {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_draw_fouls'] : '-') : '-'}
@@ -218,6 +188,9 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
                                 </TableCell>
                                 <TableCell align="center">
                                     {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_saved'] : '-') : '-'}
+                                </TableCell>
+                                <TableCell align="center">
+                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_blocked'] : '-') : '-'}
                                 </TableCell>
                                 <TableCell align="center">
                                     {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_clearance'] : '-') : '-'}

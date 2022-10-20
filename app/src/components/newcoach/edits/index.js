@@ -11,14 +11,8 @@ const Edits = () => {
     const [curEdit, setCurEdit] = useState(null);
     const [tagLoading, setTagLoading] = useState(false);
     const [curTagIdx, setCurTagIdx] = useState(-1);
-    const [videoData, setVideodata] = useState({
-        idx: 0,
-        autoPlay: true,
-        videoPlay: false
-    });
 
     const handleClickRow = (index) => {
-        setVideodata({ ...videoData, idx: index });
         setCurTagIdx(index);
     };
 
@@ -36,7 +30,6 @@ const Edits = () => {
     useEffect(() => {
         setEditTagList([]);
         setCurTagIdx(-1);
-        setVideodata({ ...videoData, idx: 0 });
 
         if (curEdit !== null && curEdit.type === 'edit') {
             setTagLoading(true);
@@ -50,7 +43,6 @@ const Edits = () => {
 
     useEffect(() => {
         setCurTagIdx(0);
-        setVideodata({ ...videoData, idx: 0 });
     }, [editTagList]);
 
     console.log('Edits => ', curTagIdx, editTagList);
@@ -74,7 +66,7 @@ const Edits = () => {
                         showPlay={false}
                     />
                 </div>
-                <EditVideoPlayer videoData={videoData} tagList={editTagList} onChangeClip={setCurTagIdx} drawOpen={true} />
+                <EditVideoPlayer idx={curTagIdx} tagList={editTagList} onChangeClip={setCurTagIdx} drawOpen={true} />
             </Box>
         </Box>
     );
