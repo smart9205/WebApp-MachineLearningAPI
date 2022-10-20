@@ -828,11 +828,11 @@ const getAllPlayerTagsByTeam = (teamId, gameId) => {
     });
 };
 
-const getGamePlayerTags = (teamId, playerId, gameId, actionId, actionTypeId, actionResultId) => {
+const getGamePlayerTags = (userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId) => {
     return axios
-        .get(API_URL + `coach_team/game_player_tags/${teamId}/${playerId}/${gameId}/${actionId}/${actionTypeId}/${actionResultId}`, {
+        .get(API_URL + `player/game_player_tags/${userId}/${teamId}/${playerId}/${gameId}/${actionId}/${actionTypeId}/${actionResultId}`, {
             headers: authHeader(),
-            data: { teamId, playerId, gameId, actionId, actionTypeId, actionResultId }
+            data: { userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId }
         })
         .then((response) => {
             return response.data;

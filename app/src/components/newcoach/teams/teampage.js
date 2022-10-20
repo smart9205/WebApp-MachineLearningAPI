@@ -1,13 +1,14 @@
 import { Box, Typography, CircularProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeftOutlined';
 
 import GameService from '../../../services/game.service';
-import TeamPlayers from './tabs/players';
 import TeamGames from './tabs/games';
 import TeamOverview from './tabs/overview';
+import TeamPlayersStats from './tabs/players';
 
 const Tabs = ['Overview', 'Summary', 'Stats', 'Games', 'Players Overview', 'Players Stats'];
 
@@ -25,6 +26,7 @@ const TeamPage = () => {
         loadingDone: false
     });
     const [gameList, setGameList] = useState([]);
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const handleClickTab = (idx) => {
         setValues({ ...values, tabSelected: idx });
@@ -55,7 +57,7 @@ const TeamPage = () => {
                 insidePaint: null,
                 homeAway: null,
                 gameResult: null,
-                our: true
+                userId: currentUser.id
             }).then((data) => {
                 setValues({ ...values, players: stats, playerStats: data, teamName: stats[0].team_name, loading: false, loadingDone: true, teamId: ids[0], seasonId: ids[1], leagueId: ids[2] });
             });
@@ -95,7 +97,9 @@ const TeamPage = () => {
                     </Box>
                     {values.tabSelected === 0 && <TeamOverview games={gameList} teamname={values.teamName} teamId={values.teamId} />}
                     {values.tabSelected === 3 && <TeamGames />}
-                    {values.tabSelected === 5 && <TeamPlayers playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} leagueId={values.leagueId} />}
+                    {values.tabSelected === 5 && (
+                        <TeamPlayersStats playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} leagueId={values.leagueId} />
+                    )}
                 </>
             )}
         </Box>

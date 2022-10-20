@@ -300,6 +300,49 @@ exports.gameByPlayerId = (req, res) => {
         });
 };
 
+exports.getGamePlayerTags = (req, res) => {
+    const teamId =
+        req.params.teamId === "null" ? null : parseInt(req.params.teamId);
+    const userId =
+        req.params.userId === "null" ? null : parseInt(req.params.userId);
+    const playerIds =
+        req.params.playerId === "null" ? null : `'${req.params.playerId}'`;
+    const actionId =
+        req.params.actionId === "null" ? null : `'${req.params.actionId}'`;
+    const actionTypeId =
+        req.params.actionTypeId === "null"
+            ? null
+            : `'${req.params.actionTypeId}'`;
+    const actionResultId =
+        req.params.actionResultId === "null"
+            ? null
+            : `'${req.params.actionResultId}'`;
+
+    Sequelize.query(
+        `
+    SELECT * FROM public.fnc_get_players_tags(
+      ${userId},
+      ${teamId},
+      ${playerIds},
+      '${req.params.gameId}',
+      ${actionId},
+      ${actionTypeId},
+      ${actionResultId}
+    )
+  `
+    )
+        .then((data) => {
+            res.send(data[0]);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    err.message ||
+                    "Some error occurred while retrieving games.",
+            });
+        });
+};
+
 exports.gameDetailsByPlayerId = (req, res) => {
     Sequelize.query(
         `

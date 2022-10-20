@@ -4,6 +4,7 @@ import { toXML } from 'jstoxml';
 import DownloadXML from '../../coach/DownloadXML';
 import { greenColor, redColor } from '../../coach/Colors';
 import GameService from '../../../services/game.service';
+import { useSelector } from 'react-redux';
 
 export const XmlDataFilterGame = ({ game, tagList, isOur, tag_name, setExportXML }) => {
     let rowsForXML = [];
@@ -189,6 +190,7 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
         'Started From Tackle',
         'Started From Throw In'
     ];
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const convertToNumber = (numberTime) => {
         const array = numberTime.split(':');
@@ -272,7 +274,7 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
     };
 
     const getPlayerTagList = async (id, isOur) => {
-        return await GameService.getGamePlayerTags(id, null, `${game.id}`, null, null, null).then((res) => {
+        return await GameService.getGamePlayerTags(currentUser.id, id, null, `${game.id}`, null, null, null).then((res) => {
             const sortedList = res.sort(sortByStartTime);
             let player_names = [];
             let playerActions = [];
@@ -694,6 +696,7 @@ export const XmlDataFilterOpponents = ({ game, teamId, setXML, setLoading }) => 
         'Started From Tackle',
         'Started From Throw In'
     ];
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const convertToNumber = (numberTime) => {
         const array = numberTime.split(':');
@@ -777,7 +780,7 @@ export const XmlDataFilterOpponents = ({ game, teamId, setXML, setLoading }) => 
     };
 
     const getPlayerTagList = async (id, isOur) => {
-        return await GameService.getGamePlayerTags(id, null, `${game.id}`, null, null, null).then((res) => {
+        return await GameService.getGamePlayerTags(currentUser.id, id, null, `${game.id}`, null, null, null).then((res) => {
             const sortedList = res.sort(sortByStartTime);
             let player_names = [];
             let playerActions = [];

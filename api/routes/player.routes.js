@@ -44,6 +44,11 @@ module.exports = (app) => {
     );
 
     app.get(
+        "/player/game_player_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId",
+        controller.getGamePlayerTags
+    );
+
+    app.get(
         "/player/request/getcorrection",
         [authJwt.verifyToken, authJwt.isAdminOrCoach],
         controller.getCorrectionRequest

@@ -5,7 +5,7 @@ import GameService from '../../../../../services/game.service';
 import GamePlayerLogo from './playerLogo';
 import GamePlayerStatDialog from './status';
 
-const GamePlayerLogoList = ({ game, teamId, opponent, our, setIds, where }) => {
+const GamePlayerLogoList = ({ game, teamId, opponent, our, setIds }) => {
     const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectArray, setSelectArray] = useState([]);
@@ -34,8 +34,7 @@ const GamePlayerLogoList = ({ game, teamId, opponent, our, setIds, where }) => {
             courtAreaId: null,
             insidePaint: null,
             homeAway: null,
-            gameResult: null,
-            our: where === 'Games' ? our : false
+            gameResult: null
         }).then((res) => {
             setPlayerState(res[0]);
             setStatOpen(true);
@@ -88,16 +87,7 @@ const GamePlayerLogoList = ({ game, teamId, opponent, our, setIds, where }) => {
                     </Box>
                 ))}
             </Box>
-            <GamePlayerStatDialog
-                open={statOpen}
-                onClose={() => setStatOpen(false)}
-                player={currentPlayer}
-                game={game}
-                teamId={our ? teamId : opponent}
-                our={our}
-                initialState={playerState}
-                where={where}
-            />
+            <GamePlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} game={game} teamId={our ? teamId : opponent} our={our} initialState={playerState} />
         </Box>
     );
 };

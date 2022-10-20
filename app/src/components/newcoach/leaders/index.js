@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Autocomplete, Box, CircularProgress, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
@@ -64,6 +65,7 @@ const Leaders = () => {
         leagueFilter: 'none',
         playerFilter: null
     });
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const handleChange = (prop) => (e) => {
         setValues({ ...values, [prop]: e.target.value });
@@ -246,7 +248,7 @@ const Leaders = () => {
             insidePaint: null,
             homeAway: null,
             gameResult: null,
-            our: true
+            userId: currentUser.id
         }).then((res) => {
             setPlayerList(res);
             setSeasonList(getSeasonList(res));

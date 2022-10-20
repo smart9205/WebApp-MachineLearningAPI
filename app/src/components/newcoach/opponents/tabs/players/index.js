@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useReducer, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import UpIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
 
@@ -73,6 +74,8 @@ const OpponentPlayers = ({ game }) => {
     const [exportEditOpen, setExportEditOpen] = useState(false);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const handleChangeTeam = (flag) => {
         setValues({ ...values, isOur: flag, playList: [] });
@@ -247,6 +250,7 @@ const OpponentPlayers = ({ game }) => {
             setVideoData({ ...videoData, tagList: [] });
             getPlayTagList(
                 GameService.getGamePlayerTags(
+                    currentUser.id,
                     values.isOur ? game.home_team_id : game.away_team_id,
                     playerIds.length === 0 ? null : playerIds.join(','),
                     `${game.id}`,

@@ -5,7 +5,7 @@ import EditIcon from '../../../../../assets/editicon.png';
 
 import { USER_IMAGE_DEFAULT } from '../../../../../common/staticData';
 
-const GamePlayerLogo = ({ player, idx, onShow }) => {
+const GamePlayerLogo = ({ player, onShow }) => {
     const getImage = () => {
         return player.image && player.image.length > 0 ? player.image : USER_IMAGE_DEFAULT;
     };

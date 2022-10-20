@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TableSortLabel } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 import { PLAYER_ICON_DEFAULT } from '../../../../../common/staticData';
 import { getComparator, stableSort } from '../../../components/utilities';
@@ -61,13 +62,14 @@ const headCells = [
     }
 ];
 
-const TeamPlayers = ({ playerList, stats, teamId, seasonId, leagueId }) => {
+const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => {
     const [playerIds, setPlayerIds] = useState([]);
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('total_player_games');
     const [statOpen, setStatOpen] = useState(false);
     const [playerStat, setPlayerStat] = useState(null);
     const [currentPlayer, setCurrentPlayer] = useState(null);
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const getPlayerStatus = (id) => {
         if (stats.length > 0) return stats.filter((item) => item.player_id === id)[0];
@@ -135,7 +137,7 @@ const TeamPlayers = ({ playerList, stats, teamId, seasonId, leagueId }) => {
             insidePaint: null,
             homeAway: null,
             gameResult: null,
-            our: true
+            userId: currentUser.id
         }).then((res) => {
             setCurrentPlayer(player);
             setPlayerStat(res[0]);
@@ -233,4 +235,4 @@ const TeamPlayers = ({ playerList, stats, teamId, seasonId, leagueId }) => {
     );
 };
 
-export default TeamPlayers;
+export default TeamPlayersStats;

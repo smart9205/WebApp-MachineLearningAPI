@@ -1,5 +1,6 @@
 import { Box, Button, Dialog, DialogContent, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import MatchAll from '../../../../../../assets/match_all.png';
 
@@ -47,6 +48,7 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initia
     const [errorOpen, setErrorOpen] = useState(false);
     const [gameResult, setGameResult] = useState(null);
     const [gamePlace, setGamePlace] = useState(null);
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const handleChangeGameHalf = (e, newHalf) => {
         setGameHalf(newHalf);
@@ -137,7 +139,7 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, our, initia
             insidePaint: null,
             homeAway: null,
             gameResult: null,
-            our: where === 'Games' ? our : false
+            userId: where === 'Games' ? currentUser.id : null
         }).then((res) => {
             console.log(res);
             setPlayerState(res[0]);

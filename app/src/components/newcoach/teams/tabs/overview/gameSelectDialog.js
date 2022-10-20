@@ -1,45 +1,82 @@
-import { Box, Checkbox, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Checkbox, Dialog, DialogContent, DialogTitle, FormControlLabel, Typography } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { getFormattedDate } from '../../../components/utilities';
 
 const TeamGameSelectDialog = ({ open, onClose, gameList, setIds }) => {
+    const selectedRef = useRef();
     const [selectAll, setSelectAll] = useState(false);
-    const [checkGames, setCheckGames] = useState([]);
+    const [selectedGames, setSelectedGames] = useState([]);
+
+    selectedRef.current = selectedGames;
 
     const handleCloseDialog = () => {
-        const ids = gameList.filter((game, index) => checkGames[index] === true).map((item) => item.id);
-
-        console.log('TeamGame => ', ids);
+        setIds(selectedRef.current);
         onClose();
-        setIds(ids);
+    };
+
+    const handleRowSelection = (id) => {
+        let array = selectedRef.current;
+
+        if (selectedRef.current.includes(id)) {
+            array = selectedRef.current.filter((item) => item !== id);
+            setSelectedGames(array);
+        } else {
+            array = [...array, id];
+            setSelectedGames(array);
+        }
+
+        if (selectedRef.current.length === gameList.length && !selectAll) setSelectAll(true);
+        else setSelectAll(false);
     };
 
     useEffect(() => {
-        let array = [];
+        if (selectAll) {
+            if (selectedRef.current.length < gameList.length) {
+                let array = [];
 
-        for (let i = 0; i < gameList.length; i++) array = [...array, selectAll];
+                gameList.map((item) => {
+                    array = [...array, item.id];
 
-        setCheckGames(array);
+                    return array;
+                });
+                setSelectedGames(array);
+            }
+        } else setSelectedGames([]);
     }, [selectAll, gameList]);
 
     return (
         <Dialog open={open} onClose={handleCloseDialog} width="550px">
-            <DialogTitle>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Checkbox checked={selectAll} onChange={(e) => setSelectAll(e.target.checked)} />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Select All</Typography>
-                </Box>
+            <DialogTitle style={{ padding: '24px 24px 16px' }}>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 600, color: '#1a1b1d' }}>Select Games</Typography>
             </DialogTitle>
-            <DialogContent style={{ display: 'flex', flexDirection: 'column', maxHeight: '30vh', overflowY: 'auto' }}>
-                {gameList.map((game, index) => (
-                    <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Checkbox checked={checkGames[index]} onChange={(e) => setCheckGames({ ...checkGames, [index]: e.target.checked })} />
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>
-                            {`${game.home_team_name}  VS  ${game.away_team_name} - `}
-                        </Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{`${getFormattedDate(game.date)}`}</Typography>
-                    </Box>
-                ))}
+            <DialogContent dividers style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '40vh', overflowY: 'auto' }}>
+                <FormControlLabel
+                    label="Select All"
+                    control={
+                        <Checkbox checked={selectAll} indeterminate={selectedRef.current.length > 0 && selectedRef.current.length < gameList.length} onChange={(e) => setSelectAll(e.target.checked)} />
+                    }
+                    sx={{ margin: '0' }}
+                />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginLeft: '32px' }}>
+                    {gameList.map((game, index) => (
+                        <FormControlLabel
+                            key={index}
+                            control={<Checkbox checked={selectedRef.current.includes(game.id)} onChange={(e) => handleRowSelection(game.id)} />}
+                            sx={{ border: '1px solid #E8E8E8', borderRadius: '8px', margin: '0' }}
+                            label={
+                                <div style={{ display: 'flex', width: '420px', padding: '8px 6px' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1.2 }}>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{game.home_team_name}</Typography>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{game.away_team_name}</Typography>
+                                    </div>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flex: 1.2 }}>{game.league_name}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flex: 0.6 }}>{game.season_name}</Typography>
+                                </div>
+                            }
+                        />
+                    ))}
+                </div>
             </DialogContent>
         </Dialog>
     );
