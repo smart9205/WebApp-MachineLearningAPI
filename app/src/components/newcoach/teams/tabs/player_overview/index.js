@@ -265,10 +265,6 @@ const TeamPlayersOverview = ({ games, teamId }) => {
         if (values.playList.length > 0) changeGameTime(values.playList, curTeamTagIdx);
     }, [curTeamTagIdx]);
 
-    useEffect(() => {
-        if (gameIds.length === 0) window.alert("No selected games. Please click 'Select Games' button to select.");
-    }, [games, teamId]);
-
     console.log('opponent => ', values.playList);
     console.log('opponent => ', values.clickEventName);
 
