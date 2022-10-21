@@ -1,7 +1,9 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 
 import MenuIcon from '@mui/icons-material/MenuOutlined';
+
+import '../../../coach_style.css';
 
 const GameTagButton = ({ isSelected, tagname, onShow, width }) => {
     return (
@@ -10,7 +12,7 @@ const GameTagButton = ({ isSelected, tagname, onShow, width }) => {
                 <MenuIcon />
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2px', justifyContent: 'center', width: 'fit-content' }}>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: isSelected ? '#0A7304' : '#1a1b1d' }}>{tagname}</Typography>
+                <p className="normal-text">{tagname}</p>
                 <Box sx={{ width: '100%', height: '2px', background: isSelected ? '#0A7304' : 'white' }} />
             </Box>
         </Box>

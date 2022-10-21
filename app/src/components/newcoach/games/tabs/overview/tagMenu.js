@@ -1,8 +1,10 @@
 import React from 'react';
-import { Box, Popover, Typography, Divider } from '@mui/material';
+import { Box, Popover, Divider } from '@mui/material';
 
 import ExportIcon from '../../../../../assets/Export.svg';
 import VideoIcon from '@mui/icons-material/SlideshowOutlined';
+
+import '../../../coach_style.css';
 
 const GameTagMenu = ({ anchor, onClose, onView, onHudl, onRender, onEdits }) => {
     const menuPopoverOpen = Boolean(anchor);
@@ -20,22 +22,22 @@ const GameTagMenu = ({ anchor, onClose, onView, onHudl, onRender, onEdits }) => 
         >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={onView}>
                 <VideoIcon />
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>View Clips</Typography>
+                <p className="menu-item">View Clips</p>
             </Box>
             <Divider sx={{ width: '100%' }} />
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={onHudl}>
                 <img src={ExportIcon} />
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Sportcode</Typography>
+                <p className="menu-item">Export to Sportcode</p>
             </Box>
             <Divider sx={{ width: '100%' }} />
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={onRender}>
                 <img src={ExportIcon} />
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Render</Typography>
+                <p className="menu-item">Export to Render</p>
             </Box>
             <Divider sx={{ width: '100%' }} />
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={onEdits}>
                 <img src={ExportIcon} />
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to "My Edits"</Typography>
+                <p className="menu-item">Export to "My Edits"</p>
             </Box>
         </Popover>
     );

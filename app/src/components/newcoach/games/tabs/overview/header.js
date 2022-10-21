@@ -3,10 +3,12 @@ import { Box, Typography } from '@mui/material';
 
 import ForwardIcon from '@mui/icons-material/ForwardTwoTone';
 
+import '../../../coach_style.css';
+
 const GameOverviewHeader = ({ isOur, ourname, enemyname, onChangeTeam, mb }) => {
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', marginBottom: mb }}>
-            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{ourname}</Typography>
+            <p className="normal-text">{ourname}</p>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Box
                     sx={{ 'svg path:last-of-type': { fill: 'black' }, 'svg path:first-of-type': { fill: isOur ? 'green' : 'white', opacity: 1 }, cursor: 'pointer' }}
@@ -21,7 +23,7 @@ const GameOverviewHeader = ({ isOur, ourname, enemyname, onChangeTeam, mb }) => 
                     <ForwardIcon fontSize="large" />
                 </Box>
             </Box>
-            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{enemyname}</Typography>
+            <p className="normal-text">{enemyname}</p>
         </Box>
     );
 };

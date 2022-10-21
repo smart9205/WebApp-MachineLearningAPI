@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 import GameTagListItem from './tagListItem';
+import '../../../coach_style.css';
 
 const GameTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onChecked, onVideo, onTime }) => {
     return tagList.length > 0 ? (
-        <Box sx={{ overflowY: 'auto', maxHeight: expand ? '15vh' : '50vh', minHeight: '15vh' }}>
+        <Box sx={{ overflowY: 'auto', maxHeight: expand ? '30vh' : '50vh', minHeight: '30vh' }}>
             <Box sx={{ margin: '0 4px 8px 0', width: 'calc(100% - 4px)' }}>
                 {tagList.map((tag, index) => (
                     <GameTagListItem
@@ -22,7 +23,7 @@ const GameTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onCh
             </Box>
         </Box>
     ) : (
-        <Box sx={{ overflowY: 'auto', maxHeight: expand ? '15vh' : '50vh', minHeight: expand ? '15vh' : '50vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box sx={{ overflowY: 'auto', maxHeight: expand ? '30vh' : '50vh', minHeight: expand ? '30vh' : '50vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {isLoading && (
                 <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <CircularProgress />
@@ -30,7 +31,7 @@ const GameTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onCh
             )}
             {tagList.length === 0 && !isLoading && (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '80%' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 700, color: '#1a1b1d' }}>No Data to Display</Typography>
+                    <p className="page-tab">No Data to Display</p>
                 </Box>
             )}
         </Box>
