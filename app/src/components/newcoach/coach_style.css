@@ -5,15 +5,14 @@
     font-weight: 500;
     margin: 0px;
 }
-
 .bigger-text {
     font-size: 1.2rem;
     font-family: 'DM Sans', sans-serif;
     color: #1a1b1d;
     font-weight: 900;
     margin: 0px;
+    padding-right: 30px;
 }
-
 .page-title {
     font-family: 'DM Sans', sans-serif;
     font-size: 1.4rem;
@@ -38,8 +37,17 @@
     margin: 0px;
 }
 
+.sidebar-game-count {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #1a1b1d;
+    font-weight: 600;
+    margin: 0px;
+}
+
 .select-narrator,
-.leaders-item-text {
+.leaders-item-text,
+.menu-item {
     font-family: 'DM Sans', sans-serif;
     font-size: 0.8rem;
     color: #1a1b1d;

@@ -272,7 +272,7 @@ const TeamPlayersOverview = ({ games, teamId }) => {
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', padding: '24px 16px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <SaveButton sx={{ fontWeight: 500, width: '120px', height: '28px' }} onClick={() => setDialogOpen(true)}>
+                    <SaveButton sx={{ fontWeight: 500, width: '120px', height: '28px', fontSize: '0.7rem' }} onClick={() => setDialogOpen(true)}>
                         Select Games
                     </SaveButton>
                 </Box>

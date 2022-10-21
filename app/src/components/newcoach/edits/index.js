@@ -53,7 +53,7 @@ const Edits = () => {
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
             </Box>
             <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', overflowY: 'auto' }}>
-                <div style={{ display: 'flex', padding: '24px 0' }}>
+                <div style={{ display: 'flex', padding: '10px 0' }}>
                     <EditFolderTreeView setEdit={setCurEdit} isMain={true} entireHeight="95%" treeHeight="90%" />
                     <EditTagTable
                         loading={tagLoading}

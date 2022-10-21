@@ -312,7 +312,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
                         <GameOverviewHeader isOur={values.isOur} ourname={teamname} enemyname="Opponents" onChangeTeam={handleChangeTeam} mb="0" />
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                        <SaveButton sx={{ fontWeight: 500, width: '120px', height: '28px' }} onClick={() => setDialogOpen(true)}>
+                        <SaveButton sx={{ fontWeight: 500, width: '120px', height: '28px', fontSize: '0.7rem' }} onClick={() => setDialogOpen(true)}>
                             Select Games
                         </SaveButton>
                     </Box>

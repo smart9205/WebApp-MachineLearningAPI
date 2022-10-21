@@ -1,7 +1,7 @@
 import { Checkbox, Dialog, DialogContent, DialogTitle, FormControlLabel, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { getFormattedDate } from '../../../components/utilities';
+import '../../../coach_style.css';
 
 const TeamGameSelectDialog = ({ open, onClose, gameList, setIds }) => {
     const selectedRef = useRef();
@@ -48,7 +48,7 @@ const TeamGameSelectDialog = ({ open, onClose, gameList, setIds }) => {
     return (
         <Dialog open={open} onClose={handleCloseDialog} width="550px">
             <DialogTitle style={{ padding: '24px 24px 16px' }}>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 600, color: '#1a1b1d' }}>Select Games</Typography>
+                <p className="page-title">Select Games</p>
             </DialogTitle>
             <DialogContent dividers style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '40vh', overflowY: 'auto' }}>
                 <FormControlLabel
@@ -56,7 +56,7 @@ const TeamGameSelectDialog = ({ open, onClose, gameList, setIds }) => {
                     control={
                         <Checkbox checked={selectAll} indeterminate={selectedRef.current.length > 0 && selectedRef.current.length < gameList.length} onChange={(e) => setSelectAll(e.target.checked)} />
                     }
-                    sx={{ margin: '0' }}
+                    sx={{ margin: '0', fontSize: '0.7rem' }}
                 />
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginLeft: '32px' }}>
                     {gameList.map((game, index) => (
@@ -67,11 +67,15 @@ const TeamGameSelectDialog = ({ open, onClose, gameList, setIds }) => {
                             label={
                                 <div style={{ display: 'flex', width: '420px', padding: '8px 6px' }}>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1.2 }}>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{game.home_team_name}</Typography>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>{game.away_team_name}</Typography>
+                                        <p className="normal-text">{game.home_team_name}</p>
+                                        <p className="normal-text">{game.away_team_name}</p>
                                     </div>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flex: 1.2 }}>{game.league_name}</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flex: 0.6 }}>{game.season_name}</Typography>
+                                    <p className="normal-text" style={{ flex: 1.2 }}>
+                                        {game.league_name}
+                                    </p>
+                                    <p className="normal-text" style={{ flex: 0.6 }}>
+                                        {game.season_name}
+                                    </p>
                                 </div>
                             }
                         />

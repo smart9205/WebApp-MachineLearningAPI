@@ -7,6 +7,7 @@ import GameService from '../../../services/game.service';
 import TeamListItem from './teamListItem';
 import { MenuProps } from '../components/common';
 import { getComparator, stableSort } from '../components/utilities';
+import '../coach_style.css';
 
 const Teams = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -98,10 +99,10 @@ const Teams = () => {
             {!loading && (
                 <>
                     <Box sx={{ width: '100%', padding: '24px 24px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>Teams</Typography>
+                        <p className="page-title">Teams</p>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', justifyContent: 'flex-end', width: '100%' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Season</Typography>
+                                <p className="select-narrator">Season</p>
                                 <Select
                                     value={seasonFilter}
                                     onChange={handleChange('seasonFilter')}
@@ -123,7 +124,7 @@ const Teams = () => {
                                 </Select>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>League</Typography>
+                                <p className="select-narrator">League</p>
                                 <Select
                                     value={leagueFilter}
                                     onChange={handleChange('leagueFilter')}
@@ -146,7 +147,7 @@ const Teams = () => {
                             </Box>
                         </Box>
                     </Box>
-                    <Box sx={{ overflowY: 'auto', maxHeight: '85vh', marginLeft: '24px' }}>
+                    <Box sx={{ overflowY: 'auto', maxHeight: '85vh', marginLeft: '10px' }}>
                         <Box sx={{ marginRight: '4px' }}>
                             {getTeamsList().map((team, index) => (
                                 <Box key={index} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>

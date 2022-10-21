@@ -44,54 +44,54 @@ const TeamListItem = ({ row, isHover }) => {
                     <img style={{ height: '48px' }} src={row.team_image ? row.team_image : TEAM_ICON_DEFAULT} alt="Team Logo" />
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', flex: 3, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.team_name}</Typography>
+                    <p className="normal-text">{row.team_name}</p>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', flex: 3, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.league_name}</Typography>
+                    <p className="normal-text">{row.league_name}</p>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', flex: 3, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.season_name}</Typography>
+                    <p className="normal-text">{row.season_name}</p>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>GAMES</Typography>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.total_game_played}</Typography>
+                    <p className="normal-text">GAMES</p>
+                    <p className="normal-text">{row.total_game_played}</p>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>WON</Typography>
+                    <p className="normal-text">WON</p>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#52B030', borderRadius: '12px', width: '24px', height: '24px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: 'white' }}>W</Typography>
+                            <p className="normal-text">W</p>
                         </Box>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.won}</Typography>
+                        <p className="normal-text">{row.won}</p>
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>DRAW</Typography>
+                    <p className="normal-text">DRAW</p>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#A4AAB0', borderRadius: '12px', width: '24px', height: '24px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: 'white' }}>D</Typography>
+                            <p className="normal-text">D</p>
                         </Box>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.draw}</Typography>
+                        <p className="normal-text">{row.draw}</p>
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>LOSE</Typography>
+                    <p className="normal-text">LOSE</p>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#C1272D', borderRadius: '12px', width: '24px', height: '24px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: 'white' }}>L</Typography>
+                            <p className="normal-text">L</p>
                         </Box>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.lost}</Typography>
+                        <p className="normal-text">{row.lost}</p>
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>GOALS</Typography>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{row.goals}</Typography>
+                    <p className="normal-text">GOALS</p>
+                    <p className="normal-text">{row.goals}</p>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', 'svg path': { fill: '#FE5E00' }, marginLeft: '8px', flex: 2 }}>
                     <PlayersIcon />
                     <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#a5a5a8' }}>Players</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>{row.player_count}</Typography>
+                        <p className="normal-text">Players</p>
+                        <p className="normal-text">{row.player_count}</p>
                     </Box>
                 </Box>
             </Box>

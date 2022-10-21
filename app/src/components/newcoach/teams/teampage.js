@@ -9,6 +9,7 @@ import TeamGames from './tabs/games';
 import TeamOverview from './tabs/overview';
 import TeamPlayersStats from './tabs/players';
 import TeamPlayersOverview from './tabs/player_overview';
+import '../coach_style.css';
 
 const Tabs = ['Overview', 'Summary', 'Stats', 'Games', 'Players Overview', 'Players Stats'];
 
@@ -78,7 +79,7 @@ const TeamPage = () => {
                             <Link to="/new_coach/teams">
                                 <ChevronLeftIcon sx={{ width: '32px', height: '32px' }} />
                             </Link>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>Team {values.teamName}</Typography>
+                            <p className="page-title">Team {values.teamName}</p>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '32px', paddingLeft: '56px' }}>
                             {Tabs.map((tab, index) => (
@@ -87,7 +88,7 @@ const TeamPage = () => {
                                     sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
                                     onClick={() => handleClickTab(index)}
                                 >
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.9rem', fontWeight: 600, color: '#1a1b1d' }}>{tab}</Typography>
+                                    <p className="page-tab">{tab}</p>
                                     <Box sx={{ height: '2px', width: '100%', backgroundColor: values.tabSelected === index ? '#0A7304' : '#F8F8F8' }} />
                                 </Box>
                             ))}

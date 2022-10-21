@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, FormControl, Typography, InputAdornment, IconButton, TextField } from '@mui/material';
+import { Box, FormControl, InputAdornment, IconButton, TextField } from '@mui/material';
 
 import { SaveButton } from '../components/common';
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { updatepassword } from '../../../actions/auth';
+import '../coach_style.css';
 
 const passwordList = [
     {
@@ -70,7 +71,7 @@ const PasswordTab = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                 {passwordList.map((pass) => (
                     <FormControl sx={{ gap: '4px' }} key={pass.id}>
-                        <Typography sx={{ fontSize: '12px', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 600 }}>{pass.title}</Typography>
+                        <p className="normal-text">{pass.title}</p>
                         <TextField
                             type={values[pass.show] ? 'text' : 'password'}
                             value={values[pass.id]}
@@ -103,7 +104,7 @@ const PasswordTab = () => {
                     <SaveButton
                         disabled={!(values.oldPassword.length > 0 && values.newPassword.length > 0 && values.confirmPassword.length > 0)}
                         onClick={saveChanges}
-                        sx={{ width: '200px', fontSize: '14px' }}
+                        sx={{ width: '200px', fontSize: '0.7rem' }}
                     >
                         Update Password
                     </SaveButton>

@@ -257,7 +257,7 @@ const Players = () => {
                             />
                         </Box>
                     </Box>
-                    <Box sx={{ overflowY: 'auto', maxHeight: '85vh', marginLeft: '24px' }}>
+                    <Box sx={{ overflowY: 'auto', maxHeight: '85vh', marginLeft: '10px' }}>
                         <TableContainer sx={{ maxHeight: '80vh' }}>
                             <Table stickyHeader aria-label="sticky table">
                                 <TableHead>
