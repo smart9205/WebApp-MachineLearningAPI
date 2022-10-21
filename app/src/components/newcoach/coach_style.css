@@ -1,0 +1,48 @@
+.normal-text {
+    font-size: 0.7rem;
+    font-family: 'DM Sans', sans-serif;
+    color: #1a1b1d;
+    font-weight: 500;
+    margin: 0px;
+}
+
+.bigger-text {
+    font-size: 1.2rem;
+    font-family: 'DM Sans', sans-serif;
+    color: #1a1b1d;
+    font-weight: 900;
+    margin: 0px;
+}
+
+.page-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.4rem;
+    color: #1a1b1d;
+    font-weight: 700;
+    margin: 0px;
+}
+
+.page-tab {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #1a1b1d;
+    font-weight: 600;
+    margin: 0px;
+}
+
+.leaders-column-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: white;
+    font-weight: 600;
+    margin: 0px;
+}
+
+.select-narrator,
+.leaders-item-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: #1a1b1d;
+    font-weight: 500;
+    margin: 0px;
+}

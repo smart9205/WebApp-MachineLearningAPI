@@ -202,11 +202,11 @@ const Players = () => {
             )}
             {!loading && (
                 <>
-                    <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>Players</Typography>
+                    <Box sx={{ width: '100%', padding: '24px 24px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>Players</Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>Team</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Team</Typography>
                                 <Select
                                     value={teamFilter}
                                     onChange={handleChange('teamFilter')}
@@ -215,7 +215,7 @@ const Players = () => {
                                     IconComponent={ExpandMoreIcon}
                                     inputProps={{ 'aria-label': 'Without label' }}
                                     MenuProps={MenuProps}
-                                    sx={{ borderRadius: '10px', outline: 'none', height: '36px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                    sx={{ borderRadius: '10px', outline: 'none', height: '36px', width: '300px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                 >
                                     <MenuItem key="0" value="none">
                                         All
@@ -236,6 +236,7 @@ const Players = () => {
                                 variant="outlined"
                                 sx={{
                                     width: '300px',
+                                    fontSize: '0.8rem',
                                     '& legend': { display: 'none' },
                                     '& fieldset': { top: 0 },
                                     '& .MuiOutlinedInput-root': { borderRadius: '10px' },

@@ -49,8 +49,8 @@ const Edits = () => {
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
-            <Box sx={{ width: '100%', padding: '24px 24px 21px 48px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '30px', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
+            <Box sx={{ width: '100%', padding: '24px 24px 24px 24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
             </Box>
             <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', overflowY: 'auto' }}>
                 <div style={{ display: 'flex', padding: '24px 0' }}>

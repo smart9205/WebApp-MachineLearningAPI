@@ -70,7 +70,7 @@ const Sidebar = () => {
 
     return (
         <Box sx={{ backgroundColor: 'white', width: minimum ? '80px' : '180px', paddingTop: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '64px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: minimum ? 'none' : 'space-between', 'svg path': { fill: 'black' }, padding: '0 24px 0 30px', height: '40px' }}>
                     <MenuIcon sx={{ cursor: 'pointer' }} onClick={() => handleMenuControl()} />
                     {!minimum && (
@@ -79,7 +79,7 @@ const Sidebar = () => {
                         </Link>
                     )}
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {menuList.map((menuItem, idx) => (
                         <Box key={idx} onMouseEnter={() => handleMouseEnter(idx)} onMouseLeave={handleMouseLeave} onClick={() => setSelectIndex(idx)}>
                             <MenuItem
