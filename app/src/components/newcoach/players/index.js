@@ -1,20 +1,4 @@
-import {
-    Box,
-    Typography,
-    TextField,
-    InputAdornment,
-    IconButton,
-    CircularProgress,
-    Select,
-    MenuItem,
-    TableContainer,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableSortLabel,
-    TableBody
-} from '@mui/material';
+import { Box, TextField, InputAdornment, IconButton, CircularProgress, Select, MenuItem, TableContainer, Table, TableHead, TableRow, TableCell, TableSortLabel, TableBody } from '@mui/material';
 import React, { useEffect, useReducer, useState } from 'react';
 
 import SearchIcon from '@mui/icons-material/SearchOutlined';
@@ -27,6 +11,7 @@ import { getComparator, stableSort } from '../components/utilities';
 import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
 import PlayerEditDialog from './playerEditDialog';
 import TeamPlayerStatDialog from '../teams/tabs/players/status';
+import '../coach_style.css';
 
 const headCells = [
     { id: 'total_player_games', title: 'Games' },
@@ -203,10 +188,10 @@ const Players = () => {
             {!loading && (
                 <>
                     <Box sx={{ width: '100%', padding: '24px 24px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>Players</Typography>
+                        <p className="page-title">Players</p>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Team</Typography>
+                                <p className="select-narrator">Team</p>
                                 <Select
                                     value={teamFilter}
                                     onChange={handleChange('teamFilter')}
@@ -292,16 +277,10 @@ const Players = () => {
                                             <TableCell>
                                                 <Box sx={{ paddingLeft: '16px', cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#a5a5a8' }}>
-                                                            #{player?.player_jersey_number ?? 0}
-                                                        </Typography>
-                                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>
-                                                            {player?.player_name ?? '-'}
-                                                        </Typography>
+                                                        <p className="normal-text">#{player?.player_jersey_number ?? 0}</p>
+                                                        <p className="normal-text">{player?.player_name ?? '-'}</p>
                                                     </div>
-                                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d' }}>
-                                                        {player?.player_position ?? '-'}
-                                                    </Typography>
+                                                    <p className="normal-text">{player?.player_position ?? '-'}</p>
                                                 </Box>
                                             </TableCell>
                                             <TableCell align="center">{player?.team_name ?? '-'}</TableCell>

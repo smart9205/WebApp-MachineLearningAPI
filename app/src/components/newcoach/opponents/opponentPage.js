@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Typography, CircularProgress } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeftOutlined';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
@@ -9,6 +9,7 @@ import GameService from '../../../services/game.service';
 import OpponentOverview from './tabs/overview';
 import OpponentPlayers from './tabs/players';
 import { getFormattedDate } from '../components/utilities';
+import '../coach_style.css';
 
 const Tabs = ['Overview', 'Summary', 'Stats', 'Players'];
 
@@ -52,22 +53,22 @@ const OpponentPage = () => {
                                 <Link to="/new_coach/opponents">
                                     <ChevronLeftIcon sx={{ width: '30px', height: '30px' }} />
                                 </Link>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>Game</Typography>
+                                <p className="page-title">Game</p>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '8px 16px' }}>
                                     <img style={{ width: '20px' }} src={values.game.home_team_image ? values.game.home_team_image : TEAM_ICON_DEFAULT} />
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>{values.game.home_team_name}</Typography>
+                                    <p className="bigger-text">{values.game.home_team_name}</p>
                                 </Box>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>VS</Typography>
+                                <p className="menu-item">VS</p>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '8px 16px' }}>
                                     <img style={{ width: '20px' }} src={values.game.away_team_image ? values.game.away_team_image : TEAM_ICON_DEFAULT} />
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>{values.game.away_team_name}</Typography>
+                                    <p className="bigger-text">{values.game.away_team_name}</p>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '400px', padding: '4px 8px' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{getFormattedDate(values.game.date)}</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{values.game.league_name}</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{values.game.season_name}</Typography>
+                                    <p className="menu-item">{getFormattedDate(values.game.date)}</p>
+                                    <p className="menu-item">{values.game.league_name}</p>
+                                    <p className="menu-item">{values.game.season_name}</p>
                                 </Box>
                             </Box>
                         </Box>
@@ -78,7 +79,7 @@ const OpponentPage = () => {
                                     onClick={() => handleTabClick(index)}
                                     sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
                                 >
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.9rem', fontWeight: 700, color: '#1a1b1d' }}>{tab}</Typography>
+                                    <p className="page-tab">{tab}</p>
                                     <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? '#0A7304' : '#F8F8F8' }} />
                                 </Box>
                             ))}

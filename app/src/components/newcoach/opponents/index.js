@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, CircularProgress, Select, MenuItem } from '@mui/material';
+import { Box, CircularProgress, Select, MenuItem } from '@mui/material';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
@@ -7,6 +7,7 @@ import GameService from '../../../services/game.service';
 import GameListItem from './gameListItem';
 import { MenuProps } from '../components/common';
 import { getComparator, stableSort } from '../components/utilities';
+import '../coach_style.css';
 
 const Opponents = () => {
     const [values, setValues] = useState({
@@ -138,10 +139,10 @@ const Opponents = () => {
             {!values.loading && (
                 <>
                     <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>Opponents</Typography>
+                        <p className="page-title">Opponents</p>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Period</Typography>
+                                <p className="select-narrator">Period</p>
                                 <Select
                                     value={values.periodFilter}
                                     onChange={handleChange('periodFilter')}
@@ -158,7 +159,7 @@ const Opponents = () => {
                                 </Select>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Season</Typography>
+                                <p className="select-narrator">Season</p>
                                 <Select
                                     value={values.seasonFilter}
                                     onChange={handleChange('seasonFilter')}
@@ -180,7 +181,7 @@ const Opponents = () => {
                                 </Select>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>League</Typography>
+                                <p className="select-narrator">League</p>
                                 <Select
                                     value={values.leagueFilter}
                                     onChange={handleChange('leagueFilter')}
@@ -202,7 +203,7 @@ const Opponents = () => {
                                 </Select>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Team</Typography>
+                                <p className="select-narrator">Team</p>
                                 <Select
                                     value={values.teamFilter}
                                     onChange={handleChange('teamFilter')}

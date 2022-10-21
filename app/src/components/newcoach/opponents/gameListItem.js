@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Divider, Popover, CircularProgress } from '@mui/material';
+import { Box, Divider, Popover, CircularProgress } from '@mui/material';
 
 import SortIcon from '@mui/icons-material/SortOutlined';
 import ExportIcon from '../../../assets/Export.svg';
@@ -12,6 +12,7 @@ import GameService from '../../../services/game.service';
 import ExcelDataFiltering from '../../coach/ExcelDataFiltering';
 import { XmlDataFilterOpponents } from '../components/xmldata';
 import { getFormattedDate } from '../components/utilities';
+import '../coach_style.css';
 
 const GameListItem = ({ row, isHover }) => {
     const navigate = useNavigate();
@@ -100,19 +101,25 @@ const GameListItem = ({ row, isHover }) => {
                 <img style={{ height: '100px', width: '160px', borderRadius: '12px' }} src={row.image ? row.image : GameImage} alt="Game Logo" />
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 8, padding: '0 32px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', width: '500px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{getFormattedDate(row.date)}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{row.league_name}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flex: 1, textAlign: 'center' }}>{row.season_name}</Typography>
+                        <p className="normal-text" style={{ flex: 1 }}>
+                            {getFormattedDate(row.date)}
+                        </p>
+                        <p className="normal-text" style={{ flex: 1 }}>
+                            {row.league_name}
+                        </p>
+                        <p className="normal-text" style={{ flex: 1, textAlign: 'center' }}>
+                            {row.season_name}
+                        </p>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <img src={row.home_team_image ? row.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_goals}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.home_team_name}</Typography>
+                        <p className="normal-text">{row.home_team_goals}</p>
+                        <p className="normal-text">{row.home_team_name}</p>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <img src={row.away_team_image ? row.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '24px' }} />
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_goals}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 700, color: '#1a1b1d' }}>{row.away_team_name}</Typography>
+                        <p className="normal-text">{row.away_team_goals}</p>
+                        <p className="normal-text">{row.away_team_name}</p>
                     </Box>
                 </Box>
             </Box>
@@ -142,38 +149,38 @@ const GameListItem = ({ row, isHover }) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickHomeSportGate}>
                     <img src={ExportIcon} />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{row.home_team_name}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Sportcode</Typography>
+                        <p className="menu-item">{row.home_team_name}</p>
+                        <p className="menu-item">Export to Sportcode</p>
                     </Box>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickAwaySportGate}>
                     <img src={ExportIcon} />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{row.away_team_name}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Sportcode</Typography>
+                        <p className="menu-item">{row.away_team_name}</p>
+                        <p className="menu-item">Export to Sportcode</p>
                     </Box>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickHomeExcel}>
                     <img src={ExportIcon} />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{row.home_team_name}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Excel</Typography>
+                        <p className="menu-item">{row.home_team_name}</p>
+                        <p className="menu-item">Export to Excel</p>
                     </Box>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickAwayExcel}>
                     <img src={ExportIcon} />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{row.away_team_name}</Typography>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Export to Excel</Typography>
+                        <p className="menu-item">{row.away_team_name}</p>
+                        <p className="menu-item">Export to Excel</p>
                     </Box>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDownloadVideo(row.video_url)}>
                     <DownloadIcon />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Download Video</Typography>
+                    <p className="menu-item">Download Video</p>
                 </Box>
             </Popover>
             {exportGate && <XmlDataFilterOpponents game={row} teamId={teamId} setXML={setExportGate} setLoading={setLoading} />}

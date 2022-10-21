@@ -267,7 +267,7 @@ const Leaders = () => {
                 <>
                     <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <p className="page-title">Leaders</p>
-                        <Box sx={{  display: 'flex',  alignItems: 'center', gap: '24px' ,paddingLeft: '30px'}}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', paddingLeft: '30px' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <p className="select-narrator">Seasons</p>
@@ -356,7 +356,6 @@ const Leaders = () => {
                                     </Select>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-
                                     <Autocomplete
                                         id="combo-box-demo"
                                         options={playersList}
@@ -381,11 +380,8 @@ const Leaders = () => {
                                     />
                                 </Box>
                             </Box>
-
-
                         </Box>
                     </Box>
-
                     <Box sx={{ width: '100%', maxHeight: '85vh', overflowY: 'auto' }}>
                         <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '4px' }}>
                             {statCategory.map((item) => (
