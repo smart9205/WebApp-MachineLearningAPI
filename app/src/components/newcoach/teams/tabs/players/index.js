@@ -113,7 +113,7 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
     console.log('teams/players => ', order, orderBy, playerList);
 
     return (
-        <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', minHeight: '65vh', overflowY: 'auto', display: 'flex', padding: '24px' }}>
+        <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', minHeight: '65vh', overflowY: 'auto', display: 'flex', padding: '4px' }}>
             <TableContainer sx={{ maxHeight: '80vh' }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -121,9 +121,6 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
                             <TableCell key="none" />
                             <TableCell key="name" align="center">
                                 Name
-                            </TableCell>
-                            <TableCell key="pos" align="center">
-                                Position
                             </TableCell>
                             {headCells.map((cell) => (
                                 <TableCell key={cell.id} align="center" sortDirection={orderBy === cell.id ? order : false}>
@@ -137,16 +134,15 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
                     <TableBody>
                         {getSortedArray().map((player, index) => (
                             <TableRow key={index} height="70px">
-                                <TableCell width="5%" align="center" sx={{ cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
+                                <TableCell width="3%" align="center" sx={{ cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
                                     <img style={{ height: '48px' }} alt="Player Logo" src={player ? (player.image.length > 0 ? player.image : PLAYER_ICON_DEFAULT) : PLAYER_ICON_DEFAULT} />
                                 </TableCell>
                                 <TableCell>
-                                    <Box sx={{ paddingLeft: '16px', cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>{player?.name ?? '-'}</Typography>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#a5a5a8' }}>#{player?.jersey_number ?? 0}</Typography>
+                                    <Box sx={{ paddingLeft: '10px', cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.7rem', fontWeight: 600, color: '#1a1b1d' }}>#{player?.jersey_number ?? 0} {player?.name ?? '-'}</Typography>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.7rem', fontWeight: 600, color: '#a5a5a8' }}>{player?.pos_name ?? '-'}</Typography>
                                     </Box>
                                 </TableCell>
-                                <TableCell align="center">{player?.pos_name ?? '-'}</TableCell>
                                 <TableCell align="center">
                                     {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_player_games'] : '-') : '-'}
                                 </TableCell>

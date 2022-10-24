@@ -54,12 +54,7 @@ export const menuData = [
         icon: <TheatersIcon />,
         title: 'Video Cutter'
     },
-    {
-        id: 'reports',
-        path: '/new_coach/reports',
-        icon: <ReportsIcon />,
-        title: 'Reports'
-    },
+
     {
         id: 'players',
         path: '/new_coach/players',

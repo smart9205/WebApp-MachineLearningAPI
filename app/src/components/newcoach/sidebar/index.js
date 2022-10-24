@@ -80,7 +80,7 @@ const Sidebar = () => {
                         </Link>
                     )}
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                     {menuList.map((menuItem, idx) => (
                         <Box key={idx} onMouseEnter={() => handleMouseEnter(idx)} onMouseLeave={handleMouseLeave} onClick={() => setSelectIndex(idx)}>
                             <MenuItem
