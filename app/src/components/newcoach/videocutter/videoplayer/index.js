@@ -259,7 +259,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                                 }
                             }}
                         />
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', paddingLeft: '10px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', paddingLeft: '10px' }}>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.7rem', fontWeight: 500, color: 'white' }}>{toHHMMSS(currentTime)}</Typography>
                             <IconButton
                                 style={styles.button}
@@ -271,7 +271,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                             <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
                                 <FastRewindIcon color="white" />
                             </IconButton>
-                            <Button variant="outlined" sx={{ width: '50px !important', minwidth: '50px !important', color: 'white' ,fontSize: '0.7rem' }} onClick={() => setPlayRate(0.5)}>
+                            <Button variant="outlined" sx={{ width: '45px !important', minWidth: '45px !important', maxWidth: '45px !important', color: 'white' ,fontSize: '0.7rem' }} onClick={() => setPlayRate(0.5)}>
                                 Slow
                             </Button>
                             <IconButton
@@ -283,7 +283,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                             >
                                 {play && playRate === 1 ? <PauseIcon /> : <PlayArrowIcon />}
                             </IconButton>
-                            <Button variant="outlined" sx={{ width: '20px', color: 'white',fontSize: '0.7rem'  }} onClick={() => setPlayRate((s) => s + 0.5)}>
+                            <Button variant="outlined" sx={{ width: '45px !important', minWidth: '45px !important', maxWidth: '45px !important', color: 'white',fontSize: '0.7rem'  }} onClick={() => setPlayRate((s) => s + 0.5)}>
                                 Fast
                             </Button>
                             <IconButton style={styles.button} onClick={() => fastVideo(3)}>
@@ -303,7 +303,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                             <Button
                                 variant="outlined"
                                 disabled={saveEdit === null || (saveEdit && saveEdit.type === 'folder')}
-                                sx={{ width: '20px', color: 'white', fontSize: '0.7rem' }}
+                                sx={{ width: '40px !important', minWidth: '40px !important', maxWidth: '40px !important', color: 'white', fontSize: '0.7rem' }}
                                 onClick={() => handleQS()}
                             >
                                 QS
