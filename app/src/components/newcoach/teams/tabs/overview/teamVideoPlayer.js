@@ -183,21 +183,21 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>{`${gameTime.period} - ${gameTime.time}'`}</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '100px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'white' }}>{`${gameTime.period} - ${gameTime.time}'`}</Typography>
                     </div>
-                    <img src={gameTime.home_team_image ? gameTime.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '150px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}>
+                    <img src={gameTime.home_team_image ? gameTime.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '45px', height: '45px' }} />
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '70px' }}>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'blue' }}>
                             {`${gameTime.home_team_goals} : ${gameTime.away_team_goals}`}
                         </Typography>
                     </div>
-                    <img src={gameTime.away_team_image ? gameTime.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                    <img src={gameTime.away_team_image ? gameTime.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '45px', height: '45px' }} />
                 </div>
 
                 <div style={styles.buttonBox}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{getTime()}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: 'white' }}>{getTime()}</Typography>
                         <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
                             <SkipPreviousSharpIcon color="white" />
                         </IconButton>
@@ -225,7 +225,7 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                         </IconButton>
                     </div>
                     {handle.active && (
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2px 12px', background: '#80808069' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft:'60px', padding: '5px 25px', background: '#80808069' }}>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>
                                 {`${tagList[curIdx].player_names} - ${tagList[curIdx].action_names} - ${tagList[curIdx].action_type_names} - ${tagList[curIdx].action_result_names}`}
                             </Typography>

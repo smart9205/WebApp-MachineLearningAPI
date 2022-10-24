@@ -35,13 +35,13 @@ const GameTagButtonList = ({ selectedTag, onShow, isTeams }) => {
         <>
             <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '4px' }}>
                 {Tags.slice(isTeams ? 2 : 0, 12).map((tag, index) => (
-                    <GameTagButton key={index} isSelected={selectedTag === tag} tagname={tag} onShow={onShow} width="280px" />
+                    <GameTagButton key={index} isSelected={selectedTag === tag} tagname={tag} onShow={onShow} width="236px" />
                 ))}
             </Box>
-            <Divider sx={{ width: '100%', backgroundColor: 'black', opacity: 1, border: 'none', marginTop: '2px' }} />
+            <Divider sx={{ width: '100%', backgroundColor: 'Green', opacity: 1, border: 'none', marginTop: '3px', marginBottom: '3px'  }} />
             <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto auto', gap: '4px' }}>
                 {Tags.slice(12, 24).map((tag, index) => (
-                    <GameTagButton key={index} isSelected={selectedTag === tag} tagname={tag} onShow={onShow} width="190px" />
+                    <GameTagButton key={index} isSelected={selectedTag === tag} tagname={tag} onShow={onShow} width="132px" />
                 ))}
             </Box>
         </>

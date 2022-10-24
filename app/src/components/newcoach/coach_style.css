@@ -5,6 +5,33 @@
     font-weight: 500;
     margin: 0px;
 }
+
+.small-text {
+    font-size: 0.6rem;
+    font-family: 'DM Sans', sans-serif;
+    color: #1a1b1d;
+    font-weight: 500;
+    margin: 0px;
+}
+
+.normal-text-strong {
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    color: #1a1b1d;
+    font-weight: 900;
+    margin: 0px;
+}
+
+.normal-text-white
+{
+    font-size: 0.7rem;
+    font-family: 'DM Sans', sans-serif;
+    color: #ffffff;
+    font-weight: 500;
+    margin: 0px;
+}
+
+
 .bigger-text {
     font-size: 1.2rem;
     font-family: 'DM Sans', sans-serif;
@@ -46,11 +73,18 @@
 }
 
 .select-narrator,
-.leaders-item-text,
-.menu-item {
+.leaders-item-text {
     font-family: 'DM Sans', sans-serif;
     font-size: 0.8rem;
     color: #1a1b1d;
     font-weight: 500;
+    margin: 0px;
+}
+
+.menu-item {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    color: #1a1b1d;
+    font-weight: 600;
     margin: 0px;
 }

@@ -43,13 +43,13 @@ const TeamListItem = ({ row, isHover }) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
                     <img style={{ height: '48px' }} src={row.team_image ? row.team_image : TEAM_ICON_DEFAULT} alt="Team Logo" />
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', flex: 3, padding: '0 8px' }}>
-                    <p className="normal-text">{row.team_name}</p>
+                <Box sx={{ display: 'flex', alignItems: 'center', flex: 4, padding: '0 8px' }}>
+                    <p className="normal-text-strong">{row.team_name}</p>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', flex: 3, padding: '0 8px' }}>
                     <p className="normal-text">{row.league_name}</p>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', flex: 3, padding: '0 8px' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', flex: 2, padding: '0 8px' }}>
                     <p className="normal-text">{row.season_name}</p>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
@@ -60,32 +60,32 @@ const TeamListItem = ({ row, isHover }) => {
                     <p className="normal-text">WON</p>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#52B030', borderRadius: '12px', width: '24px', height: '24px' }}>
-                            <p className="normal-text">W</p>
+                            <p className="normal-text-white">W</p>
                         </Box>
-                        <p className="normal-text">{row.won}</p>
+                        <p className="normal-text-strong">{row.won}</p>
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
                     <p className="normal-text">DRAW</p>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#A4AAB0', borderRadius: '12px', width: '24px', height: '24px' }}>
-                            <p className="normal-text">D</p>
+                            <p className="normal-text-white">D</p>
                         </Box>
-                        <p className="normal-text">{row.draw}</p>
+                        <p className="normal-text-strong">{row.draw}</p>
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
                     <p className="normal-text">LOSE</p>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#C1272D', borderRadius: '12px', width: '24px', height: '24px' }}>
-                            <p className="normal-text">L</p>
+                            <p className="normal-text-white">L</p>
                         </Box>
-                        <p className="normal-text">{row.lost}</p>
+                        <p className="normal-text-strong">{row.lost}</p>
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
                     <p className="normal-text">GOALS</p>
-                    <p className="normal-text">{row.goals}</p>
+                    <p className="normal-text-strong">{row.goals}</p>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', 'svg path': { fill: '#FE5E00' }, marginLeft: '8px', flex: 2 }}>
                     <PlayersIcon />

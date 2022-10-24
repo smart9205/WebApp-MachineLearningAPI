@@ -6,7 +6,7 @@ import '../../../coach_style.css';
 
 const GameTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onChecked, onVideo, onTime }) => {
     return tagList.length > 0 ? (
-        <Box sx={{ overflowY: 'auto', maxHeight: expand ? '30vh' : '50vh', minHeight: '30vh' }}>
+        <Box sx={{ overflowY: 'auto', maxHeight: expand ? '25vh' : '63vh', minHeight: '25vh' }}>
             <Box sx={{ margin: '0 4px 8px 0', width: 'calc(100% - 4px)' }}>
                 {tagList.map((tag, index) => (
                     <GameTagListItem
@@ -23,7 +23,7 @@ const GameTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onCh
             </Box>
         </Box>
     ) : (
-        <Box sx={{ overflowY: 'auto', maxHeight: expand ? '30vh' : '50vh', minHeight: expand ? '30vh' : '50vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box sx={{ overflowY: 'auto', maxHeight: expand ? '20vh' : '63vh', minHeight: expand ? '20vh' : '63vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {isLoading && (
                 <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <CircularProgress />
