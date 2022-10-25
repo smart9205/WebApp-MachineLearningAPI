@@ -65,7 +65,7 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
             <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
             <Paper sx={{ width: '100%', height: '100%', overflow: 'hidden', p: 0.5 }}>
                 <h5 style={{ textAlign: 'center' }}>Team Tag</h5>
-                <TableContainer style={{ height: '100%' }}>
+                <TableContainer style={{ height: '85%' }}>
                     <Table stickyHeader aria-label="sticky table" size={'small'} sx={{ pb: 4 }}>
                         <TableHead>
                             <TableRow>

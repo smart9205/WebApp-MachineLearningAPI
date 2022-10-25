@@ -487,10 +487,10 @@ export default function Tagging() {
             <CssBaseline />
             <Drawer
                 sx={{
-                    width: '30%',
+                    width: '33%',
                     flexShrink: 0,
                     '& .MuiDrawer-paper': {
-                        width: '30%',
+                        width: '33%',
                         boxSizing: 'border-box'
                     }
                 }}
@@ -523,7 +523,7 @@ export default function Tagging() {
             </Drawer>
 
             <Main open={open}>
-                <div style={{ width: 50 }}>
+                <div style={{ width: 30 }}>
                     <Tooltip title={`${open ? 'Close' : 'Open'} Tags`}>
                         <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{ height: 50, width: 50, position: 'fixed', zIndex: 1300, top: '45%' }}>
                             {open ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
@@ -531,7 +531,7 @@ export default function Tagging() {
                     </Tooltip>
                 </div>
                 <Box>
-                    <div style={{ maxWidth: '88%', margin: 'auto', position: 'relative' }}>
+                    <div style={{ maxWidth: '90%', margin: 'auto', position: 'relative' }}>
                         <div className="player-wrapper">
                             <ReactPlayer
                                 className="react-player"
@@ -558,7 +558,7 @@ export default function Tagging() {
                     </div>
                     {open && (
                         <>
-                            <Box sx={{ flexGrow: 1, textAlign: 'center', marginTop: '-10px' }}>
+                            <Box sx={{ flexGrow: 1, textAlign: 'center', marginTop: '-20px' }}>
                                 <IconButton
                                     sx={{ my: 1 }}
                                     onClick={() => {
@@ -608,7 +608,7 @@ export default function Tagging() {
                                 ))}
                             </Box>
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <Box sx={{ mx: 2, textAlign: 'center' }}>
+                                <Box sx={{ mx: 1, textAlign: 'center' }}>
                                     <TextField
                                         label="sec. before"
                                         sx={{ m: 1, width: 100 }}
