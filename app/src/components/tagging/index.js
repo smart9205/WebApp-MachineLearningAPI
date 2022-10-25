@@ -531,7 +531,7 @@ export default function Tagging() {
                     </Tooltip>
                 </div>
                 <Box>
-                    <div style={{ maxWidth: '90%', margin: 'auto', position: 'relative' }}>
+                    <div style={{ maxWidth: '92%', margin: 'auto', position: 'relative' }}>
                         <div className="player-wrapper">
                             <ReactPlayer
                                 className="react-player"
@@ -549,7 +549,7 @@ export default function Tagging() {
                             />
                         </div>
                         {curTagStatusText !== '' && (
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', position: 'absolute', top: '28px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', position: 'absolute', top: '10px' }}>
                                 <div style={{ background: 'blue', width: 'fit-content', padding: '4px 8px' }}>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'white' }}>{curTagStatusText}</Typography>
                                 </div>

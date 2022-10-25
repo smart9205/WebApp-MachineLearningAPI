@@ -12,10 +12,9 @@ import GameTagMenu from '../../../games/tabs/overview/tagMenu';
 import GamePlayerTagButtonList from '../../../games/tabs/players/tagButtonList';
 import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
-import TeamGameSelectDialog from '../overview/gameSelectDialog';
-import { SaveButton } from '../../../components/common';
 import TeamVideoPlayer from '../overview/teamVideoPlayer';
 import TeamPlayerLogoList from './playerLogoList';
+import GameSelectControl from '../overview/gameSelectControl';
 
 const ActionData = {
     Goal: { action_id: '1', action_type_id: null, action_result_id: '3' },
@@ -71,7 +70,6 @@ const TeamPlayersOverview = ({ games, teamId }) => {
     const [playerTagList, setPlayerTagList] = useState([]);
     const [playerIds, setPlayerIds] = useState([]);
     const [exportEditOpen, setExportEditOpen] = useState(false);
-    const [dialogOpen, setDialogOpen] = useState(false);
     const [gameIds, setGameIds] = useState([]);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
@@ -272,9 +270,7 @@ const TeamPlayersOverview = ({ games, teamId }) => {
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', padding: '24px 16px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <SaveButton sx={{ fontWeight: 500, width: '120px', height: '28px', fontSize: '0.7rem' }} onClick={() => setDialogOpen(true)}>
-                        Select Games
-                    </SaveButton>
+                    <GameSelectControl gameList={games} setIds={setGameIds} />
                 </Box>
                 <TeamPlayerLogoList games={gameIds} teamId={teamId} setIds={setPlayerIds} />
                 {values.expandButtons && <GamePlayerTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
@@ -314,7 +310,6 @@ const TeamPlayersOverview = ({ games, teamId }) => {
                 />
             </Box>
             <TeamVideoPlayer videoData={videoData} games={games} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} gameTime={gameTime} isTeams={false} />
-            <TeamGameSelectDialog open={dialogOpen} onClose={() => setDialogOpen(false)} gameList={games} setIds={setGameIds} />
             <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={playerTagList} isTeams={false} />
         </Box>
     );

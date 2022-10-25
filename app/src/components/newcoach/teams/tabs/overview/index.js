@@ -3,18 +3,17 @@ import { Box } from '@mui/material';
 
 import UpIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
 
-import { SaveButton } from '../../../components/common';
 import GameOverviewHeader from '../../../games/tabs/overview/header';
 import GameTagMenu from '../../../games/tabs/overview/tagMenu';
 import GameTagControlSection from '../../../games/tabs/overview/tagControlSection';
 import GameTagList from '../../../games/tabs/overview/tagList';
 import { gameCreateCommand } from '../../../components/utilities';
-import TeamGameSelectDialog from './gameSelectDialog';
 import GameService from '../../../../../services/game.service';
 import TeamVideoPlayer from './teamVideoPlayer';
 import GameTagButtonList from '../../../games/tabs/overview/tagButtonList';
 import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
+import GameSelectControl from './gameSelectControl';
 
 const TeamOverview = ({ games, teamname, teamId }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
@@ -47,7 +46,6 @@ const TeamOverview = ({ games, teamname, teamId }) => {
     const [exportHudl, setExportHudl] = useState(false);
     const [playerTagList, setPlayerTagList] = useState([]);
     const [gameIds, setGameIds] = useState([]);
-    const [dialogOpen, setDialogOpen] = useState(false);
     const [exportEditOpen, setExportEditOpen] = useState(false);
     const [exportList, setExportList] = useState([]);
 
@@ -312,9 +310,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
                         <GameOverviewHeader isOur={values.isOur} ourname={teamname} enemyname="Opponents" onChangeTeam={handleChangeTeam} mb="0" />
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                        <SaveButton sx={{ fontWeight: 500, width: '120px', height: '28px', fontSize: '0.7rem' }} onClick={() => setDialogOpen(true)}>
-                            Select Games
-                        </SaveButton>
+                        <GameSelectControl gameList={games} setIds={setGameIds} />
                     </Box>
                 </Box>
                 {values.expandButtons && <GameTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} isTeams={true} />}
@@ -354,7 +350,6 @@ const TeamOverview = ({ games, teamname, teamId }) => {
                 />
             </Box>
             <TeamVideoPlayer videoData={videoData} games={games} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} gameTime={gameTime} isTeams={true} />
-            <TeamGameSelectDialog open={dialogOpen} onClose={() => setDialogOpen(false)} gameList={games} setIds={setGameIds} />
             <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} isTeams={true} />
         </Box>
     );
