@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,52 +22,40 @@ const Modalstyle = {
 };
 
 const PlayerSelector = ({ playerList, currPlayerId, tagList, modalOpen, handleClose, setModalOpen, setPlay, curIdx }) => {
-
     const onSelect = (player) => {
+        console.log('selector => ', currPlayerId, ',', player.player_id, ',', tagList, curIdx);
 
-        gameService.addCorrectionRequest(currPlayerId, player.player_id, tagList[curIdx].id)
-            .then((res) => {
-                setModalOpen(false)
-                setPlay(true)
-            })
-    }
+        gameService.addCorrectionRequest(currPlayerId, player.player_id, tagList[curIdx].id).then((res) => {
+            setModalOpen(false);
+            setPlay(true);
+        });
+    };
 
     const sortByJerseyNumber = (x, y) => {
         return x.jersey_number - y.jersey_number;
     };
 
-    let filteredPlayerList = playerList.sort(sortByJerseyNumber)
+    let filteredPlayerList = playerList.sort(sortByJerseyNumber);
 
     return (
-
-        <Modal
-            open={modalOpen}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-        >
+        <Modal open={modalOpen} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
             <Box sx={Modalstyle}>
-
                 <TableContainer component={Paper} sx={{ height: '22rem', backgroundColor: '#343434', p: '5px', borderRadius: '6px' }}>
                     <Table aria-label="a dense table">
                         <TableBody>
                             {filteredPlayerList.map((player, i) => (
-                                <TableRow
-                                    key={i}
-                                    onClick={() => onSelect(player)}
-                                    sx={{ border: 0, height: 40, "&:hover": { backgroundColor: '#000' } }}
-                                >
-                                    <TableCell sx={{ width: '120px', color: 'white', cursor: 'pointer' }} align="left"># {player.jersey_number}     {player.f_name} {player.l_name}</TableCell>
+                                <TableRow key={i} onClick={() => onSelect(player)} sx={{ border: 0, height: 40, '&:hover': { backgroundColor: '#000' } }}>
+                                    <TableCell sx={{ width: '120px', color: 'white', cursor: 'pointer' }} align="left">
+                                        # {player.jersey_number} {player.f_name} {player.l_name}
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
-
             </Box>
         </Modal>
+    );
+};
 
-    )
-}
-
-export default PlayerSelector
+export default PlayerSelector;

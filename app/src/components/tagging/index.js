@@ -396,6 +396,8 @@ export default function Tagging() {
             await addPlayerTag({ ...pTag, team_tag_id: tTag.id });
         }
         setTempPlayerTagList([]);
+        
+        
         dispPlayerTags(tTag.id);
     };
 

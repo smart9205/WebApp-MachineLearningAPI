@@ -93,30 +93,11 @@ export default function TagVideo({ tagList, url, muteState, setOpen, gameId }) {
 
     const seekTo = (sec) => player.current.seekTo(sec);
 
-    const playTagByIdx = (i) => {
-        let startTime = toSecond(tagList[i]?.start_time);
-        const endTime = toSecond(tagList[i]?.end_time);
-
-        console.log('$$$$$$$$', startTime, '$$', endTime);
-
-        if (endTime - startTime > 12) startTime += Math.floor((endTime - startTime - 12) / 2);
-
-        console.log('$$$$$$$$', startTime);
-        seekTo(startTime);
-    };
+    const playTagByIdx = (i) => seekTo(toSecond(tagList[i]?.start_time) + 3);
 
     const onProgress = (currentTime) => {
-        let startTime = toSecond(tagList[curIdx]?.start_time);
-        let endTime = toSecond(tagList[curIdx]?.end_time);
-
-        if (endTime - startTime > 12) {
-            let firstDelta = Math.floor((endTime - startTime - 12) / 2);
-            let endDelta = endTime - startTime - 12 - firstDelta;
-
-            startTime += firstDelta;
-            endTime -= endDelta;
-        }
-        console.log('$$$$$$$$', startTime, '$$', endTime);
+        const startTime = toSecond(tagList[curIdx]?.start_time) + 3;
+        const endTime = toSecond(tagList[curIdx]?.end_time) - 3;
 
         if (currentTime < startTime) {
             seekTo(startTime);

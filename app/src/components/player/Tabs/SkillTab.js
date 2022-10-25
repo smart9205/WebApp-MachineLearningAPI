@@ -109,7 +109,8 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
                         jersey: context.player.jersey_number,
                         action_name: item.action_names,
                         player_id: item.player_id,
-                        team_id: teamId
+                        team_id: teamId,
+                        id: item.id
                     };
                 })
             );
