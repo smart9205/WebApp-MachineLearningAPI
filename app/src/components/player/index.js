@@ -1,21 +1,25 @@
 import React, { useEffect, useState, createContext, useMemo, useReducer } from 'react';
 import { useParams } from 'react-router-dom';
 import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { IconButton, CircularProgress, Box, Typography, Popover, List, ListItemButton, ListItemText } from '@mui/material';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import GameService from '../../services/game.service';
 import DialogContent from '@mui/material/DialogContent';
 import Dialog from '@mui/material/Dialog';
-import TagVideo from './TagVideo';
 import { makeStyles } from '@mui/styles';
+
 import PlayerDetailCard from './PlayerDetailCard';
 import GameDetailTab from './GameDetailTab';
 import './Profile.css';
-import { useTranslation } from 'react-i18next';
+import { getComparator, getFormattedDate, stableSort } from '../newcoach/components/utilities';
+import GameService from '../../services/game.service';
+import TagVideo from './TagVideo';
+
 import GameImage from '../../assets/game_image.png';
 import FilterIcon from '@mui/icons-material/FilterListOutlined';
-import { getComparator, getFormattedDate, stableSort } from '../newcoach/components/utilities';
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import FullVideoPlayer from './videoDialog';
 
 const styles = {
     loader: {
@@ -59,6 +63,7 @@ export default function Player() {
     const [loading, setLoading] = useState(true);
     const [games, setGames] = useState([]);
     const [open, setOpen] = useState(false);
+    const [fullVideo, setFullVideo] = useState(false);
     const [playTags, setPlayTags] = useState([]);
 
     const [context, setContext] = useReducer((old, action) => ({ ...old, ...action }), {});
@@ -79,6 +84,7 @@ export default function Player() {
     const [seasonList, setSeasonList] = useState([]);
     const [seasonFilter, setSeasonFilter] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [curPlayGame, setCurPlayGame] = useState(null);
 
     const theme = useMemo(
         () =>
@@ -185,6 +191,11 @@ export default function Player() {
                             />
                         </DialogContent>
                     </Dialog>
+                    <Dialog className="profileSection_tagvideo" classes={{ paper: classes.paper }} open={fullVideo} onClose={(e) => setFullVideo(false)}>
+                        <DialogContent sx={{ p: 0 }}>
+                            <FullVideoPlayer video_url={curPlayGame ? (curPlayGame?.mobile_video_url ? curPlayGame?.mobile_video_url : curPlayGame?.video_url) : ''} />
+                        </DialogContent>
+                    </Dialog>
                     {playerData && <PlayerDetailCard player={playerData} />}
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', padding: '18px 20px', position: 'absolute', top: '9rem' }}>
                         <IconButton onClick={(e) => setFilterAnchorEl(e.currentTarget)}>
@@ -226,7 +237,6 @@ export default function Player() {
                                     boxShadow: hoverIndex === index ? '0px 4px 16px rgba(0, 0, 0, 0.1)' : 'none',
                                     cursor: 'pointer'
                                 }}
-                                onClick={() => setContext({ game: item })}
                             >
                                 <Box sx={{ borderRadius: '10px', background: `url(${getImage(item)}) center center / cover no-repeat silver`, width: '120px', height: '70px', marginBottom: '12px' }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '52px', width: '120px' }}>
@@ -235,9 +245,20 @@ export default function Player() {
                                             {item.away_team_image && <img src={item.away_team_image} style={{ width: '32px', height: '32px' }} />}
                                         </Box>
                                     </Box>
-                                    <IconButton color="primary" sx={{ padding: 0 }} onClick={() => setContext({ game: null })}>
-                                        <PlayCircleOutlineIcon sx={{ width: '36px', height: '36px' }} />
-                                    </IconButton>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                                        <IconButton
+                                            style={{ color: 'white', backgroundColor: '#80808069', padding: 0 }}
+                                            onClick={() => {
+                                                setCurPlayGame(item);
+                                                setFullVideo(true);
+                                            }}
+                                        >
+                                            <PlayCircleOutlineIcon sx={{ width: '36px', height: '36px' }} />
+                                        </IconButton>
+                                        <IconButton style={{ color: 'white', backgroundColor: '#80808069', padding: 0 }} onClick={() => setContext({ game: item })}>
+                                            <QueryStatsIcon sx={{ width: '36px', height: '36px' }} />
+                                        </IconButton>
+                                    </div>
                                 </Box>
                                 <Box sx={{ display: 'flex', gap: '2px', flexDirection: 'column', flex: 1 }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

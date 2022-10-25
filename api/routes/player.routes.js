@@ -49,6 +49,11 @@ module.exports = (app) => {
     );
 
     app.get(
+        "/player/player_detection/:gameId/:videoTime",
+        controller.getPlayersDetection
+    );
+
+    app.get(
         "/player/request/getcorrection",
         [authJwt.verifyToken, authJwt.isAdminOrCoach],
         controller.getCorrectionRequest

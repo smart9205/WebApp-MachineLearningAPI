@@ -212,6 +212,28 @@ exports.getPlayersStatsAdvanced = (req, res) => {
         });
 };
 
+exports.getPlayersDetection = (req, res) => {
+    const videoTime = req.params.videoTime === null ? null : `'${req.params.videoTime}'`;
+
+    Sequelize.query(
+        `
+    SELECT * from public.fnc_get_players_detection(
+      ${req.params.gameId},
+      ${videoTime}
+    )
+  `
+    )
+        .then((data) => {
+            res.send(data[0]);
+        })
+        .catch((e) => {
+            res.status(500).send({
+                message:
+                    e.message || "Some error occurred while retrieving games.",
+            });
+        });
+};
+
 exports.addCorrectionRequest = (req, res) => {
     Sequelize.query(
         `

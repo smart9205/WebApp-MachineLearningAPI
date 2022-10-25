@@ -611,7 +611,7 @@ export default function Tagging() {
                                 <Box sx={{ mx: 1, textAlign: 'center' }}>
                                     <TextField
                                         label="sec. before"
-                                        sx={{ m: 1, width: 100 }}
+                                        sx={{ m: 1, width: 90 }}
                                         inputProps={{ min: 0, style: { textAlign: 'center' } }}
                                         type="number"
                                         value={config.sec_before}
@@ -619,7 +619,7 @@ export default function Tagging() {
                                     />
                                     <TextField
                                         label="sec. after"
-                                        sx={{ m: 1, width: 100 }}
+                                        sx={{ m: 1, width: 90 }}
                                         inputProps={{ min: 0, style: { textAlign: 'center' } }}
                                         type="number"
                                         value={config.sec_after}

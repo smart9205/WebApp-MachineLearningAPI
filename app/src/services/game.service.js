@@ -789,6 +789,12 @@ const getPlayersStats = (seasonId, leagueId, gameId, teamId, playerId) => {
         });
 };
 
+const getPlayersDetection = (gameId, videoTime) => {
+    return axios.get(API_URL + `player/player_detection/${gameId}/${videoTime}`, { headers: authHeader(), data: { gameId, videoTime } }).then((response) => {
+        return response.data;
+    });
+};
+
 const getPlayersStatsAdvanced = (req) => {
     return axios.post(API_URL + `player/getplayersstats/advance`, req, { headers: authHeader() }).then((response) => {
         return response.data;
@@ -1015,6 +1021,7 @@ const gameService = {
     getGameDetailssByPlayer,
     getPlayersStats,
     getPlayersStatsAdvanced,
+    getPlayersDetection,
     addCorrectionRequest,
     getCorrectionRequest,
     doCorrection,
