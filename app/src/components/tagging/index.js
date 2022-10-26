@@ -21,7 +21,7 @@ import ReactPlayer from 'react-player';
 import GameService from '../../services/game.service';
 import IndividualTagTable from './IndividualTagTable';
 import TeamTagTable from './TeamTagTable';
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -37,7 +37,6 @@ import SelectMainPlayers from './contents/SelectMainPlayers';
 import moment from 'moment';
 import { compose } from '@mui/system';
 import Others from './contents/Others';
-import { getPeriod } from '../newcoach/games/tabs/overview/tagListItem';
 const drawerWidth = '30%';
 
 const PLAYBACK_RATE = [
@@ -106,24 +105,13 @@ export default function Tagging() {
     const { user: currentUser } = useSelector((state) => state.auth);
 
     React.useEffect(async () => {
-        if (!currentUser) {
-            navigate('/');
-            window.alert('You must log in first.');
-
-            return;
-        }
-
-        await GameService.getGame(game_id)
-            .then((res) => {
-                console.log(res);
-                if (!((!res.done_tagging && currentUser.roles.includes('ROLE_TAGGER')) || currentUser.roles.includes('ROLE_ADMIN'))) {
-                    navigate('/');
-                    window.alert('Game has been already tagged');
-                }
-            })
-            .catch((e) => {
+        await GameService.getGame(game_id).then((res) => {
+            console.log(res);
+            if (res.done_tagging && !currentUser.roles.includes('ROLE_ADMIN') && currentUser.roles.includes('ROLE_TAGGER')) {
                 navigate('/');
-            });
+                window.alert('Game has been already tagged');
+            }
+        });
     }, [game_id]);
 
     const player = React.useRef(null);
@@ -142,8 +130,6 @@ export default function Tagging() {
     const [play, setPlay] = React.useState(false);
     const [playRate, setPlayRate] = React.useState(3);
     const [clicked, setClicked] = React.useState(false);
-    const [curTeamTag, setCurTeamTag] = React.useState(null);
-    const [curTagStatusText, setCurTagStatusText] = React.useState('');
 
     const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
         url: '',
@@ -257,8 +243,7 @@ export default function Tagging() {
                 setPlayerTagList([]);
                 return;
             }
-            setCurTeamTag(res[0]);
-            player.current.seekTo(toSecond(res[0].start_time));
+            setState({ curTeamTagId: res[0].id });
             dispPlayerTags(res[0].id);
         });
     }, [game_id, tagCnt]);
@@ -396,8 +381,6 @@ export default function Tagging() {
             await addPlayerTag({ ...pTag, team_tag_id: tTag.id });
         }
         setTempPlayerTagList([]);
-        
-        
         dispPlayerTags(tTag.id);
     };
 
@@ -431,35 +414,6 @@ export default function Tagging() {
         setState({ offense: team, start_time: subSecToHHMMSS(st, 5) });
     };
 
-    const displayTagInfo = () => {
-        if (curTeamTag === null) return '';
-        if (player && player.current.getCurrentTime() < toSecond(teamTagList[teamTagList.length - 1].start_time)) return '';
-
-        const period = getPeriod(curTeamTag.period);
-        let time = Math.floor(player.current.getCurrentTime()) - toSecond(teamTagList[teamTagList.length - 1].start_time);
-
-        if (curTeamTag.period === 2) time -= 45 * 60;
-        else if (curTeamTag.period === 3) time -= 90 * 60;
-
-        let minutes = Math.floor(time / 60);
-        let seconds = time - minutes * 60;
-
-        if (minutes < 0) minutes = '0';
-        else if (minutes < 10) minutes = '0' + minutes;
-
-        if (seconds < 0) seconds = '0';
-        else if (seconds < 10) seconds = '0' + seconds;
-
-        console.log('#########', period, minutes, seconds);
-        return `${period} ${minutes}:${seconds}`;
-    };
-
-    React.useEffect(() => {
-        setCurTagStatusText(displayTagInfo());
-    }, [state.curTeamTagId]);
-
-    console.log('#########', curTeamTag, curTagStatusText);
-
     return (
         <Box sx={{ display: 'flex' }}>
             <Modal disableAutoFocus open={modalOpen} onClose={() => setModalOpen(false)} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
@@ -489,10 +443,10 @@ export default function Tagging() {
             <CssBaseline />
             <Drawer
                 sx={{
-                    width: '33%',
+                    width: '30%',
                     flexShrink: 0,
                     '& .MuiDrawer-paper': {
-                        width: '33%',
+                        width: '30%',
                         boxSizing: 'border-box'
                     }
                 }}
@@ -505,10 +459,8 @@ export default function Tagging() {
                     sx={{ height: '60%', p: 1, width: '100%' }}
                     updateTagList={updateTagList}
                     handleRowClick={(row) => {
-                        setCurTeamTag(row);
-                        player.current.seekTo(toSecond(row?.start_time));
                         dispPlayerTags(row?.id);
-                        console.log('tagging => ', teamTagList, row);
+                        player.current.seekTo(toSecond(row?.start_time));
                     }}
                     selectedId={state.curTeamTagId}
                 />
@@ -525,7 +477,7 @@ export default function Tagging() {
             </Drawer>
 
             <Main open={open}>
-                <div style={{ width: 30 }}>
+                <div style={{ width: 50 }}>
                     <Tooltip title={`${open ? 'Close' : 'Open'} Tags`}>
                         <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{ height: 50, width: 50, position: 'fixed', zIndex: 1300, top: '45%' }}>
                             {open ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
@@ -533,7 +485,7 @@ export default function Tagging() {
                     </Tooltip>
                 </div>
                 <Box>
-                    <div style={{ maxWidth: '92%', margin: 'auto', position: 'relative' }}>
+                    <div style={{ maxWidth: '88%', margin: 'auto' }}>
                         <div className="player-wrapper">
                             <ReactPlayer
                                 className="react-player"
@@ -542,7 +494,6 @@ export default function Tagging() {
                                 ref={player}
                                 onPlay={() => setPlay(true)}
                                 onPause={() => setPlay(false)}
-                                onProgress={(p) => setCurTagStatusText(displayTagInfo())}
                                 playing={play}
                                 playbackRate={PLAYBACK_RATE[playRate].rate}
                                 controls={true}
@@ -550,17 +501,10 @@ export default function Tagging() {
                                 height="97%"
                             />
                         </div>
-                        {curTagStatusText !== '' && (
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', position: 'absolute', top: '10px' }}>
-                                <div style={{ background: 'blue', width: 'fit-content', padding: '4px 8px' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'white' }}>{curTagStatusText}</Typography>
-                                </div>
-                            </div>
-                        )}
                     </div>
                     {open && (
                         <>
-                            <Box sx={{ flexGrow: 1, textAlign: 'center', marginTop: '-20px' }}>
+                            <Box sx={{ flexGrow: 1, textAlign: 'center', marginTop: '-10px' }}>
                                 <IconButton
                                     sx={{ my: 1 }}
                                     onClick={() => {
@@ -610,10 +554,10 @@ export default function Tagging() {
                                 ))}
                             </Box>
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <Box sx={{ mx: 1, textAlign: 'center' }}>
+                                <Box sx={{ mx: 2, textAlign: 'center' }}>
                                     <TextField
                                         label="sec. before"
-                                        sx={{ m: 1, width: 90 }}
+                                        sx={{ m: 1, width: 100 }}
                                         inputProps={{ min: 0, style: { textAlign: 'center' } }}
                                         type="number"
                                         value={config.sec_before}
@@ -621,7 +565,7 @@ export default function Tagging() {
                                     />
                                     <TextField
                                         label="sec. after"
-                                        sx={{ m: 1, width: 90 }}
+                                        sx={{ m: 1, width: 100 }}
                                         inputProps={{ min: 0, style: { textAlign: 'center' } }}
                                         type="number"
                                         value={config.sec_after}
