@@ -7,6 +7,7 @@ import List from "./basic/ModalList"
 
 const SubBox = styled(Box)`
   margin: 6px;
+  margin-top: 80px;
   & nav {
     padding: 6px;
     border-radius: 6px;
