@@ -83,7 +83,8 @@ const Teams = () => {
         GameService.getAllMyCoachTeam().then((res) => {
             const ascArray = stableSort(res, getComparator('asc', 'team_name'));
 
-            setState({ teamsList: ascArray, seasonList: getSeasonList(res), leagueList: getLeagueList(res), loading: false });
+            if (res.length > 0) setState({ teamsList: ascArray, seasonList: getSeasonList(res), leagueList: getLeagueList(res), loading: false });
+            else setState({ loading: false });
         });
     }, []);
 

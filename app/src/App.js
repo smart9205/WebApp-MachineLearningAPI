@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter, Route, Routes, Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -32,7 +32,6 @@ import { history } from './helpers/history';
 import AuthVerify from './common/AuthVerify';
 import EventBus from './common/EventBus';
 import { getUser, parseJwt } from './common/utilities';
-import Coach from './components/coach';
 import Layout from './components/Layout';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import NewCoach from './components/newcoach';
@@ -47,7 +46,6 @@ import Edits from './components/newcoach/edits';
 import GamePage from './components/newcoach/games/gamePage';
 import Opponents from './components/newcoach/opponents';
 import Leaders from './components/newcoach/leaders';
-import gameService from './services/game.service';
 import OpponentPage from './components/newcoach/opponents/opponentPage';
 import VideoCutter from './components/newcoach/videocutter';
 import Corrections from './components/newcoach/corrections';
@@ -61,7 +59,7 @@ const CustomTheme = () => {
         setMyTheme(
             createTheme({
                 palette: {
-                    mode: pathname === '/coach' || pathname.startsWith('/new_coach') ? 'light' : 'dark'
+                    mode: pathname.startsWith('/new_coach') ? 'light' : 'dark'
                 }
             })
         );
@@ -148,10 +146,6 @@ const App = () => {
                                 </Route>
 
                                 <Route path="/tagging/:id" element={<Tagging />} />
-
-                                <Route path="/coach" element={<RoleRoute role="ROLE_COACH" />}>
-                                    <Route path="/coach" element={<Coach />} />
-                                </Route>
 
                                 <Route path="/new_coach" element={<RoleRoute role="ROLE_COACH" />}>
                                     <Route path="/new_coach" element={<Navigate to="/new_coach/leaders" replace />} />

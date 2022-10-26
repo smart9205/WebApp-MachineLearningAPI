@@ -28,7 +28,7 @@ const Opponents = () => {
     };
 
     const getDescGamesList = (array) => {
-        return stableSort(array, getComparator('desc', 'date'));
+        return array.length > 0 ? stableSort(array, getComparator('desc', 'date')) : [];
     };
 
     const getSeasonList = (array) => {
@@ -46,6 +46,8 @@ const Opponents = () => {
 
             return result;
         }
+
+        return [];
     };
 
     const getTeamList = (array) => {
@@ -65,6 +67,8 @@ const Opponents = () => {
 
             return result;
         }
+
+        return [];
     };
 
     const getLeagueList = (array) => {
@@ -82,6 +86,8 @@ const Opponents = () => {
 
             return result;
         }
+
+        return [];
     };
 
     const getFilteredGamesList = (newList) => {

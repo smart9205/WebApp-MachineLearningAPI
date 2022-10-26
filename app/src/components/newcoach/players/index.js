@@ -161,21 +161,24 @@ const Players = () => {
         await GameService.getAllTeamsByCoach().then((res) => {
             teamIds = getTeamIds(res);
         });
-        await GameService.getPlayersStatsAdvanced({
-            seasonId: null,
-            leagueId: leagueIds.length > 0 ? leagueIds.join(',') : null,
-            gameId: null,
-            teamId: teamIds.length > 0 ? teamIds.join(',') : null,
-            playerId: null,
-            gameTime: null,
-            courtAreaId: null,
-            insidePaint: null,
-            homeAway: null,
-            gameResult: null
-        }).then((data) => {
-            setPlayerStats(data);
-            setState({ loading: false, teamList: getTeamList(data) });
-        });
+
+        if (teamIds.length > 0) {
+            await GameService.getPlayersStatsAdvanced({
+                seasonId: null,
+                leagueId: leagueIds.length > 0 ? leagueIds.join(',') : null,
+                gameId: null,
+                teamId: teamIds.join(','),
+                playerId: null,
+                gameTime: null,
+                courtAreaId: null,
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((data) => {
+                setPlayerStats(data);
+                setState({ loading: false, teamList: getTeamList(data) });
+            });
+        } else setState({ loading: false });
     }, []);
 
     return (
@@ -242,82 +245,84 @@ const Players = () => {
                             />
                         </Box>
                     </Box>
-                    <Box sx={{ overflowY: 'auto', maxHeight: '85vh', marginLeft: '10px' }}>
-                        <TableContainer sx={{ maxHeight: '80vh' }}>
-                            <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell key="none" />
-                                        <TableCell key="name" align="center">
-                                            Name
-                                        </TableCell>
-                                        <TableCell key="team" align="center">
-                                            Team
-                                        </TableCell>
-                                        {headCells.map((cell) => (
-                                            <TableCell key={cell.id} align="center" sortDirection={orderBy === cell.id ? order : false}>
-                                                <TableSortLabel active={orderBy === cell.id} direction={orderBy === cell.id ? order : 'asc'} onClick={() => handleRequestSort(cell.id)}>
-                                                    {cell.title}
-                                                </TableSortLabel>
+                    {playerStats.length > 0 && (
+                        <Box sx={{ overflowY: 'auto', maxHeight: '85vh', marginLeft: '10px' }}>
+                            <TableContainer sx={{ maxHeight: '80vh' }}>
+                                <Table stickyHeader aria-label="sticky table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell key="none" />
+                                            <TableCell key="name" align="center">
+                                                Name
                                             </TableCell>
-                                        ))}
-                                        <TableCell key="menu" />
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {getSortedArray().map((player) => (
-                                        <TableRow key={player.player_id} height="70px" hover>
-                                            <TableCell width="5%" align="center" sx={{ cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
-                                                <img
-                                                    style={{ height: '48px' }}
-                                                    alt="Player Logo"
-                                                    src={player ? (player.image_url.length > 0 ? player.image_url : PLAYER_ICON_DEFAULT) : PLAYER_ICON_DEFAULT}
-                                                />
+                                            <TableCell key="team" align="center">
+                                                Team
                                             </TableCell>
-                                            <TableCell>
-                                                <Box sx={{ paddingLeft: '16px', cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                        <p className="normal-text">#{player?.player_jersey_number ?? 0}</p>
-                                                        <p className="normal-text">{player?.player_name ?? '-'}</p>
-                                                    </div>
-                                                    <p className="normal-text">{player?.player_position ?? '-'}</p>
-                                                </Box>
-                                            </TableCell>
-                                            <TableCell align="center">{player?.team_name ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_player_games'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_goal'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_shot'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_dribble'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_crosses'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_corner'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_free_kick'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_passes'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_turnover'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_fouls'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_draw_fouls'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_interception'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_tackle'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_saved'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_blocked'] ?? '-'}</TableCell>
-                                            <TableCell align="center">{player['total_clearance'] ?? '-'}</TableCell>
-                                            <TableCell
-                                                align="center"
-                                                sx={{ cursor: 'pointer' }}
-                                                onClick={() => {
-                                                    setEditPlayer(player);
-                                                    setEditOpen(true);
-                                                }}
-                                            >
-                                                <SortIcon />
-                                            </TableCell>
+                                            {headCells.map((cell) => (
+                                                <TableCell key={cell.id} align="center" sortDirection={orderBy === cell.id ? order : false}>
+                                                    <TableSortLabel active={orderBy === cell.id} direction={orderBy === cell.id ? order : 'asc'} onClick={() => handleRequestSort(cell.id)}>
+                                                        {cell.title}
+                                                    </TableSortLabel>
+                                                </TableCell>
+                                            ))}
+                                            <TableCell key="menu" />
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <PlayerEditDialog open={editOpen} onClose={() => setEditOpen(false)} player={editPlayer} />
-                        <TeamPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} teamId={null} seasonId={null} leagueId={null} initialState={playerStat} />
-                    </Box>
+                                    </TableHead>
+                                    <TableBody>
+                                        {getSortedArray().map((player) => (
+                                            <TableRow key={player.player_id} height="70px" hover>
+                                                <TableCell width="5%" align="center" sx={{ cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
+                                                    <img
+                                                        style={{ height: '48px' }}
+                                                        alt="Player Logo"
+                                                        src={player ? (player.image_url.length > 0 ? player.image_url : PLAYER_ICON_DEFAULT) : PLAYER_ICON_DEFAULT}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Box sx={{ paddingLeft: '16px', cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                            <p className="normal-text">#{player?.player_jersey_number ?? 0}</p>
+                                                            <p className="normal-text">{player?.player_name ?? '-'}</p>
+                                                        </div>
+                                                        <p className="normal-text">{player?.player_position ?? '-'}</p>
+                                                    </Box>
+                                                </TableCell>
+                                                <TableCell align="center">{player?.team_name ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_player_games'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_goal'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_shot'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_dribble'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_crosses'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_corner'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_free_kick'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_passes'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_turnover'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_fouls'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_draw_fouls'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_interception'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_tackle'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_saved'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_blocked'] ?? '-'}</TableCell>
+                                                <TableCell align="center">{player['total_clearance'] ?? '-'}</TableCell>
+                                                <TableCell
+                                                    align="center"
+                                                    sx={{ cursor: 'pointer' }}
+                                                    onClick={() => {
+                                                        setEditPlayer(player);
+                                                        setEditOpen(true);
+                                                    }}
+                                                >
+                                                    <SortIcon />
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <PlayerEditDialog open={editOpen} onClose={() => setEditOpen(false)} player={editPlayer} />
+                            <TeamPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} teamId={null} seasonId={null} leagueId={null} initialState={playerStat} />
+                        </Box>
+                    )}
                 </>
             )}
         </Box>

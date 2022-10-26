@@ -146,7 +146,7 @@ const Login = (props) => {
     if (isLoggedIn) {
         if (currentUser.subscription.length || currentUser.roles.includes('ROLE_ADMIN')) {
             if (currentUser.roles.includes('ROLE_ADMIN')) return <Navigate to="/admin" />;
-            else if (currentUser.roles.includes('ROLE_COACH')) return <Navigate to="/coach" />;
+            else if (currentUser.roles.includes('ROLE_COACH')) return <Navigate to="/new_coach" />;
             else return <Navigate to="/" />;
         }
         if (!open) handleOpen();

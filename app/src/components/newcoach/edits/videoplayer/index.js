@@ -153,6 +153,8 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [curIdx]);
 
+    console.log('my edits => ', tagList);
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
             <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
@@ -178,24 +180,26 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
                             {videoURL === '' && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                         </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>
-                                {`${getPeriod(tagList[curIdx]?.period)} - ${tagList[curIdx]?.time_in_game}'`}
-                            </Typography>
+                    {tagList.length > 0 && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>
+                                    {`${getPeriod(tagList[curIdx]?.period)} - ${tagList[curIdx]?.time_in_game}'`}
+                                </Typography>
+                            </div>
+                            {tagList[curIdx]?.home_team_goal !== 0 && tagList[curIdx]?.away_team_goal !== 0 && (
+                                <>
+                                    <img src={tagList[curIdx]?.home_team_logo ? tagList[curIdx]?.home_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
+                                        <Typography
+                                            sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}
+                                        >{`${tagList[curIdx]?.home_team_goal} : ${tagList[curIdx]?.away_team_goal}`}</Typography>
+                                    </div>
+                                    <img src={tagList[curIdx]?.away_team_logo ? tagList[curIdx]?.away_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                                </>
+                            )}
                         </div>
-                        {tagList[curIdx]?.home_team_goal !== 0 && tagList[curIdx]?.away_team_goal !== 0 && (
-                            <>
-                                <img src={tagList[curIdx]?.home_team_logo ? tagList[curIdx]?.home_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
-                                    <Typography
-                                        sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}
-                                    >{`${tagList[curIdx]?.home_team_goal} : ${tagList[curIdx]?.away_team_goal}`}</Typography>
-                                </div>
-                                <img src={tagList[curIdx]?.away_team_logo ? tagList[curIdx]?.away_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
-                            </>
-                        )}
-                    </div>
+                    )}
 
                     <div style={styles.buttonBox}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

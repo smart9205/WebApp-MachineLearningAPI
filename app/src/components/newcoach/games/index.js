@@ -43,7 +43,7 @@ const Games = () => {
     };
 
     const getDescGamesList = (array) => {
-        return stableSort(array, getComparator('desc', 'date'));
+        return array.length > 0 ? stableSort(array, getComparator('desc', 'date')) : [];
     };
 
     const updateGameList = (item, isEdit) => {
@@ -88,6 +88,8 @@ const Games = () => {
 
             return result;
         }
+
+        return [];
     };
 
     const getTeamList = (array) => {
@@ -107,6 +109,8 @@ const Games = () => {
 
             return result;
         }
+
+        return [];
     };
 
     const getLeagueList = (array) => {
@@ -124,6 +128,8 @@ const Games = () => {
 
             return result;
         }
+
+        return [];
     };
 
     const getFilteredGamesList = (newList) => {

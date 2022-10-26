@@ -236,22 +236,25 @@ const Leaders = () => {
         await GameService.getAllPlayersByCoach().then((res) => {
             setPlayersList(getPlayersList(res));
         });
-        await GameService.getPlayersStatsAdvanced({
-            seasonId: null,
-            leagueId: leagueIds.length > 0 ? leagueIds.join(',') : null,
-            gameId: null,
-            teamId: teamIds.length > 0 ? teamIds.join(',') : null,
-            playerId: null,
-            gameTime: null,
-            courtAreaId: null,
-            insidePaint: null,
-            homeAway: null,
-            gameResult: null
-        }).then((res) => {
-            setPlayerList(res);
-            setSeasonList(getSeasonList(res));
-            setLoading(false);
-        });
+
+        if (teamIds.length > 0) {
+            await GameService.getPlayersStatsAdvanced({
+                seasonId: null,
+                leagueId: leagueIds.length > 0 ? leagueIds.join(',') : null,
+                gameId: null,
+                teamId: teamIds.join(','),
+                playerId: null,
+                gameTime: null,
+                courtAreaId: null,
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setPlayerList(res);
+                setSeasonList(getSeasonList(res));
+                setLoading(false);
+            });
+        } else setLoading(false);
     }, []);
 
     console.log('leaders => ', playerList);
@@ -382,20 +385,22 @@ const Leaders = () => {
                             </Box>
                         </Box>
                     </Box>
-                    <Box sx={{ width: '100%', maxHeight: '85vh', overflowY: 'auto' }}>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '4px' }}>
-                            {statCategory.map((item) => (
-                                <LeadersPlayerStatColumn
-                                    key={item.id}
-                                    list={getFilteredList()}
-                                    isTotal={item.id === 'player_games' ? true : displayOption === 'total'}
-                                    option={item.id}
-                                    title={item.title}
-                                    onClick={handleDisplayStatDialog}
-                                />
-                            ))}
+                    {playerList.length > 0 && (
+                        <Box sx={{ width: '100%', maxHeight: '85vh', overflowY: 'auto' }}>
+                            <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '4px' }}>
+                                {statCategory.map((item) => (
+                                    <LeadersPlayerStatColumn
+                                        key={item.id}
+                                        list={getFilteredList()}
+                                        isTotal={item.id === 'player_games' ? true : displayOption === 'total'}
+                                        option={item.id}
+                                        title={item.title}
+                                        onClick={handleDisplayStatDialog}
+                                    />
+                                ))}
+                            </Box>
                         </Box>
-                    </Box>
+                    )}
                 </>
             )}
             <LeadersPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} />

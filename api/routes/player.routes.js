@@ -43,6 +43,12 @@ module.exports = (app) => {
         controller.getPlayersStatsAdvanced
     );
 
+    app.post(
+        "/player/getplayersstats/game",
+        [authJwt.verifyToken, authJwt.isAdminOrCoach],
+        controller.getPlayersStatsGamebyGame
+    );
+
     app.get(
         "/player/game_player_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId",
         controller.getGamePlayerTags
