@@ -5,10 +5,11 @@ import { Box, Typography, CircularProgress } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeftOutlined';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 
-import GameService from '../../../services/game.service';
 import GameOverview from './tabs/overview';
 import GamePlayers from './tabs/players';
+import GameStats from './tabs/stats';
 import { getFormattedDate } from '../components/utilities';
+import GameService from '../../../services/game.service';
 
 const Tabs = ['Overview', 'Summary', 'Stats', 'Players'];
 
@@ -19,7 +20,7 @@ const GamePage = () => {
         tabSelected: 0,
         loading: false,
         loadingDone: false,
-        curTab: 0
+        curTab: 2
     });
 
     const handleTabClick = (idx) => {
@@ -87,6 +88,7 @@ const GamePage = () => {
                         </Box>
                     </Box>
                     {values.curTab === 0 && <GameOverview game={values.game} />}
+                    {values.curTab === 2 && <GameStats game={values.game} />}
                     {values.curTab === 3 && <GamePlayers game={values.game} />}
                 </>
             )}
