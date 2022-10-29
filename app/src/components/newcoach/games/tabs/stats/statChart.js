@@ -11,7 +11,7 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
     const [playData, setPlayData] = useState({ url: '', list: [] });
 
     const getBarWidth = (maxCount, count) => {
-        const realWidth = Math.floor((count * 95) / maxCount);
+        const realWidth = Math.floor((count * 98) / maxCount);
 
         return `${realWidth}%`;
     };

@@ -8,41 +8,44 @@ import GameStatsBoxList from './statBoxList';
 import GameStatsChart from './statChart';
 
 const action_results_interception = [
-    // { title: 'Corner', color: 'orange' },
-    { title: 'Free Kick', color: 'purple' },
-    { title: 'Short Pass', color: 'pink' },
-    { title: 'Long Pass', color: 'rgb(119, 77, 199)' },
-    { title: 'Through Pass', color: 'red' },
-    { title: 'Throw-In', color: 'blue' }
+    { title: 'Short Pass', color: 'rgb(100,134,74)' },
+    { title: 'Long Pass', color: 'rgb(255,140,15)' },
+    { title: 'Through Pass', color: 'rgb(37,148,204)' },
+    { title: 'Free Kick', color: 'rgb(255,40,74)' },
+    { title: 'Throw-In', color: 'rgb(108,137,197)' }
 ];
 
 const action_results_cross = [
-    { title: 'Blocked', color: 'pink' },
-    { title: 'Cleared', color: 'darkred' },
-    { title: 'Offside', color: 'rgb(239, 163, 128)' },
-    { title: 'Successful', color: 'lightgreen' }
+    { title: 'Cleared', color: 'rgb(100,134,74)' },
+    { title: 'Successful', color: 'rgb(255,140,15)' },
+    { title: 'Blocked', color: 'rgb(37,148,204)' },
+    { title: 'Unsuccessful', color: 'rgb(255,40,74)' },
+    { title: 'Offside', color: 'rgb(108,137,197)' }
 ];
 
 const action_results_dribble = [
-    { title: 'Draw Foul', color: 'rgb(216, 180, 3)' },
-    { title: 'Stolen By', color: 'lightblue' },
-    { title: 'Successful', color: 'lightgreen' },
-    { title: 'Unsuccessful', color: 'pink' }
+    { title: 'Successful', color: 'rgb(100,134,74)' },
+    { title: 'Stolen', color: 'rgb(255,140,15)' },
+    { title: 'Deflected', color: 'rgb(37,148,204)' },
+    { title: 'Unsuccessful', color: 'rgb(255,40,74)' },
+    { title: 'Draw Foul', color: 'rgb(108,137,197)' }
 ];
 
 const action_results_shot = [
-    { title: 'On Target', color: 'lightblue' },
-    { title: 'Off Target', color: 'lightgreen' },
-    { title: 'Goal', color: 'darkgreen' },
-    { title: 'Blocked', color: 'lightpink' }
+    { title: 'Goal', color: 'rgb(100,134,74)' },
+    { title: 'On Target', color: 'rgb(255,140,15)' },
+    { title: 'Off Target', color: 'rgb(37,148,204)' },
+    { title: 'Blocked', color: 'rgb(255,40,74)' },
+    { title: 'Saved', color: 'rgb(108,137,197)' }
 ];
 
 const action_results_pass = [
-    { title: 'Bad Pass', color: 'purple' },
-    { title: 'Blocked', color: 'rgb(208, 41, 117)' },
-    { title: 'Offside', color: 'rgb(241, 166, 135)' },
-    { title: 'Successful', color: 'lightgreen' }
-];
+    { title: 'Successful', color: 'rgb(100,134,74)' },
+    { title: 'Bad Pass', color: 'rgb(255,140,15)' },
+    { title: 'Blocked', color: 'rgb(37,148,204)' },
+    { title: 'Offside', color: 'rgb(255,40,74)' },
+    { title: 'Stolen', color: 'rgb(108,137,197)' }
+ ];
 
 const GameStats = ({ game }) => {
     const [values, setValues] = useState({
@@ -94,7 +97,7 @@ const GameStats = ({ game }) => {
     console.log('game stats => ', values.playerList);
 
     return (
-        <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex', padding: '24px 10px', gap: '10px' }}>
+        <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex', padding: '20px 10px', gap: '10px' }}>
             <Box sx={{ minWidth: '34%', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <GameOverviewHeader
@@ -106,17 +109,17 @@ const GameStats = ({ game }) => {
                     />
                     <GameStatsBoxList list={values.playerList} />
                 </Box>
-                <GameStatsChart chartId="interception" title="Interception" isType={true} action_results={action_results_interception} list={values.playerList} filterText="Interception" game={game} />
+                <GameStatsChart chartId="shot" title="Shoting" isType={false} action_results={action_results_shot} list={values.playerList} filterText="Shot" game={game} />
             </Box>
             <Box sx={{ flex: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <GameStatsChart chartId="cross" title="Crossing" isType={false} action_results={action_results_cross} list={values.playerList} filterText="Cross" game={game} />
                     <GameStatsChart chartId="dribble" title="Dribbling" isType={false} action_results={action_results_dribble} list={values.playerList} filterText="Dribble" game={game} />
+                    <GameStatsChart chartId="cross" title="Crossing" isType={false} action_results={action_results_cross} list={values.playerList} filterText="Cross" game={game} />
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <GameStatsChart chartId="shot" title="Shoting" isType={false} action_results={action_results_shot} list={values.playerList} filterText="Shot" game={game} />
                     <GameStatsChart chartId="pass" title="Passing" isType={false} action_results={action_results_pass} list={values.playerList} filterText="Pass" game={game} />
-                </Box>
+                    <GameStatsChart chartId="interception" title="Interception" isType={true} action_results={action_results_interception} list={values.playerList} filterText="Interception" game={game} />
+            </Box>
             </Box>
         </Box>
     );

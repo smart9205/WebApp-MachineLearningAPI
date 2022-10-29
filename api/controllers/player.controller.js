@@ -223,7 +223,7 @@ exports.getPlayersStatsGamebyGame = (req, res) => {
 
     Sequelize.query(
         `
-    SELECT * from public.fnc_get_players_stats_game_by_game(
+    SELECT * from public.fnc_get_player_stats_game_by_game(
       ${req.body.seasonId},
       ${league_id},
       ${game_id},
