@@ -20,7 +20,7 @@ const GamePage = () => {
         tabSelected: 0,
         loading: false,
         loadingDone: false,
-        curTab: 2
+        curTab: 0
     });
 
     const handleTabClick = (idx) => {

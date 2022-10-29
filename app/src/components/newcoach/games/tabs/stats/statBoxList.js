@@ -36,13 +36,15 @@ const GameStatsBoxList = ({ list }) => {
 
             return temp;
         });
+        boxList[1][2].total += list.filter((item) => item.action_names === 'Shot' && item.action_result_names === 'Goal').length;
+        boxList[1][2].total += list.filter((item) => item.action_names === 'Own Goal' && item.action_result_names === 'Goal').length;
         setActionList(temp);
     }, [list]);
 
     console.log('game stats boxlist => ', boxList, actionList);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', paddingTop: '10px', paddingBottom: '65px' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                 {boxList[0].map((item) => (
                     <Box

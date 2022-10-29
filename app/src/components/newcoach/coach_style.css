@@ -6,6 +6,15 @@
     margin: 0px;
 }
 
+.normal-text-italic {
+    font-size: 0.7rem;
+    font-family: 'DM Sans', sans-serif;
+    color: #1a1b1d;
+    font-weight: 500;
+    margin: 0px;
+    font-style: italic;
+}
+
 .small-text {
     font-size: 0.6rem;
     font-family: 'DM Sans', sans-serif;
@@ -22,15 +31,13 @@
     margin: 0px;
 }
 
-.normal-text-white
-{
+.normal-text-white {
     font-size: 0.7rem;
     font-family: 'DM Sans', sans-serif;
     color: #ffffff;
     font-weight: 500;
     margin: 0px;
 }
-
 
 .bigger-text {
     font-size: 1.2rem;
@@ -40,6 +47,7 @@
     margin: 0px;
     padding-right: 30px;
 }
+
 .page-title {
     font-family: 'DM Sans', sans-serif;
     font-size: 1.4rem;
@@ -87,4 +95,33 @@
     color: #1a1b1d;
     font-weight: 600;
     margin: 0px;
+}
+
+.chart-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #1a1b1d;
+    font-weight: 600;
+    margin: 0px;
+    font-style: italic;
+    text-align: center;
+}
+
+.chart-bar-text {
+    font-size: 0.7rem;
+    font-family: 'DM Sans', sans-serif;
+    color: white;
+    font-weight: 500;
+    margin: 0px;
+    text-align: center;
+}
+
+.chart-primary-text {
+    font-size: 0.7rem;
+    font-family: 'DM Sans', sans-serif;
+    color: #1a1b1d;
+    font-weight: 500;
+    margin: 0px;
+    text-align: right;
+    padding-right: 8px;
 }
