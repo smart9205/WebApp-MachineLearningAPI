@@ -35,8 +35,7 @@ const action_results_shot = [
     { title: 'Goal', color: 'rgb(100,134,74)' },
     { title: 'On Target', color: 'rgb(255,140,15)' },
     { title: 'Off Target', color: 'rgb(37,148,204)' },
-    { title: 'Blocked', color: 'rgb(255,40,74)' },
-    { title: 'Saved', color: 'rgb(108,137,197)' }
+    { title: 'Blocked', color: 'rgb(255,40,74)' }
 ];
 
 const action_results_pass = [
@@ -105,7 +104,7 @@ const GameStats = ({ game }) => {
                         ourname={values.teamId === game.away_team_id ? game.away_team_name : game.home_team_name}
                         enemyname={values.opponentTeamId === game.home_team_id ? game.home_team_name : game.away_team_name}
                         onChangeTeam={handleChangeTeam}
-                        mb="8px"
+                        mb="0px"
                     />
                     <GameStatsBoxList list={values.playerList} />
                 </Box>
