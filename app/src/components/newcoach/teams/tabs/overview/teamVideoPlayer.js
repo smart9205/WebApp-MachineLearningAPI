@@ -25,7 +25,7 @@ const styles = {
         bottom: 10,
         zIndex: 100,
         color: 'white',
-        fontSize: 14,
+        fontSize: '0.75rem',
         display: 'flex',
         width: '50%'
     },

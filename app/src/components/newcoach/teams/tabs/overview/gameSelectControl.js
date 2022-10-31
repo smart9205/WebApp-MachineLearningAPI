@@ -19,7 +19,7 @@ const StyledAutocompletePopper = styled('div')(({ theme }) => ({
         boxShadow: 'none',
         margin: 0,
         color: 'inherit',
-        fontSize: 13
+        fontSize: '0.7rem'
     },
     [`& .${autocompleteClasses.listbox}`]: {
         backgroundColor: theme.palette.mode === 'light' ? '#fff' : '#1c2128',
@@ -59,7 +59,7 @@ const StyledPopper = styled(Popper)(({ theme }) => ({
     borderRadius: 6,
     width: 380,
     zIndex: theme.zIndex.modal,
-    fontSize: 13,
+    fontSize: '0.7rem',
     color: theme.palette.mode === 'light' ? '#24292e' : '#c9d1d9',
     backgroundColor: theme.palette.mode === 'light' ? '#fff' : '#1c2128'
 }));
@@ -74,7 +74,7 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
         padding: 8,
         transition: theme.transitions.create(['border-color', 'box-shadow']),
         border: `1px solid ${theme.palette.mode === 'light' ? '#eaecef' : '#30363d'}`,
-        fontSize: 14,
+        fontSize: '0.7rem',
         '&:focus': {
             boxShadow: `0px 0px 0px 3px ${theme.palette.mode === 'light' ? 'rgba(3, 102, 214, 0.3)' : 'rgb(12, 45, 107)'}`,
             borderColor: theme.palette.mode === 'light' ? '#0366d6' : '#388bfd'
