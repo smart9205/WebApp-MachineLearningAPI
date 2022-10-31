@@ -187,7 +187,6 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
                                     {`${getPeriod(tagList[curIdx]?.period)} - ${tagList[curIdx]?.time_in_game}'`}
                                 </Typography>
                             </div>
-                            {tagList[curIdx]?.home_team_goal !== 0 && tagList[curIdx]?.away_team_goal !== 0 && (
                                 <>
                                     <img src={tagList[curIdx]?.home_team_logo ? tagList[curIdx]?.home_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
@@ -197,7 +196,6 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
                                     </div>
                                     <img src={tagList[curIdx]?.away_team_logo ? tagList[curIdx]?.away_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
                                 </>
-                            )}
                         </div>
                     )}
 

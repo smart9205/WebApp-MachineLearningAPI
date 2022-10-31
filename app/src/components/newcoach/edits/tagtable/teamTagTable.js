@@ -111,7 +111,7 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
 
     return (
         <>
-            <TableContainer style={{ height: '95%', width: '100%' }}>
+            <TableContainer style={{ height: '94%', width: '100%' }}>
                 <DndProvider backend={HTML5Backend}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>

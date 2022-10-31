@@ -208,7 +208,7 @@ exports.findOne = (req, res) => {
 
   Sequelize.query(
     `
-  select * from public.fnc_get_clips_in_edits(${id})
+  select * from public.fnc_get_clips_in_edits(${id}) order by sort asc
   `
   )
     .then((data) => {

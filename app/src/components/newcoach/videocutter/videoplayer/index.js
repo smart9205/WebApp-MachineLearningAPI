@@ -172,7 +172,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
     console.log('EditVideo => ', saveEdit, newClip);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '28px', width: '100%' }}>
+        <div style={{ fontSize:'0.8rem', display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '28px', width: '70%' }}>
             <Select
                 value={selectedGame?.id ?? 0}
                 onChange={handleSelectChange}
@@ -182,18 +182,18 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                 inputProps={{ 'aria-label': 'Without label' }}
                 MenuProps={MenuProps}
                 disabled={gameList.length === 0}
-                sx={{ outline: 'none', height: '36px', width: '100%', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                sx={{fontSize:'0.8rem', alignItems: 'center', outline: 'none', height: '36px', width: '98%', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
             >
                 {gameList.map((game, index) => (
                     <MenuItem key={index} value={game.id}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", color: '#1a1b1d' }}>{`${game.home_team_name} VS ${game.away_team_name} - `}</Typography>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", color: '#1a1b1d' }}>{getFormattedDate(game.date)}</Typography>
+                            <Typography sx={{fontSize:'0.8rem',  fontFamily: "'DM Sans', sans-serif", color: '#1a1b1d' }}>{`${game.home_team_name} vs ${game.away_team_name} - `}</Typography>
+                            <Typography sx={{fontSize:'0.8rem',  fontFamily: "'DM Sans', sans-serif", color: '#1a1b1d' }}>{getFormattedDate(game.date)}</Typography>
                         </div>
                     </MenuItem>
                 ))}
             </Select>
-            <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
+            <div style={{ width: '98%', margin: 'auto', minWidth: 500, position: 'relative' }}>
                 <FullScreen handle={handle}>
                     <div style={{ width: drawOpen ? '100%' : '90%' }}>
                         <div className="player-wrapper">

@@ -133,8 +133,8 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
             nodeId={nodes.id}
             label={
                 <Box sx={{ display: 'flex', alignItems: 'center', padding: '2px 0', gap: '4px' }}>
-                    {nodes.type === 'folder' ? <img src={FolderIcon} style={{ height: '24px' }} /> : <img src={EditsIcon} style={{ height: '24px' }} />}
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
+                    {nodes.type === 'folder' ? <img src={FolderIcon} style={{ height: '1.2rem' }} /> : <img src={EditsIcon} style={{ height: '1.2rem' }} />}
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.72rem', fontWeight: 500, color: '#1a1b1d', flexGrow: 1 }}>{nodes.name}</Typography>
                     {isMain && hoverIndex === nodes.id && (
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Box onClick={() => handleEditName(nodes)}>
@@ -182,17 +182,17 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
 
     return (
         <>
-            <Box sx={{ height: entireHeight, width: '300px', padding: '16px 8px' }}>
+            <Box sx={{ height: entireHeight, width: '260px', padding: '16px 5px' }}>
                 {loading ? (
                     <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <CircularProgress />
                     </div>
                 ) : (
                     <>
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 16px 24px' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 10px 24px' }}>
                             <Button
                                 variant="contained"
-                                sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
+                                sx={{ fontSize: '0.75rem !important', background: '#C5EAC6', color:'#0A7304', '&:hover': { background: '#0A7304' ,color:'#fff'} }}
                                 onClick={() => {
                                     setCreateFolderEdit(true);
                                     setFolderDialog(true);
@@ -203,7 +203,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                             <Button
                                 variant="contained"
                                 disabled={curEdit === null || curEdit.type === 'edit'}
-                                sx={{ background: '#C5EAC6', '&:hover': { background: '#0A7304' } }}
+                                sx={{fontSize: '0.75rem !important',  background: '#C5EAC6', color:'#0A7304', '&:hover': { background: '#0A7304' ,color:'#fff'} }}
                                 onClick={() => {
                                     setCreateFolderEdit(false);
                                     setFolderDialog(true);
