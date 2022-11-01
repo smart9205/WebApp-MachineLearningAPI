@@ -10,6 +10,7 @@ import TeamOverview from './tabs/overview';
 import TeamPlayersStats from './tabs/players';
 import TeamPlayersOverview from './tabs/player_overview';
 import '../coach_style.css';
+import GameSelectControl from './tabs/overview/gameSelectControl';
 
 const Tabs = ['Overview', 'Summary', 'Stats', 'Games', 'Players Overview', 'Players Stats'];
 
@@ -27,6 +28,7 @@ const TeamPage = () => {
         loadingDone: false
     });
     const [gameList, setGameList] = useState([]);
+    const [gameIds, setGameIds] = useState([]);
 
     const handleClickTab = (idx) => {
         setValues({ ...values, tabSelected: idx });
@@ -92,11 +94,12 @@ const TeamPage = () => {
                                     <Box sx={{ height: '2px', width: '100%', backgroundColor: values.tabSelected === index ? '#0A7304' : '#F8F8F8' }} />
                                 </Box>
                             ))}
+                            <GameSelectControl gameList={gameList} setIds={setGameIds} />
                         </Box>
                     </Box>
-                    {values.tabSelected === 0 && <TeamOverview games={gameList} teamname={values.teamName} teamId={values.teamId} />}
+                    {values.tabSelected === 0 && <TeamOverview games={gameList} gameIds={gameIds} teamname={values.teamName} teamId={values.teamId} />}
                     {values.tabSelected === 3 && <TeamGames />}
-                    {values.tabSelected === 4 && <TeamPlayersOverview games={gameList} teamId={values.teamId} />}
+                    {values.tabSelected === 4 && <TeamPlayersOverview games={gameList} gameIds={gameIds} teamId={values.teamId} />}
                     {values.tabSelected === 5 && (
                         <TeamPlayersStats playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} leagueId={values.leagueId} />
                     )}

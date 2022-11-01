@@ -14,7 +14,6 @@ import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import TeamVideoPlayer from '../overview/teamVideoPlayer';
 import TeamPlayerLogoList from './playerLogoList';
-import GameSelectControl from '../overview/gameSelectControl';
 
 const ActionData = {
     Goal: { action_id: '1', action_type_id: null, action_result_id: '3' },
@@ -39,7 +38,7 @@ const ActionData = {
     All: { action_id: null, action_type_id: null, action_result_id: null }
 };
 
-const TeamPlayersOverview = ({ games, teamId }) => {
+const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
     const [videoData, setVideoData] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -70,7 +69,6 @@ const TeamPlayersOverview = ({ games, teamId }) => {
     const [playerTagList, setPlayerTagList] = useState([]);
     const [playerIds, setPlayerIds] = useState([]);
     const [exportEditOpen, setExportEditOpen] = useState(false);
-    const [gameIds, setGameIds] = useState([]);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
@@ -269,9 +267,6 @@ const TeamPlayersOverview = ({ games, teamId }) => {
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', padding: '24px 10px' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <GameSelectControl gameList={games} setIds={setGameIds} />
-                </Box>
                 <TeamPlayerLogoList games={gameIds} teamId={teamId} setIds={setPlayerIds} />
                 {values.expandButtons && <GamePlayerTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>

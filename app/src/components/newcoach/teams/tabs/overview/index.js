@@ -13,9 +13,8 @@ import TeamVideoPlayer from './teamVideoPlayer';
 import GameTagButtonList from '../../../games/tabs/overview/tagButtonList';
 import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
-import GameSelectControl from './gameSelectControl';
 
-const TeamOverview = ({ games, teamname, teamId }) => {
+const TeamOverview = ({ games, gameIds, teamname, teamId }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
     const [videoData, setVideoData] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -45,7 +44,6 @@ const TeamOverview = ({ games, teamname, teamId }) => {
     const [checkArray, setCheckArray] = useState([]);
     const [exportHudl, setExportHudl] = useState(false);
     const [playerTagList, setPlayerTagList] = useState([]);
-    const [gameIds, setGameIds] = useState([]);
     const [exportEditOpen, setExportEditOpen] = useState(false);
     const [exportList, setExportList] = useState([]);
 
@@ -306,12 +304,7 @@ const TeamOverview = ({ games, teamname, teamId }) => {
         <Box sx={{ width: '100%', background: 'white', maxHeight: '85vh', minHeight: '75vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', minWidth: '550px', flexDirection: 'column', padding: '16px 16px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
-                    <Box sx={{ display: 'flex', flex: 4, alignItems: 'center', justifyContent: 'center' }}>
-                        <GameOverviewHeader isOur={values.isOur} ourname={teamname} enemyname="Opponents" onChangeTeam={handleChangeTeam} mb="0" />
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                        <GameSelectControl gameList={games} setIds={setGameIds} />
-                    </Box>
+                    <GameOverviewHeader isOur={values.isOur} ourname={teamname} enemyname="Opponents" onChangeTeam={handleChangeTeam} mb="0" />
                 </Box>
                 {values.expandButtons && <GameTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} isTeams={true} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
