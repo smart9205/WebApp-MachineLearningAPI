@@ -5,20 +5,20 @@ import '../../../coach_style.css';
 
 let boxList = [
     [
-        { id: 'goal', title: 'Goal', total: 0 },
-        { id: 'shot', title: 'Shot', total: 0 },
-        { id: 'pass', title: 'Pass', total: 0 }
+        { id: 'goal', title: 'Goals Scored', total: 0 },
+        { id: 'Shot', title: 'Shots', total: 0 },
+        { id: 'Pass', title: 'Passes', total: 0 }
         
     ],
     [
-        { id: 'blocked', title: 'Blocked', total: 0 },
-        { id: 'clearance', title: 'Clearance', total: 0 },
-        { id: 'saved', title: 'Saved', total: 0 }
+        { id: 'Blocked', title: 'Blocked', total: 0 },
+        { id: 'Clearance', title: 'Clearance', total: 0 },
+        { id: 'Saved', title: 'Saved', total: 0 }
     ],  
     [
-        { id: 'interception', title: 'Interception', total: 0 },
-        { id: 'tackle', title: 'Tackle', total: 0 },
-        { id: 'draw_fouls', title: 'Draw Foul', total: 0 }
+        { id: 'Interception', title: 'Interceptions', total: 0 },
+        { id: 'Tackle', title: 'Tackles', total: 0 },
+        { id: 'Draw Foul', title: 'Draw Fouls', total: 0 }
   
     ]
 
@@ -32,7 +32,7 @@ const GameStatsBoxList = ({ list }) => {
 
         boxList.map((row, rId) => {
             return row.map((item, cId) => {
-                boxList[rId][cId].total = list.filter((stat) => stat.action_names === item.title).length;
+                boxList[rId][cId].total = list.filter((stat) => stat.action_names === item.id).length;
 
                 return boxList;
             });
@@ -45,7 +45,7 @@ const GameStatsBoxList = ({ list }) => {
             return temp;
         });
         boxList[0][0].total += list.filter((item) => item.action_names === 'Shot' && item.action_result_names === 'Goal').length;
-        boxList[0][0].total += list.filter((item) => item.action_names === 'Own Goal' && item.action_result_names === 'Goal').length;
+        //boxList[0][0].total += list.filter((item) => item.action_names === 'Own Goal' && item.action_result_names === 'Goal').length;
         setActionList(temp);
     }, [list]);
 
