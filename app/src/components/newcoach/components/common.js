@@ -49,7 +49,7 @@ const SearchText = styled(TextField)(({ theme }) => ({
     '& .MuiInputBase-input': {
         padding: '10px 10px 10px 0px',
         fontFamily: "'DM Sans', sans-serif",
-        fontSize: '14px',
+        fontSize: '0.7rem',
         fontWeight: 700
     },
     '& .MuiInputAdornment-root': {
@@ -68,7 +68,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
         position: 'relative',
         backgroundColor: theme.palette.mode === 'light' ? 'white' : '#2b2b2b',
         border: '2px solid #e8e8e8',
-        fontSize: '14px',
+        fontSize: '0.7rem',
         lineHeight: '20px',
         padding: '0 16px',
         transition: 'border-color 0.15s ease-in-out 0s',
@@ -85,7 +85,7 @@ const SaveButton = styled(Button)(({ theme }) => ({
     textTransform: 'capitalize',
     fontFamily: "'DM Sans', sans-serif",
     fontWeight: 600,
-    fontSize: '14px',
+    fontSize: '0.7rem',
     backgroundColor: '#0A7304',
     color: 'white',
     '&:disabled': { backgroundColor: '#e8e8e8' },

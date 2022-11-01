@@ -135,11 +135,11 @@ const Corrections = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', padding: '16px', gap: '16px' }}>
                             <Box sx={{ 'svg path': { fill: '#C5EAC6' }, display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }} onClick={() => handleAccept()}>
                                 <CheckIcon />
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Accept</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Accept</Typography>
                             </Box>
                             <Box sx={{ 'svg path': { fill: '#FFCCCB' }, display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }} onClick={() => handleDeny()}>
                                 <CloseIcon />
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>Deny</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Deny</Typography>
                             </Box>
                         </Box>
                     </Popover>

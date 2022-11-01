@@ -76,10 +76,10 @@ const GameEditPage = ({ open, onClose, game, updateGameList, standingList }) => 
         <Dialog open={open} onClose={onClose} maxWidth="2000px" maxheight="initial">
             <DialogTitle>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '28px', fontWeight: 700, color: '#1a1b1d' }}>Edit Game</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>Edit Game</Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px', cursor: 'pointer' }} onClick={onClose}>
                         <CloseIcon sx={{ width: '18px', height: '18px' }} />
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>Close</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.7rem', fontWeight: 600, color: '#1a1b1d' }}>Close</Typography>
                     </Box>
                 </Box>
             </DialogTitle>
@@ -104,8 +104,8 @@ const GameEditPage = ({ open, onClose, game, updateGameList, standingList }) => 
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <img src={game.home_team_image ? game.home_team_image : TEAM_ICON_DEFAULT} style={{ height: '36px' }} />
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{game.home_team_goals}</Typography>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{game.home_team_name}</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{game.home_team_goals}</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{game.home_team_name}</Typography>
                             </div>
                             <Select
                                 value={values.homeStanding}
@@ -132,8 +132,8 @@ const GameEditPage = ({ open, onClose, game, updateGameList, standingList }) => 
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <img src={game.away_team_image ? game.away_team_image : TEAM_ICON_DEFAULT} style={{ height: '36px' }} />
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{game.away_team_goals}</Typography>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{game.away_team_name}</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{game.away_team_goals}</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{game.away_team_name}</Typography>
                             </div>
                             <Select
                                 value={values.awayStanding}
@@ -164,7 +164,7 @@ const GameEditPage = ({ open, onClose, game, updateGameList, standingList }) => 
                         values.image === game.image && values.mute === game.mute_video && values.homeStanding.id === game.home_team_standing_id && values.awayStanding.id === game.away_team_standing_id
                     }
                     onClick={saveChanges}
-                    sx={{ width: '300px', fontSize: '14px' }}
+                    sx={{ width: '200px', fontSize: '1rem' }}
                 >
                     Save changes
                 </SaveButton>
