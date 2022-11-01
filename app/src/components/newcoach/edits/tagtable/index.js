@@ -150,20 +150,36 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
                         </Box>
                     )}
                     {teamTagList.length > 0 && (
-                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 10px 24px' }}>
-                            <Button variant="contained" sx={{fontSize: '0.75rem !important', background: '#C5EAC6', color:'#0A7304', '&:hover': { background: '#0A7304' ,color:'#fff' } }} onClick={handleRender}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 10px 24px' }}>
+                            <Button
+                                variant="contained"
+                                sx={{ fontSize: '0.75rem !important', background: '#C5EAC6', color: '#0A7304', '&:hover': { background: '#0A7304', color: '#fff' } }}
+                                onClick={handleRender}
+                            >
                                 Render
                             </Button>
-                            <Button variant="contained" sx={{fontSize: '0.75rem !important',  background: '#C5EAC6', color:'#0A7304', '&:hover': { background: '#0A7304'  ,color:'#fff'} }} onClick={handleMove}>
-                                <ContentCutIcon sx={{ height:'15px'}}/>
+                            <Button
+                                variant="contained"
+                                sx={{ fontSize: '0.75rem !important', background: '#C5EAC6', color: '#0A7304', '&:hover': { background: '#0A7304', color: '#fff' } }}
+                                onClick={handleMove}
+                            >
+                                <ContentCutIcon sx={{ height: '15px' }} />
                                 Move
                             </Button>
-                            <Button variant="contained" sx={{fontSize: '0.75rem !important',  background: '#C5EAC6', color:'#0A7304', '&:hover': { background: '#0A7304' ,color:'#fff' } }} onClick={handleCopy}>
-                                <ContentCopyIcon sx={{ height:'15px'}}/>
+                            <Button
+                                variant="contained"
+                                sx={{ fontSize: '0.75rem !important', background: '#C5EAC6', color: '#0A7304', '&:hover': { background: '#0A7304', color: '#fff' } }}
+                                onClick={handleCopy}
+                            >
+                                <ContentCopyIcon sx={{ height: '15px' }} />
                                 Copy
                             </Button>
-                            <Button variant="contained" sx={{fontSize: '0.75rem !important',  background: '#C5EAC6', color:'#0A7304', '&:hover': { background: '#0A7304' ,color:'#fff' } }} onClick={handleDelete}>
-                                <DeleteIcon sx={{ height:'15px'}}/>
+                            <Button
+                                variant="contained"
+                                sx={{ fontSize: '0.75rem !important', background: '#C5EAC6', color: '#0A7304', '&:hover': { background: '#0A7304', color: '#fff' } }}
+                                onClick={handleDelete}
+                            >
+                                <DeleteIcon sx={{ height: '15px' }} />
                                 Delete
                             </Button>
                         </Box>
