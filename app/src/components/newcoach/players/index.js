@@ -273,13 +273,13 @@ const Players = () => {
                                             <TableRow key={player.player_id} height="70px" hover>
                                                 <TableCell width="5%" align="center" sx={{ cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
                                                     <img
-                                                        style={{ height: '48px' }}
-                                                        alt="Player Logo"
+                                                        style={{ height: '70px' , borderRadius: '8px' , paddingTop: '2px', paddingBottom:'2px'}}
+                                                        
                                                         src={player ? (player.image_url.length > 0 ? player.image_url : PLAYER_ICON_DEFAULT) : PLAYER_ICON_DEFAULT}
                                                     />
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Box sx={{ paddingLeft: '16px', cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
+                                                    <Box sx={{ paddingLeft: '10px', cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                             <p className="normal-text">#{player?.player_jersey_number ?? 0}</p>
                                                             <p className="normal-text">{player?.player_name ?? '-'}</p>

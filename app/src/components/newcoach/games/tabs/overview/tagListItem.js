@@ -17,7 +17,7 @@ const GameTagListItem = ({ item, isSelected, idx, isChecked, onChecked, onShowVi
                 display: 'flex',
                 alignItems: 'center',
                 cursor: 'pointer',
-                gap: '8px',
+                gap: '0px',
                 padding: '4px',
                 justifyContent: 'space-between',
                 border: '1px solid #e8e8e8',

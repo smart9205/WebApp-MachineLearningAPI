@@ -6,7 +6,7 @@ import '../../../coach_style.css';
 
 const GameTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onChecked, onVideo, onTime }) => {
     return tagList.length > 0 ? (
-        <Box sx={{ overflowY: 'auto', maxHeight: expand ? '25vh' : '63vh', minHeight: '25vh' }}>
+        <Box sx={{ overflowY: 'auto', maxHeight: expand ? '30vh' : '63vh', minHeight: '30vh' }}>
             <Box sx={{ margin: '0 4px 8px 0', width: 'calc(100% - 4px)' }}>
                 {tagList.map((tag, index) => (
                     <GameTagListItem

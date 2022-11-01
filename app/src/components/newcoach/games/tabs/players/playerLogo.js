@@ -50,7 +50,7 @@ const GamePlayerLogo = ({ player, onShow }) => {
                     position: 'absolute'
                 }}
             >
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 500, color: '#1a1b1d' }}>{getDisplayName()}</Typography>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.7rem', fontWeight: 500, color: '#1a1b1d' }}>{getDisplayName()}</Typography>
             </Box>
         </Box>
     );

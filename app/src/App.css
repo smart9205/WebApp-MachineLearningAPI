@@ -93,6 +93,9 @@ div.team-theme-color {
     padding: 0px !important;
 }
 
+.MuiButtonBase-root-MuiMenuItem-root{
+    font-size: 0.8rem !important;
+}
 
 .css-sytnxd-MuiButtonBase-root-MuiIconButton-root {
     padding: 0 !important;

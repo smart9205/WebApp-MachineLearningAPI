@@ -268,7 +268,7 @@ const TeamPlayersOverview = ({ games, teamId }) => {
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', padding: '24px 16px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', padding: '24px 10px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                     <GameSelectControl gameList={games} setIds={setGameIds} />
                 </Box>

@@ -358,7 +358,7 @@ const Leaders = () => {
                                         </MenuItem>
                                     </Select>
                                 </Box>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Box sx={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <Autocomplete
                                         id="combo-box-demo"
                                         options={playersList}
@@ -387,7 +387,7 @@ const Leaders = () => {
                     </Box>
                     {playerList.length > 0 && (
                         <Box sx={{ width: '100%', maxHeight: '85vh', overflowY: 'auto' }}>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '4px' }}>
+                            <Box sx={{ fontSize: '0.8rem', display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '4px' }}>
                                 {statCategory.map((item) => (
                                     <LeadersPlayerStatColumn
                                         key={item.id}

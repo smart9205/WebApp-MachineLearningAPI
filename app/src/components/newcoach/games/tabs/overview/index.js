@@ -327,7 +327,7 @@ const GameOverview = ({ game }) => {
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
-            <Box sx={{ display: 'flex', minWidth: '600px', flexDirection: 'column', padding: '24px 16px' }}>
+            <Box sx={{ display: 'flex', minWidth: '600px', flexDirection: 'column', padding: '24px 10px' }}>
                 <GameOverviewHeader
                     isOur={values.isOur}
                     ourname={values.teamId === game.away_team_id ? game.away_team_name : game.home_team_name}

@@ -134,8 +134,8 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
                     <TableBody>
                         {getSortedArray().map((player, index) => (
                             <TableRow key={index} height="70px">
-                                <TableCell width="3%" align="center" sx={{ cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
-                                    <img style={{ height: '48px' }} alt="Player Logo" src={player ? (player.image.length > 0 ? player.image : PLAYER_ICON_DEFAULT) : PLAYER_ICON_DEFAULT} />
+                                <TableCell width="4%" align="center" sx={{ cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
+                                    <img style={{ height: '70px' , borderRadius: '8px', paddingTop: '2px', paddingBottom:'2px'}} src={player ? (player.image.length > 0 ? player.image : PLAYER_ICON_DEFAULT) : PLAYER_ICON_DEFAULT} />
                                 </TableCell>
                                 <TableCell>
                                     <Box sx={{ paddingLeft: '10px', cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
