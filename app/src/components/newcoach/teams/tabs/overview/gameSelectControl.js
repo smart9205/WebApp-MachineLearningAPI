@@ -13,6 +13,8 @@ import DoneIcon from '@mui/icons-material/Done';
 
 import '../../../coach_style.css';
 import { SaveButton } from '../../../components/common';
+import { getFormattedDate } from '../../../components/utilities';
+import { Checkbox, FormControlLabel } from '@mui/material';
 
 const StyledAutocompletePopper = styled('div')(({ theme }) => ({
     [`& .${autocompleteClasses.paper}`]: {
@@ -57,7 +59,7 @@ const StyledPopper = styled(Popper)(({ theme }) => ({
     border: `1px solid ${theme.palette.mode === 'light' ? '#e1e4e8' : '#30363d'}`,
     boxShadow: `0 8px 24px ${theme.palette.mode === 'light' ? 'rgba(149, 157, 165, 0.2)' : 'rgb(1, 4, 9)'}`,
     borderRadius: 6,
-    width: 380,
+    width: 480,
     zIndex: theme.zIndex.modal,
     fontSize: '0.7rem',
     color: theme.palette.mode === 'light' ? '#24292e' : '#c9d1d9',
@@ -86,6 +88,7 @@ export default function GameSelectControl({ gameList, setIds }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [value, setValue] = React.useState([]);
     const [pendingValue, setPendingValue] = React.useState([]);
+    const [selectAll, setSelectAll] = React.useState(false);
     const theme = useTheme();
 
     const handleClick = (event) => {
@@ -97,18 +100,23 @@ export default function GameSelectControl({ gameList, setIds }) {
         setValue(pendingValue);
         setIds(pendingValue.map((item) => item.id));
         console.log(pendingValue);
-        if (anchorEl) {
-            anchorEl.focus();
-        }
+
+        if (anchorEl) anchorEl.focus();
+
         setAnchorEl(null);
     };
 
     const open = Boolean(anchorEl);
     const id = open ? 'github-label' : undefined;
 
+    React.useEffect(() => {
+        if (selectAll) setPendingValue(gameList);
+        else setPendingValue([]);
+    }, [selectAll]);
+
     return (
         <React.Fragment>
-            <SaveButton sx={{ fontWeight: 500, width: '120px', height: '28px', fontSize: '0.7rem' }} endIcon={<SettingsIcon />} disableRipple aria-describedby={id} onClick={handleClick}>
+            <SaveButton sx={{ fontWeight: 500, width: '150px', height: '28px', fontSize: '0.9rem' }} endIcon={<SettingsIcon />} disableRipple aria-describedby={id} onClick={handleClick}>
                 Select Games
             </SaveButton>
             <StyledPopper id={id} open={open} anchorEl={anchorEl} placement="bottom-start">
@@ -118,11 +126,19 @@ export default function GameSelectControl({ gameList, setIds }) {
                             sx={{
                                 borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#eaecef' : '#30363d'}`,
                                 padding: '8px 10px',
-                                fontWeight: 600
+                                fontWeight: 600,
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontSize:'0.8rem'
                             }}
                         >
-                            Please select games to load tags
+                            Please select games
+                            <FormControlLabel
+                            sx={{ mt: 1, marginLeft: '130px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem' }}
+                            control={<Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} inputProps={{ 'aria-label': 'controlled' }} />}
+                            label="Select All"
+                        />
                         </Box>
+
                         <Autocomplete
                             open
                             multiple
@@ -144,28 +160,12 @@ export default function GameSelectControl({ gameList, setIds }) {
                             noOptionsText="No Games"
                             renderOption={(props, option, { selected }) => (
                                 <li key={option.id} {...props} style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                                    <Box
-                                        component={DoneIcon}
-                                        sx={{ width: 17, height: 17, mr: '5px', ml: '-2px' }}
-                                        style={{
-                                            visibility: selected ? 'visible' : 'hidden'
-                                        }}
-                                    />
-                                    <div
-                                        style={{
-                                            flexGrow: 1
-                                        }}
-                                    >
+                                    <Box component={DoneIcon} sx={{ width: 17, height: 17, mr: '5px', ml: '-2px' }} style={{ visibility: selected ? 'visible' : 'hidden' }} />
+                                    <div style={{ flexGrow: 1 }}>
                                         <p className="normal-text">{`${option.home_team_name} vs ${option.away_team_name}`}</p>
-                                        <p className="normal-text">{`${option.league_name} ${option.season_name}`}</p>
+                                        <p className="normal-text">{`${option.league_name} ${option.season_name} ${getFormattedDate(option.date)}`}</p>
                                     </div>
-                                    <Box
-                                        component={CloseIcon}
-                                        sx={{ opacity: 0.6, width: 18, height: 18 }}
-                                        style={{
-                                            visibility: selected ? 'visible' : 'hidden'
-                                        }}
-                                    />
+                                    <Box component={CloseIcon} sx={{ opacity: 0.6, width: 18, height: 18 }} style={{ visibility: selected ? 'visible' : 'hidden' }} />
                                 </li>
                             )}
                             options={gameList}
