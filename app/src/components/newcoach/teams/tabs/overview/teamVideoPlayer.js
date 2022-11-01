@@ -36,7 +36,7 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 48px'
+        padding: '0 20px'
     },
     button: {
         color: 'white',

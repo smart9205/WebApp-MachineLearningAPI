@@ -143,7 +143,7 @@ export default function GameSelectControl({ gameList, setIds }) {
                             renderTags={() => null}
                             noOptionsText="No Games"
                             renderOption={(props, option, { selected }) => (
-                                <li key={option.id} {...props} style={{ display: 'flex', alignItems: 'center', width: '360px' }}>
+                                <li key={option.id} {...props} style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                                     <Box
                                         component={DoneIcon}
                                         sx={{ width: 17, height: 17, mr: '5px', ml: '-2px' }}
