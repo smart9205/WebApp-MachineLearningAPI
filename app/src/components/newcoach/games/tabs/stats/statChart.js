@@ -30,7 +30,11 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
             player.data[sId].videoList.map((item) => {
                 return {
                     start_time: item.player_tag_start_time,
-                    end_time: item.player_tag_end_time
+                    end_time: item.player_tag_end_time,
+                    player_name: item.player_names,
+                    action_name: item.action_names,
+                    action_type: item.action_type_names,
+                    action_result: item.action_result_names
                 };
             })
         );
@@ -85,7 +89,7 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
         setPlayerList(stableSort(temp, getComparator('desc', 'count')));
     }, [list, filterText]);
 
-    console.log('chart => ', playerList);
+    console.log('chart => ', playData);
 
     return (
         <Box id={chartId} sx={{ width: '100%', height: '272px', display: 'flex', flexDirection: 'column', gap: '8px' }}>

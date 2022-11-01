@@ -44,7 +44,7 @@ const action_results_pass = [
     { title: 'Blocked', color: 'rgb(37,148,204)' },
     { title: 'Offside', color: 'rgb(255,40,74)' },
     { title: 'Stolen', color: 'rgb(108,137,197)' }
- ];
+];
 
 const GameStats = ({ game }) => {
     const [values, setValues] = useState({
@@ -117,8 +117,16 @@ const GameStats = ({ game }) => {
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <GameStatsChart chartId="pass" title="Passing" isType={false} action_results={action_results_pass} list={values.playerList} filterText="Pass" game={game} />
-                    <GameStatsChart chartId="interception" title="Interception" isType={true} action_results={action_results_interception} list={values.playerList} filterText="Interception" game={game} />
-            </Box>
+                    <GameStatsChart
+                        chartId="interception"
+                        title="Interception"
+                        isType={true}
+                        action_results={action_results_interception}
+                        list={values.playerList}
+                        filterText="Interception"
+                        game={game}
+                    />
+                </Box>
             </Box>
         </Box>
     );
