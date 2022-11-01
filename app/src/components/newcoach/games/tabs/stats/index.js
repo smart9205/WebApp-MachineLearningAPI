@@ -106,7 +106,7 @@ const GameStats = ({ game }) => {
                         onChangeTeam={handleChangeTeam}
                         mb="0px"
                     />
-                    <GameStatsBoxList list={values.playerList} />
+                    <GameStatsBoxList game={game} list={values.playerList} />
                 </Box>
                 <GameStatsChart chartId="shot" title="Shoting" isType={false} action_results={action_results_shot} list={values.playerList} filterText="Shot" game={game} />
             </Box>

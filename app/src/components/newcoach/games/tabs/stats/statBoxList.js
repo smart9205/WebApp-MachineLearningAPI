@@ -2,30 +2,46 @@ import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import '../../../coach_style.css';
+import GameStatsVideoPlayer from './videoDialog';
 
 let boxList = [
     [
-        { id: 'goal', title: 'Goals Scored', total: 0 },
-        { id: 'Shot', title: 'Shots', total: 0 },
-        { id: 'Pass', title: 'Passes', total: 0 }
-        
+        { id: 'goal', title: 'Goals Scored', total: 0, data: [] },
+        { id: 'Shot', title: 'Shots', total: 0, data: [] },
+        { id: 'Pass', title: 'Passes', total: 0, data: [] }
     ],
     [
-        { id: 'Blocked', title: 'Blocked', total: 0 },
-        { id: 'Clearance', title: 'Clearance', total: 0 },
-        { id: 'Saved', title: 'Saved', total: 0 }
-    ],  
+        { id: 'Blocked', title: 'Blocked', total: 0, data: [] },
+        { id: 'Clearance', title: 'Clearance', total: 0, data: [] },
+        { id: 'Saved', title: 'Saved', total: 0, data: [] }
+    ],
     [
-        { id: 'Interception', title: 'Interceptions', total: 0 },
-        { id: 'Tackle', title: 'Tackles', total: 0 },
-        { id: 'Draw Foul', title: 'Draw Fouls', total: 0 }
-  
+        { id: 'Interception', title: 'Interceptions', total: 0, data: [] },
+        { id: 'Tackle', title: 'Tackles', total: 0, data: [] },
+        { id: 'Draw Foul', title: 'Draw Fouls', total: 0, data: [] }
     ]
-
 ];
 
-const GameStatsBoxList = ({ list }) => {
+const GameStatsBoxList = ({ game, list }) => {
     const [actionList, setActionList] = useState([]);
+    const [videoOpen, setVideoOpen] = useState(false);
+    const [playData, setPlayData] = useState([]);
+
+    const handleDisplayVideo = (player) => {
+        setPlayData(
+            player.data.map((item) => {
+                return {
+                    start_time: item.player_tag_start_time,
+                    end_time: item.player_tag_end_time,
+                    player_name: item.player_names,
+                    action_name: item.action_names,
+                    action_type: item.action_type_names,
+                    action_result: item.action_result_names
+                };
+            })
+        );
+        setVideoOpen(true);
+    };
 
     useEffect(() => {
         let temp = [];
@@ -33,6 +49,7 @@ const GameStatsBoxList = ({ list }) => {
         boxList.map((row, rId) => {
             return row.map((item, cId) => {
                 boxList[rId][cId].total = list.filter((stat) => stat.action_names === item.id).length;
+                boxList[rId][cId].data = list.filter((stat) => stat.action_names === item.id);
 
                 return boxList;
             });
@@ -45,7 +62,7 @@ const GameStatsBoxList = ({ list }) => {
             return temp;
         });
         boxList[0][0].total += list.filter((item) => item.action_names === 'Shot' && item.action_result_names === 'Goal').length;
-        //boxList[0][0].total += list.filter((item) => item.action_names === 'Own Goal' && item.action_result_names === 'Goal').length;
+        boxList[0][0].data = list.filter((item) => item.action_names === 'Shot' && item.action_result_names === 'Goal');
         setActionList(temp);
     }, [list]);
 
@@ -67,8 +84,10 @@ const GameStatsBoxList = ({ list }) => {
                             border: '1px solid #1A1B1D',
                             background: '#F2F7F2',
                             width: '120px',
-                            height: '60px'
+                            height: '60px',
+                            cursor: 'pointer'
                         }}
+                        onClick={() => handleDisplayVideo(item)}
                     >
                         <p className="normal-text">{item.title}</p>
                         <p className="normal-text">{item.total}</p>
@@ -89,8 +108,10 @@ const GameStatsBoxList = ({ list }) => {
                             border: '1px solid #1A1B1D',
                             background: '#F2F7F2',
                             width: '120px',
-                            height: '60px'
+                            height: '60px',
+                            cursor: 'pointer'
                         }}
+                        onClick={() => handleDisplayVideo(item)}
                     >
                         <p className="normal-text">{item.title}</p>
                         <p className="normal-text">{item.total}</p>
@@ -111,14 +132,17 @@ const GameStatsBoxList = ({ list }) => {
                             border: '1px solid #1A1B1D',
                             background: '#F2F7F2',
                             width: '120px',
-                            height: '60px'
+                            height: '60px',
+                            cursor: 'pointer'
                         }}
+                        onClick={() => handleDisplayVideo(item)}
                     >
                         <p className="normal-text">{item.title}</p>
                         <p className="normal-text">{item.total}</p>
                     </Box>
                 ))}
             </Box>
+            {videoOpen && <GameStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={game.video_url} tagList={playData} />}
         </Box>
     );
 };
