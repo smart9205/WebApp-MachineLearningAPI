@@ -1,7 +1,7 @@
 const db = require("../models");
 const Team = db.team;
 const Op = db.Sequelize.Op;
-const Sequelize = db.Sequelize;
+const Sequelize = db.sequelize;
 
 exports.create = async (req, res) => {
   // Validate request
@@ -115,22 +115,21 @@ exports.getTeamsStatsAdvanced = (req, res) => {
 };
 
 exports.getTeamsStatsGamebyGame = (req, res) => {
-    const game_time =
-        req.body.gameTime === null ? null : `'${req.body.gameTime}'`;
-    const court =
-        req.body.courtAreaId === null ? null : `'${req.body.courtAreaId}'`;
-    const game_id = req.body.gameId === null ? null : `'${req.body.gameId}'`;
-    const league_id =
-        req.body.leagueId === null ? null : `'${req.body.leagueId}'`;
+  const game_time =
+    req.body.gameTime === null ? null : `'${req.body.gameTime}'`;
+  const court =
+    req.body.courtAreaId === null ? null : `'${req.body.courtAreaId}'`;
+  const game_id = req.body.gameId === null ? null : `'${req.body.gameId}'`;
+  const league_id =
+    req.body.leagueId === null ? null : `'${req.body.leagueId}'`;
 
-    Sequelize.query(
-        `
+  Sequelize.query(
+    `
     SELECT * from public.fnc_get_team_stats_game_by_game(
       ${req.body.seasonId},
       ${league_id},
       ${game_id},
       ${req.body.teamId},
-      ${req.body.playerId},
       ${req.userId},
       ${game_time},
       ${court},
@@ -139,16 +138,15 @@ exports.getTeamsStatsGamebyGame = (req, res) => {
       ${req.body.gameResult}
     )
   `
-    )
-        .then((data) => {
-            res.send(data[0]);
-        })
-        .catch((e) => {
-            res.status(500).send({
-                message:
-                    e.message || "Some error occurred while retrieving games.",
-            });
-        });
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((e) => {
+      res.status(500).send({
+        message: e.message || "Some error occurred while retrieving games.",
+      });
+    });
 };
 
 exports.update = (req, res) => {
