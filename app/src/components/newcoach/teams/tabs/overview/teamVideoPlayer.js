@@ -240,7 +240,7 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                             {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
                         </IconButton>
                     </div>
-                    {handle.active && (
+                    {handle.active && tagList.length > 0 && (
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '60px', padding: '5px 25px', background: '#80808069' }}>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>
                                 {`${tagList[curIdx].player_names} - ${tagList[curIdx].action_names} - ${tagList[curIdx].action_type_names} - ${tagList[curIdx].action_result_names}`}
