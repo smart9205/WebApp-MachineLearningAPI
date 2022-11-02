@@ -11,6 +11,7 @@ import TeamPlayersStats from './tabs/players';
 import TeamPlayersOverview from './tabs/player_overview';
 import '../coach_style.css';
 import GameSelectControl from './tabs/overview/gameSelectControl';
+import TeamStats from './tabs/stats';
 
 const Tabs = ['Overview', 'Summary', 'Stats', 'Games', 'Players Overview', 'Players Stats'];
 
@@ -98,6 +99,7 @@ const TeamPage = () => {
                         </Box>
                     </Box>
                     {values.tabSelected === 0 && <TeamOverview games={gameList} gameIds={gameIds} teamname={values.teamName} teamId={values.teamId} />}
+                    {values.tabSelected === 2 && <TeamStats games={gameList} gameIds={gameIds} teamId={values.teamId} />}
                     {values.tabSelected === 3 && <TeamGames />}
                     {values.tabSelected === 4 && <TeamPlayersOverview games={gameList} gameIds={gameIds} teamId={values.teamId} />}
                     {values.tabSelected === 5 && (

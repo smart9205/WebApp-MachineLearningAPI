@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-import { IconButton, Slider, Select, MenuItem, Typography, Button } from '@mui/material';
+import { IconButton, Slider, Select, MenuItem, Typography, Button, List, ListItem, ListItemText } from '@mui/material';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { useHotkeys } from 'react-hotkeys-hook';
 
@@ -54,6 +54,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
     const [createOpen, setCreateOpen] = useState(false);
     const [selectedGame, setSelectedGame] = useState(null);
     const [gameList, setGameList] = useState([]);
+    const [listOpen, setListOpen] = useState(false);
     const [duration, setDuration] = useState(0);
     const [position, setPosition] = useState(0);
     const [playRate, setPlayRate] = useState(1);
@@ -138,6 +139,21 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
         setPlay(true);
     };
 
+    const handleSelectList = (game) => {
+        setListOpen(false);
+        setSelectedGame(game);
+
+        if (game.video_url.startsWith('https://www.youtube.com')) {
+            gameService.getNewStreamURL(game.video_url).then((res) => {
+                setVideoURL(res);
+            });
+        } else setVideoURL(game.video_url);
+
+        setNewClip({ ...newClip, game_id: game.id });
+        seekTo(0);
+        setPlay(true);
+    };
+
     const handleQS = () => {
         if (saveEdit !== null && saveEdit.type === 'edit') {
             if (currentTime <= 15) setNewClip({ ...newClip, start_time: toHHMMSS(0), end_time: toHHMMSS(currentTime) });
@@ -172,27 +188,29 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
     console.log('EditVideo => ', saveEdit, newClip);
 
     return (
-        <div style={{ fontSize:'0.8rem', display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '28px', width: '70%' }}>
-            <Select
-                value={selectedGame?.id ?? 0}
-                onChange={handleSelectChange}
-                label=""
-                variant="outlined"
-                IconComponent={ExpandMoreIcon}
-                inputProps={{ 'aria-label': 'Without label' }}
-                MenuProps={MenuProps}
-                disabled={gameList.length === 0}
-                sx={{fontSize:'0.8rem', alignItems: 'center', outline: 'none', height: '36px', width: '98%', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-            >
-                {gameList.map((game, index) => (
-                    <MenuItem key={index} value={game.id}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <Typography sx={{fontSize:'0.8rem',  fontFamily: "'DM Sans', sans-serif", color: '#1a1b1d' }}>{`${game.home_team_name} vs ${game.away_team_name} - `}</Typography>
-                            <Typography sx={{fontSize:'0.8rem',  fontFamily: "'DM Sans', sans-serif", color: '#1a1b1d' }}>{getFormattedDate(game.date)}</Typography>
-                        </div>
-                    </MenuItem>
-                ))}
-            </Select>
+        <div style={{ fontSize: '0.8rem', display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '28px', width: '70%' }}>
+            {!handle.active && (
+                <Select
+                    value={selectedGame?.id ?? 0}
+                    onChange={handleSelectChange}
+                    label=""
+                    variant="outlined"
+                    IconComponent={ExpandMoreIcon}
+                    inputProps={{ 'aria-label': 'Without label' }}
+                    MenuProps={MenuProps}
+                    disabled={gameList.length === 0}
+                    sx={{ fontSize: '0.8rem', alignItems: 'center', outline: 'none', height: '36px', width: '98%', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                >
+                    {gameList.map((game, index) => (
+                        <MenuItem key={index} value={game.id}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                <Typography sx={{ fontSize: '0.8rem', fontFamily: "'DM Sans', sans-serif", color: '#1a1b1d' }}>{`${game.home_team_name} vs ${game.away_team_name} - `}</Typography>
+                                <Typography sx={{ fontSize: '0.8rem', fontFamily: "'DM Sans', sans-serif", color: '#1a1b1d' }}>{getFormattedDate(game.date)}</Typography>
+                            </div>
+                        </MenuItem>
+                    ))}
+                </Select>
+            )}
             <div style={{ width: '98%', margin: 'auto', minWidth: 500, position: 'relative' }}>
                 <FullScreen handle={handle}>
                     <div style={{ width: drawOpen ? '100%' : '90%' }}>
@@ -221,7 +239,39 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                             {videoURL === '' && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                         </div>
                     </div>
-
+                    {handle.active && (
+                        <div
+                            style={{
+                                position: 'absolute',
+                                left: 0,
+                                top: '12px',
+                                width: '100%',
+                                padding: '0 24px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexDirection: 'column'
+                            }}
+                        >
+                            <Button variant="outlined" disabled={gameList.length === 0} onClick={() => setListOpen(true)}>
+                                Select Games
+                            </Button>
+                            {listOpen && (
+                                <List sx={{ maxWidth: 500, bgcolor: 'background.paper', maxHeight: 300, position: 'relative', overflow: 'auto', color: 'black' }}>
+                                    {gameList.map((item, index) => (
+                                        <ListItem key={index}>
+                                            <ListItemText
+                                                primary={`${item.home_team_name} vs ${item.away_team_name}`}
+                                                secondary={getFormattedDate(item.date)}
+                                                sx={{ cursor: 'pointer', padding: '8px 0' }}
+                                                onClick={() => handleSelectList(item)}
+                                            />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            )}
+                        </div>
+                    )}
                     <div style={styles.buttonBox}>
                         <Slider
                             aria-label="time-indicator"
@@ -271,7 +321,11 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                             <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
                                 <FastRewindIcon color="white" />
                             </IconButton>
-                            <Button variant="outlined" sx={{ width: '45px !important', minWidth: '45px !important', maxWidth: '45px !important', color: 'white' ,fontSize: '0.7rem' }} onClick={() => setPlayRate(0.5)}>
+                            <Button
+                                variant="outlined"
+                                sx={{ width: '45px !important', minWidth: '45px !important', maxWidth: '45px !important', color: 'white', fontSize: '0.7rem' }}
+                                onClick={() => setPlayRate(0.5)}
+                            >
                                 Slow
                             </Button>
                             <IconButton
@@ -283,7 +337,11 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                             >
                                 {play && playRate === 1 ? <PauseIcon /> : <PlayArrowIcon />}
                             </IconButton>
-                            <Button variant="outlined" sx={{ width: '45px !important', minWidth: '45px !important', maxWidth: '45px !important', color: 'white',fontSize: '0.7rem'  }} onClick={() => setPlayRate((s) => s + 0.5)}>
+                            <Button
+                                variant="outlined"
+                                sx={{ width: '45px !important', minWidth: '45px !important', maxWidth: '45px !important', color: 'white', fontSize: '0.7rem' }}
+                                onClick={() => setPlayRate((s) => s + 0.5)}
+                            >
                                 Fast
                             </Button>
                             <IconButton style={styles.button} onClick={() => fastVideo(3)}>
