@@ -153,7 +153,7 @@ export default function VideoPlayer({ videoData, onChangeClip, tagList, drawOpen
                         <SkipNextSharpIcon />
                     </IconButton>
 
-                    {autoPlay && <FormControlLabel control={<Switch defaultChecked onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
+                    {autoPlay && <FormControlLabel control={<Switch defaultChecked onChange={(e) => setCanNext(e.target.checked)} />} label="AP" sx={{ color: 'white' }} />}
 
                     <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
                         {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}

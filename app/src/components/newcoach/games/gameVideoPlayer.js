@@ -196,7 +196,7 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
                     )}
                 </div>
                 <div style={styles.buttonBox}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{getTime()}</Typography>
                         <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
                             <SkipPreviousSharpIcon color="white" />
@@ -228,7 +228,7 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
                             <SkipNextSharpIcon />
                         </IconButton>
 
-                        {autoPlay && <FormControlLabel control={<Switch defaultChecked onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
+                        {autoPlay && <FormControlLabel control={<Switch defaultChecked onChange={(e) => setCanNext(e.target.checked)} />} label="AP" sx={{ color: 'white' }} />}
                         <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
                             {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
                         </IconButton>

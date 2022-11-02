@@ -242,7 +242,7 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
                                 <SkipNextSharpIcon />
                             </IconButton>
 
-                            <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />
+                            <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="AP" sx={{ color: 'white' }} />
                             <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
                                 {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
                             </IconButton>
