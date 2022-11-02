@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ReactPlayer from 'react-player';
-import { IconButton, Switch, FormControlLabel, Typography } from '@mui/material';
+import { IconButton, Switch, FormControlLabel, Typography, Button } from '@mui/material';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -37,7 +37,8 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 20px'
+        padding: '0 48px',
+        width: '100%'
     },
     button: {
         color: 'white',
@@ -55,6 +56,9 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
     const [videoList, setVideoList] = useState([]);
     const [canNext, setCanNext] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
+    const [fullMode, setFullMode] = useState(false);
+    const [playRate, setPlayRate] = useState(1);
+    const [showLogo, setShowLogo] = useState(true);
 
     const seekTo = (sec) => player.current && player.current.seekTo(sec);
 
@@ -142,9 +146,7 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
 
         playTagByIdx(idx);
         setCurIdx(idx);
-
         setPlay(true);
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [idx]);
 
@@ -153,12 +155,19 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [curIdx]);
 
+    const fullscreenChange = useCallback(
+        (state, h) => {
+            if (handle === h) setFullMode(state);
+        },
+        [handle]
+    );
+
     console.log('my edits => ', tagList);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
             <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
-                <FullScreen handle={handle}>
+                <FullScreen handle={handle} onChange={fullscreenChange}>
                     <div style={{ width: drawOpen ? '100%' : '80%', margin: 'auto' }}>
                         <div className="player-wrapper">
                             {videoURL !== '' && (
@@ -173,6 +182,7 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
                                     onProgress={(p) => onProgress(p.playedSeconds)}
                                     playing={play}
                                     controls={false}
+                                    playbackRate={playRate}
                                     width="100%"
                                     height="100%"
                                 />
@@ -180,22 +190,25 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
                             {videoURL === '' && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                         </div>
                     </div>
-                    {tagList.length > 0 && (
+                    <div style={{ position: 'absolute', left: '36px', top: '12px' }}>
+                        <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="Show Logo" sx={{ color: 'white' }} />
+                    </div>
+                    {showLogo && tagList.length > 0 && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>
                                     {`${getPeriod(tagList[curIdx]?.period)} - ${tagList[curIdx]?.time_in_game}'`}
                                 </Typography>
                             </div>
-                                <>
-                                    <img src={tagList[curIdx]?.home_team_logo ? tagList[curIdx]?.home_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
-                                        <Typography
-                                            sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}
-                                        >{`${tagList[curIdx]?.home_team_goal} : ${tagList[curIdx]?.away_team_goal}`}</Typography>
-                                    </div>
-                                    <img src={tagList[curIdx]?.away_team_logo ? tagList[curIdx]?.away_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
-                                </>
+                            <>
+                                <img src={tagList[curIdx]?.home_team_logo ? tagList[curIdx]?.home_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
+                                    <Typography
+                                        sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}
+                                    >{`${tagList[curIdx]?.home_team_goal} : ${tagList[curIdx]?.away_team_goal}`}</Typography>
+                                </div>
+                                <img src={tagList[curIdx]?.away_team_logo ? tagList[curIdx]?.away_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                            </>
                         </div>
                     )}
 
@@ -207,11 +220,21 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
                             <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
                                 <FastRewindIcon color="white" />
                             </IconButton>
-
-                            <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
-                                {play ? <PauseIcon /> : <PlayArrowIcon />}
+                            <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate(0.5)}>
+                                Slow
+                            </Button>
+                            <IconButton
+                                onClick={() => {
+                                    if (playRate === 1) setPlay((p) => !p);
+                                    else setPlayRate(1);
+                                }}
+                                style={{ color: 'white', backgroundColor: '#80808069' }}
+                            >
+                                {play && playRate === 1 ? <PauseIcon /> : <PlayArrowIcon />}
                             </IconButton>
-
+                            <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate((s) => s + 0.5)}>
+                                Fast
+                            </Button>
                             <IconButton style={styles.button} onClick={() => fastVideo(3)}>
                                 <FastForwardIcon color="white" />
                             </IconButton>
@@ -220,14 +243,13 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
                             </IconButton>
 
                             <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />
-
                             <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
                                 {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
                             </IconButton>
                         </div>
-                        {handle.active && (
+                        {fullMode && (
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2px 12px', background: '#80808069' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{tagList[curIdx].name}</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{tagList[curIdx].clip_name}</Typography>
                             </div>
                         )}
                     </div>

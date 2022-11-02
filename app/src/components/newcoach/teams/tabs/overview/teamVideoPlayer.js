@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-import { IconButton, Switch, FormControlLabel, Typography } from '@mui/material';
+import { IconButton, Switch, FormControlLabel, Typography, Button } from '@mui/material';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -36,7 +36,7 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 20px'
+        padding: '0 48px'
     },
     button: {
         color: 'white',
@@ -55,6 +55,8 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
     const [videoList, setVideoList] = useState([]);
     const [canNext, setCanNext] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
+    const [playRate, setPlayRate] = useState(1);
+    const [showLogo, setShowLogo] = useState(true);
 
     useEffect(() => {
         setVideoList([]);
@@ -174,6 +176,7 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                                 onProgress={(p) => onProgress(p.playedSeconds)}
                                 playing={play}
                                 controls={false}
+                                playbackRate={playRate}
                                 width="100%"
                                 height="100%"
                             />
@@ -181,19 +184,23 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                         {tagList.length === 0 && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                     </div>
                 </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '100px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'white' }}>{`${gameTime.period} - ${gameTime.time}'`}</Typography>
-                    </div>
-                    <img src={gameTime.home_team_image ? gameTime.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '45px', height: '45px' }} />
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '70px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'blue' }}>
-                            {`${gameTime.home_team_goals} : ${gameTime.away_team_goals}`}
-                        </Typography>
-                    </div>
-                    <img src={gameTime.away_team_image ? gameTime.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '45px', height: '45px' }} />
+                <div style={{ position: 'absolute', left: '36px', top: '12px' }}>
+                    <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="Show Logo" sx={{ color: 'white' }} />
                 </div>
+                {showLogo && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '100px' }}>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'white' }}>{`${gameTime.period} - ${gameTime.time}'`}</Typography>
+                        </div>
+                        <img src={gameTime.home_team_image ? gameTime.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '45px', height: '45px' }} />
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '70px' }}>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'blue' }}>
+                                {`${gameTime.home_team_goals} : ${gameTime.away_team_goals}`}
+                            </Typography>
+                        </div>
+                        <img src={gameTime.away_team_image ? gameTime.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '45px', height: '45px' }} />
+                    </div>
+                )}
 
                 <div style={styles.buttonBox}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -205,11 +212,21 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                         <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
                             <FastRewindIcon color="white" />
                         </IconButton>
-
-                        <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
-                            {play ? <PauseIcon /> : <PlayArrowIcon />}
+                        <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate(0.5)}>
+                            Slow
+                        </Button>
+                        <IconButton
+                            onClick={() => {
+                                if (playRate === 1) setPlay((p) => !p);
+                                else setPlayRate(1);
+                            }}
+                            style={{ color: 'white', backgroundColor: '#80808069' }}
+                        >
+                            {play && playRate === 1 ? <PauseIcon /> : <PlayArrowIcon />}
                         </IconButton>
-
+                        <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate((s) => s + 0.5)}>
+                            Fast
+                        </Button>
                         <IconButton style={styles.button} onClick={() => fastVideo(3)}>
                             <FastForwardIcon color="white" />
                         </IconButton>
@@ -219,13 +236,12 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                         </IconButton>
 
                         {autoPlay && <FormControlLabel control={<Switch checked={canNext} onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
-
                         <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
                             {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
                         </IconButton>
                     </div>
                     {handle.active && (
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft:'60px', padding: '5px 25px', background: '#80808069' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '60px', padding: '5px 25px', background: '#80808069' }}>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>
                                 {`${tagList[curIdx].player_names} - ${tagList[curIdx].action_names} - ${tagList[curIdx].action_type_names} - ${tagList[curIdx].action_result_names}`}
                             </Typography>

@@ -82,40 +82,42 @@ const CorrectionsVideoPlayer = ({ onClose, video_url, start, end, name }) => {
                             position: 'absolute',
                             padding: '0 16px',
                             top: '12px',
-                            justifyContent: name !== '' ? 'space-between' : 'flex-end'
+                            justifyContent: 'flex-end',
+                            cursor: 'pointer'
                         }}
+                        onClick={onClose}
                     >
+                        <CloseIcon />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', left: 0, bottom: '16px', justifyContent: 'space-between', width: '100%', padding: '0 20px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            <IconButton style={{ color: 'white', backgroundColor: '#80808069' }} onClick={() => fastVideo(-3)}>
+                                <FastRewindIcon color="white" />
+                            </IconButton>
+                            <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate(0.5)}>
+                                Slow
+                            </Button>
+                            <IconButton
+                                onClick={() => {
+                                    if (playRate === 1) setPlay((p) => !p);
+                                    else setPlayRate(1);
+                                }}
+                                style={{ color: 'white', backgroundColor: '#80808069' }}
+                            >
+                                {play && playRate === 1 ? <PauseIcon /> : <PlayIcon />}
+                            </IconButton>
+                            <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate((s) => s + 0.5)}>
+                                Fast
+                            </Button>
+                            <IconButton style={{ color: 'white', backgroundColor: '#80808069' }} onClick={() => fastVideo(3)}>
+                                <FastForwardIcon color="white" />
+                            </IconButton>
+                        </div>
                         {name !== '' && (
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2px 12px', background: '#80808069' }}>
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{name}</Typography>
                             </div>
                         )}
-                        <div style={{ cursor: 'pointer' }} onClick={onClose}>
-                            <CloseIcon />
-                        </div>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', left: 0, bottom: '16px', justifyContent: 'center', width: '100%', gap: '1rem' }}>
-                        <IconButton style={{ color: 'white', backgroundColor: '#80808069' }} onClick={() => fastVideo(-3)}>
-                            <FastRewindIcon color="white" />
-                        </IconButton>
-                        <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate(0.5)}>
-                            Slow
-                        </Button>
-                        <IconButton
-                            onClick={() => {
-                                if (playRate === 1) setPlay((p) => !p);
-                                else setPlayRate(1);
-                            }}
-                            style={{ color: 'white', backgroundColor: '#80808069' }}
-                        >
-                            {play && playRate === 1 ? <PauseIcon /> : <PlayIcon />}
-                        </IconButton>
-                        <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate((s) => s + 0.5)}>
-                            Fast
-                        </Button>
-                        <IconButton style={{ color: 'white', backgroundColor: '#80808069' }} onClick={() => fastVideo(3)}>
-                            <FastForwardIcon color="white" />
-                        </IconButton>
                     </div>
                 </FullScreen>
             </div>

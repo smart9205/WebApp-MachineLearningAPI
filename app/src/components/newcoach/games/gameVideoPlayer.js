@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import ReactPlayer from 'react-player';
-import { IconButton, Switch, FormControlLabel, Typography } from '@mui/material';
+import { IconButton, Switch, FormControlLabel, Typography, Button } from '@mui/material';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
@@ -54,6 +54,8 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
     const [videoURL, setVideoURL] = useState('');
     const [canNext, setCanNext] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
+    const [playRate, setPlayRate] = useState(1);
+    const [showLogo, setShowLogo] = useState(true);
 
     useEffect(() => {
         if (game?.video_url.startsWith('https://www.youtube.com')) {
@@ -110,7 +112,7 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
 
     const PlayVideo = (num) => {
         let index;
-        if (curIdx + num >= tagList.length - 1) {
+        if (curIdx + num >= tagList.length) {
             index = 0;
         } else if (curIdx + num < 0) {
             index = tagList.length - 1;
@@ -145,7 +147,7 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
         return hour + ':' + minute + ':' + second;
     };
 
-    console.log('gamevideo => ', game, currentTime);
+    console.log('gamevideo => ', curIdx);
 
     return (
         <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
@@ -164,6 +166,7 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
                                 onProgress={(p) => onProgress(p.playedSeconds)}
                                 playing={play}
                                 controls={false}
+                                playbackRate={playRate}
                                 width="100%"
                                 height="100%"
                             />
@@ -171,23 +174,27 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
                         {tagList.length === 0 && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                     </div>
                 </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>{`${game.period} - ${game.time}'`}</Typography>
-                    </div>
-                    {game.home_team_goals !== undefined && (
-                        <>
-                            <img src={game.home_team_image ? game.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
-                                <Typography
-                                    sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}
-                                >{`${game.home_team_goals} : ${game.away_team_goals}`}</Typography>
-                            </div>
-                            <img src={game.away_team_image ? game.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
-                        </>
-                    )}
+                <div style={{ position: 'absolute', left: '36px', top: '12px' }}>
+                    <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="Show Logo" sx={{ color: 'white' }} />
                 </div>
+                {showLogo && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>{`${game.period} - ${game.time}'`}</Typography>
+                        </div>
+                        {game.home_team_goals !== undefined && (
+                            <>
+                                <img src={game.home_team_image ? game.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
+                                    <Typography
+                                        sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}
+                                    >{`${game.home_team_goals} : ${game.away_team_goals}`}</Typography>
+                                </div>
+                                <img src={game.away_team_image ? game.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                            </>
+                        )}
+                    </div>
+                )}
                 <div style={styles.buttonBox}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{getTime()}</Typography>
@@ -198,11 +205,21 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
                         <IconButton style={styles.button} onClick={() => fastVideo(-3)}>
                             <FastRewindIcon color="white" />
                         </IconButton>
-
-                        <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
-                            {play ? <PauseIcon /> : <PlayArrowIcon />}
+                        <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate(0.5)}>
+                            Slow
+                        </Button>
+                        <IconButton
+                            onClick={() => {
+                                if (playRate === 1) setPlay((p) => !p);
+                                else setPlayRate(1);
+                            }}
+                            style={{ color: 'white', backgroundColor: '#80808069' }}
+                        >
+                            {play && playRate === 1 ? <PauseIcon /> : <PlayArrowIcon />}
                         </IconButton>
-
+                        <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate((s) => s + 0.5)}>
+                            Fast
+                        </Button>
                         <IconButton style={styles.button} onClick={() => fastVideo(3)}>
                             <FastForwardIcon color="white" />
                         </IconButton>
@@ -212,7 +229,6 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
                         </IconButton>
 
                         {autoPlay && <FormControlLabel control={<Switch defaultChecked onChange={(e) => setCanNext(e.target.checked)} />} label="Auto Play" sx={{ color: 'white' }} />}
-
                         <IconButton onClick={handle.active ? handle.exit : handle.enter} style={styles.button}>
                             {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
                         </IconButton>
