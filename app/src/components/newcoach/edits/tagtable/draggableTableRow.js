@@ -77,8 +77,8 @@ export const EditDraggableTableRow = ({ id, row, index, moveRow, selected, isTea
             <TCellNameEdit
                 value={row.clip_name}
                 update={(v) => {
-                    updateList(index, { ...row, clip_name: v }, { ...row, name: v });
-                    row.name = v;
+                    updateList(index, { ...row, clip_name: v, name: v });
+                    row.clip_name = v;
                 }}
                 style={{ height: '36px' }}
                 onClick={() => onSelect(index)}

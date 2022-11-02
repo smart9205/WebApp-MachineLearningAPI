@@ -3,14 +3,43 @@ import { Box, CircularProgress } from '@mui/material';
 
 import GameService from '../../../../../services/game.service';
 import TeamPlayerLogo from './playerLogo';
+import TeamPlayerOverviewStatDialog from './status';
 
 const TeamPlayerLogoList = ({ games, teamId, setIds }) => {
     const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectArray, setSelectArray] = useState([]);
+    const [statOpen, setStatOpen] = useState(false);
+    const [currentPlayer, setCurrentPlayer] = useState(null);
+    const [playerState, setPlayerState] = useState(null);
+
+    let statClick = false;
 
     const handleSelectPlayer = (index) => {
-        setSelectArray({ ...selectArray, [index]: !selectArray[index] });
+        if (!statClick) {
+            setSelectArray({ ...selectArray, [index]: !selectArray[index] });
+            statClick = false;
+        } else setSelectArray({ ...selectArray, [index]: false });
+    };
+
+    const handleDisplayList = (player) => {
+        statClick = true;
+        GameService.getPlayersStatsAdvanced({
+            seasonId: null,
+            leagueId: null,
+            gameId: games.join(','),
+            teamId: teamId,
+            playerId: player.player_id,
+            gameTime: '1,2,3,4,5,6',
+            courtAreaId: null,
+            insidePaint: null,
+            homeAway: null,
+            gameResult: null
+        }).then((res) => {
+            setPlayerState(res[0]);
+            setStatOpen(true);
+            setCurrentPlayer(player);
+        });
     };
 
     useEffect(() => {
@@ -44,10 +73,11 @@ const TeamPlayerLogoList = ({ games, teamId, setIds }) => {
             <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto auto auto auto auto', gap: '0px' }}>
                 {playerList.map((item, index) => (
                     <Box key={index} sx={{ borderRadius: '10px', border: selectArray[index] ? '4px solid #0A7304' : '4px solid white', cursor: 'pointer' }} onClick={() => handleSelectPlayer(index)}>
-                        <TeamPlayerLogo player={item} />
+                        <TeamPlayerLogo player={item} onShow={handleDisplayList} />
                     </Box>
                 ))}
             </Box>
+            <TeamPlayerOverviewStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} games={games} teamId={teamId} initialState={playerState} />
         </Box>
     );
 };

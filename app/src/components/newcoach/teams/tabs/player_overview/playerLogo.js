@@ -5,7 +5,7 @@ import EditIcon from '../../../../../assets/editicon.png';
 
 import { USER_IMAGE_DEFAULT } from '../../../../../common/staticData';
 
-const TeamPlayerLogo = ({ player }) => {
+const TeamPlayerLogo = ({ player, onShow }) => {
     const getImage = () => {
         return player.image && player.image.length > 0 ? player.image : USER_IMAGE_DEFAULT;
     };
@@ -26,9 +26,15 @@ const TeamPlayerLogo = ({ player }) => {
 
     return (
         <Box sx={{ width: '80px', height: '100px', borderRadius: '8px', background: `url(${getImage()}) center center / cover no-repeat silver`, position: 'relative' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', width: '100%' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                 <Box sx={{ borderRadius: '8px 0', width: '18px', height: '18px', background: '#C5EAC6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: '#1a1b1d' }}>{player.jersey_number}</Typography>
+                </Box>
+                <Box
+                    sx={{ cursor: 'pointer', background: '#C5EAC6', borderRadius: '0 8px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '18px', height: '18px' }}
+                    onClick={() => onShow(player)}
+                >
+                    <img src={EditIcon} style={{ height: '14px', position: 'absolute' }} />
                 </Box>
             </Box>
             <Box
