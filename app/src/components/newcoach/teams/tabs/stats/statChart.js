@@ -34,7 +34,8 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                     player_name: item.player_names,
                     action_name: item.action_names,
                     action_type: item.action_type_names,
-                    action_result: item.action_result_names
+                    action_result: item.action_result_names,
+                    game_id: item.game_id
                 };
             })
         );

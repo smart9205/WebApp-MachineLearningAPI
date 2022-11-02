@@ -190,27 +190,27 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
                             {videoURL === '' && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                         </div>
                     </div>
-                    <div style={{ position: 'absolute', left: '36px', top: '12px' }}>
-                        <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="Show Logo" sx={{ color: 'white' }} />
-                    </div>
-                    {showLogo && tagList.length > 0 && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>
-                                    {`${getPeriod(tagList[curIdx]?.period)} - ${tagList[curIdx]?.time_in_game}'`}
-                                </Typography>
-                            </div>
-                            <>
-                                <img src={tagList[curIdx]?.home_team_logo ? tagList[curIdx]?.home_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
-                                    <Typography
-                                        sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}
-                                    >{`${tagList[curIdx]?.home_team_goal} : ${tagList[curIdx]?.away_team_goal}`}</Typography>
+                    <div style={{ position: 'absolute', left: '36px', top: '12px', width: '90%', display: 'flex', alignItems: 'center' }}>
+                        <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="Show Logo" sx={{ color: 'white', margin: 0, flex: 1 }} />
+                        {showLogo && tagList.length > 0 && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flex: 4 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>
+                                        {`${getPeriod(tagList[curIdx]?.period)} - ${tagList[curIdx]?.time_in_game}'`}
+                                    </Typography>
                                 </div>
-                                <img src={tagList[curIdx]?.away_team_logo ? tagList[curIdx]?.away_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
-                            </>
-                        </div>
-                    )}
+                                <>
+                                    <img src={tagList[curIdx]?.home_team_logo ? tagList[curIdx]?.home_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
+                                        <Typography
+                                            sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}
+                                        >{`${tagList[curIdx]?.home_team_goal} : ${tagList[curIdx]?.away_team_goal}`}</Typography>
+                                    </div>
+                                    <img src={tagList[curIdx]?.away_team_logo ? tagList[curIdx]?.away_team_logo : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                                </>
+                            </div>
+                        )}
+                    </div>
 
                     <div style={styles.buttonBox}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

@@ -184,23 +184,23 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                         {tagList.length === 0 && <img src={GameImage} style={{ width: '100%', height: '100%', borderRadius: '12px', position: 'absolute', left: 0, top: 0 }} />}
                     </div>
                 </div>
-                <div style={{ position: 'absolute', left: '36px', top: '12px' }}>
-                    <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="Show Logo" sx={{ color: 'white' }} />
+                <div style={{ position: 'absolute', left: '36px', top: '12px', width: '90%', display: 'flex', alignItems: 'center' }}>
+                    <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="Show Logo" sx={{ color: 'white', margin: 0, flex: 1 }} />
+                    {showLogo && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flex: 4 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '100px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'white' }}>{`${gameTime.period} - ${gameTime.time}'`}</Typography>
+                            </div>
+                            <img src={gameTime.home_team_image ? gameTime.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '45px', height: '45px' }} />
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '70px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'blue' }}>
+                                    {`${gameTime.home_team_goals} : ${gameTime.away_team_goals}`}
+                                </Typography>
+                            </div>
+                            <img src={gameTime.away_team_image ? gameTime.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '45px', height: '45px' }} />
+                        </div>
+                    )}
                 </div>
-                {showLogo && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', width: '100%', position: 'absolute', minWidth: '300px', left: 0, top: '12px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '100px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'white' }}>{`${gameTime.period} - ${gameTime.time}'`}</Typography>
-                        </div>
-                        <img src={gameTime.home_team_image ? gameTime.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '45px', height: '45px' }} />
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '70px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'blue' }}>
-                                {`${gameTime.home_team_goals} : ${gameTime.away_team_goals}`}
-                            </Typography>
-                        </div>
-                        <img src={gameTime.away_team_image ? gameTime.away_team_image : TEAM_ICON_DEFAULT} style={{ width: '45px', height: '45px' }} />
-                    </div>
-                )}
 
                 <div style={styles.buttonBox}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

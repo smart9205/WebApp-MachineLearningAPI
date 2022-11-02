@@ -77,12 +77,15 @@ const TeamStatsVideoPlayer = ({ onClose, video_url, tagList }) => {
                     });
                 } else if (game.video_url.toLowerCase() !== 'no video') videos = [...videos, { url: game.video_url, id: game.id }];
             });
-            setVideoURL(videos.filter((item) => item.id === tagList[0].game_id)[0].url);
-            setVideoList(videos);
+
+            if (videos.length > 0) {
+                setVideoURL(videos.filter((item) => item.id === tagList[0].game_id)[0].url);
+                setVideoList(videos);
+            }
         }
     }, [video_url]);
 
-    console.log('video====', currentIndex);
+    console.log('video====', video_url, tagList);
 
     return (
         <div
