@@ -104,7 +104,7 @@ const TeamPage = () => {
                     </Box>
                     {values.tabSelected === 0 && <TeamOverview games={gameList} gameIds={gameIds} teamname={values.teamName} teamId={values.teamId} />}
                     {values.tabSelected === 2 && <TeamStats games={gameList} gameIds={gameIds} teamId={values.teamId} />}
-                    {values.tabSelected === 3 && <TeamGames gameIds={gameIds} teamId={values.teamId} />}
+                    {values.tabSelected === 3 && <TeamGames games={gameList} gameIds={gameIds} teamId={values.teamId} />}
                     {values.tabSelected === 4 && <TeamPlayersOverview games={gameList} gameIds={gameIds} teamId={values.teamId} />}
                     {values.tabSelected === 5 && <TeamPlayersStats playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} gameIds={gameIds} />}
                 </>
