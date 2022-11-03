@@ -41,7 +41,7 @@ const statList = [
     { id: 'player_games', title: 'Games' }
 ];
 
-const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, leagueId, initialState }) => {
+const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, gameIds, initialState }) => {
     const [playerState, setPlayerState] = useState(null);
     const [gameHalf, setGameHalf] = useState(['first', 'second']);
     const [gameTime, setGameTime] = useState(['1', '2', '3', '4', '5', '6']);
@@ -137,8 +137,8 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, leagueI
         setLoading(true);
         GameService.getPlayersStatsAdvanced({
             seasonId: seasonId,
-            leagueId: leagueId,
-            gameId: null,
+            leagueId: null,
+            gameId: gameIds.join(','),
             teamId: teamId,
             playerId: player.id,
             gameTime: gameTime.join(','),

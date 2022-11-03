@@ -25,7 +25,7 @@ const headCells = [
     { id: 'total_clearance', title: 'Clearance' }
 ];
 
-const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => {
+const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds }) => {
     const [playerIds, setPlayerIds] = useState([]);
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('total_player_games');
@@ -90,8 +90,8 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
     const handleDisplayList = (player) => {
         GameService.getPlayersStatsAdvanced({
             seasonId: seasonId,
-            leagueId: leagueId,
-            gameId: null,
+            leagueId: null,
+            gameId: gameIds.join(','),
             teamId: teamId,
             playerId: player.id,
             gameTime: '1,2,3,4,5,6',
@@ -135,11 +135,16 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
                         {getSortedArray().map((player, index) => (
                             <TableRow key={index} height="70px">
                                 <TableCell width="4%" align="center" sx={{ cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
-                                    <img style={{ height: '70px' , borderRadius: '8px', paddingTop: '2px', paddingBottom:'2px'}} src={player ? (player.image.length > 0 ? player.image : PLAYER_ICON_DEFAULT) : PLAYER_ICON_DEFAULT} />
+                                    <img
+                                        style={{ height: '70px', borderRadius: '8px', paddingTop: '2px', paddingBottom: '2px' }}
+                                        src={player ? (player.image.length > 0 ? player.image : PLAYER_ICON_DEFAULT) : PLAYER_ICON_DEFAULT}
+                                    />
                                 </TableCell>
                                 <TableCell>
                                     <Box sx={{ paddingLeft: '10px', cursor: 'pointer' }} onClick={() => handleDisplayList(player)}>
-                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.7rem', fontWeight: 600, color: '#1a1b1d' }}>#{player?.jersey_number ?? 0} {player?.name ?? '-'}</Typography>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.7rem', fontWeight: 600, color: '#1a1b1d' }}>
+                                            #{player?.jersey_number ?? 0} {player?.name ?? '-'}
+                                        </Typography>
                                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.7rem', fontWeight: 600, color: '#a5a5a8' }}>{player?.pos_name ?? '-'}</Typography>
                                     </Box>
                                 </TableCell>
@@ -196,7 +201,7 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, leagueId }) => 
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TeamPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} teamId={teamId} seasonId={seasonId} leagueId={leagueId} initialState={playerStat} />
+            <TeamPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} teamId={teamId} seasonId={seasonId} gameIds={gameIds} initialState={playerStat} />
         </Box>
     );
 };

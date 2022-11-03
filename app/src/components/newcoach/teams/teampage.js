@@ -40,20 +40,24 @@ const TeamPage = () => {
 
         if (pathname.match(/\/new_coach\/teams\//) !== null) {
             const ids = atob(params.teamId).split('|');
-            let stats = [];
 
             setValues({ ...values, loading: true });
-            await GameService.getAllGamesByCoach(ids[1], ids[2], ids[0], null).then((res) => {
+            await GameService.getAllGamesByCoach(ids[1], null, ids[0], null).then((res) => {
                 setGameList(res);
             });
             await GameService.getCoachTeamPlayers(ids[0], ids[1], ids[2]).then((res) => {
-                stats = res;
+                setValues({ ...values, players: res, teamName: res[0].team_name, loading: false, loadingDone: true, teamId: ids[0], seasonId: ids[1], leagueId: ids[2] });
             });
-            await GameService.getPlayersStatsAdvanced({
-                seasonId: ids[1],
-                leagueId: `${ids[2]}`,
-                gameId: null,
-                teamId: `${ids[0]}`,
+        }
+    }, [params]);
+
+    useEffect(() => {
+        if (gameIds.length > 0) {
+            GameService.getPlayersStatsAdvanced({
+                seasonId: values.seasonId,
+                leagueId: null,
+                gameId: gameIds.join(','),
+                teamId: `${values.teamId}`,
                 playerId: null,
                 gameTime: null,
                 courtAreaId: null,
@@ -61,10 +65,10 @@ const TeamPage = () => {
                 homeAway: null,
                 gameResult: null
             }).then((data) => {
-                setValues({ ...values, players: stats, playerStats: data, teamName: stats[0].team_name, loading: false, loadingDone: true, teamId: ids[0], seasonId: ids[1], leagueId: ids[2] });
+                setValues({ ...values, playerStats: data });
             });
         }
-    }, [params]);
+    }, [gameIds]);
 
     console.log('Team => ', values.playerStats);
 
@@ -102,9 +106,7 @@ const TeamPage = () => {
                     {values.tabSelected === 2 && <TeamStats games={gameList} gameIds={gameIds} teamId={values.teamId} />}
                     {values.tabSelected === 3 && <TeamGames gameIds={gameIds} teamId={values.teamId} />}
                     {values.tabSelected === 4 && <TeamPlayersOverview games={gameList} gameIds={gameIds} teamId={values.teamId} />}
-                    {values.tabSelected === 5 && (
-                        <TeamPlayersStats playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} leagueId={values.leagueId} />
-                    )}
+                    {values.tabSelected === 5 && <TeamPlayersStats playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} gameIds={gameIds} />}
                 </>
             )}
         </Box>
