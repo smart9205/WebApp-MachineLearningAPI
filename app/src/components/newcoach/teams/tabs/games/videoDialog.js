@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import ReactPlayer from 'react-player';
-import { Button, IconButton, Typography } from '@mui/material';
+import { Button, FormControlLabel, IconButton, Switch, Typography } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/CloseOutlined';
 import PlayIcon from '@mui/icons-material/PlayArrow';
@@ -13,6 +13,7 @@ import SkipPreviousSharpIcon from '@mui/icons-material/SkipPreviousSharp';
 
 import { toSecond } from '../../../components/utilities';
 import gameService from '../../../../../services/game.service';
+import { TEAM_ICON_DEFAULT } from '../../../../../common/staticData';
 
 const TeamGamesVideoPlayer = ({ onClose, video_url, tagList }) => {
     const handle = useFullScreenHandle();
@@ -22,6 +23,7 @@ const TeamGamesVideoPlayer = ({ onClose, video_url, tagList }) => {
     const [currentTime, setCurrentTime] = useState(0);
     const [videoURL, setVideoURL] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [showLogo, setShowLogo] = useState(true);
 
     const fastVideo = (param) => {
         player.current && player.current.seekTo(currentTime + param);
@@ -116,12 +118,31 @@ const TeamGamesVideoPlayer = ({ onClose, video_url, tagList }) => {
                             position: 'absolute',
                             padding: '0 16px',
                             top: '12px',
-                            justifyContent: 'flex-end',
-                            cursor: 'pointer'
+                            justifyContent: 'space-between'
                         }}
-                        onClick={onClose}
                     >
-                        <CloseIcon />
+                        <div style={{ display: 'flex', alignItems: 'center', flex: 5 }}>
+                            <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="Show Logo" sx={{ color: 'white', margin: 0, flex: 1 }} />
+                            {showLogo && (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flex: 4 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>
+                                            {`${tagList[currentIndex].period} - ${tagList[currentIndex].time}'`}
+                                        </Typography>
+                                    </div>
+                                    <img src={tagList[currentIndex].home_team_image ? tagList[currentIndex].home_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '90px' }}>
+                                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'blue' }}>
+                                            {`${tagList[currentIndex].home_team_goals} : ${tagList[currentIndex].away_team_goals}`}
+                                        </Typography>
+                                    </div>
+                                    <img src={tagList[currentIndex].away_team_image ? tagList[currentIndex].away_team_image : TEAM_ICON_DEFAULT} style={{ width: '56px', height: '56px' }} />
+                                </div>
+                            )}
+                        </div>
+                        <div style={{ cursor: 'pointer' }} onClick={onClose}>
+                            <CloseIcon />
+                        </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', left: 0, bottom: '16px', justifyContent: 'space-between', width: '100%', padding: '0 16px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -154,7 +175,9 @@ const TeamGamesVideoPlayer = ({ onClose, video_url, tagList }) => {
                             </IconButton>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2px 12px', background: '#80808069' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}></Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>
+                                {`${tagList[currentIndex].player_name}, ${tagList[currentIndex].action_name}, ${tagList[currentIndex].action_type}, ${tagList[currentIndex].action_result}`}
+                            </Typography>
                         </div>
                     </div>
                 </FullScreen>

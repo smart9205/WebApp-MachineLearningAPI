@@ -7,6 +7,7 @@ import { getComparator, getFormattedDate, stableSort } from '../../../components
 
 import '../../../coach_style.css';
 import TeamGamesVideoPlayer from './videoDialog';
+import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 
 const properties = [
     { id: 'total_goal', action: 'Goal' },
@@ -65,7 +66,17 @@ const TeamGames = ({ games, gameIds, teamId }) => {
                 res.map((item) => {
                     return {
                         start_time: item.player_tag_start_time,
-                        end_time: item.player_tag_end_time
+                        end_time: item.player_tag_end_time,
+                        player_name: item.player_names,
+                        action_name: item.action_names,
+                        action_type: item.action_type_names,
+                        action_result: item.action_result_names,
+                        period: getPeriod(item.period),
+                        time: item.time_in_game,
+                        home_team_image: item.home_team_logo,
+                        away_team_image: item.away_team_logo,
+                        home_team_goals: item.home_team_goal,
+                        away_team_goals: item.away_team_goal
                     };
                 })
             );
@@ -94,16 +105,9 @@ const TeamGames = ({ games, gameIds, teamId }) => {
     };
 
     const getGameGoalsFontStyle = (game) => {
-        const isOur = game.team_name === game.home_team_name ? 1 : game.team_name === game.away_team_name ? 2 : 0;
+        if (game.team_id === game.home_team_id) return { home: 700, away: 400 };
 
-        if (isOur !== 0) {
-            if (game['total_goal'] > game['opp_total_goal']) {
-                if (isOur === 1) return { home: 700, away: 400 };
-                else return { home: 400, away: 700 };
-            }
-        }
-
-        return { home: 400, away: 400 };
+        return { home: 400, away: 700 };
     };
 
     useEffect(() => {
