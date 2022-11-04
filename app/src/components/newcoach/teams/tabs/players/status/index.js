@@ -138,7 +138,7 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, gameIds
         GameService.getPlayersStatsAdvanced({
             seasonId: seasonId,
             leagueId: null,
-            gameId: gameIds.join(','),
+            gameId: gameIds.length === 0 ? null : gameIds.join(','),
             teamId: teamId,
             playerId: player.id,
             gameTime: gameTime.join(','),

@@ -103,4 +103,35 @@ const MenuProps = {
     }
 };
 
-export { StyleTextField, BootstrapInput, SearchText, SaveButton, MenuProps };
+const ActionData = {
+    All: { action_id: null, action_type_id: null, action_result_id: null },
+    YellowCard: { action_id: null, action_type_id: '9', action_result_id: null },
+    RedCard: { action_id: null, action_type_id: '10', action_result_id: null },
+    GoalKick: { action_id: '1', action_type_id: null, action_result_id: null },
+    GoalOpportunity: { action_id: '1', action_type_id: null, action_result_id: '1' },
+    ShotOffTarget: { action_id: '1', action_type_id: null, action_result_id: '2' },
+    Goal: { action_id: '1', action_type_id: null, action_result_id: '3' },
+    PenaltyMissed: { action_id: '1', action_type_id: '13', action_result_id: '2' },
+    FreeKick: { action_id: '1,2,3', action_type_id: '11,13', action_result_id: null },
+    Passes: { action_id: '2', action_type_id: null, action_result_id: null },
+    PassesSuccess: { action_id: '2', action_type_id: null, action_result_id: '4' },
+    ThroughPass: { action_id: '2', action_type_id: '6', action_result_id: null },
+    KeyPass: { action_id: '2', action_type_id: '7', action_result_id: null },
+    PassesShots: { action_id: '2', action_type_id: '15', action_result_id: null },
+    Corner: { action_id: '2,3', action_type_id: '12', action_result_id: null },
+    Turnover: { action_id: '2,7', action_type_id: null, action_result_id: '5,11,12,15' },
+    Cross: { action_id: '3', action_type_id: '1,2,3,4,5,6,7,8,9,10,13,14,15', action_result_id: null },
+    Dribble: { action_id: '4', action_type_id: null, action_result_id: null },
+    DribbleSuccess: { action_id: '4', action_type_id: null, action_result_id: '4' },
+    Penalty: { action_id: '4', action_type_id: null, action_result_id: '14' },
+    Foul: { action_id: '5', action_type_id: null, action_result_id: null },
+    DrawFoul: { action_id: '6', action_type_id: null, action_result_id: null },
+    Offside: { action_id: '7', action_type_id: null, action_result_id: '15' },
+    Saved: { action_id: '8', action_type_id: null, action_result_id: null },
+    Interception: { action_id: '10', action_type_id: null, action_result_id: null },
+    Clearance: { action_id: '11', action_type_id: null, action_result_id: null },
+    Tackle: { action_id: '12', action_type_id: null, action_result_id: null },
+    Blocked: { action_id: '13', action_type_id: null, action_result_id: '7,19' }
+};
+
+export { StyleTextField, BootstrapInput, SearchText, SaveButton, MenuProps, ActionData };

@@ -8,6 +8,7 @@ import { getComparator, getFormattedDate, stableSort } from '../../../components
 import '../../../coach_style.css';
 import TeamGamesVideoPlayer from './videoDialog';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
+import { ActionData } from '../../../components/common';
 
 const properties = [
     { id: 'total_goal', action: 'Goal' },
@@ -26,30 +27,6 @@ const properties = [
     { id: 'total_blocked', action: 'Blocked' },
     { id: 'total_clearance', action: 'Clearance' }
 ];
-
-const ActionData = {
-    Goal: { action_id: '1', action_type_id: null, action_result_id: '3' },
-    GoalOpportunity: { action_id: '1', action_type_id: null, action_result_id: '1' },
-    GoalKick: { action_id: '1', action_type_id: null, action_result_id: null },
-    FreeKick: { action_id: '1,2,3', action_type_id: '11,13', action_result_id: null },
-    KeyPass: { action_id: '2', action_type_id: '7', action_result_id: null },
-    ThroughPass: { action_id: '2', action_type_id: '6', action_result_id: null },
-    Passes: { action_id: '2', action_type_id: null, action_result_id: null },
-    Cross: { action_id: '3', action_type_id: '1,2,3,4,5,6,7,8,9,10,13,14,15', action_result_id: null },
-    Dribble: { action_id: '4', action_type_id: null, action_result_id: null },
-    Offside: { action_id: '7', action_type_id: null, action_result_id: '15' },
-    Corner: { action_id: '2,3', action_type_id: '12', action_result_id: null },
-    DrawFoul: { action_id: '6', action_type_id: null, action_result_id: null },
-    Turnover: { action_id: '2,7', action_type_id: null, action_result_id: '5,11,12,15' },
-    Saved: { action_id: '8', action_type_id: null, action_result_id: null },
-    Penalty: { action_id: '4', action_type_id: null, action_result_id: '14' },
-    Blocked: { action_id: '13', action_type_id: null, action_result_id: '7,19' },
-    Clearance: { action_id: '11', action_type_id: null, action_result_id: null },
-    Interception: { action_id: '10', action_type_id: null, action_result_id: null },
-    Tackle: { action_id: '12', action_type_id: null, action_result_id: null },
-    Foul: { action_id: '5', action_type_id: null, action_result_id: null },
-    All: { action_id: null, action_type_id: null, action_result_id: null }
-};
 
 const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
     const [teamStatList, setTeamStatList] = useState([]);
@@ -135,7 +112,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
             <TableContainer style={{ maxHeight: '80vh' }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
-                        <TableRow>
+                        <TableRow height="36px">
                             <TableCell align="center">Game</TableCell>
                             <TableCell align="center" colSpan={2}>
                                 Team
@@ -161,7 +138,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                     <TableBody>
                         {teamStatList.map((item, index) => (
                             <>
-                                <TableRow key={index}>
+                                <TableRow key={index} height="36px" hover>
                                     <TableCell key={`${index}-game`} align="center" rowSpan={2} sx={{ borderBottom: '1px solid #0A7304' }}>
                                         <div>
                                             <p className="normal-text">{item.league_name}</p>
@@ -169,7 +146,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                             <p className="normal-text">{getFormattedDate(item.game_date)}</p>
                                         </div>
                                     </TableCell>
-                                    <TableCell key={`${index}-result`} align="center" height="36px">
+                                    <TableCell key={`${index}-result`} align="center">
                                         <div
                                             style={{
                                                 background: `${getGameResultImage(item)['home'].color}`,
@@ -183,25 +160,25 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                             <p className="normal-text-white">{getGameResultImage(item)['home'].text}</p>
                                         </div>
                                     </TableCell>
-                                    <TableCell key={`${index}-home`} align="center" sx={{ height: '36px', fontWeight: getGameGoalsFontStyle(item).home }}>
+                                    <TableCell key={`${index}-home`} align="center" sx={{ fontWeight: getGameGoalsFontStyle(item).home }}>
                                         {item.home_team_name}
                                     </TableCell>
-                                    <TableCell key={`${index}-format`} align="center" sx={{ height: '36px', fontWeight: getGameGoalsFontStyle(item).home }}>
+                                    <TableCell key={`${index}-format`} align="center" sx={{ fontWeight: getGameGoalsFontStyle(item).home }}>
                                         {item.team_formation_name}
                                     </TableCell>
                                     {properties.map((prop) => (
                                         <TableCell
                                             key={`${index}-${prop.id}`}
                                             align="center"
-                                            sx={{ height: '36px', cursor: 'pointer', fontWeight: getGameGoalsFontStyle(item).home }}
+                                            sx={{ cursor: 'pointer', fontWeight: getGameGoalsFontStyle(item).home }}
                                             onClick={() => handleDisplayVideo(item.game_id, item.home_team_id, prop.action)}
                                         >
                                             {item.team_id === item.home_team_id ? item[prop.id] : item[`opp_${prop.id}`]}
                                         </TableCell>
                                     ))}
                                 </TableRow>
-                                <TableRow key={index + 1}>
-                                    <TableCell key={`${index + 1}-result`} align="center" sx={{ borderBottom: '1px solid #0A7304', height: '36px' }}>
+                                <TableRow key={index + 1} height="36px" hover>
+                                    <TableCell key={`${index + 1}-result`} align="center" sx={{ borderBottom: '1px solid #0A7304' }}>
                                         <div
                                             style={{
                                                 background: `${getGameResultImage(item)['away'].color}`,
@@ -215,17 +192,17 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                             <p className="normal-text-white">{getGameResultImage(item)['away'].text}</p>
                                         </div>
                                     </TableCell>
-                                    <TableCell key={`${index + 1}-away`} align="center" sx={{ borderBottom: '1px solid #0A7304', height: '36px', fontWeight: getGameGoalsFontStyle(item).away }}>
+                                    <TableCell key={`${index + 1}-away`} align="center" sx={{ borderBottom: '1px solid #0A7304', fontWeight: getGameGoalsFontStyle(item).away }}>
                                         {item.away_team_name}
                                     </TableCell>
-                                    <TableCell key={`${index + 1}-format`} align="center" sx={{ borderBottom: '1px solid #0A7304', height: '36px', fontWeight: getGameGoalsFontStyle(item).away }}>
+                                    <TableCell key={`${index + 1}-format`} align="center" sx={{ borderBottom: '1px solid #0A7304', fontWeight: getGameGoalsFontStyle(item).away }}>
                                         {item.opponent_formation_name}
                                     </TableCell>
                                     {properties.map((prop) => (
                                         <TableCell
                                             key={`${index + 1}-opp_${prop.id}`}
                                             align="center"
-                                            sx={{ borderBottom: '1px solid #0A7304', height: '36px', cursor: 'pointer', fontWeight: getGameGoalsFontStyle(item).away }}
+                                            sx={{ borderBottom: '1px solid #0A7304', cursor: 'pointer', fontWeight: getGameGoalsFontStyle(item).away }}
                                             onClick={() => handleDisplayVideo(item.game_id, item.away_team_id, prop.action)}
                                         >
                                             {item.team_id === item.home_team_id ? item[`opp_${prop.id}`] : item[prop.id]}

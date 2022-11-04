@@ -14,29 +14,7 @@ import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import TeamVideoPlayer from '../overview/teamVideoPlayer';
 import TeamPlayerLogoList from './playerLogoList';
-
-const ActionData = {
-    Goal: { action_id: '1', action_type_id: null, action_result_id: '3' },
-    GoalOpportunity: { action_id: '1', action_type_id: null, action_result_id: '1' },
-    GoalKick: { action_id: '1', action_type_id: null, action_result_id: null },
-    FreeKick: { action_id: '1,2,3', action_type_id: '11,13', action_result_id: null },
-    KeyPass: { action_id: '2', action_type_id: '7', action_result_id: null },
-    ThroughPass: { action_id: '2', action_type_id: '6', action_result_id: null },
-    Cross: { action_id: '3', action_type_id: '1,2,3,4,5,6,7,8,9,10,13,14,15', action_result_id: null },
-    Dribble: { action_id: '4', action_type_id: null, action_result_id: null },
-    Offside: { action_id: '7', action_type_id: null, action_result_id: '15' },
-    Corner: { action_id: '2,3', action_type_id: '12', action_result_id: null },
-    DrawFoul: { action_id: '6', action_type_id: null, action_result_id: null },
-    Turnover: { action_id: '2,7', action_type_id: null, action_result_id: '5,11,12,15' },
-    Saved: { action_id: '8', action_type_id: null, action_result_id: null },
-    Penalty: { action_id: '4', action_type_id: null, action_result_id: '14' },
-    Blocked: { action_id: '13', action_type_id: null, action_result_id: '7,19' },
-    Clearance: { action_id: '11', action_type_id: null, action_result_id: null },
-    Interception: { action_id: '10', action_type_id: null, action_result_id: null },
-    Tackle: { action_id: '12', action_type_id: null, action_result_id: null },
-    Foul: { action_id: '5', action_type_id: null, action_result_id: null },
-    All: { action_id: null, action_type_id: null, action_result_id: null }
-};
+import { ActionData } from '../../../components/common';
 
 const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);

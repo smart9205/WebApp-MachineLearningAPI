@@ -4,6 +4,7 @@ import { Snackbar, Alert, IconButton, CircularProgress, Typography } from '@mui/
 
 import GameService from '../../../services/game.service';
 import { PlayerContext } from '../index';
+import { ActionData } from '../../newcoach/components/common';
 
 import StarButton from '../../../assets/Stars.png';
 
@@ -22,63 +23,32 @@ const styles = {
 };
 
 export const statList = [
-    { id: 'goal', title: 'Goals' },
-    { id: 'shot', title: 'Shots' },
-    { id: 'penalties', title: 'Penalties' },
-    { id: 'penalties_missed', title: 'Penalties Missed' },
-    { id: 'shot_on_target', title: 'Shots On Target' },
-    { id: 'shot_off_target', title: 'Shots Off Target' },
-    { id: 'dribble', title: 'Dribbles' },
-    { id: 'dribble_successful', title: 'Successful Dribbles' },
-    { id: 'crosses', title: 'Crosses' },
-    { id: 'free_kick', title: 'Free Kicks' },
-    { id: 'passes', title: 'Passes' },
-    { id: 'successful_passes', title: 'Successful Passes' },
-    { id: 'passes_for_shots', title: 'Passes For Shots' },
-    { id: 'key_passes', title: 'Key Passes' },
-    { id: 'through_passes', title: 'Through Passes' },
-    { id: 'turnover', title: 'Turnovers' },
-    { id: 'offside', title: 'Offsides' },
-    { id: 'draw_fouls', title: 'Draw Fouls' },
-    { id: 'tackle', title: 'Tackles' },
-    { id: 'interception', title: 'Interceptions' },
-    { id: 'saved', title: 'Saved' },
-    { id: 'clearance', title: 'Clearance' },
-    { id: 'fouls', title: 'Fouls' },
-    { id: 'yellow_cards', title: 'Yellow Cards' },
-    { id: 'red_cards', title: 'Red Cards' }
+    { id: 'goal', title: 'Goals', action: 'Goal' },
+    { id: 'shot', title: 'Shots', action: 'GoalKick' },
+    { id: 'penalties', title: 'Penalties', action: 'Penalty' },
+    { id: 'penalties_missed', title: 'Penalties Missed', action: 'PenaltyMissed' },
+    { id: 'shot_on_target', title: 'Shots On Target', action: 'GoalOpportunity' },
+    { id: 'shot_off_target', title: 'Shots Off Target', action: 'ShotOffTarget' },
+    { id: 'dribble', title: 'Dribbles', action: 'Dribble' },
+    { id: 'dribble_successful', title: 'Successful Dribbles', action: 'DribbleSuccess' },
+    { id: 'crosses', title: 'Crosses', action: 'Cross' },
+    { id: 'free_kick', title: 'Free Kicks', action: 'FreeKick' },
+    { id: 'passes', title: 'Passes', action: 'Passes' },
+    { id: 'successful_passes', title: 'Successful Passes', action: 'PassesSuccess' },
+    { id: 'passes_for_shots', title: 'Passes For Shots', action: 'PassesShots' },
+    { id: 'key_passes', title: 'Key Passes', action: 'KeyPass' },
+    { id: 'through_passes', title: 'Through Passes', action: 'ThroughPass' },
+    { id: 'turnover', title: 'Turnovers', action: 'Turnover' },
+    { id: 'offside', title: 'Offsides', action: 'Offside' },
+    { id: 'draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
+    { id: 'tackle', title: 'Tackles', action: 'Tackle' },
+    { id: 'interception', title: 'Interceptions', action: 'Interception' },
+    { id: 'saved', title: 'Saved', action: 'Saved' },
+    { id: 'clearance', title: 'Clearance', action: 'Clearance' },
+    { id: 'fouls', title: 'Fouls', action: 'Foul' },
+    { id: 'yellow_cards', title: 'Yellow Cards', action: 'YellowCard' },
+    { id: 'red_cards', title: 'Red Cards', action: 'RedCard' }
 ];
-
-const ActionData = {
-    goal: { action_id: '1', action_type_id: null, action_result_id: '3' },
-    shot_on_target: { action_id: '1', action_type_id: null, action_result_id: '1' },
-    shot_off_target: { action_id: '1', action_type_id: null, action_result_id: '2' },
-    shot: { action_id: '1', action_type_id: null, action_result_id: null },
-    free_kick: { action_id: '1,2,3', action_type_id: '11,13', action_result_id: null },
-    passes: { action_id: '2', action_type_id: null, action_result_id: null },
-    successful_passes: { action_id: '2', action_type_id: null, action_result_id: '4' },
-    passes_for_shots: { action_id: '2', action_type_id: '15', action_result_id: null },
-    key_passes: { action_id: '2', action_type_id: '7', action_result_id: null },
-    through_passes: { action_id: '2', action_type_id: '6', action_result_id: null },
-    crosses: { action_id: '3', action_type_id: '1,2,3,4,5,6,7,8,9,10,13,14,15', action_result_id: null },
-    dribble: { action_id: '4', action_type_id: null, action_result_id: null },
-    dribble_successful: { action_id: '4', action_type_id: null, action_result_id: '4' },
-    offside: { action_id: '7', action_type_id: null, action_result_id: '15' },
-    draw_fouls: { action_id: '6', action_type_id: null, action_result_id: null },
-    turnover: { action_id: '2,7', action_type_id: null, action_result_id: '5,11,12,15' },
-    saved: { action_id: '8', action_type_id: null, action_result_id: null },
-    penalties: { action_id: '4', action_type_id: null, action_result_id: '14' },
-    penalties_missed: { action_id: '1', action_type_id: '13', action_result_id: '2' },
-    clearance: { action_id: '11', action_type_id: null, action_result_id: null },
-    interception: { action_id: '10', action_type_id: null, action_result_id: null },
-    tackle: { action_id: '12', action_type_id: null, action_result_id: null },
-    fouls: { action_id: '5', action_type_id: null, action_result_id: null },
-    yellow_cards: { action_id: null, action_type_id: '9', action_result_id: null },
-    red_cards: { action_id: null, action_type_id: '10', action_result_id: null },
-    Corner: { action_id: '2,3', action_type_id: '12', action_result_id: null },
-    Blocked: { action_id: '13', action_type_id: null, action_result_id: '7,19' },
-    All: { action_id: null, action_type_id: null, action_result_id: null }
-};
 
 export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
     const { context, setContext } = useContext(PlayerContext);
@@ -194,7 +164,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
                                 background: context.player?.second_color ?? 'white',
                                 cursor: 'pointer'
                             }}
-                            onClick={() => getPlayerTags(item.id)}
+                            onClick={() => getPlayerTags(item.action)}
                         >
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{playerStat[`total_${item.id}`]}</Typography>
