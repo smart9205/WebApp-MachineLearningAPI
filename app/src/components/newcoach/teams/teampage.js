@@ -24,16 +24,12 @@ const TeamPage = () => {
         teamId: -1,
         seasonId: -1,
         leagueId: -1,
-        tabSelected: 0,
         loading: false,
         loadingDone: false
     });
     const [gameList, setGameList] = useState([]);
     const [gameIds, setGameIds] = useState([]);
-
-    const handleClickTab = (idx) => {
-        setValues({ ...values, tabSelected: idx });
-    };
+    const [curTab, setCurTab] = useState(0);
 
     useEffect(async () => {
         const pathname = window.location.pathname;
@@ -93,22 +89,20 @@ const TeamPage = () => {
                                 <Box
                                     key={index}
                                     sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
-                                    onClick={() => handleClickTab(index)}
+                                    onClick={() => setCurTab(index)}
                                 >
                                     <p className="page-tab">{tab}</p>
-                                    <Box sx={{ height: '2px', width: '100%', backgroundColor: values.tabSelected === index ? '#0A7304' : '#F8F8F8' }} />
+                                    <Box sx={{ height: '2px', width: '100%', backgroundColor: curTab === index ? '#0A7304' : '#F8F8F8' }} />
                                 </Box>
                             ))}
                             <GameSelectControl gameList={gameList} setIds={setGameIds} />
                         </Box>
                     </Box>
-                    {values.tabSelected === 0 && <TeamOverview games={gameList} gameIds={gameIds} teamname={values.teamName} teamId={values.teamId} />}
-                    {values.tabSelected === 2 && <TeamStats games={gameList} gameIds={gameIds} teamId={values.teamId} />}
-                    {values.tabSelected === 3 && <TeamGames games={gameList} gameIds={gameIds} teamId={values.teamId} seasonId={values.seasonId} />}
-                    {values.tabSelected === 4 && <TeamPlayersOverview games={gameList} gameIds={gameIds} teamId={values.teamId} />}
-                    {values.tabSelected === 5 && (
-                        <TeamPlayersStats playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} gameIds={gameIds} games={gameList} />
-                    )}
+                    {curTab === 0 && <TeamOverview games={gameList} gameIds={gameIds} teamname={values.teamName} teamId={values.teamId} />}
+                    {curTab === 2 && <TeamStats games={gameList} gameIds={gameIds} teamId={values.teamId} />}
+                    {curTab === 3 && <TeamGames games={gameList} gameIds={gameIds} teamId={values.teamId} seasonId={values.seasonId} />}
+                    {curTab === 4 && <TeamPlayersOverview games={gameList} gameIds={gameIds} teamId={values.teamId} />}
+                    {curTab === 5 && <TeamPlayersStats playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} gameIds={gameIds} games={gameList} />}
                 </>
             )}
         </Box>

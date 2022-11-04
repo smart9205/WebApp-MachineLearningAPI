@@ -39,11 +39,12 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
     const [playData, setPlayData] = useState([]);
     const [videoOpen, setVideoOpen] = useState(false);
     const [gameList, setGameList] = useState([]);
+    const [detectStats, setDetectStats] = useState([]);
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
     const getPlayerStatus = (id) => {
-        if (stats.length > 0) return stats.filter((item) => item.player_id === id)[0];
+        if (detectStats.length > 0) return detectStats.filter((item) => item.player_id === id)[0];
 
         return null;
     };
@@ -56,39 +57,26 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
     };
 
     const getSortedArray = () => {
-        if (playerList.length > 0 && stats.length > 0) {
-            const sortedStats = stableSort(stats, getComparator(order, orderBy));
+        if (playerList.length > 0 && detectStats.length > 0) {
+            const sortedStats = stableSort(detectStats, getComparator(order, orderBy));
             const other = playerList.filter((item) => !playerIds.includes(item.id));
             const inside = playerList.filter((item) => playerIds.includes(item.id));
             let newList = [];
 
-            console.log('#########', inside, other);
+            sortedStats.map((item) => {
+                const newItem = inside.filter((data) => data.id === item.player_id);
 
-            if (sortedStats.length === inside.length) {
-                sortedStats.map((item) => {
-                    const newItem = playerList.filter((data) => data.id === item.player_id)[0];
+                if (newItem.length === 1) newList = [...newList, newItem[0]];
 
-                    newList = [...newList, newItem];
-
-                    return newList;
-                });
-            } else {
-                const newIds = inside.map((item) => item.id);
-                const newStats = sortedStats.filter((item) => newIds.includes(item.player_id));
-
-                newStats.map((item) => {
-                    const newItem = inside.filter((data) => data.id === item.player_id)[0];
-
-                    newList = [...newList, newItem];
-
-                    return newList;
-                });
-            }
+                return newList;
+            });
             other.map((item) => {
                 newList = [...newList, item];
 
                 return newList;
             });
+
+            console.log('#########', inside, other, newList);
 
             return newList;
         }
@@ -153,10 +141,22 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
     };
 
     useEffect(() => {
-        if (stats.length > 0) setPlayerIds(stats.map((item) => item.player_id));
+        if (stats.length > 0) {
+            let newArray = [];
+
+            stats.map((item) => {
+                const filt = newArray.filter((data) => item.player_id === data.player_id);
+
+                if (filt.length === 0) newArray = [...newArray, item];
+
+                return newArray;
+            });
+            setDetectStats(newArray);
+            setPlayerIds(newArray.map((item) => item.player_id));
+        }
     }, [playerList, stats]);
 
-    console.log('teams/players => ', order, orderBy, playerList);
+    console.log('teams/players => ', order, orderBy, detectStats);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', minHeight: '65vh', overflowY: 'auto', display: 'flex', padding: '4px' }}>
