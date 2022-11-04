@@ -24,7 +24,7 @@ const TeamStatsVideoPlayer = ({ onClose, video_url, tagList }) => {
     const [videoURL, setVideoURL] = useState('');
     const [videoList, setVideoList] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [showLogo, setShowLogo] = useState([]);
+    const [showLogo, setShowLogo] = useState(true);
 
     const fastVideo = (param) => {
         player.current && player.current.seekTo(currentTime + param);
