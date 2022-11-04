@@ -51,7 +51,7 @@ const ActionData = {
     All: { action_id: null, action_type_id: null, action_result_id: null }
 };
 
-const TeamGames = ({ games, gameIds, teamId }) => {
+const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
     const [teamStatList, setTeamStatList] = useState([]);
     const [playData, setPlayData] = useState([]);
     const [videoOpen, setVideoOpen] = useState(false);
@@ -113,7 +113,7 @@ const TeamGames = ({ games, gameIds, teamId }) => {
     useEffect(() => {
         if (gameIds.length > 0) {
             GameService.getTeamsStatsGamebyGame({
-                seasonId: null,
+                seasonId: seasonId,
                 leagueId: null,
                 gameId: gameIds.join(','),
                 teamId: teamId,

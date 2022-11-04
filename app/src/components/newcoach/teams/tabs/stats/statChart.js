@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import '../../../coach_style.css';
 import { getComparator, stableSort } from '../../../components/utilities';
+import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import TeamStatsVideoPlayer from './videoDialog';
 
 const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterText, games }) => {
@@ -35,7 +36,13 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                     action_name: item.action_names,
                     action_type: item.action_type_names,
                     action_result: item.action_result_names,
-                    game_id: item.game_id
+                    game_id: item.game_id,
+                    period: getPeriod(item.period),
+                    time: item.time_in_game,
+                    home_team_image: item.home_team_logo,
+                    away_team_image: item.away_team_logo,
+                    home_team_goals: item.home_team_goal,
+                    away_team_goals: item.away_team_goal
                 };
             })
         );

@@ -1,37 +1,69 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Box, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TableSortLabel } from '@mui/material';
 
 import { PLAYER_ICON_DEFAULT } from '../../../../../common/staticData';
 import { getComparator, stableSort } from '../../../components/utilities';
 import GameService from '../../../../../services/game.service';
 import TeamPlayerStatDialog from './status';
+import { getPeriod } from '../../../games/tabs/overview/tagListItem';
+import TeamStatsVideoPlayer from '../stats/videoDialog';
 
 const headCells = [
     { id: 'total_player_games', title: 'Games' },
-    { id: 'total_goal', title: 'Goals' },
-    { id: 'total_shot', title: 'Shots' },
-    { id: 'total_dribble', title: 'Dribbles' },
-    { id: 'total_crosses', title: 'Crosses' },
-    { id: 'total_corner', title: 'Corners' },
-    { id: 'total_free_kick', title: 'Free Kicks' },
-    { id: 'total_passes', title: 'Passes' },
-    { id: 'total_turnover', title: 'Turnovers' },
-    { id: 'total_fouls', title: 'Fouls' },
-    { id: 'total_draw_fouls', title: 'Draw Fouls' },
-    { id: 'total_interception', title: 'Interceptions' },
-    { id: 'total_tackle', title: 'Tackles' },
-    { id: 'total_saved', title: 'Saved' },
-    { id: 'total_blocked', title: 'Blocked' },
-    { id: 'total_clearance', title: 'Clearance' }
+    { id: 'total_goal', title: 'Goals', action: 'Goal' },
+    { id: 'total_shot', title: 'Shots', action: 'GoalKick' },
+    { id: 'total_dribble', title: 'Dribbles', action: 'Dribble' },
+    { id: 'total_crosses', title: 'Crosses', action: 'Cross' },
+    { id: 'total_corner', title: 'Corners', action: 'Corner' },
+    { id: 'total_free_kick', title: 'Free Kicks', action: 'FreeKick' },
+    { id: 'total_passes', title: 'Passes', action: 'Passes' },
+    { id: 'total_turnover', title: 'Turnovers', action: 'Turnover' },
+    { id: 'total_fouls', title: 'Fouls', action: 'Foul' },
+    { id: 'total_draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
+    { id: 'total_interception', title: 'Interceptions', action: 'Interception' },
+    { id: 'total_tackle', title: 'Tackles', action: 'Tackle' },
+    { id: 'total_saved', title: 'Saved', action: 'Saved' },
+    { id: 'total_blocked', title: 'Blocked', action: 'Blocked' },
+    { id: 'total_clearance', title: 'Clearance', action: 'Clearance' }
 ];
 
-const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds }) => {
+const ActionData = {
+    Goal: { action_id: '1', action_type_id: null, action_result_id: '3' },
+    GoalOpportunity: { action_id: '1', action_type_id: null, action_result_id: '1' },
+    GoalKick: { action_id: '1', action_type_id: null, action_result_id: null },
+    FreeKick: { action_id: '1,2,3', action_type_id: '11,13', action_result_id: null },
+    KeyPass: { action_id: '2', action_type_id: '7', action_result_id: null },
+    ThroughPass: { action_id: '2', action_type_id: '6', action_result_id: null },
+    Passes: { action_id: '2', action_type_id: null, action_result_id: null },
+    Cross: { action_id: '3', action_type_id: '1,2,3,4,5,6,7,8,9,10,13,14,15', action_result_id: null },
+    Dribble: { action_id: '4', action_type_id: null, action_result_id: null },
+    Offside: { action_id: '7', action_type_id: null, action_result_id: '15' },
+    Corner: { action_id: '2,3', action_type_id: '12', action_result_id: null },
+    DrawFoul: { action_id: '6', action_type_id: null, action_result_id: null },
+    Turnover: { action_id: '2,7', action_type_id: null, action_result_id: '5,11,12,15' },
+    Saved: { action_id: '8', action_type_id: null, action_result_id: null },
+    Penalty: { action_id: '4', action_type_id: null, action_result_id: '14' },
+    Blocked: { action_id: '13', action_type_id: null, action_result_id: '7,19' },
+    Clearance: { action_id: '11', action_type_id: null, action_result_id: null },
+    Interception: { action_id: '10', action_type_id: null, action_result_id: null },
+    Tackle: { action_id: '12', action_type_id: null, action_result_id: null },
+    Foul: { action_id: '5', action_type_id: null, action_result_id: null },
+    All: { action_id: null, action_type_id: null, action_result_id: null }
+};
+
+const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games }) => {
     const [playerIds, setPlayerIds] = useState([]);
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('total_player_games');
     const [statOpen, setStatOpen] = useState(false);
     const [playerStat, setPlayerStat] = useState(null);
     const [currentPlayer, setCurrentPlayer] = useState(null);
+    const [playData, setPlayData] = useState([]);
+    const [videoOpen, setVideoOpen] = useState(false);
+    const [gameList, setGameList] = useState([]);
+
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const getPlayerStatus = (id) => {
         if (stats.length > 0) return stats.filter((item) => item.player_id === id)[0];
@@ -106,6 +138,43 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds }) => {
         });
     };
 
+    const handleDisplayVideo = (cell, player_id) => {
+        if (playerIds.includes(player_id) && getPlayerStatus(player_id) && cell.title !== 'Games') {
+            GameService.getGamePlayerTags(
+                currentUser.id,
+                teamId,
+                `${player_id}`,
+                gameIds.join(','),
+                ActionData[cell.action].action_id,
+                ActionData[cell.action].action_type_id,
+                ActionData[cell.action].action_result_id
+            ).then((res) => {
+                console.log('team games => ', res);
+                setPlayData(
+                    res.map((item) => {
+                        return {
+                            start_time: item.player_tag_start_time,
+                            end_time: item.player_tag_end_time,
+                            player_name: item.player_names,
+                            action_name: item.action_names,
+                            action_type: item.action_type_names,
+                            action_result: item.action_result_names,
+                            game_id: item.game_id,
+                            period: getPeriod(item.period),
+                            time: item.time_in_game,
+                            home_team_image: item.home_team_logo,
+                            away_team_image: item.away_team_logo,
+                            home_team_goals: item.home_team_goal,
+                            away_team_goals: item.away_team_goal
+                        };
+                    })
+                );
+                setGameList(games.filter((item) => gameIds.includes(item.id)));
+                setVideoOpen(true);
+            });
+        }
+    };
+
     useEffect(() => {
         if (stats.length > 0) setPlayerIds(stats.map((item) => item.player_id));
     }, [playerList, stats]);
@@ -118,8 +187,7 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds }) => {
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                            <TableCell key="none" />
-                            <TableCell key="name" align="center">
+                            <TableCell key="name" align="center" colSpan={2}>
                                 Name
                             </TableCell>
                             {headCells.map((cell) => (
@@ -148,60 +216,18 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds }) => {
                                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.7rem', fontWeight: 600, color: '#a5a5a8' }}>{player?.pos_name ?? '-'}</Typography>
                                     </Box>
                                 </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_player_games'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_goal'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_shot'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_dribble'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_crosses'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_corner'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_free_kick'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_passes'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_turnover'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_fouls'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_draw_fouls'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_interception'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_tackle'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_saved'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_blocked'] : '-') : '-'}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)['total_clearance'] : '-') : '-'}
-                                </TableCell>
+                                {headCells.map((cell) => (
+                                    <TableCell key={cell.id} align="center" sx={{ cursor: 'pointer' }} onClick={() => handleDisplayVideo(cell.id, player?.id ?? 0)}>
+                                        {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)[cell.id] : '-') : '-'}
+                                    </TableCell>
+                                ))}
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
             <TeamPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} teamId={teamId} seasonId={seasonId} gameIds={gameIds} initialState={playerStat} />
+            {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />}
         </Box>
     );
 };
