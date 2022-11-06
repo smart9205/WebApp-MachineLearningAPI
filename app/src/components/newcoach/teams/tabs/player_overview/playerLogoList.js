@@ -52,7 +52,7 @@ const TeamPlayerLogoList = ({ games, teamId, setIds }) => {
                 setSelectArray([]);
                 res.map((item) => setSelectArray((old) => [...old, false]));
             });
-        }
+        } else setPlayerList([]);
     }, [games, teamId]);
 
     useEffect(() => {

@@ -47,6 +47,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
     const [playerTagList, setPlayerTagList] = useState([]);
     const [playerIds, setPlayerIds] = useState([]);
     const [exportEditOpen, setExportEditOpen] = useState(false);
+    const [gameList, setGameList] = useState([]);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
@@ -93,13 +94,13 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
         if (values.playList.length === 0) {
             setValues({ ...values, clickEventName: 'render' });
             setLoadData(true);
-        } else gamePlayerCreateCommand(values.playList, tagIndex.name, games, gameIds);
+        } else gamePlayerCreateCommand(values.playList, tagIndex.name, gameList, gameIds);
     };
 
     const handleClickRenderFromButton = () => {
         const newList = values.playList.filter((item, index) => checkArray[index] === true);
 
-        gamePlayerCreateCommand(newList, tagIndex.name, games, gameIds);
+        gamePlayerCreateCommand(newList, tagIndex.name, gameList, gameIds);
     };
 
     const handleClickEditsFromButton = () => {
@@ -186,7 +187,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
             setLoading(false);
             setLoadData(false);
 
-            if (values.clickEventName === 'render') gamePlayerCreateCommand(res, tagIndex.name, games, gameIds);
+            if (values.clickEventName === 'render') gamePlayerCreateCommand(res, tagIndex.name, gameList, gameIds);
             else if (values.clickEventName === 'sportcode') {
                 setPlayerTagList(res);
             } else if (values.clickEventName === 'my_edits') {
@@ -210,23 +211,31 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
     };
 
     useEffect(() => {
-        if (loadData) {
-            setLoading(true);
+        if (gameIds.length > 0) {
+            setGameList(games.filter((item) => gameIds.includes(item.id)));
+
+            if (loadData) {
+                setLoading(true);
+                setValues({ ...values, playList: [] });
+                setVideoData({ ...videoData, tagList: [] });
+                getPlayTagList(
+                    GameService.getGamePlayerTags(
+                        currentUser.id,
+                        teamId,
+                        playerIds.length === 0 ? null : playerIds.join(','),
+                        gameIds.join(','),
+                        ActionData[tagIndex.id].action_id,
+                        ActionData[tagIndex.id].action_type_id,
+                        ActionData[tagIndex.id].action_result_id
+                    )
+                );
+            }
+        } else {
+            setGameList([]);
             setValues({ ...values, playList: [] });
             setVideoData({ ...videoData, tagList: [] });
-            getPlayTagList(
-                GameService.getGamePlayerTags(
-                    currentUser.id,
-                    teamId,
-                    playerIds.length === 0 ? null : playerIds.join(','),
-                    gameIds.length > 0 ? gameIds.join(',') : null,
-                    ActionData[tagIndex.id].action_id,
-                    ActionData[tagIndex.id].action_type_id,
-                    ActionData[tagIndex.id].action_result_id
-                )
-            );
         }
-    }, [tagIndex, loadData]);
+    }, [tagIndex, loadData, gameIds]);
 
     useEffect(() => {
         setCheckArray([]);
@@ -240,7 +249,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
     }, [curTeamTagIdx]);
 
     console.log('opponent => ', values.playList);
-    console.log('opponent => ', values.clickEventName);
+    console.log('opponent => ', values.clickEventName, checkArray);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
@@ -282,7 +291,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
                     onTime={handleChangeTime}
                 />
             </Box>
-            <TeamVideoPlayer videoData={videoData} games={games} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} gameTime={gameTime} isTeams={false} />
+            <TeamVideoPlayer videoData={videoData} games={gameList} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} gameTime={gameTime} isTeams={false} />
             <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={playerTagList} isTeams={false} />
         </Box>
     );
