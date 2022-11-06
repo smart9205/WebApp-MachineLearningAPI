@@ -185,7 +185,7 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                     </div>
                 </div>
                 <div style={{ position: 'absolute', left: '36px', top: '12px', width: '90%', display: 'flex', alignItems: 'center' }}>
-                    <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="Show Logo" sx={{ color: 'white', margin: 0, flex: 1 }} />
+                    <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="" sx={{ color: 'white', margin: 0, flex: 1 }} />
                     {showLogo && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flex: 4 }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '100px' }}>

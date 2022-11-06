@@ -63,7 +63,7 @@ const TeamPage = () => {
             }).then((data) => {
                 setValues({ ...values, playerStats: data });
             });
-        }
+        } else setValues({ ...values, playerStats: [] });
     }, [gameIds]);
 
     console.log('Team => ', values.playerStats);

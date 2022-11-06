@@ -119,9 +119,9 @@ const Leaders = () => {
             let result = [];
 
             desc.map((item) => {
-                const filter = result.filter((team) => team === item.team_name);
+                const filter = result.filter((team) => team.name === item.team_name && team.id === item.team_id);
 
-                if (filter.length === 0) result = [...result, item.team_name];
+                if (filter.length === 0) result = [...result, { name: item.team_name, id: item.team_id }];
 
                 return result;
             });
@@ -156,9 +156,9 @@ const Leaders = () => {
             let result = [];
 
             desc.map((item) => {
-                const filter = result.filter((league) => league === item.league_name);
+                const filter = result.filter((league) => league.name === item.league_name && league.id === item.league_id);
 
-                if (filter.length === 0) result = [...result, item.league_name];
+                if (filter.length === 0) result = [...result, { name: item.league_name, id: item.league_id }];
 
                 return result;
             });
@@ -193,69 +193,96 @@ const Leaders = () => {
         if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter === null)
             array = playerList.filter((item) => item.season_name === values.seasonFilter);
         else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter === null)
-            array = playerList.filter((item) => item.league_name === values.leagueFilter);
+            array = playerList.filter((item) => item.league_name === values.leagueFilter.name);
         else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter === null)
-            array = playerList.filter((item) => item.team_name === values.teamFilter);
+            array = playerList.filter((item) => item.team_name === values.teamFilter.name);
         else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter !== null)
             array = playerList.filter((item) => item.player_name === values.playerFilter.name);
         else if (values.seasonFilter !== 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter === null)
-            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.league_name === values.leagueFilter);
+            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.league_name === values.leagueFilter.name);
         else if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter === null)
-            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.team_name === values.teamFilter);
+            array = playerList.filter((item) => item.season_name === values.seasonFilter && item.team_name === values.teamFilter.name);
         else if (values.seasonFilter !== 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter !== null)
             array = playerList.filter((item) => item.season_name === values.seasonFilter && item.player_name === values.playerFilter.name);
         else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter !== 'none' && values.playerFilter === null)
-            array = playerList.filter((item) => item.league_name === values.leagueFilter && item.team_name === values.teamFilter);
+            array = playerList.filter((item) => item.league_name === values.leagueFilter.name && item.team_name === values.teamFilter.name);
         else if (values.seasonFilter === 'none' && values.leagueFilter !== 'none' && values.teamFilter === 'none' && values.playerFilter !== null)
-            array = playerList.filter((item) => item.league_name === values.leagueFilter && item.player_name === values.playerFilter.name);
+            array = playerList.filter((item) => item.league_name === values.leagueFilter.name && item.player_name === values.playerFilter.name);
         else if (values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter !== 'none' && values.playerFilter !== null)
-            array = playerList.filter((item) => item.player_name === values.playerFilter.name && item.team_name === values.teamFilter);
+            array = playerList.filter((item) => item.player_name === values.playerFilter.name && item.team_name === values.teamFilter.name);
         else
             array = playerList.filter(
-                (item) => item.league_name === values.leagueFilter && item.season_name === values.seasonFilter && item.team_name === values.teamFilter && item.player_name === values.playerFilter.name
+                (item) =>
+                    item.league_name === values.leagueFilter.name &&
+                    item.season_name === values.seasonFilter &&
+                    item.team_name === values.teamFilter.name &&
+                    item.player_name === values.playerFilter.name
             );
 
         return values.seasonFilter === 'none' && values.leagueFilter === 'none' && values.teamFilter === 'none' && values.playerFilter === null ? playerList : array;
     };
 
     useEffect(async () => {
-        let leagueIds = [];
-        let teamIds = [];
+        if (leagueList.length === 0 && teamList.length === 0 && playersList.length === 0) {
+            let leagueIds = [];
+            let teamIds = [];
 
-        setLoading(true);
-        await GameService.getAllLeaguesByCoach().then((res) => {
-            console.log(res);
-            setLeagueList(getLeagueList(res));
-            leagueIds = getLeagueIds(res);
-        });
-        await GameService.getAllTeamsByCoach().then((res) => {
-            console.log(res);
-            setTeamList(getTeamList(res));
-            teamIds = getTeamIds(res);
-        });
-        await GameService.getAllPlayersByCoach().then((res) => {
-            setPlayersList(getPlayersList(res));
-        });
-
-        if (teamIds.length > 0) {
-            await GameService.getPlayersStatsAdvanced({
-                seasonId: null,
-                leagueId: leagueIds.length > 0 ? leagueIds.join(',') : null,
-                gameId: null,
-                teamId: teamIds.join(','),
-                playerId: null,
-                gameTime: null,
-                courtAreaId: null,
-                insidePaint: null,
-                homeAway: null,
-                gameResult: null
-            }).then((res) => {
-                setPlayerList(res);
-                setSeasonList(getSeasonList(res));
-                setLoading(false);
+            setLoading(true);
+            await GameService.getAllLeaguesByCoach().then((res) => {
+                setLeagueList(getLeagueList(res));
+                leagueIds = getLeagueIds(res);
             });
-        } else setLoading(false);
-    }, []);
+            await GameService.getAllTeamsByCoach().then((res) => {
+                setTeamList(getTeamList(res));
+                teamIds = getTeamIds(res);
+            });
+            await GameService.getAllPlayersByCoach().then((res) => {
+                setPlayersList(getPlayersList(res));
+            });
+
+            if (teamIds.length > 0) {
+                await GameService.getPlayersStatsAdvanced({
+                    seasonId: null,
+                    leagueId: leagueIds.length > 0 ? leagueIds.join(',') : null,
+                    gameId: null,
+                    teamId: teamIds.join(','),
+                    playerId: null,
+                    gameTime: null,
+                    courtAreaId: null,
+                    insidePaint: null,
+                    homeAway: null,
+                    gameResult: null
+                }).then((res) => {
+                    setPlayerList(res);
+                    setSeasonList(getSeasonList(res));
+                    setLoading(false);
+                });
+            }
+        } else {
+            const leagueIds = values.leagueFilter === 'none' ? leagueList.map((item) => item.id) : [];
+            const teamIds = teamList.map((item) => item.id);
+
+            if (teamIds.length > 0) {
+                setLoading(true);
+                await GameService.getPlayersStatsAdvanced({
+                    seasonId: null,
+                    leagueId: values.leagueFilter === 'none' ? (leagueIds.length > 0 ? leagueIds.join(',') : null) : `${values.leagueFilter.id}`,
+                    gameId: null,
+                    teamId: teamIds.join(','),
+                    playerId: null,
+                    gameTime: null,
+                    courtAreaId: null,
+                    insidePaint: null,
+                    homeAway: null,
+                    gameResult: null
+                }).then((res) => {
+                    setPlayerList(res);
+                    setSeasonList(getSeasonList(res));
+                    setLoading(false);
+                });
+            }
+        }
+    }, [values.leagueFilter]);
 
     console.log('leaders => ', playerList);
 
@@ -311,7 +338,7 @@ const Leaders = () => {
                                         </MenuItem>
                                         {leagueList.map((league, index) => (
                                             <MenuItem key={index + 1} value={league}>
-                                                {league}
+                                                {league.name}
                                             </MenuItem>
                                         ))}
                                     </Select>
@@ -333,7 +360,7 @@ const Leaders = () => {
                                         </MenuItem>
                                         {teamList.map((team, index) => (
                                             <MenuItem key={index + 1} value={team}>
-                                                {team}
+                                                {team.name}
                                             </MenuItem>
                                         ))}
                                     </Select>

@@ -102,7 +102,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
             }).then((res) => {
                 setTeamStatList(stableSort(res, getComparator('desc', 'game_date')));
             });
-        }
+        } else setTeamStatList([]);
     }, [gameIds]);
 
     console.log('team games => ', teamStatList);

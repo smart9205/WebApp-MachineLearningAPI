@@ -135,7 +135,7 @@ const TeamStatsVideoPlayer = ({ onClose, video_url, tagList }) => {
                         }}
                     >
                         <div style={{ display: 'flex', alignItems: 'center', flex: 5 }}>
-                            <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="Show Logo" sx={{ color: 'white', margin: 0, flex: 1 }} />
+                            <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="" sx={{ color: 'white', margin: 0, flex: 1 }} />
                             {showLogo && (
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flex: 4 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
@@ -153,7 +153,7 @@ const TeamStatsVideoPlayer = ({ onClose, video_url, tagList }) => {
                                 </div>
                             )}
                         </div>
-                        <div style={{ cursor: 'pointer' }} onClick={onClose}>
+                        <div style={{color:'Red', cursor: 'pointer' }} onClick={onClose}>
                             <CloseIcon />
                         </div>
                     </div>

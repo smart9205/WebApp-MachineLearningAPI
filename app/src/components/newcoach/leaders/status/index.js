@@ -137,7 +137,7 @@ const LeadersPlayerStatDialog = ({ open, onClose, player }) => {
         setLoading(true);
         GameService.getPlayersStatsAdvanced({
             seasonId: player?.season_id ?? null,
-            leagueId: player?.league_id ?? null,
+            leagueId: null,
             gameId: null,
             teamId: player?.team_id ?? null,
             playerId: player?.player_id ?? null,

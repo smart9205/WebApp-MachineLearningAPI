@@ -54,12 +54,12 @@ const TeamStats = ({ games, gameIds, teamId }) => {
     useEffect(() => {
         if (games.length > 0 && gameIds.length > 0) {
             setGameList(games.filter((item) => gameIds.includes(item.id)));
-
-            if (playerList.length === 0) {
-                GameService.getGamePlayerTags(currentUser.id, teamId, null, gameIds.join(','), null, null, null).then((res) => {
-                    setPlayerList(res);
-                });
-            }
+            GameService.getGamePlayerTags(currentUser.id, teamId, null, gameIds.join(','), null, null, null).then((res) => {
+                setPlayerList(res);
+            });
+        } else {
+            setGameList([]);
+            setPlayerList([]);
         }
     }, [games, gameIds]);
 

@@ -85,26 +85,28 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
     };
 
     const handleDisplayList = (player) => {
-        GameService.getPlayersStatsAdvanced({
-            seasonId: seasonId,
-            leagueId: null,
-            gameId: gameIds.join(','),
-            teamId: teamId,
-            playerId: player.id,
-            gameTime: '1,2,3,4,5,6',
-            courtAreaId: '1,2,3,4',
-            insidePaint: null,
-            homeAway: null,
-            gameResult: null
-        }).then((res) => {
-            setCurrentPlayer(player);
-            setPlayerStat(res[0]);
-            setStatOpen(true);
-        });
+        if (gameIds.length > 0) {
+            GameService.getPlayersStatsAdvanced({
+                seasonId: seasonId,
+                leagueId: null,
+                gameId: gameIds.join(','),
+                teamId: teamId,
+                playerId: player.id,
+                gameTime: '1,2,3,4,5,6',
+                courtAreaId: '1,2,3,4',
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setCurrentPlayer(player);
+                setPlayerStat(res[0]);
+                setStatOpen(true);
+            });
+        } else window.alert("No selected games. Please click 'Select Games' button to select.");
     };
 
     const handleDisplayVideo = (cell, player_id) => {
-        if (playerIds.includes(player_id) && getPlayerStatus(player_id) && cell.title !== 'Games') {
+        if (playerIds.includes(player_id) && getPlayerStatus(player_id) && getPlayerStatus(player_id)[cell.id] !== 0 && cell.title !== 'Games') {
             GameService.getGamePlayerTags(
                 currentUser.id,
                 teamId,
