@@ -120,8 +120,7 @@ const ActionData = {
     PassesShots: { action_id: '2', action_type_id: '15', action_result_id: null },
     Corner: { action_id: '2,3', action_type_id: '12', action_result_id: null },
     Turnover: { action_id: '2,7', action_type_id: null, action_result_id: '5,11,12,15' },
-    Cross: { action_id: '3', action_type_id: null, action_result_id: null },
-    /*Cross: { action_id: '3', action_type_id: '1,2,3,4,5,6,7,8,9,10,13,14,15', action_result_id: null },*/
+    Cross: { action_id: '3', action_type_id: '1,2,3,4,5,6,7,8,9,10,13,14,15', action_result_id: null },
     Dribble: { action_id: '4', action_type_id: null, action_result_id: null },
     DribbleSuccess: { action_id: '4', action_type_id: null, action_result_id: '4' },
     Penalty: { action_id: '4', action_type_id: null, action_result_id: '14' },
