@@ -40,6 +40,7 @@ export const statList = [
     { id: 'through_passes', title: 'Through Passes', action: 'ThroughPass' },
     { id: 'turnover', title: 'Turnovers', action: 'Turnover' },
     { id: 'offside', title: 'Offsides', action: 'Offside' },
+    { id: 'corner', title: 'Corners', action: 'Corner' },
     { id: 'draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
     { id: 'tackle', title: 'Tackles', action: 'Tackle' },
     { id: 'interception', title: 'Interceptions', action: 'Interception' },
@@ -170,6 +171,25 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{playerStat[`total_${item.id}`]}</Typography>
                         </div>
                     ))}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexDirection: 'column',
+                            gap: '4px',
+                            padding: '6px 0',
+                            width: '100%',
+                            height: '60px',
+                            borderRadius: '12px',
+                            border: '1px solid #E8E8E8',
+                            background: context.player?.second_color ?? 'white',
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => getPlayerTags('All')}
+                    >
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>All Actions</Typography>
+                    </div>
                 </div>
             )}
         </>

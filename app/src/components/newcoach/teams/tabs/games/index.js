@@ -36,8 +36,20 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
-    const handleDisplayVideo = (gameId, tId, prop) => {
-        GameService.getGamePlayerTags(currentUser.id, tId, null, `${gameId}`, ActionData[prop].action_id, ActionData[prop].action_type_id, ActionData[prop].action_result_id).then((res) => {
+    const handleDisplayVideo = (cell, isOur, prop) => {
+        const value = cell.team_id === cell.home_team_id ? (isOur ? cell[prop.id] : cell[`opp_${prop.id}`]) : isOur ? cell[`opp_${prop.id}`] : cell[prop.id];
+
+        if (value <= 0) return;
+
+        GameService.getGamePlayerTags(
+            currentUser.id,
+            isOur ? cell.home_team_id : cell.away_team_id,
+            null,
+            `${cell.game_id}`,
+            ActionData[prop.action].action_id,
+            ActionData[prop.action].action_type_id,
+            ActionData[prop.action].action_result_id
+        ).then((res) => {
             console.log('team games => ', res);
             setPlayData(
                 res.map((item) => {
@@ -57,7 +69,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                     };
                 })
             );
-            setVideoURL(games.filter((item) => item.id === gameId)[0].video_url);
+            setVideoURL(games.filter((item) => item.id === cell.game_id)[0].video_url);
             setVideoOpen(true);
         });
     };
@@ -171,7 +183,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                             key={`${index}-${prop.id}`}
                                             align="center"
                                             sx={{ cursor: 'pointer', fontWeight: getGameGoalsFontStyle(item).home }}
-                                            onClick={() => handleDisplayVideo(item.game_id, item.home_team_id, prop.action)}
+                                            onClick={() => handleDisplayVideo(item, true, prop)}
                                         >
                                             {item.team_id === item.home_team_id ? item[prop.id] : item[`opp_${prop.id}`]}
                                         </TableCell>
@@ -203,7 +215,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                             key={`${index + 1}-opp_${prop.id}`}
                                             align="center"
                                             sx={{ borderBottom: '1px solid #0A7304', cursor: 'pointer', fontWeight: getGameGoalsFontStyle(item).away }}
-                                            onClick={() => handleDisplayVideo(item.game_id, item.away_team_id, prop.action)}
+                                            onClick={() => handleDisplayVideo(item, false, prop)}
                                         >
                                             {item.team_id === item.home_team_id ? item[`opp_${prop.id}`] : item[prop.id]}
                                         </TableCell>

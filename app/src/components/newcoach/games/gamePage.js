@@ -11,7 +11,7 @@ import GameStats from './tabs/stats';
 import { getFormattedDate } from '../components/utilities';
 import GameService from '../../../services/game.service';
 
-const Tabs = ['Overview', 'Summary', 'Stats', 'Players'];
+const Tabs = ['Overview', 'Stats', 'Players'];
 
 const GamePage = () => {
     const params = useParams();
@@ -88,8 +88,8 @@ const GamePage = () => {
                         </Box>
                     </Box>
                     {values.curTab === 0 && <GameOverview game={values.game} />}
-                    {values.curTab === 2 && <GameStats game={values.game} />}
-                    {values.curTab === 3 && <GamePlayers game={values.game} />}
+                    {values.curTab === 1 && <GameStats game={values.game} />}
+                    {values.curTab === 2 && <GamePlayers game={values.game} />}
                 </>
             )}
         </Box>

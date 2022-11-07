@@ -13,7 +13,7 @@ import '../coach_style.css';
 import GameSelectControl from './tabs/overview/gameSelectControl';
 import TeamStats from './tabs/stats';
 
-const Tabs = ['Overview', 'Summary', 'Stats', 'Games', 'Players Overview', 'Players Stats'];
+const Tabs = ['Overview', 'Stats', 'Games', 'Players Overview', 'Players Stats'];
 
 const TeamPage = () => {
     const params = useParams();
@@ -99,10 +99,10 @@ const TeamPage = () => {
                         </Box>
                     </Box>
                     {curTab === 0 && <TeamOverview games={gameList} gameIds={gameIds} teamname={values.teamName} teamId={values.teamId} />}
-                    {curTab === 2 && <TeamStats games={gameList} gameIds={gameIds} teamId={values.teamId} />}
-                    {curTab === 3 && <TeamGames games={gameList} gameIds={gameIds} teamId={values.teamId} seasonId={values.seasonId} />}
-                    {curTab === 4 && <TeamPlayersOverview games={gameList} gameIds={gameIds} teamId={values.teamId} />}
-                    {curTab === 5 && <TeamPlayersStats playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} gameIds={gameIds} games={gameList} />}
+                    {curTab === 1 && <TeamStats games={gameList} gameIds={gameIds} teamId={values.teamId} />}
+                    {curTab === 2 && <TeamGames games={gameList} gameIds={gameIds} teamId={values.teamId} seasonId={values.seasonId} />}
+                    {curTab === 3 && <TeamPlayersOverview games={gameList} gameIds={gameIds} teamId={values.teamId} teamName={values.teamName} />}
+                    {curTab === 4 && <TeamPlayersStats playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} gameIds={gameIds} games={gameList} />}
                 </>
             )}
         </Box>

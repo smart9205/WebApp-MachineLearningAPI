@@ -100,10 +100,11 @@ export default function Player() {
     useEffect(() => {
         setLoading(true);
         GameService.getGameDetailssByPlayer(playerId).then((res) => {
-            const ascArray = stableSort(res, getComparator('desc', 'date'));
+            const doneArray = res.filter((item) => item.done_tagging === true);
+            const ascArray = stableSort(doneArray, getComparator('desc', 'date'));
 
             setGames(ascArray);
-            getSeasonList(res);
+            getSeasonList(doneArray);
         });
 
         GameService.getPlayerById(playerId).then((res) => {

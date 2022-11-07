@@ -15,8 +15,9 @@ import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import TeamVideoPlayer from '../overview/teamVideoPlayer';
 import TeamPlayerLogoList from './playerLogoList';
 import { ActionData } from '../../../components/common';
+import { XmlDataFilterTeamPlayer } from '../../../components/xmldatateam';
 
-const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
+const TeamPlayersOverview = ({ games, gameIds, teamId, teamName }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
     const [videoData, setVideoData] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -48,6 +49,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
     const [playerIds, setPlayerIds] = useState([]);
     const [exportEditOpen, setExportEditOpen] = useState(false);
     const [gameList, setGameList] = useState([]);
+    const [exportXML, setExportXML] = useState(false);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
@@ -75,6 +77,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
         const newList = values.playList.filter((item, index) => checkArray[index] === true);
 
         setPlayerTagList(newList);
+        setExportXML(true);
     };
 
     const handleClickHudlFromMenu = () => {
@@ -85,6 +88,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
             setLoadData(true);
         } else {
             setPlayerTagList(values.playList);
+            setExportXML(true);
         }
     };
 
@@ -190,6 +194,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
             if (values.clickEventName === 'render') gamePlayerCreateCommand(res, tagIndex.name, gameList, gameIds);
             else if (values.clickEventName === 'sportcode') {
                 setPlayerTagList(res);
+                setExportXML(true);
             } else if (values.clickEventName === 'my_edits') {
                 setPlayerTagList(res);
                 setExportEditOpen(true);
@@ -254,7 +259,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', padding: '24px 10px' }}>
-                <TeamPlayerLogoList games={gameIds} teamId={teamId} setIds={setPlayerIds} />
+                <TeamPlayerLogoList games={games} gameIds={gameIds} teamId={teamId} setIds={setPlayerIds} />
                 {values.expandButtons && <GamePlayerTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
@@ -293,6 +298,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId }) => {
             </Box>
             <TeamVideoPlayer videoData={videoData} games={games} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} gameTime={gameTime} isTeams={false} />
             <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={playerTagList} isTeams={false} />
+            {exportXML && <XmlDataFilterTeamPlayer games={gameList} tagList={playerTagList} tag_name={tagIndex.name} team_name={teamName} setExportXML={setExportXML} />}
         </Box>
     );
 };

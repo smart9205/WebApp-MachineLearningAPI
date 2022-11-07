@@ -5,7 +5,7 @@ import GameService from '../../../../../services/game.service';
 import TeamPlayerLogo from './playerLogo';
 import TeamPlayerOverviewStatDialog from './status';
 
-const TeamPlayerLogoList = ({ games, teamId, setIds }) => {
+const TeamPlayerLogoList = ({ games, gameIds, teamId, setIds }) => {
     const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectArray, setSelectArray] = useState([]);
@@ -27,7 +27,7 @@ const TeamPlayerLogoList = ({ games, teamId, setIds }) => {
         GameService.getPlayersStatsAdvanced({
             seasonId: null,
             leagueId: null,
-            gameId: games.join(','),
+            gameId: gameIds.join(','),
             teamId: teamId,
             playerId: player.player_id,
             gameTime: '1,2,3,4,5,6',
@@ -43,17 +43,17 @@ const TeamPlayerLogoList = ({ games, teamId, setIds }) => {
     };
 
     useEffect(() => {
-        if (teamId !== -1 && games.length > 0) {
+        if (teamId !== -1 && gameIds.length > 0) {
             setLoading(true);
             setPlayerList([]);
-            GameService.getGameCoachTeamPlayers(teamId, games.join(',')).then((res) => {
+            GameService.getGameCoachTeamPlayers(teamId, gameIds.join(',')).then((res) => {
                 setPlayerList(res);
                 setLoading(false);
                 setSelectArray([]);
                 res.map((item) => setSelectArray((old) => [...old, false]));
             });
         } else setPlayerList([]);
-    }, [games, teamId]);
+    }, [gameIds, teamId]);
 
     useEffect(() => {
         const ids = playerList.filter((item, index) => selectArray[index] === true).map((item) => item.player_id);
@@ -77,7 +77,7 @@ const TeamPlayerLogoList = ({ games, teamId, setIds }) => {
                     </Box>
                 ))}
             </Box>
-            <TeamPlayerOverviewStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} games={games} teamId={teamId} initialState={playerState} />
+            <TeamPlayerOverviewStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} games={games} gameIds={gameIds} teamId={teamId} initialState={playerState} />
         </Box>
     );
 };
