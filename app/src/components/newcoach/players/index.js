@@ -21,6 +21,9 @@ import { useSelector } from 'react-redux';
 
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
+import EditIcon from '@mui/icons-material/EditOutlined';
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 
 import GameService from '../../../services/game.service';
 import { ActionData, MenuProps } from '../components/common';
@@ -106,7 +109,7 @@ const Players = () => {
         if (cell.title !== 'Games' && player[cell.id] !== undefined && player[cell.id] > 0) {
             let gameIds = [];
 
-            await GameService.getAllGamesByCoach(player.season_id, player.league_id, player.team_id, null).then((res) => {
+            await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
                 const videoGames = res.filter((item) => item.video_url.toLowerCase() !== 'no video');
 
                 setGameList(videoGames);
@@ -151,7 +154,7 @@ const Players = () => {
         if (cell.title !== 'Games' && player[cell.id] !== undefined && player[cell.id] > 0) {
             let gameIds = [];
 
-            await GameService.getAllGamesByCoach(player.season_id, player.league_id, player.team_id, null).then((res) => {
+            await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
                 const videoGames = res.filter((item) => item.video_url.toLowerCase() !== 'no video');
 
                 setGameList(videoGames);
@@ -176,12 +179,12 @@ const Players = () => {
         let gameIds = [];
 
         setMenuAnchorEl(null);
-        await GameService.getAllGamesByCoach(playerStat.season_id, playerStat.league_id, playerStat.team_id, null).then((res) => {
+        await GameService.getAllGamesByCoach(playerStat.season_id, null, playerStat.team_id, null).then((res) => {
             gameIds = res.map((item) => item.id);
         });
         await GameService.getPlayersStatsGamebyGame({
             seasonId: playerStat.season_id,
-            leagueId: `${playerStat.league_id}`,
+            leagueId: null,
             gameId: gameIds.length === 0 ? null : gameIds.join(','),
             teamId: playerStat.team_id,
             playerId: playerStat.player_id,
@@ -191,14 +194,14 @@ const Players = () => {
             homeAway: null,
             gameResult: null
         }).then((res) => {
-            setPlayerGames(res);
+            setPlayerGames(stableSort(res, getComparator('desc', 'game_date')));
             setGamesOpen(true);
         });
     };
 
     const handleDisplayStats = () => {
         setMenuAnchorEl(null);
-        GameService.getAllGamesByCoach(playerStat.season_id, playerStat.league_id, playerStat.team_id, null).then((res) => {
+        GameService.getAllGamesByCoach(playerStat.season_id, null, playerStat.team_id, null).then((res) => {
             setGameList(res);
             setStatOpen(true);
         });
@@ -452,7 +455,7 @@ const Players = () => {
                             />
                             {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />}
                             <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
-                            <PlayersGamesDialog open={gamesOpen} onClose={() => setGamesOpen(false)} list={playerGames} />
+                            <PlayersGamesDialog open={gamesOpen} onClose={() => setGamesOpen(false)} list={playerGames} playerName={playerStat?.player_name ?? ''} />
                             <Popover
                                 id={menuPopoverId}
                                 open={menuPopoverOpen}
@@ -462,22 +465,25 @@ const Players = () => {
                                 transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                                 sx={{ '& .MuiPopover-paper': { width: '220px', borderRadius: '12px', border: '1px solid #E8E8E8' } }}
                             >
-                                <Box sx={{ display: 'flex', alignItems: 'center', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDisplayStats()}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDisplayStats()}>
+                                    <QueryStatsIcon />
                                     <p className="menu-item">Accumulated Stats</p>
                                 </Box>
                                 <Divider sx={{ width: '100%' }} />
-                                <Box sx={{ display: 'flex', alignItems: 'center', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDisplayGames()}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDisplayGames()}>
+                                    <SportsSoccerIcon />
                                     <p className="menu-item">Game By Game</p>
                                 </Box>
                                 <Divider sx={{ width: '100%' }} />
                                 <Box
-                                    sx={{ display: 'flex', alignItems: 'center', padding: '12px 20px', cursor: 'pointer' }}
+                                    sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }}
                                     onClick={() => {
                                         setMenuAnchorEl(null);
                                         setEditPlayer(playerStat);
                                         setEditOpen(true);
                                     }}
                                 >
+                                    <EditIcon />
                                     <p className="menu-item">Edit Player</p>
                                 </Box>
                             </Popover>

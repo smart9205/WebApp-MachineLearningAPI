@@ -29,7 +29,7 @@ const properties = [
     { id: 'total_clearance', title: 'Clearance', action: 'Clearance' }
 ];
 
-const PlayersGamesDialog = ({ open, onClose, list }) => {
+const PlayersGamesDialog = ({ open, onClose, list, playerName }) => {
     const { user: currentUser } = useSelector((state) => state.auth);
 
     const [playData, setPlayData] = useState([]);
@@ -96,11 +96,15 @@ const PlayersGamesDialog = ({ open, onClose, list }) => {
         }
     };
 
+    const getAwayTeamName = (item) => {
+        return item.team_name === item.home_team_name ? item.away_team_name : item.home_team_name;
+    };
+
     console.log('player games => ', list);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="1500px">
-            <DialogTitle>Games of Player</DialogTitle>
+            <DialogTitle>{`Games of ${playerName}`}</DialogTitle>
             <DialogContent>
                 <TableContainer style={{ maxHeight: '75vh', minWidth: '1200px' }}>
                     <Table stickyHeader aria-label="sticky table">
@@ -122,7 +126,7 @@ const PlayersGamesDialog = ({ open, onClose, list }) => {
                                     <TableCell key={`${index}-game`} align="center" width="348px">
                                         <div>
                                             <p className="normal-text">{`${item.season_name}, ${item.league_name}`}</p>
-                                            <p className="normal-text">{`${getFormattedDate(item.game_date)} VS ${item.away_team_name}`}</p>
+                                            <p className="normal-text">{`${getFormattedDate(item.game_date)} VS ${getAwayTeamName(item)}`}</p>
                                         </div>
                                     </TableCell>
                                     {properties.map((prop) => (
