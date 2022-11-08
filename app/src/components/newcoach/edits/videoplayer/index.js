@@ -213,7 +213,7 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
                     </div>
 
                     <div style={styles.buttonBox}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                             <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
                                 <SkipPreviousSharpIcon color="white" />
                             </IconButton>

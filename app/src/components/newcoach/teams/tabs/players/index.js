@@ -9,6 +9,7 @@ import GameService from '../../../../../services/game.service';
 import TeamPlayerStatDialog from './status';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import TeamStatsVideoPlayer from '../stats/videoDialog';
+import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 
 const headCells = [
     { id: 'total_player_games', title: 'Games' },
@@ -40,6 +41,7 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
     const [videoOpen, setVideoOpen] = useState(false);
     const [gameList, setGameList] = useState([]);
     const [detectStats, setDetectStats] = useState([]);
+    const [exportOpen, setExportOpen] = useState(false);
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
@@ -142,6 +144,25 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
         }
     };
 
+    const handleExportTags = (cell, player_id) => (e) => {
+        e.preventDefault();
+
+        if (playerIds.includes(player_id) && getPlayerStatus(player_id) && getPlayerStatus(player_id)[cell.id] !== 0 && cell.title !== 'Games') {
+            GameService.getGamePlayerTags(
+                currentUser.id,
+                teamId,
+                `${player_id}`,
+                gameIds.join(','),
+                ActionData[cell.action].action_id,
+                ActionData[cell.action].action_type_id,
+                ActionData[cell.action].action_result_id
+            ).then((res) => {
+                setPlayData(res);
+                setExportOpen(true);
+            });
+        }
+    };
+
     useEffect(() => {
         if (stats.length > 0) {
             let newArray = [];
@@ -196,7 +217,13 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
                                     </Box>
                                 </TableCell>
                                 {headCells.map((cell) => (
-                                    <TableCell key={cell.id} align="center" sx={{ cursor: 'pointer' }} onClick={() => handleDisplayVideo(cell, player?.id ?? 0)}>
+                                    <TableCell
+                                        key={cell.id}
+                                        align="center"
+                                        sx={{ cursor: 'pointer' }}
+                                        onClick={() => handleDisplayVideo(cell, player?.id ?? 0)}
+                                        onContextMenu={handleExportTags(cell, player?.id ?? 0)}
+                                    >
                                         {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)[cell.id] : '-') : '-'}
                                     </TableCell>
                                 ))}
@@ -207,6 +234,7 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
             </TableContainer>
             <TeamPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} teamId={teamId} seasonId={seasonId} gameIds={gameIds} initialState={playerStat} />
             {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />}
+            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );
 };

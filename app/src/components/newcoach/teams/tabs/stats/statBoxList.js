@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import '../../../coach_style.css';
+import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import TeamStatsVideoPlayer from './videoDialog';
 
@@ -27,6 +28,7 @@ const TeamStatsBoxList = ({ games, list }) => {
     const [actionList, setActionList] = useState([]);
     const [videoOpen, setVideoOpen] = useState(false);
     const [playData, setPlayData] = useState([]);
+    const [exportOpen, setExportOpen] = useState(false);
 
     const handleDisplayVideo = (player) => {
         if (player.total > 0) {
@@ -50,6 +52,15 @@ const TeamStatsBoxList = ({ games, list }) => {
                 })
             );
             setVideoOpen(true);
+        }
+    };
+
+    const handleExportTags = (player) => (e) => {
+        e.preventDefault();
+
+        if (player.total > 0) {
+            setPlayData(player.data);
+            setExportOpen(true);
         }
     };
 
@@ -110,6 +121,7 @@ const TeamStatsBoxList = ({ games, list }) => {
                             cursor: 'pointer'
                         }}
                         onClick={() => handleDisplayVideo(item)}
+                        onContextMenu={handleExportTags(item)}
                     >
                         <p className="normal-text">{item.title}</p>
                         <p className="normal-text">{item.total}</p>
@@ -134,6 +146,8 @@ const TeamStatsBoxList = ({ games, list }) => {
                             cursor: 'pointer'
                         }}
                         onClick={() => handleDisplayVideo(item)}
+                        onContextMenu={handleExportTags(item)}
+                        contextMenu="none"
                     >
                         <p className="normal-text">{item.title}</p>
                         <p className="normal-text">{item.total}</p>
@@ -158,6 +172,7 @@ const TeamStatsBoxList = ({ games, list }) => {
                             cursor: 'pointer'
                         }}
                         onClick={() => handleDisplayVideo(item)}
+                        onContextMenu={handleExportTags(item)}
                     >
                         <p className="normal-text">{item.title}</p>
                         <p className="normal-text">{item.total}</p>
@@ -165,6 +180,7 @@ const TeamStatsBoxList = ({ games, list }) => {
                 ))}
             </Box>
             {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={games} tagList={playData} />}
+            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );
 };

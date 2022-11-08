@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import '../../../coach_style.css';
 import { getComparator, stableSort } from '../../../components/utilities';
+import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import TeamStatsVideoPlayer from './videoDialog';
 
@@ -11,6 +12,7 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
     const [hoverId, setHoverId] = useState('');
     const [videoOpen, setVideoOpen] = useState(false);
     const [playData, setPlayData] = useState([]);
+    const [exportOpen, setExportOpen] = useState(false);
 
     const getBarWidth = (maxCount, count) => {
         const realWidth = Math.floor((count * 98) / maxCount);
@@ -47,6 +49,12 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
             })
         );
         setVideoOpen(true);
+    };
+
+    const handleExportTags = (player, sId) => (e) => {
+        e.preventDefault();
+        setPlayData(player.data[sId].videoList);
+        setExportOpen(true);
     };
 
     const getTooltipContent = (player, sId) => {
@@ -133,6 +141,7 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                                         onMouseEnter={() => handleMouseEnter(index, sId)}
                                         onMouseLeave={() => setHoverId('')}
                                         onClick={() => handleDisplayVideo(item, sId)}
+                                        onContextMenu={handleExportTags(item, sId)}
                                     >
                                         <Tooltip arrow title={getTooltipContent(item, sId)} TransitionComponent={Zoom} placement="right">
                                             <p className="chart-bar-text">{skill.count}</p>
@@ -148,6 +157,7 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                 ))}
             </div>
             {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={games} tagList={playData} />}
+            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );
 };
