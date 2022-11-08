@@ -42,7 +42,8 @@ const statList = [
     { id: 'blocked', title: 'Blocked', action: 'Blocked' },
     { id: 'fouls', title: 'Fouls', action: 'Foul' },
     { id: 'yellow_cards', title: 'Yellow Cards', action: 'YellowCard' },
-    { id: 'red_cards', title: 'Red Cards', action: 'RedCard' }
+    { id: 'red_cards', title: 'Red Cards', action: 'RedCard' },
+    { id: 'player_games', title: 'Games' }
 ];
 
 const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, teamId, initialState }) => {
@@ -158,7 +159,7 @@ const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, t
     };
 
     const handleDisplayVideo = (cell) => {
-        if (playerState && playerState[`total_${cell.id}`] > 0) {
+        if (playerState && playerState[`total_${cell.id}`] > 0 && cell.title !== 'Games') {
             GameService.getGamePlayerTags(
                 currentUser.id,
                 teamId,
@@ -201,7 +202,7 @@ const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, t
     const handleExportTags = (cell) => (e) => {
         e.preventDefault();
 
-        if (playerState && playerState[`total_${cell.id}`] > 0) {
+        if (playerState && playerState[`total_${cell.id}`] > 0 && cell.title !== 'Games') {
             GameService.getGamePlayerTags(
                 currentUser.id,
                 teamId,
