@@ -232,7 +232,16 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TeamPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} teamId={teamId} seasonId={seasonId} gameIds={gameIds} initialState={playerStat} />
+            <TeamPlayerStatDialog
+                open={statOpen}
+                onClose={() => setStatOpen(false)}
+                player={currentPlayer}
+                teamId={teamId}
+                seasonId={seasonId}
+                games={games}
+                gameIds={gameIds}
+                initialState={playerStat}
+            />
             {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />}
             <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>

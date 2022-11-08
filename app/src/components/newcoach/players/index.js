@@ -450,6 +450,7 @@ const Players = () => {
                                 player={currentPlayer}
                                 teamId={playerStat?.team_id ?? null}
                                 seasonId={playerStat?.season_id ?? null}
+                                games={gameList}
                                 gameIds={gameList.map((item) => item.id)}
                                 initialState={playerStat}
                             />
