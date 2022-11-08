@@ -9,6 +9,7 @@ import '../../../coach_style.css';
 import TeamGamesVideoPlayer from './videoDialog';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import { ActionData } from '../../../components/common';
+import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 
 const properties = [
     { id: 'total_goal', action: 'Goal' },
@@ -33,6 +34,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
     const [playData, setPlayData] = useState([]);
     const [videoOpen, setVideoOpen] = useState(false);
     const [videoURL, setVideoURL] = useState('');
+    const [exportOpen, setExportOpen] = useState(false);
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
@@ -71,6 +73,27 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
             );
             setVideoURL(games.filter((item) => item.id === cell.game_id)[0].video_url);
             setVideoOpen(true);
+        });
+    };
+
+    const handleExportTags = (cell, isOur, prop) => (e) => {
+        e.preventDefault();
+
+        const value = cell.team_id === cell.home_team_id ? (isOur ? cell[prop.id] : cell[`opp_${prop.id}`]) : isOur ? cell[`opp_${prop.id}`] : cell[prop.id];
+
+        if (value <= 0) return;
+
+        GameService.getGamePlayerTags(
+            currentUser.id,
+            isOur ? cell.home_team_id : cell.away_team_id,
+            null,
+            `${cell.game_id}`,
+            ActionData[prop.action].action_id,
+            ActionData[prop.action].action_type_id,
+            ActionData[prop.action].action_result_id
+        ).then((res) => {
+            setPlayData(res);
+            setExportOpen(true);
         });
     };
 
@@ -184,6 +207,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                             align="center"
                                             sx={{ cursor: 'pointer', fontWeight: getGameGoalsFontStyle(item).home }}
                                             onClick={() => handleDisplayVideo(item, true, prop)}
+                                            onContextMenu={handleExportTags(item, true, prop)}
                                         >
                                             {item.team_id === item.home_team_id ? item[prop.id] : item[`opp_${prop.id}`]}
                                         </TableCell>
@@ -216,6 +240,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                             align="center"
                                             sx={{ borderBottom: '1px solid #0A7304', cursor: 'pointer', fontWeight: getGameGoalsFontStyle(item).away }}
                                             onClick={() => handleDisplayVideo(item, false, prop)}
+                                            onContextMenu={handleExportTags(item, false, prop)}
                                         >
                                             {item.team_id === item.home_team_id ? item[`opp_${prop.id}`] : item[prop.id]}
                                         </TableCell>
@@ -227,6 +252,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                 </Table>
             </TableContainer>
             {videoOpen && <TeamGamesVideoPlayer onClose={() => setVideoOpen(false)} video_url={videoURL} tagList={playData} />}
+            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );
 };
