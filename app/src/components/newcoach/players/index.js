@@ -21,7 +21,6 @@ import { useSelector } from 'react-redux';
 
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
-import SortIcon from '@mui/icons-material/SortOutlined';
 
 import GameService from '../../../services/game.service';
 import { ActionData, MenuProps } from '../components/common';
@@ -33,6 +32,7 @@ import '../coach_style.css';
 import { getPeriod } from '../games/tabs/overview/tagListItem';
 import TeamStatsVideoPlayer from '../teams/tabs/stats/videoDialog';
 import GameExportToEdits from '../games/tabs/overview/exportEdits';
+import PlayersGamesDialog from './gamesDialog';
 
 const headCells = [
     { id: 'total_player_games', title: 'Games' },
@@ -72,6 +72,8 @@ const Players = () => {
     const [videoOpen, setVideoOpen] = useState(false);
     const [gameList, setGameList] = useState([]);
     const [exportOpen, setExportOpen] = useState(false);
+    const [playerGames, setPlayerGames] = useState([]);
+    const [gamesOpen, setGamesOpen] = useState(false);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const menuPopoverOpen = Boolean(menuAnchorEl);
@@ -101,7 +103,7 @@ const Players = () => {
     };
 
     const handleDisplayVideo = (cell, player) => async (e) => {
-        if (cell.title !== 'Games' && player[cell.id] !== undefined) {
+        if (cell.title !== 'Games' && player[cell.id] !== undefined && player[cell.id] > 0) {
             let gameIds = [];
 
             await GameService.getAllGamesByCoach(player.season_id, player.league_id, player.team_id, null).then((res) => {
@@ -146,7 +148,7 @@ const Players = () => {
     const handleExportPlayerTags = (cell, player) => async (e) => {
         e.preventDefault();
 
-        if (cell.title !== 'Games' && player[cell.id] !== undefined) {
+        if (cell.title !== 'Games' && player[cell.id] !== undefined && player[cell.id] > 0) {
             let gameIds = [];
 
             await GameService.getAllGamesByCoach(player.season_id, player.league_id, player.team_id, null).then((res) => {
@@ -189,7 +191,8 @@ const Players = () => {
             homeAway: null,
             gameResult: null
         }).then((res) => {
-            console.log('game by game =>', res);
+            setPlayerGames(res);
+            setGamesOpen(true);
         });
     };
 
@@ -398,7 +401,6 @@ const Players = () => {
                                                     </TableSortLabel>
                                                 </TableCell>
                                             ))}
-                                            <TableCell key="menu" />
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -433,17 +435,6 @@ const Players = () => {
                                                         {player[cell.id] ?? '-'}
                                                     </TableCell>
                                                 ))}
-                                                <TableCell
-                                                    key={`${player.player_id}-${index}-3`}
-                                                    align="center"
-                                                    sx={{ cursor: 'pointer' }}
-                                                    onClick={() => {
-                                                        setEditPlayer(player);
-                                                        setEditOpen(true);
-                                                    }}
-                                                >
-                                                    <SortIcon />
-                                                </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -461,6 +452,7 @@ const Players = () => {
                             />
                             {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />}
                             <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
+                            <PlayersGamesDialog open={gamesOpen} onClose={() => setGamesOpen(false)} list={playerGames} />
                             <Popover
                                 id={menuPopoverId}
                                 open={menuPopoverOpen}
@@ -476,6 +468,17 @@ const Players = () => {
                                 <Divider sx={{ width: '100%' }} />
                                 <Box sx={{ display: 'flex', alignItems: 'center', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDisplayGames()}>
                                     <p className="menu-item">Game By Game</p>
+                                </Box>
+                                <Divider sx={{ width: '100%' }} />
+                                <Box
+                                    sx={{ display: 'flex', alignItems: 'center', padding: '12px 20px', cursor: 'pointer' }}
+                                    onClick={() => {
+                                        setMenuAnchorEl(null);
+                                        setEditPlayer(playerStat);
+                                        setEditOpen(true);
+                                    }}
+                                >
+                                    <p className="menu-item">Edit Player</p>
                                 </Box>
                             </Popover>
                         </Box>

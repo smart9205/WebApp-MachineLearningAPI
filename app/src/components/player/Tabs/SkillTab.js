@@ -63,10 +63,6 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
     const [msg, setMsg] = useState('');
     const [loading, setLoading] = useState(true);
 
-    const getNormalStatList = () => {
-        return statList.filter((item) => playerStat && playerStat[`total_${item.id}`] > 0);
-    };
-
     const getPlayerTags = (id) => {
         GameService.getGamePlayerTags(null, teamId, `${playerId}`, `${gameId}`, ActionData[id].action_id, ActionData[id].action_type_id, ActionData[id].action_result_id).then((res) => {
             console.log('######', res);
@@ -148,7 +144,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
                             )}
                         </div>
                     </div>
-                    {getNormalStatList().map((item) => (
+                    {statList.map((item) => (
                         <div
                             key={item.id}
                             style={{
@@ -168,7 +164,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
                             onClick={() => getPlayerTags(item.action)}
                         >
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{playerStat[`total_${item.id}`]}</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{playerStat[`total_${item.id}`] ?? '0'}</Typography>
                         </div>
                     ))}
                     <div
