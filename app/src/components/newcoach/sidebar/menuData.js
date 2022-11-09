@@ -10,6 +10,7 @@ import EditsIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import LeadersIcon from '@mui/icons-material/PeopleAltOutlined';
 import TheatersIcon from '@mui/icons-material/Theaters';
 import CheckIcon from '@mui/icons-material/Check';
+import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 
 export const menuData = [
     {
@@ -54,12 +55,17 @@ export const menuData = [
         icon: <TheatersIcon />,
         title: 'Video Cutter'
     },
-
     {
         id: 'players',
         path: '/new_coach/players',
         icon: <PlayersIcon />,
         title: 'Players'
+    },
+    {
+        id: 'goalkeepers',
+        path: '/new_coach/goalkeepers',
+        icon: <SportsSoccerIcon />,
+        title: 'Goalkeepers'
     },
     {
         id: 'settings',

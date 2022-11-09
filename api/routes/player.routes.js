@@ -1,100 +1,106 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/player.controller");
 module.exports = (app) => {
-    app.use(function (req, res, next) {
-        res.header(
-            "Access-Control-Allow-Headers",
-            "x-access-token, Origin, Content-Type, Accept"
-        );
-        next();
-    });
-
-    app.post(
-        "/player",
-        [authJwt.verifyToken, authJwt.isAdmin],
-        controller.create
+  app.use(function (req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers",
+      "x-access-token, Origin, Content-Type, Accept"
     );
+    next();
+  });
 
-    app.get("/player", controller.findAll);
+  app.post(
+    "/player",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.create
+  );
 
-    app.post("/player/highlight", controller.addHighlight);
+  app.get("/player", controller.findAll);
 
-    app.get("/player/highlight/:id", controller.getAllHighlightByPlayerId);
+  app.post("/player/highlight", controller.addHighlight);
 
-    app.get("/player/position", controller.findAllPosition);
+  app.get("/player/highlight/:id", controller.getAllHighlightByPlayerId);
 
-    app.get("/player/:id", controller.findOne);
+  app.get("/player/position", controller.findAllPosition);
 
-    app.get("/player/gameByPlayerId/:id", controller.gameByPlayerId);
+  app.get("/player/:id", controller.findOne);
 
-    app.get(
-        "/player/gameDetailsByPlayerId/:id",
-        controller.gameDetailsByPlayerId
-    );
+  app.get("/player/gameByPlayerId/:id", controller.gameByPlayerId);
 
-    app.get(
-        "/player/getplayersstats/:seasonId/:leagueId/:gameId/:teamId/:playerId",
-        [authJwt.verifyToken, authJwt.isAdminOrCoach],
-        controller.getPlayersStats
-    );
+  app.get(
+    "/player/gameDetailsByPlayerId/:id",
+    controller.gameDetailsByPlayerId
+  );
 
-    app.post(
-        "/player/getplayersstats/advance",
-        controller.getPlayersStatsAdvanced
-    );
+  app.get(
+    "/player/getplayersstats/:seasonId/:leagueId/:gameId/:teamId/:playerId",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getPlayersStats
+  );
 
-    app.post(
-        "/player/getplayersstats/game",
-        [authJwt.verifyToken, authJwt.isAdminOrCoach],
-        controller.getPlayersStatsGamebyGame
-    );
+  app.post(
+    "/player/getplayersstats/advance",
+    controller.getPlayersStatsAdvanced
+  );
 
-    app.get(
-        "/player/game_player_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId",
-        controller.getGamePlayerTags
-    );
+  app.post(
+    "/player/getplayersstats/summary",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getPlayersStatsAdvanceSummary
+  );
 
-    app.get(
-        "/player/player_detection/:gameId/:videoTime",
-        controller.getPlayersDetection
-    );
+  app.post(
+    "/player/getplayersstats/game",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getPlayersStatsGamebyGame
+  );
 
-    app.get(
-        "/player/request/getcorrection",
-        [authJwt.verifyToken, authJwt.isAdminOrCoach],
-        controller.getCorrectionRequest
-    );
+  app.get(
+    "/player/game_player_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId",
+    controller.getGamePlayerTags
+  );
 
-    app.put(
-        "/player/addcorrection/:curPlayerId/:newPlayerId/:playerTagId",
-        controller.addCorrectionRequest
-    );
+  app.get(
+    "/player/player_detection/:gameId/:videoTime/:minBefore/:minAfter",
+    controller.getPlayersDetection
+  );
 
-    app.put(
-        "/player/docorrection/:cId",
-        [authJwt.verifyToken, authJwt.isAdminOrCoach],
-        controller.doCorrection
-    );
+  app.get(
+    "/player/request/getcorrection",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getCorrectionRequest
+  );
 
-    app.put(
-        "/player/:id",
-        [authJwt.verifyToken, authJwt.isAdmin],
-        controller.update
-    );
+  app.put(
+    "/player/addcorrection/:curPlayerId/:newPlayerId/:playerTagId",
+    controller.addCorrectionRequest
+  );
 
-    app.delete(
-        "/player/:id",
-        [authJwt.verifyToken, authJwt.isAdmin],
-        controller.delete
-    );
+  app.put(
+    "/player/docorrection/:cId",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.doCorrection
+  );
 
-    app.delete("/player/correction/:id", controller.deleteCorrection);
+  app.put(
+    "/player/:id",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.update
+  );
 
-    app.delete("/player", [authJwt.isAdmin], controller.deleteAll);
+  app.delete(
+    "/player/:id",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.delete
+  );
 
-    app.post(
-        "/user/updateConfig",
-        [authJwt.verifyToken],
-        controller.updateTaggerConfig
-    );
+  app.delete("/player/correction/:id", controller.deleteCorrection);
+
+  app.delete("/player", [authJwt.isAdmin], controller.deleteAll);
+
+  app.post(
+    "/user/updateConfig",
+    [authJwt.verifyToken],
+    controller.updateTaggerConfig
+  );
 };

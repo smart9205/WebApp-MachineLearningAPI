@@ -16,7 +16,7 @@ export default function StatisticTab({ games }) {
 
     useEffect(() => {
         setLoading(true);
-        GameService.getPlayersStatsAdvanced({
+        GameService.getPlayersStatsAdvanceSummary({
             seasonId: null,
             leagueId: null,
             gameId: games ? games.map((item) => item.game_id).join(',') : null,
