@@ -241,7 +241,7 @@ const Leaders = () => {
             });
 
             if (teamIds.length > 0) {
-                await GameService.getPlayersStatsAdvanced({
+                await GameService.getPlayersStatsAdvanceSummary({
                     seasonId: null,
                     leagueId: leagueIds.length > 0 ? leagueIds.join(',') : null,
                     gameId: null,

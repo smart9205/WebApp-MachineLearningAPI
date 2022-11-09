@@ -11,6 +11,9 @@ import LeadersIcon from '@mui/icons-material/PeopleAltOutlined';
 import TheatersIcon from '@mui/icons-material/Theaters';
 import CheckIcon from '@mui/icons-material/Check';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
+import PanToolIcon from '@mui/icons-material/PanTool';
+import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
+import GroupIcon from '@mui/icons-material/Group';
 
 export const menuData = [
     {
@@ -32,21 +35,27 @@ export const menuData = [
         title: 'Teams'
     },
     {
-        id: 'opponents',
-        path: '/new_coach/opponents',
-        icon: <TeamsIcon />,
-        title: 'Opponents'
-    },
-    {
         id: 'games',
         path: '/new_coach/games',
-        icon: <GamesIcon />,
+        icon: <SportsSoccerIcon />,
         title: 'Games'
+    },
+    {
+        id: 'players',
+        path: '/new_coach/players',
+        icon: <GroupIcon />,
+        title: 'Players'
+    },
+    {
+        id: 'goalkeepers',
+        path: '/new_coach/goalkeepers',
+        icon: <PanToolIcon />,
+        title: 'Goalkeepers'
     },
     {
         id: 'edits',
         path: '/new_coach/edits',
-        icon: <EditsIcon />,
+        icon: <PersonalVideoIcon />,
         title: 'My Edits'
     },
     {
@@ -56,16 +65,10 @@ export const menuData = [
         title: 'Video Cutter'
     },
     {
-        id: 'players',
-        path: '/new_coach/players',
-        icon: <PlayersIcon />,
-        title: 'Players'
-    },
-    {
-        id: 'goalkeepers',
-        path: '/new_coach/goalkeepers',
+        id: 'opponents',
+        path: '/new_coach/opponents',
         icon: <SportsSoccerIcon />,
-        title: 'Goalkeepers'
+        title: 'Opponents'
     },
     {
         id: 'settings',
