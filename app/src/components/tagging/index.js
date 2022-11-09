@@ -37,6 +37,7 @@ import SelectMainPlayers from './contents/SelectMainPlayers';
 import moment from 'moment';
 import { compose } from '@mui/system';
 import Others from './contents/Others';
+import GK from './contents/GK';
 import { getPeriod } from '../newcoach/games/tabs/overview/tagListItem';
 const drawerWidth = '30%';
 
@@ -144,6 +145,7 @@ export default function Tagging() {
     const [clicked, setClicked] = React.useState(false);
     const [curTeamTag, setCurTeamTag] = React.useState(null);
     const [curTagStatusText, setCurTagStatusText] = React.useState('');
+    const [defenseTeamGoalKeeper, setDefenseTeamGoalKeeper] = React.useState([]);
 
     const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
         url: '',
@@ -458,28 +460,70 @@ export default function Tagging() {
         setCurTagStatusText(displayTagInfo());
     }, [state.curTeamTagId]);
 
+    let defPlayers = [];
+
+    React.useEffect(() => {
+        defenseTeam.map((data) => {
+            if (data.position_name === 'Goalkeeper') {
+                defPlayers.push(data);
+            }
+            setDefenseTeamGoalKeeper(defPlayers);
+        });
+    }, [defenseTeam]);
+    
     return (
         <Box sx={{ display: 'flex' }}>
             <Modal disableAutoFocus open={modalOpen} onClose={() => setModalOpen(false)} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                 <Box style={style}>
                     {modalContent === TAGGING.shot.value && (
-                        <Shot offenseTeamId={offenseTeamId} defenseTeamId={defenseTeamId} offenseTeam={offenseTeam} defenseTeam={defenseTeam} taggingState={setTaggingState} />
+                        <Shot
+                            offenseTeamId={offenseTeamId}
+                            defenseTeamId={defenseTeamId}
+                            offenseTeam={offenseTeam}
+                            defenseTeam={defenseTeam}
+                            defenseTeamGoalKeeper={defenseTeamGoalKeeper}
+                            taggingState={setTaggingState}
+                        />
                     )}
                     {modalContent === TAGGING.short_pass.value && <ShortPass offenseTeam={offenseTeam} taggingState={setTaggingState} offenseTeamId={offenseTeamId} />}
                     {modalContent === TAGGING.pass.value && (
-                        <Pass offenseTeam={offenseTeam} defenseTeam={defenseTeam} taggingState={setTaggingState} offenseTeamId={offenseTeamId} defenseTeamId={defenseTeamId} />
+                        <Pass
+                            offenseTeam={offenseTeam}
+                            defenseTeam={defenseTeam}
+                            taggingState={setTaggingState}
+                            offenseTeamId={offenseTeamId}
+                            defenseTeamId={defenseTeamId}
+                            defenseTeamGoalKeeper={defenseTeamGoalKeeper}
+                        />
                     )}
                     {modalContent === TAGGING.cross.value && (
-                        <Cross offenseTeamId={offenseTeamId} defenseTeamId={defenseTeamId} offenseTeam={offenseTeam} defenseTeam={defenseTeam} taggingState={setTaggingState} />
+                        <Cross
+                            offenseTeamId={offenseTeamId}
+                            defenseTeamId={defenseTeamId}
+                            offenseTeam={offenseTeam}
+                            defenseTeam={defenseTeam}
+                            taggingState={setTaggingState}
+                            defenseTeamGoalKeeper={defenseTeamGoalKeeper}
+                        />
                     )}
                     {modalContent === TAGGING.foul.value && (
                         <Foul offenseTeamId={offenseTeamId} defenseTeamId={defenseTeamId} offenseTeam={offenseTeam} defenseTeam={defenseTeam} taggingState={setTaggingState} />
                     )}
                     {modalContent === TAGGING.dribble.value && (
-                        <Dribble offenseTeamId={offenseTeamId} defenseTeamId={defenseTeamId} offenseTeam={offenseTeam} defenseTeam={defenseTeam} taggingState={setTaggingState} />
+                        <Dribble
+                            offenseTeamId={offenseTeamId}
+                            defenseTeamId={defenseTeamId}
+                            offenseTeam={offenseTeam}
+                            defenseTeam={defenseTeam}
+                            taggingState={setTaggingState}
+                            defenseTeamGoalKeeper={defenseTeamGoalKeeper}
+                        />
                     )}
                     {modalContent === 'Others' && (
                         <Others offenseTeamId={offenseTeamId} defenseTeamId={defenseTeamId} offenseTeam={offenseTeam} defenseTeam={defenseTeam} taggingState={setTaggingState} />
+                    )}
+                    {modalContent === 'GK' && (
+                        <GK offenseTeamId={offenseTeamId} defenseTeamId={defenseTeamId} offenseTeam={offenseTeam} defenseTeam={defenseTeam} taggingState={setTaggingState} defenseTeamGoalKeeper={defenseTeamGoalKeeper} />
                     )}
                     {modalContent === 'SELECT_PLAYER' && <SelectMainPlayers homeTeam={state.homePlayers} awayTeam={state.awayPlayers} game={state.game} setGamePlayerRefresh={setGamePlayerRefresh} />}
                 </Box>
@@ -669,12 +713,17 @@ export default function Tagging() {
                                         </Grid>
                                     ))}
                                 </Grid>
-                                <TagButton
-                                    onClick={(e) => taggingButtonClicked('Others')}
-                                    style={{ textTransform: 'none', fontSize: '10px', writingMode: 'vertical-rl', maxWidth: 10, height: 125, marginTop: '12px' }}
-                                >
-                                    Others (x)
-                                </TagButton>
+
+                                <div style={{display: 'flex', flexDirection:'column'}}>
+                                    
+                                    <TagButton onClick={(e) => taggingButtonClicked('Others')} style={{ textTransform: 'none', fontSize: '10px', maxWidth: 10, height: 65, marginTop: '12px' }}>
+                                        Others (x)
+                                    </TagButton>
+
+                                    <TagButton onClick={(e) => taggingButtonClicked('GK')} style={{ textTransform: 'none', fontSize: '10px', maxWidth: 10, height: 48, marginTop: '12px' }}>
+                                        GK
+                                    </TagButton>
+                                </div>
 
                                 <RadioGroup
                                     sx={{ my: 0, mx: 2 }}
