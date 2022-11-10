@@ -59,6 +59,7 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
     const [gameList, setGameList] = useState([]);
     const [videoOpen, setVideoOpen] = useState(false);
     const [exportOpen, setExportOpen] = useState(false);
+    const [refresh, setRefresh] = useState(false);
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
@@ -183,6 +184,7 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                 setPlayData(
                     data.map((item) => {
                         return {
+                            tag_id: item.id,
                             start_time: item.player_tag_start_time,
                             end_time: item.player_tag_end_time,
                             player_name: item.player_names,
@@ -190,6 +192,9 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                             action_type: item.action_type_names,
                             action_result: item.action_result_names,
                             game_id: item.game_id,
+                            team_id: teamId,
+                            court_area: item.court_area_id,
+                            inside_pain: item.inside_the_pain,
                             period: getPeriod(item.period),
                             time: item.time_in_game,
                             home_team_image: item.home_team_logo,
@@ -235,6 +240,26 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
         setGameTime(['1', '2', '3', '4', '5', '6']);
         setCourtArea(['1', '2', '3', '4']);
     }, [initialState, open]);
+
+    useEffect(() => {
+        setLoading(true);
+        GameService.getPlayersStatsAdvanced({
+            seasonId: seasonId,
+            leagueId: null,
+            gameId: gameIds.length === 0 ? null : gameIds.join(','),
+            teamId: teamId,
+            playerId: player?.id ?? null,
+            gameTime: gameTime.join(','),
+            courtAreaId: courtArea.join(','),
+            insidePaint: null,
+            homeAway: gamePlace ? parseInt(gamePlace) : null,
+            gameResult: gameResult ? parseInt(gameResult) : null
+        }).then((res) => {
+            console.log(res);
+            setPlayerState(res[0]);
+            setLoading(false);
+        });
+    }, [refresh]);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="1500px">
@@ -378,7 +403,16 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                 </Box>
             </DialogContent>
             <GamePlayerStatErrorMessage open={errorOpen} onClose={() => setErrorOpen(false)} />
-            {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />}
+            <TeamStatsVideoPlayer
+                open={videoOpen}
+                onClose={(flag) => {
+                    setVideoOpen(false);
+
+                    if (flag) setRefresh((r) => !r);
+                }}
+                video_url={gameList}
+                tagList={playData}
+            />
             <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Dialog>
     );

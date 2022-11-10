@@ -194,7 +194,10 @@ export default function Player() {
                     </Dialog>
                     <Dialog className="profileSection_tagvideo" classes={{ paper: classes.paper }} open={fullVideo} onClose={(e) => setFullVideo(false)}>
                         <DialogContent sx={{ p: 0 }}>
-                            <FullVideoPlayer video_url={curPlayGame ? (curPlayGame?.mobile_video_url ? curPlayGame?.mobile_video_url : curPlayGame?.video_url) : ''} />
+                            <FullVideoPlayer
+                                video_url={curPlayGame ? (curPlayGame?.mobile_video_url ? curPlayGame?.mobile_video_url : curPlayGame?.video_url) : ''}
+                                muteState={curPlayGame?.mute_video ?? false}
+                            />
                         </DialogContent>
                     </Dialog>
                     {playerData && <PlayerDetailCard player={playerData} />}

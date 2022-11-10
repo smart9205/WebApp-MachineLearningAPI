@@ -24,7 +24,7 @@ let boxList = [
     ]
 ];
 
-const TeamStatsBoxList = ({ games, list }) => {
+const TeamStatsBoxList = ({ games, list, teamId, refreshPage }) => {
     const [actionList, setActionList] = useState([]);
     const [videoOpen, setVideoOpen] = useState(false);
     const [playData, setPlayData] = useState([]);
@@ -35,6 +35,7 @@ const TeamStatsBoxList = ({ games, list }) => {
             setPlayData(
                 player.data.map((item) => {
                     return {
+                        tag_id: item.id,
                         start_time: item.player_tag_start_time,
                         end_time: item.player_tag_end_time,
                         player_name: item.player_names,
@@ -42,6 +43,9 @@ const TeamStatsBoxList = ({ games, list }) => {
                         action_type: item.action_type_names,
                         action_result: item.action_result_names,
                         game_id: item.game_id,
+                        team_id: teamId,
+                        court_area: item.court_area_id,
+                        inside_pain: item.inside_the_pain,
                         period: getPeriod(item.period),
                         time: item.time_in_game,
                         home_team_image: item.home_team_logo,
@@ -179,7 +183,16 @@ const TeamStatsBoxList = ({ games, list }) => {
                     </Box>
                 ))}
             </Box>
-            {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={games} tagList={playData} />}
+            <TeamStatsVideoPlayer
+                open={videoOpen}
+                onClose={(flag) => {
+                    setVideoOpen(false);
+
+                    if (flag) refreshPage((r) => !r);
+                }}
+                video_url={games}
+                tagList={playData}
+            />
             <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );

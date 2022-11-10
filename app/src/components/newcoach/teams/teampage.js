@@ -18,8 +18,6 @@ const Tabs = ['Overview', 'Stats', 'Games', 'Players Overview', 'Players Stats']
 const TeamPage = () => {
     const params = useParams();
     const [values, setValues] = useState({
-        players: [],
-        playerStats: [],
         teamName: '',
         teamId: -1,
         seasonId: -1,
@@ -42,31 +40,10 @@ const TeamPage = () => {
                 setGameList(res);
             });
             await GameService.getCoachTeamPlayers(ids[0], ids[1], ids[2]).then((res) => {
-                setValues({ ...values, players: res, teamName: res[0].team_name, loading: false, loadingDone: true, teamId: ids[0], seasonId: ids[1], leagueId: ids[2] });
+                setValues({ ...values, teamName: res[0].team_name, loading: false, loadingDone: true, teamId: ids[0], seasonId: ids[1], leagueId: ids[2] });
             });
         }
     }, [params]);
-
-    useEffect(() => {
-        if (gameIds.length > 0) {
-            GameService.getPlayersStatsAdvanced({
-                seasonId: values.seasonId,
-                leagueId: null,
-                gameId: gameIds.join(','),
-                teamId: `${values.teamId}`,
-                playerId: null,
-                gameTime: null,
-                courtAreaId: null,
-                insidePaint: null,
-                homeAway: null,
-                gameResult: null
-            }).then((data) => {
-                setValues({ ...values, playerStats: data });
-            });
-        } else setValues({ ...values, playerStats: [] });
-    }, [gameIds]);
-
-    console.log('Team => ', values.playerStats);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
@@ -102,7 +79,7 @@ const TeamPage = () => {
                     {curTab === 1 && <TeamStats games={gameList} gameIds={gameIds} teamId={values.teamId} />}
                     {curTab === 2 && <TeamGames games={gameList} gameIds={gameIds} teamId={values.teamId} seasonId={values.seasonId} />}
                     {curTab === 3 && <TeamPlayersOverview games={gameList} gameIds={gameIds} teamId={values.teamId} teamName={values.teamName} />}
-                    {curTab === 4 && <TeamPlayersStats playerList={values.players} stats={values.playerStats} teamId={values.teamId} seasonId={values.seasonId} gameIds={gameIds} games={gameList} />}
+                    {curTab === 4 && <TeamPlayersStats teamId={values.teamId} seasonId={values.seasonId} leagueId={values.leagueId} gameIds={gameIds} games={gameList} />}
                 </>
             )}
         </Box>

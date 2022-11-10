@@ -7,7 +7,7 @@ import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import TeamStatsVideoPlayer from './videoDialog';
 
-const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterText, games }) => {
+const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterText, games, teamId, refreshPage }) => {
     const [playerList, setPlayerList] = useState([]);
     const [hoverId, setHoverId] = useState('');
     const [videoOpen, setVideoOpen] = useState(false);
@@ -32,6 +32,7 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
         setPlayData(
             player.data[sId].videoList.map((item) => {
                 return {
+                    tag_id: item.id,
                     start_time: item.player_tag_start_time,
                     end_time: item.player_tag_end_time,
                     player_name: item.player_names,
@@ -39,6 +40,9 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                     action_type: item.action_type_names,
                     action_result: item.action_result_names,
                     game_id: item.game_id,
+                    team_id: teamId,
+                    court_area: item.court_area_id,
+                    inside_pain: item.inside_the_pain,
                     period: getPeriod(item.period),
                     time: item.time_in_game,
                     home_team_image: item.home_team_logo,
@@ -156,7 +160,16 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                     </div>
                 ))}
             </div>
-            {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={games} tagList={playData} />}
+            <TeamStatsVideoPlayer
+                open={videoOpen}
+                onClose={(flag) => {
+                    setVideoOpen(false);
+
+                    if (flag) refreshPage((r) => !r);
+                }}
+                video_url={games}
+                tagList={playData}
+            />
             <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );

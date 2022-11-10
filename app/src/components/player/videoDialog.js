@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/CloseOutlined';
 
 import gameService from '../../services/game.service';
 
-const FullVideoPlayer = ({ video_url }) => {
+const FullVideoPlayer = ({ video_url, muteState }) => {
     const handle = useFullScreenHandle();
     const player = useRef(null);
     const [play, setPlay] = useState(true);
@@ -43,6 +43,7 @@ const FullVideoPlayer = ({ video_url }) => {
                     onPause={() => setPlay(false)}
                     onProgress={(p) => onProgress(p.playedSeconds)}
                     playing={play}
+                    muted={muteState}
                     controls={true}
                     width="100%"
                     height="100%"

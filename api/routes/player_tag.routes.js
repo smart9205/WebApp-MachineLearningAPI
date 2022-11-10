@@ -29,6 +29,8 @@ module.exports = (app) => {
 
   app.put("/player_tag/:id", [authJwt.verifyToken], controller.update);
 
+  app.put("/player_tag/update/:id", controller.updateTag);
+
   app.delete("/player_tag/:id", controller.delete);
 
   app.delete("/player_tag", controller.deleteAll);

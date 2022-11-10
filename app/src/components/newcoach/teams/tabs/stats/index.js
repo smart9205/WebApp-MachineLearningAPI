@@ -48,6 +48,7 @@ const action_results_pass = [
 const TeamStats = ({ games, gameIds, teamId }) => {
     const [playerList, setPlayerList] = useState([]);
     const [gameList, setGameList] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
@@ -61,23 +62,63 @@ const TeamStats = ({ games, gameIds, teamId }) => {
             setGameList([]);
             setPlayerList([]);
         }
-    }, [games, gameIds]);
+    }, [games, gameIds, refresh]);
 
     console.log('team stats => ', playerList);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex', padding: '20px 10px', gap: '10px' }}>
             <Box sx={{ minWidth: '34%', display: 'flex', flexDirection: 'column', gap: '52px' }}>
-                <TeamStatsBoxList games={gameList} list={playerList} />
-                <TeamStatsChart chartId="shot" title="Shoting" isType={false} action_results={action_results_shot} list={playerList} filterText="Shot" games={gameList} />
+                <TeamStatsBoxList games={gameList} list={playerList} teamId={teamId} refreshPage={setRefresh} />
+                <TeamStatsChart
+                    chartId="shot"
+                    title="Shoting"
+                    isType={false}
+                    action_results={action_results_shot}
+                    list={playerList}
+                    filterText="Shot"
+                    games={gameList}
+                    teamId={teamId}
+                    refreshPage={setRefresh}
+                />
             </Box>
             <Box sx={{ flex: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <TeamStatsChart chartId="dribble" title="Dribbling" isType={false} action_results={action_results_dribble} list={playerList} filterText="Dribble" games={gameList} />
-                    <TeamStatsChart chartId="cross" title="Crossing" isType={false} action_results={action_results_cross} list={playerList} filterText="Cross" games={gameList} />
+                    <TeamStatsChart
+                        chartId="dribble"
+                        title="Dribbling"
+                        isType={false}
+                        action_results={action_results_dribble}
+                        list={playerList}
+                        filterText="Dribble"
+                        games={gameList}
+                        teamId={teamId}
+                        refreshPage={setRefresh}
+                    />
+                    <TeamStatsChart
+                        chartId="cross"
+                        title="Crossing"
+                        isType={false}
+                        action_results={action_results_cross}
+                        list={playerList}
+                        filterText="Cross"
+                        games={gameList}
+                        teamId={teamId}
+                        refreshPage={setRefresh}
+                    />
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <TeamStatsChart chartId="pass" title="Passing" isType={false} action_results={action_results_pass} list={playerList} filterText="Pass" games={gameList} />
+                    <TeamStatsChart
+                        chartId="pass"
+                        title="Passing"
+                        isType={false}
+                        action_results={action_results_pass}
+                        list={playerList}
+                        filterText="Pass"
+                        games={gameList}
+                        teamId={teamId}
+                        refreshPage={setRefresh}
+                    />
                     <TeamStatsChart
                         chartId="interception"
                         title="Interception"
@@ -86,6 +127,8 @@ const TeamStats = ({ games, gameIds, teamId }) => {
                         list={playerList}
                         filterText="Interception"
                         games={gameList}
+                        teamId={teamId}
+                        refreshPage={setRefresh}
                     />
                 </Box>
             </Box>

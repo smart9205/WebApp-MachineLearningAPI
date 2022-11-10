@@ -30,7 +30,8 @@ const headCells = [
     { id: 'total_clearance', title: 'Clearance', action: 'Clearance' }
 ];
 
-const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games }) => {
+const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
+    const [playerList, setPlayerList] = useState([]);
     const [playerIds, setPlayerIds] = useState([]);
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('total_player_games');
@@ -42,6 +43,7 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
     const [gameList, setGameList] = useState([]);
     const [detectStats, setDetectStats] = useState([]);
     const [exportOpen, setExportOpen] = useState(false);
+    const [refresh, setRefresh] = useState(false);
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
@@ -122,6 +124,7 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
                 setPlayData(
                     res.map((item) => {
                         return {
+                            tag_id: item.id,
                             start_time: item.player_tag_start_time,
                             end_time: item.player_tag_end_time,
                             player_name: item.player_names,
@@ -129,6 +132,9 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
                             action_type: item.action_type_names,
                             action_result: item.action_result_names,
                             game_id: item.game_id,
+                            team_id: teamId,
+                            court_area: item.court_area_id,
+                            inside_pain: item.inside_the_pain,
                             period: getPeriod(item.period),
                             time: item.time_in_game,
                             home_team_image: item.home_team_logo,
@@ -163,11 +169,25 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
         }
     };
 
-    useEffect(() => {
-        if (stats.length > 0) {
+    useEffect(async () => {
+        await GameService.getCoachTeamPlayers(teamId, seasonId, leagueId).then((res) => {
+            setPlayerList(res);
+        });
+        await GameService.getPlayersStatsAdvanced({
+            seasonId: seasonId,
+            leagueId: null,
+            gameId: gameIds.join(','),
+            teamId: `${teamId}`,
+            playerId: null,
+            gameTime: null,
+            courtAreaId: null,
+            insidePaint: null,
+            homeAway: null,
+            gameResult: null
+        }).then((data) => {
             let newArray = [];
 
-            stats.map((item) => {
+            data.map((item) => {
                 const filt = newArray.filter((data) => item.player_id === data.player_id);
 
                 if (filt.length === 0) newArray = [...newArray, item];
@@ -176,8 +196,8 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
             });
             setDetectStats(newArray);
             setPlayerIds(newArray.map((item) => item.player_id));
-        }
-    }, [playerList, stats]);
+        });
+    }, [refresh, gameIds]);
 
     console.log('teams/players => ', order, orderBy, detectStats);
 
@@ -242,7 +262,16 @@ const TeamPlayersStats = ({ playerList, stats, teamId, seasonId, gameIds, games 
                 gameIds={gameIds}
                 initialState={playerStat}
             />
-            {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />}
+            <TeamStatsVideoPlayer
+                open={videoOpen}
+                onClose={(flag) => {
+                    setVideoOpen(false);
+
+                    if (flag) setRefresh((r) => !r);
+                }}
+                video_url={gameList}
+                tagList={playData}
+            />
             <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );

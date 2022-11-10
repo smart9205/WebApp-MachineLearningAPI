@@ -665,6 +665,12 @@ const updatePlayerTag = (req) => {
     });
 };
 
+const updatePlayerTagByManual = (req) => {
+    return axios.put(API_URL + `player_tag/update/${req.id}`, req, { headers: authHeader(), data: { id: req.id } }).then((response) => {
+        return response.data;
+    });
+};
+
 const updatePlayer = (req) => {
     return axios.put(API_URL + `player/${req.id}`, req, { headers: authHeader(), data: { id: req.id } }).then((response) => {
         return response.data;
@@ -1077,6 +1083,7 @@ const gameService = {
     updateLeague,
     updateTaggerConfig,
     updatePlayerTag,
+    updatePlayerTagByManual,
     updateTeamTag,
     updatePlayer,
     updateCoachTeam,
