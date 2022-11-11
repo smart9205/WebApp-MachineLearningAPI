@@ -351,11 +351,10 @@ export default function Tagging() {
     };
 
     const addTeamTag = async (isCP) => {
-       
         try {
             const res = await GameService.addTeamTag({
                 ...teamTag,
-                
+
                 end_time: isCP ? toHHMMSS(player.current.getCurrentTime()) : teamTag.end_time
             });
             setModalOpen(false);
@@ -399,7 +398,7 @@ export default function Tagging() {
             await addPlayerTag({ ...pTag, team_tag_id: tTag.id });
         }
         setTempPlayerTagList([]);
-        
+
         dispPlayerTags(tTag.id);
     };
 
@@ -435,13 +434,13 @@ export default function Tagging() {
 
     const displayTagInfo = () => {
         if (curTeamTag === null) return '';
-        if (player && player.current.getCurrentTime() < toSecond(teamTagList[teamTagList.length - 1].start_time)) return '';
+
+        const sameTags = teamTagList.filter((item) => item.period === curTeamTag.period);
+
+        if (player && player.current.getCurrentTime() < toSecond(sameTags[sameTags.length - 1].start_time)) return '';
 
         const period = getPeriod(curTeamTag.period);
-        let time = Math.floor(player.current.getCurrentTime()) - toSecond(teamTagList[teamTagList.length - 1].start_time);
-
-        if (curTeamTag.period === 2) time -= 45 * 60;
-        else if (curTeamTag.period === 3) time -= 90 * 60;
+        let time = Math.floor(player.current.getCurrentTime()) - toSecond(sameTags[sameTags.length - 1].start_time);
 
         let minutes = Math.floor(time / 60);
         let seconds = time - minutes * 60;
@@ -470,7 +469,7 @@ export default function Tagging() {
             setDefenseTeamGoalKeeper(defPlayers);
         });
     }, [defenseTeam]);
-    
+
     return (
         <Box sx={{ display: 'flex' }}>
             <Modal disableAutoFocus open={modalOpen} onClose={() => setModalOpen(false)} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
@@ -523,7 +522,14 @@ export default function Tagging() {
                         <Others offenseTeamId={offenseTeamId} defenseTeamId={defenseTeamId} offenseTeam={offenseTeam} defenseTeam={defenseTeam} taggingState={setTaggingState} />
                     )}
                     {modalContent === 'GK' && (
-                        <GK offenseTeamId={offenseTeamId} defenseTeamId={defenseTeamId} offenseTeam={offenseTeam} defenseTeam={defenseTeam} taggingState={setTaggingState} defenseTeamGoalKeeper={defenseTeamGoalKeeper} />
+                        <GK
+                            offenseTeamId={offenseTeamId}
+                            defenseTeamId={defenseTeamId}
+                            offenseTeam={offenseTeam}
+                            defenseTeam={defenseTeam}
+                            taggingState={setTaggingState}
+                            defenseTeamGoalKeeper={defenseTeamGoalKeeper}
+                        />
                     )}
                     {modalContent === 'SELECT_PLAYER' && <SelectMainPlayers homeTeam={state.homePlayers} awayTeam={state.awayPlayers} game={state.game} setGamePlayerRefresh={setGamePlayerRefresh} />}
                 </Box>
@@ -550,7 +556,6 @@ export default function Tagging() {
                         setCurTeamTag(row);
                         player.current.seekTo(toSecond(row?.start_time));
                         dispPlayerTags(row?.id);
-                       
                     }}
                     selectedId={state.curTeamTagId}
                 />
@@ -714,8 +719,7 @@ export default function Tagging() {
                                     ))}
                                 </Grid>
 
-                                <div style={{display: 'flex', flexDirection:'column'}}>
-                                    
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <TagButton onClick={(e) => taggingButtonClicked('Others')} style={{ textTransform: 'none', fontSize: '10px', maxWidth: 10, height: 65, marginTop: '12px' }}>
                                         Others (x)
                                     </TagButton>
