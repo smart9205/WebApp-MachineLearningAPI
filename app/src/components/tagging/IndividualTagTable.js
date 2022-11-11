@@ -128,7 +128,7 @@ export default function IndividualTagTable({
                         />
                         <TCellSelectEdit
                           rows={row.team_id === offenseTeamId ? offenseTeam : defenseTeam}
-                          value={{ id: row.player_id, name: `${row.player_fname} ${row.player_lname}` }}
+                          value={{ id: row.player_id, name: `${row.jersey} ${row.player_lname}` }}
                           update={v => update({ ...row, player_id: v })}
                         />
                         <TCellTimeEdit

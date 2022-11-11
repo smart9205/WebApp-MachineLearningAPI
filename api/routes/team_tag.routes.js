@@ -18,7 +18,7 @@ module.exports = (app) => {
 
   app.get("/team_tag/getbygame/:id", controller.getByGameId);
 
-  app.put("/team_tag/:id", [authJwt.isAdmin], controller.update);
+  app.put("/team_tag/:id", [authJwt.verifyToken], controller.update);
 
   app.delete("/team_tag/:id", controller.delete);
 

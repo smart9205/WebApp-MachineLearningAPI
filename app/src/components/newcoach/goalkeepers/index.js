@@ -34,10 +34,7 @@ const headCells = [
     { id: 'total_ground_challenge', title: 'Ground Challenges', action: '' },
     { id: 'total_one_vs_one', title: 'One vs One', action: '' },
     { id: 'total_goalkeeper_exit', title: 'Exits', action: '' },
-    { id: 'total_blocked', title: 'Blocked', action: 'Blocked' },
-    { id: 'total_interception', title: 'Interceptions', action: 'Interception' },
-    { id: 'total_clearance', title: 'Clearance', action: 'Clearance' },
-    { id: 'total_tackle', title: 'Tackles', action: 'Tackle' }
+
 ];
 
 const Goalkeepers = () => {
