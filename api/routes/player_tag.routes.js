@@ -29,7 +29,7 @@ module.exports = (app) => {
 
   app.put("/player_tag/:id", [authJwt.isAdminOrTagger], controller.update);
 
-  app.put("/player_tag/update/:id", controller.updateTag);
+  app.put("/player_tag/update/:id", [authJwt.isAdminOrTagger], controller.update);
 
   app.delete("/player_tag/:id", controller.delete);
 
