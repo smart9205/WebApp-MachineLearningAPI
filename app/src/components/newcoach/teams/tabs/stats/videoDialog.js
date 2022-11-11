@@ -97,7 +97,7 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
     return (
         <Dialog style={{ minWidth: '98%', backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
             <DialogContent style={{ p: 0 }}>
-                <div style={{ width: '80%', margin: 'auto', position: 'relative' }}>
+                <div style={{ width: '100%', margin: 'auto', position: 'relative' }}>
                     <FullScreen handle={handle}>
                         <div style={{ width: '100%', margin: 'auto' }}>
                             <div className="player-wrapper">
@@ -127,9 +127,9 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                                 justifyContent: 'space-between'
                             }}
                         >
-                            <div style={{ display: 'flex', alignItems: 'center', flex: 5.5 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', flex: 6 }}>
                                 <div
-                                    style={{ display: 'flex', alignItems: 'center', flex: 0.5 }}
+                                    style={{ display: 'flex', alignItems: 'center', flex: 0 }}
                                     onClick={() => {
                                         setPlay(false);
                                         setTagEditOpen(true);
@@ -137,7 +137,7 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                                 >
                                     <EditIcon style={{ color: 'red', padding: 3, borderRadius: 60, textAlign: 'center', cursor: 'pointer' }} />
                                 </div>
-                                <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="" sx={{ color: 'white', margin: 0, flex: 1 }} />
+                                <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="" sx={{ color: 'white', margin: 0, flex: 0 }} />
                                 {tagList.length > 0 && showLogo && (
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flex: 4 }}>
                                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
