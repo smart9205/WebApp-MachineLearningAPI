@@ -20,22 +20,24 @@ import PlayersGamesDialog from '../players/gamesDialog';
 import '../coach_style.css';
 
 const headCells = [
-    { id: 'total_player_games', title: 'Games' },
-    { id: 'total_goal', title: 'Goals', action: 'Goal' },
-    { id: 'total_shot', title: 'Shots', action: 'GoalKick' },
-    { id: 'total_dribble', title: 'Dribbles', action: 'Dribble' },
-    { id: 'total_crosses', title: 'Crosses', action: 'Cross' },
-    { id: 'total_corner', title: 'Corners', action: 'Corner' },
-    { id: 'total_free_kick', title: 'Free Kicks', action: 'FreeKick' },
-    { id: 'total_passes', title: 'Passes', action: 'Passes' },
-    { id: 'total_turnover', title: 'Turnovers', action: 'Turnover' },
-    { id: 'total_fouls', title: 'Fouls', action: 'Foul' },
-    { id: 'total_draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
-    { id: 'total_interception', title: 'Interceptions', action: 'Interception' },
-    { id: 'total_tackle', title: 'Tackles', action: 'Tackle' },
+    { id: 'total_player_games', title: 'Games', action: '' },
+    { id: 'total_goal_receive', title: 'Goals Received', action: '' },
+    { id: 'total_opp_crosses', title: 'Opponents Crosses', action: '' },
+    { id: 'total_opp_corner', title: 'Opponents Corners', action: '' },
+    { id: 'total_opp_free_kick', title: 'Opponents Free Kicks', action: '' },
+    { id: 'total_short_pass', title: 'Short Passes', action: '' },
+    { id: 'total_long_pass', title: 'Long Passes', action: '' },
+    { id: 'total_build_up', title: 'Build Ups', action: '' },
+    { id: 'total_super_save', title: 'Super Saved', action: '' },
     { id: 'total_saved', title: 'Saved', action: 'Saved' },
+    { id: 'total_air_challenge', title: 'Air Challenges', action: '' },
+    { id: 'total_ground_challenge', title: 'Ground Challenges', action: '' },
+    { id: 'total_one_vs_one', title: 'One vs One', action: '' },
+    { id: 'total_goalkeeper_exit', title: 'Exits', action: '' },
     { id: 'total_blocked', title: 'Blocked', action: 'Blocked' },
-    { id: 'total_clearance', title: 'Clearance', action: 'Clearance' }
+    { id: 'total_interception', title: 'Interceptions', action: 'Interception' },
+    { id: 'total_clearance', title: 'Clearance', action: 'Clearance' },
+    { id: 'total_tackle', title: 'Tackles', action: 'Tackle' }
 ];
 
 const Goalkeepers = () => {
@@ -95,7 +97,7 @@ const Goalkeepers = () => {
     };
 
     const handleDisplayVideo = (cell, player) => async (e) => {
-        if (cell.title !== 'Games' && player[cell.id] !== undefined && player[cell.id] > 0) {
+        if (cell.action !== '' && player[cell.id] !== undefined && player[cell.id] > 0) {
             let gameIds = [];
 
             await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
@@ -116,6 +118,7 @@ const Goalkeepers = () => {
                 setPlayData(
                     res.map((item) => {
                         return {
+                            tag_id: item.id,
                             start_time: item.player_tag_start_time,
                             end_time: item.player_tag_end_time,
                             player_name: item.player_names,
@@ -123,6 +126,9 @@ const Goalkeepers = () => {
                             action_type: item.action_type_names,
                             action_result: item.action_result_names,
                             game_id: item.game_id,
+                            team_id: player.team_id,
+                            court_area: item.court_area_id,
+                            inside_pain: item.inside_the_pain,
                             period: getPeriod(item.period),
                             time: item.time_in_game,
                             home_team_image: item.home_team_logo,
@@ -140,7 +146,7 @@ const Goalkeepers = () => {
     const handleExportPlayerTags = (cell, player) => async (e) => {
         e.preventDefault();
 
-        if (cell.title !== 'Games' && player[cell.id] !== undefined && player[cell.id] > 0) {
+        if (cell.action !== '' && player[cell.id] !== undefined && player[cell.id] > 0) {
             let gameIds = [];
 
             await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
@@ -336,7 +342,7 @@ const Goalkeepers = () => {
                         gameIds={gameList.map((item) => item.id)}
                         initialState={playerStat}
                     />
-                    {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />}
+                    <TeamStatsVideoPlayer open={videoOpen} onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />
                     <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
                     <PlayersGamesDialog open={gamesOpen} onClose={() => setGamesOpen(false)} list={playerGames} playerName={playerStat?.player_name ?? ''} />
                     <Popover
