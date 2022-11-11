@@ -27,9 +27,9 @@ module.exports = (app) => {
 
   app.get("/player_tag/getgamescore/:game", controller.getGameScore);
 
-  app.put("/player_tag/:id", [authJwt.isAdminOrTagger], controller.update);
+  app.put("/player_tag/:id", [authJwt.verifyToken], controller.update);
 
-  app.put("/player_tag/update/:id", [authJwt.isAdminOrTagger], controller.update);
+  app.put("/player_tag/update/:id", controller.updateTag);
 
   app.delete("/player_tag/:id", controller.delete);
 
