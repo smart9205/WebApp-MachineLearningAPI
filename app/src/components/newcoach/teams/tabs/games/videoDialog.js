@@ -16,6 +16,7 @@ import { toSecond } from '../../../components/utilities';
 import gameService from '../../../../../services/game.service';
 import { TEAM_ICON_DEFAULT } from '../../../../../common/staticData';
 import TeamPlayerTagEditDialog from '../stats/playerTagEdit';
+
 import '../../../../player/Profile.css';
 
 const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList }) => {
@@ -72,12 +73,13 @@ const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList }) => {
     };
 
     useEffect(() => {
+        setCurrentIndex(0);
         if (video_url.startsWith('https://www.youtube.com')) {
             gameService.getNewStreamURL(video_url).then((res) => {
                 setVideoURL(res.url);
             });
         } else if (video_url.toLowerCase() !== 'no video') setVideoURL(video_url);
-    }, [video_url]);
+    }, [video_url, tagList, open]);
 
     console.log('video====', currentIndex);
 

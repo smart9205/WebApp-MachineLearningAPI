@@ -92,9 +92,13 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                 setVideoURL(videos.filter((item) => item.id === tagList[0].game_id)[0].url);
             }
         }
-    }, [tagList, video_url, open]);
+    }, [tagList, video_url]);
 
-    console.log('video====', videoURL, tagList);
+    useEffect(() => {
+        setCurrentIndex(0);
+    }, [open]);
+
+    console.log('Daniel====', currentIndex);
 
     return (
         <Dialog style={{ minWidth: '98%', backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
@@ -140,7 +144,7 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                                     <EditIcon style={{ color: 'red', padding: 3, borderRadius: 60, textAlign: 'center', cursor: 'pointer' }} />
                                 </div>
                                 <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="" sx={{ color: 'white', margin: 0, flex: 0.5 }} />
-                                {tagList.length > 0 && showLogo && (
+                                {tagList.length > 0 && currentIndex < tagList.length && showLogo && (
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flex: 4 }}>
                                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '150px' }}>
                                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, color: 'white' }}>
@@ -191,7 +195,7 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                                     <SkipNextSharpIcon />
                                 </IconButton>
                             </div>
-                            {tagList.length > 0 && (
+                            {tagList.length > 0 && currentIndex < tagList.length && (
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2px 12px', background: '#80808069' }}>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>
                                         {`${tagList[currentIndex].player_name}, ${tagList[currentIndex].action_name}, ${tagList[currentIndex].action_type}, ${tagList[currentIndex].action_result}`}
