@@ -60,8 +60,6 @@ export default function PlayerSelector({ title, playerList, game, posList = [], 
             });
     };
 
-    if (loading) {
-    }
     return (
         <SubBox sx={{ marginTop: '5rem', height: '100%' }}>
             <div className="title">{title}</div>
@@ -72,7 +70,7 @@ export default function PlayerSelector({ title, playerList, game, posList = [], 
                             !editable && !player.checked ? (
                                 <></>
                             ) : (
-                                <TableRow key={i} sx={{ border: 0, height: 35, background: selected && selected.id === player.id ? 'darkblue' : '' }}>
+                                <TableRow key={i} onClick={() => onSelect(player)} sx={{ border: 0, height: 35, background: selected && selected.id === player.id ? 'darkblue' : '' }}>
                                     {editable && (
                                         <TableCell className="player-select-checkbox">
                                             <CustomCheck defaultValue={player.checked} onCheck={(v) => (player.checked = v)} />
@@ -87,7 +85,9 @@ export default function PlayerSelector({ title, playerList, game, posList = [], 
                                             }}
                                         />
                                     ) : (
-                                        <TableCell align="left">#{player.jersey_number}</TableCell>
+                                        <TableCell align="left" width="32px">
+                                            #{player.jersey_number}
+                                        </TableCell>
                                     )}
                                     <TableCell sx={{ width: '120px' }} align="left">
                                         {player.f_name} {player.l_name}
