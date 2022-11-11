@@ -89,10 +89,25 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
     }, [video_url]);
 
     useEffect(() => {
-        if (videoList.length > 0 && tagList.length > 0) setVideoURL(videoList.filter((item) => item.id === tagList[0].game_id)[0].url);
-    }, [tagList]);
+        if (video_url.length > 0 && tagList.length > 0) {
+            let videos = [];
 
-    console.log('video====', video_url, tagList);
+            video_url.map((game) => {
+                if (game.video_url.startsWith('https://www.youtube.com')) {
+                    gameService.getNewStreamURL(game.video_url).then((res) => {
+                        videos = [...videos, { url: res.url, id: game.id }];
+                    });
+                } else if (game.video_url.toLowerCase() !== 'no video') videos = [...videos, { url: game.video_url, id: game.id }];
+            });
+
+            if (videos.length > 0) {
+                setVideoList(videos);
+                setVideoURL(videos.filter((item) => item.id === tagList[0].game_id)[0].url);
+            }
+        }
+    }, [tagList, video_url, open]);
+
+    console.log('video====', videoURL, tagList);
 
     return (
         <Dialog style={{ minWidth: '98%', backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
