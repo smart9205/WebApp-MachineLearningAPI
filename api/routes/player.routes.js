@@ -84,7 +84,7 @@ module.exports = (app) => {
 
   app.put(
     "/player/:id",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isAdminOrTagger],
     controller.update
   );
 

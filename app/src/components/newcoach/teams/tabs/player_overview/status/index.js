@@ -236,23 +236,25 @@ const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, t
     }, [initialState, open]);
 
     useEffect(() => {
-        setLoading(true);
-        GameService.getPlayersStatsAdvanced({
-            seasonId: null,
-            leagueId: null,
-            gameId: gameIds.length === 0 ? null : gameIds.join(','),
-            teamId: teamId,
-            playerId: player?.player_id ?? null,
-            gameTime: gameTime.join(','),
-            courtAreaId: courtArea.join(','),
-            insidePaint: null,
-            homeAway: gamePlace ? parseInt(gamePlace) : null,
-            gameResult: gameResult ? parseInt(gameResult) : null
-        }).then((res) => {
-            console.log(res);
-            setPlayerState(res[0]);
-            setLoading(false);
-        });
+        if (player && gameIds.length > 0) {
+            setLoading(true);
+            GameService.getPlayersStatsAdvanced({
+                seasonId: null,
+                leagueId: null,
+                gameId: gameIds.length === 0 ? null : gameIds.join(','),
+                teamId: teamId,
+                playerId: player?.player_id ?? null,
+                gameTime: gameTime.join(','),
+                courtAreaId: courtArea.join(','),
+                insidePaint: null,
+                homeAway: gamePlace ? parseInt(gamePlace) : null,
+                gameResult: gameResult ? parseInt(gameResult) : null
+            }).then((res) => {
+                console.log(res);
+                setPlayerState(res[0]);
+                setLoading(false);
+            });
+        }
     }, [refresh]);
 
     return (
