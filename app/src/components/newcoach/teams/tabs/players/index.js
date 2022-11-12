@@ -173,7 +173,7 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
         await GameService.getCoachTeamPlayers(teamId, seasonId, leagueId).then((res) => {
             setPlayerList(res);
         });
-        await GameService.getPlayersStatsAdvanced({
+        await GameService.getPlayersStatsAdvanceSummary({
             seasonId: seasonId,
             leagueId: null,
             gameId: gameIds.join(','),
