@@ -101,11 +101,11 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
     console.log('Daniel====', currentIndex);
 
     return (
-        <Dialog style={{ minWidth: '100%', backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
-            <DialogContent style={{ p: 0 }}>
+        <Dialog style={{ backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
+            <DialogContent style={{ p: 0 ,minWidth: '800px'}}>
                 <div style={{ width: '100%', margin: 'auto', position: 'relative' }}>
                     <FullScreen handle={handle}>
-                        <div style={{ width: '100%', margin: 'auto', minWidth:'700px' }}>
+                        <div style={{ width: '100%', margin: 'auto' , minWidth: '700px'}}>
                             <div className="player-wrapper">
                                 <ReactPlayer 
                                     className="react-player"

@@ -310,9 +310,9 @@ const Goalkeepers = () => {
                                         <TableCell key={`${player.player_id}-${index}-1`}>
                                             <Box sx={{ paddingLeft: '10px', cursor: 'pointer' }} onClick={handleShowMenu(player)}>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                    <p className="normal-text">#{player?.player_jersey_number ?? 0}</p>
                                                     <p className="normal-text">{player?.player_name ?? '-'}</p>
                                                 </div>
+                                                <p className="normal-text">#{player?.player_jersey_number ?? 0}</p>
                                                 <p className="normal-text">{player?.player_position ?? '-'}</p>
                                             </Box>
                                         </TableCell>
