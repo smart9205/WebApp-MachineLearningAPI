@@ -117,7 +117,8 @@ const GameStatsVideoPlayer = ({ onClose, video_url, tagList }) => {
                             padding: '0 16px',
                             top: '12px',
                             justifyContent: 'flex-end',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            color:'red'
                         }}
                         onClick={onClose}
                     >

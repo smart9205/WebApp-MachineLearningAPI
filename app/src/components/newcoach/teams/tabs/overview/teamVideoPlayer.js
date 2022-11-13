@@ -185,15 +185,15 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                     </div>
                 </div>
                 <div style={{ position: 'absolute', left: '36px', top: '12px', width: '90%', display: 'flex', alignItems: 'center' }}>
-                    <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="" sx={{ color: 'white', margin: 0, flex: 1 }} />
+                    <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="" sx={{ color: 'white', margin: 0, flex: 0 }} />
                     {showLogo && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flex: 4 }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'blue', width: '100px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'white' }}>{`${gameTime.period} - ${gameTime.time}'`}</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 500, color: 'white' }}>{`${gameTime.period} - ${gameTime.time}'`}</Typography>
                             </div>
                             <img src={gameTime.home_team_image ? gameTime.home_team_image : TEAM_ICON_DEFAULT} style={{ width: '45px', height: '45px' }} />
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '70px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'blue' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', width: '80px' }}>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 500, color: 'blue' }}>
                                     {`${gameTime.home_team_goals} : ${gameTime.away_team_goals}`}
                                 </Typography>
                             </div>
@@ -204,7 +204,7 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
 
                 <div style={styles.buttonBox}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: 'white' }}>{getTime()}</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1rem', width: '80px', fontWeight: 500, color: 'white' }}>{getTime()}</Typography>
                         <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
                             <SkipPreviousSharpIcon color="white" />
                         </IconButton>
@@ -242,7 +242,7 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
                     </div>
                     {handle.active && tagList.length > 0 && (
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '60px', padding: '5px 25px', background: '#80808069' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 500, color: 'white' }}>
                                 {`${tagList[curIdx].player_names} - ${tagList[curIdx].action_names} - ${tagList[curIdx].action_type_names} - ${tagList[curIdx].action_result_names}`}
                             </Typography>
                         </div>
