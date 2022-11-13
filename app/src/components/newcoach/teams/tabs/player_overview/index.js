@@ -257,7 +257,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId, teamName }) => {
     console.log('opponent => ', values.clickEventName, checkArray);
 
     return (
-        <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
+        <Box sx={{ width: '100%', background: 'white', maxHeight: '85vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', padding: '24px 10px' }}>
                 <TeamPlayerLogoList games={games} gameIds={gameIds} teamId={teamId} setIds={setPlayerIds} />
                 {values.expandButtons && <GamePlayerTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
