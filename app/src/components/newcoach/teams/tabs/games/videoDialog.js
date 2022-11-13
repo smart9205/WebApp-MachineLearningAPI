@@ -86,11 +86,11 @@ const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList }) => {
     return (
         <Dialog style={{ minWidth: '100%', backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
             <DialogContent style={{ p: 0 }}>
-                <div style={{ width: '100%', minWidth:'100%' , margin: 'auto', position: 'relative' }}>
+                <div style={{ width: '100%', margin: 'auto', position: 'relative' }}>
                     <FullScreen handle={handle}>
                         <div style={{ width: '100%', margin: 'auto' }}>
                             <div className="player-wrapper">
-                                <ReactPlayer
+                                <ReactPlayer 
                                     className="react-player"
                                     url={videoURL}
                                     ref={player}

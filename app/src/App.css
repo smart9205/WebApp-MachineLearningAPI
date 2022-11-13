@@ -25,6 +25,7 @@ body > iframe {
     position: absolute;
     top: 0;
     left: 0;
+    min-width: 100%;
 }
 .MuiDropzoneArea-textContainer {
     display: none;

@@ -107,7 +107,7 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                     <FullScreen handle={handle}>
                         <div style={{ width: '100%', margin: 'auto' }}>
                             <div className="player-wrapper">
-                                <ReactPlayer
+                                <ReactPlayer 
                                     className="react-player"
                                     url={videoURL}
                                     ref={player}
