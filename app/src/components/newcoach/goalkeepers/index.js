@@ -278,8 +278,8 @@ const Goalkeepers = () => {
                 </div>
             )}
             {!loading && goalkeeperList.length > 0 && (
-                <Box sx={{ height: '80vh', marginLeft: '10px', background: 'white' }}>
-                    <TableContainer sx={{ maxHeight: '80vh' }}>
+                <Box sx={{ height: '85vh', marginLeft: '10px', background: 'white' }}>
+                    <TableContainer sx={{ maxHeight: '85vh' }}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                 <TableRow height="36px">
@@ -307,27 +307,24 @@ const Goalkeepers = () => {
                                                 src={player ? (player.image_url.length > 0 ? player.image_url : PLAYER_ICON_DEFAULT) : PLAYER_ICON_DEFAULT}
                                             />
                                         </TableCell>
-                                        <TableCell key={`${player.player_id}-${index}-1`} sx={{ width: '300px' }}>
+                                        <TableCell key={`${player.player_id}-${index}-1`} sx={{ width: '115px' }}>
                                             <Box sx={{ paddingLeft: '10px', cursor: 'pointer' }} onClick={handleShowMenu(player)}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                    <p className="normal-text">{player?.player_name ?? '-'}</p>
-                                                </div>
-                                                <p className="normal-text">#{player?.player_jersey_number ?? 0}</p>
-                                                <p className="normal-text">{player?.player_position ?? '-'}</p>
+                                                <p className="normal-text">{player?.player_name ?? '-'}</p>
+                                                <p className="normal-text">#{player?.player_jersey_number ?? 0} {player?.player_position ?? '-'}</p>
                                             </Box>
                                         </TableCell>
-                                        <TableCell key={`${player.player_id}-${index}-2`} align="center">
-                                            {player?.team_name ?? '-'}
+                                        <TableCell key={`${player.player_id}-${index}-2`} sx={{ width: '160px' }} align="center">
+                                        <p className="normal-text"> {player?.team_name ?? '-'}</p>
                                         </TableCell>
                                         {headCells.map((cell, cId) => (
                                             <TableCell
                                                 key={`${cell.id}-${index}-${cId}`}
                                                 align="center"
-                                                sx={{ cursor: 'pointer' }}
+                                                sx={{ cursor: 'pointer' ,width: '55px' }}
                                                 onClick={handleDisplayVideo(cell, player)}
                                                 onContextMenu={handleExportPlayerTags(cell, player)}
                                             >
-                                                {player[cell.id] ?? '-'}
+                                               <p className="normal-text"> {player[cell.id] ?? '-'}</p>
                                             </TableCell>
                                         ))}
                                     </TableRow>
