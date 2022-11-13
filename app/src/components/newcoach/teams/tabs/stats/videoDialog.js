@@ -105,7 +105,7 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
             <DialogContent style={{ p: 0}}>
                 <div style={{ width: '100%', margin: 'auto', position: 'relative' }}>
                     <FullScreen handle={handle}>
-                        <div style={{ width: '100%', margin: 'auto'}}>
+                        <div style={{ width: '100%', margin: 'auto' , minWidth: '700px'}}>
                             <div className="player-wrapper">
                                 <ReactPlayer 
                                     className="react-player"
