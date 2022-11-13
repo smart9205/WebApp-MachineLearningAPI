@@ -356,6 +356,7 @@ div.profileSection td {
     background: transparent;
     box-shadow: none;
     margin: 0 4px;
+    min-width: 78% !important;
 }
 
 @media (orientation: landscape) {

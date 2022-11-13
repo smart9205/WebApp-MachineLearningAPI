@@ -307,7 +307,7 @@ const Goalkeepers = () => {
                                                 src={player ? (player.image_url.length > 0 ? player.image_url : PLAYER_ICON_DEFAULT) : PLAYER_ICON_DEFAULT}
                                             />
                                         </TableCell>
-                                        <TableCell key={`${player.player_id}-${index}-1`}>
+                                        <TableCell key={`${player.player_id}-${index}-1`} sx={{ width: '300px' }}>
                                             <Box sx={{ paddingLeft: '10px', cursor: 'pointer' }} onClick={handleShowMenu(player)}>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                     <p className="normal-text">{player?.player_name ?? '-'}</p>
