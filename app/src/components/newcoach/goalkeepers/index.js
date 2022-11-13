@@ -21,19 +21,26 @@ import '../coach_style.css';
 
 const headCells = [
     { id: 'total_player_games', title: 'Games', action: '' },
+    { id: 'total_build_ups', title: 'Build Ups', action: '' },
+    { id: 'total_short_passes', title: 'Short Passes', action: '' },
+    { id: 'total_long_passes', title: 'Long Passes', action: '' },
+    { id: 'total_super_save', title: 'Super Saved', action: '' },
+    { id: 'total_saved', title: 'Saved', action: 'Saved' },
+    { id: 'total_goalkeeper_exit', title: 'Exits', action: '' },
+    { id: 'total_air_challenge', title: 'Air Challenges', action: '' },
+    { id: 'total_ground_challenge', title: 'Ground Challenges', action: '' },
+    { id: 'total_one_vs_one', title: '1vs1', action: '' },
     { id: 'total_goal_received', title: 'Goals Received', action: '' },
     { id: 'total_opponent_crosses', title: 'Opponents Crosses', action: '' },
     { id: 'total_opponent_corners', title: 'Opponents Corners', action: '' },
     { id: 'total_opponent_free_kicks', title: 'Opponents Free Kicks', action: '' },
-    { id: 'total_short_passes', title: 'Short Passes', action: '' },
-    { id: 'total_long_passes', title: 'Long Passes', action: '' },
-    { id: 'total_build_ups', title: 'Build Ups', action: '' },
-    { id: 'total_super_save', title: 'Super Saved', action: '' },
-    { id: 'total_saved', title: 'Saved', action: 'Saved' },
-    { id: 'total_air_challenge', title: 'Air Challenges', action: '' },
-    { id: 'total_ground_challenge', title: 'Ground Challenges', action: '' },
-    { id: 'total_one_vs_one', title: 'One vs One', action: '' },
-    { id: 'total_goalkeeper_exit', title: 'Exits', action: '' },
+
+
+
+
+
+
+
 
 ];
 
