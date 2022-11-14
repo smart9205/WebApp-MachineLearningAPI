@@ -52,34 +52,34 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
                 ActionData[prop.action].action_type_id,
                 ActionData[prop.action].action_result_id
             ).then((res) => {
+                const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
+
                 setPlayData(
-                    cell.title === 'Exits'
-                        ? res.filter((item) => item.inside_the_pain === false)
-                        : res.map((item) => {
-                              return {
-                                  tag_id: item.id,
-                                  start_time: item.player_tag_start_time,
-                                  end_time: item.player_tag_end_time,
-                                  player_name: item.player_names,
-                                  action_name: item.action_names,
-                                  action_type: item.action_type_names,
-                                  action_result: item.action_result_names,
-                                  game_id: item.game_id,
-                                  team_id: teamId,
-                                  court_area: item.court_area_id,
-                                  inside_pain: item.inside_the_pain,
-                                  period: getPeriod(item.period),
-                                  time: item.time_in_game,
-                                  home_team_image: item.home_team_logo,
-                                  away_team_image: item.away_team_logo,
-                                  home_team_goals: item.home_team_goal,
-                                  away_team_goals: item.away_team_goal
-                              };
-                          })
+                    flist.map((item) => {
+                        return {
+                            tag_id: item.id,
+                            start_time: item.player_tag_start_time,
+                            end_time: item.player_tag_end_time,
+                            player_name: item.player_names,
+                            action_name: item.action_names,
+                            action_type: item.action_type_names,
+                            action_result: item.action_result_names,
+                            game_id: item.game_id,
+                            team_id: teamId,
+                            court_area: item.court_area_id,
+                            inside_pain: item.inside_the_pain,
+                            period: getPeriod(item.period),
+                            time: item.time_in_game,
+                            home_team_image: item.home_team_logo,
+                            away_team_image: item.away_team_logo,
+                            home_team_goals: item.home_team_goal,
+                            away_team_goals: item.away_team_goal
+                        };
+                    })
                 );
                 setVideoURL(video_url);
 
-                if (res.length > 0) setVideoOpen(true);
+                if (flist.length > 0) setVideoOpen(true);
             });
         }
     };
@@ -97,9 +97,11 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
                 ActionData[prop.action].action_type_id,
                 ActionData[prop.action].action_result_id
             ).then((res) => {
-                setPlayData(cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res);
+                const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
 
-                if (res.length > 0) setExportOpen(true);
+                setPlayData(flist);
+
+                if (flist.length > 0) setExportOpen(true);
             });
         }
     };

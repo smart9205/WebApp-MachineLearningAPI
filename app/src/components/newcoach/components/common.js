@@ -114,11 +114,14 @@ const ActionData = {
     PenaltyMissed: { action_id: '1', action_type_id: '13', action_result_id: '2' },
     FreeKick: { action_id: '1,2,3', action_type_id: '11,13', action_result_id: null },
     Passes: { action_id: '2', action_type_id: null, action_result_id: null },
+    ShortPass: { action_id: '2', action_type_id: '4', action_result_id: null },
+    LongPass: { action_id: '2', action_type_id: '5', action_result_id: null },
     PassesSuccess: { action_id: '2', action_type_id: null, action_result_id: '4' },
     ThroughPass: { action_id: '2', action_type_id: '6', action_result_id: null },
     KeyPass: { action_id: '2', action_type_id: '7', action_result_id: null },
     PassesShots: { action_id: '2', action_type_id: '15', action_result_id: null },
     Corner: { action_id: '2,3', action_type_id: '12', action_result_id: null },
+    BuildUp: { action_id: '2,4', action_type_id: null, action_result_id: null },
     Turnover: { action_id: '2,7', action_type_id: null, action_result_id: '5,11,12,15' },
     Cross: { action_id: '3', action_type_id: '1,2,3,4,5,6,7,8,9,10,13,14,15', action_result_id: null },
     Dribble: { action_id: '4', action_type_id: null, action_result_id: null },
@@ -131,7 +134,12 @@ const ActionData = {
     Interception: { action_id: '10', action_type_id: null, action_result_id: null },
     Clearance: { action_id: '11', action_type_id: null, action_result_id: null },
     Tackle: { action_id: '12', action_type_id: null, action_result_id: null },
-    Blocked: { action_id: '13', action_type_id: null, action_result_id: '7,19' }
+    Blocked: { action_id: '13', action_type_id: null, action_result_id: '7,19' },
+    SuperSaved: { action_id: '17', action_type_id: null, action_result_id: null },
+    AirChallenge: { action_id: '18', action_type_id: null, action_result_id: null },
+    GroundChallenge: { action_id: '19', action_type_id: null, action_result_id: null },
+    One: { action_id: '20', action_type_id: null, action_result_id: null },
+    GoalReceive: { action_id: '22', action_type_id: null, action_result_id: null }
 };
 
 export { StyleTextField, BootstrapInput, SearchText, SaveButton, MenuProps, ActionData };

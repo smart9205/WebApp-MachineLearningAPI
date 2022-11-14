@@ -220,7 +220,7 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                 );
                 setGameList(games.filter((item) => gameIds.includes(item.id)));
 
-                if (res.length > 0) setVideoOpen(true);
+                if (data.length > 0) setVideoOpen(true);
             });
         }
     };
@@ -246,7 +246,7 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
 
                 setPlayData(data);
 
-                if (res.length > 0) setExportOpen(true);
+                if (data.length > 0) setExportOpen(true);
             });
         }
     };
