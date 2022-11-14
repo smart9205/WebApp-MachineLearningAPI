@@ -12,7 +12,7 @@ import '../coach_style.css';
 import GameExportToEdits from '../games/tabs/overview/exportEdits';
 
 const properties = [
-    { id: 'total_player_games', title: 'Games', action: '' },
+    { id: 'total_player_games', title: 'Games Played', action: '' },
     { id: 'total_build_ups', title: 'Build Ups', action: '' },
     { id: 'total_short_passes', title: 'Short Passes', action: '' },
     { id: 'total_long_passes', title: 'Long Passes', action: '' },
@@ -141,7 +141,7 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
                                             onClick={() => handleDisplayVideo(item, prop)}
                                             onContextMenu={handleExportTags(item, prop)}
                                         >
-                                            {item[prop.id] ? item[prop.id] : '-'}
+                                            {item[prop.id]}
                                         </TableCell>
                                     ))}
                                 </TableRow>

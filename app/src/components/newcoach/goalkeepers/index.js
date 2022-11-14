@@ -13,15 +13,15 @@ import { getComparator, stableSort } from '../components/utilities';
 import { ActionData, MenuProps } from '../components/common';
 import { getPeriod } from '../games/tabs/overview/tagListItem';
 import PlayerEditDialog from '../players/playerEditDialog';
-import TeamPlayerStatDialog from '../teams/tabs/players/status';
 import TeamStatsVideoPlayer from '../teams/tabs/stats/videoDialog';
 import GameExportToEdits from '../games/tabs/overview/exportEdits';
+import GoalkeepersGamesDialog from './gamesDialog';
+import GoalkeeperStatDialog from './status';
 
 import '../coach_style.css';
-import GoalkeepersGamesDialog from './gamesDialog';
 
 const headCells = [
-    { id: 'total_player_games', title: 'Games', action: '' },
+    { id: 'total_player_games', title: 'Games Played', action: '' },
     { id: 'total_build_ups', title: 'Build Ups', action: '' },
     { id: 'total_short_passes', title: 'Short Passes', action: '' },
     { id: 'total_long_passes', title: 'Long Passes', action: '' },
@@ -30,7 +30,7 @@ const headCells = [
     { id: 'total_goalkeeper_exit', title: 'Exits', action: '' },
     { id: 'total_air_challenge', title: 'Air Challenges', action: '' },
     { id: 'total_ground_challenge', title: 'Ground Challenges', action: '' },
-    { id: 'total_one_vs_one', title: '1vs1', action: '' },
+    { id: 'total_one_vs_one', title: '1 vs 1', action: '' },
     { id: 'total_goal_received', title: 'Goals Received', action: '' },
     { id: 'total_opponent_crosses', title: 'Opponents Crosses', action: '' },
     { id: 'total_opponent_corners', title: 'Opponents Corners', action: '' },
@@ -76,9 +76,9 @@ const Goalkeepers = () => {
     const getFilteredList = () => {
         let list = [];
 
-        if (values.seasonFilter !== 'none' && values.teamFilter === 'none') list = goalkeeperList.filter((item) => item.season_name === values.seasonFilter);
+        if (values.seasonFilter !== 'none' && values.teamFilter === 'none') list = goalkeeperList.filter((item) => item.season_name === values.seasonFilter.name);
         else if (values.seasonFilter === 'none' && values.teamFilter !== 'none') list = goalkeeperList.filter((item) => item.team_name === values.teamFilter);
-        else list = goalkeeperList.filter((item) => item.season_name === values.seasonFilter && item.team_name === values.teamFilter);
+        else list = goalkeeperList.filter((item) => item.season_name === values.seasonFilter.name && item.team_name === values.teamFilter);
 
         return values.seasonFilter === 'none' && values.teamFilter === 'none' ? goalkeeperList : list;
     };
@@ -190,7 +190,7 @@ const Goalkeepers = () => {
         await GameService.getAllGamesByCoach(playerStat.season_id, null, playerStat.team_id, null).then((res) => {
             gameIds = res.map((item) => item.id);
         });
-        await GameService.getPlayersStatsGamebyGame({
+        await GameService.getGoalkeepersStatsGamebyGame({
             seasonId: playerStat.season_id,
             leagueId: null,
             gameId: gameIds.length === 0 ? null : gameIds.join(','),
@@ -202,6 +202,7 @@ const Goalkeepers = () => {
             homeAway: null,
             gameResult: null
         }).then((res) => {
+            console.log('$$$$$$$$$', res);
             setPlayerGames(stableSort(res, getComparator('desc', 'game_date')));
             setGamesOpen(true);
         });
@@ -276,9 +277,9 @@ const Goalkeepers = () => {
             let result = [];
 
             array.map((item) => {
-                const filter = result.filter((team) => team === item.season_name);
+                const filter = result.filter((team) => team.name === item.season_name);
 
-                if (filter.length === 0) result = [...result, item.season_name];
+                if (filter.length === 0) result = [...result, { name: item.season_name, id: item.season_id }];
 
                 return result;
             });
@@ -303,7 +304,7 @@ const Goalkeepers = () => {
 
         if (teamIds.length > 0) {
             await GameService.getGoalkeepersStatsAdvanceSummary({
-                seasonId: null,
+                seasonId: values.seasonFilter === 'none' ? null : values.seasonFilter.id,
                 leagueId: leagueIds.length > 0 ? leagueIds.join(',') : null,
                 gameId: null,
                 teamId: teamIds.join(','),
@@ -321,9 +322,9 @@ const Goalkeepers = () => {
                 setLoading(false);
             });
         } else setLoading(false);
-    }, []);
+    }, [values.seasonFilter]);
 
-    console.log('Goals => ', goalkeeperList);
+    console.log('Goals => ', goalkeeperList, values.seasonFilter);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
@@ -347,7 +348,7 @@ const Goalkeepers = () => {
                             </MenuItem>
                             {values.seasonList.map((season, index) => (
                                 <MenuItem key={index + 1} value={season}>
-                                    {season}
+                                    {season.name}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -437,7 +438,7 @@ const Goalkeepers = () => {
                         </Table>
                     </TableContainer>
                     <PlayerEditDialog open={editOpen} onClose={() => setEditOpen(false)} player={editPlayer} />
-                    <TeamPlayerStatDialog
+                    <GoalkeeperStatDialog
                         open={statOpen}
                         onClose={() => setStatOpen(false)}
                         player={currentPlayer}
