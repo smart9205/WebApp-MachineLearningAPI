@@ -18,7 +18,7 @@ const properties = [
     { id: 'total_long_passes', title: 'Long Passes', action: 'LongPass' },
     { id: 'total_super_save', title: 'Super Saved', action: 'SuperSaved' },
     { id: 'total_saved', title: 'Saved', action: 'Saved' },
-    { id: 'total_goalkeeper_exit', title: 'Exits', action: 'All' },
+    { id: 'total_goalkeeper_exit', title: 'Exits', action: 'Exits' },
     { id: 'total_air_challenge', title: 'Air Challenges', action: 'AirChallenge' },
     { id: 'total_ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
     { id: 'total_one_vs_one', title: '1 vs 1', action: 'One' },

@@ -48,7 +48,7 @@ const statList = [
     { id: 'long_passes', title: 'Long Passes', action: 'LongPass' },
     { id: 'super_save', title: 'Super Saved', action: 'SuperSaved' },
     { id: 'saved', title: 'Saved', action: 'Saved' },
-    { id: 'goalkeeper_exit', title: 'Exits', action: 'All' },
+    { id: 'goalkeeper_exit', title: 'Exits', action: 'Exits' },
     { id: 'air_challenge', title: 'Air Challenges', action: 'AirChallenge' },
     { id: 'ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
     { id: 'one_vs_one', title: '1 vs 1', action: 'One' },

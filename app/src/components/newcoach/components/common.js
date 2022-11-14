@@ -139,7 +139,9 @@ const ActionData = {
     AirChallenge: { action_id: '18', action_type_id: null, action_result_id: null },
     GroundChallenge: { action_id: '19', action_type_id: null, action_result_id: null },
     One: { action_id: '20', action_type_id: null, action_result_id: null },
-    GoalReceive: { action_id: '22', action_type_id: null, action_result_id: null }
+    GoalReceive: { action_id: '22', action_type_id: null, action_result_id: null },
+    Exits: { action_id: '5,6,10,11,12,13,14,15,20', action_type_id: null, action_result_id: null },
+    
 };
 
 export { StyleTextField, BootstrapInput, SearchText, SaveButton, MenuProps, ActionData };
