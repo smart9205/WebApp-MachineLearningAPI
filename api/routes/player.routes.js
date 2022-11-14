@@ -55,6 +55,23 @@ module.exports = (app) => {
     controller.getPlayersStatsGamebyGame
   );
 
+  app.post(
+    "/player/getgoalkeepersstats/advance",
+    controller.getGoalkeepersStatsAdvanced
+  );
+
+  app.post(
+    "/player/getgoalkeepersstats/summary",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getGoalkeepersStatsAdvanceSummary
+  );
+
+  app.post(
+    "/player/getgoalkeepersstats/game",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getGoalkeepersStatsGamebyGame
+  );
+
   app.get(
     "/player/game_player_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId",
     controller.getGamePlayerTags

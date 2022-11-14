@@ -280,6 +280,120 @@ exports.getPlayersStatsGamebyGame = (req, res) => {
     });
 };
 
+exports.getGoalkeepersStatsAdvanced = (req, res) => {
+  const game_time =
+    req.body.gameTime === null ? null : `'${req.body.gameTime}'`;
+  const court =
+    req.body.courtAreaId === null ? null : `'${req.body.courtAreaId}'`;
+  const game_id = req.body.gameId === null ? null : `'${req.body.gameId}'`;
+  const league_id =
+    req.body.leagueId === null ? null : `'${req.body.leagueId}'`;
+  const team_id = req.body.teamId === null ? null : `'${req.body.teamId}'`;
+  const player_id =
+    req.body.playerId === null ? null : `'${req.body.playerId}'`;
+
+  Sequelize.query(
+    `
+    SELECT * from public.fnc_get_goalkeeper_stats_advanced(
+      ${req.body.seasonId},
+      ${league_id},
+      ${game_id},
+      ${team_id},
+      ${player_id},
+      null,
+      ${game_time},
+      ${court},
+      ${req.body.insidePaint},
+      ${req.body.homeAway},
+      ${req.body.gameResult}
+    )
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((e) => {
+      res.status(500).send({
+        message: e.message || "Some error occurred while retrieving games.",
+      });
+    });
+};
+
+exports.getGoalkeepersStatsAdvanceSummary = (req, res) => {
+  const game_time =
+    req.body.gameTime === null ? null : `'${req.body.gameTime}'`;
+  const court =
+    req.body.courtAreaId === null ? null : `'${req.body.courtAreaId}'`;
+  const game_id = req.body.gameId === null ? null : `'${req.body.gameId}'`;
+  const league_id =
+    req.body.leagueId === null ? null : `'${req.body.leagueId}'`;
+  const team_id = req.body.teamId === null ? null : `'${req.body.teamId}'`;
+  const player_id =
+    req.body.playerId === null ? null : `'${req.body.playerId}'`;
+
+  Sequelize.query(
+    `
+    SELECT * from public.fnc_get_goalkeeper_stats_advance_summary(
+      ${req.body.seasonId},
+      ${league_id},
+      ${game_id},
+      ${team_id},
+      ${player_id},
+      null,
+      ${game_time},
+      ${court},
+      ${req.body.insidePaint},
+      ${req.body.homeAway},
+      ${req.body.gameResult}
+    )
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((e) => {
+      res.status(500).send({
+        message: e.message || "Some error occurred while retrieving games.",
+      });
+    });
+};
+
+exports.getGoalkeepersStatsGamebyGame = (req, res) => {
+  const game_time =
+    req.body.gameTime === null ? null : `'${req.body.gameTime}'`;
+  const court =
+    req.body.courtAreaId === null ? null : `'${req.body.courtAreaId}'`;
+  const game_id = req.body.gameId === null ? null : `'${req.body.gameId}'`;
+  const league_id =
+    req.body.leagueId === null ? null : `'${req.body.leagueId}'`;
+
+  Sequelize.query(
+    `
+    SELECT * from public.fnc_get_goalkeeper_stats_game_by_game(
+      ${req.body.seasonId},
+      ${league_id},
+      ${game_id},
+      ${req.body.teamId},
+      ${req.body.playerId},
+      ${req.userId},
+      ${game_time},
+      ${court},
+      ${req.body.insidePaint},
+      ${req.body.homeAway},
+      ${req.body.gameResult}
+    )
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((e) => {
+      res.status(500).send({
+        message: e.message || "Some error occurred while retrieving games.",
+      });
+    });
+};
+
 exports.getPlayersDetection = (req, res) => {
   const videoTime =
     req.params.videoTime === null ? null : `'${req.params.videoTime}'`;

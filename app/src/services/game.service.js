@@ -826,6 +826,24 @@ const getPlayersStatsGamebyGame = (req) => {
         return response.data;
     });
 };
+
+const getGoalkeepersStatsAdvanced = (req) => {
+    return axios.post(API_URL + `player/getgoalkeepersstats/advance`, req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const getGoalkeepersStatsAdvanceSummary = (req) => {
+    return axios.post(API_URL + `player/getgoalkeepersstats/summary`, req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const getGoalkeepersStatsGamebyGame = (req) => {
+    return axios.post(API_URL + `player/getgoalkeepersstats/game`, req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
 const addCorrectionRequest = (curPlayerId, newPlayerId, playerTagId) => {
     return axios.put(API_URL + `player/addcorrection/${curPlayerId}/${newPlayerId}/${playerTagId}`, { curPlayerId, newPlayerId, playerTagId }, { headers: authHeader() }).then((response) => {
         return response.data;
@@ -1050,6 +1068,9 @@ const gameService = {
     getPlayersStatsAdvanced,
     getPlayersStatsAdvanceSummary,
     getPlayersStatsGamebyGame,
+    getGoalkeepersStatsAdvanced,
+    getGoalkeepersStatsAdvanceSummary,
+    getGoalkeepersStatsGamebyGame,
     getPlayersDetection,
     addCorrectionRequest,
     getCorrectionRequest,

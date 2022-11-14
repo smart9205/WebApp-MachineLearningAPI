@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Divider, Popover, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@mui/material';
+import { Box, CircularProgress, Divider, MenuItem, Popover, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { useSelector } from 'react-redux';
 
 import EditIcon from '@mui/icons-material/EditOutlined';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
 import GameService from '../../../services/game.service';
 import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
 import { getComparator, stableSort } from '../components/utilities';
-import { ActionData } from '../components/common';
+import { ActionData, MenuProps } from '../components/common';
 import { getPeriod } from '../games/tabs/overview/tagListItem';
 import PlayerEditDialog from '../players/playerEditDialog';
 import TeamPlayerStatDialog from '../teams/tabs/players/status';
 import TeamStatsVideoPlayer from '../teams/tabs/stats/videoDialog';
 import GameExportToEdits from '../games/tabs/overview/exportEdits';
-import PlayersGamesDialog from '../players/gamesDialog';
 
 import '../coach_style.css';
+import GoalkeepersGamesDialog from './gamesDialog';
 
 const headCells = [
     { id: 'total_player_games', title: 'Games', action: '' },
@@ -33,15 +34,7 @@ const headCells = [
     { id: 'total_goal_received', title: 'Goals Received', action: '' },
     { id: 'total_opponent_crosses', title: 'Opponents Crosses', action: '' },
     { id: 'total_opponent_corners', title: 'Opponents Corners', action: '' },
-    { id: 'total_opponent_free_kicks', title: 'Opponents Free Kicks', action: '' },
-
-
-
-
-
-
-
-
+    { id: 'total_opponent_free_kicks', title: 'Opponents Free Kicks', action: '' }
 ];
 
 const Goalkeepers = () => {
@@ -60,6 +53,12 @@ const Goalkeepers = () => {
     const [exportOpen, setExportOpen] = useState(false);
     const [playerGames, setPlayerGames] = useState([]);
     const [gamesOpen, setGamesOpen] = useState(false);
+    const [values, setValues] = useState({
+        teamList: [],
+        seasonList: [],
+        teamFilter: 'none',
+        seasonFilter: 'none'
+    });
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const menuPopoverOpen = Boolean(menuAnchorEl);
@@ -74,8 +73,18 @@ const Goalkeepers = () => {
         setOrderBy(prop);
     };
 
+    const getFilteredList = () => {
+        let list = [];
+
+        if (values.seasonFilter !== 'none' && values.teamFilter === 'none') list = goalkeeperList.filter((item) => item.season_name === values.seasonFilter);
+        else if (values.seasonFilter === 'none' && values.teamFilter !== 'none') list = goalkeeperList.filter((item) => item.team_name === values.teamFilter);
+        else list = goalkeeperList.filter((item) => item.season_name === values.seasonFilter && item.team_name === values.teamFilter);
+
+        return values.seasonFilter === 'none' && values.teamFilter === 'none' ? goalkeeperList : list;
+    };
+
     const getSortedArray = () => {
-        return stableSort(goalkeeperList, getComparator(order, orderBy));
+        return stableSort(getFilteredList(), getComparator(order, orderBy));
     };
 
     const handleShowMenu = (player) => (e) => {
@@ -198,6 +207,16 @@ const Goalkeepers = () => {
         });
     };
 
+    const getDisplayName = (player) => {
+        if (player) {
+            if (player.player_jersey_number === 999) return player.player_position;
+
+            return `#${player.player_jersey_number} ${player.player_position}`;
+        }
+
+        return '-';
+    };
+
     const getLeagueIds = (array) => {
         if (array.length > 0) {
             let result = [];
@@ -234,6 +253,42 @@ const Goalkeepers = () => {
         return [];
     };
 
+    const getTeamList = (array) => {
+        if (array.length > 0) {
+            let result = [];
+
+            array.map((item) => {
+                const filter = result.filter((team) => team === item.team_name);
+
+                if (filter.length === 0) result = [...result, item.team_name];
+
+                return result;
+            });
+
+            return result;
+        }
+
+        return [];
+    };
+
+    const getSeasonList = (array) => {
+        if (array.length > 0) {
+            let result = [];
+
+            array.map((item) => {
+                const filter = result.filter((team) => team === item.season_name);
+
+                if (filter.length === 0) result = [...result, item.season_name];
+
+                return result;
+            });
+
+            return result;
+        }
+
+        return [];
+    };
+
     useEffect(async () => {
         let leagueIds = [];
         let teamIds = [];
@@ -247,7 +302,7 @@ const Goalkeepers = () => {
         });
 
         if (teamIds.length > 0) {
-            await GameService.getPlayersStatsAdvanceSummary({
+            await GameService.getGoalkeepersStatsAdvanceSummary({
                 seasonId: null,
                 leagueId: leagueIds.length > 0 ? leagueIds.join(',') : null,
                 gameId: null,
@@ -259,7 +314,10 @@ const Goalkeepers = () => {
                 homeAway: null,
                 gameResult: null
             }).then((res) => {
-                setGoalkeeperList(res.filter((item) => item.player_position === 'Goalkeeper'));
+                const list = res.filter((item) => item.player_position === 'Goalkeeper');
+
+                setGoalkeeperList(list);
+                setValues({ ...values, teamList: getTeamList(list), seasonList: getSeasonList(list) });
                 setLoading(false);
             });
         } else setLoading(false);
@@ -269,8 +327,54 @@ const Goalkeepers = () => {
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
-            <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <p className="page-title">Goalkeepers</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <p className="normal-text">Season</p>
+                        <Select
+                            value={values.seasonFilter}
+                            onChange={(e) => setValues({ ...values, seasonFilter: e.target.value })}
+                            label=""
+                            variant="outlined"
+                            IconComponent={ExpandMoreIcon}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            MenuProps={MenuProps}
+                            sx={{ outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                        >
+                            <MenuItem key="0" value="none">
+                                All
+                            </MenuItem>
+                            {values.seasonList.map((season, index) => (
+                                <MenuItem key={index + 1} value={season}>
+                                    {season}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <p className="normal-text">Team</p>
+                        <Select
+                            value={values.teamFilter}
+                            onChange={(e) => setValues({ ...values, teamFilter: e.target.value })}
+                            label=""
+                            variant="outlined"
+                            IconComponent={ExpandMoreIcon}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            MenuProps={MenuProps}
+                            sx={{ outline: 'none', height: '36px', width: '300px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                        >
+                            <MenuItem key="0" value="none">
+                                All
+                            </MenuItem>
+                            {values.teamList.map((team, index) => (
+                                <MenuItem key={index + 1} value={team}>
+                                    {team}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </Box>
+                </div>
             </Box>
             {loading && (
                 <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -310,21 +414,21 @@ const Goalkeepers = () => {
                                         <TableCell key={`${player.player_id}-${index}-1`} sx={{ width: '115px' }}>
                                             <Box sx={{ paddingLeft: '10px', cursor: 'pointer' }} onClick={handleShowMenu(player)}>
                                                 <p className="normal-text">{player?.player_name ?? '-'}</p>
-                                                <p className="normal-text">#{player?.player_jersey_number ?? 0} {player?.player_position ?? '-'}</p>
+                                                <p className="normal-text">{getDisplayName(player)}</p>
                                             </Box>
                                         </TableCell>
                                         <TableCell key={`${player.player_id}-${index}-2`} sx={{ width: '160px' }} align="center">
-                                        <p className="normal-text"> {player?.team_name ?? '-'}</p>
+                                            <p className="normal-text"> {player?.team_name ?? '-'}</p>
                                         </TableCell>
                                         {headCells.map((cell, cId) => (
                                             <TableCell
                                                 key={`${cell.id}-${index}-${cId}`}
                                                 align="center"
-                                                sx={{ cursor: 'pointer' ,width: '55px' }}
+                                                sx={{ cursor: 'pointer', width: '55px' }}
                                                 onClick={handleDisplayVideo(cell, player)}
                                                 onContextMenu={handleExportPlayerTags(cell, player)}
                                             >
-                                               <p className="normal-text"> {player[cell.id] ?? '-'}</p>
+                                                <p className="normal-text"> {player[cell.id] ?? '-'}</p>
                                             </TableCell>
                                         ))}
                                     </TableRow>
@@ -345,7 +449,7 @@ const Goalkeepers = () => {
                     />
                     <TeamStatsVideoPlayer open={videoOpen} onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />
                     <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
-                    <PlayersGamesDialog open={gamesOpen} onClose={() => setGamesOpen(false)} list={playerGames} playerName={playerStat?.player_name ?? ''} />
+                    <GoalkeepersGamesDialog open={gamesOpen} onClose={() => setGamesOpen(false)} list={playerGames} playerName={playerStat?.player_name ?? ''} teamId={playerStat?.team_id ?? 0} />
                     <Popover
                         id={menuPopoverId}
                         open={menuPopoverOpen}
