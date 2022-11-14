@@ -43,16 +43,16 @@ const statList = [
     { id: 'fouls', title: 'Fouls', action: 'Foul' },
     { id: 'yellow_cards', title: 'Yellow Cards', action: 'YellowCard' },
     { id: 'red_cards', title: 'Red Cards', action: 'RedCard' },
-    { id: 'build_ups', title: 'Build Ups', action: '' },
-    { id: 'short_passes', title: 'Short Passes', action: '' },
-    { id: 'long_passes', title: 'Long Passes', action: '' },
-    { id: 'super_save', title: 'Super Saved', action: '' },
+    { id: 'build_ups', title: 'Build Ups', action: 'BuildUp' },
+    { id: 'short_passes', title: 'Short Passes', action: 'ShortPass' },
+    { id: 'long_passes', title: 'Long Passes', action: 'LongPass' },
+    { id: 'super_save', title: 'Super Saved', action: 'SuperSaved' },
     { id: 'saved', title: 'Saved', action: 'Saved' },
-    { id: 'goalkeeper_exit', title: 'Exits', action: '' },
-    { id: 'air_challenge', title: 'Air Challenges', action: '' },
-    { id: 'ground_challenge', title: 'Ground Challenges', action: '' },
-    { id: 'one_vs_one', title: '1 vs 1', action: '' },
-    { id: 'goal_received', title: 'Goals Received', action: '' },
+    { id: 'goalkeeper_exit', title: 'Exits', action: 'All' },
+    { id: 'air_challenge', title: 'Air Challenges', action: 'AirChallenge' },
+    { id: 'ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
+    { id: 'one_vs_one', title: '1 vs 1', action: 'One' },
+    { id: 'goal_received', title: 'Goals Received', action: 'GoalReceive' },
     { id: 'opponent_crosses', title: 'Opponents Crosses', action: '' },
     { id: 'opponent_corners', title: 'Opponents Corners', action: '' },
     { id: 'opponent_free_kicks', title: 'Opponents Free Kicks', action: '' },
@@ -193,6 +193,7 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
 
                 if (cell.title === 'Shots In The Box') data = res.filter((item) => item.inside_the_pain === true);
                 else if (cell.title === 'Shots Out Of The Box') data = res.filter((item) => item.inside_the_pain === false);
+                else if (cell.title === 'Exits') data = res.filter((item) => item.inside_the_pain === false);
 
                 setPlayData(
                     data.map((item) => {
@@ -218,7 +219,8 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                     })
                 );
                 setGameList(games.filter((item) => gameIds.includes(item.id)));
-                setVideoOpen(true);
+
+                if (res.length > 0) setVideoOpen(true);
             });
         }
     };
@@ -240,9 +242,11 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
 
                 if (cell.title === 'Shots In The Box') data = res.filter((item) => item.inside_the_pain === true);
                 else if (cell.title === 'Shots Out Of The Box') data = res.filter((item) => item.inside_the_pain === false);
+                else if (cell.title === 'Exits') data = res.filter((item) => item.inside_the_pain === false);
 
                 setPlayData(data);
-                setExportOpen(true);
+
+                if (res.length > 0) setExportOpen(true);
             });
         }
     };

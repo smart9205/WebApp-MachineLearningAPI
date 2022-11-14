@@ -22,16 +22,16 @@ import '../coach_style.css';
 
 const headCells = [
     { id: 'total_player_games', title: 'Games Played', action: '' },
-    { id: 'total_build_ups', title: 'Build Ups', action: '' },
-    { id: 'total_short_passes', title: 'Short Passes', action: '' },
-    { id: 'total_long_passes', title: 'Long Passes', action: '' },
-    { id: 'total_super_save', title: 'Super Saved', action: '' },
+    { id: 'total_build_ups', title: 'Build Ups', action: 'BuildUp' },
+    { id: 'total_short_passes', title: 'Short Passes', action: 'ShortPass' },
+    { id: 'total_long_passes', title: 'Long Passes', action: 'LongPass' },
+    { id: 'total_super_save', title: 'Super Saved', action: 'SuperSaved' },
     { id: 'total_saved', title: 'Saved', action: 'Saved' },
-    { id: 'total_goalkeeper_exit', title: 'Exits', action: '' },
-    { id: 'total_air_challenge', title: 'Air Challenges', action: '' },
-    { id: 'total_ground_challenge', title: 'Ground Challenges', action: '' },
-    { id: 'total_one_vs_one', title: '1 vs 1', action: '' },
-    { id: 'total_goal_received', title: 'Goals Received', action: '' },
+    { id: 'total_goalkeeper_exit', title: 'Exits', action: 'All' },
+    { id: 'total_air_challenge', title: 'Air Challenges', action: 'AirChallenge' },
+    { id: 'total_ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
+    { id: 'total_one_vs_one', title: '1 vs 1', action: 'One' },
+    { id: 'total_goal_received', title: 'Goals Received', action: 'GoalReceive' },
     { id: 'total_opponent_crosses', title: 'Opponents Crosses', action: '' },
     { id: 'total_opponent_corners', title: 'Opponents Corners', action: '' },
     { id: 'total_opponent_free_kicks', title: 'Opponents Free Kicks', action: '' }
@@ -129,29 +129,32 @@ const Goalkeepers = () => {
                 ActionData[cell.action].action_result_id
             ).then((res) => {
                 setPlayData(
-                    res.map((item) => {
-                        return {
-                            tag_id: item.id,
-                            start_time: item.player_tag_start_time,
-                            end_time: item.player_tag_end_time,
-                            player_name: item.player_names,
-                            action_name: item.action_names,
-                            action_type: item.action_type_names,
-                            action_result: item.action_result_names,
-                            game_id: item.game_id,
-                            team_id: player.team_id,
-                            court_area: item.court_area_id,
-                            inside_pain: item.inside_the_pain,
-                            period: getPeriod(item.period),
-                            time: item.time_in_game,
-                            home_team_image: item.home_team_logo,
-                            away_team_image: item.away_team_logo,
-                            home_team_goals: item.home_team_goal,
-                            away_team_goals: item.away_team_goal
-                        };
-                    })
+                    cell.title === 'Exits'
+                        ? res.filter((item) => item.inside_the_pain === false)
+                        : res.map((item) => {
+                              return {
+                                  tag_id: item.id,
+                                  start_time: item.player_tag_start_time,
+                                  end_time: item.player_tag_end_time,
+                                  player_name: item.player_names,
+                                  action_name: item.action_names,
+                                  action_type: item.action_type_names,
+                                  action_result: item.action_result_names,
+                                  game_id: item.game_id,
+                                  team_id: player.team_id,
+                                  court_area: item.court_area_id,
+                                  inside_pain: item.inside_the_pain,
+                                  period: getPeriod(item.period),
+                                  time: item.time_in_game,
+                                  home_team_image: item.home_team_logo,
+                                  away_team_image: item.away_team_logo,
+                                  home_team_goals: item.home_team_goal,
+                                  away_team_goals: item.away_team_goal
+                              };
+                          })
                 );
-                setVideoOpen(true);
+
+                if (res.length > 0) setVideoOpen(true);
             });
         }
     };
@@ -177,8 +180,9 @@ const Goalkeepers = () => {
                 ActionData[cell.action].action_type_id,
                 ActionData[cell.action].action_result_id
             ).then((res) => {
-                setPlayData(res);
-                setExportOpen(true);
+                setPlayData(cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res);
+
+                if (res.length > 0) setExportOpen(true);
             });
         }
     };
@@ -318,7 +322,9 @@ const Goalkeepers = () => {
                 const list = res.filter((item) => item.player_position === 'Goalkeeper');
 
                 setGoalkeeperList(list);
-                setValues({ ...values, teamList: getTeamList(list), seasonList: getSeasonList(list) });
+
+                if (values.seasonList.length === 0 || values.teamList.length === 0) setValues({ ...values, teamList: getTeamList(list), seasonList: getSeasonList(list) });
+
                 setLoading(false);
             });
         } else setLoading(false);
