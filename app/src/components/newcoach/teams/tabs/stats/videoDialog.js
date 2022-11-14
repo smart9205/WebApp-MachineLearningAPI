@@ -75,39 +75,32 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
     };
 
     useEffect(() => {
-        if (video_url.length > 0 && tagList.length > 0) {
-            let videos = [];
-
-            setCurrentIndex(0);
-            video_url.map((game) => {
-                if (game.video_url.startsWith('https://www.youtube.com')) {
-                    gameService.getNewStreamURL(game.video_url).then((res) => {
-                        videos = [...videos, { url: res.url, id: game.id }];
-                    });
-                } else if (game.video_url.toLowerCase() !== 'no video') videos = [...videos, { url: game.video_url, id: game.id }];
-            });
-
-            if (videos.length > 0) {
-                setVideoList(videos);
-                setVideoURL(videos.filter((item) => item.id === tagList[0].game_id)[0].url);
-            }
-        }
-    }, [tagList, video_url]);
+        setVideoList([]);
+        video_url.map((game) => {
+            if (game.video_url.startsWith('https://www.youtube.com')) {
+                gameService.getNewStreamURL(game.video_url).then((res) => {
+                    setVideoList((old) => [...old, { id: game.id, url: res.url }]);
+                });
+            } else if (game.video_url.toLowerCase() !== 'no video') setVideoList((old) => [...old, { id: game.id, url: game.video_url }]);
+        });
+    }, [video_url]);
 
     useEffect(() => {
         setCurrentIndex(0);
+
+        if (videoList.length > 0) setVideoURL(videoList.filter((item) => item.id === tagList[0].game_id)[0].url);
     }, [open]);
 
-    console.log('Daniel====', currentIndex);
+    console.log('Daniel====', videoList, tagList, videoURL);
 
     return (
         <Dialog style={{ backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
-            <DialogContent style={{ p: 0}}>
+            <DialogContent style={{ p: 0 }}>
                 <div style={{ width: '100%', margin: 'auto', position: 'relative' }}>
                     <FullScreen handle={handle}>
-                        <div style={{ width: '100%', margin: 'auto' , minWidth: '700px'}}>
+                        <div style={{ width: '100%', margin: 'auto', minWidth: '700px' }}>
                             <div className="player-wrapper">
-                                <ReactPlayer 
+                                <ReactPlayer
                                     className="react-player"
                                     url={videoURL}
                                     ref={player}

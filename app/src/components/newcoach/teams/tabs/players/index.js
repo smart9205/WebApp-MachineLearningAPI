@@ -144,7 +144,6 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
                         };
                     })
                 );
-                setGameList(games.filter((item) => gameIds.includes(item.id)));
                 setVideoOpen(true);
             });
         }
@@ -170,6 +169,7 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
     };
 
     useEffect(async () => {
+        setGameList(games.filter((item) => gameIds.includes(item.id)));
         await GameService.getCoachTeamPlayers(teamId, seasonId, leagueId).then((res) => {
             setPlayerList(res);
         });

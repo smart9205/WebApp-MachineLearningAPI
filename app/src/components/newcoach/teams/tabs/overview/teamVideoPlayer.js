@@ -63,7 +63,7 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
         games.map((game) => {
             if (game.video_url.startsWith('https://www.youtube.com')) {
                 gameService.getNewStreamURL(game.video_url).then((res) => {
-                    setVideoList((old) => [...old, { id: game.id, url: res }]);
+                    setVideoList((old) => [...old, { id: game.id, url: res.url }]);
                 });
             } else if (game.video_url.toLowerCase() !== 'no video') setVideoList((old) => [...old, { id: game.id, url: game.video_url }]);
         });

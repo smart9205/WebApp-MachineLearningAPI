@@ -7,11 +7,11 @@ import MatchAll from '../../../../../../assets/match_all.png';
 import { USER_IMAGE_DEFAULT } from '../../../../../../common/staticData';
 import { getFormattedDate } from '../../../../components/utilities';
 import GameService from '../../../../../../services/game.service';
-import GamePlayerStatErrorMessage from './errorMessage';
 import { ActionData } from '../../../../components/common';
 import TeamStatsVideoPlayer from '../../stats/videoDialog';
 import GameExportToEdits from '../../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../../games/tabs/overview/tagListItem';
+import GamePlayerStatErrorMessage from '../../../../games/tabs/players/status/errorMessage';
 
 const statList = [
     { id: 'goal', title: 'Goals', action: 'Goal' },
@@ -204,7 +204,6 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                         };
                     })
                 );
-                setGameList(games.filter((item) => gameIds.includes(item.id)));
                 setVideoOpen(true);
             });
         }
@@ -240,6 +239,10 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
         setGameTime(['1', '2', '3', '4', '5', '6']);
         setCourtArea(['1', '2', '3', '4']);
     }, [initialState, open]);
+
+    useEffect(() => {
+        setGameList(games.filter((item) => gameIds.includes(item.id)));
+    }, [games, gameIds]);
 
     useEffect(() => {
         if (player && gameIds.length > 0) {
