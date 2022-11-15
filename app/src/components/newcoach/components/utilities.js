@@ -233,6 +233,16 @@ export function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
+export function orderedSort(array) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    
+    stabilizedThis.sort((a, b) => {
+        return a[0].order - b[0].order;
+    });
+
+    return stabilizedThis.map((el) => el[0]);
+}
+
 export function getFormattedDate(date) {
     const old_format = date.match(/\d\d\d\d-\d\d-\d\d/) + '';
     const array = old_format.split('-');
