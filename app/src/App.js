@@ -149,7 +149,7 @@ const App = () => {
                                 <Route path="/tagging/:id" element={<Tagging />} />
 
                                 <Route path="/new_coach" element={<RoleRoute role="ROLE_COACH" />}>
-                                    <Route path="/new_coach" element={<Navigate to="/new_coach/leaders" replace />} />
+                                    <Route path="/new_coach" element={<Navigate to="/new_coach/teams" replace />} />
                                     <Route
                                         path="/new_coach/dashboard"
                                         element={
