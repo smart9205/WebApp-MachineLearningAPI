@@ -1,37 +1,33 @@
-import { Box } from '@mui/material';
 import React, { useState } from 'react';
 
-import ProfileTab from './profileTab';
-import PasswordTab from './passwordTab';
+import SettingsRenderTool from './rendertool';
+import SettingsProfile from './profileTab';
+import SettingsPassword from './passwordTab';
+
 import '../coach_style.css';
 
-const Tabs = ['Profile', 'Password'];
+const Tabs = ['Render Tool', 'Profile', 'Password'];
 
 const Settings = () => {
-    const [values, setValues] = useState({
-        curTab: 0
-    });
-
-    const handleTabClick = (idx) => {
-        setValues({ ...values, curTab: idx });
-    };
+    const [curTab, setCurTab] = useState(0);
 
     return (
-        <Box sx={{ width: '98%', margin: '0 auto' }}>
-            <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+        <div className="coach-page-style">
+            <div className="page-header">
                 <p className="page-title">Settings</p>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+                <div className="page-tab-container settings-page">
                     {Tabs.map((tab, index) => (
-                        <Box onClick={() => handleTabClick(index)} sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: 'fit-content', cursor: 'pointer' }}>
-                            <p className="page-tab">{tab}</p>
-                            <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? '#0A7304' : '#F8F8F8' }} />
-                        </Box>
+                        <div key={index} onClick={() => setCurTab(index)} className="page-tab-style">
+                            <p className="page-tab-title">{tab}</p>
+                            {curTab === index ? <div className="selected-line" /> : <div className="unselected-line" />}
+                        </div>
                     ))}
-                </Box>
-            </Box>
-            {values.curTab === 0 && <ProfileTab />}
-            {values.curTab === 1 && <PasswordTab />}
-        </Box>
+                </div>
+            </div>
+            {curTab === 0 && <SettingsRenderTool />}
+            {curTab === 1 && <SettingsProfile />}
+            {curTab === 2 && <SettingsPassword />}
+        </div>
     );
 };
 

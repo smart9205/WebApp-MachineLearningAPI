@@ -7,6 +7,8 @@ import { updateProfile2 } from '../../../actions/auth';
 import { USER_IMAGE_DEFAULT } from '../../../common/staticData';
 import UploadButton from '../components/uploadButton';
 
+import '../coach_style.css';
+
 const profileList = [
     {
         id: 'firstName',
@@ -45,7 +47,7 @@ const profileList = [
     }
 ];
 
-const PrfileTab = () => {
+const SettingsProfile = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const [values, setValues] = useState({
         logo: '',
@@ -96,7 +98,7 @@ const PrfileTab = () => {
     }, [values]);
 
     return (
-        <Box sx={{ padding: '24px', backgroundColor: 'white', display: 'flex', gap: '24px', borderRadius: '10px', margin: '0 24px 24px', maxHeight: '700px', height: '750px', overflowY: 'auto' }}>
+        <div className="tab-page settings-profile">
             <UploadButton
                 class_name="upload-user-view"
                 id_name="user-logo"
@@ -105,23 +107,25 @@ const PrfileTab = () => {
                 onURL={(url) => setValues({ ...values, logo: url })}
                 defaultImage={USER_IMAGE_DEFAULT}
             />
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                {profileList.map((item) => (
-                    <FormControl sx={{ gap: '4px' }} key={item.id}>
-                        <p className="normal-text">{item.title}</p>
-                        <TextField
-                            value={values[item.id]}
-                            label=""
-                            inputProps={{ 'aria-label': 'Without label', readOnly: item.readonly }}
-                            variant="outlined"
-                            placeholder={item.placeholder}
-                            onChange={handleChange(item.id)}
-                            helperText={errors[item.id] ? item.error : ''}
-                            error={errors[item.id]}
-                            sx={{ borderRadius: '10px', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
-                        />
-                    </FormControl>
-                ))}
+            <div className="settings-password-container">
+                <div className="grid-container">
+                    {profileList.map((item) => (
+                        <FormControl sx={{ gap: '4px' }} key={item.id}>
+                            <p className="normal-text">{item.title}</p>
+                            <TextField
+                                value={values[item.id]}
+                                label=""
+                                inputProps={{ 'aria-label': 'Without label', readOnly: item.readonly }}
+                                variant="outlined"
+                                placeholder={item.placeholder}
+                                onChange={handleChange(item.id)}
+                                helperText={errors[item.id] ? item.error : ''}
+                                error={errors[item.id]}
+                                sx={{ borderRadius: '10px', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                            />
+                        </FormControl>
+                    ))}
+                </div>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '24px' }}>
                     <SaveButton
                         disabled={!(values.firstName.length > 0 && values.lastName.length > 0 && values.email.length > 0 && values.phone.length > 0 && values.country.length > 0)}
@@ -131,9 +135,9 @@ const PrfileTab = () => {
                         Save changes
                     </SaveButton>
                 </Box>
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 };
 
-export default PrfileTab;
+export default SettingsProfile;
