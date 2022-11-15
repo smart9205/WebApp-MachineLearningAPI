@@ -236,6 +236,7 @@
     padding: 12px 35px;
     border: 1px solid #0a7304;
     border-radius: 12px;
+    width: 400px;
 }
 
 .render-item img {
