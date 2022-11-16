@@ -35,7 +35,7 @@ const statCategory = [
     { id: 'turnover', title: 'Turnovers' },
     { id: 'turnover_on_offensive_court', title: 'Turnovers on Offensive Court' },
     { id: 'turnover_on_defensive_court', title: 'Turnovers on Defensive Court' },
-    { id: 'saved', title: 'Saved' },
+    { id: 'saved', title: 'Saved & Super Saved' },
     { id: 'tackle', title: 'Tackles' },
     { id: 'tackle_on_offensive_court', title: 'Tackles on Offensive Court' },
     { id: 'tackle_on_defensive_court', title: 'Tackles on Defensive Court' },

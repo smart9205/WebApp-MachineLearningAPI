@@ -45,7 +45,7 @@ const styles = {
 };
 export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpen }) {
     const handle = useFullScreenHandle();
-    const { tagList, autoPlay, idx, videoPlay, cnt = null } = videoData;
+    const { tagList, autoPlay, idx, click, videoPlay, cnt = null } = videoData;
 
     const player = useRef(null);
     const [play, setPlay] = useState(false);
@@ -76,7 +76,7 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
         setPlay(videoPlay);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tagList, idx, videoPlay, ready, cnt]);
+    }, [tagList, idx, videoPlay, ready, cnt, click]);
 
     useEffect(() => {
         if (autoPlay) onChangeClip(curIdx);

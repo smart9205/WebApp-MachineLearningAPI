@@ -20,7 +20,15 @@ const LeadersPlayerStatItem = ({ player, option, isTotal, onShow }) => {
                     <p className="normal-text">{player.team_name}</p>
                 </div>
             </div>
-            <p className="bigger-text">{isTotal ? player[`total_${option}`] : player[`average_${option}`]}</p>
+            <p className="bigger-text">
+                {isTotal
+                    ? option === 'saved'
+                        ? player[`total_${option}`] + player[`total_super_save`]
+                        : player[`total_${option}`]
+                    : option === 'saved'
+                    ? player[`average_${option}`] + player[`average_super_save`]
+                    : player[`average_${option}`]}
+            </p>
         </div>
     );
 };

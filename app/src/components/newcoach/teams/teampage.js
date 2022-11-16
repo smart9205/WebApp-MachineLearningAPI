@@ -68,7 +68,7 @@ const TeamPage = () => {
                                     sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
                                     onClick={() => setCurTab(index)}
                                 >
-                                    <p className="page-tab">{tab}</p>
+                                    <p className="page-tab-title">{tab}</p>
                                     <Box sx={{ height: '2px', width: '100%', backgroundColor: curTab === index ? '#0A7304' : '#F8F8F8' }} />
                                 </Box>
                             ))}

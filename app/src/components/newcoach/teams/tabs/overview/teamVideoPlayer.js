@@ -45,7 +45,7 @@ const styles = {
 };
 export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOpen, gameTime, isTeams }) {
     const handle = useFullScreenHandle();
-    const { tagList, autoPlay, idx, videoPlay, cnt = null } = videoData;
+    const { tagList, autoPlay, idx, videoPlay, click, cnt = null } = videoData;
 
     const player = useRef(null);
     const [play, setPlay] = useState(false);
@@ -81,7 +81,7 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
         setPlay(videoPlay);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tagList, idx, videoPlay, ready, cnt]);
+    }, [tagList, idx, videoPlay, ready, click, cnt]);
 
     useEffect(() => {
         if (autoPlay) onChangeClip(curIdx);

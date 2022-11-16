@@ -6,7 +6,7 @@ import MatchAll from '../../../../assets/match_all.png';
 import { USER_IMAGE_DEFAULT } from '../../../../common/staticData';
 import { getFormattedDate } from '../../components/utilities';
 import GameService from '../../../../services/game.service';
-import GamePlayerStatErrorMessage from './errorMessage';
+import GamePlayerStatErrorMessage from '../../games/tabs/players/status/errorMessage';
 
 const statList = [
     { id: 'goal', title: 'Goals' },

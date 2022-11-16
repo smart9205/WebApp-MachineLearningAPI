@@ -21,7 +21,8 @@ const TeamOverview = ({ games, gameIds, teamname, teamId }) => {
         idx: 0,
         autoPlay: true,
         tagList: [],
-        videoPlay: true
+        videoPlay: true,
+        click: false
     });
     const [values, setValues] = useState({
         isOur: true,
@@ -136,7 +137,7 @@ const TeamOverview = ({ games, gameIds, teamname, teamId }) => {
 
     const handleShowVideo = (index) => {
         setCurTeamTagIdx(index);
-        setVideoData({ ...videoData, idx: index });
+        setVideoData({ ...videoData, idx: index, click: !videoData.click });
     };
 
     const handleCheckChange = (idx) => (e) => {

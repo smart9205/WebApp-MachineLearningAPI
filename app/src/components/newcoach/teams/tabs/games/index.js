@@ -36,6 +36,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
     const [videoURL, setVideoURL] = useState('');
     const [exportOpen, setExportOpen] = useState(false);
     const [refresh, setRefresh] = useState(false);
+    const [hoverIndex, setHoverIndex] = useState(-1);
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
@@ -146,7 +147,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
         } else setTeamStatList([]);
     }, [gameIds, refresh]);
 
-    console.log('team games => ', teamStatList);
+    console.log('team games => ', hoverIndex);
 
     return (
         <Box sx={{ width: '100%', background: 'white', height: '80vh', display: 'flex', padding: '20px 10px' }}>
@@ -179,7 +180,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                     <TableBody>
                         {teamStatList.map((item, index) => (
                             <>
-                                <TableRow key={index} height="36px" hover>
+                                <TableRow key={index} height="36px" onMouseEnter={() => setHoverIndex(index)} onMouseLeave={() => setHoverIndex(-1)}>
                                     <TableCell key={`${index}-game`} align="center" rowSpan={2} sx={{ borderBottom: '1px solid #0A7304' }}>
                                         <div>
                                             <p className="normal-text">{item.league_name}</p>
@@ -201,17 +202,17 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                             <p className="normal-text-white">{getGameResultImage(item)['home'].text}</p>
                                         </div>
                                     </TableCell>
-                                    <TableCell key={`${index}-home`} align="center" sx={{ fontWeight: getGameGoalsFontStyle(item).home }}>
+                                    <TableCell key={`${index}-home`} align="center" sx={{ fontWeight: getGameGoalsFontStyle(item).home, background: hoverIndex === index ? '#F8F8F8' : 'white' }}>
                                         {item.home_team_name}
                                     </TableCell>
-                                    <TableCell key={`${index}-format`} align="center" sx={{ fontWeight: getGameGoalsFontStyle(item).home }}>
+                                    <TableCell key={`${index}-format`} align="center" sx={{ fontWeight: getGameGoalsFontStyle(item).home, background: hoverIndex === index ? '#F8F8F8' : 'white' }}>
                                         {item.team_formation_name}
                                     </TableCell>
                                     {properties.map((prop) => (
                                         <TableCell
                                             key={`${index}-${prop.id}`}
                                             align="center"
-                                            sx={{ cursor: 'pointer', fontWeight: getGameGoalsFontStyle(item).home }}
+                                            sx={{ cursor: 'pointer', fontWeight: getGameGoalsFontStyle(item).home, background: hoverIndex === index ? '#F8F8F8' : 'white' }}
                                             onClick={() => handleDisplayVideo(item, true, prop)}
                                             onContextMenu={handleExportTags(item, true, prop)}
                                         >
@@ -219,8 +220,8 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                         </TableCell>
                                     ))}
                                 </TableRow>
-                                <TableRow key={index + 1} height="36px" hover>
-                                    <TableCell key={`${index + 1}-result`} align="center" sx={{ borderBottom: '1px solid #0A7304' }}>
+                                <TableRow key={teamStatList.length + index} height="36px" hover>
+                                    <TableCell key={`${teamStatList.length + index}-result`} align="center" sx={{ borderBottom: '1px solid #0A7304' }}>
                                         <div
                                             style={{
                                                 background: `${getGameResultImage(item)['away'].color}`,
@@ -234,15 +235,15 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                             <p className="normal-text-white">{getGameResultImage(item)['away'].text}</p>
                                         </div>
                                     </TableCell>
-                                    <TableCell key={`${index + 1}-away`} align="center" sx={{ borderBottom: '1px solid #0A7304', fontWeight: getGameGoalsFontStyle(item).away }}>
+                                    <TableCell key={`${teamStatList.length + index}-away`} align="center" sx={{ borderBottom: '1px solid #0A7304', fontWeight: getGameGoalsFontStyle(item).away }}>
                                         {item.away_team_name}
                                     </TableCell>
-                                    <TableCell key={`${index + 1}-format`} align="center" sx={{ borderBottom: '1px solid #0A7304', fontWeight: getGameGoalsFontStyle(item).away }}>
+                                    <TableCell key={`${teamStatList.length + index}-format`} align="center" sx={{ borderBottom: '1px solid #0A7304', fontWeight: getGameGoalsFontStyle(item).away }}>
                                         {item.opponent_formation_name}
                                     </TableCell>
                                     {properties.map((prop) => (
                                         <TableCell
-                                            key={`${index + 1}-opp_${prop.id}`}
+                                            key={`${teamStatList.length + index}-opp_${prop.id}`}
                                             align="center"
                                             sx={{ borderBottom: '1px solid #0A7304', cursor: 'pointer', fontWeight: getGameGoalsFontStyle(item).away }}
                                             onClick={() => handleDisplayVideo(item, false, prop)}
