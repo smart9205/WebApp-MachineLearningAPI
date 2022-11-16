@@ -69,7 +69,7 @@ const AddmainPlayer = ({ title, game, setAddPlayerModalOpen, setGamePlayerRefres
                             team_id: game.home_team_id,
                             player_id: res.data.id
                         }).then((res) => {
-                            // console.log(res)
+
                         })
                     } else if (title == 'Away Team') {
                         GameService.addTeamPlayer({
@@ -78,7 +78,7 @@ const AddmainPlayer = ({ title, game, setAddPlayerModalOpen, setGamePlayerRefres
                             team_id: game.away_team_id,
                             player_id: res.data.id
                         }).then((res) => {
-                            // console.log(res)
+
                         })
                     }
                 }

@@ -140,7 +140,7 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
             homeAway: null,
             gameResult: null
         }).then((res) => {
-            console.log(res);
+
             setPlayerState(res[0]);
             setLoading(false);
         });

@@ -324,8 +324,6 @@ const GameOverview = ({ game }) => {
         if (values.playList.length > 0) changeGameTime(values.playList, curTeamTagIdx);
     }, [curTeamTagIdx]);
 
-    console.log('GameOverview => ', values.playList, game);
-
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', minWidth: '600px', flexDirection: 'column', padding: '24px 10px' }}>

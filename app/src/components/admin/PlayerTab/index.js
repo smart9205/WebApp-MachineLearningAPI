@@ -156,7 +156,6 @@ export default function PlayerTab({ t }) {
         setPlayerOpen(false);
         GameService.getAllPlayers()
             .then((res) => {
-                console.log('players => ', res);
                 setRows(res);
                 setLoading(false);
             })

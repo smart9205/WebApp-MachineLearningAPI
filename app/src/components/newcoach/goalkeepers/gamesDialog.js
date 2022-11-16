@@ -110,8 +110,6 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
         return item.team_name === item.home_team_name ? item.away_team_name : item.home_team_name;
     };
 
-    console.log('player games => ', list);
-
     return (
         <Dialog open={open} onClose={onClose} maxWidth="xl">
             <DialogTitle>{`Games of ${playerName}`}</DialogTitle>

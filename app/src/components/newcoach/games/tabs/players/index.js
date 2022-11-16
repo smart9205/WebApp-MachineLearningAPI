@@ -190,7 +190,7 @@ const GamePlayers = ({ game }) => {
 
     const getPlayTagList = (func) => {
         func.then((res) => {
-            console.log('Game/Overview => ', res);
+
             setLoading(false);
             setLoadData(false);
 
@@ -268,9 +268,6 @@ const GamePlayers = ({ game }) => {
     useEffect(() => {
         if (values.playList.length > 0) changeGameTime(values.playList, curTeamTagIdx);
     }, [curTeamTagIdx]);
-
-    console.log('GamePlayer => ', values.playList, playerIds);
-    // console.log(`GamePlayer => ${values.teamId}, ${values.opponentTeamId}`);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>

@@ -133,8 +133,6 @@ const Opponents = () => {
         });
     }, []);
 
-    console.log('Opponents => ', values.gameList);
-
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             {values.loading && (

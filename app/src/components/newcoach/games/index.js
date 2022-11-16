@@ -65,7 +65,6 @@ const Games = () => {
                     list[i].mobile_video_url = item.mobile_video_url;
                 }
 
-                console.log('++++++++++ ', item, list[i]);
                 setValues({ ...values, gamesList: list });
 
                 return;
@@ -180,8 +179,6 @@ const Games = () => {
             setValues({ ...values, gamesList: getDescGamesList(res), seasonList: getSeasonList(res), teamList: getTeamList(res), leagueList: getLeagueList(res), loading: false });
         });
     }, []);
-
-    console.log('******** ', values.gamesList[0]);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>

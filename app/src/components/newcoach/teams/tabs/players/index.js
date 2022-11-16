@@ -80,8 +80,6 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
                 return newList;
             });
 
-            console.log('#########', inside, other, newList);
-
             return newList;
         }
 
@@ -120,7 +118,6 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
                 ActionData[cell.action].action_type_id,
                 ActionData[cell.action].action_result_id
             ).then((res) => {
-                console.log('team games => ', res);
                 setPlayData(
                     res.map((item) => {
                         return {
@@ -199,8 +196,6 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
         });
     }, [refresh, gameIds]);
 
-    console.log('teams/players => ', order, orderBy, detectStats);
-
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', minHeight: '65vh', overflowY: 'auto', display: 'flex', padding: '4px' }}>
             <TableContainer sx={{ maxHeight: '80vh' }}>
@@ -244,7 +239,13 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
                                         onClick={() => handleDisplayVideo(cell, player?.id ?? 0)}
                                         onContextMenu={handleExportTags(cell, player?.id ?? 0)}
                                     >
-                                        {playerIds.includes(player?.id ?? 0) ? (getPlayerStatus(player?.id ?? 0) ? getPlayerStatus(player?.id ?? 0)[cell.id] : '-') : '-'}
+                                        {playerIds.includes(player?.id ?? 0)
+                                            ? getPlayerStatus(player?.id ?? 0)
+                                                ? cell.id === 'total_saved'
+                                                    ? getPlayerStatus(player?.id ?? 0)[cell.id] + getPlayerStatus(player?.id ?? 0)['total_super_save']
+                                                    : getPlayerStatus(player?.id ?? 0)[cell.id]
+                                                : '-'
+                                            : '-'}
                                     </TableCell>
                                 ))}
                             </TableRow>

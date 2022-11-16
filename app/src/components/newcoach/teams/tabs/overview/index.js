@@ -112,7 +112,6 @@ const TeamOverview = ({ games, gameIds, teamname, teamId }) => {
         const ids = newList.map((item) => item.game_id);
         const newVideos = games.filter((game) => ids.includes(game.id) === true);
 
-        console.log('######', newVideos);
         gameCreateCommand(newList, tagIndex, newVideos, ids);
     };
 
@@ -192,7 +191,6 @@ const TeamOverview = ({ games, gameIds, teamname, teamId }) => {
 
     const getPlayTagList = (func) => {
         func.then((res) => {
-            console.log('Game/Overview => ', res);
             setLoading(false);
             setLoadData(false);
 
@@ -309,8 +307,6 @@ const TeamOverview = ({ games, gameIds, teamname, teamId }) => {
     useEffect(() => {
         setGameList(games.filter((item) => gameIds.includes(item.id)));
     }, [games, gameIds]);
-
-    console.log('TeamOverview => ', values.playList, gameIds);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '85vh', minHeight: '80vh', overflowY: 'auto', display: 'flex' }}>

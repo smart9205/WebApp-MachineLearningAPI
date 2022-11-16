@@ -188,7 +188,6 @@ const OpponentPlayers = ({ game }) => {
 
     const getPlayTagList = (func) => {
         func.then((res) => {
-            console.log('Game/Overview => ', res);
             setLoading(false);
             setLoadData(false);
 
@@ -255,9 +254,6 @@ const OpponentPlayers = ({ game }) => {
     useEffect(() => {
         setGameTime({ ...gameTime, video_url: game.video_url });
     }, []);
-
-    console.log('opponent => ', values.playList);
-    console.log('opponent => ', values.clickEventName);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>

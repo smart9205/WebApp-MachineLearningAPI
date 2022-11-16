@@ -89,8 +89,6 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
         }
     }, [player]);
 
-    console.log('tag edit => ', values);
-
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg">
             <DialogTitle>Player Tag Edit</DialogTitle>

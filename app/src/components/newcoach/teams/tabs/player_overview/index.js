@@ -188,7 +188,6 @@ const TeamPlayersOverview = ({ games, gameIds, teamId, teamName }) => {
 
     const getPlayTagList = (func) => {
         func.then((res) => {
-            console.log('Game/Overview => ', res);
             setLoading(false);
             setLoadData(false);
 
@@ -253,9 +252,6 @@ const TeamPlayersOverview = ({ games, gameIds, teamId, teamName }) => {
     useEffect(() => {
         if (values.playList.length > 0) changeGameTime(values.playList, curTeamTagIdx);
     }, [curTeamTagIdx]);
-
-    console.log('opponent => ', values.playList);
-    console.log('opponent => ', values.clickEventName, checkArray);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '85vh', overflowY: 'auto', display: 'flex' }}>

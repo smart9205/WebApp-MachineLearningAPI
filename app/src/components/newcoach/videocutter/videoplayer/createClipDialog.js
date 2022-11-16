@@ -20,7 +20,7 @@ const EditCreateClipDialog = ({ open, onClose, editNode, clip, onPlay, updateLis
                     newClip.edit_id = editNode.id;
                     newClip.name = clipName;
                 });
-                console.log('clip_save => ', newClip);
+
                 await gameService.addNewEditClips({ id: editNode.id, rows: [newClip] }).then((res) => {
                     onPlay(true);
                     updateList(true);

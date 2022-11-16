@@ -93,8 +93,6 @@ const GameStats = ({ game }) => {
         }
     }, [values]);
 
-    // console.log('game stats => ', values.playerList);
-
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex', padding: '20px 10px', gap: '10px' }}>
             <Box sx={{ minWidth: '34%', display: 'flex', flexDirection: 'column', gap: '6px' }}>

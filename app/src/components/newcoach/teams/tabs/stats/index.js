@@ -64,8 +64,6 @@ const TeamStats = ({ games, gameIds, teamId }) => {
         }
     }, [games, gameIds, refresh]);
 
-    console.log('team stats => ', playerList);
-
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex', padding: '20px 10px', gap: '10px' }}>
             <Box sx={{ minWidth: '34%', display: 'flex', flexDirection: 'column', gap: '52px' }}>

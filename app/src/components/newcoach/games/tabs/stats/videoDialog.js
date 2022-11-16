@@ -72,8 +72,6 @@ const GameStatsVideoPlayer = ({ onClose, video_url, tagList }) => {
         } else if (video_url.toLowerCase() !== 'no video') setVideoURL(video_url);
     }, [video_url]);
 
-    console.log('video====', currentIndex);
-
     return (
         <div
             style={{

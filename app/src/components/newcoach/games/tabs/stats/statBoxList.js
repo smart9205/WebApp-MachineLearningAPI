@@ -48,8 +48,12 @@ const GameStatsBoxList = ({ game, list }) => {
 
         boxList.map((row, rId) => {
             return row.map((item, cId) => {
-                boxList[rId][cId].total = list.filter((stat) => stat.action_names === item.id).length;
-                boxList[rId][cId].data = list.filter((stat) => stat.action_names === item.id);
+                boxList[rId][cId].total =
+                    item.id === 'Saved'
+                        ? list.filter((stat) => stat.action_names === 'Saved' || stat.action_names === 'Super Saved').length
+                        : list.filter((stat) => stat.action_names === item.id).length;
+                boxList[rId][cId].data =
+                    item.id === 'Saved' ? list.filter((stat) => stat.action_names === 'Saved' || stat.action_names === 'Super Saved') : list.filter((stat) => stat.action_names === item.id);
 
                 return boxList;
             });
@@ -65,8 +69,6 @@ const GameStatsBoxList = ({ game, list }) => {
         boxList[0][0].data = list.filter((item) => item.action_names === 'Shot' && item.action_result_names === 'Goal');
         setActionList(temp);
     }, [list]);
-
-    console.log('game stats boxlist => ', boxList, actionList);
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', paddingTop: '0px', paddingBottom: '20px' }}>

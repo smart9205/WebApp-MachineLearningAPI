@@ -32,8 +32,6 @@ export default function GameDetailTab({ playTags, gameList, t }) {
         });
     }, [playerId, game]);
 
-    console.log('$$$$$', context, playerId, game);
-
     return (
         <>
             <div className="skillsTab">

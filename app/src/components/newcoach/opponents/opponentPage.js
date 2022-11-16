@@ -11,7 +11,7 @@ import OpponentPlayers from './tabs/players';
 import { getFormattedDate } from '../components/utilities';
 import '../coach_style.css';
 
-const Tabs = ['Overview', 'Summary', 'Stats', 'Players'];
+const Tabs = ['Overview', 'Players'];
 
 const OpponentPage = () => {
     const params = useParams();
@@ -79,14 +79,14 @@ const OpponentPage = () => {
                                     onClick={() => handleTabClick(index)}
                                     sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
                                 >
-                                    <p className="page-tab">{tab}</p>
+                                    <p className="page-tab-title">{tab}</p>
                                     <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? '#0A7304' : '#F8F8F8' }} />
                                 </Box>
                             ))}
                         </Box>
                     </Box>
                     {values.curTab === 0 && <OpponentOverview game={values.game} />}
-                    {values.curTab === 3 && <OpponentPlayers game={values.game} />}
+                    {values.curTab === 1 && <OpponentPlayers game={values.game} />}
                 </>
             )}
         </Box>

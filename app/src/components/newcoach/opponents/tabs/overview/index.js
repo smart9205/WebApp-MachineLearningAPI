@@ -311,8 +311,6 @@ const OpponentOverview = ({ game }) => {
         setGameTime({ ...gameTime, video_url: game.video_url });
     }, []);
 
-    console.log('GameOverview => ', values.playList[0]);
-
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', maxWidth: '600px', flexDirection: 'column', padding: '24px 10px' }}>

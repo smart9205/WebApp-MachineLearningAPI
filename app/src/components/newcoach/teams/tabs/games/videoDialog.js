@@ -81,8 +81,6 @@ const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList }) => {
         } else if (video_url.toLowerCase() !== 'no video') setVideoURL(video_url);
     }, [video_url, tagList, open]);
 
-    console.log('video====', currentIndex);
-
     return (
         <Dialog style={{  backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
             <DialogContent style={{ p: 0 }}>

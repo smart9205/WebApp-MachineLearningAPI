@@ -43,8 +43,6 @@ export default function Game({ t }) {
         setOpen(true);
     }, []);
 
-    console.log('##########', gameList);
-
     return (
         <div>
             <div style={{ position: 'absolute', zIndex: 10, padding: 10, display: 'flex' }}>

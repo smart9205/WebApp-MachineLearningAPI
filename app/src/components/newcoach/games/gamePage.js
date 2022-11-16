@@ -38,8 +38,6 @@ const GamePage = () => {
         }
     }, [params.gameId]);
 
-    console.log('GamePage => ', params);
-
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             {values.loading && (

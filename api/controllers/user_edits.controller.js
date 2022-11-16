@@ -280,7 +280,7 @@ exports.updateEditClip = (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  console.log("+++++++++++++ ", req.body);
+
   const id = req.params.id;
 
   const num = await User_Edits.update(req.body, { where: { id: id } });

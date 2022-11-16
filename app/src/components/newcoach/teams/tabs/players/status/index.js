@@ -159,7 +159,6 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
             homeAway: gamePlace ? parseInt(gamePlace) : null,
             gameResult: gameResult ? parseInt(gameResult) : null
         }).then((res) => {
-            console.log(res);
             setPlayerState(res[0]);
             setLoading(false);
         });
@@ -259,7 +258,6 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                 homeAway: gamePlace ? parseInt(gamePlace) : null,
                 gameResult: gameResult ? parseInt(gameResult) : null
             }).then((res) => {
-                console.log(res);
                 setPlayerState(res[0]);
                 setLoading(false);
             });

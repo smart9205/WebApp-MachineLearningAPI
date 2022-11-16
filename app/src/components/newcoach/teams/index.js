@@ -88,8 +88,6 @@ const Teams = () => {
         });
     }, []);
 
-    console.log('Teams => ', teamsList);
-
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             {loading && (

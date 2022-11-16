@@ -147,8 +147,6 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
         return hour + ':' + minute + ':' + second;
     };
 
-    console.log('gamevideo => ', curIdx);
-
     return (
         <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
             <FullScreen handle={handle}>

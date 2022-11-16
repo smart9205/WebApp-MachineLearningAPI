@@ -133,8 +133,6 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
         setTeamTagList(tagList);
     }, [tagList]);
 
-    console.log(teamTagList);
-
     return (
         <Box sx={{ width: '480px', height: '100%', padding: '16px 5px', borderLeft: '1px solid #E8E8E8', textAlign: 'center' }}>
             {loading && (

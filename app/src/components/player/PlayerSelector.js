@@ -23,7 +23,6 @@ const Modalstyle = {
 
 const PlayerSelector = ({ playerList, currPlayerId, tagList, modalOpen, handleClose, setModalOpen, setPlay, curIdx }) => {
     const onSelect = (player) => {
-        console.log('selector => ', currPlayerId, ',', player.player_id, ',', tagList, curIdx);
 
         gameService.addCorrectionRequest(currPlayerId, player.player_id, tagList[curIdx].id).then((res) => {
             setModalOpen(false);

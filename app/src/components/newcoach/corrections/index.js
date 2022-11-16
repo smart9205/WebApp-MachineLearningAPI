@@ -52,8 +52,6 @@ const Corrections = () => {
         });
     }, []);
 
-    console.log('correction => ', corrections);
-
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             {loading && (

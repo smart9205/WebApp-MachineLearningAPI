@@ -91,8 +91,6 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
         if (videoList.length > 0) setVideoURL(videoList.filter((item) => item.id === tagList[0].game_id)[0].url);
     }, [open]);
 
-    console.log('Daniel====', videoList, tagList, videoURL);
-
     return (
         <Dialog style={{ backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
             <DialogContent style={{ p: 0 }}>

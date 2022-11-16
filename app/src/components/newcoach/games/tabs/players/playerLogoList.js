@@ -71,8 +71,6 @@ const GamePlayerLogoList = ({ game, teamId, opponent, our, setIds }) => {
         setIds(ids);
     }, [selectArray]);
 
-    console.log('playerlogo => ', playerList, game);
-
     return (
         <Box sx={{ minWidth: '600px' }}>
             {loading && (

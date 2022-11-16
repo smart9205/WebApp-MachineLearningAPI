@@ -161,7 +161,6 @@ export default function Player() {
 
                 if (filter.length === 0) result = [...result, item.season_name];
 
-                console.log('Player => ', item.season_name, result);
                 return result;
             });
             setSeasonList(result);
@@ -169,8 +168,6 @@ export default function Player() {
     };
 
     const { player: playerData, game: curGame } = context;
-
-    console.log('player', context);
 
     return (
         <ThemeProvider theme={theme}>

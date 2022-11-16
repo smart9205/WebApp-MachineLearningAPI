@@ -65,7 +65,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
 
     const getPlayerTags = (id) => {
         GameService.getGamePlayerTags(null, teamId, `${playerId}`, `${gameId}`, ActionData[id].action_id, ActionData[id].action_type_id, ActionData[id].action_result_id).then((res) => {
-            console.log('######', res);
+
             playTags(
                 res.map((item) => {
                     return {

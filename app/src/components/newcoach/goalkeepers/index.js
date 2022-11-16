@@ -208,7 +208,6 @@ const Goalkeepers = () => {
             homeAway: null,
             gameResult: null
         }).then((res) => {
-            console.log('$$$$$$$$$', res);
             setPlayerGames(stableSort(res, getComparator('desc', 'game_date')));
             setGamesOpen(true);
         });
@@ -331,8 +330,6 @@ const Goalkeepers = () => {
             });
         } else setLoading(false);
     }, [values.seasonFilter]);
-
-    console.log('Goals => ', goalkeeperList, values.seasonFilter);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>

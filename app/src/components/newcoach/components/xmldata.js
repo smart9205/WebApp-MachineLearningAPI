@@ -330,8 +330,6 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
             allData = res;
         });
 
-        console.log(allData);
-
         const OurGameHighlight = getTeamTagList('Game Highlight');
         const OurCleanGame = getTeamTagList('Clean Game');
         const OurOffensivePossession = getTeamTagList('All Offensive Possessions');
@@ -456,7 +454,6 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
         const newXMLData = toXML(XMLData, config);
         const blob = new Blob([newXMLData], { type: 'text/xml' });
 
-        console.log(rowsForXML);
         setNewBlob(blob);
         setXML(false);
         setLoading(false);
@@ -577,8 +574,6 @@ export const XmlDataFilterGamesShort = ({ game, setXML, setLoading }) => {
             allData = res;
         });
 
-        console.log(allData);
-
         const oppFirst = allData.filter((item) => item.instance_name === 'All Offensive Possessions Opp')[0];
         const oppIndex = allData.indexOf(oppFirst);
         const ownData = allData.slice(0, oppIndex);
@@ -669,7 +664,6 @@ export const XmlDataFilterGamesShort = ({ game, setXML, setLoading }) => {
         const newXMLData = toXML(XMLData, config);
         const blob = new Blob([newXMLData], { type: 'text/xml' });
 
-        console.log(rowsForXML);
         setNewBlob(blob);
         setXML(false);
         setLoading(false);
@@ -825,8 +819,6 @@ export const XmlDataFilterOpponents = ({ game, teamId, setXML, setLoading }) => 
             allData = res;
         });
 
-        console.log(allData);
-
         const OurGameHighlight = getTeamTagList('Game Highlight');
         const OurCleanGame = getTeamTagList('Clean Game');
         const OurOffensivePossession = getTeamTagList('All Offensive Possessions');
@@ -951,7 +943,6 @@ export const XmlDataFilterOpponents = ({ game, teamId, setXML, setLoading }) => 
         const newXMLData = toXML(XMLData, config);
         const blob = new Blob([newXMLData], { type: 'text/xml' });
 
-        console.log(rowsForXML);
         setNewBlob(blob);
         setXML(false);
         setLoading(false);

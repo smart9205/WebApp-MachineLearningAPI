@@ -99,7 +99,6 @@ export default function GameSelectControl({ gameList, setIds }) {
     const handleClose = () => {
         setValue(pendingValue);
         setIds(pendingValue.map((item) => item.id));
-        console.log(pendingValue);
 
         if (anchorEl) anchorEl.focus();
 

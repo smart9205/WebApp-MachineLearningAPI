@@ -162,8 +162,6 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
         [handle]
     );
 
-    console.log('my edits => ', tagList);
-
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
             <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>

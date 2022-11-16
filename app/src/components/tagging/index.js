@@ -116,7 +116,7 @@ export default function Tagging() {
 
         await GameService.getGame(game_id)
             .then((res) => {
-                console.log(res);
+
                 if (!((!res.done_tagging && currentUser.roles.includes('ROLE_TAGGER')) || currentUser.roles.includes('ROLE_ADMIN'))) {
                     navigate('/');
                     window.alert('Game has been already tagged');
@@ -451,7 +451,6 @@ export default function Tagging() {
         if (seconds < 0) seconds = '0';
         else if (seconds < 10) seconds = '0' + seconds;
 
-        console.log('#########', period, minutes, seconds);
         return `${period} ${minutes}:${seconds}`;
     };
 

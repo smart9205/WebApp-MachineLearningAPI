@@ -45,8 +45,6 @@ const Edits = () => {
         setCurTagIdx(0);
     }, [editTagList]);
 
-    console.log('Edits => ', curTagIdx, editTagList);
-
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             <Box sx={{ width: '100%', padding: '24px 24px 24px 24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>

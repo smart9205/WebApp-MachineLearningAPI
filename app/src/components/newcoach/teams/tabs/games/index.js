@@ -54,7 +54,6 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
             ActionData[prop.action].action_type_id,
             ActionData[prop.action].action_result_id
         ).then((res) => {
-            console.log('team games => ', res);
             setPlayData(
                 res.map((item) => {
                     return {
@@ -146,8 +145,6 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
             });
         } else setTeamStatList([]);
     }, [gameIds, refresh]);
-
-    console.log('team games => ', hoverIndex);
 
     return (
         <Box sx={{ width: '100%', background: 'white', height: '80vh', display: 'flex', padding: '20px 10px' }}>

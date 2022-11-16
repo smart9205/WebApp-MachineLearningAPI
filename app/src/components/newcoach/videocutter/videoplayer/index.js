@@ -185,8 +185,6 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
         }
     }, [selectedGame]);
 
-    console.log('EditVideo => ', saveEdit, newClip);
-
     return (
         <div style={{ fontSize: '0.8rem', display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '28px', width: '70%' }}>
             {!handle.active && (

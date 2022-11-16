@@ -95,8 +95,6 @@ export default function PlayerFormDialog({ open, onResult, edit = null, t }) {
         onResult({ open: false });
     };
 
-    console.log('playerdata => ', playerData);
-
     return (
         <Dialog open={open} onClose={(e) => handlePlayerClose(false)} maxWidth="lg">
             <DialogTitle>

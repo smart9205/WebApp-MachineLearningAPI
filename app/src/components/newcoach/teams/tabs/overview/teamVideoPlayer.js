@@ -75,7 +75,6 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
         if (tagList.length === 0) return;
 
         playTagByIdx(idx);
-        console.log('TeamVideo => ', curIdx, videoURL, videoList);
         setCurIdx(idx);
 
         setPlay(videoPlay);
@@ -92,7 +91,6 @@ export default function TeamVideoPlayer({ videoData, games, onChangeClip, drawOp
 
     const playTagByIdx = (i) => {
         const video = videoList.filter((item) => item.id === tagList[i].game_id)[0].url;
-        console.log(videoURL, video);
 
         if (video !== videoURL) setVideoURL(video);
 

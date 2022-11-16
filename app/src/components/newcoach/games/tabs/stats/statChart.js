@@ -94,8 +94,6 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
         setPlayerList(stableSort(temp, getComparator('desc', 'count')));
     }, [list, filterText]);
 
-    // console.log('chart => ', playData);
-
     return (
         <Box id={chartId} sx={{ width: '100%', height: '272px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <p className="chart-title">{title}</p>

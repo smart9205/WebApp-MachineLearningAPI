@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import NotifyIcon from '../../../assets/notify.png';
 
 const MenuItem = ({ path, icon, title, isMinimized, isHover, isSelected, isEnabled }) => {
-    console.log(title, ' ', isEnabled);
+
     return (
         <Link to={path}>
             <Box sx={{ display: 'flex', alignItems: 'center', height: '42px', gap: '8px' }}>

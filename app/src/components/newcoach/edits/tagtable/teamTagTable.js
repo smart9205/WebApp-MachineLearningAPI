@@ -19,7 +19,7 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
     selectedRef.current = selectedRows;
 
     const moveRow = useCallback((dragIndex, hoverIndex, isDropped) => {
-        console.log('dragging => ', isDropped);
+
         if (!isDropped)
             setTableRows((prevCards) => {
                 const newRow = update(prevCards, {
@@ -55,12 +55,10 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
             setSelectedRows(array);
         }
 
-        console.log(array);
         setChecks(array);
     };
 
     const handleUpdateTable = useCallback(async (index, data) => {
-        console.log('edit####', data);
         setTableRows((prev) => update(prev, { [index]: { $set: data } }));
         await GameService.updateEditClip(data);
         updateTable();

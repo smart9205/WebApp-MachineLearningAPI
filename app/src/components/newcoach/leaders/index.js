@@ -284,8 +284,6 @@ const Leaders = () => {
         }
     }, [values.leagueFilter]);
 
-    console.log('leaders => ', playerList);
-
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             {loading && (

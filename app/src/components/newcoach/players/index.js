@@ -319,8 +319,6 @@ const Players = () => {
         } else setState({ loading: false });
     }, []);
 
-    console.log('player => ', gameList);
-
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             {loading && (
@@ -435,7 +433,7 @@ const Players = () => {
                                                         onClick={handleDisplayVideo(cell, player)}
                                                         onContextMenu={handleExportPlayerTags(cell, player)}
                                                     >
-                                                        {player[cell.id] ?? '-'}
+                                                        {cell.id === 'total_saved' ? player[cell.id] + player['total_super_save'] : player[cell.id]}
                                                     </TableCell>
                                                 ))}
                                             </TableRow>
