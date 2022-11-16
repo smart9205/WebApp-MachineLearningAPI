@@ -556,6 +556,54 @@ exports.gameDetailsByPlayerId = (req, res) => {
     });
 };
 
+exports.getPlayersGames = (req, res) => {
+  const teams = req.params.teams === null ? null : `'${req.params.teams}'`;
+  const players =
+    req.params.players === null ? null : `'${req.params.players}'`;
+
+  Sequelize.query(
+    `
+  select * from public.get_players_games(
+    ${req.params.season},
+    ${teams},
+    ${players},
+    ${req.userId}
+    )
+    `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving games.",
+      });
+    });
+};
+
+exports.getPlayersTeams = (req, res) => {
+  const players =
+    req.params.players === null ? null : `'${req.params.players}'`;
+
+  Sequelize.query(
+    `
+  select * from public.get_players_teams(
+    ${req.params.season},
+    ${players},
+    ${req.userId}
+    )
+    `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving games.",
+      });
+    });
+};
+
 exports.update = (req, res) => {
   const id = req.params.id;
 

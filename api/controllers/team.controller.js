@@ -149,6 +149,28 @@ exports.getTeamsStatsGamebyGame = (req, res) => {
     });
 };
 
+exports.getTeamsGames = (req, res) => {
+  const teams = req.params.teams === null ? null : `'${req.params.teams}'`;
+
+  Sequelize.query(
+    `
+  select * from public.get_teams_games(
+    ${req.params.season},
+    ${teams},
+    ${req.userId}
+    )
+    `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving games.",
+      });
+    });
+};
+
 exports.update = (req, res) => {
   const id = req.params.id;
 

@@ -16,6 +16,12 @@ module.exports = (app) => {
 
   app.get("/team/:id", controller.findOne);
 
+  app.get(
+    "/team/games/:season/:teams",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getTeamsGames
+  );
+
   app.post(
     "/team/getteamsstats/advance",
     [authJwt.verifyToken, authJwt.isAdminOrCoach],

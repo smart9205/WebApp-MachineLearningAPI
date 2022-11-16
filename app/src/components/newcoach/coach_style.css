@@ -239,7 +239,13 @@
     width: 400px;
 }
 
-.render-item img {
+.render-item-container img {
     width: 270px;
     height: 180px;
+}
+
+.horizontal-4 {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }

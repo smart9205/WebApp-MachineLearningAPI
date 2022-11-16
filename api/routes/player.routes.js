@@ -88,6 +88,18 @@ module.exports = (app) => {
     controller.getCorrectionRequest
   );
 
+  app.get(
+    "/player/games/:season/:teams/:players",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getPlayersGames
+  );
+
+  app.get(
+    "/player/teams/:season/:players",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getPlayersTeams
+  );
+
   app.put(
     "/player/addcorrection/:curPlayerId/:newPlayerId/:playerTagId",
     controller.addCorrectionRequest

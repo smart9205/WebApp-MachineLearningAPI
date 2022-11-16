@@ -809,6 +809,24 @@ const getPlayersDetection = (gameId, videoTime, minBefore, minAfter) => {
         });
 };
 
+const getPlayersGames = (season, teams, players) => {
+    return axios.get(API_URL + `player/games/${season}/${teams}/${players}`, { headers: authHeader(), data: { season, teams, players } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getPlayersTeams = (season, players) => {
+    return axios.get(API_URL + `player/teams/${season}/${players}`, { headers: authHeader(), data: { season, players } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getTeamsGames = (season, teams) => {
+    return axios.get(API_URL + `team/games/${season}/${teams}`, { headers: authHeader(), data: { season, teams } }).then((response) => {
+        return response.data;
+    });
+};
+
 const getPlayersStatsAdvanced = (req) => {
     return axios.post(API_URL + `player/getplayersstats/advance`, req, { headers: authHeader() }).then((response) => {
         return response.data;
@@ -1072,6 +1090,9 @@ const gameService = {
     getGoalkeepersStatsAdvanceSummary,
     getGoalkeepersStatsGamebyGame,
     getPlayersDetection,
+    getPlayersGames,
+    getPlayersTeams,
+    getTeamsGames,
     addCorrectionRequest,
     getCorrectionRequest,
     doCorrection,
