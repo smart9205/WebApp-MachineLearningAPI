@@ -8,42 +8,42 @@ import GameStatsBoxList from './statBoxList';
 import GameStatsChart from './statChart';
 
 const action_results_interception = [
-    { title: 'Short Pass', color: 'rgb(100,134,74)' },
-    { title: 'Long Pass', color: 'rgb(255,140,15)' },
-    { title: 'Through Pass', color: 'rgb(37,148,204)' },
-    { title: 'Free Kick', color: 'rgb(255,40,74)' },
-    { title: 'Throw-In', color: 'rgb(108,137,197)' }
+    { order: 1, title: 'Short Pass', color: 'rgb(100,134,74)' },
+    { order: 2, title: 'Long Pass', color: 'rgb(255,140,15)' },
+    { order: 3, title: 'Through Pass', color: 'rgb(37,148,204)' },
+    { order: 4, title: 'Free Kick', color: 'rgb(255,40,74)' },
+    { order: 5, title: 'Throw-In', color: 'rgb(108,137,197)' }
 ];
 
 const action_results_cross = [
-    { title: 'Cleared', color: 'rgb(100,134,74)' },
-    { title: 'Successful', color: 'rgb(255,140,15)' },
-    { title: 'Blocked', color: 'rgb(37,148,204)' },
-    { title: 'Unsuccessful', color: 'rgb(255,40,74)' },
-    { title: 'Offside', color: 'rgb(108,137,197)' }
+    { order: 1, title: 'Cleared', color: 'rgb(100,134,74)' },
+    { order: 2, title: 'Successful', color: 'rgb(255,140,15)' },
+    { order: 3, title: 'Blocked', color: 'rgb(37,148,204)' },
+    { order: 4, title: 'Unsuccessful', color: 'rgb(255,40,74)' },
+    { order: 5, title: 'Offside', color: 'rgb(108,137,197)' }
 ];
 
 const action_results_dribble = [
-    { title: 'Successful', color: 'rgb(100,134,74)' },
-    { title: 'Stolen', color: 'rgb(255,140,15)' },
-    { title: 'Deflected', color: 'rgb(37,148,204)' },
-    { title: 'Unsuccessful', color: 'rgb(255,40,74)' },
-    { title: 'Draw Foul', color: 'rgb(108,137,197)' }
+    { order: 1, title: 'Successful', color: 'rgb(100,134,74)' },
+    { order: 2, title: 'Stolen', color: 'rgb(255,140,15)' },
+    { order: 3, title: 'Deflected', color: 'rgb(37,148,204)' },
+    { order: 4, title: 'Unsuccessful', color: 'rgb(255,40,74)' },
+    { order: 5, title: 'Draw Foul', color: 'rgb(108,137,197)' }
 ];
 
 const action_results_shot = [
-    { title: 'Goal', color: 'rgb(100,134,74)' },
-    { title: 'On Target', color: 'rgb(255,140,15)' },
-    { title: 'Off Target', color: 'rgb(37,148,204)' },
-    { title: 'Blocked', color: 'rgb(255,40,74)' }
+    { order: 1, title: 'Goal', color: 'rgb(100,134,74)' },
+    { order: 2, title: 'On Target', color: 'rgb(255,140,15)' },
+    { order: 3, title: 'Off Target', color: 'rgb(37,148,204)' },
+    { order: 4, title: 'Blocked', color: 'rgb(255,40,74)' }
 ];
 
 const action_results_pass = [
-    { title: 'Successful', color: 'rgb(100,134,74)' },
-    { title: 'Bad Pass', color: 'rgb(255,140,15)' },
-    { title: 'Blocked', color: 'rgb(37,148,204)' },
-    { title: 'Offside', color: 'rgb(255,40,74)' },
-    { title: 'Stolen', color: 'rgb(108,137,197)' }
+    { order: 1, title: 'Successful', color: 'rgb(100,134,74)' },
+    { order: 2, title: 'Bad Pass', color: 'rgb(255,140,15)' },
+    { order: 3, title: 'Blocked', color: 'rgb(37,148,204)' },
+    { order: 4, title: 'Offside', color: 'rgb(255,40,74)' },
+    { order: 5, title: 'Stolen', color: 'rgb(108,137,197)' }
 ];
 
 const GameStats = ({ game }) => {
@@ -93,7 +93,7 @@ const GameStats = ({ game }) => {
         }
     }, [values]);
 
-    console.log('game stats => ', values.playerList);
+    // console.log('game stats => ', values.playerList);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex', padding: '20px 10px', gap: '10px' }}>

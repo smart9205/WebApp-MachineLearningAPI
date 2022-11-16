@@ -2,7 +2,7 @@ import { Box, Tooltip, Zoom } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import '../../../coach_style.css';
-import { getComparator, stableSort } from '../../../components/utilities';
+import { getComparator, stableSort, orderedSort } from '../../../components/utilities';
 import GameStatsVideoPlayer from './videoDialog';
 
 const GameStatsChart = ({ chartId, title, isType, action_results, list, filterText, game }) => {
@@ -74,13 +74,18 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                     if (filt.length === 0) {
                         const play = includedData.filter((res) => (isType ? name === res.action_type_names : name === res.action_result_names));
 
-                        includedFilterList = [...includedFilterList, { name: name, count: play.length, color: action_results[results.indexOf(name)].color, videoList: play }];
+                        includedFilterList = [
+                            ...includedFilterList,
+                            { name: name, count: play.length, color: action_results[results.indexOf(name)].color, videoList: play, order: action_results[results.indexOf(name)].order }
+                        ];
 
                         return includedFilterList;
                     }
                 });
 
-                temp = [...temp, { name: item.player_names, count: includedData.length, data: includedFilterList }];
+                let includedOrderFilter = orderedSort(includedFilterList);
+
+                temp = [...temp, { name: item.player_names, count: includedData.length, data: includedOrderFilter }];
             }
 
             return temp;
@@ -89,7 +94,7 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
         setPlayerList(stableSort(temp, getComparator('desc', 'count')));
     }, [list, filterText]);
 
-    console.log('chart => ', playData);
+    // console.log('chart => ', playData);
 
     return (
         <Box id={chartId} sx={{ width: '100%', height: '272px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
