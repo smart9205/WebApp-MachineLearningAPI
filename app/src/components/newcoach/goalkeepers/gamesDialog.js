@@ -12,10 +12,11 @@ import '../coach_style.css';
 import GameExportToEdits from '../games/tabs/overview/exportEdits';
 
 const properties = [
-    { id: 'total_player_games', title: 'Games Played', action: '' },
-    { id: 'total_build_ups', title: 'Build Ups', action: 'BuildUp' },
+    { id: 'total_passes', title: 'Passes', action: 'Passes' },
+    { id: 'total_successful_passes', title: 'Successful Passes', action: 'PassesSuccess' },
     { id: 'total_short_passes', title: 'Short Passes', action: 'ShortPass' },
     { id: 'total_long_passes', title: 'Long Passes', action: 'LongPass' },
+    { id: 'total_build_ups', title: 'Build Ups', action: 'BuildUp' },
     { id: 'total_super_save', title: 'Super Saved', action: 'SuperSaved' },
     { id: 'total_saved', title: 'Saved', action: 'Saved' },
     { id: 'total_goalkeeper_exit', title: 'Exits', action: 'Exits' },
@@ -25,7 +26,12 @@ const properties = [
     { id: 'total_goal_received', title: 'Goals Received', action: 'GoalReceive' },
     { id: 'total_opponent_crosses', title: 'Opponents Crosses', action: '' },
     { id: 'total_opponent_corners', title: 'Opponents Corners', action: '' },
-    { id: 'total_opponent_free_kicks', title: 'Opponents Free Kicks', action: '' }
+    { id: 'total_opponent_free_kicks', title: 'Opponents Free Kicks', action: '' },
+    { id: 'total_tackle', title: 'Tackles', action: 'Tackle' },
+    { id: 'total_interception', title: 'Interceptions', action: 'Interception' },
+    { id: 'total_clearance', title: 'Clearance', action: 'Clearance' },
+    { id: 'total_fouls', title: 'Fouls', action: 'Foul' },
+    { id: 'total_draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' }
 ];
 
 const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => {
@@ -115,7 +121,7 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
             <DialogTitle>{`Games of ${playerName}`}</DialogTitle>
             <DialogContent>
                 <TableContainer style={{ maxHeight: '75vh', minWidth: '1200px' }}>
-                    <Table stickyHeader aria-label="sticky table" sx={{ '& .MuiTableCell-root': { padding: '16px !important' } }}>
+                    <Table stickyHeader aria-label="sticky table" sx={{ '& .MuiTableCell-root': { padding: '4px !important' } }}>
                         <TableHead>
                             <TableRow height="36px">
                                 <TableCell key="0" align="center">

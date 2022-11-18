@@ -88,22 +88,41 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
 
     const handleDisplayList = (player) => {
         if (gameIds.length > 0) {
-            GameService.getPlayersStatsAdvanced({
-                seasonId: seasonId,
-                leagueId: null,
-                gameId: gameIds.join(','),
-                teamId: teamId,
-                playerId: player.id,
-                gameTime: '1,2,3,4,5,6',
-                courtAreaId: '1,2,3,4',
-                insidePaint: null,
-                homeAway: null,
-                gameResult: null
-            }).then((res) => {
-                setCurrentPlayer(player);
-                setPlayerStat(res[0]);
-                setStatOpen(true);
-            });
+            if (player.pos_name === 'Goalkeeper') {
+                GameService.getGoalkeepersStatsAdvanceSummary({
+                    seasonId: seasonId,
+                    leagueId: null,
+                    gameId: gameIds.join(','),
+                    teamId: teamId,
+                    playerId: player.id,
+                    gameTime: '1,2,3,4,5,6',
+                    courtAreaId: '1,2,3,4',
+                    insidePaint: null,
+                    homeAway: null,
+                    gameResult: null
+                }).then((res) => {
+                    setCurrentPlayer(player);
+                    setPlayerStat(res[0]);
+                    setStatOpen(true);
+                });
+            } else {
+                GameService.getPlayersStatsAdvanced({
+                    seasonId: seasonId,
+                    leagueId: null,
+                    gameId: gameIds.join(','),
+                    teamId: teamId,
+                    playerId: player.id,
+                    gameTime: '1,2,3,4,5,6',
+                    courtAreaId: '1,2,3,4',
+                    insidePaint: null,
+                    homeAway: null,
+                    gameResult: null
+                }).then((res) => {
+                    setCurrentPlayer(player);
+                    setPlayerStat(res[0]);
+                    setStatOpen(true);
+                });
+            }
         } else window.alert("No selected games. Please click 'Select Games' button to select.");
     };
 

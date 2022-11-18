@@ -40,6 +40,29 @@ const statList = [
     { id: 'red_cards', title: 'Red Cards' }
 ];
 
+const goalkeeper = [
+    { id: 'passes', title: 'Passes', action: 'Passes' },
+    { id: 'successful_passes', title: 'Successful Passes', action: 'PassesSuccess' },
+    { id: 'short_passes', title: 'Short Passes', action: 'ShortPass' },
+    { id: 'long_passes', title: 'Long Passes', action: 'LongPass' },
+    { id: 'build_ups', title: 'Build Ups', action: 'BuildUp' },
+    { id: 'super_save', title: 'Super Saved', action: 'SuperSaved' },
+    { id: 'saved', title: 'Saved', action: 'Saved' },
+    { id: 'goalkeeper_exit', title: 'Exits', action: 'Exits' },
+    { id: 'air_challenge', title: 'Air Challenges', action: 'AirChallenge' },
+    { id: 'ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
+    { id: 'one_vs_one', title: '1 vs 1', action: 'One' },
+    { id: 'goal_received', title: 'Goals Received', action: 'GoalReceive' },
+    { id: 'tackle', title: 'Tackles', action: 'Tackle' },
+    { id: 'interception', title: 'Interceptions', action: 'Interception' },
+    { id: 'clearance', title: 'Clearance', action: 'Clearance' },
+    { id: 'fouls', title: 'Fouls', action: 'Foul' },
+    { id: 'draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
+    { id: 'red_cards', title: 'Red Cards', action: 'RedCard' },
+    { id: 'yellow_cards', title: 'Yellow Cards', action: 'YellowCard' },
+    { id: 'player_games', title: 'Games Played', action: '' }
+];
+
 const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialState }) => {
     const [playerState, setPlayerState] = useState(null);
     const [gameHalf, setGameHalf] = useState(['first', 'second']);
@@ -128,22 +151,46 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
         }
 
         setLoading(true);
-        GameService.getPlayersStatsAdvanced({
-            seasonId: game.season_id,
-            leagueId: game.league_id,
-            gameId: game.id,
-            teamId: teamId,
-            playerId: player.player_id,
-            gameTime: gameTime.join(','),
-            courtAreaId: courtArea.join(','),
-            insidePaint: null,
-            homeAway: null,
-            gameResult: null
-        }).then((res) => {
 
-            setPlayerState(res[0]);
-            setLoading(false);
-        });
+        if (player.name === 'Goalkeeper') {
+            GameService.getGoalkeepersStatsAdvanceSummary({
+                seasonId: game.season_id,
+                leagueId: game.league_id,
+                gameId: game.id,
+                teamId: teamId,
+                playerId: player.player_id,
+                gameTime: gameTime.join(','),
+                courtAreaId: courtArea.join(','),
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setPlayerState(res[0]);
+                setLoading(false);
+            });
+        } else {
+            GameService.getPlayersStatsAdvanced({
+                seasonId: game.season_id,
+                leagueId: game.league_id,
+                gameId: game.id,
+                teamId: teamId,
+                playerId: player.player_id,
+                gameTime: gameTime.join(','),
+                courtAreaId: courtArea.join(','),
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setPlayerState(res[0]);
+                setLoading(false);
+            });
+        }
+    };
+
+    const getStatList = () => {
+        if (player) return player.name === 'Goalkeeper' ? goalkeeper : statList;
+
+        return statList;
     };
 
     useEffect(() => {
@@ -265,7 +312,7 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
                 <Box sx={{ border: '1px solid #E8E8E8', borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>PLAYER STATS</Typography>
                     <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '8px' }}>
-                        {statList.map((item, index) => (
+                        {getStatList().map((item, index) => (
                             <div
                                 key={index}
                                 style={{

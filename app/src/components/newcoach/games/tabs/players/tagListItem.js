@@ -46,7 +46,6 @@ const GamePlayerTagListItem = ({ item, isSelected, idx, isChecked, onChecked, on
                     </Box>
                 </Box>
             </Box>
-
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <div style={{ width: '100px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -70,8 +69,6 @@ const GamePlayerTagListItem = ({ item, isSelected, idx, isChecked, onChecked, on
                 </div>
                 <input key={idx} type="checkbox" value={isChecked} checked={isChecked ? true : false} style={{ width: '18px', height: '18px' }} onChange={onChecked(idx)} />
             </Box>
-
-
         </Box>
     );
 };

@@ -24,22 +24,42 @@ const TeamPlayerLogoList = ({ games, gameIds, teamId, setIds }) => {
 
     const handleDisplayList = (player) => {
         statClick = true;
-        GameService.getPlayersStatsAdvanced({
-            seasonId: null,
-            leagueId: null,
-            gameId: gameIds.join(','),
-            teamId: teamId,
-            playerId: player.player_id,
-            gameTime: '1,2,3,4,5,6',
-            courtAreaId: null,
-            insidePaint: null,
-            homeAway: null,
-            gameResult: null
-        }).then((res) => {
-            setPlayerState(res[0]);
-            setStatOpen(true);
-            setCurrentPlayer(player);
-        });
+
+        if (player.name === 'Goalkeeper') {
+            GameService.getGoalkeepersStatsAdvanceSummary({
+                seasonId: null,
+                leagueId: null,
+                gameId: gameIds.join(','),
+                teamId: teamId,
+                playerId: player.player_id,
+                gameTime: '1,2,3,4,5,6',
+                courtAreaId: null,
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setPlayerState(res[0]);
+                setStatOpen(true);
+                setCurrentPlayer(player);
+            });
+        } else {
+            GameService.getPlayersStatsAdvanced({
+                seasonId: null,
+                leagueId: null,
+                gameId: gameIds.join(','),
+                teamId: teamId,
+                playerId: player.player_id,
+                gameTime: '1,2,3,4,5,6',
+                courtAreaId: null,
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setPlayerState(res[0]);
+                setStatOpen(true);
+                setCurrentPlayer(player);
+            });
+        }
     };
 
     useEffect(() => {
@@ -60,6 +80,8 @@ const TeamPlayerLogoList = ({ games, gameIds, teamId, setIds }) => {
 
         setIds(ids);
     }, [selectArray]);
+
+    console.log('$$$$$$', currentPlayer);
 
     return (
         <Box sx={{ minWidth: '600px' }}>

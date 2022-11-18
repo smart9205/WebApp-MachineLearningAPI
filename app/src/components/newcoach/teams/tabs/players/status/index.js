@@ -46,6 +46,29 @@ const statList = [
     { id: 'player_games', title: 'Games' }
 ];
 
+const goalkeeper = [
+    { id: 'passes', title: 'Passes', action: 'Passes' },
+    { id: 'successful_passes', title: 'Successful Passes', action: 'PassesSuccess' },
+    { id: 'short_passes', title: 'Short Passes', action: 'ShortPass' },
+    { id: 'long_passes', title: 'Long Passes', action: 'LongPass' },
+    { id: 'build_ups', title: 'Build Ups', action: 'BuildUp' },
+    { id: 'super_save', title: 'Super Saved', action: 'SuperSaved' },
+    { id: 'saved', title: 'Saved', action: 'Saved' },
+    { id: 'goalkeeper_exit', title: 'Exits', action: 'Exits' },
+    { id: 'air_challenge', title: 'Air Challenges', action: 'AirChallenge' },
+    { id: 'ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
+    { id: 'one_vs_one', title: '1 vs 1', action: 'One' },
+    { id: 'goal_received', title: 'Goals Received', action: 'GoalReceive' },
+    { id: 'tackle', title: 'Tackles', action: 'Tackle' },
+    { id: 'interception', title: 'Interceptions', action: 'Interception' },
+    { id: 'clearance', title: 'Clearance', action: 'Clearance' },
+    { id: 'fouls', title: 'Fouls', action: 'Foul' },
+    { id: 'draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
+    { id: 'red_cards', title: 'Red Cards', action: 'RedCard' },
+    { id: 'yellow_cards', title: 'Yellow Cards', action: 'YellowCard' },
+    { id: 'player_games', title: 'Games Played', action: '' }
+];
+
 const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, gameIds, initialState }) => {
     const [playerState, setPlayerState] = useState(null);
     const [gameHalf, setGameHalf] = useState(['first', 'second']);
@@ -147,21 +170,40 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
         }
 
         setLoading(true);
-        GameService.getPlayersStatsAdvanced({
-            seasonId: seasonId,
-            leagueId: null,
-            gameId: gameIds.length === 0 ? null : gameIds.join(','),
-            teamId: teamId,
-            playerId: player.id,
-            gameTime: gameTime.join(','),
-            courtAreaId: courtArea.join(','),
-            insidePaint: null,
-            homeAway: gamePlace ? parseInt(gamePlace) : null,
-            gameResult: gameResult ? parseInt(gameResult) : null
-        }).then((res) => {
-            setPlayerState(res[0]);
-            setLoading(false);
-        });
+
+        if (player.pos_name === 'Goalkeeper') {
+            GameService.getGoalkeepersStatsAdvanceSummary({
+                seasonId: seasonId,
+                leagueId: null,
+                gameId: gameIds.length === 0 ? null : gameIds.join(','),
+                teamId: teamId,
+                playerId: player.id,
+                gameTime: gameTime.join(','),
+                courtAreaId: courtArea.join(','),
+                insidePaint: null,
+                homeAway: gamePlace ? parseInt(gamePlace) : null,
+                gameResult: gameResult ? parseInt(gameResult) : null
+            }).then((res) => {
+                setPlayerState(res[0]);
+                setLoading(false);
+            });
+        } else {
+            GameService.getPlayersStatsAdvanced({
+                seasonId: seasonId,
+                leagueId: null,
+                gameId: gameIds.length === 0 ? null : gameIds.join(','),
+                teamId: teamId,
+                playerId: player.id,
+                gameTime: gameTime.join(','),
+                courtAreaId: courtArea.join(','),
+                insidePaint: null,
+                homeAway: gamePlace ? parseInt(gamePlace) : null,
+                gameResult: gameResult ? parseInt(gameResult) : null
+            }).then((res) => {
+                setPlayerState(res[0]);
+                setLoading(false);
+            });
+        }
     };
 
     const handleDisplayVideo = (cell) => {
@@ -232,6 +274,12 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
         }
     };
 
+    const getStatList = () => {
+        if (player) return player.pos_name === 'Goalkeeper' ? goalkeeper : statList;
+
+        return statList;
+    };
+
     useEffect(() => {
         setPlayerState(initialState);
         setGameHalf(['first', 'second']);
@@ -246,23 +294,44 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
     useEffect(() => {
         if (player && gameIds.length > 0) {
             setLoading(true);
-            GameService.getPlayersStatsAdvanced({
-                seasonId: seasonId,
-                leagueId: null,
-                gameId: gameIds.length === 0 ? null : gameIds.join(','),
-                teamId: teamId,
-                playerId: player?.id ?? null,
-                gameTime: gameTime.join(','),
-                courtAreaId: courtArea.join(','),
-                insidePaint: null,
-                homeAway: gamePlace ? parseInt(gamePlace) : null,
-                gameResult: gameResult ? parseInt(gameResult) : null
-            }).then((res) => {
-                setPlayerState(res[0]);
-                setLoading(false);
-            });
+
+            if (player.pos_name === 'Goalkeeper') {
+                GameService.getGoalkeepersStatsAdvanceSummary({
+                    seasonId: seasonId,
+                    leagueId: null,
+                    gameId: gameIds.length === 0 ? null : gameIds.join(','),
+                    teamId: teamId,
+                    playerId: player?.id ?? null,
+                    gameTime: gameTime.join(','),
+                    courtAreaId: courtArea.join(','),
+                    insidePaint: null,
+                    homeAway: gamePlace ? parseInt(gamePlace) : null,
+                    gameResult: gameResult ? parseInt(gameResult) : null
+                }).then((res) => {
+                    setPlayerState(res[0]);
+                    setLoading(false);
+                });
+            } else {
+                GameService.getPlayersStatsAdvanced({
+                    seasonId: seasonId,
+                    leagueId: null,
+                    gameId: gameIds.length === 0 ? null : gameIds.join(','),
+                    teamId: teamId,
+                    playerId: player?.id ?? null,
+                    gameTime: gameTime.join(','),
+                    courtAreaId: courtArea.join(','),
+                    insidePaint: null,
+                    homeAway: gamePlace ? parseInt(gamePlace) : null,
+                    gameResult: gameResult ? parseInt(gameResult) : null
+                }).then((res) => {
+                    setPlayerState(res[0]);
+                    setLoading(false);
+                });
+            }
         }
     }, [refresh]);
+
+    console.log('$$$$$', playerState);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="1500px">
@@ -376,7 +445,7 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                 <Box sx={{ border: '1px solid #E8E8E8', borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>PLAYER STATS</Typography>
                     <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '8px' }}>
-                        {statList.map((item, index) => (
+                        {getStatList().map((item, index) => (
                             <div
                                 key={index}
                                 style={{

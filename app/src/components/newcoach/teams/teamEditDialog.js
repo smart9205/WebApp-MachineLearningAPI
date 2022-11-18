@@ -46,6 +46,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
     };
 
     const saveChanges = () => {
+        console.log('Teams => ', team);
         setLoading(true);
         GameService.updateTeam(values)
             .then((res) => {
@@ -63,15 +64,15 @@ const TeamEditDialog = ({ open, onClose, team }) => {
             ...values,
             id: team.team_id,
             name: team.team_name,
-            image: team.team_image,
-            team_color: team.team_color,
-            second_color: team.second_color,
-            sponsor_logo: team.sponsor_logo,
-            sponsor_url: team.sponsor_url,
-            show_sponsor: team.show_sponsor,
-            create_highlights: team.create_highlights,
-            team_language: team.team_language,
-            filter_by_position: team.filter_by_position
+            image: team.team_image ?? '',
+            team_color: team.team_color ?? 'white',
+            second_color: team.second_color ?? 'white',
+            sponsor_logo: team.sponsor_logo ?? '',
+            sponsor_url: team.sponsor_url ?? '',
+            show_sponsor: team.show_sponsor ?? false,
+            create_highlights: team.create_highlights ?? false,
+            team_language: team.team_language ?? 'en',
+            filter_by_position: team.filter_by_position ?? false
         });
     }, [team]);
 
@@ -176,7 +177,8 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                                 ))}
                             </Select>
                         </Box>
-                        <FormControlLabel
+                        <div style={{ height: '170px' }} />
+                        {/* <FormControlLabel
                             sx={{ mt: 1 }}
                             control={
                                 <Switch
@@ -197,7 +199,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                                 />
                             }
                             label="Filter by Position"
-                        />
+                        /> */}
                     </Box>
                 </Box>
                 <SaveButton onClick={saveChanges} sx={{ width: '300px', fontSize: '0.7rem' }}>

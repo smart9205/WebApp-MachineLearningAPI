@@ -24,22 +24,42 @@ const GamePlayerLogoList = ({ game, teamId, opponent, our, setIds }) => {
 
     const handleDisplayList = (player) => {
         statClick = true;
-        GameService.getPlayersStatsAdvanced({
-            seasonId: game.season_id,
-            leagueId: game.league_id,
-            gameId: game.id,
-            teamId: our ? teamId : opponent,
-            playerId: player.player_id,
-            gameTime: '1,2,3,4,5,6',
-            courtAreaId: null,
-            insidePaint: null,
-            homeAway: null,
-            gameResult: null
-        }).then((res) => {
-            setPlayerState(res[0]);
-            setStatOpen(true);
-            setCurrentPlayer(player);
-        });
+
+        if (player.name === 'Goalkeeper') {
+            GameService.getGoalkeepersStatsAdvanceSummary({
+                seasonId: game.season_id,
+                leagueId: game.league_id,
+                gameId: game.id,
+                teamId: our ? teamId : opponent,
+                playerId: player.player_id,
+                gameTime: '1,2,3,4,5,6',
+                courtAreaId: null,
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setPlayerState(res[0]);
+                setStatOpen(true);
+                setCurrentPlayer(player);
+            });
+        } else {
+            GameService.getPlayersStatsAdvanced({
+                seasonId: game.season_id,
+                leagueId: game.league_id,
+                gameId: game.id,
+                teamId: our ? teamId : opponent,
+                playerId: player.player_id,
+                gameTime: '1,2,3,4,5,6',
+                courtAreaId: null,
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setPlayerState(res[0]);
+                setStatOpen(true);
+                setCurrentPlayer(player);
+            });
+        }
     };
 
     useEffect(() => {

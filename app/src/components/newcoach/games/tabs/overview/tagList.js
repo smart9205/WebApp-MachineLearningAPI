@@ -31,7 +31,7 @@ const GameTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onCh
             )}
             {tagList.length === 0 && !isLoading && (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '80%' }}>
-                    <p className="page-tab">No Data to Display</p>
+                    <p className="page-tab-title">No Data to Display</p>
                 </Box>
             )}
         </Box>
