@@ -61,8 +61,10 @@ const Players = () => {
         searchText: '',
         teamList: [],
         teamFilter: 'none',
-        loading: false
+        seasonList: [],
+        seasonFilter: 'none'
     });
+    const [loading, setLoading] = useState(false);
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('total_player_games');
     const [playerStats, setPlayerStats] = useState([]);
@@ -207,7 +209,7 @@ const Players = () => {
         });
     };
 
-    const { searchText, teamList, teamFilter, loading } = state;
+    const { searchText, teamList, teamFilter, seasonList, seasonFilter } = state;
 
     const handleChange = (prop) => (e) => {
         setState({ [prop]: e.target.value });
@@ -240,13 +242,38 @@ const Players = () => {
         return [];
     };
 
+    const getSeasonList = (array) => {
+        if (array.length > 0) {
+            const desc = stableSort(array, getComparator('desc', 'season_name'));
+            let result = [];
+
+            desc.map((item) => {
+                const filter = result.filter((season) => season.name === item.season_name);
+
+                if (filter.length === 0) result = [...result, { id: item.season_id, name: item.season_name }];
+
+                return result;
+            });
+
+            return result;
+        }
+
+        return [];
+    };
+
     const getSortedArray = () => {
         return stableSort(getPlayers(), getComparator(order, orderBy));
     };
 
     const getPlayers = () => {
         return searchText
-            ? playerStats.filter((item) => compareStrings(item.player_position, searchText) || compareStrings(item.player_name, searchText) || compareStrings(item.team_name, searchText))
+            ? playerStats.filter(
+                  (item) =>
+                      compareStrings(item.player_position, searchText) ||
+                      compareStrings(item.player_name, searchText) ||
+                      compareStrings(item.team_name, searchText) ||
+                      compareStrings(item.season_name, searchText)
+              )
             : teamFilter !== 'none'
             ? playerStats.filter((item) => item.team_name === teamFilter)
             : playerStats;
@@ -292,7 +319,7 @@ const Players = () => {
         let leagueIds = [];
         let teamIds = [];
 
-        setState({ loading: true });
+        setLoading(true);
         await GameService.getAllLeaguesByCoach().then((res) => {
             leagueIds = getLeagueIds(res);
         });
@@ -302,7 +329,7 @@ const Players = () => {
 
         if (teamIds.length > 0) {
             await GameService.getPlayersStatsAdvanceSummary({
-                seasonId: null,
+                seasonId: seasonFilter === 'none' ? null : seasonFilter.id,
                 leagueId: leagueIds.length > 0 ? leagueIds.join(',') : null,
                 gameId: null,
                 teamId: teamIds.join(','),
@@ -314,10 +341,13 @@ const Players = () => {
                 gameResult: null
             }).then((data) => {
                 setPlayerStats(data);
-                setState({ loading: false, teamList: getTeamList(data) });
+
+                if (seasonList.length === 0 || teamList.length === 0) setState({ teamList: getTeamList(data), seasonList: getSeasonList(data) });
+
+                setLoading(false);
             });
-        } else setState({ loading: false });
-    }, []);
+        } else setLoading(false);
+    }, [seasonFilter]);
 
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
@@ -331,6 +361,28 @@ const Players = () => {
                     <Box sx={{ width: '100%', padding: '24px 24px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <p className="page-title">Players</p>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <p className="select-narrator">Season</p>
+                                <Select
+                                    value={seasonFilter}
+                                    onChange={handleChange('seasonFilter')}
+                                    label=""
+                                    variant="outlined"
+                                    IconComponent={ExpandMoreIcon}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    MenuProps={MenuProps}
+                                    sx={{ borderRadius: '10px', outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
+                                >
+                                    <MenuItem key="0" value="none">
+                                        All
+                                    </MenuItem>
+                                    {seasonList.map((season, index) => (
+                                        <MenuItem key={index + 1} value={season}>
+                                            {season.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <p className="select-narrator">Team</p>
                                 <Select
