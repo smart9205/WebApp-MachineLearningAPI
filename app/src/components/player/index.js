@@ -120,11 +120,6 @@ export default function Player() {
 
     useEffect(() => {
         i18next.changeLanguage(language);
-        if (language == 'iw' || language == 'ar') {
-            document.body.style.direction = 'rtl';
-        } else {
-            document.body.style.direction = 'ltr';
-        }
     }, [language]);
 
     const numClicked = (gameId, key) => {

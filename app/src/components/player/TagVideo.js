@@ -30,7 +30,8 @@ const styles = {
         right: 0,
         display: 'flex',
         justifyContent: 'space-between',
-        margin: 'auto'
+        margin: 'auto',
+        direction: 'ltr'
     },
     correctionControl: {
         position: 'absolute',
@@ -99,28 +100,27 @@ export default function TagVideo({ tagList, url, muteState, setOpen, gameId }) {
         const startTime = toSecond(tagList[curIdx]?.start_time) + 3;
         const endTime = toSecond(tagList[curIdx]?.end_time) - 3;
 
-        if (currentTime < startTime) {
+        if (currentTime <= startTime) {
             seekTo(startTime);
-        }
-
-        if (currentTime > endTime) {
-            if (tagList.length <= curIdx) {
-                // last tag
-                setPlay(false);
+            setPlay(true);
+        } else if (currentTime >= endTime) {
+            if (curIdx < tagList.length - 1) PlayVideo(1);
+            else {
+                setPlay(true);
                 setOpen(false);
-            } else {
-                setCurIdx((c) => c + 1);
             }
         }
     };
 
-    const PlayVideo = (num) => {
-        let index;
-        if (curIdx + num >= tagList.length) {
-            index = 0;
-        } else if (curIdx + num < 0) {
-            index = tagList.length - 1;
-        } else index = curIdx + num;
+    const PlayVideo = (add) => {
+        let index = curIdx + add;
+
+        if (index >= tagList.length) {
+            setPlay(false);
+            setOpen(false);
+
+            return;
+        } else if (index < 0) index = 0;
 
         playTagByIdx(index);
         setPlay(true);
@@ -143,6 +143,8 @@ export default function TagVideo({ tagList, url, muteState, setOpen, gameId }) {
             handleOpen();
         });
     };
+
+    console.log('tagvideo => ', curIdx);
 
     return (
         <>
@@ -223,7 +225,7 @@ export default function TagVideo({ tagList, url, muteState, setOpen, gameId }) {
                     )}
                     <div style={styles.buttonBox}>
                         <IconButton onClick={() => PlayVideo(-1)} style={styles.button}>
-                            {document.body.style.direction === 'ltr' ? <SkipPreviousSharpIcon color="white" /> : <SkipNextSharpIcon />}
+                            <SkipPreviousSharpIcon color="white" />
                         </IconButton>
 
                         <IconButton onClick={() => setPlay((p) => !p)} style={styles.button}>
@@ -231,7 +233,7 @@ export default function TagVideo({ tagList, url, muteState, setOpen, gameId }) {
                         </IconButton>
 
                         <IconButton onClick={() => PlayVideo(1)} style={styles.button}>
-                            {document.body.style.direction === 'ltr' ? <SkipNextSharpIcon /> : <SkipPreviousSharpIcon color="white" />}
+                            <SkipNextSharpIcon />
                         </IconButton>
                     </div>
                 </div>
