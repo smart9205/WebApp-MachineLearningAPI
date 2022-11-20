@@ -51,12 +51,35 @@ export const statList = [
     { id: 'red_cards', title: 'Red Cards', action: 'RedCard' }
 ];
 
+export const goalkeeper = [
+    { id: 'passes', title: 'Passes', action: 'Passes' },
+    { id: 'successful_passes', title: 'Successful Passes', action: 'PassesSuccess' },
+    { id: 'short_passes', title: 'Short Passes', action: 'ShortPass' },
+    { id: 'long_passes', title: 'Long Passes', action: 'LongPass' },
+    { id: 'build_ups', title: 'Build Ups', action: 'BuildUp' },
+    { id: 'super_save', title: 'Super Saved', action: 'SuperSaved' },
+    { id: 'saved', title: 'Saved', action: 'Saved' },
+    { id: 'goalkeeper_exit', title: 'Exits', action: 'Exits' },
+    { id: 'air_challenge', title: 'Air Challenges', action: 'AirChallenge' },
+    { id: 'ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
+    { id: 'one_vs_one', title: '1 vs 1', action: 'One' },
+    { id: 'goal_received', title: 'Goals Received', action: 'GoalReceive' },
+    { id: 'tackle', title: 'Tackles', action: 'Tackle' },
+    { id: 'interception', title: 'Interceptions', action: 'Interception' },
+    { id: 'clearance', title: 'Clearance', action: 'Clearance' },
+    { id: 'fouls', title: 'Fouls', action: 'Foul' },
+    { id: 'draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
+    { id: 'red_cards', title: 'Red Cards', action: 'RedCard' },
+    { id: 'yellow_cards', title: 'Yellow Cards', action: 'YellowCard' }
+];
+
 export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
     const { context, setContext } = useContext(PlayerContext);
 
     const teamId = context.game.is_home_team ? context.game.home_team_id : context.game.away_team_id;
     const gameId = context.game.game_id;
     const playerId = context.player.id;
+    const pos_name = context.player.position_name;
 
     const [playerStat, setPlayerStat] = useState(null);
     const [open, setOpen] = useState(false);
@@ -85,25 +108,48 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
         );
     };
 
+    const getStatList = () => {
+        return pos_name ? (pos_name === 'Goalkeeper' ? goalkeeper : statList) : statList;
+    };
+
     useEffect(() => {
         if (!teamId || !gameId || !playerId) return;
 
         setLoading(true);
-        GameService.getPlayersStatsAdvanced({
-            seasonId: context.game?.season_id ?? null,
-            leagueId: context.game?.league_id ?? null,
-            gameId: gameId ?? null,
-            teamId: teamId ?? null,
-            playerId: playerId ?? null,
-            gameTime: null,
-            courtAreaId: null,
-            insidePaint: null,
-            homeAway: null,
-            gameResult: null
-        }).then((res) => {
-            setPlayerStat(res[0]);
-            setLoading(false);
-        });
+
+        if (pos_name === 'Goalkeeper') {
+            GameService.getGoalkeepersStatsAdvanceSummary({
+                seasonId: context.game?.season_id ?? null,
+                leagueId: context.game?.league_id ?? null,
+                gameId: gameId ?? null,
+                teamId: teamId ?? null,
+                playerId: playerId ?? null,
+                gameTime: null,
+                courtAreaId: null,
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setPlayerStat(res[0]);
+                setLoading(false);
+            });
+        } else {
+            GameService.getPlayersStatsAdvanced({
+                seasonId: context.game?.season_id ?? null,
+                leagueId: context.game?.league_id ?? null,
+                gameId: gameId ?? null,
+                teamId: teamId ?? null,
+                playerId: playerId ?? null,
+                gameTime: null,
+                courtAreaId: null,
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setPlayerStat(res[0]);
+                setLoading(false);
+            });
+        }
     }, [teamId, gameId, playerId]);
 
     const saveHighlight = () => {
@@ -145,7 +191,7 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
                             )}
                         </div>
                     </div>
-                    {statList.map((item) => (
+                    {getStatList().map((item) => (
                         <div
                             key={item.id}
                             style={{

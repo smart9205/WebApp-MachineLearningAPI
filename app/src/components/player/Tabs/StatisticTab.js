@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { PlayerContext } from '..';
 import GameService from '../../../services/game.service';
-import { statList } from './SkillTab';
+import { goalkeeper, statList } from './SkillTab';
 
 export default function StatisticTab({ games }) {
     const { context, setContext } = useContext(PlayerContext);
@@ -11,26 +11,49 @@ export default function StatisticTab({ games }) {
     const [loading, setLoading] = useState(false);
 
     const getNormalStatList = () => {
-        return statList.filter((item) => playerStat && playerStat[`total_${item.id}`] > 0);
+        return getStatList().filter((item) => playerStat && playerStat[`total_${item.id}`] > 0);
+    };
+
+    const getStatList = () => {
+        return context.player ? (context.player.position_name === 'Goalkeeper' ? goalkeeper : statList) : statList;
     };
 
     useEffect(() => {
         setLoading(true);
-        GameService.getPlayersStatsAdvanceSummary({
-            seasonId: null,
-            leagueId: null,
-            gameId: games ? games.map((item) => item.game_id).join(',') : null,
-            teamId: null,
-            playerId: context.player?.id ?? null,
-            gameTime: null,
-            courtAreaId: null,
-            insidePaint: null,
-            homeAway: null,
-            gameResult: null
-        }).then((res) => {
-            setPlayerStat(res[0]);
-            setLoading(false);
-        });
+
+        if (context.player && context.player.position_name === 'Goalkeeper') {
+            GameService.getGoalkeepersStatsAdvanceSummary({
+                seasonId: null,
+                leagueId: null,
+                gameId: games ? games.map((item) => item.game_id).join(',') : null,
+                teamId: null,
+                playerId: context.player?.id ?? null,
+                gameTime: null,
+                courtAreaId: null,
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setPlayerStat(res[0]);
+                setLoading(false);
+            });
+        } else {
+            GameService.getPlayersStatsAdvanceSummary({
+                seasonId: null,
+                leagueId: null,
+                gameId: games ? games.map((item) => item.game_id).join(',') : null,
+                teamId: null,
+                playerId: context.player?.id ?? null,
+                gameTime: null,
+                courtAreaId: null,
+                insidePaint: null,
+                homeAway: null,
+                gameResult: null
+            }).then((res) => {
+                setPlayerStat(res[0]);
+                setLoading(false);
+            });
+        }
     }, [context]);
 
     return (
