@@ -37,6 +37,8 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
     };
 
     const onProgress = (seconds) => {
+        if (tagList.length === 0) return;
+
         setCurrentTime(seconds);
 
         const start = toSecond(tagList[currentIndex].start_time);
@@ -88,8 +90,10 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
     useEffect(() => {
         setCurrentIndex(0);
 
-        if (videoList.length > 0) setVideoURL(videoList.filter((item) => item.id === tagList[0].game_id)[0].url);
+        if (videoList.length > 0 && tagList.length > 0) setVideoURL(videoList.filter((item) => item.id === tagList[0].game_id)[0].url);
     }, [open]);
+
+    console.log('vvvvideo => ', currentIndex);
 
     return (
         <Dialog style={{ backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
@@ -196,16 +200,18 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                         </div>
                     </FullScreen>
                 </div>
-                <TeamPlayerTagEditDialog
-                    open={tagEditOpen}
-                    onClose={(flag) => {
-                        setTagEditOpen(false);
-                        setPlay(true);
+                {tagList.length > 0 && (
+                    <TeamPlayerTagEditDialog
+                        open={tagEditOpen}
+                        onClose={(flag) => {
+                            setTagEditOpen(false);
+                            setPlay(true);
 
-                        if (flag) setUpdated((c) => c + 1);
-                    }}
-                    player={tagList[currentIndex]}
-                />
+                            if (flag) setUpdated((c) => c + 1);
+                        }}
+                        player={tagList[currentIndex]}
+                    />
+                )}
             </DialogContent>
         </Dialog>
     );

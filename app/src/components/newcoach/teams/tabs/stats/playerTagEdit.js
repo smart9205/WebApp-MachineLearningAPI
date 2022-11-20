@@ -52,6 +52,8 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
     };
 
     useEffect(async () => {
+        if (!player) return;
+
         let players = [];
         let actions = [];
         let types = [];
@@ -88,6 +90,8 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
             });
         }
     }, [player]);
+
+    console.log('eeedit => ', player);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg">

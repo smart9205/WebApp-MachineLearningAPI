@@ -19,7 +19,7 @@ const init = {
     l_name: '',
     date_of_birth: new Date(),
     position: null,
-    jersey_number: 1,
+    jersey_number: 0,
     image: ''
 };
 
@@ -42,19 +42,21 @@ export default function PlayerFormDialog({ open, onResult, edit = null, t }) {
     }, []);
 
     useEffect(() => {
-        if (!edit) return;
+        if (edit) {
+            const names = edit?.player_name.split(' ');
+            const first = names.length === 2 ? names[0] : `${names[0]} ${names[1]}`;
+            const last = names.length === 2 ? names[1] : names.length === 3 ? names[2] : `${names[2]} ${names[3]}`;
 
-        const names = edit?.player_name.split(' ');
-
-        setPlayerData({
-            id: edit?.id,
-            f_name: names[0],
-            l_name: names[1],
-            date_of_birth: edit?.date_of_birth,
-            position: positionList.find((p) => p.id === edit?.player_position_id),
-            jersey_number: edit?.jersey_number,
-            image: edit?.image
-        });
+            setPlayerData({
+                id: edit?.id,
+                f_name: first,
+                l_name: last,
+                date_of_birth: edit?.date_of_birth,
+                position: positionList.find((p) => p.id === edit?.player_position_id),
+                jersey_number: edit?.jersey_number,
+                image: edit?.image
+            });
+        } else setPlayerData({ ...playerData, position: positionList.find((p) => p.short === 'NA') });
     }, [edit, positionList]);
 
     useEffect(() => {
@@ -62,7 +64,7 @@ export default function PlayerFormDialog({ open, onResult, edit = null, t }) {
             f_name: playerData.f_name.length === 0,
             l_name: playerData.l_name.length === 0,
             position: !playerData.position,
-            jersey_number: Number(playerData.jersey_number) <= 0
+            jersey_number: Number(playerData.jersey_number) < 0
         });
     }, [playerData]);
 
@@ -94,6 +96,8 @@ export default function PlayerFormDialog({ open, onResult, edit = null, t }) {
         setPlayerData(init);
         onResult({ open: false });
     };
+
+    console.log('###########', positionList, edit);
 
     return (
         <Dialog open={open} onClose={(e) => handlePlayerClose(false)} maxWidth="lg">

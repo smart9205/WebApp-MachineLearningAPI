@@ -234,7 +234,10 @@ const OpponentPlayers = ({ game }) => {
                     `${game.id}`,
                     ActionData[tagIndex.id].action_id,
                     ActionData[tagIndex.id].action_type_id,
-                    ActionData[tagIndex.id].action_result_id
+                    ActionData[tagIndex.id].action_result_id,
+                    null,
+                    null,
+                    null
                 )
             );
         }

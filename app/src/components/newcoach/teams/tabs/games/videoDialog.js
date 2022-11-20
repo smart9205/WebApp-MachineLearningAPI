@@ -74,6 +74,7 @@ const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList }) => {
 
     useEffect(() => {
         setCurrentIndex(0);
+
         if (video_url.startsWith('https://www.youtube.com')) {
             gameService.getNewStreamURL(video_url).then((res) => {
                 setVideoURL(res.url);
@@ -82,13 +83,13 @@ const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList }) => {
     }, [video_url, tagList, open]);
 
     return (
-        <Dialog style={{  backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
+        <Dialog style={{ backgroundColor: 'transparent' }} className="profileSection_tagvideo" open={open} onClose={() => onClose(updated > 0)}>
             <DialogContent style={{ p: 0 }}>
                 <div style={{ width: '100%', margin: 'auto', position: 'relative' }}>
                     <FullScreen handle={handle}>
-                        <div style={{ width: '100%', margin: 'auto', minWidth: '700px'}}>
+                        <div style={{ width: '100%', margin: 'auto', minWidth: '700px' }}>
                             <div className="player-wrapper">
-                                <ReactPlayer 
+                                <ReactPlayer
                                     className="react-player"
                                     url={videoURL}
                                     ref={player}
@@ -186,16 +187,18 @@ const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                         </div>
                     </FullScreen>
                 </div>
-                <TeamPlayerTagEditDialog
-                    open={tagEditOpen}
-                    onClose={(flag) => {
-                        setTagEditOpen(false);
-                        setPlay(true);
+                {tagList.length > 0 && (
+                    <TeamPlayerTagEditDialog
+                        open={tagEditOpen}
+                        onClose={(flag) => {
+                            setTagEditOpen(false);
+                            setPlay(true);
 
-                        if (flag) setUpdated((c) => c + 1);
-                    }}
-                    player={tagList[currentIndex]}
-                />
+                            if (flag) setUpdated((c) => c + 1);
+                        }}
+                        player={tagList[currentIndex]}
+                    />
+                )}
             </DialogContent>
         </Dialog>
     );

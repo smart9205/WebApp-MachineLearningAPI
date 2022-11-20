@@ -154,7 +154,7 @@ exports.getTeamsGames = (req, res) => {
 
   Sequelize.query(
     `
-  select * from public.get_teams_games(
+  select * from public.fnc_get_teams_games(
     ${req.params.season},
     ${teams},
     ${req.userId}

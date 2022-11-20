@@ -896,11 +896,11 @@ const getAllPlayerTagsByTeam = (teamId, gameId) => {
     });
 };
 
-const getGamePlayerTags = (userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId) => {
+const getGamePlayerTags = (userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside) => {
     return axios
-        .get(API_URL + `player/game_player_tags/${userId}/${teamId}/${playerId}/${gameId}/${actionId}/${actionTypeId}/${actionResultId}`, {
+        .get(API_URL + `player/game_player_tags/${userId}/${teamId}/${playerId}/${gameId}/${actionId}/${actionTypeId}/${actionResultId}/${gameTime}/${courtArea}/${inside}`, {
             headers: authHeader(),
-            data: { userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId }
+            data: { userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside }
         })
         .then((response) => {
             return response.data;

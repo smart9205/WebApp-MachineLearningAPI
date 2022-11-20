@@ -126,7 +126,10 @@ const Goalkeepers = () => {
                 gameIds.length === 0 ? null : gameIds.join(','),
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
-                ActionData[cell.action].action_result_id
+                ActionData[cell.action].action_result_id,
+                null,
+                null,
+                null
             ).then((res) => {
                 const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
 
@@ -178,7 +181,10 @@ const Goalkeepers = () => {
                 gameIds.length === 0 ? null : gameIds.join(','),
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
-                ActionData[cell.action].action_result_id
+                ActionData[cell.action].action_result_id,
+                null,
+                null,
+                null
             ).then((res) => {
                 const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
 

@@ -64,24 +64,25 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
     const [loading, setLoading] = useState(true);
 
     const getPlayerTags = (id) => {
-        GameService.getGamePlayerTags(null, teamId, `${playerId}`, `${gameId}`, ActionData[id].action_id, ActionData[id].action_type_id, ActionData[id].action_result_id).then((res) => {
-
-            playTags(
-                res.map((item) => {
-                    return {
-                        start_time: item.player_tag_start_time,
-                        end_time: item.player_tag_end_time,
-                        player_fname: context.player.f_name,
-                        player_lname: context.player.l_name,
-                        jersey: context.player.jersey_number,
-                        action_name: item.action_names,
-                        player_id: item.player_id,
-                        team_id: teamId,
-                        id: item.id
-                    };
-                })
-            );
-        });
+        GameService.getGamePlayerTags(null, teamId, `${playerId}`, `${gameId}`, ActionData[id].action_id, ActionData[id].action_type_id, ActionData[id].action_result_id, null, null, null).then(
+            (res) => {
+                playTags(
+                    res.map((item) => {
+                        return {
+                            start_time: item.player_tag_start_time,
+                            end_time: item.player_tag_end_time,
+                            player_fname: context.player.f_name,
+                            player_lname: context.player.l_name,
+                            jersey: context.player.jersey_number,
+                            action_name: item.action_names,
+                            player_id: item.player_id,
+                            team_id: teamId,
+                            id: item.id
+                        };
+                    })
+                );
+            }
+        );
     };
 
     useEffect(() => {

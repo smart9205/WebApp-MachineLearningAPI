@@ -209,7 +209,10 @@ const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, t
                 gameIds.join(','),
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
-                ActionData[cell.action].action_result_id
+                ActionData[cell.action].action_result_id,
+                gameTime.length === 0 ? null : gameTime.join(','),
+                courtArea.length === 0 ? null : courtArea.join(','),
+                null
             ).then((res) => {
                 let data = res;
 
@@ -255,7 +258,10 @@ const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, t
                 gameIds.join(','),
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
-                ActionData[cell.action].action_result_id
+                ActionData[cell.action].action_result_id,
+                gameTime.length === 0 ? null : gameTime.join(','),
+                courtArea.length === 0 ? null : courtArea.join(','),
+                null
             ).then((res) => {
                 let data = res;
 
@@ -325,7 +331,7 @@ const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, t
         }
     }, [refresh]);
 
-    console.log('$$$$$', playerState);
+    console.log('$$$$$', playData);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="1500px">

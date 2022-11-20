@@ -190,7 +190,6 @@ const GamePlayers = ({ game }) => {
 
     const getPlayTagList = (func) => {
         func.then((res) => {
-
             setLoading(false);
             setLoadData(false);
 
@@ -237,7 +236,10 @@ const GamePlayers = ({ game }) => {
                     `${game.id}`,
                     ActionData[tagIndex.id].action_id,
                     ActionData[tagIndex.id].action_type_id,
-                    ActionData[tagIndex.id].action_result_id
+                    ActionData[tagIndex.id].action_result_id,
+                    null,
+                    null,
+                    null
                 )
             );
         }

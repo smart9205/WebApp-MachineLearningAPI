@@ -52,7 +52,10 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
             `${cell.game_id}`,
             ActionData[prop.action].action_id,
             ActionData[prop.action].action_type_id,
-            ActionData[prop.action].action_result_id
+            ActionData[prop.action].action_result_id,
+            null,
+            null,
+            null
         ).then((res) => {
             setPlayData(
                 res.map((item) => {
@@ -96,7 +99,10 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
             `${cell.game_id}`,
             ActionData[prop.action].action_id,
             ActionData[prop.action].action_type_id,
-            ActionData[prop.action].action_result_id
+            ActionData[prop.action].action_result_id,
+            null,
+            null,
+            null
         ).then((res) => {
             setPlayData(res);
             setExportOpen(true);

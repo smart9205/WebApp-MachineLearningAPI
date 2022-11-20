@@ -516,6 +516,12 @@ exports.getGamePlayerTags = (req, res) => {
     req.params.actionResultId === "null"
       ? null
       : `'${req.params.actionResultId}'`;
+  const gameTime =
+    req.params.gameTime === "null" ? null : `'${req.params.gameTime}'`;
+  const courtArea =
+    req.params.courtArea === "null" ? null : `'${req.params.courtArea}'`;
+  const inside =
+    req.params.inside === "null" ? null : parseInt(req.params.inside);
 
   Sequelize.query(
     `
@@ -526,7 +532,10 @@ exports.getGamePlayerTags = (req, res) => {
       '${req.params.gameId}',
       ${actionId},
       ${actionTypeId},
-      ${actionResultId}
+      ${actionResultId},
+      ${gameTime},
+      ${courtArea},
+      ${inside}
     )
   `
   )
@@ -563,7 +572,7 @@ exports.getPlayersGames = (req, res) => {
 
   Sequelize.query(
     `
-  select * from public.get_players_games(
+  select * from public.fnc_get_players_games(
     ${req.params.season},
     ${teams},
     ${players},
@@ -587,7 +596,7 @@ exports.getPlayersTeams = (req, res) => {
 
   Sequelize.query(
     `
-  select * from public.get_players_teams(
+  select * from public.fnc_get_players_teams(
     ${req.params.season},
     ${players},
     ${req.userId}

@@ -51,7 +51,10 @@ const PlayersGamesDialog = ({ open, onClose, list, playerName }) => {
                 `${cell.game_id}`,
                 ActionData[prop.action].action_id,
                 ActionData[prop.action].action_type_id,
-                ActionData[prop.action].action_result_id
+                ActionData[prop.action].action_result_id,
+                null,
+                null,
+                null
             ).then((res) => {
                 setPlayData(
                     res.map((item) => {
@@ -88,7 +91,10 @@ const PlayersGamesDialog = ({ open, onClose, list, playerName }) => {
                 `${cell.game_id}`,
                 ActionData[prop.action].action_id,
                 ActionData[prop.action].action_type_id,
-                ActionData[prop.action].action_result_id
+                ActionData[prop.action].action_result_id,
+                null,
+                null,
+                null
             ).then((res) => {
                 setPlayData(res);
                 setExportOpen(true);

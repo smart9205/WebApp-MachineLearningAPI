@@ -124,7 +124,10 @@ const Players = () => {
                 gameIds.length === 0 ? null : gameIds.join(','),
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
-                ActionData[cell.action].action_result_id
+                ActionData[cell.action].action_result_id,
+                null,
+                null,
+                null
             ).then((res) => {
                 setPlayData(
                     res.map((item) => {
@@ -169,7 +172,10 @@ const Players = () => {
                 gameIds.length === 0 ? null : gameIds.join(','),
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
-                ActionData[cell.action].action_result_id
+                ActionData[cell.action].action_result_id,
+                null,
+                null,
+                null
             ).then((res) => {
                 setPlayData(res);
                 setExportOpen(true);

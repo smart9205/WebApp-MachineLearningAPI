@@ -215,7 +215,10 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                 gameIds.join(','),
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
-                ActionData[cell.action].action_result_id
+                ActionData[cell.action].action_result_id,
+                gameTime.length === 0 ? null : gameTime.join(','),
+                courtArea.length === 0 ? null : courtArea.join(','),
+                null
             ).then((res) => {
                 let data = res;
 
@@ -261,7 +264,10 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                 gameIds.join(','),
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
-                ActionData[cell.action].action_result_id
+                ActionData[cell.action].action_result_id,
+                gameTime.length === 0 ? null : gameTime.join(','),
+                courtArea.length === 0 ? null : courtArea.join(','),
+                null
             ).then((res) => {
                 let data = res;
 

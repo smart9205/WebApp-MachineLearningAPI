@@ -73,7 +73,7 @@ module.exports = (app) => {
   );
 
   app.get(
-    "/player/game_player_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId",
+    "/player/game_player_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId/:gameTime/:courtArea/:inside",
     controller.getGamePlayerTags
   );
 
