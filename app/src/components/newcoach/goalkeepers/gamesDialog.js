@@ -22,16 +22,16 @@ const properties = [
     { id: 'total_goalkeeper_exit', title: 'Exits', action: 'Exits' },
     { id: 'total_air_challenge', title: 'Air Challenges', action: 'AirChallenge' },
     { id: 'total_ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
-    { id: 'total_one_vs_one', title: '1 vs 1', action: 'One' },
+    { id: 'total_one_vs_one', title: '1vs1', action: 'One' },
     { id: 'total_goal_received', title: 'Goals Received', action: 'GoalReceive' },
-    { id: 'total_opponent_crosses', title: 'Opponents Crosses', action: '' },
-    { id: 'total_opponent_corners', title: 'Opponents Corners', action: '' },
-    { id: 'total_opponent_free_kicks', title: 'Opponents Free Kicks', action: '' },
-    { id: 'total_tackle', title: 'Tackles', action: 'Tackle' },
-    { id: 'total_interception', title: 'Interceptions', action: 'Interception' },
+      { id: 'total_interception', title: 'Interceptions', action: 'Interception' },
     { id: 'total_clearance', title: 'Clearance', action: 'Clearance' },
     { id: 'total_fouls', title: 'Fouls', action: 'Foul' },
-    { id: 'total_draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' }
+    { id: 'total_draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
+    { id: 'total_opponent_crosses', title: 'Opponents Crosses', action: '' },
+    { id: 'total_opponent_corners', title: 'Opponents Corners', action: '' },
+    { id: 'total_opponent_free_kicks', title: 'Opponents Free-Kicks', action: '' }
+
 ];
 
 const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => {
@@ -56,7 +56,10 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
                 `${cell.game_id}`,
                 ActionData[prop.action].action_id,
                 ActionData[prop.action].action_type_id,
-                ActionData[prop.action].action_result_id
+                ActionData[prop.action].action_result_id,
+                null,
+                null,
+                null
             ).then((res) => {
                 const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
 
@@ -101,7 +104,10 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
                 `${cell.game_id}`,
                 ActionData[prop.action].action_id,
                 ActionData[prop.action].action_type_id,
-                ActionData[prop.action].action_result_id
+                ActionData[prop.action].action_result_id,
+                null,
+                null,
+                null
             ).then((res) => {
                 const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
 
@@ -137,10 +143,10 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
                         <TableBody>
                             {list.map((item, index) => (
                                 <TableRow key={index} height="36px" hover>
-                                    <TableCell key={`${index}-game`} align="center" width="348px">
+                                    <TableCell key={`${index}-game`} align="center" width="240px">
                                         <div>
                                             <p className="normal-text">{`${item.season_name}, ${item.league_name}`}</p>
-                                            <p className="normal-text">{`${getFormattedDate(item.game_date)} VS ${getAwayTeamName(item)}`}</p>
+                                            <p className="normal-text">{`${getFormattedDate(item.game_date)} vs ${getAwayTeamName(item)}`}</p>
                                         </div>
                                     </TableCell>
                                     {properties.map((prop) => (

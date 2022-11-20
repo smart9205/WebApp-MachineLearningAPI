@@ -86,26 +86,38 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
     const [msg, setMsg] = useState('');
     const [loading, setLoading] = useState(true);
 
-    const getPlayerTags = (id) => {
-        GameService.getGamePlayerTags(null, teamId, `${playerId}`, `${gameId}`, ActionData[id].action_id, ActionData[id].action_type_id, ActionData[id].action_result_id, null, null, null).then(
-            (res) => {
-                playTags(
-                    res.map((item) => {
-                        return {
-                            start_time: item.player_tag_start_time,
-                            end_time: item.player_tag_end_time,
-                            player_fname: context.player.f_name,
-                            player_lname: context.player.l_name,
-                            jersey: context.player.jersey_number,
-                            action_name: item.action_names,
-                            player_id: item.player_id,
-                            team_id: teamId,
-                            id: item.id
-                        };
-                    })
-                );
-            }
-        );
+    const getPlayerTags = (cell) => {
+        GameService.getGamePlayerTags(
+            null,
+            teamId,
+            `${playerId}`,
+            `${gameId}`,
+            ActionData[cell.action].action_id,
+            ActionData[cell.action].action_type_id,
+            ActionData[cell.action].action_result_id,
+            null,
+            null,
+            null
+        ).then((res) => {
+            const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
+
+            console.log('skill tab => ', res);
+            playTags(
+                flist.map((item) => {
+                    return {
+                        start_time: item.player_tag_start_time,
+                        end_time: item.player_tag_end_time,
+                        player_fname: context.player.f_name,
+                        player_lname: context.player.l_name,
+                        jersey: context.player.jersey_number,
+                        action_name: item.action_names,
+                        player_id: item.player_id,
+                        team_id: teamId,
+                        id: item.id
+                    };
+                })
+            );
+        });
     };
 
     const getStatList = () => {
@@ -206,9 +218,10 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
                                 borderRadius: '12px',
                                 border: '1px solid #E8E8E8',
                                 background: context.player?.second_color ?? 'white',
-                                cursor: 'pointer'
+                                cursor: 'pointer',
+                                direction: 'ltr'
                             }}
-                            onClick={() => getPlayerTags(item.action)}
+                            onClick={() => getPlayerTags(item)}
                         >
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{playerStat[`total_${item.id}`] ?? '0'}</Typography>
@@ -227,9 +240,10 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
                             borderRadius: '12px',
                             border: '1px solid #E8E8E8',
                             background: context.player?.second_color ?? 'white',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            direction: 'ltr'
                         }}
-                        onClick={() => getPlayerTags('All')}
+                        onClick={() => getPlayerTags({ action: 'All', title: '' })}
                     >
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>All Actions</Typography>
                     </div>

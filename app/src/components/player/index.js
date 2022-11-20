@@ -179,7 +179,7 @@ export default function Player() {
                     </div>
                 )}
                 <Box className="profileSection">
-                    <Dialog className="profileSection_tagvideo" classes={{ paper: classes.paper }} open={open} onClose={(e) => setOpen(false)}>
+                    <Dialog className="profileSection_tagvideo_mobile" classes={{ paper: classes.paper }} open={open} onClose={(e) => setOpen(false)}>
                         <DialogContent sx={{ p: 0 }}>
                             <TagVideo
                                 tagList={playTags}
@@ -190,7 +190,7 @@ export default function Player() {
                             />
                         </DialogContent>
                     </Dialog>
-                    <Dialog className="profileSection_tagvideo" classes={{ paper: classes.paper }} open={fullVideo} onClose={(e) => setFullVideo(false)}>
+                    <Dialog className="profileSection_tagvideo_mobile" classes={{ paper: classes.paper }} open={fullVideo} onClose={(e) => setFullVideo(false)}>
                         <DialogContent sx={{ p: 0 }}>
                             <FullVideoPlayer
                                 video_url={curPlayGame ? (curPlayGame?.mobile_video_url ? curPlayGame?.mobile_video_url : curPlayGame?.video_url) : ''}

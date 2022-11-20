@@ -359,6 +359,13 @@ div.profileSection td {
     min-width: 78% !important;
 }
 
+.profileSection_tagvideo_mobile .MuiPaper-root.MuiPaper-elevation {
+    background: transparent;
+    box-shadow: none;
+    margin: 0 4px;
+    min-width: 98% !important;
+}
+
 @media (orientation: landscape) {
     .profileSection_tagvideo .MuiDialog-container.MuiDialog-scrollPaper {
         align-items: flex-start;
