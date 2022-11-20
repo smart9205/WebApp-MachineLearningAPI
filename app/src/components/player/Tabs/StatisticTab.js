@@ -5,7 +5,7 @@ import { PlayerContext } from '..';
 import GameService from '../../../services/game.service';
 import { goalkeeper, statList } from './SkillTab';
 
-export default function StatisticTab({ games }) {
+export default function StatisticTab({ games, season_id }) {
     const { context, setContext } = useContext(PlayerContext);
     const [playerStat, setPlayerStat] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ export default function StatisticTab({ games }) {
 
         if (context.player && context.player.position_name === 'Goalkeeper') {
             GameService.getGoalkeepersStatsAdvanceSummary({
-                seasonId: null,
+                seasonId: season_id,
                 leagueId: null,
                 gameId: games ? games.map((item) => item.game_id).join(',') : null,
                 teamId: null,
@@ -39,7 +39,7 @@ export default function StatisticTab({ games }) {
             });
         } else {
             GameService.getPlayersStatsAdvanceSummary({
-                seasonId: null,
+                seasonId: season_id,
                 leagueId: null,
                 gameId: games ? games.map((item) => item.game_id).join(',') : null,
                 teamId: null,

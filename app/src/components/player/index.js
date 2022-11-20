@@ -82,7 +82,7 @@ export default function Player() {
     const filterPopoverId = filterPopoverOpen ? 'simple-popover' : undefined;
 
     const [seasonList, setSeasonList] = useState([]);
-    const [seasonFilter, setSeasonFilter] = useState('');
+    const [seasonFilter, setSeasonFilter] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [curPlayGame, setCurPlayGame] = useState(null);
 
@@ -102,9 +102,12 @@ export default function Player() {
         GameService.getGameDetailssByPlayer(playerId).then((res) => {
             const doneArray = res.filter((item) => item.done_tagging === true);
             const ascArray = stableSort(doneArray, getComparator('desc', 'date'));
+            const seasons = getSeasonList(doneArray);
 
             setGames(ascArray);
-            getSeasonList(doneArray);
+            setSeasonList(seasons);
+            setSelectedIndex(doneArray.length > 0 ? 1 : 0);
+            setSeasonFilter(seasons[0]);
         });
 
         GameService.getPlayerById(playerId).then((res) => {
@@ -133,7 +136,7 @@ export default function Player() {
     };
 
     const handleListItemClick = (event, index) => {
-        if (index === 0) setSeasonFilter('');
+        if (index === 0) setSeasonFilter(null);
         else setSeasonFilter(seasonList[index - 1]);
 
         setSelectedIndex(index);
@@ -141,25 +144,28 @@ export default function Player() {
     };
 
     const getGameList = () => {
-        const newList = seasonFilter && seasonFilter.length > 0 ? games.filter((game) => game.season_name === seasonFilter) : games;
+        const newList = seasonFilter ? games.filter((game) => game.season_name === seasonFilter.name) : games;
 
         return stableSort(newList, getComparator('desc', 'game_date'));
     };
 
     const getSeasonList = (array) => {
         if (array.length > 0) {
-            const desc = stableSort(array, getComparator('desc', 'season_name'));
+            const desc = stableSort(array, getComparator('desc', 'season_id'));
             let result = [];
 
             desc.map((item) => {
-                const filter = result.filter((season) => season === item.season_name);
+                const filter = result.filter((season) => season.name === item.season_name);
 
-                if (filter.length === 0) result = [...result, item.season_name];
+                if (filter.length === 0) result = [...result, { name: item.season_name, id: item.season_id }];
 
                 return result;
             });
-            setSeasonList(result);
+
+            return result;
         }
+
+        return [];
     };
 
     const { player: playerData, game: curGame } = context;
@@ -212,7 +218,7 @@ export default function Player() {
                             </ListItemButton>
                             {seasonList.map((season, index) => (
                                 <ListItemButton key={index + 1} selected={selectedIndex === index + 1} onClick={(event) => handleListItemClick(event, index + 1)}>
-                                    <ListItemText primary={season} />
+                                    <ListItemText primary={season.name} />
                                 </ListItemButton>
                             ))}
                         </List>
@@ -280,6 +286,7 @@ export default function Player() {
                                 setOpen(true);
                             }}
                             gameList={games}
+                            seasonId={seasonFilter?.id ?? null}
                             t={t}
                         />
                     )}
