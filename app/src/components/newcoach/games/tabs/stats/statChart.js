@@ -1,15 +1,19 @@
 import { Box, Tooltip, Zoom } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import '../../../coach_style.css';
 import { getComparator, stableSort, orderedSort } from '../../../components/utilities';
+import GameExportToEdits from '../overview/exportEdits';
+import { getPeriod } from '../overview/tagListItem';
 import GameStatsVideoPlayer from './videoDialog';
 
-const GameStatsChart = ({ chartId, title, isType, action_results, list, filterText, game }) => {
+import '../../../coach_style.css';
+
+const GameStatsChart = ({ chartId, title, isType, action_results, list, filterText, game, teamId, refreshPage }) => {
     const [playerList, setPlayerList] = useState([]);
     const [hoverId, setHoverId] = useState('');
     const [videoOpen, setVideoOpen] = useState(false);
     const [playData, setPlayData] = useState([]);
+    const [exportOpen, setExportOpen] = useState(false);
 
     const getBarWidth = (maxCount, count) => {
         const realWidth = Math.floor((count * 98) / maxCount);
@@ -34,11 +38,27 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                     player_name: item.player_names,
                     action_name: item.action_names,
                     action_type: item.action_type_names,
-                    action_result: item.action_result_names
+                    action_result: item.action_result_names,
+                    game_id: item.game_id,
+                    team_id: teamId,
+                    court_area: item.court_area_id,
+                    inside_pain: item.inside_the_pain,
+                    period: getPeriod(item.period),
+                    time: item.time_in_game,
+                    home_team_image: item.home_team_logo,
+                    away_team_image: item.away_team_logo,
+                    home_team_goals: item.home_team_goal,
+                    away_team_goals: item.away_team_goal
                 };
             })
         );
         setVideoOpen(true);
+    };
+
+    const handleExportTags = (player, sId) => (e) => {
+        e.preventDefault();
+        setPlayData(player.data[sId].videoList);
+        setExportOpen(true);
     };
 
     const getTooltipContent = (player, sId) => {
@@ -128,6 +148,7 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                                         onMouseEnter={() => handleMouseEnter(index, sId)}
                                         onMouseLeave={() => setHoverId('')}
                                         onClick={() => handleDisplayVideo(item, sId)}
+                                        onContextMenu={handleExportTags(item, sId)}
                                     >
                                         <Tooltip arrow title={getTooltipContent(item, sId)} TransitionComponent={Zoom} placement="right">
                                             <p className="chart-bar-text">{skill.count}</p>
@@ -142,7 +163,17 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                     </div>
                 ))}
             </div>
-            {videoOpen && <GameStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={game.video_url} tagList={playData} />}
+            <GameStatsVideoPlayer
+                open={videoOpen}
+                onClose={(flag) => {
+                    setVideoOpen(false);
+
+                    if (flag) refreshPage((r) => !r);
+                }}
+                video_url={game.video_url}
+                tagList={playData}
+            />
+            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );
 };

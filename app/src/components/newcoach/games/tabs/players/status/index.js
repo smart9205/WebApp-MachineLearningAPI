@@ -10,8 +10,8 @@ import GameService from '../../../../../../services/game.service';
 import GamePlayerStatErrorMessage from './errorMessage';
 import { ActionData } from '../../../../components/common';
 import { getPeriod } from '../../overview/tagListItem';
-import TeamStatsVideoPlayer from '../../../../teams/tabs/stats/videoDialog';
 import GameExportToEdits from '../../overview/exportEdits';
+import GameStatsVideoPlayer from '../../stats/videoDialog';
 
 const statList = [
     { id: 'goal', title: 'Goals', action: 'Goal' },
@@ -453,7 +453,8 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
                                     height: '60px',
                                     borderRadius: '12px',
                                     border: '1px solid #E8E8E8',
-                                    background: loading ? 'white' : playerState ? (playerState[`total_${item.id}`] > 0 ? '#F2F7F2' : 'white') : 'white'
+                                    background: loading ? 'white' : playerState ? (playerState[`total_${item.id}`] > 0 ? '#F2F7F2' : 'white') : 'white',
+                                    cursor: 'pointer'
                                 }}
                                 onClick={() => handleDisplayVideo(item)}
                                 onContextMenu={handleExportTags(item)}
@@ -468,14 +469,14 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
                 </Box>
             </DialogContent>
             <GamePlayerStatErrorMessage open={errorOpen} onClose={() => setErrorOpen(false)} />
-            <TeamStatsVideoPlayer
+            <GameStatsVideoPlayer
                 open={videoOpen}
                 onClose={(flag) => {
                     setVideoOpen(false);
 
                     if (flag) setRefresh((r) => !r);
                 }}
-                video_url={gameList}
+                video_url={game.video_url}
                 tagList={playData}
             />
             <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />

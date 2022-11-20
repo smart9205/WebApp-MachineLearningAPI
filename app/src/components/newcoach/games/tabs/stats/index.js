@@ -56,7 +56,7 @@ const GameStats = ({ game }) => {
         selectAll: false,
         clickEventName: ''
     });
-    const [loading, setLoading] = useState(false);
+    const [refresh, setRefresh] = useState(false);
 
     const { user: currentUser } = useSelector((state) => state.auth);
 
@@ -66,8 +66,6 @@ const GameStats = ({ game }) => {
 
     useEffect(async () => {
         if (values.playerList.length === 0) {
-            setLoading(true);
-
             if (values.teamId === -1 || values.opponentTeamId === -1) {
                 let team = 0;
                 let opponent = 0;
@@ -80,18 +78,16 @@ const GameStats = ({ game }) => {
                     team = filtered[0].team_id;
                     opponent = team === game.home_team_id ? game.away_team_id : game.home_team_id;
                 });
-                await GameService.getGamePlayerTags(currentUser.id, values.isOur ? team : opponent, null, `${game.id}`, null, null, null).then((res) => {
+                await GameService.getGamePlayerTags(currentUser.id, values.isOur ? team : opponent, null, `${game.id}`, null, null, null, null, null, null).then((res) => {
                     setValues({ ...values, teamId: team, opponentTeamId: opponent, playerList: res });
-                    setLoading(false);
                 });
             } else {
-                await GameService.getGamePlayerTags(currentUser.id, values.isOur ? values.teamId : values.opponentTeamId, null, `${game.id}`, null, null, null).then((res) => {
+                await GameService.getGamePlayerTags(currentUser.id, values.isOur ? values.teamId : values.opponentTeamId, null, `${game.id}`, null, null, null, null, null, null).then((res) => {
                     setValues({ ...values, playerList: res });
-                    setLoading(false);
                 });
             }
         }
-    }, [values]);
+    }, [values, refresh]);
 
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex', padding: '20px 10px', gap: '10px' }}>
@@ -104,17 +100,57 @@ const GameStats = ({ game }) => {
                         onChangeTeam={handleChangeTeam}
                         mb="0px"
                     />
-                    <GameStatsBoxList game={game} list={values.playerList} />
+                    <GameStatsBoxList game={game} list={values.playerList} teamId={values.isOur ? values.teamId : values.opponentTeamId} refreshPage={setRefresh} />
                 </Box>
-                <GameStatsChart chartId="shot" title="Shoting" isType={false} action_results={action_results_shot} list={values.playerList} filterText="Shot" game={game} />
+                <GameStatsChart
+                    chartId="shot"
+                    title="Shoting"
+                    isType={false}
+                    action_results={action_results_shot}
+                    list={values.playerList}
+                    filterText="Shot"
+                    game={game}
+                    teamId={values.isOur ? values.teamId : values.opponentTeamId}
+                    refreshPage={setRefresh}
+                />
             </Box>
             <Box sx={{ flex: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <GameStatsChart chartId="dribble" title="Dribbling" isType={false} action_results={action_results_dribble} list={values.playerList} filterText="Dribble" game={game} />
-                    <GameStatsChart chartId="cross" title="Crossing" isType={false} action_results={action_results_cross} list={values.playerList} filterText="Cross" game={game} />
+                    <GameStatsChart
+                        chartId="dribble"
+                        title="Dribbling"
+                        isType={false}
+                        action_results={action_results_dribble}
+                        list={values.playerList}
+                        filterText="Dribble"
+                        game={game}
+                        teamId={values.isOur ? values.teamId : values.opponentTeamId}
+                        refreshPage={setRefresh}
+                    />
+                    <GameStatsChart
+                        chartId="cross"
+                        title="Crossing"
+                        isType={false}
+                        action_results={action_results_cross}
+                        list={values.playerList}
+                        filterText="Cross"
+                        game={game}
+                        teamId={values.isOur ? values.teamId : values.opponentTeamId}
+                        refreshPage={setRefresh}
+                    />
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <GameStatsChart chartId="pass" title="Passing" isType={false} action_results={action_results_pass} list={values.playerList} filterText="Pass" game={game} />
+                    <GameStatsChart
+                        chartId="pass"
+                        title="Passing"
+                        isType={false}
+                        action_results={action_results_pass}
+                        list={values.playerList}
+                        filterText="Pass"
+                        game={game}
+                        teamId={values.isOur ? values.teamId : values.opponentTeamId}
+                        refreshPage={setRefresh}
+                    />
                     <GameStatsChart
                         chartId="interception"
                         title="Interception"
@@ -123,6 +159,8 @@ const GameStats = ({ game }) => {
                         list={values.playerList}
                         filterText="Interception"
                         game={game}
+                        teamId={values.isOur ? values.teamId : values.opponentTeamId}
+                        refreshPage={setRefresh}
                     />
                 </Box>
             </Box>

@@ -1,8 +1,11 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import '../../../coach_style.css';
+import GameExportToEdits from '../overview/exportEdits';
+import { getPeriod } from '../overview/tagListItem';
 import GameStatsVideoPlayer from './videoDialog';
+
+import '../../../coach_style.css';
 
 let boxList = [
     [
@@ -22,10 +25,11 @@ let boxList = [
     ]
 ];
 
-const GameStatsBoxList = ({ game, list }) => {
+const GameStatsBoxList = ({ game, list, teamId, refreshPage }) => {
     const [actionList, setActionList] = useState([]);
     const [videoOpen, setVideoOpen] = useState(false);
     const [playData, setPlayData] = useState([]);
+    const [exportOpen, setExportOpen] = useState(false);
 
     const handleDisplayVideo = (player) => {
         setPlayData(
@@ -36,11 +40,30 @@ const GameStatsBoxList = ({ game, list }) => {
                     player_name: item.player_names,
                     action_name: item.action_names,
                     action_type: item.action_type_names,
-                    action_result: item.action_result_names
+                    action_result: item.action_result_names,
+                    game_id: item.game_id,
+                    team_id: teamId,
+                    court_area: item.court_area_id,
+                    inside_pain: item.inside_the_pain,
+                    period: getPeriod(item.period),
+                    time: item.time_in_game,
+                    home_team_image: item.home_team_logo,
+                    away_team_image: item.away_team_logo,
+                    home_team_goals: item.home_team_goal,
+                    away_team_goals: item.away_team_goal
                 };
             })
         );
         setVideoOpen(true);
+    };
+
+    const handleExportTags = (player) => (e) => {
+        e.preventDefault();
+
+        if (player.total > 0) {
+            setPlayData(player.data);
+            setExportOpen(true);
+        }
     };
 
     useEffect(() => {
@@ -138,13 +161,24 @@ const GameStatsBoxList = ({ game, list }) => {
                             cursor: 'pointer'
                         }}
                         onClick={() => handleDisplayVideo(item)}
+                        onContextMenu={handleExportTags(item)}
                     >
                         <p className="normal-text">{item.title}</p>
                         <p className="normal-text">{item.total}</p>
                     </Box>
                 ))}
             </Box>
-            {videoOpen && <GameStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={game.video_url} tagList={playData} />}
+            <GameStatsVideoPlayer
+                open={videoOpen}
+                onClose={(flag) => {
+                    setVideoOpen(false);
+
+                    if (flag) refreshPage((r) => !r);
+                }}
+                video_url={game.video_url}
+                tagList={playData}
+            />
+            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );
 };
