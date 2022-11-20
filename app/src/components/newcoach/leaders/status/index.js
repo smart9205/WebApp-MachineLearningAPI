@@ -1,5 +1,6 @@
 import { Box, Button, Dialog, DialogContent, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import MatchAll from '../../../../assets/match_all.png';
 
@@ -7,39 +8,10 @@ import { USER_IMAGE_DEFAULT } from '../../../../common/staticData';
 import { getFormattedDate } from '../../components/utilities';
 import GameService from '../../../../services/game.service';
 import GamePlayerStatErrorMessage from '../../games/tabs/players/status/errorMessage';
-
-const statList = [
-    { id: 'goal', title: 'Goals' },
-    { id: 'shot', title: 'Shots' },
-    { id: 'penalties', title: 'Penalties' },
-    { id: 'penalties_missed', title: 'Penalties Missed' },
-    { id: 'shot_on_target', title: 'Shots On Target' },
-    { id: 'shot_off_target', title: 'Shots Off Target' },
-    { id: 'shot_on_box', title: 'Shots In The Box' },
-    { id: 'shot_out_of_box', title: 'Shots Out Of The Box' },
-    { id: 'dribble', title: 'Dribbles' },
-    { id: 'dribble_successful', title: 'Successful Dribbles' },
-    { id: 'crosses', title: 'Crosses' },
-    { id: 'free_kick', title: 'Free Kicks' },
-    { id: 'corner', title: 'Corners' },
-    { id: 'passes', title: 'Passes' },
-    { id: 'successful_passes', title: 'Successful Passes' },
-    { id: 'passes_for_shots', title: 'Passes For Shots' },
-    { id: 'key_passes', title: 'Key Passes' },
-    { id: 'through_passes', title: 'Through Passes' },
-    { id: 'turnover', title: 'Turnovers' },
-    { id: 'offside', title: 'Offsides' },
-    { id: 'draw_fouls', title: 'Draw Fouls' },
-    { id: 'tackle', title: 'Tackles' },
-    { id: 'interception', title: 'Interceptions' },
-    { id: 'saved', title: 'Saved' },
-    { id: 'clearance', title: 'Clearance' },
-    { id: 'blocked', title: 'Blocked' },
-    { id: 'fouls', title: 'Fouls' },
-    { id: 'yellow_cards', title: 'Yellow Cards' },
-    { id: 'red_cards', title: 'Red Cards' },
-    { id: 'player_games', title: 'Games' }
-];
+import { statList } from '../../teams/tabs/players/status';
+import { getPeriod } from '../../games/tabs/overview/tagListItem';
+import { ActionData } from '../../components/common';
+import TeamStatsVideoPlayer from '../../teams/tabs/stats/videoDialog';
 
 const LeadersPlayerStatDialog = ({ open, onClose, player }) => {
     const [playerState, setPlayerState] = useState(null);
@@ -50,6 +22,12 @@ const LeadersPlayerStatDialog = ({ open, onClose, player }) => {
     const [errorOpen, setErrorOpen] = useState(false);
     const [gameResult, setGameResult] = useState(null);
     const [gamePlace, setGamePlace] = useState(null);
+    const [playData, setPlayData] = useState([]);
+    const [videoOpen, setVideoOpen] = useState(false);
+    const [gameList, setGameList] = useState([]);
+    const [refresh, setRefresh] = useState(false);
+
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const handleChangeGameHalf = (e, newHalf) => {
         setGameHalf(newHalf);
@@ -152,12 +130,90 @@ const LeadersPlayerStatDialog = ({ open, onClose, player }) => {
         });
     };
 
+    const handleDisplayVideo = async (cell) => {
+        if (playerState && playerState[`total_${cell.id}`] > 0 && cell.action !== '') {
+            let gameIds = [];
+
+            await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
+                const videoGames = res.filter((item) => item.video_url.toLowerCase() !== 'no video');
+
+                setGameList(videoGames);
+                gameIds = videoGames.map((item) => item.id);
+            });
+            await GameService.getGamePlayerTags(
+                currentUser.id,
+                player.team_id,
+                `${player.player_id}`,
+                gameIds.join(','),
+                ActionData[cell.action].action_id,
+                ActionData[cell.action].action_type_id,
+                ActionData[cell.action].action_result_id,
+                gameTime.length === 0 ? null : gameTime.join(','),
+                courtArea.length === 0 ? null : courtArea.join(','),
+                null
+            ).then((res) => {
+                let data = res;
+
+                if (cell.title === 'Shots In The Box') data = res.filter((item) => item.inside_the_pain === true);
+                else if (cell.title === 'Shots Out Of The Box') data = res.filter((item) => item.inside_the_pain === false);
+
+                setPlayData(
+                    data.map((item) => {
+                        return {
+                            tag_id: item.id,
+                            start_time: item.player_tag_start_time,
+                            end_time: item.player_tag_end_time,
+                            player_name: item.player_names,
+                            action_name: item.action_names,
+                            action_type: item.action_type_names,
+                            action_result: item.action_result_names,
+                            game_id: item.game_id,
+                            team_id: player.team_id,
+                            court_area: item.court_area_id,
+                            inside_pain: item.inside_the_pain,
+                            period: getPeriod(item.period),
+                            time: item.time_in_game,
+                            home_team_image: item.home_team_logo,
+                            away_team_image: item.away_team_logo,
+                            home_team_goals: item.home_team_goal,
+                            away_team_goals: item.away_team_goal
+                        };
+                    })
+                );
+                setVideoOpen(true);
+            });
+        }
+    };
+
     useEffect(() => {
         setPlayerState(player);
         setGameHalf(['first', 'second']);
         setGameTime(['1', '2', '3', '4', '5', '6']);
         setCourtArea(['1', '2', '3', '4']);
     }, [player, open]);
+
+    useEffect(() => {
+        if (player) {
+            setLoading(true);
+            GameService.getPlayersStatsAdvanced({
+                seasonId: player?.season_id ?? null,
+                leagueId: null,
+                gameId: null,
+                teamId: player?.team_id ?? null,
+                playerId: player?.player_id ?? null,
+                gameTime: gameTime.length === 0 ? null : gameTime.join(','),
+                courtAreaId: courtArea.length === 0 ? null : courtArea.join(','),
+                insidePaint: null,
+                homeAway: gamePlace ? parseInt(gamePlace) : null,
+                gameResult: gameResult ? parseInt(gameResult) : null
+            }).then((res) => {
+                setPlayerState(res[0]);
+                setLoading(false);
+            });
+        }
+    }, [refresh]);
+
+    console.log('leaders => ', playData, player);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="1500px">
@@ -291,8 +347,10 @@ const LeadersPlayerStatDialog = ({ open, onClose, player }) => {
                                     height: '60px',
                                     borderRadius: '12px',
                                     border: '1px solid #E8E8E8',
-                                    background: loading ? 'white' : playerState ? (playerState[`total_${item.id}`] > 0 ? '#F2F7F2' : 'white') : 'white'
+                                    background: loading ? 'white' : playerState ? (playerState[`total_${item.id}`] > 0 ? '#F2F7F2' : 'white') : 'white',
+                                    cursor: 'pointer'
                                 }}
+                                onClick={() => handleDisplayVideo(item)}
                             >
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>
@@ -304,6 +362,16 @@ const LeadersPlayerStatDialog = ({ open, onClose, player }) => {
                 </Box>
             </DialogContent>
             <GamePlayerStatErrorMessage open={errorOpen} onClose={() => setErrorOpen(false)} />
+            <TeamStatsVideoPlayer
+                open={videoOpen}
+                onClose={(flag) => {
+                    setVideoOpen(false);
+
+                    if (flag) setRefresh((r) => !r);
+                }}
+                video_url={gameList}
+                tagList={playData}
+            />
         </Dialog>
     );
 };
