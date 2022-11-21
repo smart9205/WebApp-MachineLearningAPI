@@ -35,6 +35,7 @@ export default function Others({ defenseTeam, offenseTeam, taggingState, offense
                         { id: 8, name: "Offensive Foul" },
                         { id: 13, name: "Hand-Ball" },
                         { id: 16, name: "Own Goal" },
+                        { id: 15, name: "Offside" },
                     ].map((r, i) => (
                         <ListItemButton key={r.id}
                             selected={actionTypeId === r.id}
@@ -184,6 +185,27 @@ export default function Others({ defenseTeam, offenseTeam, taggingState, offense
                                 player_id: player.id,
                                 action_id: 16,
                                 action_result_id: 3,
+                                court_area_id: areaCourtId,
+                                inside_the_paint: inTheBox
+                            },
+                        ])
+                    }}
+                />
+            }
+
+            {actionTypeId === 15 &&
+                <PlayerSelector
+                    title="Defensive Player List"
+                    playerList={defenseTeam}
+                    editable={false}
+                    onSelect={(player) => {
+                        taggingState([
+                            {
+                                action_type_id: 8,
+                                team_id: defenseTeamId,
+                                player_id: player.id,
+                                action_id: 7,
+                                action_result_id: 15,
                                 court_area_id: areaCourtId,
                                 inside_the_paint: inTheBox
                             },

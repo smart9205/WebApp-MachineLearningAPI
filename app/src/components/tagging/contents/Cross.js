@@ -22,7 +22,8 @@ const RESULT_LIST = [
     { id: 7, name: 'Blocked By' },
     { id: 8, name: 'Cleared By' },
     { id: 15, name: 'Offside' },
-    { id: 18, name: 'Air Challenge' }
+    { id: 18, name: 'Air Challenge' },
+    { id: 19, name: 'Ground Challenge' }
 ];
 
 export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseTeamId, defenseTeamId, defenseTeamGoalKeeper }) {
@@ -125,6 +126,38 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                     }}
                 />
             )}
+            
+            {result.name === 'Ground Challenge' && (
+                <PlayerSelector
+                    title="Defensive Player List"
+                    playerList={defenseTeamGoalKeeper}
+                    editable={false}
+                    selected={defensivePlayer}
+                    onSelect={(player) => {
+                        setDefensivePlayer(player);
+                        taggingState([
+                            {
+                                action_type_id: actionTypeId,
+                                team_id: defenseTeamId,
+                                player_id: player.id,
+                                action_id: 19,
+                                action_result_id: 4,
+                                court_area_id: areaCourtId,
+                                inside_the_paint: inTheBox
+                            },
+                            {
+                                action_type_id: actionTypeId,
+                                player_id: offensivePlayer.id,
+                                team_id: offenseTeamId,
+                                action_id: 3,
+                                action_result_id: 4,
+                                court_area_id: areaCourtId,
+                                inside_the_paint: inTheBox
+                            }
+                        ]);
+                    }}
+                />
+            )}
 
             {result.name === 'Offside' ? (
                 <PlayerSelector
@@ -157,6 +190,7 @@ export default function Cross({ defenseTeam, offenseTeam, taggingState, offenseT
                     }}
                 />
             ) : (
+                result.name !== 'Ground Challenge' &&
                 result.name !== 'Air Challenge' &&
                 result.name !== 'Successful' &&
                 result.name !== 'Unsuccessful' && (

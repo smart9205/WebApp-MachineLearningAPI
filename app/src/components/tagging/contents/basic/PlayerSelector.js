@@ -44,19 +44,17 @@ const SubBox = styled(Box)`
 `;
 
 export default function PlayerSelector({ title, playerList, game, posList = [], editable = true, selected = null, onSelect, setGamePlayerRefresh }) {
-    const [loading, setLoading] = React.useState(false);
     const [addPlayerModalOpen, setAddPlayerModalOpen] = React.useState(false);
     const [playerOpen, setPlayerOpen] = React.useState(false);
 
     const update = (data) => {
-        setLoading(true);
         gameService
             .updatePlayer(data)
             .then((res) => {
-                setLoading(false);
+                console.log("Response: ", res)
             })
-            .catch(() => {
-                setLoading(false);
+            .catch((error) => {
+                console.log("ERROR: ", error)
             });
     };
 

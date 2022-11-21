@@ -18,7 +18,6 @@ const SubBox = styled(Box)`
 
 const SUCCESSFUL = 'Successful';
 const STOLE_BY = 'Stole By';
-const BLOCKED_BY = 'Blocked By';
 const BAD_PASS = 'Bad Pass';
 const OFFSIDE = 'Offside';
 const DEFLECTED_BY = 'Deflected By';
@@ -68,30 +67,6 @@ export default function Pass({ defenseTeam, offenseTeam, taggingState, defenseTe
                 action_id: 2,
                 action_result_id: 11, //Bad Pass
                 court_area_id: areaCourtId,
-                inside_the_paint: inTheBox
-            }
-        ]);
-    };
-
-    const defensivePlayerClickedBlockedBy = (player) => {
-        setDefensivePlayer(player);
-        taggingState([
-            {
-                ...tagData,
-                team_id: defenseTeamId,
-                player_id: player.id,
-                action_id: 13,
-                action_result_id: 7, //Blocked
-                court_area_id: areaCourtId,
-                inside_the_paint: inTheBox
-            },
-            {
-                ...tagData,
-                player_id: offensivePlayer.id,
-                team_id: offenseTeamId,
-                action_id: 2,
-                action_result_id: 7, //Blocked
-                court_area_id: areaCourtId === 1 ? 4 : areaCourtId === 2 ? 3 : areaCourtId,
                 inside_the_paint: inTheBox
             }
         ]);
@@ -166,7 +141,6 @@ export default function Pass({ defenseTeam, offenseTeam, taggingState, defenseTe
                     {[
                         { id: 4, name: SUCCESSFUL },
                         { id: 5, name: STOLE_BY },
-                        { id: 7, name: BLOCKED_BY },
                         { id: 11, name: BAD_PASS },
                         { id: 15, name: OFFSIDE },
                         { id: 9, name: ASSIST },
@@ -205,18 +179,6 @@ export default function Pass({ defenseTeam, offenseTeam, taggingState, defenseTe
                     selected={defensivePlayer}
                     onSelect={(player) => {
                         defensivePlayerClicked(player);
-                    }}
-                />
-            )}
-
-            {result.name === BLOCKED_BY && (
-                <PlayerSelector
-                    title="Defensive Player List"
-                    playerList={defenseTeam}
-                    editable={false}
-                    selected={defensivePlayer}
-                    onSelect={(player) => {
-                        defensivePlayerClickedBlockedBy(player);
                     }}
                 />
             )}

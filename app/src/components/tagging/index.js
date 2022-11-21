@@ -146,6 +146,7 @@ export default function Tagging() {
     const [curTeamTag, setCurTeamTag] = React.useState(null);
     const [curTagStatusText, setCurTagStatusText] = React.useState('');
     const [defenseTeamGoalKeeper, setDefenseTeamGoalKeeper] = React.useState([]);
+    const [teamTagClicked, setTeamTagClicked] = React.useState(true)
 
     const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
         url: '',
@@ -272,7 +273,7 @@ export default function Tagging() {
             .then((res) => {
                 setPlayerTagList(res);
             })
-            .catch(() => {});
+            .catch(() => { });
     };
 
     const changePlayRate = (flag) => {
@@ -329,6 +330,7 @@ export default function Tagging() {
     useHotkeys(TAGGING.foul.hotkey, () => taggingButtonClicked(TAGGING.foul.value));
     useHotkeys(TAGGING.cross.hotkey, () => taggingButtonClicked(TAGGING.cross.value), HOTKEY_OPTION);
     useHotkeys('x', () => taggingButtonClicked('Others'), HOTKEY_OPTION);
+    useHotkeys('z', () => taggingButtonClicked('GK'), HOTKEY_OPTION);
     useHotkeys('v', () => setClicked(true), HOTKEY_OPTION);
 
     useHotkeys('return', () => setPlay((v) => !v), HOTKEY_OPTION);
@@ -361,19 +363,38 @@ export default function Tagging() {
             setTeamTag({ id: res.id });
             setTagCnt(tagCnt + 1);
             return res;
-        } catch (e) {}
+        } catch (e) { }
     };
 
     const addPlayerTag = async (PTag) => await GameService.addPlayerTag(PTag);
 
+    let playerTagTime = []
+
+    const sendTimeData = (data) => {
+        playerTagTime.push(data)
+        setClicked(true)
+        setTeamTagClicked(true)
+    }
+
     const setTaggingState = (tags) => {
+
+        let start_time = '00:00:00'
+        let end_time = '00:00:00'
+
+        if (playerTagTime.length <= 0) {
+            start_time = playerTag.start_time
+            end_time = playerTag.end_time
+        } else {
+            start_time = playerTagTime[0].start_time
+            end_time = playerTagTime[0].end_time
+        }
         setTempPlayerTagList([
             ...temp_playerTag_list,
             ...tags.map((tag) => {
                 return {
                     ...tag,
-                    start_time: playerTag.start_time,
-                    end_time: playerTag.end_time
+                    start_time: start_time,
+                    end_time: end_time
                 };
             })
         ]);
@@ -557,6 +578,7 @@ export default function Tagging() {
                         dispPlayerTags(row?.id);
                     }}
                     selectedId={state.curTeamTagId}
+                    setTeamTagClicked={setTeamTagClicked}
                 />
                 <IndividualTagTable
                     sx={{ height: '40%', p: 1, width: '100%' }}
@@ -567,6 +589,10 @@ export default function Tagging() {
                     updateTagList={() => {
                         dispPlayerTags(state.curTeamTagId);
                     }}
+                    taggingState={setTaggingState}
+                    setPlay={setPlay}
+                    sendTimeData={sendTimeData}
+                    teamTagClicked={teamTagClicked}
                 />
             </Drawer>
 
@@ -724,7 +750,7 @@ export default function Tagging() {
                                     </TagButton>
 
                                     <TagButton onClick={(e) => taggingButtonClicked('GK')} style={{ textTransform: 'none', fontSize: '10px', maxWidth: 10, height: 48, marginTop: '12px' }}>
-                                        GK
+                                        GK (z)
                                     </TagButton>
                                 </div>
 

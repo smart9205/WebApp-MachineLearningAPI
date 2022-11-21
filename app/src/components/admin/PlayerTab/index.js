@@ -184,6 +184,20 @@ export default function PlayerTab({ t }) {
     };
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    const getSortedList = () => {
+        const sorted = stableSort(rows, getComparator(order, orderBy));
+
+        return sorted
+            .filter(
+                (r) =>
+                    r.player_name.toLowerCase().includes(search.toLowerCase()) ||
+                    r.player_position_name.toLowerCase().includes(search.toLowerCase()) ||
+                    r.date_of_birth.toLowerCase().includes(search.toLowerCase()) ||
+                    r.jersey_number.toString().toLowerCase().includes(search.toLowerCase())
+            )
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    };
+
     return (
         <Box sx={{ width: '100%' }}>
             <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
@@ -239,18 +253,7 @@ export default function PlayerTab({ t }) {
                                 </TableBody>
                             ) : (
                                 <TableBody>
-                                    {stableSort(
-                                        rows
-                                            .filter(
-                                                (r) =>
-                                                    r.player_name.toLowerCase().includes(search.toLowerCase()) ||
-                                                    r.player_position_name.toLowerCase().includes(search.toLowerCase()) ||
-                                                    r.date_of_birth.toLowerCase().includes(search.toLowerCase()) ||
-                                                    r.jersey_number.toString().toLowerCase().includes(search.toLowerCase())
-                                            )
-                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-                                        getComparator(order, orderBy)
-                                    ).map((row) => {
+                                    {getSortedList().map((row) => {
                                         return (
                                             <TableRow hover key={row.id}>
                                                 <TableCell align="center">

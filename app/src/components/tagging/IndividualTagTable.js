@@ -8,20 +8,35 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import Paper from '@mui/material/Paper';
 import TCellTimeEdit from './TCellTimeEdit';
 import TCellSelectEdit from './TCellSelectEdit';
 import GameService from '../../services/game.service';
 import CircularProgress from '@mui/material/CircularProgress';
 import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
+import Modal from '@mui/material/Modal';
+import PlayerTagForm from './PlayerTagForm';
 
-export default function IndividualTagTable({ rows, offenseTeamId, offenseTeam, updateTagList, defenseTeam = null, del = true, onPlay, ...params }) {
+const style = {
+    position: 'absolute',
+    top: '45%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    p: 4
+};
+
+export default function IndividualTagTable({ rows, offenseTeamId, offenseTeam, updateTagList, taggingState, setPlay, sendTimeData, config, playerCurTime, teamTagClicked, defenseTeam = null, del = true, onPlay, ...params }) {
     const [loading, setLoading] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState(rows[0]);
     const [actions, setActions] = useState([]);
     const [actionTypes, setActionTypes] = useState([]);
     const [actionResults, setActionResults] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
         GameService.getAllActions().then((res) => {
@@ -74,8 +89,29 @@ export default function IndividualTagTable({ rows, offenseTeamId, offenseTeam, u
     return (
         <Box {...params}>
             <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
+            <Modal disableAutoFocus open={openModal} onClose={() => setOpenModal(false)} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+                <Box style={style}>
+                    <PlayerTagForm
+                        offenseTeam={offenseTeam}
+                        defenseTeam={defenseTeam}
+                        taggingState={taggingState}
+                        setOpenModal={setOpenModal}
+                        sendTimeData={sendTimeData}
+                        setPlay={setPlay}
+                        tagActionsList={actions}
+                        tagActionTypesList={actionTypes}
+                        tagActionResultsList={actionResults}
+                    />
+                </Box>
+            </Modal>
             <Paper sx={{ width: '100%', height: '100%', overflow: 'hidden', p: 0.5 }}>
-                <h5 style={{ textAlign: 'center' }}>Player Tag</h5>
+                <Box sx={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
+                    <h5 style={{ textAlign: 'center' }}>Player Tag</h5>
+                    <AddIcon style={teamTagClicked ? { pointerEvents: 'none', opacity: 0.5, position: 'absolute', right: 0, cursor: 'pointer' } : { opacity: 1, position: 'absolute', right: 0, cursor: 'pointer' }  } onClick={() => {
+                        setPlay(false)
+                        setOpenModal(true)
+                    }} />
+                </Box>
                 <TableContainer style={{ height: '86%' }}>
                     <Table stickyHeader aria-label="sticky table" size={'small'} sx={{ pb: 4 }}>
                         <TableHead>
