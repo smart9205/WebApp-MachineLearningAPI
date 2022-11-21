@@ -5,16 +5,15 @@ import { useSelector } from 'react-redux';
 import MatchAll from '../../../../assets/match_all.png';
 
 import { USER_IMAGE_DEFAULT } from '../../../../common/staticData';
-import { ActionData } from '../../components/common';
-import GameExportToEdits from '../../games/tabs/overview/exportEdits';
-import { getPeriod } from '../../games/tabs/overview/tagListItem';
-import GamePlayerStatErrorMessage from '../../games/tabs/players/status/errorMessage';
-import TeamStatsVideoPlayer from '../../teams/tabs/stats/videoDialog';
-import GameService from '../../../../services/game.service';
 import { getFormattedDate } from '../../components/utilities';
-import { goalkeeper } from '../../teams/tabs/players/status';
+import GameService from '../../../../services/game.service';
+import GamePlayerStatErrorMessage from '../../games/tabs/players/status/errorMessage';
+import { goalkeeper, statList } from '../../teams/tabs/players/status';
+import { getPeriod } from '../../games/tabs/overview/tagListItem';
+import { ActionData } from '../../components/common';
+import TeamStatsVideoPlayer from '../../teams/tabs/stats/videoDialog';
 
-const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, gameIds, initialState }) => {
+const LeadersPlayerStatDialog = ({ open, onClose, player }) => {
     const [playerState, setPlayerState] = useState(null);
     const [gameHalf, setGameHalf] = useState(['first', 'second']);
     const [gameTime, setGameTime] = useState(['1', '2', '3', '4', '5', '6']);
@@ -24,9 +23,8 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
     const [gameResult, setGameResult] = useState(null);
     const [gamePlace, setGamePlace] = useState(null);
     const [playData, setPlayData] = useState([]);
-    const [gameList, setGameList] = useState([]);
     const [videoOpen, setVideoOpen] = useState(false);
-    const [exportOpen, setExportOpen] = useState(false);
+    const [gameList, setGameList] = useState([]);
     const [refresh, setRefresh] = useState(false);
 
     const { user: currentUser } = useSelector((state) => state.auth);
@@ -84,6 +82,15 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
         }
     };
 
+    const handleChangeCourtArea = (courtId) => {
+        let newList = [...courtArea];
+
+        if (newList.includes(courtId)) newList = newList.filter((item) => item !== courtId);
+        else newList = [...newList, courtId];
+
+        setCourtArea(newList);
+    };
+
     const handleChangeGameResult = (e, newResult) => {
         setGameResult(newResult);
     };
@@ -95,16 +102,7 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
     const getPlayerStat = (id) => {
         if (id === 'player_games') return playerState[`total_${id}`];
 
-        return playerState[`total_${id}`] ? playerState[`total_${id}`] : '0' + ' (' + playerState[`average_${id}`] ? playerState[`average_${id}`] : '0' + ')';
-    };
-
-    const handleChangeCourtArea = (courtId) => {
-        let newList = [...courtArea];
-
-        if (newList.includes(courtId)) newList = newList.filter((item) => item !== courtId);
-        else newList = [...newList, courtId];
-
-        setCourtArea(newList);
+        return playerState[`total_${id}`] + ' (' + playerState[`average_${id}`] + ')';
     };
 
     const handlePlayerStat = () => {
@@ -115,29 +113,56 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
         }
 
         setLoading(true);
-        GameService.getPlayersStatsAdvanced({
-            seasonId: seasonId,
-            leagueId: null,
-            gameId: gameIds.length === 0 ? null : gameIds.join(','),
-            teamId: teamId,
-            playerId: player.id,
-            gameTime: gameTime.join(','),
-            courtAreaId: courtArea.join(','),
-            insidePaint: null,
-            homeAway: gamePlace ? parseInt(gamePlace) : null,
-            gameResult: gameResult ? parseInt(gameResult) : null
-        }).then((res) => {
-            setPlayerState(res[0]);
-            setLoading(false);
-        });
+
+        if (player.player_position === 'Goalkeeper') {
+            GameService.getGoalkeepersStatsAdvanceSummary({
+                seasonId: player?.season_id ?? null,
+                leagueId: null,
+                gameId: null,
+                teamId: player?.team_id ?? null,
+                playerId: player?.player_id ?? null,
+                gameTime: gameTime.join(','),
+                courtAreaId: courtArea.join(','),
+                insidePaint: null,
+                homeAway: gamePlace ? parseInt(gamePlace) : null,
+                gameResult: gameResult ? parseInt(gameResult) : null
+            }).then((res) => {
+                setPlayerState(res[0]);
+                setLoading(false);
+            });
+        } else {
+            GameService.getPlayersStatsAdvanced({
+                seasonId: player?.season_id ?? null,
+                leagueId: null,
+                gameId: null,
+                teamId: player?.team_id ?? null,
+                playerId: player?.player_id ?? null,
+                gameTime: gameTime.join(','),
+                courtAreaId: courtArea.join(','),
+                insidePaint: null,
+                homeAway: gamePlace ? parseInt(gamePlace) : null,
+                gameResult: gameResult ? parseInt(gameResult) : null
+            }).then((res) => {
+                setPlayerState(res[0]);
+                setLoading(false);
+            });
+        }
     };
 
-    const handleDisplayVideo = (cell) => {
+    const handleDisplayVideo = async (cell) => {
         if (playerState && playerState[`total_${cell.id}`] > 0 && cell.action !== '') {
-            GameService.getGamePlayerTags(
+            let gameIds = [];
+
+            await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
+                const videoGames = res.filter((item) => item.video_url.toLowerCase() !== 'no video');
+
+                setGameList(videoGames);
+                gameIds = videoGames.map((item) => item.id);
+            });
+            await GameService.getGamePlayerTags(
                 currentUser.id,
-                teamId,
-                `${player.id}`,
+                player.team_id,
+                `${player.player_id}`,
                 gameIds.join(','),
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
@@ -150,7 +175,6 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
 
                 if (cell.title === 'Shots In The Box') data = res.filter((item) => item.inside_the_pain === true);
                 else if (cell.title === 'Shots Out Of The Box') data = res.filter((item) => item.inside_the_pain === false);
-                else if (cell.title === 'Exits') data = res.filter((item) => item.inside_the_pain === false);
 
                 setPlayData(
                     data.map((item) => {
@@ -163,7 +187,7 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                             action_type: item.action_type_names,
                             action_result: item.action_result_names,
                             game_id: item.game_id,
-                            team_id: teamId,
+                            team_id: player.team_id,
                             court_area: item.court_area_id,
                             inside_pain: item.inside_the_pain,
                             period: getPeriod(item.period),
@@ -175,69 +199,84 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                         };
                     })
                 );
-                setGameList(games.filter((item) => gameIds.includes(item.id)));
-
-                if (data.length > 0) setVideoOpen(true);
+                setVideoOpen(true);
             });
         }
     };
 
-    const handleExportTags = (cell) => (e) => {
-        e.preventDefault();
+    const getStatList = () => {
+        if (player) return player.player_position === 'Goalkeeper' ? goalkeeper : statList;
 
-        if (playerState && playerState[`total_${cell.id}`] > 0 && cell.action !== '') {
-            GameService.getGamePlayerTags(
-                currentUser.id,
-                teamId,
-                `${player.id}`,
-                gameIds.join(','),
-                ActionData[cell.action].action_id,
-                ActionData[cell.action].action_type_id,
-                ActionData[cell.action].action_result_id,
-                gameTime.length === 0 ? null : gameTime.join(','),
-                courtArea.length === 0 ? null : courtArea.join(','),
-                null
-            ).then((res) => {
-                let data = res;
-
-                if (cell.title === 'Shots In The Box') data = res.filter((item) => item.inside_the_pain === true);
-                else if (cell.title === 'Shots Out Of The Box') data = res.filter((item) => item.inside_the_pain === false);
-                else if (cell.title === 'Exits') data = res.filter((item) => item.inside_the_pain === false);
-
-                setPlayData(data);
-
-                if (data.length > 0) setExportOpen(true);
-            });
-        }
+        return statList;
     };
 
     useEffect(() => {
-        setPlayerState(initialState);
+        setPlayerState(player);
         setGameHalf(['first', 'second']);
         setGameTime(['1', '2', '3', '4', '5', '6']);
         setCourtArea(['1', '2', '3', '4']);
-    }, [initialState, open]);
 
-    useEffect(() => {
-        if (player && gameIds.length > 0) {
+        if (player && player.player_position === 'Goalkeeper') {
             setLoading(true);
-            GameService.getGoalkeepersStatsAdvanced({
-                seasonId: seasonId,
+            GameService.getGoalkeepersStatsAdvanceSummary({
+                seasonId: player?.season_id ?? null,
                 leagueId: null,
-                gameId: gameIds.length === 0 ? null : gameIds.join(','),
-                teamId: teamId,
-                playerId: player?.id ?? null,
-                gameTime: gameTime.join(','),
-                courtAreaId: courtArea.join(','),
+                gameId: null,
+                teamId: player?.team_id ?? null,
+                playerId: player?.player_id ?? null,
+                gameTime: '1,2,3,4,5,6',
+                courtAreaId: '1,2,3,4',
                 insidePaint: null,
-                homeAway: gamePlace ? parseInt(gamePlace) : null,
-                gameResult: gameResult ? parseInt(gameResult) : null
+                homeAway: null,
+                gameResult: null
             }).then((res) => {
                 setPlayerState(res[0]);
                 setLoading(false);
             });
         }
+    }, [player, open]);
+
+    useEffect(() => {
+        if (player) {
+            setLoading(true);
+
+            if (player.player_position === 'Goalkeeper') {
+                GameService.getGoalkeepersStatsAdvanceSummary({
+                    seasonId: player?.season_id ?? null,
+                    leagueId: null,
+                    gameId: null,
+                    teamId: player?.team_id ?? null,
+                    playerId: player?.player_id ?? null,
+                    gameTime: gameTime.length === 0 ? null : gameTime.join(','),
+                    courtAreaId: courtArea.length === 0 ? null : courtArea.join(','),
+                    insidePaint: null,
+                    homeAway: gamePlace ? parseInt(gamePlace) : null,
+                    gameResult: gameResult ? parseInt(gameResult) : null
+                }).then((res) => {
+                    setPlayerState(res[0]);
+                    setLoading(false);
+                });
+            } else {
+                GameService.getPlayersStatsAdvanced({
+                    seasonId: player?.season_id ?? null,
+                    leagueId: null,
+                    gameId: null,
+                    teamId: player?.team_id ?? null,
+                    playerId: player?.player_id ?? null,
+                    gameTime: gameTime.length === 0 ? null : gameTime.join(','),
+                    courtAreaId: courtArea.length === 0 ? null : courtArea.join(','),
+                    insidePaint: null,
+                    homeAway: gamePlace ? parseInt(gamePlace) : null,
+                    gameResult: gameResult ? parseInt(gameResult) : null
+                }).then((res) => {
+                    setPlayerState(res[0]);
+                    setLoading(false);
+                });
+            }
+        }
     }, [refresh]);
+
+    console.log('leaders/stat => ', playerState);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="1500px">
@@ -247,24 +286,30 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>PROFILE</Typography>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '460px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', width: '120px', height: '120px' }}>
-                                <img src={player?.image ? player?.image : USER_IMAGE_DEFAULT} style={{ borderRadius: '12px', height: '100%' }} />
+                                <img src={player?.image_url ? player?.image_url : USER_IMAGE_DEFAULT} style={{ borderRadius: '12px', height: '100%' }} />
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '320px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>First name</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.f_name ?? ''}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>
+                                        {player?.player_name ? player?.player_name.split(' ')[0] : ''}
+                                    </Typography>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Last name</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.l_name ?? ''}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>
+                                        {player?.player_name ? player?.player_name.split(' ')[1] : ''}
+                                    </Typography>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Jersey Number</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.jersey_number ?? ''}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>
+                                        {player?.player_jersey_number ?? ''}
+                                    </Typography>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Position</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.pos_name ?? ''}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.player_position ?? ''}</Typography>
                                 </div>
                             </div>
                         </Box>
@@ -344,35 +389,32 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                 </Box>
                 <Box sx={{ border: '1px solid #E8E8E8', borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>PLAYER STATS</Typography>
-                    <div style={{ maxHeight: '460px', overflowY: 'auto' }}>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '8px' }}>
-                            {goalkeeper.map((item, index) => (
-                                <div
-                                    key={index}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexDirection: 'column',
-                                        gap: '4px',
-                                        padding: '6px 0',
-                                        width: '160px',
-                                        height: '60px',
-                                        borderRadius: '12px',
-                                        border: '1px solid #E8E8E8',
-                                        background: loading ? 'white' : playerState ? (playerState[`total_${item.id}`] > 0 ? '#F2F7F2' : 'white') : 'white',
-                                        cursor: 'pointer'
-                                    }}
-                                    onClick={() => handleDisplayVideo(item)}
-                                    onContextMenu={handleExportTags(item)}
-                                >
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>
-                                        {!loading ? (playerState ? getPlayerStat(item.id) : '0') : '0'}
-                                    </Typography>
-                                </div>
-                            ))}
-                        </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '8px' }}>
+                        {getStatList().map((item, index) => (
+                            <div
+                                key={index}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexDirection: 'column',
+                                    gap: '4px',
+                                    padding: '6px 0',
+                                    width: '160px',
+                                    height: '60px',
+                                    borderRadius: '12px',
+                                    border: '1px solid #E8E8E8',
+                                    background: loading ? 'white' : playerState ? (playerState[`total_${item.id}`] > 0 ? '#F2F7F2' : 'white') : 'white',
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() => handleDisplayVideo(item)}
+                            >
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>
+                                    {!loading ? (playerState ? getPlayerStat(item.id) : '0') : '0'}
+                                </Typography>
+                            </div>
+                        ))}
                     </div>
                 </Box>
             </DialogContent>
@@ -387,9 +429,8 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                 video_url={gameList}
                 tagList={playData}
             />
-            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Dialog>
     );
 };
 
-export default GoalkeeperStatDialog;
+export default LeadersPlayerStatDialog;
