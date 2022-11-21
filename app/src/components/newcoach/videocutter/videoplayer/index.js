@@ -130,7 +130,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
 
         if (game.video_url.startsWith('https://www.youtube.com')) {
             await gameService.getNewStreamURL(game.video_url).then((res) => {
-                setVideoURL(res);
+                setVideoURL(res.url);
             });
         } else setVideoURL(game.video_url);
 
@@ -145,7 +145,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
 
         if (game.video_url.startsWith('https://www.youtube.com')) {
             gameService.getNewStreamURL(game.video_url).then((res) => {
-                setVideoURL(res);
+                setVideoURL(res.url);
             });
         } else setVideoURL(game.video_url);
 
