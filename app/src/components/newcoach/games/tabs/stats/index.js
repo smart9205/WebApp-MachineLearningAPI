@@ -100,7 +100,7 @@ const GameStats = ({ game }) => {
                         onChangeTeam={handleChangeTeam}
                         mb="0px"
                     />
-                    <GameStatsBoxList game={game} list={values.playerList} teamId={values.isOur ? values.teamId : values.opponentTeamId} refreshPage={setRefresh} />
+                    <GameStatsBoxList game={game} list={values.playerList} teamId={values.isOur ? values.teamId : values.opponentTeamId} refreshPage={setRefresh} isEdit={values.isOur} />
                 </Box>
                 <GameStatsChart
                     chartId="shot"
@@ -112,6 +112,7 @@ const GameStats = ({ game }) => {
                     game={game}
                     teamId={values.isOur ? values.teamId : values.opponentTeamId}
                     refreshPage={setRefresh}
+                    isEdit={values.isOur}
                 />
             </Box>
             <Box sx={{ flex: 1 }}>
@@ -126,6 +127,7 @@ const GameStats = ({ game }) => {
                         game={game}
                         teamId={values.isOur ? values.teamId : values.opponentTeamId}
                         refreshPage={setRefresh}
+                        isEdit={values.isOur}
                     />
                     <GameStatsChart
                         chartId="cross"
@@ -137,6 +139,7 @@ const GameStats = ({ game }) => {
                         game={game}
                         teamId={values.isOur ? values.teamId : values.opponentTeamId}
                         refreshPage={setRefresh}
+                        isEdit={values.isOur}
                     />
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -150,6 +153,7 @@ const GameStats = ({ game }) => {
                         game={game}
                         teamId={values.isOur ? values.teamId : values.opponentTeamId}
                         refreshPage={setRefresh}
+                        isEdit={values.isOur}
                     />
                     <GameStatsChart
                         chartId="interception"
@@ -161,6 +165,7 @@ const GameStats = ({ game }) => {
                         game={game}
                         teamId={values.isOur ? values.teamId : values.opponentTeamId}
                         refreshPage={setRefresh}
+                        isEdit={values.isOur}
                     />
                 </Box>
             </Box>

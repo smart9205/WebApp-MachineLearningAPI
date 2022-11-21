@@ -46,7 +46,7 @@ export const statList = [
     { id: 'player_games', title: 'Games', action: '' }
 ];
 
-const goalkeeper = [
+export const goalkeeper = [
     { id: 'passes', title: 'Passes', action: 'Passes' },
     { id: 'successful_passes', title: 'Successful Passes', action: 'PassesSuccess' },
     { id: 'short_passes', title: 'Short Passes', action: 'ShortPass' },
@@ -365,12 +365,6 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Position</Typography>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.pos_name ?? ''}</Typography>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Birth date</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>
-                                        {getFormattedDate(player?.date_of_birth ?? '1970-01-01')}
-                                    </Typography>
                                 </div>
                             </div>
                         </Box>

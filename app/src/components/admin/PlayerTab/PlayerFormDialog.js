@@ -5,10 +5,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
 import Button from '@mui/material/Button';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 import GameService from '../../../services/game.service';
 import Upload from '../../../common/upload';
 import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
@@ -157,7 +158,7 @@ export default function PlayerFormDialog({ open, onResult, edit = null, t }) {
                             }}
                             renderInput={(params) => <TextField {...params} label={t('Position')} helperText={error.position ? 'Position cannot be empty' : ''} error={error.position} />}
                         />
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 label={t('DOB')}
                                 value={playerData.date_of_birth}

@@ -549,6 +549,54 @@ exports.getGamePlayerTags = (req, res) => {
     });
 };
 
+exports.getOpponentTags = (req, res) => {
+  const teamId =
+    req.params.teamId === "null" ? null : parseInt(req.params.teamId);
+  const userId =
+    req.params.userId === "null" ? null : parseInt(req.params.userId);
+  const playerIds =
+    req.params.playerId === "null" ? null : `'${req.params.playerId}'`;
+  const actionId =
+    req.params.actionId === "null" ? null : `'${req.params.actionId}'`;
+  const actionTypeId =
+    req.params.actionTypeId === "null" ? null : `'${req.params.actionTypeId}'`;
+  const actionResultId =
+    req.params.actionResultId === "null"
+      ? null
+      : `'${req.params.actionResultId}'`;
+  const gameTime =
+    req.params.gameTime === "null" ? null : `'${req.params.gameTime}'`;
+  const courtArea =
+    req.params.courtArea === "null" ? null : `'${req.params.courtArea}'`;
+  const inside =
+    req.params.inside === "null" ? null : parseInt(req.params.inside);
+
+  Sequelize.query(
+    `
+    SELECT * FROM public.fnc_get_opponent_tags(
+      ${userId},
+      ${teamId},
+      ${playerIds},
+      '${req.params.gameId}',
+      ${actionId},
+      ${actionTypeId},
+      ${actionResultId},
+      ${gameTime},
+      ${courtArea},
+      ${inside}
+    )
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving games.",
+      });
+    });
+};
+
 exports.gameDetailsByPlayerId = (req, res) => {
   Sequelize.query(
     `

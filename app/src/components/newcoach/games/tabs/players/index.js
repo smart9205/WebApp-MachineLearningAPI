@@ -281,7 +281,7 @@ const GamePlayers = ({ game }) => {
                     onChangeTeam={handleChangeTeam}
                     mb="8px"
                 />
-                <GamePlayerLogoList game={game} teamId={values.teamId} opponent={values.opponentTeamId} our={values.isOur} setIds={setPlayerIds} />
+                <GamePlayerLogoList game={game} teamId={values.teamId} opponent={values.opponentTeamId} our={values.isOur} setIds={setPlayerIds} isEdit={values.isOur} />
                 {values.expandButtons && <GamePlayerTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />

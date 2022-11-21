@@ -78,6 +78,11 @@ module.exports = (app) => {
   );
 
   app.get(
+    "/player/opponent_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId/:gameTime/:courtArea/:inside",
+    controller.getOpponentTags
+  );
+
+  app.get(
     "/player/player_detection/:gameId/:videoTime/:minBefore/:minAfter",
     controller.getPlayersDetection
   );

@@ -12,29 +12,7 @@ import GamePlayerStatErrorMessage from '../../games/tabs/players/status/errorMes
 import TeamStatsVideoPlayer from '../../teams/tabs/stats/videoDialog';
 import GameService from '../../../../services/game.service';
 import { getFormattedDate } from '../../components/utilities';
-
-const statList = [
-    { id: 'passes', title: 'Passes', action: 'Passes' },
-    { id: 'successful_passes', title: 'Successful Passes', action: 'PassesSuccess' },
-    { id: 'short_passes', title: 'Short Passes', action: 'ShortPass' },
-    { id: 'long_passes', title: 'Long Passes', action: 'LongPass' },
-    { id: 'build_ups', title: 'Build Ups', action: 'BuildUp' },
-    { id: 'super_save', title: 'Super Saved', action: 'SuperSaved' },
-    { id: 'saved', title: 'Saved', action: 'Saved' },
-    { id: 'goalkeeper_exit', title: 'Exits', action: 'Exits' },
-    { id: 'air_challenge', title: 'Air Challenges', action: 'AirChallenge' },
-    { id: 'ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
-    { id: 'one_vs_one', title: '1 vs 1', action: 'One' },
-    { id: 'goal_received', title: 'Goals Received', action: 'GoalReceive' },
-    { id: 'tackle', title: 'Tackles', action: 'Tackle' },
-    { id: 'interception', title: 'Interceptions', action: 'Interception' },
-    { id: 'clearance', title: 'Clearance', action: 'Clearance' },
-    { id: 'fouls', title: 'Fouls', action: 'Foul' },
-    { id: 'draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
-    { id: 'red_cards', title: 'Red Cards', action: 'RedCard' },
-    { id: 'yellow_cards', title: 'Yellow Cards', action: 'YellowCard' },
-    { id: 'player_games', title: 'Games Played', action: '' }
-];
+import { goalkeeper } from '../../teams/tabs/players/status';
 
 const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, gameIds, initialState }) => {
     const [playerState, setPlayerState] = useState(null);
@@ -288,12 +266,6 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Position</Typography>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.pos_name ?? ''}</Typography>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Birth date</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>
-                                        {getFormattedDate(player?.date_of_birth ?? '1970-01-01')}
-                                    </Typography>
-                                </div>
                             </div>
                         </Box>
                     </Box>
@@ -374,7 +346,7 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>PLAYER STATS</Typography>
                     <div style={{ maxHeight: '460px', overflowY: 'auto' }}>
                         <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '8px' }}>
-                            {statList.map((item, index) => (
+                            {goalkeeper.map((item, index) => (
                                 <div
                                     key={index}
                                     style={{

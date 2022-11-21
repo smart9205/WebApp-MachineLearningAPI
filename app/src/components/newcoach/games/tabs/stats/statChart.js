@@ -8,7 +8,7 @@ import GameStatsVideoPlayer from './videoDialog';
 
 import '../../../coach_style.css';
 
-const GameStatsChart = ({ chartId, title, isType, action_results, list, filterText, game, teamId, refreshPage }) => {
+const GameStatsChart = ({ chartId, title, isType, action_results, list, filterText, game, teamId, refreshPage, isEdit }) => {
     const [playerList, setPlayerList] = useState([]);
     const [hoverId, setHoverId] = useState('');
     const [videoOpen, setVideoOpen] = useState(false);
@@ -172,6 +172,7 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                 }}
                 video_url={game.video_url}
                 tagList={playData}
+                isEdit={isEdit}
             />
             <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>

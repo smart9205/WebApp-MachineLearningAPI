@@ -12,62 +12,7 @@ import TeamStatsVideoPlayer from '../../stats/videoDialog';
 import { getPeriod } from '../../../../games/tabs/overview/tagListItem';
 import GameExportToEdits from '../../../../games/tabs/overview/exportEdits';
 import GamePlayerStatErrorMessage from '../../../../games/tabs/players/status/errorMessage';
-
-const statList = [
-    { id: 'goal', title: 'Goals', action: 'Goal' },
-    { id: 'shot', title: 'Shots', action: 'GoalKick' },
-    { id: 'penalties', title: 'Penalties', action: 'Penalty' },
-    { id: 'penalties_missed', title: 'Penalties Missed', action: 'PenaltyMissed' },
-    { id: 'shot_on_target', title: 'Shots On Target', action: 'GoalOpportunity' },
-    { id: 'shot_off_target', title: 'Shots Off Target', action: 'ShotOffTarget' },
-    { id: 'shot_on_box', title: 'Shots In The Box', action: 'GoalKick' },
-    { id: 'shot_out_of_box', title: 'Shots Out Of The Box', action: 'GoalKick' },
-    { id: 'dribble', title: 'Dribbles', action: 'Dribble' },
-    { id: 'dribble_successful', title: 'Successful Dribbles', action: 'DribbleSuccess' },
-    { id: 'crosses', title: 'Crosses', action: 'Cross' },
-    { id: 'free_kick', title: 'Free Kicks', action: 'FreeKick' },
-    { id: 'corner', title: 'Corners', action: 'Corner' },
-    { id: 'passes', title: 'Passes', action: 'Passes' },
-    { id: 'successful_passes', title: 'Successful Passes', action: 'PassesSuccess' },
-    { id: 'passes_for_shots', title: 'Passes For Shots', action: 'PassesShots' },
-    { id: 'key_passes', title: 'Key Passes', action: 'KeyPass' },
-    { id: 'through_passes', title: 'Through Passes', action: 'ThroughPass' },
-    { id: 'turnover', title: 'Turnovers', action: 'Turnover' },
-    { id: 'offside', title: 'Offsides', action: 'Offside' },
-    { id: 'draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
-    { id: 'tackle', title: 'Tackles', action: 'Tackle' },
-    { id: 'interception', title: 'Interceptions', action: 'Interception' },
-    { id: 'saved', title: 'Saved', action: 'Saved' },
-    { id: 'clearance', title: 'Clearance', action: 'Clearance' },
-    { id: 'blocked', title: 'Blocked', action: 'Blocked' },
-    { id: 'fouls', title: 'Fouls', action: 'Foul' },
-    { id: 'yellow_cards', title: 'Yellow Cards', action: 'YellowCard' },
-    { id: 'red_cards', title: 'Red Cards', action: 'RedCard' },
-    { id: 'player_games', title: 'Games' }
-];
-
-const goalkeeper = [
-    { id: 'passes', title: 'Passes', action: 'Passes' },
-    { id: 'successful_passes', title: 'Successful Passes', action: 'PassesSuccess' },
-    { id: 'short_passes', title: 'Short Passes', action: 'ShortPass' },
-    { id: 'long_passes', title: 'Long Passes', action: 'LongPass' },
-    { id: 'build_ups', title: 'Build Ups', action: 'BuildUp' },
-    { id: 'super_save', title: 'Super Saved', action: 'SuperSaved' },
-    { id: 'saved', title: 'Saved', action: 'Saved' },
-    { id: 'goalkeeper_exit', title: 'Exits', action: 'Exits' },
-    { id: 'air_challenge', title: 'Air Challenges', action: 'AirChallenge' },
-    { id: 'ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
-    { id: 'one_vs_one', title: '1 vs 1', action: 'One' },
-    { id: 'goal_received', title: 'Goals Received', action: 'GoalReceive' },
-    { id: 'tackle', title: 'Tackles', action: 'Tackle' },
-    { id: 'interception', title: 'Interceptions', action: 'Interception' },
-    { id: 'clearance', title: 'Clearance', action: 'Clearance' },
-    { id: 'fouls', title: 'Fouls', action: 'Foul' },
-    { id: 'draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
-    { id: 'red_cards', title: 'Red Cards', action: 'RedCard' },
-    { id: 'yellow_cards', title: 'Yellow Cards', action: 'YellowCard' },
-    { id: 'player_games', title: 'Games Played', action: '' }
-];
+import { goalkeeper, statList } from '../../players/status';
 
 const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, teamId, initialState }) => {
     const [playerState, setPlayerState] = useState(null);
@@ -359,12 +304,6 @@ const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, t
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Position</Typography>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.name ?? ''}</Typography>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Birth date</Typography>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>
-                                        {getFormattedDate(player?.date_of_birth ?? '1970-01-01')}
-                                    </Typography>
                                 </div>
                             </div>
                         </Box>

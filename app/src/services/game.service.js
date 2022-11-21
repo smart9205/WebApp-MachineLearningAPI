@@ -907,6 +907,17 @@ const getGamePlayerTags = (userId, teamId, playerId, gameId, actionId, actionTyp
         });
 };
 
+const getOpponentTags = (userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside) => {
+    return axios
+        .get(API_URL + `player/opponent_tags/${userId}/${teamId}/${playerId}/${gameId}/${actionId}/${actionTypeId}/${actionResultId}/${gameTime}/${courtArea}/${inside}`, {
+            headers: authHeader(),
+            data: { userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside }
+        })
+        .then((response) => {
+            return response.data;
+        });
+};
+
 const getGameScore = (gameId) => {
     return axios.get(API_URL + `player_tag/getgamescore/${gameId}`, { headers: authHeader(), data: { gameId } }).then((response) => {
         return response.data;
@@ -1018,6 +1029,7 @@ const gameService = {
     getAllPlayerTagsByPlayer,
     getAllPlayerTagsByTeam,
     getGamePlayerTags,
+    getOpponentTags,
     getAllCoach,
     getAllCoachTeam,
     getAllGamesByCoach,

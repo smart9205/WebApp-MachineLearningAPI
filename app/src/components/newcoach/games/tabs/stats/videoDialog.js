@@ -19,7 +19,7 @@ import { TEAM_ICON_DEFAULT } from '../../../../../common/staticData';
 
 import '../../../../player/Profile.css';
 
-const GameStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
+const GameStatsVideoPlayer = ({ open, onClose, video_url, tagList, isEdit = true }) => {
     const handle = useFullScreenHandle();
     const player = useRef(null);
     const [playRate, setPlayRate] = useState(1);
@@ -118,15 +118,17 @@ const GameStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                             }}
                         >
                             <div style={{ display: 'flex', alignItems: 'center', flex: 6 }}>
-                                <div
-                                    style={{ display: 'flex', alignItems: 'center', flex: 0 }}
-                                    onClick={() => {
-                                        setPlay(false);
-                                        setTagEditOpen(true);
-                                    }}
-                                >
-                                    <EditIcon style={{ color: 'red', padding: 3, borderRadius: 60, textAlign: 'center', cursor: 'pointer' }} />
-                                </div>
+                                {isEdit && (
+                                    <div
+                                        style={{ display: 'flex', alignItems: 'center', flex: 0 }}
+                                        onClick={() => {
+                                            setPlay(false);
+                                            setTagEditOpen(true);
+                                        }}
+                                    >
+                                        <EditIcon style={{ color: 'red', padding: 3, borderRadius: 60, textAlign: 'center', cursor: 'pointer' }} />
+                                    </div>
+                                )}
                                 <FormControlLabel control={<Switch checked={showLogo} onChange={(e) => setShowLogo(e.target.checked)} />} label="" sx={{ color: 'white', margin: 0, flex: 0 }} />
                                 {tagList.length > 0 && currentIndex < tagList.length && showLogo && (
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flex: 4 }}>
@@ -189,7 +191,7 @@ const GameStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                         </div>
                     </FullScreen>
                 </div>
-                {tagList.length > 0 && (
+                {tagList.length > 0 && isEdit && (
                     <TeamPlayerTagEditDialog
                         open={tagEditOpen}
                         onClose={(flag) => {
