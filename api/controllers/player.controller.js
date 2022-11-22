@@ -522,6 +522,8 @@ exports.getGamePlayerTags = (req, res) => {
     req.params.courtArea === "null" ? null : `'${req.params.courtArea}'`;
   const inside =
     req.params.inside === "null" ? null : parseInt(req.params.inside);
+  const gameIds =
+    req.params.gameId === "null" ? null : `'${req.params.gameId}'`;
 
   Sequelize.query(
     `
@@ -529,7 +531,7 @@ exports.getGamePlayerTags = (req, res) => {
       ${userId},
       ${teamId},
       ${playerIds},
-      '${req.params.gameId}',
+      ${gameIds},
       ${actionId},
       ${actionTypeId},
       ${actionResultId},
@@ -570,6 +572,8 @@ exports.getOpponentTags = (req, res) => {
     req.params.courtArea === "null" ? null : `'${req.params.courtArea}'`;
   const inside =
     req.params.inside === "null" ? null : parseInt(req.params.inside);
+  const gameIds =
+    req.params.gameId === "null" ? null : `'${req.params.gameId}'`;
 
   Sequelize.query(
     `
@@ -577,7 +581,7 @@ exports.getOpponentTags = (req, res) => {
       ${userId},
       ${teamId},
       ${playerIds},
-      '${req.params.gameId}',
+      ${gameIds},
       ${actionId},
       ${actionTypeId},
       ${actionResultId},

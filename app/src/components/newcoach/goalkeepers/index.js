@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Divider, MenuItem, Popover, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@mui/material';
+import { Box, CircularProgress, Divider, getNativeSelectUtilityClasses, MenuItem, Popover, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { useSelector } from 'react-redux';
 
 import EditIcon from '@mui/icons-material/EditOutlined';
@@ -112,6 +112,7 @@ const Goalkeepers = () => {
     const handleDisplayVideo = (cell, player) => async (e) => {
         if (cell.action !== '' && player[cell.id] !== undefined && player[cell.id] > 0) {
             let gameIds = [];
+            let playerGameIds = [];
 
             await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
                 const videoGames = res.filter((item) => item.video_url.toLowerCase() !== 'no video');
@@ -120,12 +121,19 @@ const Goalkeepers = () => {
                 gameIds = videoGames.map((item) => item.id);
             });
 
+
+            let seasonId = values.seasonFilter === 'none' ? null : values.seasonFilter.id;
+
+            await GameService.getPlayersGames(seasonId, player.team_id, player.player_id,null).then((res) => {
+                playerGameIds = res.filter((item) => item.game_id);
+            });
+
             if (cell.title.includes('Opponents')) {
                 await GameService.getOpponentTags(
                     currentUser.id,
                     player.team_id,
                     null,
-                    gameIds.length === 0 ? null : gameIds.join(','),
+                    playerGameIds.length === 0 ? null : playerGameIds.join(','),
                     ActionData[cell.action].action_id,
                     ActionData[cell.action].action_type_id,
                     ActionData[cell.action].action_result_id,
@@ -164,7 +172,7 @@ const Goalkeepers = () => {
                     currentUser.id,
                     player.team_id,
                     `${player.player_id}`,
-                    gameIds.length === 0 ? null : gameIds.join(','),
+                    playerGameIds.length === 0 ? null : playerGameIds.join(','),
                     ActionData[cell.action].action_id,
                     ActionData[cell.action].action_type_id,
                     ActionData[cell.action].action_result_id,
