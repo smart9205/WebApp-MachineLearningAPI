@@ -618,9 +618,9 @@ exports.gameDetailsByPlayerId = (req, res) => {
 };
 
 exports.getPlayersGames = (req, res) => {
-  const teams = req.params.teams === null ? null : `'${req.params.teams}'`;
+  const teams = req.params.teams === "null" ? null : `'${req.params.teams}'`;
   const players =
-    req.params.players === null ? null : `'${req.params.players}'`;
+    req.params.players === "null" ? null : `'${req.params.players}'`;
 
   Sequelize.query(
     `
@@ -644,7 +644,7 @@ exports.getPlayersGames = (req, res) => {
 
 exports.getPlayersTeams = (req, res) => {
   const players =
-    req.params.players === null ? null : `'${req.params.players}'`;
+    req.params.players === "null" ? null : `'${req.params.players}'`;
 
   Sequelize.query(
     `

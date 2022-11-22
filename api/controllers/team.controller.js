@@ -150,7 +150,7 @@ exports.getTeamsStatsGamebyGame = (req, res) => {
 };
 
 exports.getTeamsGames = (req, res) => {
-  const teams = req.params.teams === null ? null : `'${req.params.teams}'`;
+  const teams = req.params.teams === "null" ? null : `'${req.params.teams}'`;
 
   Sequelize.query(
     `

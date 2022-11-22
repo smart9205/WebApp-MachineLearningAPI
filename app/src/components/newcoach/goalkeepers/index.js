@@ -1,5 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Divider, getNativeSelectUtilityClasses, MenuItem, Popover, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@mui/material';
+import {
+    Box,
+    CircularProgress,
+    Divider,
+    getNativeSelectUtilityClasses,
+    MenuItem,
+    Popover,
+    Select,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TableSortLabel
+} from '@mui/material';
 import { useSelector } from 'react-redux';
 
 import EditIcon from '@mui/icons-material/EditOutlined';
@@ -47,6 +62,7 @@ const Goalkeepers = () => {
     const [editOpen, setEditOpen] = useState(false);
     const [editPlayer, setEditPlayer] = useState(null);
     const [gameList, setGameList] = useState([]);
+    const [gameIdsForStats, setGameIdsForStats] = useState([]);
     const [statOpen, setStatOpen] = useState(false);
     const [playData, setPlayData] = useState([]);
     const [videoOpen, setVideoOpen] = useState(false);
@@ -77,8 +93,8 @@ const Goalkeepers = () => {
         let list = [];
 
         if (values.seasonFilter !== 'none' && values.teamFilter === 'none') list = goalkeeperList.filter((item) => item.season_name === values.seasonFilter.name);
-        else if (values.seasonFilter === 'none' && values.teamFilter !== 'none') list = goalkeeperList.filter((item) => item.team_name === values.teamFilter);
-        else list = goalkeeperList.filter((item) => item.season_name === values.seasonFilter.name && item.team_name === values.teamFilter);
+        else if (values.seasonFilter === 'none' && values.teamFilter !== 'none') list = goalkeeperList.filter((item) => item.team_name === values.teamFilter.name);
+        else list = goalkeeperList.filter((item) => item.season_name === values.seasonFilter.name && item.team_name === values.teamFilter.name);
 
         return values.seasonFilter === 'none' && values.teamFilter === 'none' ? goalkeeperList : list;
     };
@@ -101,31 +117,29 @@ const Goalkeepers = () => {
         setMenuAnchorEl(e.currentTarget);
     };
 
-    const handleDisplayStats = () => {
+    const handleDisplayStats = async () => {
         setMenuAnchorEl(null);
-        GameService.getAllGamesByCoach(playerStat.season_id, null, playerStat.team_id, null).then((res) => {
+        await GameService.getAllGamesByCoach(playerStat.season_id, null, playerStat.team_id, null).then((res) => {
             setGameList(res);
-            setStatOpen(true);
         });
+        await GameService.getPlayersGames(values.seasonFilter === 'none' ? null : values.seasonFilter.id, values.teamFilter === 'none' ? null : values.teamFilter.id, playerStat.player_id).then(
+            (res) => {
+                setGameIdsForStats(res.map((item) => item.game_id));
+                setStatOpen(true);
+            }
+        );
     };
 
     const handleDisplayVideo = (cell, player) => async (e) => {
         if (cell.action !== '' && player[cell.id] !== undefined && player[cell.id] > 0) {
-            let gameIds = [];
             let playerGameIds = [];
-
-            await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
-                const videoGames = res.filter((item) => item.video_url.toLowerCase() !== 'no video');
-
-                setGameList(videoGames);
-                gameIds = videoGames.map((item) => item.id);
-            });
-
-
             let seasonId = values.seasonFilter === 'none' ? null : values.seasonFilter.id;
 
-            await GameService.getPlayersGames(seasonId, player.team_id, player.player_id,null).then((res) => {
-                playerGameIds = res.filter((item) => item.game_id);
+            await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
+                setGameList(res.filter((item) => item.video_url.toLowerCase() !== 'no video'));
+            });
+            await GameService.getPlayersGames(seasonId, values.teamFilter === 'none' ? null : values.teamFilter.id, player.player_id).then((res) => {
+                playerGameIds = res.map((item) => item.game_id);
             });
 
             if (cell.title.includes('Opponents')) {
@@ -216,13 +230,11 @@ const Goalkeepers = () => {
         e.preventDefault();
 
         if (cell.action !== '' && player[cell.id] !== undefined && player[cell.id] > 0) {
-            let gameIds = [];
+            let playerGameIds = [];
+            let seasonId = values.seasonFilter === 'none' ? null : values.seasonFilter.id;
 
-            await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
-                const videoGames = res.filter((item) => item.video_url.toLowerCase() !== 'no video');
-
-                setGameList(videoGames);
-                gameIds = videoGames.map((item) => item.id);
+            await GameService.getPlayersGames(seasonId, values.teamFilter === 'none' ? null : values.teamFilter.id, player.player_id).then((res) => {
+                playerGameIds = res.map((item) => item.game_id);
             });
 
             if (cell.title.includes('Opponents')) {
@@ -230,7 +242,7 @@ const Goalkeepers = () => {
                     currentUser.id,
                     player.team_id,
                     null,
-                    gameIds.length === 0 ? null : gameIds.join(','),
+                    playerGameIds.length === 0 ? null : playerGameIds.join(','),
                     ActionData[cell.action].action_id,
                     ActionData[cell.action].action_type_id,
                     ActionData[cell.action].action_result_id,
@@ -247,7 +259,7 @@ const Goalkeepers = () => {
                     currentUser.id,
                     player.team_id,
                     `${player.player_id}`,
-                    gameIds.length === 0 ? null : gameIds.join(','),
+                    playerGameIds.length === 0 ? null : playerGameIds.join(','),
                     ActionData[cell.action].action_id,
                     ActionData[cell.action].action_type_id,
                     ActionData[cell.action].action_result_id,
@@ -269,9 +281,11 @@ const Goalkeepers = () => {
         let gameIds = [];
 
         setMenuAnchorEl(null);
-        await GameService.getAllGamesByCoach(playerStat.season_id, null, playerStat.team_id, null).then((res) => {
-            gameIds = res.map((item) => item.id);
-        });
+        await GameService.getPlayersGames(values.seasonFilter === 'none' ? null : values.seasonFilter.id, values.teamFilter === 'none' ? null : values.teamFilter.id, playerStat.player_id).then(
+            (res) => {
+                gameIds = res.map((item) => item.game_id);
+            }
+        );
         await GameService.getGoalkeepersStatsGamebyGame({
             seasonId: playerStat.season_id,
             leagueId: null,
@@ -340,9 +354,9 @@ const Goalkeepers = () => {
             let result = [];
 
             array.map((item) => {
-                const filter = result.filter((team) => team === item.team_name);
+                const filter = result.filter((team) => team.name === item.team_name);
 
-                if (filter.length === 0) result = [...result, item.team_name];
+                if (filter.length === 0) result = [...result, { name: item.team_name, id: item.team_id }];
 
                 return result;
             });
@@ -451,7 +465,7 @@ const Goalkeepers = () => {
                             </MenuItem>
                             {values.teamList.map((team, index) => (
                                 <MenuItem key={index + 1} value={team}>
-                                    {team}
+                                    {team.name}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -526,7 +540,7 @@ const Goalkeepers = () => {
                         teamId={playerStat?.team_id ?? null}
                         seasonId={playerStat?.season_id ?? null}
                         games={gameList}
-                        gameIds={gameList.map((item) => item.id)}
+                        gameIds={gameIdsForStats}
                         initialState={playerStat}
                     />
                     <TeamStatsVideoPlayer open={videoOpen} onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />

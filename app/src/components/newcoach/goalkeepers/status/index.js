@@ -115,7 +115,7 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
         }
 
         setLoading(true);
-        GameService.getPlayersStatsAdvanced({
+        GameService.getGoalkeepersStatsAdvanceSummary({
             seasonId: seasonId,
             leagueId: null,
             gameId: gameIds.length === 0 ? null : gameIds.join(','),
@@ -221,7 +221,7 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
     useEffect(() => {
         if (player && gameIds.length > 0) {
             setLoading(true);
-            GameService.getGoalkeepersStatsAdvanced({
+            GameService.getGoalkeepersStatsAdvanceSummary({
                 seasonId: seasonId,
                 leagueId: null,
                 gameId: gameIds.length === 0 ? null : gameIds.join(','),

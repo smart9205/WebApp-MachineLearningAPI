@@ -109,19 +109,20 @@ const Players = () => {
 
     const handleDisplayVideo = (cell, player) => async (e) => {
         if (cell.title !== 'Games' && player[cell.id] !== undefined && player[cell.id] > 0) {
-            let gameIds = [];
+            let playerGameIds = [];
+            let seasonId = seasonFilter === 'none' ? null : seasonFilter.id;
 
             await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
-                const videoGames = res.filter((item) => item.video_url.toLowerCase() !== 'no video');
-
-                setGameList(videoGames);
-                gameIds = videoGames.map((item) => item.id);
+                setGameList(res.filter((item) => item.video_url.toLowerCase() !== 'no video'));
+            });
+            await GameService.getPlayersGames(seasonId, teamFilter === 'none' ? null : teamFilter.id, player.player_id, null).then((res) => {
+                playerGameIds = res.map((item) => item.game_id);
             });
             await GameService.getGamePlayerTags(
                 currentUser.id,
                 player.team_id,
                 `${player.player_id}`,
-                gameIds.length === 0 ? null : gameIds.join(','),
+                playerGameIds.length === 0 ? null : playerGameIds.join(','),
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
                 ActionData[cell.action].action_result_id,
@@ -161,19 +162,17 @@ const Players = () => {
         e.preventDefault();
 
         if (cell.title !== 'Games' && player[cell.id] !== undefined && player[cell.id] > 0) {
-            let gameIds = [];
+            let playerGameIds = [];
+            let seasonId = seasonFilter === 'none' ? null : seasonFilter.id;
 
-            await GameService.getAllGamesByCoach(player.season_id, null, player.team_id, null).then((res) => {
-                const videoGames = res.filter((item) => item.video_url.toLowerCase() !== 'no video');
-
-                setGameList(videoGames);
-                gameIds = videoGames.map((item) => item.id);
+            await GameService.getPlayersGames(seasonId, teamFilter === 'none' ? null : teamFilter.id, player.player_id, null).then((res) => {
+                playerGameIds = res.map((item) => item.game_id);
             });
             await GameService.getGamePlayerTags(
                 currentUser.id,
                 player.team_id,
                 `${player.player_id}`,
-                gameIds.length === 0 ? null : gameIds.join(','),
+                playerGameIds.length === 0 ? null : playerGameIds.join(','),
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
                 ActionData[cell.action].action_result_id,
@@ -191,8 +190,8 @@ const Players = () => {
         let gameIds = [];
 
         setMenuAnchorEl(null);
-        await GameService.getAllGamesByCoach(playerStat.season_id, null, playerStat.team_id, null).then((res) => {
-            gameIds = res.map((item) => item.id);
+        await GameService.getPlayersGames(seasonFilter === 'none' ? null : seasonFilter.id, teamFilter === 'none' ? null : teamFilter.id, playerStat.player_id, null).then((res) => {
+            gameIds = res.map((item) => item.game_id);
         });
         await GameService.getPlayersStatsGamebyGame({
             seasonId: playerStat.season_id,
@@ -239,9 +238,9 @@ const Players = () => {
             let result = [];
 
             desc.map((item) => {
-                const filter = result.filter((team) => team === item.team_name);
+                const filter = result.filter((team) => team.name === item.team_name);
 
-                if (filter.length === 0) result = [...result, item.team_name];
+                if (filter.length === 0) result = [...result, { name: item.team_name, id: item.team_id }];
 
                 return result;
             });
@@ -285,7 +284,7 @@ const Players = () => {
                       compareStrings(item.season_name, searchText)
               )
             : teamFilter !== 'none'
-            ? playerStats.filter((item) => item.team_name === teamFilter)
+            ? playerStats.filter((item) => item.team_name === teamFilter.name)
             : playerStats;
     };
 
@@ -410,7 +409,7 @@ const Players = () => {
                                     </MenuItem>
                                     {teamList.map((team, index) => (
                                         <MenuItem key={index + 1} value={team}>
-                                            {team}
+                                            {team.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
