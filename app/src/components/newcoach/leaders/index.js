@@ -264,6 +264,7 @@ const Leaders = () => {
 
             if (teamIds.length > 0) {
                 setLoading(true);
+                setValues({ ...values, seasonFilter: 'none' });
                 await GameService.getPlayersStatsAdvanced({
                     seasonId: null,
                     leagueId: values.leagueFilter === 'none' ? (leagueIds.length > 0 ? leagueIds.join(',') : null) : `${values.leagueFilter.id}`,
@@ -278,7 +279,6 @@ const Leaders = () => {
                 }).then((res) => {
                     setPlayerList(res);
                     setSeasonList(getSeasonList(res));
-                    setValues({ ...values, seasonFilter: 'none' });
                     setLoading(false);
                 });
             }

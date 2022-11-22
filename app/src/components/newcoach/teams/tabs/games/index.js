@@ -209,7 +209,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                         {item.home_team_name}
                                     </TableCell>
                                     <TableCell key={`${index}-format`} align="center" sx={{ fontWeight: getGameGoalsFontStyle(item).home, background: hoverIndex === index ? '#F8F8F8' : 'white' }}>
-                                        {item.team_formation_name}
+                                        {item.team_formation_name.toLowerCase().includes('unknown') ? '' : item.team_formation_name}
                                     </TableCell>
                                     {properties.map((prop) => (
                                         <TableCell
@@ -242,7 +242,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                                         {item.away_team_name}
                                     </TableCell>
                                     <TableCell key={`${teamStatList.length + index}-format`} align="center" sx={{ borderBottom: '1px solid #0A7304', fontWeight: getGameGoalsFontStyle(item).away }}>
-                                        {item.opponent_formation_name}
+                                        {item.opponent_formation_name.toLowerCase().includes('unknown') ? '' : item.opponent_formation_name}
                                     </TableCell>
                                     {properties.map((prop) => (
                                         <TableCell
