@@ -195,14 +195,14 @@ export default function Others({ defenseTeam, offenseTeam, taggingState, offense
 
             {actionTypeId === 15 &&
                 <PlayerSelector
-                    title="Defensive Player List"
-                    playerList={defenseTeam}
+                    title="Offensive Player List"
+                    playerList={offenseTeam}
                     editable={false}
                     onSelect={(player) => {
                         taggingState([
                             {
                                 action_type_id: 8,
-                                team_id: defenseTeamId,
+                                team_id: offenseTeamId,
                                 player_id: player.id,
                                 action_id: 7,
                                 action_result_id: 15,

@@ -32,9 +32,9 @@ const headCells = [
     { id: 'total_ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
     { id: 'total_one_vs_one', title: '1 vs 1', action: 'One' },
     { id: 'total_goal_received', title: 'Goals Received', action: 'GoalReceive' },
-    { id: 'total_opponent_crosses', title: 'Opponents Crosses', action: '' },
-    { id: 'total_opponent_corners', title: 'Opponents Corners', action: '' },
-    { id: 'total_opponent_free_kicks', title: 'Opponents Free Kicks', action: '' }
+    { id: 'total_opponent_crosses', title: 'Opponents Crosses', action: 'Cross' },
+    { id: 'total_opponent_corners', title: 'Opponents Corners', action: 'Corner' },
+    { id: 'total_opponent_free_kicks', title: 'Opponents Free Kicks', action: 'FreeKick' }
 ];
 
 const Goalkeepers = () => {
@@ -119,46 +119,88 @@ const Goalkeepers = () => {
                 setGameList(videoGames);
                 gameIds = videoGames.map((item) => item.id);
             });
-            await GameService.getGamePlayerTags(
-                currentUser.id,
-                player.team_id,
-                `${player.player_id}`,
-                gameIds.length === 0 ? null : gameIds.join(','),
-                ActionData[cell.action].action_id,
-                ActionData[cell.action].action_type_id,
-                ActionData[cell.action].action_result_id,
-                null,
-                null,
-                null
-            ).then((res) => {
-                const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
 
-                setPlayData(
-                    flist.map((item) => {
-                        return {
-                            tag_id: item.id,
-                            start_time: item.player_tag_start_time,
-                            end_time: item.player_tag_end_time,
-                            player_name: item.player_names,
-                            action_name: item.action_names,
-                            action_type: item.action_type_names,
-                            action_result: item.action_result_names,
-                            game_id: item.game_id,
-                            team_id: player.team_id,
-                            court_area: item.court_area_id,
-                            inside_pain: item.inside_the_pain,
-                            period: getPeriod(item.period),
-                            time: item.time_in_game,
-                            home_team_image: item.home_team_logo,
-                            away_team_image: item.away_team_logo,
-                            home_team_goals: item.home_team_goal,
-                            away_team_goals: item.away_team_goal
-                        };
-                    })
-                );
+            if (cell.title.includes('Opponents')) {
+                await GameService.getOpponentTags(
+                    currentUser.id,
+                    player.team_id,
+                    null,
+                    gameIds.length === 0 ? null : gameIds.join(','),
+                    ActionData[cell.action].action_id,
+                    ActionData[cell.action].action_type_id,
+                    ActionData[cell.action].action_result_id,
+                    null,
+                    null,
+                    null
+                ).then((res) => {
+                    setPlayData(
+                        res.map((item) => {
+                            return {
+                                tag_id: item.id,
+                                start_time: item.player_tag_start_time,
+                                end_time: item.player_tag_end_time,
+                                player_name: item.player_names,
+                                action_name: item.action_names,
+                                action_type: item.action_type_names,
+                                action_result: item.action_result_names,
+                                game_id: item.game_id,
+                                team_id: player.team_id,
+                                court_area: item.court_area_id,
+                                inside_pain: item.inside_the_pain,
+                                period: getPeriod(item.period),
+                                time: item.time_in_game,
+                                home_team_image: item.home_team_logo,
+                                away_team_image: item.away_team_logo,
+                                home_team_goals: item.home_team_goal,
+                                away_team_goals: item.away_team_goal
+                            };
+                        })
+                    );
 
-                if (flist.length > 0) setVideoOpen(true);
-            });
+                    if (res.length > 0) setVideoOpen(true);
+                });
+            } else {
+                await GameService.getGamePlayerTags(
+                    currentUser.id,
+                    player.team_id,
+                    `${player.player_id}`,
+                    gameIds.length === 0 ? null : gameIds.join(','),
+                    ActionData[cell.action].action_id,
+                    ActionData[cell.action].action_type_id,
+                    ActionData[cell.action].action_result_id,
+                    null,
+                    null,
+                    null
+                ).then((res) => {
+                    const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
+
+                    setPlayData(
+                        flist.map((item) => {
+                            return {
+                                tag_id: item.id,
+                                start_time: item.player_tag_start_time,
+                                end_time: item.player_tag_end_time,
+                                player_name: item.player_names,
+                                action_name: item.action_names,
+                                action_type: item.action_type_names,
+                                action_result: item.action_result_names,
+                                game_id: item.game_id,
+                                team_id: player.team_id,
+                                court_area: item.court_area_id,
+                                inside_pain: item.inside_the_pain,
+                                period: getPeriod(item.period),
+                                time: item.time_in_game,
+                                home_team_image: item.home_team_logo,
+                                away_team_image: item.away_team_logo,
+                                home_team_goals: item.home_team_goal,
+                                away_team_goals: item.away_team_goal
+                            };
+                        })
+                    );
+
+                    if (flist.length > 0) setVideoOpen(true);
+                });
+            }
         }
     };
 
@@ -174,24 +216,44 @@ const Goalkeepers = () => {
                 setGameList(videoGames);
                 gameIds = videoGames.map((item) => item.id);
             });
-            await GameService.getGamePlayerTags(
-                currentUser.id,
-                player.team_id,
-                `${player.player_id}`,
-                gameIds.length === 0 ? null : gameIds.join(','),
-                ActionData[cell.action].action_id,
-                ActionData[cell.action].action_type_id,
-                ActionData[cell.action].action_result_id,
-                null,
-                null,
-                null
-            ).then((res) => {
-                const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
 
-                setPlayData(flist);
+            if (cell.title.includes('Opponents')) {
+                await GameService.getOpponentTags(
+                    currentUser.id,
+                    player.team_id,
+                    null,
+                    gameIds.length === 0 ? null : gameIds.join(','),
+                    ActionData[cell.action].action_id,
+                    ActionData[cell.action].action_type_id,
+                    ActionData[cell.action].action_result_id,
+                    null,
+                    null,
+                    null
+                ).then((res) => {
+                    setPlayData(res);
 
-                if (flist.length > 0) setExportOpen(true);
-            });
+                    if (res.length > 0) setExportOpen(true);
+                });
+            } else {
+                await GameService.getGamePlayerTags(
+                    currentUser.id,
+                    player.team_id,
+                    `${player.player_id}`,
+                    gameIds.length === 0 ? null : gameIds.join(','),
+                    ActionData[cell.action].action_id,
+                    ActionData[cell.action].action_type_id,
+                    ActionData[cell.action].action_result_id,
+                    null,
+                    null,
+                    null
+                ).then((res) => {
+                    const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
+
+                    setPlayData(flist);
+
+                    if (flist.length > 0) setExportOpen(true);
+                });
+            }
         }
     };
 

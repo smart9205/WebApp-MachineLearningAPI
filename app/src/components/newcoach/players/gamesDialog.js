@@ -59,12 +59,17 @@ const PlayersGamesDialog = ({ open, onClose, list, playerName }) => {
                 setPlayData(
                     res.map((item) => {
                         return {
+                            tag_id: item.id,
                             start_time: item.player_tag_start_time,
                             end_time: item.player_tag_end_time,
                             player_name: item.player_names,
                             action_name: item.action_names,
                             action_type: item.action_type_names,
                             action_result: item.action_result_names,
+                            game_id: item.game_id,
+                            team_id: cell.team_id,
+                            court_area: item.court_area_id,
+                            inside_pain: item.inside_the_pain,
                             period: getPeriod(item.period),
                             time: item.time_in_game,
                             home_team_image: item.home_team_logo,
@@ -111,7 +116,7 @@ const PlayersGamesDialog = ({ open, onClose, list, playerName }) => {
             <DialogTitle>{`Games of ${playerName}`}</DialogTitle>
             <DialogContent>
                 <TableContainer style={{ maxHeight: '75vh', minWidth: '1200px' }}>
-                    <Table stickyHeader aria-label="sticky table">
+                    <Table stickyHeader aria-label="sticky table" sx={{ '& .MuiTableCell-root': { padding: '4px !important' } }}>
                         <TableHead>
                             <TableRow height="36px">
                                 <TableCell key="0" align="center">
@@ -127,7 +132,7 @@ const PlayersGamesDialog = ({ open, onClose, list, playerName }) => {
                         <TableBody>
                             {list.map((item, index) => (
                                 <TableRow key={index} height="36px" hover>
-                                    <TableCell key={`${index}-game`} align="center" width="348px">
+                                    <TableCell key={`${index}-game`} align="center" width="240px">
                                         <div>
                                             <p className="normal-text">{`${item.season_name}, ${item.league_name}`}</p>
                                             <p className="normal-text">{`${getFormattedDate(item.game_date)} VS ${getAwayTeamName(item)}`}</p>
@@ -149,7 +154,7 @@ const PlayersGamesDialog = ({ open, onClose, list, playerName }) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                {videoOpen && <TeamGamesVideoPlayer onClose={() => setVideoOpen(false)} video_url={videoURL} tagList={playData} />}
+                <TeamGamesVideoPlayer open={videoOpen} onClose={() => setVideoOpen(false)} video_url={videoURL} tagList={playData} />
                 <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
             </DialogContent>
         </Dialog>

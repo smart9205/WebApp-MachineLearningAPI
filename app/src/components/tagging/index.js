@@ -146,6 +146,7 @@ export default function Tagging() {
     const [curTeamTag, setCurTeamTag] = React.useState(null);
     const [curTagStatusText, setCurTagStatusText] = React.useState('');
     const [defenseTeamGoalKeeper, setDefenseTeamGoalKeeper] = React.useState([]);
+    const [teamTagId, setTeamTagId] = React.useState(null)
     const [teamTagClicked, setTeamTagClicked] = React.useState(true)
 
     const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -339,7 +340,8 @@ export default function Tagging() {
     const taggingButtonClicked = (action) => {
         setModalOpen(true);
         setModalContent(action);
-
+        setTeamTagId(null)
+        setTeamTagClicked(true)
         setPlay(false);
 
         const curTime = player.current.getCurrentTime();
@@ -368,10 +370,10 @@ export default function Tagging() {
 
     const addPlayerTag = async (PTag) => await GameService.addPlayerTag(PTag);
 
-    let playerTagTime = []
+    let playerTagTimeAndId = []
 
     const sendTimeData = (data) => {
-        playerTagTime.push(data)
+        playerTagTimeAndId.push(data)
         setClicked(true)
         setTeamTagClicked(true)
     }
@@ -381,12 +383,12 @@ export default function Tagging() {
         let start_time = '00:00:00'
         let end_time = '00:00:00'
 
-        if (playerTagTime.length <= 0) {
+        if (playerTagTimeAndId.length <= 0) {
             start_time = playerTag.start_time
             end_time = playerTag.end_time
         } else {
-            start_time = playerTagTime[0].start_time
-            end_time = playerTagTime[0].end_time
+            start_time = playerTagTimeAndId[0].start_time
+            end_time = playerTagTimeAndId[0].end_time
         }
         setTempPlayerTagList([
             ...temp_playerTag_list,
@@ -413,14 +415,20 @@ export default function Tagging() {
     }, [config]);
 
     const saveTags = async (isCP = false) => {
-        setPlay(false);
-        const tTag = await addTeamTag(isCP);
+        setPlay(false)
+        let tTag = null
+        if (teamTagId !== null) {
+            tTag = teamTagId
+        } else {
+            let temp = await addTeamTag(isCP);
+            tTag = temp.id
+        }
         for (const pTag of temp_playerTag_list) {
-            await addPlayerTag({ ...pTag, team_tag_id: tTag.id });
+            await addPlayerTag({ ...pTag, team_tag_id: tTag });
         }
         setTempPlayerTagList([]);
 
-        dispPlayerTags(tTag.id);
+        dispPlayerTags(teamTagId !== null ? teamTagId : tTag.id);
     };
 
     React.useEffect(() => {
@@ -579,6 +587,8 @@ export default function Tagging() {
                     }}
                     selectedId={state.curTeamTagId}
                     setTeamTagClicked={setTeamTagClicked}
+                    teamTagClicked={teamTagClicked}
+                    setTeamTagId={setTeamTagId}
                 />
                 <IndividualTagTable
                     sx={{ height: '40%', p: 1, width: '100%' }}

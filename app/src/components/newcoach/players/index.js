@@ -132,6 +132,7 @@ const Players = () => {
                 setPlayData(
                     res.map((item) => {
                         return {
+                            tag_id: item.id,
                             start_time: item.player_tag_start_time,
                             end_time: item.player_tag_end_time,
                             player_name: item.player_names,
@@ -139,6 +140,9 @@ const Players = () => {
                             action_type: item.action_type_names,
                             action_result: item.action_result_names,
                             game_id: item.game_id,
+                            team_id: player.team_id,
+                            court_area: item.court_area_id,
+                            inside_pain: item.inside_the_pain,
                             period: getPeriod(item.period),
                             time: item.time_in_game,
                             home_team_image: item.home_team_logo,
@@ -510,7 +514,7 @@ const Players = () => {
                                 gameIds={gameList.map((item) => item.id)}
                                 initialState={playerStat}
                             />
-                            {videoOpen && <TeamStatsVideoPlayer onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />}
+                            <TeamStatsVideoPlayer open={videoOpen} onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />
                             <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
                             <PlayersGamesDialog open={gamesOpen} onClose={() => setGamesOpen(false)} list={playerGames} playerName={playerStat?.player_name ?? ''} />
                             <Popover

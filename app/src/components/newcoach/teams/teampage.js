@@ -1,4 +1,4 @@
-import { Box, Typography, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
@@ -9,9 +9,10 @@ import TeamGames from './tabs/games';
 import TeamOverview from './tabs/overview';
 import TeamPlayersStats from './tabs/players';
 import TeamPlayersOverview from './tabs/player_overview';
-import '../coach_style.css';
 import GameSelectControl from './tabs/overview/gameSelectControl';
 import TeamStats from './tabs/stats';
+
+import '../coach_style.css';
 
 const Tabs = ['Overview', 'Stats', 'Games', 'Players Overview', 'Players Stats'];
 
@@ -46,35 +47,31 @@ const TeamPage = () => {
     }, [params]);
 
     return (
-        <Box sx={{ width: '98%', margin: '0 auto' }}>
+        <div className="coach-page-style">
+            <div className="page-header">
+                <div className="page-title-bar">
+                    <Link to="/new_coach/teams">
+                        <ChevronLeftIcon sx={{ width: '32px', height: '32px' }} />
+                    </Link>
+                    <p className="page-title">Team {values.teamName}</p>
+                </div>
+                <div className="page-tab-container">
+                    {Tabs.map((tab, index) => (
+                        <div key={index} onClick={() => setCurTab(index)} className="page-tab-style">
+                            <p className="page-tab-title">{tab}</p>
+                            {curTab === index ? <div className="selected-line" /> : <div className="unselected-line" />}
+                        </div>
+                    ))}
+                    <GameSelectControl gameList={gameList} setIds={setGameIds} />
+                </div>
+            </div>
             {values.loading && (
-                <div style={{ width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div className="loading-circle">
                     <CircularProgress />
                 </div>
             )}
             {values.loadingDone && (
                 <>
-                    <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', 'svg path': { fill: 'black' } }}>
-                            <Link to="/new_coach/teams">
-                                <ChevronLeftIcon sx={{ width: '32px', height: '32px' }} />
-                            </Link>
-                            <p className="page-title">Team {values.teamName}</p>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '32px', paddingLeft: '56px' }}>
-                            {Tabs.map((tab, index) => (
-                                <Box
-                                    key={index}
-                                    sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
-                                    onClick={() => setCurTab(index)}
-                                >
-                                    <p className="page-tab-title">{tab}</p>
-                                    <Box sx={{ height: '2px', width: '100%', backgroundColor: curTab === index ? '#0A7304' : '#F8F8F8' }} />
-                                </Box>
-                            ))}
-                            <GameSelectControl gameList={gameList} setIds={setGameIds} />
-                        </Box>
-                    </Box>
                     {curTab === 0 && <TeamOverview games={gameList} gameIds={gameIds} teamname={values.teamName} teamId={values.teamId} />}
                     {curTab === 1 && <TeamStats games={gameList} gameIds={gameIds} teamId={values.teamId} />}
                     {curTab === 2 && <TeamGames games={gameList} gameIds={gameIds} teamId={values.teamId} seasonId={values.seasonId} />}
@@ -82,7 +79,7 @@ const TeamPage = () => {
                     {curTab === 4 && <TeamPlayersStats teamId={values.teamId} seasonId={values.seasonId} leagueId={values.leagueId} gameIds={gameIds} games={gameList} />}
                 </>
             )}
-        </Box>
+        </div>
     );
 };
 

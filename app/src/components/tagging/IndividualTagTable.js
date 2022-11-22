@@ -107,7 +107,7 @@ export default function IndividualTagTable({ rows, offenseTeamId, offenseTeam, u
             <Paper sx={{ width: '100%', height: '100%', overflow: 'hidden', p: 0.5 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
                     <h5 style={{ textAlign: 'center' }}>Player Tag</h5>
-                    <AddIcon style={teamTagClicked ? { pointerEvents: 'none', opacity: 0.5, position: 'absolute', right: 0, cursor: 'pointer' } : { opacity: 1, position: 'absolute', right: 0, cursor: 'pointer' }  } onClick={() => {
+                    <AddIcon style={teamTagClicked ? { pointerEvents: 'none', opacity: 0.5, position: 'absolute', right: 0, cursor: 'pointer' } : { opacity: 1, position: 'absolute', right: 0, cursor: 'pointer' }} onClick={() => {
                         setPlay(false)
                         setOpenModal(true)
                     }} />

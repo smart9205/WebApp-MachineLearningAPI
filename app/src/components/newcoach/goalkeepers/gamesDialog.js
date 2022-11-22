@@ -24,14 +24,13 @@ const properties = [
     { id: 'total_ground_challenge', title: 'Ground Challenges', action: 'GroundChallenge' },
     { id: 'total_one_vs_one', title: '1vs1', action: 'One' },
     { id: 'total_goal_received', title: 'Goals Received', action: 'GoalReceive' },
-      { id: 'total_interception', title: 'Interceptions', action: 'Interception' },
+    { id: 'total_interception', title: 'Interceptions', action: 'Interception' },
     { id: 'total_clearance', title: 'Clearance', action: 'Clearance' },
     { id: 'total_fouls', title: 'Fouls', action: 'Foul' },
     { id: 'total_draw_fouls', title: 'Draw Fouls', action: 'DrawFoul' },
-    { id: 'total_opponent_crosses', title: 'Opponents Crosses', action: '' },
-    { id: 'total_opponent_corners', title: 'Opponents Corners', action: '' },
-    { id: 'total_opponent_free_kicks', title: 'Opponents Free-Kicks', action: '' }
-
+    { id: 'total_opponent_crosses', title: 'Opponents Crosses', action: 'Cross' },
+    { id: 'total_opponent_corners', title: 'Opponents Corners', action: 'Corner' },
+    { id: 'total_opponent_free_kicks', title: 'Opponents Free-Kicks', action: 'FreeKick' }
 ];
 
 const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => {
@@ -49,47 +48,90 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
             await GameService.getGameById(cell.game_id).then((res) => {
                 video_url = res.video_url;
             });
-            await GameService.getGamePlayerTags(
-                currentUser.id,
-                cell.team_id,
-                `${cell.player_id}`,
-                `${cell.game_id}`,
-                ActionData[prop.action].action_id,
-                ActionData[prop.action].action_type_id,
-                ActionData[prop.action].action_result_id,
-                null,
-                null,
-                null
-            ).then((res) => {
-                const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
 
-                setPlayData(
-                    flist.map((item) => {
-                        return {
-                            tag_id: item.id,
-                            start_time: item.player_tag_start_time,
-                            end_time: item.player_tag_end_time,
-                            player_name: item.player_names,
-                            action_name: item.action_names,
-                            action_type: item.action_type_names,
-                            action_result: item.action_result_names,
-                            game_id: item.game_id,
-                            team_id: teamId,
-                            court_area: item.court_area_id,
-                            inside_pain: item.inside_the_pain,
-                            period: getPeriod(item.period),
-                            time: item.time_in_game,
-                            home_team_image: item.home_team_logo,
-                            away_team_image: item.away_team_logo,
-                            home_team_goals: item.home_team_goal,
-                            away_team_goals: item.away_team_goal
-                        };
-                    })
-                );
-                setVideoURL(video_url);
+            if (prop.title.includes('Opponents')) {
+                await GameService.getOpponentTags(
+                    currentUser.id,
+                    cell.team_id,
+                    null,
+                    `${cell.game_id}`,
+                    ActionData[prop.action].action_id,
+                    ActionData[prop.action].action_type_id,
+                    ActionData[prop.action].action_result_id,
+                    null,
+                    null,
+                    null
+                ).then((res) => {
+                    setPlayData(
+                        res.map((item) => {
+                            return {
+                                tag_id: item.id,
+                                start_time: item.player_tag_start_time,
+                                end_time: item.player_tag_end_time,
+                                player_name: item.player_names,
+                                action_name: item.action_names,
+                                action_type: item.action_type_names,
+                                action_result: item.action_result_names,
+                                game_id: item.game_id,
+                                team_id: teamId,
+                                court_area: item.court_area_id,
+                                inside_pain: item.inside_the_pain,
+                                period: getPeriod(item.period),
+                                time: item.time_in_game,
+                                home_team_image: item.home_team_logo,
+                                away_team_image: item.away_team_logo,
+                                home_team_goals: item.home_team_goal,
+                                away_team_goals: item.away_team_goal
+                            };
+                        })
+                    );
+                    setVideoURL(video_url);
 
-                if (flist.length > 0) setVideoOpen(true);
-            });
+                    if (res.length > 0) setVideoOpen(true);
+                });
+            } else {
+                await GameService.getGamePlayerTags(
+                    currentUser.id,
+                    cell.team_id,
+                    `${cell.player_id}`,
+                    `${cell.game_id}`,
+                    ActionData[prop.action].action_id,
+                    ActionData[prop.action].action_type_id,
+                    ActionData[prop.action].action_result_id,
+                    null,
+                    null,
+                    null
+                ).then((res) => {
+                    const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
+
+                    setPlayData(
+                        flist.map((item) => {
+                            return {
+                                tag_id: item.id,
+                                start_time: item.player_tag_start_time,
+                                end_time: item.player_tag_end_time,
+                                player_name: item.player_names,
+                                action_name: item.action_names,
+                                action_type: item.action_type_names,
+                                action_result: item.action_result_names,
+                                game_id: item.game_id,
+                                team_id: teamId,
+                                court_area: item.court_area_id,
+                                inside_pain: item.inside_the_pain,
+                                period: getPeriod(item.period),
+                                time: item.time_in_game,
+                                home_team_image: item.home_team_logo,
+                                away_team_image: item.away_team_logo,
+                                home_team_goals: item.home_team_goal,
+                                away_team_goals: item.away_team_goal
+                            };
+                        })
+                    );
+                    setVideoURL(video_url);
+
+                    if (flist.length > 0) setVideoOpen(true);
+                });
+            }
         }
     };
 
@@ -97,30 +139,51 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
         e.preventDefault();
 
         if (cell[prop.id] > 0 && prop.action !== '') {
-            GameService.getGamePlayerTags(
-                currentUser.id,
-                cell.team_id,
-                `${cell.player_id}`,
-                `${cell.game_id}`,
-                ActionData[prop.action].action_id,
-                ActionData[prop.action].action_type_id,
-                ActionData[prop.action].action_result_id,
-                null,
-                null,
-                null
-            ).then((res) => {
-                const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
+            if (prop.title.includes('Opponents')) {
+                GameService.getOpponentTags(
+                    currentUser.id,
+                    cell.team_id,
+                    null,
+                    `${cell.game_id}`,
+                    ActionData[prop.action].action_id,
+                    ActionData[prop.action].action_type_id,
+                    ActionData[prop.action].action_result_id,
+                    null,
+                    null,
+                    null
+                ).then((res) => {
+                    setPlayData(res);
 
-                setPlayData(flist);
+                    if (res.length > 0) setExportOpen(true);
+                });
+            } else {
+                GameService.getGamePlayerTags(
+                    currentUser.id,
+                    cell.team_id,
+                    `${cell.player_id}`,
+                    `${cell.game_id}`,
+                    ActionData[prop.action].action_id,
+                    ActionData[prop.action].action_type_id,
+                    ActionData[prop.action].action_result_id,
+                    null,
+                    null,
+                    null
+                ).then((res) => {
+                    const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;
 
-                if (flist.length > 0) setExportOpen(true);
-            });
+                    setPlayData(flist);
+
+                    if (flist.length > 0) setExportOpen(true);
+                });
+            }
         }
     };
 
     const getAwayTeamName = (item) => {
         return item.team_name === item.home_team_name ? item.away_team_name : item.home_team_name;
     };
+
+    console.log('goalkeeper/games => ', list);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="xl">

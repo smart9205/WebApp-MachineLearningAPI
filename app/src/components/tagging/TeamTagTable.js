@@ -23,7 +23,7 @@ const PERIOD = [
     { id: 3, name: 'Overtime' }
 ];
 
-export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId, onPlay, setTeamTagClicked, ...params }) {
+export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId, onPlay, setTeamTagClicked, setTeamTagId, teamTagClicked, ...params }) {
     const [loading, setLoading] = React.useState(false);
     const [deleteOpen, setDeleteOpen] = React.useState(false);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -60,11 +60,18 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
             });
     };
 
+    React.useEffect(() => {
+        if(rows.lenght <= 0){
+            setTeamTagId(null)
+            setTeamTagClicked(false)
+        }
+    },[rows])
+
     return (
         <Box {...params}>
             <DeleteConfirmDialog open={deleteOpen} handleDeleteClose={handleDeleteClose} />
             <Paper sx={{ width: '100%', height: '100%', overflow: 'hidden', p: 0.5 }}>
-                <h5 style={{ textAlign: 'center' }}onClick={() => setTeamTagClicked(false)} >Team Tag</h5>
+                <h5 style={{ textAlign: 'center' }} >Team Tag</h5>
                 <TableContainer style={{ height: '85%' }}>
                     <Table stickyHeader aria-label="sticky table" size={'small'} sx={{ pb: 4 }}>
                         <TableHead>
@@ -88,7 +95,10 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
                                 <>
                                     {rows.map((row) => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id} selected={row.id === selectedId}>
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id} selected={row.id === selectedId} onClick={() => {
+                                                setTeamTagId(row.id)
+                                                setTeamTagClicked(!teamTagClicked)
+                                            }} >
                                                 <TCellSelectEdit
                                                     rows={PERIOD}
                                                     value={PERIOD.find((p) => p.id === row.period)}
