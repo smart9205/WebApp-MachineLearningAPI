@@ -29,7 +29,7 @@ const style = {
     p: 4
 };
 
-export default function IndividualTagTable({ rows, offenseTeamId, offenseTeam, updateTagList, taggingState, setPlay, sendTimeData, config, playerCurTime, teamTagClicked, defenseTeam = null, del = true, onPlay, ...params }) {
+export default function IndividualTagTable({ rows, offenseTeamId, offenseTeam, updateTagList, taggingState, setPlay, sendTimeData, config, playerCurTime, teamTagClicked, startTime, defenseTeam = null, del = true, onPlay, ...params }) {
     const [loading, setLoading] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState(rows[0]);
@@ -101,6 +101,7 @@ export default function IndividualTagTable({ rows, offenseTeamId, offenseTeam, u
                         tagActionsList={actions}
                         tagActionTypesList={actionTypes}
                         tagActionResultsList={actionResults}
+                        startTime={startTime}
                     />
                 </Box>
             </Modal>

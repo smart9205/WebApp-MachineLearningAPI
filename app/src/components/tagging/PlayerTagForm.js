@@ -19,6 +19,8 @@ import Switch from '@mui/material/Switch';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
+import dayjs from 'dayjs';
+import { toHHMMSS } from '../../common/utilities';
 
 const areas = [
     { id: 1, name: "Defensive" },
@@ -27,7 +29,10 @@ const areas = [
     { id: 4, name: "Offensive" },
 ]
 
-const PlayerTagForm = ({ offenseTeam, defenseTeam, taggingState, setOpenModal, sendTimeData, setPlay, tagActionsList, tagActionTypesList, tagActionResultsList }) => {
+const PlayerTagForm = ({ offenseTeam, defenseTeam, taggingState, setOpenModal, sendTimeData, setPlay, tagActionsList, tagActionTypesList, tagActionResultsList, startTime }) => {
+
+    const time = startTime.split(':');
+    let actual_time = time[0]*3600+time[1]*60+(+time[2])
 
     const [alertOpen, setAlertOpen] = useState(false);
     const [alert, setAlert] = useState('');
@@ -42,8 +47,8 @@ const PlayerTagForm = ({ offenseTeam, defenseTeam, taggingState, setOpenModal, s
     const [actionType, setActionType] = useState('');
     const [actionResult, setActionResult] = useState('');
     const [timeData, setTimeData] = useReducer((old, action) => ({ ...old, ...action }), {
-        start_time: '00:00:00',
-        end_time: '00:00:00'
+        start_time: dayjs(`2022-03-05 ${toHHMMSS(actual_time)}`),
+        end_time: dayjs(`2022-03-05 ${toHHMMSS(actual_time + 18)}`)
     });
 
     const handleClose = (event, reason) => {
@@ -63,11 +68,10 @@ const PlayerTagForm = ({ offenseTeam, defenseTeam, taggingState, setOpenModal, s
         return n > 9 ? "" + n : "0" + n;
     }
 
-
     const handleSubmitForm = () => {
 
         if (!player || !courtAreas || !action || !actionType) {
-            OpenAlert('Input enough data to add a new game!', 'warning');
+            OpenAlert('Input enough data to add a new player tag!', 'warning');
             return;
         }
 
@@ -244,7 +248,8 @@ const PlayerTagForm = ({ offenseTeam, defenseTeam, taggingState, setOpenModal, s
                                     onChange={(newValue) => {
                                         setTimeData({ start_time: newValue });
                                     }}
-                                    renderInput={(params) => <TextField {...params} fullWidth />}
+                                    
+                                    renderInput={(params) => <TextField {...params} fullWidth/>}
                                 />
                             </Box>
                         </Grid>

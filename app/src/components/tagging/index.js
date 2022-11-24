@@ -147,6 +147,7 @@ export default function Tagging() {
     const [curTagStatusText, setCurTagStatusText] = React.useState('');
     const [defenseTeamGoalKeeper, setDefenseTeamGoalKeeper] = React.useState([]);
     const [teamTagId, setTeamTagId] = React.useState(null)
+    const [startTime, setStartTime] = React.useState(null)
     const [teamTagClicked, setTeamTagClicked] = React.useState(true)
 
     const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
@@ -370,10 +371,10 @@ export default function Tagging() {
 
     const addPlayerTag = async (PTag) => await GameService.addPlayerTag(PTag);
 
-    let playerTagTimeAndId = []
+    let playerTagTime = []
 
     const sendTimeData = (data) => {
-        playerTagTimeAndId.push(data)
+        playerTagTime.push(data)
         setClicked(true)
         setTeamTagClicked(true)
     }
@@ -383,12 +384,12 @@ export default function Tagging() {
         let start_time = '00:00:00'
         let end_time = '00:00:00'
 
-        if (playerTagTimeAndId.length <= 0) {
+        if (playerTagTime.length <= 0) {
             start_time = playerTag.start_time
             end_time = playerTag.end_time
         } else {
-            start_time = playerTagTimeAndId[0].start_time
-            end_time = playerTagTimeAndId[0].end_time
+            start_time = playerTagTime[0].start_time
+            end_time = playerTagTime[0].end_time
         }
         setTempPlayerTagList([
             ...temp_playerTag_list,
@@ -589,6 +590,7 @@ export default function Tagging() {
                     setTeamTagClicked={setTeamTagClicked}
                     teamTagClicked={teamTagClicked}
                     setTeamTagId={setTeamTagId}
+                    setStartTime={setStartTime}
                 />
                 <IndividualTagTable
                     sx={{ height: '40%', p: 1, width: '100%' }}
@@ -603,6 +605,7 @@ export default function Tagging() {
                     setPlay={setPlay}
                     sendTimeData={sendTimeData}
                     teamTagClicked={teamTagClicked}
+                    startTime={startTime}
                 />
             </Drawer>
 

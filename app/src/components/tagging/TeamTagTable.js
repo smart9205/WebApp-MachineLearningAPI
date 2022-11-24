@@ -23,7 +23,7 @@ const PERIOD = [
     { id: 3, name: 'Overtime' }
 ];
 
-export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId, onPlay, setTeamTagClicked, setTeamTagId, teamTagClicked, ...params }) {
+export default function TeamTagTable({ rows, updateTagList, handleRowClick, selectedId, onPlay, setTeamTagClicked, setTeamTagId, teamTagClicked, setStartTime, ...params }) {
     const [loading, setLoading] = React.useState(false);
     const [deleteOpen, setDeleteOpen] = React.useState(false);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -61,11 +61,11 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
     };
 
     React.useEffect(() => {
-        if(rows.lenght <= 0){
+        if (rows.lenght <= 0) {
             setTeamTagId(null)
             setTeamTagClicked(false)
         }
-    },[rows])
+    }, [rows])
 
     return (
         <Box {...params}>
@@ -97,6 +97,7 @@ export default function TeamTagTable({ rows, updateTagList, handleRowClick, sele
                                         return (
                                             <TableRow hover role="checkbox" tabIndex={-1} key={row.id} selected={row.id === selectedId} onClick={() => {
                                                 setTeamTagId(row.id)
+                                                setStartTime(row.start_time)
                                                 setTeamTagClicked(!teamTagClicked)
                                             }} >
                                                 <TCellSelectEdit
