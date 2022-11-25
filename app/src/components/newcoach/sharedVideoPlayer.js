@@ -27,7 +27,7 @@ const CoachSharedEditVideoPlayer = () => {
 
     return (
         <div style={{ display: 'flex' }}>
-            <EditVideoPlayer idx={curTagIndex} tagList={tagList} onChangeClip={setCurTagIndex} drawOpen={true} />
+            <EditVideoPlayer idx={curTagIndex} tagList={tagList} onChangeClip={setCurTagIndex} drawOpen={false} />
         </div>
     );
 };

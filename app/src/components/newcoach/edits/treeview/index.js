@@ -240,7 +240,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                     if (flag) handleDeleteEditFolder(curEdit);
                 }}
             />
-            <EditShareDialog open={shareOpen} onClose={() => setShareOpen(false)} editId={curEdit?.id ?? 0} />
+            <EditShareDialog open={shareOpen} onClose={() => setShareOpen(false)} edit={curEdit} />
         </>
     );
 };

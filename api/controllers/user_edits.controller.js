@@ -206,20 +206,20 @@ exports.findAllFolders = (req, res) => {
     });
 };
 
-sendEmail = async (to, subject, html) => {
+sendEmail = async (origin, email, userId, subject, html) => {
   const sendgrid = require("@sendgrid/mail");
   sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
   const msg = {
-    to: to.email, // Change to your recipient
-    from: "scouting4u2010@gmail.com", // Change to your verified sender
+    to: email, // Change to your recipient
+    from: origin, // Change to your verified sender
     subject: subject,
     html: html,
   };
 
   const email_queue = await Email_Queue.create({
-    user_id: to.id,
-    user_email: to.email,
+    user_id: userId,
+    user_email: email,
     send_date: new Date(),
     subject: subject,
     content: html,
@@ -238,7 +238,7 @@ sendEmail = async (to, subject, html) => {
 
 exports.sendShareEmail = (req, res) => {
   Sequelize.query(
-    `SELECT * FROM public."Users" WHERE public."Users".email='${req.body.email}'`
+    `SELECT * FROM public."Users" WHERE public."Users".id=${req.userId}`
   )
     .then((data) => {
       const user = data[0][0];
@@ -253,15 +253,21 @@ exports.sendShareEmail = (req, res) => {
                 <meta charset="UTF-8">
               </head>
               <body>
-                <h2>${req.body.name} shared User Edit</h2>
+                <h2>${req.body.name}, ${user.first_name} ${user.last_name} shared the edit "${req.body.edit_name}" with you.</h2>
                 <br/>
                 <h4>${req.body.text}</h4>
                 <br/>
-                Click on this link to display video clips of shared User Edit <a href="${url}"> ${url} </a>
+                Click <a href="${url}"> here </a> to watch the shared video. 
               </body>
             </html>`;
 
-      sendEmail(user, "Share - User Edit", html);
+      sendEmail(
+        user.email,
+        req.body.email,
+        req.userId,
+        `A new share from ${user.first_name} ${user.last_name}`,
+        html
+      );
       res.status(200).send({
         message: `Shared successfully, Please check the shared url.`,
       });

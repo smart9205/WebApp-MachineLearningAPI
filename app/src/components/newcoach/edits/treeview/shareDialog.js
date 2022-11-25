@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import GameService from '../../../../services/game.service';
 
-const EditShareDialog = ({ open, onClose, editId }) => {
+const EditShareDialog = ({ open, onClose, edit }) => {
     const [username, setUsername] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [comment, setComment] = useState('');
@@ -13,28 +13,28 @@ const EditShareDialog = ({ open, onClose, editId }) => {
 
         let shareId = '';
 
-        await GameService.getEditbyId(editId).then((res) => {
+        await GameService.getEditbyId(edit.id).then((res) => {
             shareId = res[0].share_id;
         });
-        await GameService.sendShareEmail({ share_id: shareId, name: username, email: userEmail, text: comment }).then((res) => {
+        await GameService.sendShareEmail({ share_id: shareId, edit_name: edit.name, name: username, email: userEmail, text: comment }).then((res) => {
             onClose();
         });
     };
 
     return (
         <Dialog open={open} onClose={onClose} scroll="paper" aria-labelledby="scroll-dialog-title">
-            <DialogTitle id="scroll-dialog-title">Share for Edit</DialogTitle>
+            <DialogTitle id="scroll-dialog-title">{edit ? edit.name : 'Share for Edit'}</DialogTitle>
             <DialogContent dividers style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '36px' }}>
                 <TextField
                     value={username}
-                    label="User Name"
+                    label="Share To"
                     variant="outlined"
                     onChange={(e) => setUsername(e.target.value)}
                     sx={{ borderRadius: '10px', height: '48px', width: '450px', '& .MuiOutlinedInput-root': { borderRadius: '10px' } }}
                 />
                 <TextField
                     value={userEmail}
-                    label="User Email"
+                    label="Email"
                     variant="outlined"
                     onChange={(e) => setUserEmail(e.target.value)}
                     sx={{ borderRadius: '10px', height: '48px', width: '450px', '& .MuiOutlinedInput-root': { borderRadius: '10px' } }}

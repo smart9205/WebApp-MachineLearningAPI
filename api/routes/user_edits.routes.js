@@ -8,7 +8,6 @@ module.exports = (app) => {
     );
     next();
   });
-  app.use([authJwt.verifyToken]);
 
   app.post("/user_edits", [authJwt.isAdminOrCoach], controller.create);
 
