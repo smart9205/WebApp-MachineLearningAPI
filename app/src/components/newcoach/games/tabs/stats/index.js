@@ -78,13 +78,15 @@ const GameStats = ({ game }) => {
                     team = filtered[0].team_id;
                     opponent = team === game.home_team_id ? game.away_team_id : game.home_team_id;
                 });
-                await GameService.getGamePlayerTags(currentUser.id, values.isOur ? team : opponent, null, `${game.id}`, null, null, null, null, null, null).then((res) => {
+                await GameService.getGamePlayerTags(currentUser.id, values.isOur ? team : opponent, null, `${game.id}`, null, null, null, null, null, null, null, null).then((res) => {
                     setValues({ ...values, teamId: team, opponentTeamId: opponent, playerList: res });
                 });
             } else {
-                await GameService.getGamePlayerTags(currentUser.id, values.isOur ? values.teamId : values.opponentTeamId, null, `${game.id}`, null, null, null, null, null, null).then((res) => {
-                    setValues({ ...values, playerList: res });
-                });
+                await GameService.getGamePlayerTags(currentUser.id, values.isOur ? values.teamId : values.opponentTeamId, null, `${game.id}`, null, null, null, null, null, null, null, null).then(
+                    (res) => {
+                        setValues({ ...values, playerList: res });
+                    }
+                );
             }
         }
     }, [values, refresh]);

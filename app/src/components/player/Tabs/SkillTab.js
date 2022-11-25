@@ -97,6 +97,8 @@ export default function SkillTab({ playTags, onHighlight, showHighlight, t }) {
             ActionData[cell.action].action_result_id,
             null,
             null,
+            null,
+            null,
             null
         ).then((res) => {
             const flist = cell.title === 'Exits' ? res.filter((item) => item.inside_the_pain === false) : res;

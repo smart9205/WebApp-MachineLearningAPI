@@ -54,6 +54,8 @@ const PlayersGamesDialog = ({ open, onClose, list, playerName }) => {
                 ActionData[prop.action].action_result_id,
                 null,
                 null,
+                null,
+                null,
                 null
             ).then((res) => {
                 setPlayData(
@@ -97,6 +99,8 @@ const PlayersGamesDialog = ({ open, onClose, list, playerName }) => {
                 ActionData[prop.action].action_id,
                 ActionData[prop.action].action_type_id,
                 ActionData[prop.action].action_result_id,
+                null,
+                null,
                 null,
                 null,
                 null

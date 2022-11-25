@@ -76,19 +76,17 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
             players = res;
         });
 
-        if (player) {
-            setValues({
-                ...values,
-                player_name: players.filter((p) => p.name === player.player_name)[0],
-                court_area: courtAreaList.filter((c) => c.id === player.court_area)[0],
-                action_name: actions.filter((item) => item.name === player.action_name)[0],
-                action_type: types.filter((item) => item.name === player.action_type)[0],
-                action_result: results.filter((item) => item.name === player.action_result)[0],
-                inside_pain: player.inside_pain,
-                start_time: player.start_time,
-                end_time: player.end_time
-            });
-        }
+        setValues({
+            ...values,
+            player_name: players.filter((p) => p.name === player.player_name)[0],
+            court_area: courtAreaList.filter((c) => c.id === player.court_area)[0],
+            action_name: actions.filter((item) => item.name === player.action_name)[0],
+            action_type: types.filter((item) => item.name === player.action_type)[0],
+            action_result: results.filter((item) => item.name === player.action_result)[0],
+            inside_pain: player.inside_pain,
+            start_time: player.start_time,
+            end_time: player.end_time
+        });
     }, [player]);
 
     console.log('eeedit => ', player);

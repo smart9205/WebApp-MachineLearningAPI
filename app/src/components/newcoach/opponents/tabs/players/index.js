@@ -237,6 +237,8 @@ const OpponentPlayers = ({ game }) => {
                     ActionData[tagIndex.id].action_result_id,
                     null,
                     null,
+                    null,
+                    null,
                     null
                 )
             );

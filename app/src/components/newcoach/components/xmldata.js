@@ -274,7 +274,7 @@ export const XmlDataFilterGames = ({ game, setXML, setLoading }) => {
     };
 
     const getPlayerTagList = async (id, isOur) => {
-        return await GameService.getGamePlayerTags(currentUser.id, id, null, `${game.id}`, null, null, null).then((res) => {
+        return await GameService.getGamePlayerTags(currentUser.id, id, null, `${game.id}`, null, null, null, null, null, null, null, null).then((res) => {
             const sortedList = res.sort(sortByStartTime);
             let player_names = [];
             let playerActions = [];
@@ -774,7 +774,7 @@ export const XmlDataFilterOpponents = ({ game, teamId, setXML, setLoading }) => 
     };
 
     const getPlayerTagList = async (id, isOur) => {
-        return await GameService.getGamePlayerTags(currentUser.id, id, null, `${game.id}`, null, null, null).then((res) => {
+        return await GameService.getGamePlayerTags(currentUser.id, id, null, `${game.id}`, null, null, null, null, null, null, null, null).then((res) => {
             const sortedList = res.sort(sortByStartTime);
             let player_names = [];
             let playerActions = [];

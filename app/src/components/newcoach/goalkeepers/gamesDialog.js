@@ -60,6 +60,8 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
                     ActionData[prop.action].action_result_id,
                     null,
                     null,
+                    null,
+                    null,
                     null
                 ).then((res) => {
                     setPlayData(
@@ -98,6 +100,8 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
                     ActionData[prop.action].action_id,
                     ActionData[prop.action].action_type_id,
                     ActionData[prop.action].action_result_id,
+                    null,
+                    null,
                     null,
                     null,
                     null
@@ -150,6 +154,8 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
                     ActionData[prop.action].action_result_id,
                     null,
                     null,
+                    null,
+                    null,
                     null
                 ).then((res) => {
                     setPlayData(res);
@@ -165,6 +171,8 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
                     ActionData[prop.action].action_id,
                     ActionData[prop.action].action_type_id,
                     ActionData[prop.action].action_result_id,
+                    null,
+                    null,
                     null,
                     null,
                     null

@@ -55,6 +55,8 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
             ActionData[prop.action].action_result_id,
             null,
             null,
+            null,
+            null,
             null
         ).then((res) => {
             setPlayData(
@@ -100,6 +102,8 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
             ActionData[prop.action].action_id,
             ActionData[prop.action].action_type_id,
             ActionData[prop.action].action_result_id,
+            null,
+            null,
             null,
             null,
             null

@@ -73,12 +73,12 @@ module.exports = (app) => {
   );
 
   app.get(
-    "/player/game_player_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId/:gameTime/:courtArea/:inside",
+    "/player/game_player_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId/:gameTime/:courtArea/:inside/:gameResult/:homeAway",
     controller.getGamePlayerTags
   );
 
   app.get(
-    "/player/opponent_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId/:gameTime/:courtArea/:inside",
+    "/player/opponent_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId/:gameTime/:courtArea/:inside/:gameResult/:homeAway",
     controller.getOpponentTags
   );
 

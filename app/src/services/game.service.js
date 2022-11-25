@@ -896,22 +896,22 @@ const getAllPlayerTagsByTeam = (teamId, gameId) => {
     });
 };
 
-const getGamePlayerTags = (userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside) => {
+const getGamePlayerTags = (userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside, gameResult, homeAway) => {
     return axios
-        .get(API_URL + `player/game_player_tags/${userId}/${teamId}/${playerId}/${gameId}/${actionId}/${actionTypeId}/${actionResultId}/${gameTime}/${courtArea}/${inside}`, {
+        .get(API_URL + `player/game_player_tags/${userId}/${teamId}/${playerId}/${gameId}/${actionId}/${actionTypeId}/${actionResultId}/${gameTime}/${courtArea}/${inside}/${gameResult}/${homeAway}`, {
             headers: authHeader(),
-            data: { userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside }
+            data: { userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside, gameResult, homeAway }
         })
         .then((response) => {
             return response.data;
         });
 };
 
-const getOpponentTags = (userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside) => {
+const getOpponentTags = (userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside, gameResult, homeAway) => {
     return axios
-        .get(API_URL + `player/opponent_tags/${userId}/${teamId}/${playerId}/${gameId}/${actionId}/${actionTypeId}/${actionResultId}/${gameTime}/${courtArea}/${inside}`, {
+        .get(API_URL + `player/opponent_tags/${userId}/${teamId}/${playerId}/${gameId}/${actionId}/${actionTypeId}/${actionResultId}/${gameTime}/${courtArea}/${inside}/${gameResult}/${homeAway}`, {
             headers: authHeader(),
-            data: { userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside }
+            data: { userId, teamId, playerId, gameId, actionId, actionTypeId, actionResultId, gameTime, courtArea, inside, gameResult, homeAway }
         })
         .then((response) => {
             return response.data;

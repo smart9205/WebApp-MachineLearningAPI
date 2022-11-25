@@ -138,6 +138,8 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
                 ActionData[cell.action].action_result_id,
                 null,
                 null,
+                null,
+                null,
                 null
             ).then((res) => {
                 setPlayData(
@@ -180,6 +182,8 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
                 ActionData[cell.action].action_id,
                 ActionData[cell.action].action_type_id,
                 ActionData[cell.action].action_result_id,
+                null,
+                null,
                 null,
                 null,
                 null

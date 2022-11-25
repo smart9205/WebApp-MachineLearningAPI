@@ -144,7 +144,9 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                 ActionData[cell.action].action_result_id,
                 gameTime.length === 0 ? null : gameTime.join(','),
                 courtArea.length === 0 ? null : courtArea.join(','),
-                null
+                null,
+                gameResult ? parseInt(gameResult) : null,
+                gamePlace ? parseInt(gamePlace) : null
             ).then((res) => {
                 let data = res;
 
@@ -196,7 +198,9 @@ const GoalkeeperStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
                 ActionData[cell.action].action_result_id,
                 gameTime.length === 0 ? null : gameTime.join(','),
                 courtArea.length === 0 ? null : courtArea.join(','),
-                null
+                null,
+                gameResult ? parseInt(gameResult) : null,
+                gamePlace ? parseInt(gamePlace) : null
             ).then((res) => {
                 let data = res;
 

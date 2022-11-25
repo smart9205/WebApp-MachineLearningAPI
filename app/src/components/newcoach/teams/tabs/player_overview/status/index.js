@@ -157,7 +157,9 @@ const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, t
                 ActionData[cell.action].action_result_id,
                 gameTime.length === 0 ? null : gameTime.join(','),
                 courtArea.length === 0 ? null : courtArea.join(','),
-                null
+                null,
+                gameResult ? parseInt(gameResult) : null,
+                gamePlace ? parseInt(gamePlace) : null
             ).then((res) => {
                 let data = res;
 
@@ -206,7 +208,9 @@ const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, t
                 ActionData[cell.action].action_result_id,
                 gameTime.length === 0 ? null : gameTime.join(','),
                 courtArea.length === 0 ? null : courtArea.join(','),
-                null
+                null,
+                gameResult ? parseInt(gameResult) : null,
+                gamePlace ? parseInt(gamePlace) : null
             ).then((res) => {
                 let data = res;
 

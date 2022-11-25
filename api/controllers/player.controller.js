@@ -524,6 +524,10 @@ exports.getGamePlayerTags = (req, res) => {
     req.params.inside === "null" ? null : parseInt(req.params.inside);
   const gameIds =
     req.params.gameId === "null" ? null : `'${req.params.gameId}'`;
+  const game_result =
+    req.params.gameResult === "null" ? null : parseInt(req.params.gameResult);
+  const home_away =
+    req.params.homeAway === "null" ? null : parseInt(req.params.homeAway);
 
   Sequelize.query(
     `
@@ -537,7 +541,9 @@ exports.getGamePlayerTags = (req, res) => {
       ${actionResultId},
       ${gameTime},
       ${courtArea},
-      ${inside}
+      ${inside},
+      ${game_result},
+      ${home_away}
     )
   `
   )
@@ -574,6 +580,10 @@ exports.getOpponentTags = (req, res) => {
     req.params.inside === "null" ? null : parseInt(req.params.inside);
   const gameIds =
     req.params.gameId === "null" ? null : `'${req.params.gameId}'`;
+  const game_result =
+    req.params.gameResult === "null" ? null : parseInt(req.params.gameResult);
+  const home_away =
+    req.params.homeAway === "null" ? null : parseInt(req.params.homeAway);
 
   Sequelize.query(
     `
@@ -587,7 +597,9 @@ exports.getOpponentTags = (req, res) => {
       ${actionResultId},
       ${gameTime},
       ${courtArea},
-      ${inside}
+      ${inside},
+      ${game_result},
+      ${home_away}
     )
   `
   )

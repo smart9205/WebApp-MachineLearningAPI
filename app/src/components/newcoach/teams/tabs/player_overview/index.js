@@ -234,6 +234,8 @@ const TeamPlayersOverview = ({ games, gameIds, teamId, teamName }) => {
                         ActionData[tagIndex.id].action_result_id,
                         null,
                         null,
+                        null,
+                        null,
                         null
                     )
                 );

@@ -153,6 +153,8 @@ const Goalkeepers = () => {
                     ActionData[cell.action].action_result_id,
                     null,
                     null,
+                    null,
+                    null,
                     null
                 ).then((res) => {
                     setPlayData(
@@ -190,6 +192,8 @@ const Goalkeepers = () => {
                     ActionData[cell.action].action_id,
                     ActionData[cell.action].action_type_id,
                     ActionData[cell.action].action_result_id,
+                    null,
+                    null,
                     null,
                     null,
                     null
@@ -248,6 +252,8 @@ const Goalkeepers = () => {
                     ActionData[cell.action].action_result_id,
                     null,
                     null,
+                    null,
+                    null,
                     null
                 ).then((res) => {
                     setPlayData(res);
@@ -263,6 +269,8 @@ const Goalkeepers = () => {
                     ActionData[cell.action].action_id,
                     ActionData[cell.action].action_type_id,
                     ActionData[cell.action].action_result_id,
+                    null,
+                    null,
                     null,
                     null,
                     null
