@@ -975,6 +975,24 @@ const getAllFolders = () => {
     });
 };
 
+const sendShareEmail = (req) => {
+    return axios.post(API_URL + `user_edits/share`, req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const getEditbyId = (id) => {
+    return axios.get(API_URL + `user_edits/get/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+        return response.data;
+    });
+};
+
+const verifyShareId = (req) => {
+    return axios.post(API_URL + 'user_edits_verify', req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
 const createUserFolder = (req) => {
     return axios.post(API_URL + 'user_edits_folders', req, { headers: authHeader() }).then((response) => {
         return response.data;
@@ -1130,6 +1148,7 @@ const gameService = {
     getBiggestSortNumber,
     getVideoSourceFromEdit,
     getTeamInitialStanding,
+    getEditbyId,
 
     updateJersey,
     updateGame,
@@ -1145,6 +1164,8 @@ const gameService = {
     addNewEditClips,
     updateEditClipsSort,
     updateEditClip,
+    sendShareEmail,
+    verifyShareId,
 
     deletePlayersInTeam,
 

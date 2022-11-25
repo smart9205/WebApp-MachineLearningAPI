@@ -34,7 +34,21 @@ module.exports = (app) => {
     controller.findAllFolders
   );
 
+  app.post(
+    "/user_edits/share",
+    [authJwt.isAdminOrCoach],
+    controller.sendShareEmail
+  );
+
+  app.post("/user_edits_verify", controller.verifyShareId);
+
   app.get("/user_edits/:id", controller.findOne);
+
+  app.get(
+    "/user_edits/get/:id",
+    [authJwt.isAdminOrCoach],
+    controller.getEditbyId
+  );
 
   app.get(
     "/user_edits/big_sort/:type/:parentId",

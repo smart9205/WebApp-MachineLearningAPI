@@ -16,6 +16,7 @@ import { getComparator, stableSort } from '../../components/utilities';
 import EditCreateUserFolderEdit from './createFolder';
 import EditNameDialog from './editNameDialog';
 import DeleteConfirmDialog from '../../../../common/DeleteConfirmDialog';
+import EditShareDialog from './shareDialog';
 
 let child_ids = [];
 
@@ -54,7 +55,6 @@ export function getTreeViewData(res) {
     child_ids = [];
 
     for (let i = 0; i < resCopy.length; i += 1) {
-
         const child = getChilds(resCopy, resCopy[i].id);
         let tree = { id: String(resCopy[i].id), name: resCopy[i].name, order_num: resCopy[i].order_number, type: resCopy[i].type, parent_id: resCopy[i].parent_id };
 
@@ -73,7 +73,6 @@ export function getTreeViewData(res) {
         child_ids = [...child_ids, tree.id];
         resCopy = resCopy.filter((data) => child_ids.includes(String(data.id)) === false);
         i = -1;
-
     }
 
     return stableSort(trees, getComparator('asc', 'order_num'));
@@ -89,6 +88,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
     const [updateEdit, setUpdateEdit] = useState({});
     const [editOpen, setEditOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const [shareOpen, setShareOpen] = useState(false);
 
     const handleSetCurEdit = (edit) => {
         setCurEdit(edit);
@@ -127,6 +127,10 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
         handleSetCurEdit(null);
     };
 
+    const handleShareEdit = (node) => {
+        setShareOpen(true);
+    };
+
     const renderTree = (nodes) => (
         <TreeItem
             key={`${nodes.id}_${nodes.type}`}
@@ -145,7 +149,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                             </Box>
                             {nodes.type === 'edit' && (
                                 <>
-                                    <Box>
+                                    <Box onClick={() => handleShareEdit(nodes)}>
                                         <ShareIcon fontSize="small" />
                                     </Box>
                                     <Box>
@@ -173,10 +177,13 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
             const ascArray = stableSort(res, getComparator('asc', 'id'));
             const array = getTreeViewData(ascArray);
 
+            console.log('edit tree => ', ascArray);
             setFolders(array);
             setLoading(false);
         });
     }, []);
+
+    console.log('edit tree => ', curEdit);
 
     return (
         <>
@@ -190,7 +197,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 10px 24px' }}>
                             <Button
                                 variant="contained"
-                                sx={{ fontSize: '0.75rem !important', background: '#C5EAC6', color:'#0A7304', '&:hover': { background: '#0A7304' ,color:'#fff'} }}
+                                sx={{ fontSize: '0.75rem !important', background: '#C5EAC6', color: '#0A7304', '&:hover': { background: '#0A7304', color: '#fff' } }}
                                 onClick={() => {
                                     setCreateFolderEdit(true);
                                     setFolderDialog(true);
@@ -201,7 +208,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                             <Button
                                 variant="contained"
                                 disabled={curEdit === null || curEdit.type === 'edit'}
-                                sx={{fontSize: '0.75rem !important',  background: '#C5EAC6', color:'#0A7304', '&:hover': { background: '#0A7304' ,color:'#fff'} }}
+                                sx={{ fontSize: '0.75rem !important', background: '#C5EAC6', color: '#0A7304', '&:hover': { background: '#0A7304', color: '#fff' } }}
                                 onClick={() => {
                                     setCreateFolderEdit(false);
                                     setFolderDialog(true);
@@ -233,6 +240,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                     if (flag) handleDeleteEditFolder(curEdit);
                 }}
             />
+            <EditShareDialog open={shareOpen} onClose={() => setShareOpen(false)} editId={curEdit?.id ?? 0} />
         </>
     );
 };

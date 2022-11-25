@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import GoTop from './Shared/GoTop';
 
-const NO_NAV_Routes = ['/tagging', '/team', '/player', '/new_coach'];
+const NO_NAV_Routes = ['/tagging', '/team', '/player', '/new_coach', '/shareedit'];
 
 const Layout = ({ children }) => {
     const location = useLocation();

@@ -1,11 +1,14 @@
 const db = require("../models");
+const config = require("../config/auth.config");
 const User_Edits = db.user_edits;
 const User_Edits_Folder = db.user_edits_folders;
 const Edit_Clips = db.edit_clips;
+const Email_Queue = db.email_queue;
 const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
 
 var bcrypt = require("bcryptjs");
+var CryptoJS = require("crypto-js");
 
 exports.create = async (req, res) => {
   if (!req.body.name) {
@@ -203,12 +206,119 @@ exports.findAllFolders = (req, res) => {
     });
 };
 
+sendEmail = async (to, subject, html) => {
+  const sendgrid = require("@sendgrid/mail");
+  sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+
+  const msg = {
+    to: to.email, // Change to your recipient
+    from: "scouting4u2010@gmail.com", // Change to your verified sender
+    subject: subject,
+    html: html,
+  };
+
+  const email_queue = await Email_Queue.create({
+    user_id: to.id,
+    user_email: to.email,
+    send_date: new Date(),
+    subject: subject,
+    content: html,
+  });
+
+  sendgrid
+    .send(msg)
+    .then((resp) => {
+      Email_Queue.update({ success: true }, { where: { id: email_queue.id } });
+    })
+    .catch((error) => {
+      console.error(error);
+      Email_Queue.update({ success: false }, { where: { id: email_queue.id } });
+    });
+};
+
+exports.sendShareEmail = (req, res) => {
+  Sequelize.query(
+    `SELECT * FROM public."Users" WHERE public."Users".email='${req.body.email}'`
+  )
+    .then((data) => {
+      const user = data[0][0];
+      const ciphertext = encodeURIComponent(
+        CryptoJS.AES.encrypt(`${req.body.share_id}`, config.secret).toString()
+      );
+      const url = `https://soccer.scouting4u.com/shareedit/${ciphertext}`;
+
+      var html = `<!DOCTYPE html>
+            <html>
+              <head>
+                <meta charset="UTF-8">
+              </head>
+              <body>
+                <h2>${req.body.name} shared User Edit</h2>
+                <br/>
+                <h4>${req.body.text}</h4>
+                <br/>
+                Click on this link to display video clips of shared User Edit <a href="${url}"> ${url} </a>
+              </body>
+            </html>`;
+
+      sendEmail(user, "Share - User Edit", html);
+      res.status(200).send({
+        message: `Shared successfully, Please check the shared url.`,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving UserEdits.",
+      });
+    });
+};
+
+exports.verifyShareId = (req, res) => {
+  var bytes = CryptoJS.AES.decrypt(
+    decodeURIComponent(req.body.code),
+    config.secret
+  );
+  var data = bytes.toString(CryptoJS.enc.Utf8);
+
+  console.log("$$$$$$$$", req.body, data);
+  Sequelize.query(
+    `SELECT * FROM public."User_Edits" WHERE public."User_Edits".share_id='${data}'`
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving UserEdits.",
+      });
+    });
+};
+
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
   Sequelize.query(
     `
   select * from public.fnc_get_clips_in_edits(${id}) order by sort asc
+  `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving UserEdits.",
+      });
+    });
+};
+
+exports.getEditbyId = (req, res) => {
+  Sequelize.query(
+    `
+  select * from public."User_Edits" where public."User_Edits".user_id=${req.userId} and public."User_Edits".id=${req.params.id}
   `
   )
     .then((data) => {
@@ -280,7 +390,6 @@ exports.updateEditClip = (req, res) => {
 };
 
 exports.update = async (req, res) => {
-
   const id = req.params.id;
 
   const num = await User_Edits.update(req.body, { where: { id: id } });

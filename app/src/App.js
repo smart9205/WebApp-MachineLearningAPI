@@ -50,6 +50,7 @@ import OpponentPage from './components/newcoach/opponents/opponentPage';
 import VideoCutter from './components/newcoach/videocutter';
 import Corrections from './components/newcoach/corrections';
 import Goalkeepers from './components/newcoach/goalkeepers';
+import CoachSharedEditVideoPlayer from './components/newcoach/sharedVideoPlayer';
 
 const CustomTheme = () => {
     const { pathname } = useLocation();
@@ -147,6 +148,8 @@ const App = () => {
                                 </Route>
 
                                 <Route path="/tagging/:id" element={<Tagging />} />
+
+                                <Route path="/shareedit/:code" element={<CoachSharedEditVideoPlayer />} />
 
                                 <Route path="/new_coach" element={<RoleRoute role="ROLE_COACH" />}>
                                     <Route path="/new_coach" element={<Navigate to="/new_coach/teams" replace />} />
