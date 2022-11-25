@@ -166,7 +166,7 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
             <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
                 <FullScreen handle={handle} onChange={fullscreenChange}>
-                    <div style={{ width: drawOpen ? '100%' : '80%', margin: 'auto' }}>
+                    <div style={{ width: handle.active ? '100%' : drawOpen ? '100%' : '80%', margin: 'auto' }}>
                         <div className="player-wrapper">
                             {videoURL !== '' && (
                                 <ReactPlayer
