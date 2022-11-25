@@ -237,6 +237,8 @@ sendEmail = async (origin, email, userId, subject, html) => {
 };
 
 exports.sendShareEmail = (req, res) => {
+  const text = req.body.text.split("\n").join("<br/>");
+
   Sequelize.query(
     `SELECT * FROM public."Users" WHERE public."Users".id=${req.userId}`
   )
@@ -253,11 +255,13 @@ exports.sendShareEmail = (req, res) => {
                 <meta charset="UTF-8">
               </head>
               <body>
-                <h2>${req.body.name}, ${user.first_name} ${user.last_name} shared the edit "${req.body.edit_name}" with you.</h2>
-                <br/>
-                <h4>${req.body.text}</h4>
-                <br/>
-                Click <a href="${url}"> here </a> to watch the shared video. 
+                <div>
+                  <h2>${req.body.name}, ${user.first_name} ${user.last_name} shared the edit "${req.body.edit_name}" with you.</h2>
+                  <br/>
+                  <h4>${text}</h4>
+                  <br/>
+                  <p>Click <a href="${url}">here</a> to watch the shared video</p>
+                </div>
               </body>
             </html>`;
 
