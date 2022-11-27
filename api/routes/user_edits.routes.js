@@ -9,17 +9,21 @@ module.exports = (app) => {
     next();
   });
 
-  app.post("/user_edits", [authJwt.isAdminOrCoach], controller.create);
+  app.post(
+    "/user_edits",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.create
+  );
 
   app.post(
     "/user_edits_folders",
-    [authJwt.isAdminOrCoach],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.createFolder
   );
 
   app.post(
     "/user_edits_create",
-    [authJwt.isAdminOrCoach],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.createEdit
   );
 
@@ -29,25 +33,11 @@ module.exports = (app) => {
 
   app.get(
     "/user_edits_folders_all",
-    [authJwt.isAdminOrCoach],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.findAllFolders
   );
 
-  app.post(
-    "/user_edits/share",
-    [authJwt.isAdminOrCoach],
-    controller.sendShareEmail
-  );
-
-  app.post("/user_edits_verify", controller.verifyShareId);
-
   app.get("/user_edits/:id", controller.findOne);
-
-  app.get(
-    "/user_edits/get/:id",
-    [authJwt.isAdminOrCoach],
-    controller.getEditbyId
-  );
 
   app.get(
     "/user_edits/big_sort/:type/:parentId",
@@ -59,57 +49,83 @@ module.exports = (app) => {
     controller.getVideoSourceFromEdit
   );
 
-  app.put("/user_edits/:id", [authJwt.isAdminOrCoach], controller.update);
+  app.post(
+    "/user_edits/share",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.sendShareEmail
+  );
+
+  app.get(
+    "/user_edits/get/:id",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getEditbyId
+  );
+
+  app.post("/user_edits_verify", controller.verifyShareId);
+
+  app.put(
+    "/user_edits/:id",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.update
+  );
 
   app.put(
     "/user_edit_clips_sort",
-    [authJwt.isAdminOrCoach],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.updateEditClipsSort
   );
 
   app.put(
     "/user_edit_clip/:id",
-    [authJwt.isAdminOrCoach],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.updateEditClip
   );
 
   app.put(
     "/user_edit_clip/add/:id",
-    [authJwt.isAdminOrCoach],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.addNewEditClips
   );
 
   app.put(
     "/user_edit_clip/move/:clipIds/:editId",
-    [authJwt.isAdminOrCoach],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.moveClips
   );
 
   app.put(
     "/user_edit_clip/copy/:clipIds/:editId",
-    [authJwt.isAdminOrCoach],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.copyClips
   );
 
   app.put(
     "/user_edit_folders/move",
-    [authJwt.isAdminOrCoach],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.moveFolderNewPosition
   );
 
-  app.delete("/user_edits/:id", [authJwt.isAdminOrCoach], controller.delete);
+  app.delete(
+    "/user_edits/:id",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.delete
+  );
 
   app.delete(
     "/user_edits_folders/:id",
-    [authJwt.isAdminOrCoach],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.deleteFolder
   );
 
   app.delete(
     "/user_edits/edit_clip/:clipIds",
-    [authJwt.isAdminOrCoach],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.deleteClip
   );
 
-  app.delete("/user_edits", [authJwt.isAdminOrCoach], controller.deleteAll);
+  app.delete(
+    "/user_edits",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.deleteAll
+  );
 };
