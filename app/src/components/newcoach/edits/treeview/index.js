@@ -9,7 +9,7 @@ import EditsIcon from '../../../../assets/Edits.svg';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShareIcon from '@mui/icons-material/Share';
-import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows';
+import DesktopWindowsIcon from '@mui/icons-material/DesktopWindowsOutlined';
 import EmailIcon from '@mui/icons-material/EmailOutlined';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 
@@ -148,6 +148,15 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
         });
     };
 
+    const handleCreateEmbedCode = () => {
+        GameService.getShareURL(curEdit.id).then((res) => {
+            const message = `<iframe src="${res}" width="720" height="400" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
+
+            navigator.clipboard.writeText(message);
+            setAlertOpen(true);
+        });
+    };
+
     const renderTree = (nodes) => (
         <TreeItem
             key={`${nodes.id}_${nodes.type}`}
@@ -169,7 +178,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                                     <Box onClick={handleShareEdit}>
                                         <ShareIcon fontSize="small" />
                                     </Box>
-                                    <Box>
+                                    <Box onClick={() => handleCreateEmbedCode()}>
                                         <DesktopWindowsIcon fontSize="small" />
                                     </Box>
                                 </>
