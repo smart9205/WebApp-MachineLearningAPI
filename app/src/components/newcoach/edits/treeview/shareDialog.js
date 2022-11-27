@@ -24,21 +24,24 @@ const EditShareDialog = ({ open, onClose, edit }) => {
     return (
         <Dialog open={open} onClose={onClose} scroll="paper" aria-labelledby="scroll-dialog-title">
             <DialogTitle id="scroll-dialog-title">{edit ? edit.name : 'Share for Edit'}</DialogTitle>
-            <DialogContent dividers style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '36px' }}>
-                <TextField
-                    value={username}
-                    label="Share To"
-                    variant="outlined"
-                    onChange={(e) => setUsername(e.target.value)}
-                    sx={{ borderRadius: '10px', height: '48px', width: '450px', '& .MuiOutlinedInput-root': { borderRadius: '10px' } }}
-                />
-                <TextField
-                    value={userEmail}
-                    label="Email"
-                    variant="outlined"
-                    onChange={(e) => setUserEmail(e.target.value)}
-                    sx={{ borderRadius: '10px', height: '48px', width: '450px', '& .MuiOutlinedInput-root': { borderRadius: '10px' } }}
-                />
+            <DialogContent dividers style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '72px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '36px' }}>
+                    <TextField
+                        value={username}
+                        label="Share To"
+                        variant="outlined"
+                        onChange={(e) => setUsername(e.target.value)}
+                        sx={{ borderRadius: '10px', height: '48px', width: '450px', '& .MuiOutlinedInput-root': { borderRadius: '10px' } }}
+                    />
+                    <TextField
+                        value={userEmail}
+                        label="Email"
+                        variant="outlined"
+                        helperText="Can put several email addresses by seperating using comma and white space. For example, aa@gmail.com, bb@gmail.com"
+                        onChange={(e) => setUserEmail(e.target.value)}
+                        sx={{ borderRadius: '10px', height: '48px', width: '450px', '& .MuiOutlinedInput-root': { borderRadius: '10px' } }}
+                    />
+                </div>
                 <TextareaAutosize minRows={6} maxRows={6} value={comment} onChange={(e) => setComment(e.target.value)} style={{ width: '450px', borderRadius: '10px' }} />
             </DialogContent>
             <DialogActions>

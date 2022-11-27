@@ -239,6 +239,7 @@ sendEmail = async (origin, email, userId, subject, html) => {
 exports.sendShareEmail = (req, res) => {
   const text = req.body.text.split("\n").join("<br/>");
 
+  console.log("$$$$$$$$", req.body);
   Sequelize.query(
     `SELECT * FROM public."Users" WHERE public."Users".id=${req.userId}`
   )
@@ -248,15 +249,17 @@ exports.sendShareEmail = (req, res) => {
         CryptoJS.AES.encrypt(`${req.body.share_id}`, config.secret).toString()
       );
       const url = `https://soccer.scouting4u.com/shareedit/${ciphertext}`;
+      const emails = req.body.email.split(", ");
 
-      var html = `<!DOCTYPE html>
+      emails.map((email) => {
+        var html = `<!DOCTYPE html>
             <html>
               <head>
                 <meta charset="UTF-8">
               </head>
               <body>
-                <div style="border: 1px solid lightblue; padding: 10px; width:540px;">
-                  <a href="${url}"><img src="https://soccer-s4u-bucket.s3.eu-west-1.amazonaws.com/images/EmailThumbnail.gif" alt="" style="width: 540px;" /></a>
+              <div style="border: 1px solid lightblue; padding: 10px; width:540px;">
+              <a href="${url}"><img src="https://soccer-s4u-bucket.s3.eu-west-1.amazonaws.com/images/EmailThumbnail.gif" alt="" style="width: 540px;" /></a>
                   <h2>${req.body.edit_name}</h2>
                   <h4>Author: ${user.first_name} ${user.last_name}</h4>
                   <p>${text}</p>
@@ -271,19 +274,49 @@ exports.sendShareEmail = (req, res) => {
                 <br/>
                 <p><b>Warning:</b> Although taking reasonable precautions to ensure no viruses or malicious software are present in this email, the Scouting4U cannot accept responsibility for any loss or damage arising from the use of this email or attachments!</p> 
                 </div>
-              </body>
+                </body>
             </html>`;
 
-      sendEmail(
-        user.email,
-        req.body.email,
-        req.userId,
-        `A new share from ${user.first_name} ${user.last_name}`,
-        html
-      );
+        sendEmail(
+          user.email,
+          email,
+          req.userId,
+          `A new share from ${user.first_name} ${user.last_name}`,
+          html
+        );
+        sendEmail(
+          user.email,
+          "scouting4u2010@gmail.com",
+          req.userId,
+          `A new share from ${user.first_name} ${user.last_name}`,
+          html
+        );
+      });
       res.status(200).send({
         message: `Shared successfully, Please check the shared url.`,
       });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving UserEdits.",
+      });
+    });
+};
+
+exports.getShareURL = (req, res) => {
+  Sequelize.query(
+    `
+  select * from public."User_Edits" where public."User_Edits".user_id=${req.userId} and public."User_Edits".id=${req.params.id}
+  `
+  )
+    .then((data) => {
+      const ciphertext = encodeURIComponent(
+        CryptoJS.AES.encrypt(`${data[0][0].share_id}`, config.secret).toString()
+      );
+      const url = `https://soccer.scouting4u.com/shareedit/${ciphertext}`;
+
+      res.send(url);
     })
     .catch((err) => {
       res.status(500).send({
@@ -300,7 +333,6 @@ exports.verifyShareId = (req, res) => {
   );
   var data = bytes.toString(CryptoJS.enc.Utf8);
 
-  console.log("$$$$$$$$", req.body, data);
   Sequelize.query(
     `SELECT * FROM public."User_Edits" WHERE public."User_Edits".share_id='${data}'`
   )

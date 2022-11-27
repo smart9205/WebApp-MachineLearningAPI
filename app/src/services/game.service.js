@@ -987,8 +987,14 @@ const getEditbyId = (id) => {
     });
 };
 
+const getShareURL = (id) => {
+    return axios.get(API_URL + `user_edits/get_share/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+        return response.data;
+    });
+};
+
 const verifyShareId = (req) => {
-    return axios.post(API_URL + 'user_edits_verify', req, { headers: authHeader() }).then((response) => {
+    return axios.post(API_URL + 'user_edits_verify', req, { headers: { 'x-access-token': '' } }).then((response) => {
         return response.data;
     });
 };
@@ -1149,6 +1155,7 @@ const gameService = {
     getVideoSourceFromEdit,
     getTeamInitialStanding,
     getEditbyId,
+    getShareURL,
 
     updateJersey,
     updateGame,

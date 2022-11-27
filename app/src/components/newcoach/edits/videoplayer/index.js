@@ -245,7 +245,7 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
                                 {handle.active ? <FullscreenExitOutlinedIcon /> : <FullscreenIcon />}
                             </IconButton>
                         </div>
-                        {tagList.length > 0 && (
+                        {tagList.length > 0 && handle.active && (
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2px 12px', background: '#80808069' }}>
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: 'white' }}>{tagList[curIdx].clip_name}</Typography>
                             </div>

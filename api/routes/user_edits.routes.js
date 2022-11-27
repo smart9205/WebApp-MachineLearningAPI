@@ -61,6 +61,12 @@ module.exports = (app) => {
     controller.getEditbyId
   );
 
+  app.get(
+    "/user_edits/get_share/:id",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getShareURL
+  );
+
   app.post("/user_edits_verify", controller.verifyShareId);
 
   app.put(

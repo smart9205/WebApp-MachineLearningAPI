@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TreeView, TreeItem } from '@mui/lab';
-import { Box, Typography, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, Button, CircularProgress, Divider, Popover, Snackbar, Alert } from '@mui/material';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -10,6 +10,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShareIcon from '@mui/icons-material/Share';
 import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows';
+import EmailIcon from '@mui/icons-material/EmailOutlined';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 
 import GameService from '../../../../services/game.service';
 import { getComparator, stableSort } from '../../components/utilities';
@@ -17,6 +19,8 @@ import EditCreateUserFolderEdit from './createFolder';
 import EditNameDialog from './editNameDialog';
 import DeleteConfirmDialog from '../../../../common/DeleteConfirmDialog';
 import EditShareDialog from './shareDialog';
+
+import '../../coach_style.css';
 
 let child_ids = [];
 
@@ -89,6 +93,11 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
     const [editOpen, setEditOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [shareOpen, setShareOpen] = useState(false);
+    const [alertOpen, setAlertOpen] = useState(false);
+
+    const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+    const menuPopoverOpen = Boolean(menuAnchorEl);
+    const menuPopoverId = menuPopoverOpen ? 'simple-popover' : undefined;
 
     const handleSetCurEdit = (edit) => {
         setCurEdit(edit);
@@ -127,8 +136,16 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
         handleSetCurEdit(null);
     };
 
-    const handleShareEdit = (node) => {
-        setShareOpen(true);
+    const handleShareEdit = (e) => {
+        setMenuAnchorEl(e.currentTarget);
+    };
+
+    const handleShareEditByMessage = () => {
+        setMenuAnchorEl(null);
+        GameService.getShareURL(curEdit.id).then((res) => {
+            navigator.clipboard.writeText(res);
+            setAlertOpen(true);
+        });
     };
 
     const renderTree = (nodes) => (
@@ -149,7 +166,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                             </Box>
                             {nodes.type === 'edit' && (
                                 <>
-                                    <Box onClick={() => handleShareEdit(nodes)}>
+                                    <Box onClick={handleShareEdit}>
                                         <ShareIcon fontSize="small" />
                                     </Box>
                                     <Box>
@@ -194,6 +211,11 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                     </div>
                 ) : (
                     <>
+                        <Snackbar open={alertOpen} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={2000} onClose={() => setAlertOpen(false)}>
+                            <Alert onClose={() => setAlertOpen(false)} severity="success" sx={{ width: '100%' }}>
+                                Successfully copied URL
+                            </Alert>
+                        </Snackbar>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 10px 24px' }}>
                             <Button
                                 variant="contained"
@@ -241,6 +263,31 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                 }}
             />
             <EditShareDialog open={shareOpen} onClose={() => setShareOpen(false)} edit={curEdit} />
+            <Popover
+                id={menuPopoverId}
+                open={menuPopoverOpen}
+                anchorEl={menuAnchorEl}
+                onClose={() => setMenuAnchorEl(null)}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                sx={{ '& .MuiPopover-paper': { width: '200px', borderRadius: '12px', border: '1px solid #E8E8E8' } }}
+            >
+                <Box
+                    sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }}
+                    onClick={() => {
+                        setMenuAnchorEl(null);
+                        setShareOpen(true);
+                    }}
+                >
+                    <EmailIcon />
+                    <p className="normal-text">By email</p>
+                </Box>
+                <Divider sx={{ width: '100%' }} />
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleShareEditByMessage()}>
+                    <ChatBubbleIcon />
+                    <p className="normal-text">By message</p>
+                </Box>
+            </Popover>
         </>
     );
 };
