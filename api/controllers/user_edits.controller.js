@@ -256,11 +256,12 @@ exports.sendShareEmail = (req, res) => {
               </head>
               <body>
                 <div>
-                  <h2>${req.body.name}, ${user.first_name} ${user.last_name} shared the edit "${req.body.edit_name}" with you.</h2>
+                  <a href="${url}"><img src="https://soccer.scouting4u.com/app/src/assets/EmailThumbnail.gif" alt="" /></a>
+                  <h2>${req.body.edit_name}</h2>
                   <br/>
-                  <h4>${text}</h4>
+                  <h4>Author: ${user.first_name} ${user.last_name}</h4>
                   <br/>
-                  <p>Click <a href="${url}">here</a> to watch the shared video</p>
+                  <p>${text}</p>
                 </div>
               </body>
             </html>`;
