@@ -258,28 +258,25 @@ exports.sendShareEmail = (req, res) => {
                 <meta charset="UTF-8">
               </head>
               <body>
-              <div style="border: 1px solid lightblue; padding: 10px; width:540px;">
-              <a href="${url}"><img src="https://soccer-s4u-bucket.s3.eu-west-1.amazonaws.com/images/EmailThumbnail.gif" alt="" style="width: 540px;" /></a>
+                <div style="border: 1px solid lightblue; padding: 8px;">
+                  <a href="${url}"><img src="https://soccer-s4u-bucket.s3.eu-west-1.amazonaws.com/images/EmailThumbnail.gif" alt="" style="width: 540px;" /></a>
                   <h2>${req.body.edit_name}</h2>
                   <h4>Author: ${user.first_name} ${user.last_name}</h4>
                   <p>${text}</p>
                 </div>
-                <br/>
-                <br/>
-                <div>
-                <p>This message has been sent as a data shared between ${user.first_name} ${user.last_name} and the addressee whose name is specified above. 
-                The content of this email is confidential and intended for the recipient specified in message only. 
-                It is strictly forbidden to share any part of this message with any third party, without a written consent of the sender. 
-                If you received this message by mistake, please reply to this message and follow with its deletion, so that we can ensure such a mistake does not occur in the future.</p>
-                <br/>
-                <p><b>Warning:</b> Although taking reasonable precautions to ensure no viruses or malicious software are present in this email, the Scouting4U cannot accept responsibility for any loss or damage arising from the use of this email or attachments!</p> 
-                </div>
-                </body>
+              </body>
             </html>`;
 
         sendEmail(
           user.email,
           email,
+          req.userId,
+          `A new share from ${user.first_name} ${user.last_name}`,
+          html
+        );
+        sendEmail(
+          user.email,
+          user.email,
           req.userId,
           `A new share from ${user.first_name} ${user.last_name}`,
           html
