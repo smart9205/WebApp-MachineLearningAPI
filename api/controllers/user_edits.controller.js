@@ -256,7 +256,7 @@ exports.sendShareEmail = (req, res) => {
               </head>
               <body>
                 <div>
-                  <a href="${url}"><img src="https://soccer.scouting4u.com/app/src/assets/EmailThumbnail.gif" alt="" /></a>
+                  <a href="${url}"><img src="https://soccer-s4u-bucket.s3.eu-west-1.amazonaws.com/images/EmailThumbnail.gif" alt="" /></a>
                   <h2>${req.body.edit_name}</h2>
                   <br/>
                   <h4>Author: ${user.first_name} ${user.last_name}</h4>
