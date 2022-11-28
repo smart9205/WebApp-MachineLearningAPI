@@ -3,6 +3,8 @@ import React from 'react';
 import { makeStyles } from '@mui/styles';
 import Sidebar from './sidebar';
 
+import './coach_style.css';
+
 const useStyles = makeStyles((theme) => ({
     '@global': {
         html: {

@@ -17,6 +17,8 @@ import gameService from '../../../../services/game.service';
 import GameImage from '../../../../assets/MyEdits.png';
 import { getPeriod } from '../../games/tabs/overview/tagListItem';
 import { TEAM_ICON_DEFAULT } from '../../../../common/staticData';
+
+import '../../coach_style.css';
 // import VIDEO from '../../assets/1.mp4'
 
 const styles = {
@@ -163,10 +165,10 @@ export default function EditVideoPlayer({ idx, tagList, onChangeClip, drawOpen }
     );
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
-            <div style={{ width: '100%', margin: 'auto', minWidth: 500, position: 'relative' }}>
+        <div className="edit_video_player_container">
+            <div className="video_player_sub_container">
                 <FullScreen handle={handle} onChange={fullscreenChange}>
-                    <div style={{ width: handle.active ? '100%' : drawOpen ? '100%' : '80%', margin: 'auto' }} onContextMenu={(e) => e.preventDefault()}>
+                    <div className="video_player_section" onContextMenu={(e) => e.preventDefault()}>
                         <div className="player-wrapper" onContextMenu={(e) => e.preventDefault()}>
                             {videoURL !== '' && (
                                 <ReactPlayer

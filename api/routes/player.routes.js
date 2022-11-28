@@ -9,12 +9,6 @@ module.exports = (app) => {
     next();
   });
 
-  app.post(
-    "/player",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    controller.create
-  );
-
   app.get("/player", controller.findAll);
 
   app.post("/player/highlight", controller.addHighlight);
@@ -33,46 +27,6 @@ module.exports = (app) => {
   );
 
   app.get(
-    "/player/getplayersstats/:seasonId/:leagueId/:gameId/:teamId/:playerId",
-    [authJwt.verifyToken, authJwt.isAdminOrCoach],
-    controller.getPlayersStats
-  );
-
-  app.post(
-    "/player/getplayersstats/advance",
-    controller.getPlayersStatsAdvanced
-  );
-
-  app.post(
-    "/player/getplayersstats/summary",
-    [authJwt.verifyToken, authJwt.isAdminOrCoach],
-    controller.getPlayersStatsAdvanceSummary
-  );
-
-  app.post(
-    "/player/getplayersstats/game",
-    [authJwt.verifyToken, authJwt.isAdminOrCoach],
-    controller.getPlayersStatsGamebyGame
-  );
-
-  app.post(
-    "/player/getgoalkeepersstats/advance",
-    controller.getGoalkeepersStatsAdvanced
-  );
-
-  app.post(
-    "/player/getgoalkeepersstats/summary",
-    [authJwt.verifyToken, authJwt.isAdminOrCoach],
-    controller.getGoalkeepersStatsAdvanceSummary
-  );
-
-  app.post(
-    "/player/getgoalkeepersstats/game",
-    [authJwt.verifyToken, authJwt.isAdminOrCoach],
-    controller.getGoalkeepersStatsGamebyGame
-  );
-
-  app.get(
     "/player/game_player_tags/:userId/:teamId/:playerId/:gameId/:actionId/:actionTypeId/:actionResultId/:gameTime/:courtArea/:inside/:gameResult/:homeAway",
     controller.getGamePlayerTags
   );
@@ -85,6 +39,50 @@ module.exports = (app) => {
   app.get(
     "/player/player_detection/:gameId/:videoTime/:minBefore/:minAfter",
     controller.getPlayersDetection
+  );
+
+  app.post(
+    "/player/getplayersstats/advance",
+    controller.getPlayersStatsAdvanced
+  );
+
+  app.post(
+    "/player/getplayersstats/summary",
+    controller.getPlayersStatsAdvanceSummary
+  );
+
+  app.post(
+    "/player/getgoalkeepersstats/advance",
+    controller.getGoalkeepersStatsAdvanced
+  );
+
+  app.post(
+    "/player/getgoalkeepersstats/summary",
+    controller.getGoalkeepersStatsAdvanceSummary
+  );
+
+  app.get(
+    "/player/getplayersstats/:seasonId/:leagueId/:gameId/:teamId/:playerId",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getPlayersStats
+  );
+
+  app.post(
+    "/player",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.create
+  );
+
+  app.post(
+    "/player/getplayersstats/game",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getPlayersStatsGamebyGame
+  );
+
+  app.post(
+    "/player/getgoalkeepersstats/game",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getGoalkeepersStatsGamebyGame
   );
 
   app.get(

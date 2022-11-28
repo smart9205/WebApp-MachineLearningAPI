@@ -268,3 +268,39 @@
     align-items: center;
     gap: 4px;
 }
+
+.edit_video_player_container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.edit_video_player_container .video_player_sub_container {
+    width: 100%;
+    margin: auto;
+    min-width: 500;
+    position: relative;
+}
+
+.edit_video_player_container .video_player_sub_container .video_player_section {
+    width: 80%;
+    margin: auto;
+}
+
+@media only screen and (min-width: 720px) {
+    .edit_video_player_container .video_player_sub_container .video_player_section {
+        width: 98%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .edit_video_player_container .video_player_sub_container .video_player_section {
+        width: 80%;
+    }
+}
+
+input,
+textarea {
+    font-family: 'DM Sans', sans-serif;
+}

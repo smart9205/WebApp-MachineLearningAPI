@@ -206,7 +206,7 @@ exports.findAllFolders = (req, res) => {
     });
 };
 
-sendEmail = async (origin, email, userId, subject, html) => {
+sendShareEmail = async (origin, email, userId, subject, html) => {
   const sendgrid = require("@sendgrid/mail");
   sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -277,23 +277,21 @@ exports.sendShareEmail = (req, res) => {
             </body>
           </html>`;
 
-
-
-        sendEmail(
+        sendShareEmail(
           user.email,
           email,
           req.userId,
           `A new share from ${user.first_name} ${user.last_name}`,
           html
         );
-        sendEmail(
+        sendShareEmail(
           user.email,
           user.email,
           req.userId,
           `A new share from ${user.first_name} ${user.last_name}`,
           html
         );
-        sendEmail(
+        sendShareEmail(
           user.email,
           "scouting4u2010@gmail.com",
           req.userId,
