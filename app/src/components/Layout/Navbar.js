@@ -176,6 +176,20 @@ export default function Navbar() {
                                     </Link>
                                 </li>
                             )}
+                            {currentUser && currentUser?.roles.includes('ROLE_REPRESENTATIVE') && (
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/admin">
+                                        {t('Representative')}
+                                    </Link>
+                                </li>
+                            )}
+                            {currentUser && currentUser?.roles.includes('ROLE_MANAGER') && (
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/admin">
+                                        {t('Manager')}
+                                    </Link>
+                                </li>
+                            )}
                             <li className="nav-item">
                                 {!currentUser ? (
                                     <Link className="nav-link" to="/login">
