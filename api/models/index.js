@@ -36,7 +36,6 @@ db.user_subscription = require("../models/user_subscription.js")(
   sequelize,
   Sequelize
 );
-db.user_roles = require("../models/user_roles.js")(sequelize, Sequelize);
 
 db.game = require("../models/game.js")(sequelize, Sequelize);
 db.team = require("../models/team.js")(sequelize, Sequelize);

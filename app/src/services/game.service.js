@@ -653,6 +653,31 @@ const getAllCoach = () => {
         return response.data;
     });
 };
+
+const getAllUsers = () => {
+    return axios.get(API_URL + 'user/all', { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const getAllRepresentatives = () => {
+    return axios.get(API_URL + 'user/representative', { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const addRepresentative = (userId) => {
+    return axios.put(API_URL + `user/representative/add/${userId}`, { userId }, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const deleteRepresentative = (roleId, userId) => {
+    return axios.delete(API_URL + `user/representative/delete/${roleId}/${userId}`, { headers: authHeader(), data: { roleId, userId } }).then((response) => {
+        return response.data;
+    });
+};
+
 const getAllPositions = () => {
     return axios.get(API_URL + 'player/position', { headers: authHeader() }).then((response) => {
         return response.data;
@@ -1021,6 +1046,7 @@ const gameService = {
     addPlayerTag,
     addCoachTeam,
     addHighlight,
+    addRepresentative,
 
     addUserEdits,
     createUserFolder,
@@ -1055,6 +1081,8 @@ const gameService = {
     getGamePlayerTags,
     getOpponentTags,
     getAllCoach,
+    getAllUsers,
+    getAllRepresentatives,
     getAllCoachTeam,
     getAllGamesByCoach,
     getAdditionalGames,
@@ -1189,7 +1217,8 @@ const gameService = {
     deleteUserFolder,
     moveEditClips,
     copyEditClips,
-    moveFolderNewPosition
+    moveFolderNewPosition,
+    deleteRepresentative
 };
 
 export default gameService;

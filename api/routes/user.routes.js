@@ -12,11 +12,7 @@ module.exports = function (app) {
 
   app.get("/api/test/all", controller.allAccess);
 
-  app.get(
-    "/api/test/user",
-    [authJwt.verifyToken],
-    controller.userBoard
-  );
+  app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
 
   app.get(
     "/api/test/logger",
@@ -36,4 +32,27 @@ module.exports = function (app) {
     controller.getAllCoach
   );
 
+  app.get(
+    "/user/representative",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.getAllRepresentatives
+  );
+
+  app.put(
+    "/user/representative/add/:userId",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.addRepresentative
+  );
+
+  app.delete(
+    "/user/representative/delete/:roleId/:userId",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.deleteRepresentative
+  );
+
+  app.get(
+    "/user/all",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.getAllUsers
+  );
 };
