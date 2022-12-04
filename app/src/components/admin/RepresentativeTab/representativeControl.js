@@ -43,13 +43,13 @@ const RepresentativeControl = ({ list, refreshList }) => {
     console.log('search => ', searchText);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', border: '1px solid #E8E8E8', borderRadius: '8px', width: '280px', height: '60vh', padding: '16px 12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', border: '1px solid #E8E8E8', borderRadius: '8px', width: '280px', height: '75vh', padding: '16px 12px' }}>
             <div style={{ width: '100%', textAlign: 'right' }}>
                 <Button variant="outlined" onClick={() => handleDisplayUserList()}>
                     ADD
                 </Button>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '55vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '70vh', overflowY: 'auto' }}>
                 {list.map((item, index) => (
                     <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid white', borderRadius: '8px', padding: '4px 8px' }}>
                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: 'white' }}>{`${item.first_name} ${item.last_name}`}</Typography>
