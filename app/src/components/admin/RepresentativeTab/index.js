@@ -1,26 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import GameService from '../../../services/game.service';
+import AcademyControl from './academyControl';
 import RepresentativeControl from './representativeControl';
 
 const RepresentativeTab = () => {
-    const [representList, setRepresentList] = useState([]);
-
-    const loadAllRepresentatives = () => {
-        GameService.getAllRepresentatives().then((res) => {
-            setRepresentList(res);
-        });
-    };
-
-    useEffect(() => {
-        loadAllRepresentatives();
-    }, []);
-
-    console.log('represent => ', representList);
+    const [selectedRepresent, setSelectedRepresent] = useState(null);
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <RepresentativeControl list={representList} refreshList={loadAllRepresentatives} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
+            <RepresentativeControl select={setSelectedRepresent} />
+            <AcademyControl representative={selectedRepresent} />
         </div>
     );
 };

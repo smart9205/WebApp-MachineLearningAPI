@@ -678,6 +678,48 @@ const deleteRepresentative = (roleId, userId) => {
     });
 };
 
+const addAcademy = (name, country) => {
+    return axios.put(API_URL + `user/academy/add/${name}/${country}`, { name, country }, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const deleteAcademy = (id) => {
+    return axios.delete(API_URL + `user/academy/delete/${id}`, { headers: authHeader(), data: { id } }).then((response) => {
+        return response.data;
+    });
+};
+
+const editAcademy = (id, name, country) => {
+    return axios.put(API_URL + `user/academy/update/${id}/${name}/${country}`, { id, name, country }, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const addAcademyToRepresentative = (userId, academyId) => {
+    return axios.put(API_URL + `user/representative_academy/add/${userId}/${academyId}`, { userId, academyId }, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const getAcademiesForRepresentative = (userId) => {
+    return axios.get(API_URL + `user/representative_academy/get/${userId}`, { headers: authHeader(), data: { userId } }).then((response) => {
+        return response.data;
+    });
+};
+
+const deleteAcademyFromRepresentative = (userId, academyId) => {
+    return axios.delete(API_URL + `user/representative_academy/delete/${userId}/${academyId}`, { headers: authHeader(), data: { userId, academyId } }).then((response) => {
+        return response.data;
+    });
+};
+
+const getAllAcademies = (userId) => {
+    return axios.get(API_URL + `user/academy/get/all`, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
 const getAllPositions = () => {
     return axios.get(API_URL + 'player/position', { headers: authHeader() }).then((response) => {
         return response.data;
@@ -1047,6 +1089,8 @@ const gameService = {
     addCoachTeam,
     addHighlight,
     addRepresentative,
+    addAcademy,
+    addAcademyToRepresentative,
 
     addUserEdits,
     createUserFolder,
@@ -1083,6 +1127,8 @@ const gameService = {
     getAllCoach,
     getAllUsers,
     getAllRepresentatives,
+    getAcademiesForRepresentative,
+    getAllAcademies,
     getAllCoachTeam,
     getAllGamesByCoach,
     getAdditionalGames,
@@ -1201,6 +1247,7 @@ const gameService = {
     updateEditClip,
     sendShareEmail,
     verifyShareId,
+    editAcademy,
 
     deletePlayersInTeam,
 
@@ -1218,7 +1265,9 @@ const gameService = {
     moveEditClips,
     copyEditClips,
     moveFolderNewPosition,
-    deleteRepresentative
+    deleteRepresentative,
+    deleteAcademy,
+    deleteAcademyFromRepresentative
 };
 
 export default gameService;
