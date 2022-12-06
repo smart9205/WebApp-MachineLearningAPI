@@ -10,7 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import GameService from '../../../services/game.service';
 
-const AcademyControl = ({ representative }) => {
+const AcademyControl = ({ representative, select }) => {
     const [academyList, setAcademyList] = useState([]);
     const [academyName, setAcademyName] = useState('');
     const [academyCountry, setAcademyCountry] = useState('');
@@ -29,14 +29,14 @@ const AcademyControl = ({ representative }) => {
         if (representative === null) return;
 
         setLoading(true);
-        GameService.getAcademiesForRepresentative(representative.id).then((res) => {
+        GameService.getAcademiesForRepresentative(representative.user_id).then((res) => {
             setAcademyList(res);
             setLoading(false);
         });
     };
 
     const handleDeleteAcademyFromRepresentative = (item) => {
-        GameService.deleteAcademy(item.id).then((res) => {
+        GameService.deleteAcademyFromRepresentative(representative.user_id, item.academy_id).then((res) => {
             loadAllAcademiesByRepresentative();
         });
     };
@@ -61,10 +61,10 @@ const AcademyControl = ({ representative }) => {
     };
 
     const handleAddAcademyToRepresentative = (item) => {
-        const filtered = academyList.filter((data) => data.name === item.name && data.Country === item.Country);
+        const filtered = academyList.filter((data) => data.academy_name === item.name && data.academy_country === item.Country);
 
         if (filtered.length === 0) {
-            GameService.addAcademyToRepresentative(representative.id, item.id).then((res) => {
+            GameService.addAcademyToRepresentative(representative.user_id, item.id).then((res) => {
                 loadAllAcademiesByRepresentative();
             });
         }
@@ -94,13 +94,15 @@ const AcademyControl = ({ representative }) => {
         loadAllAcademiesByRepresentative();
     }, [representative, refreshDialog]);
 
+    console.log('academy => ', academyList);
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-                <IconButton onClick={() => setAddOpen(true)}>
+                <IconButton size="small" sx={{ padding: 0 }} onClick={() => setAddOpen(true)}>
                     <AddIcon />
                 </IconButton>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: '1rem', color: 'white' }}>Academy</Typography>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: '1rem', color: 'white', margin: 0 }}>Academy</p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', border: '1px solid #E8E8E8', borderRadius: '8px', width: '240px', height: '70vh', padding: '16px 12px' }}>
                 <div style={{ width: '100%', textAlign: 'right' }}>
@@ -132,11 +134,14 @@ const AcademyControl = ({ representative }) => {
                                     cursor: 'pointer',
                                     background: getBackgroundColor(index)
                                 }}
-                                onClick={() => setSelectedIndex(index)}
+                                onClick={() => {
+                                    setSelectedIndex(index);
+                                    select(item);
+                                }}
                             >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <FolderSharedIcon />
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: 'white' }}>{item.name}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: 'white' }}>{item.academy_name}</Typography>
                                 </div>
                                 {selectedIndex === index && (
                                     <IconButton onClick={() => handleDeleteAcademyFromRepresentative(item)}>

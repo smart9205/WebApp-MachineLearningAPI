@@ -35,12 +35,7 @@ exports.getAllCoach = (req, res) => {
 exports.getAllRepresentatives = (req, res) => {
   Sequelize.query(
     `
-      SELECT 
-        public."Users".*,
-        public."User_Roles"."roleId" as user_role
-      FROM public."User_Roles"
-      JOIN public."Users" on public."Users".id = public."User_Roles"."userId"
-      WHERE public."User_Roles"."roleId" = 7
+      select * from public.fnc_get_representative()
     `
   )
     .then((data) => {
@@ -54,11 +49,9 @@ exports.getAllRepresentatives = (req, res) => {
 };
 
 exports.addRepresentative = (req, res) => {
-  const date = new Date().toDateString();
-
   Sequelize.query(
     `
-      INSERT INTO public."User_Roles" ("createdAt", "updatedAt", "roleId", "userId") VALUES('${date}', '${date}', 7, ${req.params.userId})
+      select * from public.fnc_add_representative(${req.params.userId})
     `
   )
     .then((data) => {
@@ -74,7 +67,7 @@ exports.addRepresentative = (req, res) => {
 exports.deleteRepresentative = (req, res) => {
   Sequelize.query(
     `
-      DELETE FROM public."User_Roles" WHERE public."User_Roles"."roleId" = ${req.params.roleId} and public."User_Roles"."userId" = ${req.params.userId}
+      select * from public.fnc_delete_representative(${req.params.userId})
     `
   )
     .then((data) => {
@@ -104,11 +97,9 @@ exports.getAllUsers = (req, res) => {
 };
 
 exports.addAcademy = (req, res) => {
-  const date = new Date().toDateString();
-
   Sequelize.query(
     `
-      INSERT INTO public."Academies" ("name", "createdAt", "updatedAt", "Country") VALUES('${req.params.name}', '${date}', '${date}', '${req.params.country}')
+      select * from public.fnc_new_academy('${req.params.name}','${req.params.country}')
     `
   )
     .then((data) => {
@@ -124,7 +115,7 @@ exports.addAcademy = (req, res) => {
 exports.deleteAcademy = (req, res) => {
   Sequelize.query(
     `
-      DELETE FROM public."Academies" WHERE public."Academies"."id" = ${req.params.id}
+      select * from public.fnc_delete_academy(${req.params.id})
     `
   )
     .then((data) => {
@@ -154,11 +145,9 @@ exports.editAcademy = (req, res) => {
 };
 
 exports.addAcademyToRepresentative = (req, res) => {
-  const date = new Date().toDateString();
-
   Sequelize.query(
     `
-      INSERT INTO public."Representative_Academies" ("user_id", "academy_id", "createdAt", "updatedAt") VALUES(${req.params.userId}, ${req.params.academyId}, '${date}', '${date}')
+      select * from public.fnc_add_academy_to_representative(${req.params.academyId},${req.params.userId})
     `
   )
     .then((data) => {
@@ -174,11 +163,7 @@ exports.addAcademyToRepresentative = (req, res) => {
 exports.getAcademiesForRepresentative = (req, res) => {
   Sequelize.query(
     `
-      SELECT
-        public."Academies".*
-      FROM public."Representative_Academies"
-      JOIN public."Academies" on public."Academies".id = public."Representative_Academies".academy_id
-      WHERE public."Representative_Academies".user_id = ${req.params.userId}
+      select * from public.fnc_get_representative_academies(${req.params.userId})
     `
   )
     .then((data) => {
@@ -215,6 +200,63 @@ exports.getAllAcademies = (req, res) => {
   )
     .then((data) => {
       res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving seasons.",
+      });
+    });
+};
+
+exports.getTeamsByAcademy = (req, res) => {
+  Sequelize.query(
+    `
+      SELECT public."Teams".*
+      FROM public."Academy_Teams"
+      JOIN public."Teams" on public."Teams"."id" = public."Academy_Teams"."team_id"
+      WHERE public."Academy_Teams"."user_id" = ${req.params.userId} and public."Academy_Teams"."academy_id" = ${req.params.academyId} and public."Academy_Teams"."season_id" = ${req.params.seasonId}
+    `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving seasons.",
+      });
+    });
+};
+
+exports.addTeamToAcademy = (req, res) => {
+  const date = new Date().toDateString();
+
+  Sequelize.query(
+    `
+      INSERT INTO public."Academy_Teams" ("user_id", "season_id", "team_id", "createdAt", "updatedAt", "academy_id") VALUES(${req.params.userId}, ${req.params.seasonId}, ${req.params.teamId}, '${date}', '${date}', ${req.params.academyId})
+    `
+  )
+    .then((data) => {
+      res.send("Successfully added");
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving seasons.",
+      });
+    });
+};
+
+exports.deleteTeamsFromAcademy = (req, res) => {
+  Sequelize.query(
+    `
+      DELETE FROM public."Academy_Teams"
+      WHERE public."Academy_Teams"."user_id" = ${req.params.userId} and
+        public."Academy_Teams"."academy_id" = ${req.params.academyId} and
+        public."Academy_Teams"."season_id" = ${req.params.seasonId} and
+        public."Academy_Teams"."team_id" = ${req.params.teamId}
+    `
+  )
+    .then((data) => {
+      res.send("Successfully deleted");
     })
     .catch((err) => {
       res.status(500).send({

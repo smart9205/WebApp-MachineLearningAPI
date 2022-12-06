@@ -38,7 +38,7 @@ const RepresentativeControl = ({ select }) => {
     };
 
     const handleDeleteRepresentative = (item) => {
-        GameService.deleteRepresentative(item.user_role, item.id).then((res) => {
+        GameService.deleteRepresentative(7, item.user_id).then((res) => {
             loadAllRepresentatives();
         });
     };
@@ -59,11 +59,11 @@ const RepresentativeControl = ({ select }) => {
         loadAllRepresentatives();
     }, []);
 
-    console.log('search => ', searchText);
+    console.log('search => ', representList);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: '1rem', color: 'white', textAlign: 'center' }}>Representative</Typography>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: '1rem', color: 'white', textAlign: 'center', margin: 0 }}>Representative</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', border: '1px solid #E8E8E8', borderRadius: '8px', width: '240px', height: '70vh', padding: '16px 12px' }}>
                 <div style={{ width: '100%', textAlign: 'right' }}>
                     <Button variant="outlined" onClick={() => handleDisplayUserList()}>

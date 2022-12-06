@@ -97,4 +97,22 @@ module.exports = function (app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.getAllAcademies
   );
+
+  app.get(
+    "/user/academy_team/get/:userId/:academyId/:seasonId",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.getTeamsByAcademy
+  );
+
+  app.put(
+    "/user/academy_team/add/:userId/:academyId/:seasonId/:teamId",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.addTeamToAcademy
+  );
+
+  app.delete(
+    "/user/academy_team/delete/:userId/:academyId/:seasonId/:teamId",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.deleteTeamsFromAcademy
+  );
 };
