@@ -65,8 +65,6 @@ const AcademyTeamControl = ({ representative, academy, select }) => {
         });
     }, [academy, refreshDialog, seasonFilter]);
 
-    console.log('academy_teams => ', seasonList, teamList);
-
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: '1rem', color: 'white', textAlign: 'center', margin: 0 }}>Teams</p>

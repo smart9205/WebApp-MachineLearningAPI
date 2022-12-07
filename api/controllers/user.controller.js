@@ -211,7 +211,7 @@ exports.getAllAcademies = (req, res) => {
 exports.getTeamsByAcademy = (req, res) => {
   Sequelize.query(
     `
-      SELECT public."Teams".*
+      SELECT public."Teams".*, public."Academy_Teams".*
       FROM public."Academy_Teams"
       JOIN public."Teams" on public."Teams"."id" = public."Academy_Teams"."team_id"
       WHERE public."Academy_Teams"."user_id" = ${req.params.userId} and public."Academy_Teams"."academy_id" = ${req.params.academyId} and public."Academy_Teams"."season_id" = ${req.params.seasonId}

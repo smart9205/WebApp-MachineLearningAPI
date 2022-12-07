@@ -863,3 +863,26 @@ exports.getAllHighlightByPlayerId = (req, res) => {
       });
     });
 };
+
+exports.getPlayersByTeam = (req, res) => {
+  Sequelize.query(
+    `
+      SELECT
+        public."Players".*,
+        (SELECT public."Player_Positions".name
+        FROM public."Player_Positions"
+        WHERE public."Player_Positions".id = public."Players".position) as pos_name
+      FROM public."Team_Players"
+      LEFT JOIN public."Players" on public."Players".id = public."Team_Players".player_id
+      WHERE public."Team_Players".team_id = ${req.params.teamId} and public."Team_Players".season_id = ${req.params.seasonId}
+    `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving games.",
+      });
+    });
+};

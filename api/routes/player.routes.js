@@ -41,6 +41,8 @@ module.exports = (app) => {
     controller.getPlayersDetection
   );
 
+  app.get("/player/team/:teamId/:seasonId", controller.getPlayersByTeam);
+
   app.post(
     "/player/getplayersstats/advance",
     controller.getPlayersStatsAdvanced
