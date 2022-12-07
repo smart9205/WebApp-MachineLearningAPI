@@ -618,7 +618,7 @@ export default function Tagging() {
                     </Tooltip>
                 </div>
                 <Box>
-                    <div style={{ maxWidth: '92%', margin: 'auto', position: 'relative' }}>
+                    <div style={{ maxWidth: '86%', margin: 'auto', position: 'relative' }}>
                         <div className="player-wrapper">
                             <ReactPlayer
                                 className="react-player"

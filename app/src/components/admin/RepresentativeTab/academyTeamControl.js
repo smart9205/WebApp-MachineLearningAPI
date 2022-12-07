@@ -74,7 +74,7 @@ const AcademyTeamControl = ({ representative, academy, select }) => {
         });
     }, [representative, academy, refreshDialog, seasonFilter]);
 
-    console.log('$$$$$$$$$', academyTeamList);
+    console.log('$$$$$$$$$', academy);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -97,7 +97,7 @@ const AcademyTeamControl = ({ representative, academy, select }) => {
                             </MenuItem>
                         ))}
                     </Select>
-                    <Button variant="outlined" disabled={teamList.length === 0} onClick={() => setDialogOpen(true)}>
+                    <Button variant="outlined" disabled={teamList.length === 0 || academy === null} onClick={() => setDialogOpen(true)}>
                         ADD
                     </Button>
                 </div>
