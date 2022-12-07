@@ -199,6 +199,26 @@ export const editCreateCommand = async (tagList, name) => {
     fileDownload(command, `${name}.xml`);
 };
 
+export const downloadJsonFile = (data, setRelease) => {
+    let filename = 'game.json';
+    let contentType = 'application/json;charset=utf-8;';
+
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        var blob = new Blob([decodeURIComponent(encodeURI(JSON.stringify(data)))], { type: contentType });
+        navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+        var a = document.createElement('a');
+        a.download = filename;
+        a.href = 'data:' + contentType + ',' + encodeURIComponent(JSON.stringify(data));
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    setRelease(false);
+};
+
 export function toSecond(data) {
     if (!data || data === '') return 0;
     let a = data.split(':'); // split it at the colons
@@ -235,7 +255,7 @@ export function stableSort(array, comparator) {
 
 export function orderedSort(array) {
     const stabilizedThis = array.map((el, index) => [el, index]);
-    
+
     stabilizedThis.sort((a, b) => {
         return a[0].order - b[0].order;
     });

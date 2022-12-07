@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, TextField, Divider, Popover, CircularProgress } from '@mui/material';
 
@@ -14,7 +14,7 @@ import GameService from '../../../services/game.service';
 import GameEditPage from './gameEditPage';
 import ExcelDataFiltering from '../../coach/ExcelDataFiltering';
 import { XmlDataFilterGames, XmlDataFilterGamesShort } from '../components/xmldata';
-import { getFormattedDate } from '../components/utilities';
+import { downloadJsonFile, getFormattedDate } from '../components/utilities';
 
 const GameListItem = ({ row, isHover, isPending = false, updateList, team, standing }) => {
     const navigate = useNavigate();
@@ -22,6 +22,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
     const [exportExcel, setExportExcel] = useState(false);
     const [exportGate, setExportGate] = useState(false);
     const [exportSportShort, setExportSportShort] = useState(false);
+    const [exportJson, setExportJson] = useState(false);
     const [playerTagList, setPlayerTagList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [rowData, setRowData] = useState({
@@ -99,6 +100,12 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
         link.click();
     };
 
+    const handleExportToJson = async () => {
+        await getAllInfosByGame(row);
+        setMenuAnchorEl(null);
+        setExportJson(true);
+    };
+
     const getAllInfosByGame = async (game) => {
         let team_id = null;
 
@@ -119,6 +126,10 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
     const handleChangePath = (gameId) => () => {
         navigate(`/new_coach/games/${btoa(gameId)}`);
     };
+
+    useEffect(() => {
+        if (exportJson) downloadJsonFile(playerTagList, setExportJson);
+    }, [exportJson]);
 
     return (
         <Box
@@ -217,6 +228,11 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDownloadVideo(row.video_url)}>
                     <DownloadIcon />
                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Download Video</Typography>
+                </Box>
+                <Divider sx={{ width: '100%' }} />
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleExportToJson}>
+                    <img src={ExportIcon} />
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Export to JSON</Typography>
                 </Box>
             </Popover>
             {isPending && (

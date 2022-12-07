@@ -29,6 +29,9 @@ const AcademyControl = ({ representative, select }) => {
         if (representative === null) return;
 
         setLoading(true);
+        setAcademyList([]);
+        setSelectedIndex(-1);
+        select(null);
         GameService.getAcademiesForRepresentative(representative.user_id).then((res) => {
             setAcademyList(res);
             setLoading(false);

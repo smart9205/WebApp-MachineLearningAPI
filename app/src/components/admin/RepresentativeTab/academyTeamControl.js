@@ -38,7 +38,7 @@ const AcademyTeamControl = ({ representative, academy, select }) => {
     };
 
     const handleDeleteTeamFromAcademy = (item) => {
-        GameService.deleteTeamsFromAcademy(representative.user_id, academy.academy_id, seasonFilter.id, item.id).then((res) => {
+        GameService.deleteTeamsFromAcademy(representative.user_id, academy.academy_id, seasonFilter.id, item.team_id).then((res) => {
             setRefreshDialog(!refreshDialog);
         });
     };
@@ -56,14 +56,25 @@ const AcademyTeamControl = ({ representative, academy, select }) => {
     }, []);
 
     useEffect(() => {
-        if (representative === null || academy === null || seasonFilter === null) return;
+        if (representative === null || academy === null || seasonFilter === null) {
+            setAcademyTeamList([]);
+            setSelectedIndex(-1);
+            select(null);
+
+            return;
+        }
 
         setLoading(true);
+        setAcademyTeamList([]);
+        setSelectedIndex(-1);
+        select(null);
         GameService.getTeamsByAcademy(representative.user_id, academy.academy_id, seasonFilter.id).then((res) => {
             setAcademyTeamList(res);
             setLoading(false);
         });
-    }, [academy, refreshDialog, seasonFilter]);
+    }, [representative, academy, refreshDialog, seasonFilter]);
+
+    console.log('$$$$$$$$$', academyTeamList);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
