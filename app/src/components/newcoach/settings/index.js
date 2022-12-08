@@ -4,9 +4,8 @@ import { useSelector } from 'react-redux';
 import SettingsRenderTool from './rendertool';
 import SettingsProfile from './profileTab';
 import SettingsPassword from './passwordTab';
-
-import '../coach_style.css';
 import SettingsRepresentative from './representative';
+import SettingsManager from './manager';
 
 let Tabs = ['Render Tool', 'Profile', 'Password'];
 
@@ -38,6 +37,7 @@ const Settings = () => {
             {curTab === 1 && <SettingsProfile />}
             {curTab === 2 && <SettingsPassword />}
             {curTab === 3 && <SettingsRepresentative user_id={currentUser.id} />}
+            {curTab === 4 && <SettingsManager />}
         </div>
     );
 };

@@ -292,7 +292,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-height: 60vh;
+    max-height: 55vh;
     overflow-y: auto;
 }
 
@@ -361,11 +361,13 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    cursor: pointer;
+    border-radius: 12px;
 }
 
 .settings_academy_container .team_game_section .academy_items_container .team_game_item p:first-child {
     font-size: 0.7rem;
-    width: 88px;
+    width: 72px;
 }
 
 .settings_academy_container .team_game_section .academy_items_container .team_game_item .game_section {
@@ -385,7 +387,7 @@
 }
 
 .settings_academy_container .team_game_section .academy_items_container .team_game_item .game_section p:nth-child(3) {
-    width: 210px;
+    width: 180px;
 }
 
 .settings_academy_container .team_game_section .academy_items_container .team_game_item .game_section img:last-child {

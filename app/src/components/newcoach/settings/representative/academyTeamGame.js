@@ -43,13 +43,17 @@ const SettingsAcademyTeamGameControl = ({ academy, team, season, select, isManag
 
         if (team && season) {
             setLoading(true);
-            await GameService.getHideGame(academy.academy_id).then((res) => {
-                setIsHided(
-                    res.map((item) => {
-                        return { game: item.game_id, team: item.team_id };
-                    })
-                );
-            });
+
+            if (!isManager) {
+                await GameService.getHideGame(academy.academy_id).then((res) => {
+                    setIsHided(
+                        res.map((item) => {
+                            return { game: item.game_id, team: item.team_id };
+                        })
+                    );
+                });
+            }
+
             await GameService.getAllGamesByCoach(season.id, null, team.team_id, null).then((res) => {
                 setGameList(res);
                 setLoading(false);
@@ -73,9 +77,12 @@ const SettingsAcademyTeamGameControl = ({ academy, team, season, select, isManag
                             <div
                                 key={index}
                                 className="team_game_item"
-                                style={{ background: isManager && selectedIndex === index ? '#C5EAC6' : 'white' }}
+                                style={{ background: isManager ? (selectedIndex === index ? '#C5EAC6' : 'white') : 'white' }}
                                 onClick={() => {
-                                    if (isManager) select(item);
+                                    if (isManager) {
+                                        setSelectedIndex(index);
+                                        select(item);
+                                    }
                                 }}
                             >
                                 <p className="normal-text">{getFormattedDate(item.date)}</p>
