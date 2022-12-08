@@ -263,6 +263,135 @@
     height: 180px;
 }
 
+.tab-page.settings_representative {
+    gap: 20px;
+    justify-content: center;
+}
+
+.settings_academy_container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.settings_academy_container p:first-child {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.settings_academy_container .academy_section {
+    padding: 16px 12px;
+    border: 1px solid #0a7304;
+    border-radius: 8px;
+    width: 240px;
+    height: 60vh;
+}
+
+.settings_academy_container .academy_items_container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.settings_academy_container .academy_section .academy_items_container .academy_item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid #0a7304;
+    cursor: pointer;
+}
+
+.settings_academy_container .academy_section .academy_items_container .academy_item svg path {
+    fill: black;
+}
+
+.settings_academy_container .academy_team_section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 300px;
+    height: 60vh;
+    border-radius: 8px;
+    padding: 16px 12px;
+    border: 1px solid #0a7304;
+}
+
+.settings_academy_container .academy_team_section .team_season_container {
+    text-align: center;
+    width: 100%;
+}
+
+.settings_academy_container .academy_team_section .academy_team_items_container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.settings_academy_container .academy_team_section .academy_team_items_container .academy_team_item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid #0a7304;
+    cursor: pointer;
+}
+
+.settings_academy_container .academy_team_section .academy_team_items_container .academy_team_item svg path {
+    fill: black;
+}
+
+.settings_academy_container .team_game_section {
+    padding: 16px 12px;
+    border: 1px solid #0a7304;
+    border-radius: 8px;
+    width: 720px;
+    height: 60vh;
+}
+
+.settings_academy_container .team_game_section .academy_items_container .team_game_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.settings_academy_container .team_game_section .academy_items_container .team_game_item p:first-child {
+    font-size: 0.7rem;
+    width: 88px;
+}
+
+.settings_academy_container .team_game_section .academy_items_container .team_game_item .game_section {
+    display: flex;
+    align-items: center;
+}
+
+.settings_academy_container .team_game_section .academy_items_container .team_game_item .game_section img:first-child {
+    width: 40px;
+    height: 40px;
+    margin: 4px 8px;
+}
+
+.settings_academy_container .team_game_section .academy_items_container .team_game_item .game_section p:nth-child(2) {
+    width: 30px;
+    text-align: center;
+}
+
+.settings_academy_container .team_game_section .academy_items_container .team_game_item .game_section p:nth-child(3) {
+    width: 210px;
+}
+
+.settings_academy_container .team_game_section .academy_items_container .team_game_item .game_section img:last-child {
+    width: 32px;
+}
+
 .horizontal-4 {
     display: flex;
     align-items: center;
