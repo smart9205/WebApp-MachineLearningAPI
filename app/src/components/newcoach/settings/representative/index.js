@@ -13,7 +13,7 @@ const SettingsRepresentative = ({ user_id }) => {
         <div className="tab-page settings_representative">
             <SettingsAcademyControl userId={user_id} select={setSelectedAcademy} />
             <SettingsAcademyTeamControl userId={user_id} academy={selectedAcademy} select={setSelectedAcademyTeam} season={setSelectedSeason} />
-            <SettingsAcademyTeamGameControl team={selectedAcademyTeam} season={selectedSeason} />
+            <SettingsAcademyTeamGameControl academy={selectedAcademy} team={selectedAcademyTeam} season={selectedSeason} />
         </div>
     );
 };

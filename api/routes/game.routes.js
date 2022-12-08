@@ -368,4 +368,22 @@ module.exports = (app) => {
     [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.gameExportSportcodeShort
   );
+
+  app.get(
+    "/game/hide_game/get/:academyId",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getHideGame
+  );
+
+  app.put(
+    "/game/hide_game/add/:academyId/:gameId/:teamId",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.addHideGame
+  );
+
+  app.delete(
+    "/game/hide_game/delete/:academyId/:gameId/:teamId",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.deleteHideGame
+  );
 };

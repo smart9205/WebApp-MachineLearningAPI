@@ -714,6 +714,24 @@ const deleteAcademyFromRepresentative = (userId, academyId) => {
     });
 };
 
+const addHideGame = (academyId, gameId, teamId) => {
+    return axios.put(API_URL + `game/hide_game/add/${academyId}/${gameId}/${teamId}`, { academyId, gameId, teamId }, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const getHideGame = (academyId) => {
+    return axios.get(API_URL + `game/hide_game/get/${academyId}`, { headers: authHeader(), data: { academyId } }).then((response) => {
+        return response.data;
+    });
+};
+
+const deleteHideGame = (academyId, gameId, teamId) => {
+    return axios.delete(API_URL + `game/hide_game/delete/${academyId}/${gameId}/${teamId}`, { headers: authHeader(), data: { academyId, gameId, teamId } }).then((response) => {
+        return response.data;
+    });
+};
+
 const addTeamToAcademy = (userId, academyId, seasonId, teamId) => {
     return axios.put(API_URL + `user/academy_team/add/${userId}/${academyId}/${seasonId}/${teamId}`, { userId, academyId, seasonId, teamId }, { headers: authHeader() }).then((response) => {
         return response.data;
@@ -1118,6 +1136,7 @@ const gameService = {
     addAcademy,
     addAcademyToRepresentative,
     addTeamToAcademy,
+    addHideGame,
 
     addUserEdits,
     createUserFolder,
@@ -1132,6 +1151,7 @@ const gameService = {
     getSeasonById,
     getLeagueById,
     getPlayerById,
+    getHideGame,
 
     getGameTeamPlayers,
     getAllTeamPlayers,
@@ -1297,7 +1317,8 @@ const gameService = {
     deleteRepresentative,
     deleteAcademy,
     deleteAcademyFromRepresentative,
-    deleteTeamsFromAcademy
+    deleteTeamsFromAcademy,
+    deleteHideGame
 };
 
 export default gameService;

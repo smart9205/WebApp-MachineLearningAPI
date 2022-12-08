@@ -1318,3 +1318,55 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
+
+exports.addHideGame = (req, res) => {
+  const date = new Date().toDateString();
+
+  Sequelize.query(
+    `
+      INSERT INTO public."Hide_Games" ("academy_id", "game_id", "team_id", "createdAt", "updatedAt") VALUES(${req.params.academyId}, ${req.params.gameId}, ${req.params.teamId}, '${date}', '${date}')
+    `
+  )
+    .then((data) => {
+      res.send("Successfully added");
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while removing all Games.",
+      });
+    });
+};
+
+exports.deleteHideGame = (req, res) => {
+  Sequelize.query(
+    `
+      DELETE FROM public."Hide_Games" WHERE public."Hide_Games".academy_id = ${req.params.academyId} and public."Hide_Games".game_id = ${req.params.gameId} and public."Hide_Games".team_id = ${req.params.teamId}
+    `
+  )
+    .then((data) => {
+      res.send("Successfully deleted");
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while removing all Games.",
+      });
+    });
+};
+
+exports.getHideGame = (req, res) => {
+  Sequelize.query(
+    `
+      SELECT public."Hide_Games".*
+      FROM public."Hide_Games"
+      WHERE public."Hide_Games".academy_id = ${req.params.academyId}
+    `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while removing all Games.",
+      });
+    });
+};
