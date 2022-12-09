@@ -66,7 +66,7 @@ const SettingsAcademyTeamGameControl = ({ academy, team, season, select, isManag
     return (
         <div className="settings_academy_container">
             <p className="normal-text">Games</p>
-            <div className="team_game_section" style={{ width: isManager ? '660px' : '720px' }}>
+            <div className="team_game_section" style={{ width: isManager ? '560px' : '720px' }}>
                 {loading ? (
                     <div style={{ width: '100%', height: '80%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <CircularProgress />
