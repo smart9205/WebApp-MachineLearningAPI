@@ -28,7 +28,7 @@ import { logout } from './actions/auth';
 import { clearMessage } from './actions/message';
 
 import { history } from './helpers/history';
-
+import { useTranslation } from 'react-i18next';
 import AuthVerify from './common/AuthVerify';
 import EventBus from './common/EventBus';
 import { getUser, parseJwt } from './common/utilities';
@@ -85,6 +85,7 @@ const ThemeContext = React.createContext({ theme: {} });
 export const useMyTheme = () => React.useContext(ThemeContext);
 
 const App = () => {
+    const { t } = useTranslation();
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
@@ -245,7 +246,7 @@ const App = () => {
                                         path="/new_coach/leaders"
                                         element={
                                             <NewCoach>
-                                                <Leaders />
+                                                <Leaders t={t} />
                                             </NewCoach>
                                         }
                                     />

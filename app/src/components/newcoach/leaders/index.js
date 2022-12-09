@@ -49,7 +49,7 @@ const statCategory = [
     { id: 'yellow_cards', title: 'Yellow Cards' }
 ];
 
-const Leaders = () => {
+const Leaders = ({ t }) => {
     const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [teamList, setTeamList] = useState([]);
@@ -288,11 +288,11 @@ const Leaders = () => {
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <p className="page-title">Leaders</p>
+                <p className="page-title">{t('Leaders')}</p>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', paddingLeft: '30px' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <p className="select-narrator">Seasons</p>
+                            <p className="select-narrator">{t('Seasons')}</p>
                             <Select
                                 value={values.seasonFilter}
                                 onChange={handleChange('seasonFilter')}
@@ -304,7 +304,7 @@ const Leaders = () => {
                                 sx={{ outline: 'none', height: '36px', width: '120px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                             >
                                 <MenuItem key="0" value="none">
-                                    All
+                                    {t('All')}
                                 </MenuItem>
                                 {seasonList.map((season, index) => (
                                     <MenuItem key={index + 1} value={season}>
@@ -314,7 +314,7 @@ const Leaders = () => {
                             </Select>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <p className="select-narrator">Leagues</p>
+                            <p className="select-narrator">{t('Leagues')}</p>
                             <Select
                                 value={values.leagueFilter}
                                 onChange={handleChange('leagueFilter')}
@@ -326,7 +326,7 @@ const Leaders = () => {
                                 sx={{ outline: 'none', height: '36px', width: '170px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                             >
                                 <MenuItem key="0" value="none">
-                                    All
+                                    {t('All')}
                                 </MenuItem>
                                 {leagueList.map((league, index) => (
                                     <MenuItem key={index + 1} value={league}>
@@ -336,7 +336,7 @@ const Leaders = () => {
                             </Select>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <p className="select-narrator">Teams</p>
+                            <p className="select-narrator">{t('Teams')}</p>
                             <Select
                                 value={values.teamFilter}
                                 onChange={handleChange('teamFilter')}
@@ -348,7 +348,7 @@ const Leaders = () => {
                                 sx={{ outline: 'none', height: '36px', width: '220px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                             >
                                 <MenuItem key="0" value="none">
-                                    All
+                                    {t('All')}
                                 </MenuItem>
                                 {teamList.map((team, index) => (
                                     <MenuItem key={index + 1} value={team}>
@@ -358,7 +358,7 @@ const Leaders = () => {
                             </Select>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <p className="select-narrator">Display</p>
+                            <p className="select-narrator">{t('Display')}</p>
                             <Select
                                 value={displayOption}
                                 onChange={(e) => setDisplayOption(e.target.value)}
@@ -370,10 +370,10 @@ const Leaders = () => {
                                 sx={{ outline: 'none', height: '36px', width: '110px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                             >
                                 <MenuItem key="0" value="total">
-                                    Total
+                                    {t('Total')}
                                 </MenuItem>
                                 <MenuItem key="1" value="average">
-                                    Average
+                                    {t('Average')}
                                 </MenuItem>
                             </Select>
                         </Box>
@@ -391,7 +391,7 @@ const Leaders = () => {
                                         </li>
                                     );
                                 }}
-                                renderInput={(params) => <TextField {...params} label="Player" sx={{ my: 1 }} />}
+                                renderInput={(params) => <TextField {...params} label={t('Player')} sx={{ my: 1 }} />}
                                 onChange={(event, newValue) => setValues({ ...values, playerFilter: newValue })}
                                 sx={{
                                     width: '210px',
@@ -420,6 +420,7 @@ const Leaders = () => {
                                 option={item.id}
                                 title={item.title}
                                 onClick={handleDisplayStatDialog}
+                                t={t}
                             />
                         ))}
                     </Box>

@@ -12,7 +12,7 @@ import '../coach_style.css';
 import LogoAlone from '../../../assets/logoAlone.png';
 import MenuIcon from '@mui/icons-material/MenuOutlined';
 
-const Sidebar = () => {
+const Sidebar = ({ t }) => {
     const [minimum, setMinimum] = useState(false);
     const [hoverIndex, setHoverIndex] = useState(undefined);
     const [selectIndex, setSelectIndex] = useState(0);
@@ -87,7 +87,7 @@ const Sidebar = () => {
                             <MenuItem
                                 path={menuItem.path}
                                 icon={menuItem.icon}
-                                title={menuItem.title}
+                                title={t(menuItem.title)}
                                 isMinimized={minimum}
                                 isHover={idx === hoverIndex ? true : false}
                                 isSelected={idx === selectIndex ? true : false}
@@ -105,7 +105,9 @@ const Sidebar = () => {
                 </div>
             ) : (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '5vh', marginBottom: '8px' }}>
-                    <p className="sidebar-game-count">{gameCount} Games Ordered</p>
+                    <p className="sidebar-game-count">
+                        {gameCount} {t('Games Ordered')}
+                    </p>
                 </Box>
             )}
         </Box>

@@ -5,7 +5,7 @@ import { getComparator, stableSort } from '../components/utilities';
 import LeadersPlayerStatItem from './playerStatItem';
 import '../coach_style.css';
 
-const LeadersPlayerStatColumn = ({ list, title, option, isTotal, onClick }) => {
+const LeadersPlayerStatColumn = ({ list, title, option, isTotal, onClick, t }) => {
     const sortedList = stableSort(list, getComparator('desc', isTotal ? `total_${option}` : `average_${option}`));
     const property = isTotal ? `total_${option}` : `average_${option}`;
     const filteredList = sortedList.filter((item) => item[property] !== 0);
@@ -16,7 +16,7 @@ const LeadersPlayerStatColumn = ({ list, title, option, isTotal, onClick }) => {
         <div style={{ width: '100%', borderRadius: '8px', border: '1px solid #E8E8E8', justifyContent: 'space-between', display: 'flex', flexDirection: 'column' }}>
             <div>
                 <div style={{ width: '100%', height: '40px', borderRadius: '8px', background: '#0A7304', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <p className="leaders-column-title">{title}</p>
+                    <p className="leaders-column-title">{t(title)}</p>
                 </div>
                 <div style={{ maxHeight: '530px', overflowY: 'auto' }}>
                     {(isFull ? filteredList : filteredList.slice(0, 5)).map((item, index) => (
