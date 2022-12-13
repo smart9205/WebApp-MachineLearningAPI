@@ -46,7 +46,7 @@ const action_results_pass = [
     { order: 5, title: 'Stolen', color: 'rgb(108,137,197)' }
 ];
 
-const GameStats = ({ game }) => {
+const GameStats = ({ game, t }) => {
     const [values, setValues] = useState({
         isOur: true,
         expandButtons: true,
@@ -102,11 +102,12 @@ const GameStats = ({ game }) => {
                         onChangeTeam={handleChangeTeam}
                         mb="0px"
                     />
-                    <GameStatsBoxList game={game} list={values.playerList} teamId={values.isOur ? values.teamId : values.opponentTeamId} refreshPage={setRefresh} isEdit={values.isOur} />
+                    <GameStatsBoxList game={game} list={values.playerList} teamId={values.isOur ? values.teamId : values.opponentTeamId} refreshPage={setRefresh} isEdit={values.isOur} t={t} />
                 </Box>
                 <GameStatsChart
+                    t={t}
                     chartId="shot"
-                    title="Shoting"
+                    title={t('Shoting')}
                     isType={false}
                     action_results={action_results_shot}
                     list={values.playerList}
@@ -120,8 +121,9 @@ const GameStats = ({ game }) => {
             <Box sx={{ flex: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <GameStatsChart
+                        t={t}
                         chartId="dribble"
-                        title="Dribbling"
+                        title={t('Dribbling')}
                         isType={false}
                         action_results={action_results_dribble}
                         list={values.playerList}
@@ -132,8 +134,9 @@ const GameStats = ({ game }) => {
                         isEdit={values.isOur}
                     />
                     <GameStatsChart
+                        t={t}
                         chartId="cross"
-                        title="Crossing"
+                        title={t('Crossing')}
                         isType={false}
                         action_results={action_results_cross}
                         list={values.playerList}
@@ -146,8 +149,9 @@ const GameStats = ({ game }) => {
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <GameStatsChart
+                        t={t}
                         chartId="pass"
-                        title="Passing"
+                        title={t('Passing')}
                         isType={false}
                         action_results={action_results_pass}
                         list={values.playerList}
@@ -158,8 +162,9 @@ const GameStats = ({ game }) => {
                         isEdit={values.isOur}
                     />
                     <GameStatsChart
+                        t={t}
                         chartId="interception"
-                        title="Interception"
+                        title={t('Interception')}
                         isType={true}
                         action_results={action_results_interception}
                         list={values.playerList}

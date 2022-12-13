@@ -206,7 +206,7 @@ const App = () => {
                                         path="/new_coach/games/:gameId"
                                         element={
                                             <NewCoach>
-                                                <GamePage />
+                                                <GamePage t={t} />
                                             </NewCoach>
                                         }
                                     />
@@ -214,7 +214,7 @@ const App = () => {
                                         path="/new_coach/edits"
                                         element={
                                             <NewCoach>
-                                                <Edits />
+                                                <Edits t={t} />
                                             </NewCoach>
                                         }
                                     />
@@ -222,7 +222,7 @@ const App = () => {
                                         path="/new_coach/players"
                                         element={
                                             <NewCoach>
-                                                <Players />
+                                                <Players t={t} />
                                             </NewCoach>
                                         }
                                     />
@@ -254,7 +254,7 @@ const App = () => {
                                         path="/new_coach/video_cutter"
                                         element={
                                             <NewCoach>
-                                                <VideoCutter />
+                                                <VideoCutter t={t} />
                                             </NewCoach>
                                         }
                                     />
@@ -270,7 +270,7 @@ const App = () => {
                                         path="/new_coach/goalkeepers"
                                         element={
                                             <NewCoach>
-                                                <Goalkeepers />
+                                                <Goalkeepers t={t} />
                                             </NewCoach>
                                         }
                                     />

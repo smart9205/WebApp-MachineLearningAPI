@@ -7,7 +7,7 @@ import EditTagTable from '../edits/tagtable';
 import GameService from '../../../services/game.service';
 import '../coach_style.css';
 
-const VideoCutter = () => {
+const VideoCutter = ({ t }) => {
     const [curEdit, setCurEdit] = useState(null);
     const [editTagList, setEditTagList] = useState([]);
     const [tagLoading, setTagLoading] = useState(false);
@@ -57,12 +57,13 @@ const VideoCutter = () => {
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                <p className="page-title">Video Cutter</p>
+                <p className="page-title">{t('Video Cutter')}</p>
             </Box>
             <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', overflowY: 'auto' }}>
                 <div style={{ display: 'flex', padding: '12px 0' }}>
-                    <EditFolderTreeView setEdit={setCurEdit} isMain={true} entireHeight="95%" treeHeight="90%" />
+                    <EditFolderTreeView t={t} setEdit={setCurEdit} isMain={true} entireHeight="95%" treeHeight="90%" />
                     <EditTagTable
+                        t={t}
                         loading={tagLoading}
                         tagList={editTagList}
                         setIdx={handleClickRow}
@@ -73,7 +74,7 @@ const VideoCutter = () => {
                         showPlay={true}
                     />
                 </div>
-                <VCVideoPlayer saveEdit={curEdit} drawOpen={true} updateList={setRefresh} />
+                <VCVideoPlayer t={t} saveEdit={curEdit} drawOpen={true} updateList={setRefresh} />
             </Box>
         </Box>
     );

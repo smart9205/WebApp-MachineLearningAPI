@@ -5,7 +5,7 @@ import GameService from '../../../../services/game.service';
 import { stableSort, getComparator } from '../../components/utilities';
 import { getTreeViewData } from '.';
 
-const EditCreateUserFolderEdit = ({ open, onClose, updateList, isFolder, node }) => {
+const EditCreateUserFolderEdit = ({ open, onClose, updateList, isFolder, node, t }) => {
     const [folderName, setFolderName] = useState('');
 
     const handleCreateFolder = async () => {
@@ -30,7 +30,7 @@ const EditCreateUserFolderEdit = ({ open, onClose, updateList, isFolder, node })
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>Create New {isFolder ? 'Folder' : 'Edit'}</Typography>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{isFolder ? t('Create New Folder') : t('Create New Edit')}</Typography>
             </DialogTitle>
             <DialogContent dividers={true}>
                 <TextField
@@ -45,15 +45,15 @@ const EditCreateUserFolderEdit = ({ open, onClose, updateList, isFolder, node })
                     label=""
                     autoFocus
                     inputProps={{ 'aria-label': 'Without label' }}
-                    placeholder="New Folder Name"
+                    placeholder={t('Name')}
                     variant="outlined"
                     sx={{ borderRadius: '10px', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={onClose}>{t('Cancel')}</Button>
                 <Button variant="outlined" onClick={() => handleCreateFolder()}>
-                    Create
+                    {t('Create')}
                 </Button>
             </DialogActions>
         </Dialog>

@@ -13,7 +13,7 @@ import GameService from '../../../services/game.service';
 
 const Tabs = ['Overview', 'Stats', 'Players'];
 
-const GamePage = () => {
+const GamePage = ({ t }) => {
     const params = useParams();
     const [values, setValues] = useState({
         game: {},
@@ -53,14 +53,14 @@ const GamePage = () => {
                                 <Link to="/new_coach/games">
                                     <ChevronLeftIcon sx={{ width: '30px', height: '30px' }} />
                                 </Link>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>Game</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>{t('Game')}</Typography>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '8px 16px' }}>
                                     <img style={{ width: '20px' }} src={values.game.home_team_image ? values.game.home_team_image : TEAM_ICON_DEFAULT} />
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>{values.game.home_team_name}</Typography>
                                 </Box>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>VS</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{t('VS')}</Typography>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '8px 16px' }}>
                                     <img style={{ width: '20px' }} src={values.game.away_team_image ? values.game.away_team_image : TEAM_ICON_DEFAULT} />
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>{values.game.away_team_name}</Typography>
@@ -79,15 +79,15 @@ const GamePage = () => {
                                     onClick={() => handleTabClick(index)}
                                     sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
                                 >
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>{tab}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '18px', fontWeight: 700, color: '#1a1b1d' }}>{t(tab)}</Typography>
                                     <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? '#0A7304' : '#F8F8F8' }} />
                                 </Box>
                             ))}
                         </Box>
                     </Box>
-                    {values.curTab === 0 && <GameOverview game={values.game} />}
-                    {values.curTab === 1 && <GameStats game={values.game} />}
-                    {values.curTab === 2 && <GamePlayers game={values.game} />}
+                    {values.curTab === 0 && <GameOverview game={values.game} t={t} />}
+                    {values.curTab === 1 && <GameStats game={values.game} t={t} />}
+                    {values.curTab === 2 && <GamePlayers game={values.game} t={t} />}
                 </>
             )}
         </Box>

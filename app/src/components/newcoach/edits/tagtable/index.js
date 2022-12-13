@@ -11,7 +11,7 @@ import { editCreateCommand, toSecond } from '../../components/utilities';
 import GameService from '../../../../services/game.service';
 import EditFolderTreeView from '../treeview';
 
-const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, showPlay }) => {
+const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, showPlay, t }) => {
     const [teamTagList, setTeamTagList] = useState([]);
     const [checkArray, setCheckArray] = useState([]);
     const [eventName, setEventName] = useState('');
@@ -144,7 +144,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
                 <>
                     {teamTagList.length === 0 && (
                         <Box sx={{ width: '100%', height: '5vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>No Tags</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{t('No Tags')}</Typography>
                         </Box>
                     )}
                     {teamTagList.length > 0 && (
@@ -154,7 +154,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
                                 sx={{ fontSize: '0.75rem !important', background: '#C5EAC6', color: '#0A7304', '&:hover': { background: '#0A7304', color: '#fff' } }}
                                 onClick={handleRender}
                             >
-                                Render
+                                {t('Render')}
                             </Button>
                             <Button
                                 variant="contained"
@@ -162,7 +162,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
                                 onClick={handleMove}
                             >
                                 <ContentCutIcon sx={{ height: '15px' }} />
-                                Move
+                                {t('Move')}
                             </Button>
                             <Button
                                 variant="contained"
@@ -170,7 +170,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
                                 onClick={handleCopy}
                             >
                                 <ContentCopyIcon sx={{ height: '15px' }} />
-                                Copy
+                                {t('Copy')}
                             </Button>
                             <Button
                                 variant="contained"
@@ -178,22 +178,22 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
                                 onClick={handleDelete}
                             >
                                 <DeleteIcon sx={{ height: '15px' }} />
-                                Delete
+                                {t('Delete')}
                             </Button>
                         </Box>
                     )}
                     {teamTagList.length > 0 && (
-                        <CoachTeamTagTable tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} updateTable={update} setChecks={setCheckArray} showPlay={showPlay} />
+                        <CoachTeamTagTable t={t} tagList={teamTagList} setIndex={setIdx} selectIdx={selected} handleSort={sort} updateTable={update} setChecks={setCheckArray} showPlay={showPlay} />
                     )}
                     <Dialog open={dialogOpen} onClose={() => handleClose()} scroll="paper">
                         <DialogTitle>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>Select Edit</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{t('Select Edit')}</Typography>
                         </DialogTitle>
                         <DialogContent dividers={true} style={{ display: 'flex' }}>
                             <EditFolderTreeView setEdit={setControlEdit} isMain={false} entireHeight="400px" treeHeight="100%" />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={() => handleClose()}>Cancel</Button>
+                            <Button onClick={() => handleClose()}>{t('Cancel')}</Button>
                             <Button variant="outlined" onClick={() => handleSave()}>
                                 {eventName === 'copy' ? 'Copy' : 'Move'}
                             </Button>

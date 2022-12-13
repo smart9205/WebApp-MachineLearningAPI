@@ -8,7 +8,7 @@ import GameStatsVideoPlayer from './videoDialog';
 
 import '../../../coach_style.css';
 
-const GameStatsChart = ({ chartId, title, isType, action_results, list, filterText, game, teamId, refreshPage, isEdit }) => {
+const GameStatsChart = ({ chartId, title, isType, action_results, list, filterText, game, teamId, refreshPage, isEdit, t }) => {
     const [playerList, setPlayerList] = useState([]);
     const [hoverId, setHoverId] = useState('');
     const [videoOpen, setVideoOpen] = useState(false);
@@ -122,7 +122,7 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                     {action_results.map((item, index) => (
                         <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
                             <div style={{ background: `${item.color}`, borderRadius: '50%', width: '12px', height: '12px' }} />
-                            <p className="normal-text-italic">{item.title}</p>
+                            <p className="normal-text-italic">{t(item.title)}</p>
                         </div>
                     ))}
                 </div>

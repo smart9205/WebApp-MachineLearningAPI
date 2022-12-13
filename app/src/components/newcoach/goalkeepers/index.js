@@ -52,7 +52,7 @@ const headCells = [
     { id: 'total_opponent_free_kicks', title: 'Opponents Free Kicks', action: 'FreeKick' }
 ];
 
-const Goalkeepers = () => {
+const Goalkeepers = ({ t }) => {
     const [goalkeeperList, setGoalkeeperList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [order, setOrder] = useState('desc');
@@ -432,10 +432,10 @@ const Goalkeepers = () => {
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <p className="page-title">Goalkeepers</p>
+                <p className="page-title">{t('Goalkeepers')}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <p className="normal-text">Season</p>
+                        <p className="normal-text">{t('Season')}</p>
                         <Select
                             value={values.seasonFilter}
                             onChange={(e) => setValues({ ...values, seasonFilter: e.target.value })}
@@ -447,7 +447,7 @@ const Goalkeepers = () => {
                             sx={{ outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                         >
                             <MenuItem key="0" value="none">
-                                All
+                                {t('All')}
                             </MenuItem>
                             {values.seasonList.map((season, index) => (
                                 <MenuItem key={index + 1} value={season}>
@@ -457,7 +457,7 @@ const Goalkeepers = () => {
                         </Select>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <p className="normal-text">Team</p>
+                        <p className="normal-text">{t('Team')}</p>
                         <Select
                             value={values.teamFilter}
                             onChange={(e) => setValues({ ...values, teamFilter: e.target.value })}
@@ -469,7 +469,7 @@ const Goalkeepers = () => {
                             sx={{ outline: 'none', height: '36px', width: '300px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                         >
                             <MenuItem key="0" value="none">
-                                All
+                                {t('All')}
                             </MenuItem>
                             {values.teamList.map((team, index) => (
                                 <MenuItem key={index + 1} value={team}>
@@ -492,15 +492,15 @@ const Goalkeepers = () => {
                             <TableHead>
                                 <TableRow height="36px">
                                     <TableCell key="name" align="center" colSpan={2}>
-                                        Name
+                                        {t('Name')}
                                     </TableCell>
                                     <TableCell key="team" align="center">
-                                        Team
+                                        {t('Team')}
                                     </TableCell>
                                     {headCells.map((cell) => (
                                         <TableCell key={cell.id} align="center" sortDirection={orderBy === cell.id ? order : false}>
                                             <TableSortLabel active={orderBy === cell.id} direction={orderBy === cell.id ? order : 'asc'} onClick={() => handleRequestSort(cell.id)}>
-                                                {cell.title}
+                                                {t(cell.title)}
                                             </TableSortLabel>
                                         </TableCell>
                                     ))}
@@ -540,8 +540,9 @@ const Goalkeepers = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <PlayerEditDialog open={editOpen} onClose={() => setEditOpen(false)} player={editPlayer} />
+                    <PlayerEditDialog t={t} open={editOpen} onClose={() => setEditOpen(false)} player={editPlayer} />
                     <GoalkeeperStatDialog
+                        t={t}
                         open={statOpen}
                         onClose={() => setStatOpen(false)}
                         player={currentPlayer}
@@ -551,9 +552,16 @@ const Goalkeepers = () => {
                         gameIds={gameIdsForStats}
                         initialState={playerStat}
                     />
-                    <TeamStatsVideoPlayer open={videoOpen} onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />
+                    <TeamStatsVideoPlayer t={t} open={videoOpen} onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />
                     <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
-                    <GoalkeepersGamesDialog open={gamesOpen} onClose={() => setGamesOpen(false)} list={playerGames} playerName={playerStat?.player_name ?? ''} teamId={playerStat?.team_id ?? 0} />
+                    <GoalkeepersGamesDialog
+                        t={t}
+                        open={gamesOpen}
+                        onClose={() => setGamesOpen(false)}
+                        list={playerGames}
+                        playerName={playerStat?.player_name ?? ''}
+                        teamId={playerStat?.team_id ?? 0}
+                    />
                     <Popover
                         id={menuPopoverId}
                         open={menuPopoverOpen}
@@ -565,12 +573,12 @@ const Goalkeepers = () => {
                     >
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDisplayStats()}>
                             <QueryStatsIcon />
-                            <p className="menu-item">Accumulated Stats</p>
+                            <p className="menu-item">{t('Accumulated Stats')}</p>
                         </Box>
                         <Divider sx={{ width: '100%' }} />
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDisplayGames()}>
                             <SportsSoccerIcon />
-                            <p className="menu-item">Game By Game</p>
+                            <p className="menu-item">{t('Game By Game')}</p>
                         </Box>
                         <Divider sx={{ width: '100%' }} />
                         <Box
@@ -582,7 +590,7 @@ const Goalkeepers = () => {
                             }}
                         >
                             <EditIcon />
-                            <p className="menu-item">Edit Player</p>
+                            <p className="menu-item">{t('Edit Player')}</p>
                         </Box>
                     </Popover>
                 </Box>

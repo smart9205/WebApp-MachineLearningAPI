@@ -69,6 +69,7 @@ const TeamStats = ({ games, gameIds, teamId, t }) => {
             <Box sx={{ minWidth: '34%', display: 'flex', flexDirection: 'column', gap: '52px' }}>
                 <TeamStatsBoxList games={gameList} t={t} list={playerList} teamId={teamId} refreshPage={setRefresh} />
                 <TeamStatsChart
+                    t={t}
                     chartId="shot"
                     title={t('Shoting')}
                     isType={false}
@@ -83,6 +84,7 @@ const TeamStats = ({ games, gameIds, teamId, t }) => {
             <Box sx={{ flex: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <TeamStatsChart
+                        t={t}
                         chartId="dribble"
                         title={t('Dribbling')}
                         isType={false}
@@ -94,6 +96,7 @@ const TeamStats = ({ games, gameIds, teamId, t }) => {
                         refreshPage={setRefresh}
                     />
                     <TeamStatsChart
+                        t={t}
                         chartId="cross"
                         title={t('Crossing')}
                         isType={false}
@@ -107,6 +110,7 @@ const TeamStats = ({ games, gameIds, teamId, t }) => {
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <TeamStatsChart
+                        t={t}
                         chartId="pass"
                         title={t('Passing')}
                         isType={false}
@@ -118,6 +122,7 @@ const TeamStats = ({ games, gameIds, teamId, t }) => {
                         refreshPage={setRefresh}
                     />
                     <TeamStatsChart
+                        t={t}
                         chartId="interception"
                         title={t('Interception')}
                         isType={true}

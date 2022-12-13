@@ -6,7 +6,7 @@ import EditTagTable from './tagtable';
 import EditVideoPlayer from './videoplayer';
 import EditFolderTreeView from './treeview';
 
-const Edits = () => {
+const Edits = ({ t }) => {
     const [editTagList, setEditTagList] = useState([]);
     const [curEdit, setCurEdit] = useState(null);
     const [tagLoading, setTagLoading] = useState(false);
@@ -48,12 +48,13 @@ const Edits = () => {
     return (
         <Box sx={{ width: '98%', margin: '0 auto' }}>
             <Box sx={{ width: '100%', padding: '24px 24px 24px 24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>My Edits</Typography>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>{t('My Edits')}</Typography>
             </Box>
             <Box sx={{ display: 'flex', maxHeight: '85vh', height: '85vh', background: 'white', overflowY: 'auto' }}>
                 <div style={{ display: 'flex', padding: '10px 0' }}>
-                    <EditFolderTreeView setEdit={setCurEdit} isMain={true} entireHeight="95%" treeHeight="90%" />
+                    <EditFolderTreeView t={t} setEdit={setCurEdit} isMain={true} entireHeight="95%" treeHeight="90%" />
                     <EditTagTable
+                        t={t}
                         loading={tagLoading}
                         tagList={editTagList}
                         setIdx={handleClickRow}

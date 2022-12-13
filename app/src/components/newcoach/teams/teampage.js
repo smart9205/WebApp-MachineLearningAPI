@@ -76,9 +76,13 @@ const TeamPage = ({ t }) => {
             {values.loadingDone && (
                 <>
                     {curTab === 0 && <TeamOverview games={gameList} t={t} gameIds={gameIds} teamname={values.teamName} teamId={values.teamId} />}
+
                     {curTab === 1 && <TeamStats games={gameList} t={t} gameIds={gameIds} teamId={values.teamId} />}
+
                     {curTab === 2 && <TeamGames games={gameList} t={t} gameIds={gameIds} teamId={values.teamId} seasonId={values.seasonId} />}
+
                     {curTab === 3 && <TeamPlayersOverview games={gameList} t={t} gameIds={gameIds} teamId={values.teamId} teamName={values.teamName} />}
+
                     {curTab === 4 && <TeamPlayersStats teamId={values.teamId} t={t} seasonId={values.seasonId} leagueId={values.leagueId} gameIds={gameIds} games={gameList} />}
                 </>
             )}

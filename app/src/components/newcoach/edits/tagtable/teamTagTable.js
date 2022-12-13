@@ -8,7 +8,7 @@ import { EditDraggableTableRow } from './draggableTableRow';
 import CorrectionsVideoPlayer from '../../corrections/videoDialog';
 import GameService from '../../../../services/game.service';
 
-const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTable, setChecks, showPlay }) => {
+const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTable, setChecks, showPlay, t }) => {
     const [tableRows, setTableRows] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
@@ -19,7 +19,6 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
     selectedRef.current = selectedRows;
 
     const moveRow = useCallback((dragIndex, hoverIndex, isDropped) => {
-
         if (!isDropped)
             setTableRows((prevCards) => {
                 const newRow = update(prevCards, {
@@ -118,12 +117,12 @@ const CoachTeamTagTable = ({ tagList, setIndex, selectIdx, handleSort, updateTab
                                 <TableCell>
                                     <Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} />
                                 </TableCell>
-                                <TableCell style={{ height: '36px' }}>Clip Name</TableCell>
+                                <TableCell style={{ height: '36px' }}>{t('Clip Name')}</TableCell>
                                 <TableCell align="center" style={{ height: '36px' }}>
-                                    Start Time
+                                    {t('Start Time')}
                                 </TableCell>
                                 <TableCell align="center" style={{ height: '36px' }}>
-                                    End Time
+                                    {t('End Time')}
                                 </TableCell>
                                 <TableCell />
                             </TableRow>

@@ -82,7 +82,7 @@ export function getTreeViewData(res) {
     return stableSort(trees, getComparator('asc', 'order_num'));
 }
 
-const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
+const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight, t }) => {
     const [folders, setFolders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [folderDialog, setFolderDialog] = useState(false);
@@ -222,7 +222,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                     <>
                         <Snackbar open={alertOpen} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={2000} onClose={() => setAlertOpen(false)}>
                             <Alert onClose={() => setAlertOpen(false)} severity="success" sx={{ width: '100%' }}>
-                                Successfully copied URL
+                                {t('Successfully copied URL')}
                             </Alert>
                         </Snackbar>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 10px 24px' }}>
@@ -234,7 +234,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                                     setFolderDialog(true);
                                 }}
                             >
-                                New Folder
+                                {t('New Folder')}
                             </Button>
                             <Button
                                 variant="contained"
@@ -245,7 +245,7 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                                     setFolderDialog(true);
                                 }}
                             >
-                                New Edit
+                                {t('New Edit')}
                             </Button>
                         </Box>
                         <TreeView
@@ -261,8 +261,8 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                     </>
                 )}
             </Box>
-            <EditNameDialog open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={setFolders} />
-            <EditCreateUserFolderEdit open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setFolders} isFolder={createFolderEdit} node={curEdit} />
+            <EditNameDialog t={t} open={editOpen} onClose={() => setEditOpen(false)} node={updateEdit} nodes={folders} updateList={setFolders} />
+            <EditCreateUserFolderEdit t={t} open={folderDialog} onClose={() => setFolderDialog(false)} updateList={setFolders} isFolder={createFolderEdit} node={curEdit} />
             <DeleteConfirmDialog
                 open={confirmOpen}
                 handleDeleteClose={(flag) => {
@@ -289,12 +289,12 @@ const EditFolderTreeView = ({ setEdit, isMain, entireHeight, treeHeight }) => {
                     }}
                 >
                     <EmailIcon />
-                    <p className="normal-text">By email</p>
+                    <p className="normal-text">{t('By email')}</p>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleShareEditByMessage()}>
                     <ChatBubbleIcon />
-                    <p className="normal-text">By message</p>
+                    <p className="normal-text">{t('By message')}</p>
                 </Box>
             </Popover>
         </>

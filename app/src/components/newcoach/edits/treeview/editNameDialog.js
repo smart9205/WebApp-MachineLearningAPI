@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import GameService from '../../../../services/game.service';
 
-const EditNameDialog = ({ open, onClose, node, nodes, updateList }) => {
+const EditNameDialog = ({ open, onClose, node, nodes, updateList, t }) => {
     const [name, setName] = useState('');
     let folders = Array.isArray(nodes) ? [...nodes] : [];
 
@@ -43,7 +43,7 @@ const EditNameDialog = ({ open, onClose, node, nodes, updateList }) => {
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{node.isFolder ? 'Folder Name' : 'Edit Name'}</Typography>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 500, color: '#1a1b1d' }}>{node.isFolder ? t('Folder Name') : t('Edit Name')}</Typography>
             </DialogTitle>
             <DialogContent dividers={true}>
                 <TextField
@@ -58,15 +58,15 @@ const EditNameDialog = ({ open, onClose, node, nodes, updateList }) => {
                     label=""
                     autoFocus
                     inputProps={{ 'aria-label': 'Without label' }}
-                    placeholder="New Folder or Edit Name"
+                    placeholder={t('Name')}
                     variant="outlined"
                     sx={{ borderRadius: '10px', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => onClose()}>Cancel</Button>
+                <Button onClick={() => onClose()}>{t('Cancel')}</Button>
                 <Button variant="outlined" onClick={() => handleSave()}>
-                    Update
+                    {t('Update')}
                 </Button>
             </DialogActions>
         </Dialog>

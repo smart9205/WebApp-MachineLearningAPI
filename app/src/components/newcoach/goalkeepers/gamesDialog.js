@@ -33,7 +33,7 @@ const properties = [
     { id: 'total_opponent_free_kicks', title: 'Opponents Free-Kicks', action: 'FreeKick' }
 ];
 
-const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => {
+const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId, t }) => {
     const { user: currentUser } = useSelector((state) => state.auth);
 
     const [playData, setPlayData] = useState([]);
@@ -202,11 +202,11 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId }) => 
                         <TableHead>
                             <TableRow height="36px">
                                 <TableCell key="0" align="center">
-                                    Game
+                                    {t('Game')}
                                 </TableCell>
                                 {properties.map((item, index) => (
                                     <TableCell key={index + 1} align="center">
-                                        {item.title}
+                                        {t(item.title)}
                                     </TableCell>
                                 ))}
                             </TableRow>

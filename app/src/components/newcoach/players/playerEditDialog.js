@@ -13,7 +13,7 @@ import { SaveButton, MenuProps } from '../components/common';
 import UploadButton from '../components/uploadButton';
 import GameService from '../../../services/game.service';
 
-const PlayerEditDialog = ({ open, onClose, player }) => {
+const PlayerEditDialog = ({ open, onClose, player, t }) => {
     const navigate = useNavigate();
     const [values, setValues] = useState({
         id: 0,
@@ -72,7 +72,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
             <DialogTitle>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px', cursor: 'pointer' }} onClick={onClose}>
                     <CloseIcon sx={{ width: '18px', height: '18px' }} />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>Close</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{t('Close')}</Typography>
                 </Box>
             </DialogTitle>
             <DialogContent style={{ display: 'flex', margin: '0 30px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '24px' }}>
@@ -81,7 +81,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                         <CircularProgress />
                     </div>
                 )}
-                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '28px', fontWeight: 700, color: '#1a1b1d' }}>Edit Player</Typography>
+                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '28px', fontWeight: 700, color: '#1a1b1d' }}>{t('Edit Player')}</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
                     <UploadButton
                         class_name="upload-player-view"
@@ -94,7 +94,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>First Name</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>{t('FirstName')}</Typography>
                                 <TextField
                                     value={values.f_name}
                                     onChange={handleChange('f_name')}
@@ -106,7 +106,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                                 />
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Last Name</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>{t('LastName')}</Typography>
                                 <TextField
                                     value={values.l_name}
                                     onChange={handleChange('l_name')}
@@ -120,7 +120,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Birthday</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>{t('Birthday')}</Typography>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DatePicker
                                         label=""
@@ -135,7 +135,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                                 </LocalizationProvider>
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Jersey Number</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>{t('Jersey Number')}</Typography>
                                 <TextField
                                     value={values.jersey_number}
                                     onChange={handleChange('jersey_number')}
@@ -149,7 +149,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                             </Box>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>Position</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', marginLeft: '16px' }}>{t('Position')}</Typography>
                             <Select
                                 value={values.position}
                                 onChange={handleChange('position')}
@@ -170,7 +170,7 @@ const PlayerEditDialog = ({ open, onClose, player }) => {
                     </Box>
                 </Box>
                 <SaveButton onClick={saveChanges} sx={{ width: '300px', fontSize: '14px' }}>
-                    Save changes
+                    {t('Save changes')}
                 </SaveButton>
             </DialogContent>
         </Dialog>

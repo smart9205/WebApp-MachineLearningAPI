@@ -7,7 +7,7 @@ import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import TeamStatsVideoPlayer from './videoDialog';
 
-const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterText, games, teamId, refreshPage }) => {
+const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterText, games, teamId, refreshPage, t }) => {
     const [playerList, setPlayerList] = useState([]);
     const [hoverId, setHoverId] = useState('');
     const [videoOpen, setVideoOpen] = useState(false);
@@ -64,12 +64,18 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
     const getTooltipContent = (player, sId) => {
         return (
             <div>
-                <p className="normal-text-white">Name: {player.name}</p>
-                <p className="normal-text-white">Action: {filterText}</p>
+                <p className="normal-text-white">
+                    {t('Name')}: {player.name}
+                </p>
+                <p className="normal-text-white">
+                    {t('Action')}: {filterText}
+                </p>
                 <p className="normal-text-white">
                     {isType ? 'Type' : 'Result'}: {player.data[sId].name}
                 </p>
-                <p className="normal-text-white">Count: {player.data[sId].count}</p>
+                <p className="normal-text-white">
+                    {t('Count')}: {player.data[sId].count}
+                </p>
             </div>
         );
     };
@@ -103,7 +109,7 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                     }
                 });
 
-                let includedOrderFilter =  orderedSort(includedFilterList)
+                let includedOrderFilter = orderedSort(includedFilterList);
 
                 temp = [...temp, { name: item.player_names, count: includedData.length, data: includedOrderFilter }];
             }
@@ -122,7 +128,7 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                     {action_results.map((item, index) => (
                         <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
                             <div style={{ background: `${item.color}`, borderRadius: '50%', width: '12px', height: '12px' }} />
-                            <p className="normal-text-italic">{item.title}</p>
+                            <p className="normal-text-italic">{t(item.title)}</p>
                         </div>
                     ))}
                 </div>

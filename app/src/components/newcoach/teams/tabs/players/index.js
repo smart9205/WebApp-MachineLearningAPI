@@ -283,6 +283,7 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games, t }) => 
                 </Table>
             </TableContainer>
             <TeamPlayerStatDialog
+                t={t}
                 open={statOpen}
                 onClose={() => setStatOpen(false)}
                 player={currentPlayer}
@@ -293,6 +294,7 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games, t }) => 
                 initialState={playerStat}
             />
             <TeamStatsVideoPlayer
+                t={t}
                 open={videoOpen}
                 onClose={(flag) => {
                     setVideoOpen(false);
@@ -302,7 +304,7 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games, t }) => 
                 video_url={gameList}
                 tagList={playData}
             />
-            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
+            <GameExportToEdits t={t} open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );
 };
