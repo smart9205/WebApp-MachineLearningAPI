@@ -8,7 +8,7 @@ import SortIcon from '@mui/icons-material/SortOutlined';
 import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 import TeamEditDialog from './teamEditDialog';
 
-const TeamListItem = ({ row, isHover }) => {
+const TeamListItem = ({ row, isHover, t }) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
 
@@ -52,12 +52,12 @@ const TeamListItem = ({ row, isHover }) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', flex: 2, padding: '0 8px' }}>
                     <p className="normal-text">{row.season_name}</p>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <p className="normal-text">GAMES</p>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textTransform: 'uppercase', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
+                    <p className="normal-text">{t('Games')}</p>
                     <p className="normal-text">{row.total_game_played}</p>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <p className="normal-text">WON</p>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textTransform: 'uppercase', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
+                    <p className="normal-text">{t('Won')}</p>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#52B030', borderRadius: '12px', width: '24px', height: '24px' }}>
                             <p className="normal-text-white">W</p>
@@ -66,7 +66,7 @@ const TeamListItem = ({ row, isHover }) => {
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <p className="normal-text">DRAW</p>
+                    <p className="normal-text">{t('DRAW')}</p>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#A4AAB0', borderRadius: '12px', width: '24px', height: '24px' }}>
                             <p className="normal-text-white">D</p>
@@ -75,7 +75,7 @@ const TeamListItem = ({ row, isHover }) => {
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <p className="normal-text">LOSE</p>
+                    <p className="normal-text">{t('LOSE')}</p>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#C1272D', borderRadius: '12px', width: '24px', height: '24px' }}>
                             <p className="normal-text-white">L</p>
@@ -83,14 +83,14 @@ const TeamListItem = ({ row, isHover }) => {
                         <p className="normal-text-strong">{row.lost}</p>
                     </Box>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <p className="normal-text">GOALS</p>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textTransform: 'uppercase', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
+                    <p className="normal-text">{t('Goals')}</p>
                     <p className="normal-text-strong">{row.goals}</p>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', 'svg path': { fill: '#FE5E00' }, marginLeft: '8px', flex: 2 }}>
                     <PlayersIcon />
                     <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px' }}>
-                        <p className="normal-text">Players</p>
+                        <p className="normal-text">{t('Players')}</p>
                         <p className="normal-text">{row.player_count}</p>
                     </Box>
                 </Box>
@@ -109,7 +109,7 @@ const TeamListItem = ({ row, isHover }) => {
             >
                 <SortIcon />
             </Box>
-            <TeamEditDialog open={open} onClose={handleCloseDialog} team={row} />
+            <TeamEditDialog open={open} t={t} onClose={handleCloseDialog} team={row} />
         </Box>
     );
 };

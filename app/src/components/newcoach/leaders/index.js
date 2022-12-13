@@ -426,7 +426,7 @@ const Leaders = ({ t }) => {
                     </Box>
                 </Box>
             )}
-            <LeadersPlayerStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} />
+            <LeadersPlayerStatDialog open={statOpen} t={t} onClose={() => setStatOpen(false)} player={currentPlayer} />
         </Box>
     );
 };

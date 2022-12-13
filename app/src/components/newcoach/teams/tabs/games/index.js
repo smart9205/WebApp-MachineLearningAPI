@@ -29,7 +29,7 @@ const properties = [
     { id: 'total_clearance', action: 'Clearance' }
 ];
 
-const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
+const TeamGames = ({ games, gameIds, teamId, seasonId, t }) => {
     const [teamStatList, setTeamStatList] = useState([]);
     const [playData, setPlayData] = useState([]);
     const [videoOpen, setVideoOpen] = useState(false);
@@ -162,26 +162,26 @@ const TeamGames = ({ games, gameIds, teamId, seasonId }) => {
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow height="36px">
-                            <TableCell align="center">Game</TableCell>
+                            <TableCell align="center">{t('Game')}</TableCell>
                             <TableCell align="center" colSpan={2}>
-                                Team
+                                {t('Team')}
                             </TableCell>
-                            <TableCell align="center">Formation</TableCell>
-                            <TableCell align="center">Goals</TableCell>
-                            <TableCell align="center">Shots</TableCell>
-                            <TableCell align="center">Dribbles</TableCell>
-                            <TableCell align="center">Crosses</TableCell>
-                            <TableCell align="center">Corners</TableCell>
-                            <TableCell align="center">Free Kicks</TableCell>
-                            <TableCell align="center">Passes</TableCell>
-                            <TableCell align="center">Turnovers</TableCell>
-                            <TableCell align="center">Fouls</TableCell>
-                            <TableCell align="center">Draw Fouls</TableCell>
-                            <TableCell align="center">Interceptions</TableCell>
-                            <TableCell align="center">Tackles</TableCell>
-                            <TableCell align="center">Saved</TableCell>
-                            <TableCell align="center">Blocked</TableCell>
-                            <TableCell align="center">Clearance</TableCell>
+                            <TableCell align="center">{t('Formation')}</TableCell>
+                            <TableCell align="center">{t('Goals')}</TableCell>
+                            <TableCell align="center">{t('Shots')}</TableCell>
+                            <TableCell align="center">{t('Dribbles')}</TableCell>
+                            <TableCell align="center">{t('Crosses')}</TableCell>
+                            <TableCell align="center">{t('Corners')}</TableCell>
+                            <TableCell align="center">{t('Free Kicks')}</TableCell>
+                            <TableCell align="center">{t('Passes')}</TableCell>
+                            <TableCell align="center">{t('Turnovers')}</TableCell>
+                            <TableCell align="center">{t('Fouls')}</TableCell>
+                            <TableCell align="center">{t('Draw Fouls')}</TableCell>
+                            <TableCell align="center">{t('Interceptions')}</TableCell>
+                            <TableCell align="center">{t('Tackles')}</TableCell>
+                            <TableCell align="center">{t('Saved')}</TableCell>
+                            <TableCell align="center">{t('Blocked')}</TableCell>
+                            <TableCell align="center">{t('Clearance')}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

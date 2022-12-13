@@ -84,7 +84,7 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
     }
 }));
 
-export default function GameSelectControl({ gameList, setIds }) {
+export default function GameSelectControl({ gameList, setIds, t }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [value, setValue] = React.useState([]);
     const [pendingValue, setPendingValue] = React.useState([]);
@@ -116,7 +116,7 @@ export default function GameSelectControl({ gameList, setIds }) {
     return (
         <React.Fragment>
             <SaveButton sx={{ fontWeight: 500, width: '150px', height: '28px', fontSize: '0.9rem' }} endIcon={<SettingsIcon />} disableRipple aria-describedby={id} onClick={handleClick}>
-                Select Games
+                {t('Select Games')}
             </SaveButton>
             <StyledPopper id={id} open={open} anchorEl={anchorEl} placement="bottom-start">
                 <ClickAwayListener onClickAway={handleClose}>
@@ -127,15 +127,15 @@ export default function GameSelectControl({ gameList, setIds }) {
                                 padding: '8px 10px',
                                 fontWeight: 600,
                                 fontFamily: "'DM Sans', sans-serif",
-                                fontSize:'0.8rem'
+                                fontSize: '0.8rem'
                             }}
                         >
-                            Please select games
+                            {t('Please select games')}
                             <FormControlLabel
-                            sx={{ mt: 1, marginLeft: '130px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem' }}
-                            control={<Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} inputProps={{ 'aria-label': 'controlled' }} />}
-                            label="Select All"
-                        />
+                                sx={{ mt: 1, marginLeft: '130px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem' }}
+                                control={<Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} inputProps={{ 'aria-label': 'controlled' }} />}
+                                label="Select All"
+                            />
                         </Box>
 
                         <Autocomplete

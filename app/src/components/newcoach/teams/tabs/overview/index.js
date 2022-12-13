@@ -15,7 +15,7 @@ import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import { XmlDataFilterTeamOverview } from '../../../components/xmldatateam';
 
-const TeamOverview = ({ games, gameIds, teamname, teamId }) => {
+const TeamOverview = ({ games, gameIds, teamname, teamId, t }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
     const [videoData, setVideoData] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -340,6 +340,7 @@ const TeamOverview = ({ games, gameIds, teamname, teamId }) => {
                     />
                 )}
                 <GameTagList
+                    t={t}
                     isLoading={loading}
                     expand={values.expandButtons}
                     tagList={values.playList}

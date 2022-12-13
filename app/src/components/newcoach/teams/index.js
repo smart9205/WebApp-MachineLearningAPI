@@ -9,7 +9,7 @@ import { MenuProps } from '../components/common';
 import { getComparator, stableSort } from '../components/utilities';
 import '../coach_style.css';
 
-const Teams = () => {
+const Teams = ({ t }) => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         hoverIndex: -1,
         teamsList: [],
@@ -98,10 +98,10 @@ const Teams = () => {
             {!loading && (
                 <>
                     <Box sx={{ width: '100%', padding: '24px 24px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <p className="page-title">Teams</p>
+                        <p className="page-title">{t('Teams')}</p>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', justifyContent: 'flex-end', width: '100%' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <p className="select-narrator">Season</p>
+                                <p className="select-narrator">{t('Season')}</p>
                                 <Select
                                     value={seasonFilter}
                                     onChange={handleChange('seasonFilter')}
@@ -113,7 +113,7 @@ const Teams = () => {
                                     sx={{ borderRadius: '10px', outline: 'none', height: '36px', width: '300px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                 >
                                     <MenuItem key="0" value="none">
-                                        All
+                                        {t('All')}
                                     </MenuItem>
                                     {seasonList.map((season, index) => (
                                         <MenuItem key={index + 1} value={season}>
@@ -123,7 +123,7 @@ const Teams = () => {
                                 </Select>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <p className="select-narrator">League</p>
+                                <p className="select-narrator">{t('League')}</p>
                                 <Select
                                     value={leagueFilter}
                                     onChange={handleChange('leagueFilter')}
@@ -135,7 +135,7 @@ const Teams = () => {
                                     sx={{ borderRadius: '10px', outline: 'none', height: '36px', width: '300px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                 >
                                     <MenuItem key="0" value="none">
-                                        All
+                                        {t('All')}
                                     </MenuItem>
                                     {leagueList.map((league, index) => (
                                         <MenuItem key={index + 1} value={league}>
@@ -150,7 +150,7 @@ const Teams = () => {
                         <Box sx={{ marginRight: '4px' }}>
                             {getTeamsList().map((team, index) => (
                                 <Box key={index} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
-                                    <TeamListItem row={team} isHover={hoverIndex === index} />
+                                    <TeamListItem row={team} t={t} isHover={hoverIndex === index} />
                                 </Box>
                             ))}
                         </Box>

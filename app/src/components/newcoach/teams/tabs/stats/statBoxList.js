@@ -24,7 +24,7 @@ let boxList = [
     ]
 ];
 
-const TeamStatsBoxList = ({ games, list, teamId, refreshPage }) => {
+const TeamStatsBoxList = ({ games, list, teamId, refreshPage, t }) => {
     const [actionList, setActionList] = useState([]);
     const [videoOpen, setVideoOpen] = useState(false);
     const [playData, setPlayData] = useState([]);
@@ -129,7 +129,7 @@ const TeamStatsBoxList = ({ games, list, teamId, refreshPage }) => {
                         onClick={() => handleDisplayVideo(item)}
                         onContextMenu={handleExportTags(item)}
                     >
-                        <p className="normal-text">{item.title}</p>
+                        <p className="normal-text">{t(item.title)}</p>
                         <p className="normal-text">{item.total}</p>
                     </Box>
                 ))}
@@ -155,7 +155,7 @@ const TeamStatsBoxList = ({ games, list, teamId, refreshPage }) => {
                         onContextMenu={handleExportTags(item)}
                         contextMenu="none"
                     >
-                        <p className="normal-text">{item.title}</p>
+                        <p className="normal-text">{t(item.title)}</p>
                         <p className="normal-text">{item.total}</p>
                     </Box>
                 ))}
@@ -180,7 +180,7 @@ const TeamStatsBoxList = ({ games, list, teamId, refreshPage }) => {
                         onClick={() => handleDisplayVideo(item)}
                         onContextMenu={handleExportTags(item)}
                     >
-                        <p className="normal-text">{item.title}</p>
+                        <p className="normal-text">{t(item.title)}</p>
                         <p className="normal-text">{item.total}</p>
                     </Box>
                 ))}

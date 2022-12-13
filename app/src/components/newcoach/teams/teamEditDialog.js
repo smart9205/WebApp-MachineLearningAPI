@@ -24,7 +24,7 @@ const MenuProps = {
     }
 };
 
-const TeamEditDialog = ({ open, onClose, team }) => {
+const TeamEditDialog = ({ open, onClose, team, t }) => {
     const navigate = useNavigate();
     const [values, setValues] = useState({
         id: 0,
@@ -81,7 +81,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
             <DialogTitle>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px', cursor: 'pointer' }} onClick={onClose}>
                     <CloseIcon sx={{ width: '18px', height: '18px' }} />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>Close</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d' }}>{t('Close')}</Typography>
                 </Box>
             </DialogTitle>
             <DialogContent style={{ display: 'flex', margin: '0 30px', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
@@ -90,11 +90,11 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                         <CircularProgress />
                     </div>
                 )}
-                <p className="page-title">Edit Team</p>
+                <p className="page-title">{t('Edit Team')}</p>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '4px' }}>
-                            <p className="select-narrator">Team Logo</p>
+                            <p className="select-narrator">{t('Team Logo')}</p>
                             <UploadButton
                                 class_name="upload-team-view"
                                 id_name="team-logo"
@@ -105,7 +105,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                             />
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '4px' }}>
-                            <p className="select-narrator">Sponsor Logo</p>
+                            <p className="select-narrator">{t('Sponsor Logo')}</p>
                             <UploadButton
                                 class_name="upload-sponsor-view"
                                 id_name="sponsor-logo"
@@ -119,7 +119,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '80px', padding: '24px 0' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '32px', marginBottom: '32px' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <p className="select-narrator">Team Color</p>
+                                <p className="select-narrator">{t('Team Color')}</p>
                                 <ColorPicker
                                     defaultValue="transparent"
                                     value={values.team_color}
@@ -128,7 +128,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                                 />
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <p className="select-narrator">Second Color</p>
+                                <p className="select-narrator">{t('Second Color')}</p>
                                 <ColorPicker
                                     defaultValue="transparent"
                                     value={values.second_color}
@@ -138,14 +138,14 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                             </Box>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <p className="select-narrator">Sponsor URL</p>
+                            <p className="select-narrator">{t('Sponsor URL')}</p>
                             <TextField
                                 value={values.sponsor_url}
                                 onChange={handleChange('sponsor_url')}
                                 label=""
                                 inputProps={{ 'aria-label': 'Without label' }}
                                 variant="outlined"
-                                placeholder="Sponsor URL"
+                                placeholder={t('Sponsor URL')}
                                 sx={{ borderRadius: '10px', height: '48px', width: '300px', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                             />
                             <FormControlLabel
@@ -153,13 +153,13 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                                 control={
                                     <Switch checked={values.show_sponsor} onChange={() => setValues({ ...values, show_sponsor: !values.show_sponsor })} inputProps={{ 'aria-label': 'controlled' }} />
                                 }
-                                label="Show Sponsor"
+                                label={t('Show Sponsor')}
                             />
                         </Box>
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '64px' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <p className="select-narrator">Team Language</p>
+                            <p className="select-narrator">{t('Team Language')}</p>
                             <Select
                                 value={values.team_language}
                                 onChange={handleChange('team_language')}
@@ -203,7 +203,7 @@ const TeamEditDialog = ({ open, onClose, team }) => {
                     </Box>
                 </Box>
                 <SaveButton onClick={saveChanges} sx={{ width: '300px', fontSize: '0.7rem' }}>
-                    Save changes
+                    {t('Save changes')}
                 </SaveButton>
             </DialogContent>
         </Dialog>

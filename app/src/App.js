@@ -182,7 +182,7 @@ const App = () => {
                                         path="/new_coach/teams"
                                         element={
                                             <NewCoach>
-                                                <Teams />
+                                                <Teams t={t} />
                                             </NewCoach>
                                         }
                                     />
@@ -190,7 +190,7 @@ const App = () => {
                                         path="/new_coach/teams/:teamId"
                                         element={
                                             <NewCoach>
-                                                <TeamPage />
+                                                <TeamPage t={t} />
                                             </NewCoach>
                                         }
                                     />
@@ -198,7 +198,7 @@ const App = () => {
                                         path="/new_coach/games"
                                         element={
                                             <NewCoach>
-                                                <Games />
+                                                <Games t={t} />
                                             </NewCoach>
                                         }
                                     />

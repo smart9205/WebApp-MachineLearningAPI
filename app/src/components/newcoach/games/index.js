@@ -10,7 +10,7 @@ import { getComparator, stableSort } from '../components/utilities';
 
 const Tabs = ['Processed', 'Pending'];
 
-const Games = () => {
+const Games = ({ t }) => {
     const [values, setValues] = useState({
         loading: false,
         hoverIndex: -1,
@@ -191,10 +191,10 @@ const Games = () => {
                 <>
                     <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>Games</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>{t('Games')}</Typography>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Period</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('Period')}</Typography>
                                     <Select
                                         value={values.periodFilter}
                                         onChange={handleChange('periodFilter')}
@@ -205,13 +205,13 @@ const Games = () => {
                                         MenuProps={MenuProps}
                                         sx={{ outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                     >
-                                        <MenuItem value="0">All</MenuItem>
-                                        <MenuItem value="1">Last week</MenuItem>
-                                        <MenuItem value="2">Last month</MenuItem>
+                                        <MenuItem value="0">{t('All')}</MenuItem>
+                                        <MenuItem value="1">{t('Last week')}</MenuItem>
+                                        <MenuItem value="2">{t('Last month')}</MenuItem>
                                     </Select>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Season</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('Season')}</Typography>
                                     <Select
                                         value={values.seasonFilter}
                                         onChange={handleChange('seasonFilter')}
@@ -223,7 +223,7 @@ const Games = () => {
                                         sx={{ outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                     >
                                         <MenuItem key="0" value="none">
-                                            All
+                                            {t('All')}
                                         </MenuItem>
                                         {values.seasonList.map((season, index) => (
                                             <MenuItem key={index + 1} value={season}>
@@ -233,7 +233,7 @@ const Games = () => {
                                     </Select>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>League</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('League')}</Typography>
                                     <Select
                                         value={values.leagueFilter}
                                         onChange={handleChange('leagueFilter')}
@@ -245,7 +245,7 @@ const Games = () => {
                                         sx={{ outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                     >
                                         <MenuItem key="0" value="none">
-                                            All
+                                            {t('All')}
                                         </MenuItem>
                                         {values.leagueList.map((league, index) => (
                                             <MenuItem key={index + 1} value={league}>
@@ -255,7 +255,7 @@ const Games = () => {
                                     </Select>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Team</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('Team')}</Typography>
                                     <Select
                                         value={values.teamFilter}
                                         onChange={handleChange('teamFilter')}
@@ -267,7 +267,7 @@ const Games = () => {
                                         sx={{ outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                     >
                                         <MenuItem key="0" value="none">
-                                            All
+                                            {t('All')}
                                         </MenuItem>
                                         {values.teamList.map((team, index) => (
                                             <MenuItem key={index + 1} value={team}>
@@ -285,7 +285,7 @@ const Games = () => {
                                     onClick={() => handleTabClick(index)}
                                     sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
                                 >
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.9rem', fontWeight: 700, color: '#1a1b1d' }}>{tab}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.9rem', fontWeight: 700, color: '#1a1b1d' }}>{t(tab)}</Typography>
                                     <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? '#0A7304' : '#F8F8F8' }} />
                                 </Box>
                             ))}

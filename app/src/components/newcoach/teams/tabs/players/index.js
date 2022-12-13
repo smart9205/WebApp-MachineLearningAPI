@@ -30,7 +30,7 @@ const headCells = [
     { id: 'total_clearance', title: 'Clearance', action: 'Clearance' }
 ];
 
-const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
+const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games, t }) => {
     const [playerList, setPlayerList] = useState([]);
     const [playerIds, setPlayerIds] = useState([]);
     const [order, setOrder] = useState('desc');
@@ -232,12 +232,12 @@ const TeamPlayersStats = ({ teamId, seasonId, leagueId, gameIds, games }) => {
                     <TableHead>
                         <TableRow height="36px">
                             <TableCell key="name" align="center" colSpan={2}>
-                                Name
+                                {t('Name')}
                             </TableCell>
                             {headCells.map((cell) => (
                                 <TableCell key={cell.id} align="center" sortDirection={orderBy === cell.id ? order : false}>
                                     <TableSortLabel active={orderBy === cell.id} direction={orderBy === cell.id ? order : 'asc'} onClick={() => handleRequestSort(cell.id)}>
-                                        {cell.title}
+                                        {t(cell.title)}
                                     </TableSortLabel>
                                 </TableCell>
                             ))}
