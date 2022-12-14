@@ -14,7 +14,7 @@ import GameExportToEdits from '../../../../games/tabs/overview/exportEdits';
 import GamePlayerStatErrorMessage from '../../../../games/tabs/players/status/errorMessage';
 import { goalkeeper, statList } from '../../players/status';
 
-const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, teamId, initialState }) => {
+const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, teamId, initialState, t }) => {
     const [playerState, setPlayerState] = useState(null);
     const [gameHalf, setGameHalf] = useState(['first', 'second']);
     const [gameTime, setGameTime] = useState(['1', '2', '3', '4', '5', '6']);
@@ -419,6 +419,7 @@ const TeamPlayerOverviewStatDialog = ({ open, onClose, player, gameIds, games, t
             </DialogContent>
             <GamePlayerStatErrorMessage open={errorOpen} onClose={() => setErrorOpen(false)} />
             <TeamStatsVideoPlayer
+                t={t}
                 open={videoOpen}
                 onClose={(flag) => {
                     setVideoOpen(false);

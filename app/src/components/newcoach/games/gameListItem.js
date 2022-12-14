@@ -16,7 +16,7 @@ import ExcelDataFiltering from '../../coach/ExcelDataFiltering';
 import { XmlDataFilterGames, XmlDataFilterGamesShort } from '../components/xmldata';
 import { downloadJsonFile, getFormattedDate } from '../components/utilities';
 
-const GameListItem = ({ row, isHover, isPending = false, updateList, team, standing }) => {
+const GameListItem = ({ row, isHover, isPending = false, updateList, team, standing, t }) => {
     const navigate = useNavigate();
     const [editOpen, setEditOpen] = useState(false);
     const [exportExcel, setExportExcel] = useState(false);
@@ -207,39 +207,39 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
             >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickEdit}>
                     <EditIcon />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Edit Game</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('Edit Game')}</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickSportGate}>
                     <img src={ExportIcon} />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Export to Sportscode</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('Export to Sportscode')}</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickSportCodeShort}>
                     <img src={ExportIcon} />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Export to Sportscode Short Version</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('Export to Sportscode Short Version')}</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickExcel}>
                     <img src={ExportIcon} />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Export to Excel</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('Export to Excel')}</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDownloadVideo(row.video_url)}>
                     <DownloadIcon />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Download Video</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('Download Video')}</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleExportToJson}>
                     <img src={ExportIcon} />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>Export to JSON</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('Export to JSON')}</Typography>
                 </Box>
             </Popover>
             {isPending && (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', width: '550px', gap: '24px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <Typography sx={{ fontSize: '0.7rem', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Video URL:</Typography>
+                            <Typography sx={{ fontSize: '0.7rem', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>{t('Video URL')}:</Typography>
                             <TextField
                                 value={rowData.videoURL}
                                 label=""
@@ -257,7 +257,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
                             />
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <Typography sx={{ fontSize: '0.7rem', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>Mobile Video URL:</Typography>
+                            <Typography sx={{ fontSize: '0.7rem', marginLeft: '16px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#1A1B1D' }}>{t('Mobile Video URL')}:</Typography>
                             <TextField
                                 value={rowData.mobileURL}
                                 label=""
@@ -276,7 +276,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
                         </Box>
                     </Box>
                     <SaveButton disabled={rowData.videoURL.length === 0 && rowData.mobileURL.length === 0} onClick={saveChanges} sx={{ width: '300px', height: '32px', fontSize: '0.8rem' }}>
-                        + Update
+                        + {t('Update')}
                     </SaveButton>
                 </Box>
             )}

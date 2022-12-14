@@ -9,7 +9,7 @@ import { MenuProps } from '../components/common';
 import { getComparator, stableSort } from '../components/utilities';
 import '../coach_style.css';
 
-const Opponents = () => {
+const Opponents = ({ t }) => {
     const [values, setValues] = useState({
         loading: false,
         gameList: [],
@@ -143,10 +143,10 @@ const Opponents = () => {
             {!values.loading && (
                 <>
                     <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                        <p className="page-title">Opponents</p>
+                        <p className="page-title">{t('Opponents')}</p>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <p className="select-narrator">Period</p>
+                                <p className="select-narrator">{t('Period')}</p>
                                 <Select
                                     value={values.periodFilter}
                                     onChange={handleChange('periodFilter')}
@@ -157,13 +157,13 @@ const Opponents = () => {
                                     MenuProps={MenuProps}
                                     sx={{ outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                 >
-                                    <MenuItem value="0">All</MenuItem>
-                                    <MenuItem value="1">Last week</MenuItem>
-                                    <MenuItem value="2">Last month</MenuItem>
+                                    <MenuItem value="0">{t('All')}</MenuItem>
+                                    <MenuItem value="1">{t('Last week')}</MenuItem>
+                                    <MenuItem value="2">{t('Last month')}</MenuItem>
                                 </Select>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <p className="select-narrator">Season</p>
+                                <p className="select-narrator">{t('Season')}</p>
                                 <Select
                                     value={values.seasonFilter}
                                     onChange={handleChange('seasonFilter')}
@@ -175,7 +175,7 @@ const Opponents = () => {
                                     sx={{ outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                 >
                                     <MenuItem key="0" value="none">
-                                        All
+                                        {t('All')}
                                     </MenuItem>
                                     {values.seasonList.map((season, index) => (
                                         <MenuItem key={index + 1} value={season}>
@@ -185,7 +185,7 @@ const Opponents = () => {
                                 </Select>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <p className="select-narrator">League</p>
+                                <p className="select-narrator">{t('League')}</p>
                                 <Select
                                     value={values.leagueFilter}
                                     onChange={handleChange('leagueFilter')}
@@ -197,7 +197,7 @@ const Opponents = () => {
                                     sx={{ outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                 >
                                     <MenuItem key="0" value="none">
-                                        All
+                                        {t('All')}
                                     </MenuItem>
                                     {values.leagueList.map((league, index) => (
                                         <MenuItem key={index + 1} value={league}>
@@ -207,7 +207,7 @@ const Opponents = () => {
                                 </Select>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <p className="select-narrator">Team</p>
+                                <p className="select-narrator">{t('Team')}</p>
                                 <Select
                                     value={values.teamFilter}
                                     onChange={handleChange('teamFilter')}
@@ -219,7 +219,7 @@ const Opponents = () => {
                                     sx={{ outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                 >
                                     <MenuItem key="0" value="none">
-                                        All
+                                        {t('All')}
                                     </MenuItem>
                                     {values.teamList.map((team, index) => (
                                         <MenuItem key={index + 1} value={team}>
@@ -234,7 +234,7 @@ const Opponents = () => {
                         <Box sx={{ marginRight: '4px' }}>
                             {getGamesList().map((game, index) => (
                                 <Box key={index} onMouseEnter={() => setValues({ ...values, hoverIndex: index })} onMouseLeave={() => setValues({ ...values, hoverIndex: -1 })}>
-                                    <GameListItem row={game} isHover={values.hoverIndex === index} />
+                                    <GameListItem t={t} row={game} isHover={values.hoverIndex === index} />
                                 </Box>
                             ))}
                         </Box>

@@ -26,13 +26,13 @@ const Tags = [
     { id: 'All', name: 'All Actions' }
 ];
 
-const GamePlayerTagButtonList = ({ selectedTag, onShow }) => {
+const GamePlayerTagButtonList = ({ selectedTag, onShow, t }) => {
     return (
         <>
             <Divider sx={{ width: '100%', backgroundColor: 'black', opacity: 1, border: 'none', margin: '8px 0 2px' }} />
             <Box sx={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '0px' }}>
                 {Tags.map((tag, index) => (
-                    <GamePlayerTagButton key={index} isSelected={selectedTag === tag} tag={tag} onShow={onShow} />
+                    <GamePlayerTagButton t={t} key={index} isSelected={selectedTag === tag} tag={tag} onShow={onShow} />
                 ))}
             </Box>
         </>

@@ -8,7 +8,7 @@ import GameService from '../../../../services/game.service';
 import { getComparator, stableSort } from '../../components/utilities';
 import { MenuProps } from '../../components/common';
 
-const SettingsAcademyTeamControl = ({ userId, academy, select, season }) => {
+const SettingsAcademyTeamControl = ({ userId, academy, select, season, t }) => {
     const [academyTeamList, setAcademyTeamList] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [seasonList, setSeasonList] = useState([]);
@@ -41,7 +41,7 @@ const SettingsAcademyTeamControl = ({ userId, academy, select, season }) => {
 
     return (
         <div className="settings_academy_container">
-            <p className="normal-text">Teams</p>
+            <p className="normal-text">{t('Teams')}</p>
             <div className="academy_team_section">
                 <div className="team_season_container">
                     <Select

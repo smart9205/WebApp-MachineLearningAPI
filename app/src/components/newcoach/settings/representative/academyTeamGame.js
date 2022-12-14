@@ -8,7 +8,7 @@ import { TEAM_ICON_DEFAULT } from '../../../../common/staticData';
 import GameService from '../../../../services/game.service';
 import { getFormattedDate } from '../../components/utilities';
 
-const SettingsAcademyTeamGameControl = ({ academy, team, season, select, isManager = false }) => {
+const SettingsAcademyTeamGameControl = ({ academy, team, season, select, isManager = false, t }) => {
     const [gameList, setGameList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -65,7 +65,7 @@ const SettingsAcademyTeamGameControl = ({ academy, team, season, select, isManag
 
     return (
         <div className="settings_academy_container">
-            <p className="normal-text">Games</p>
+            <p className="normal-text">{t('Games')}</p>
             <div className="team_game_section" style={{ width: isManager ? '560px' : '720px' }}>
                 {loading ? (
                     <div style={{ width: '100%', height: '80%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

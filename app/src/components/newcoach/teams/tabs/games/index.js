@@ -266,6 +266,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId, t }) => {
                 </Table>
             </TableContainer>
             <TeamGamesVideoPlayer
+                t={t}
                 open={videoOpen}
                 onClose={(flag) => {
                     setVideoOpen(false);

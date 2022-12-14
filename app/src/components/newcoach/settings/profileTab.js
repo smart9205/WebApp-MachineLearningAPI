@@ -12,14 +12,14 @@ import '../coach_style.css';
 const profileList = [
     {
         id: 'firstName',
-        title: 'First Name',
+        title: 'FirstName',
         placeholder: 'Daniel',
         error: 'First Name cannot be empty.',
         readonly: false
     },
     {
         id: 'lastName',
-        title: 'Last Name',
+        title: 'LastName',
         placeholder: 'Gutt',
         error: 'Last Name cannot be empty.',
         readonly: false
@@ -47,7 +47,7 @@ const profileList = [
     }
 ];
 
-const SettingsProfile = () => {
+const SettingsProfile = ({ t }) => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const [values, setValues] = useState({
         logo: '',
@@ -111,7 +111,7 @@ const SettingsProfile = () => {
                 <div className="grid-container">
                     {profileList.map((item) => (
                         <FormControl sx={{ gap: '4px' }} key={item.id}>
-                            <p className="normal-text">{item.title}</p>
+                            <p className="normal-text">{t(item.title)}</p>
                             <TextField
                                 value={values[item.id]}
                                 label=""
@@ -132,7 +132,7 @@ const SettingsProfile = () => {
                         onClick={saveChanges}
                         sx={{ width: '200px', fontSize: '0.7rem' }}
                     >
-                        Save changes
+                        {t('Save changes')}
                     </SaveButton>
                 </Box>
             </div>

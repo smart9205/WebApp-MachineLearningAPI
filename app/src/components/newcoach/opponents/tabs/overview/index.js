@@ -15,7 +15,7 @@ import GameExportToEdits from '../../../games/tabs/overview/exportEdits';
 import { getPeriod } from '../../../games/tabs/overview/tagListItem';
 import GameVideoPlayer from '../../../games/gameVideoPlayer';
 
-const OpponentOverview = ({ game }) => {
+const OpponentOverview = ({ game, t }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
     const [videoData, setVideoData] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -315,7 +315,7 @@ const OpponentOverview = ({ game }) => {
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', maxWidth: '600px', flexDirection: 'column', padding: '24px 10px' }}>
                 <GameOverviewHeader isOur={values.isOur} ourname={game.home_team_name} enemyname={game.away_team_name} onChangeTeam={handleChangeTeam} mb="8px" />
-                {values.expandButtons && <GameTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} isTeams={false} />}
+                {values.expandButtons && <GameTagButtonList t={t} selectedTag={tagIndex} onShow={handleShowPopover} isTeams={false} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
                     <Box sx={{ 'svg path': { fill: 'black' }, cursor: 'pointer' }} onClick={handleExpandButtons}>
@@ -323,6 +323,7 @@ const OpponentOverview = ({ game }) => {
                     </Box>
                 </Box>
                 <GameTagMenu
+                    t={t}
                     anchor={menuAnchorEl}
                     onClose={() => setMenuAnchorEl(null)}
                     onView={handleClickView}
@@ -341,6 +342,7 @@ const OpponentOverview = ({ game }) => {
                     />
                 )}
                 <GameTagList
+                    t={t}
                     isLoading={loading}
                     expand={values.expandButtons}
                     tagList={values.playList}

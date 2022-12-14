@@ -12,6 +12,9 @@ import '../coach_style.css';
 import LogoAlone from '../../../assets/logoAlone.png';
 import MenuIcon from '@mui/icons-material/MenuOutlined';
 
+import i18next from 'i18next';
+import cookie from 'react-cookies';
+
 const Sidebar = ({ t }) => {
     const [minimum, setMinimum] = useState(false);
     const [hoverIndex, setHoverIndex] = useState(undefined);
@@ -22,6 +25,8 @@ const Sidebar = ({ t }) => {
     const [menuState, setMenuState] = useState({
         corrections: false
     });
+    const savedLanguage = cookie.load('lang') ? cookie.load('lang') : 'en';
+    const [language, setLanguage] = useState(savedLanguage);
 
     const dispatch = useDispatch();
     const currentGame = useSelector((state) => state.game);
@@ -38,6 +43,16 @@ const Sidebar = ({ t }) => {
     const handleMouseLeave = () => {
         setHoverIndex(undefined);
     };
+
+    useEffect(() => {
+        cookie.save('lang', language, { path: '/' });
+        i18next.changeLanguage(language);
+        if (language == 'iw' || language == 'ar') {
+            document.body.style.direction = 'rtl';
+        } else {
+            document.body.style.direction = 'ltr';
+        }
+    }, [language]);
 
     useEffect(async () => {
         setPathname(window.location.pathname);

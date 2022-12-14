@@ -164,6 +164,7 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                 ))}
             </div>
             <GameStatsVideoPlayer
+                t={t}
                 open={videoOpen}
                 onClose={(flag) => {
                     setVideoOpen(false);

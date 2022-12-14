@@ -19,7 +19,7 @@ import TeamPlayerTagEditDialog from './playerTagEdit';
 
 import '../../../../player/Profile.css';
 
-const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
+const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList, t }) => {
     const handle = useFullScreenHandle();
     const player = useRef(null);
     const [playRate, setPlayRate] = useState(1);
@@ -202,6 +202,7 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                 </div>
                 {tagList.length > 0 && (
                     <TeamPlayerTagEditDialog
+                        t={t}
                         open={tagEditOpen}
                         onClose={(flag) => {
                             setTagEditOpen(false);

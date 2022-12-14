@@ -236,7 +236,7 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId, t }) 
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TeamGamesVideoPlayer open={videoOpen} onClose={() => setVideoOpen(false)} video_url={videoURL} tagList={playData} />
+                <TeamGamesVideoPlayer t={t} open={videoOpen} onClose={() => setVideoOpen(false)} video_url={videoURL} tagList={playData} />
                 <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
             </DialogContent>
         </Dialog>

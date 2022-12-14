@@ -134,7 +134,7 @@ export default function GameSelectControl({ gameList, setIds, t }) {
                             <FormControlLabel
                                 sx={{ mt: 1, marginLeft: '130px', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem' }}
                                 control={<Checkbox checked={selectAll} onChange={() => setSelectAll(!selectAll)} inputProps={{ 'aria-label': 'controlled' }} />}
-                                label="Select All"
+                                label={t('Select All')}
                             />
                         </Box>
 
@@ -169,7 +169,7 @@ export default function GameSelectControl({ gameList, setIds, t }) {
                             )}
                             options={gameList}
                             getOptionLabel={(option) => `${option.home_team_name} vs ${option.away_team_name}`}
-                            renderInput={(params) => <StyledInput ref={params.InputProps.ref} inputProps={params.inputProps} autoFocus placeholder="Filter labels" />}
+                            renderInput={(params) => <StyledInput ref={params.InputProps.ref} inputProps={params.inputProps} autoFocus placeholder={t('Filter Labels')} />}
                         />
                     </div>
                 </ClickAwayListener>

@@ -19,7 +19,7 @@ import { TEAM_ICON_DEFAULT } from '../../../../../common/staticData';
 
 import '../../../../player/Profile.css';
 
-const GameStatsVideoPlayer = ({ open, onClose, video_url, tagList, isEdit = true }) => {
+const GameStatsVideoPlayer = ({ open, onClose, video_url, tagList, isEdit = true, t }) => {
     const handle = useFullScreenHandle();
     const player = useRef(null);
     const [playRate, setPlayRate] = useState(1);
@@ -193,6 +193,7 @@ const GameStatsVideoPlayer = ({ open, onClose, video_url, tagList, isEdit = true
                 </div>
                 {tagList.length > 0 && isEdit && (
                     <TeamPlayerTagEditDialog
+                        t={t}
                         open={tagEditOpen}
                         onClose={(flag) => {
                             setTagEditOpen(false);

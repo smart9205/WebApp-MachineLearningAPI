@@ -5,7 +5,7 @@ import GameService from '../../../../../services/game.service';
 import TeamPlayerLogo from './playerLogo';
 import TeamPlayerOverviewStatDialog from './status';
 
-const TeamPlayerLogoList = ({ games, gameIds, teamId, setIds }) => {
+const TeamPlayerLogoList = ({ games, gameIds, teamId, setIds, t }) => {
     const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectArray, setSelectArray] = useState([]);
@@ -97,7 +97,7 @@ const TeamPlayerLogoList = ({ games, gameIds, teamId, setIds }) => {
                     </Box>
                 ))}
             </Box>
-            <TeamPlayerOverviewStatDialog open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} games={games} gameIds={gameIds} teamId={teamId} initialState={playerState} />
+            <TeamPlayerOverviewStatDialog t={t} open={statOpen} onClose={() => setStatOpen(false)} player={currentPlayer} games={games} gameIds={gameIds} teamId={teamId} initialState={playerState} />
         </Box>
     );
 };

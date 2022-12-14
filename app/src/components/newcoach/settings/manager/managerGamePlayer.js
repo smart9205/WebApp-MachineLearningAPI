@@ -7,7 +7,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import GameService from '../../../../services/game.service';
 import { PLAYER_ICON_DEFAULT } from '../../../../common/staticData';
 
-const SettingsGamePlayerControl = ({ team, game }) => {
+const SettingsGamePlayerControl = ({ team, game, t }) => {
     const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [playerIds, setPlayerIds] = useState([]);
@@ -76,13 +76,13 @@ const SettingsGamePlayerControl = ({ team, game }) => {
                                     <img src={item.image ? item.image : PLAYER_ICON_DEFAULT} style={{ height: '40px', width: '30px', borderRadius: '8px' }} />
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' , paddingLeft:'2px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', paddingLeft: '2px' }}>
                                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: '#1c1d1a' }}>#{item.jersey_number}</Typography>
                                         <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: '#1c1d1a' }}>
                                             {`${item.first_name} ${item.last_name}`}
                                         </Typography>
                                     </div>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: '#1c1d1a' , paddingLeft:'2px' }}>{item.name}</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: '#1c1d1a', paddingLeft: '2px' }}>{item.name}</Typography>
                                 </div>
                             </div>
                         ))}
