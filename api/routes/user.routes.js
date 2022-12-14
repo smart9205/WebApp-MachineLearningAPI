@@ -118,19 +118,19 @@ module.exports = function (app) {
 
   app.get(
     "/user/academy_coach/get/:userId",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.getAcademyCoach
   );
 
   app.put(
     "/user/academy_coach/add/:userId/:academyId",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.addAcademyCoach
   );
 
   app.delete(
     "/user/academy_coach/delete/:userId/:academyId",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.deleteAcademyCoach
   );
 };

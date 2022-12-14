@@ -375,13 +375,18 @@ const getAllPlayersByCoach = () => {
     });
 };
 
-const getAllLeaguesByCoach = () => {
-    return axios.get(API_URL + `coach_team/getAllLeaguesByCoach`, { headers: authHeader() }).then((response) => {
+const getAllLeaguesByCoach = (userId) => {
+    return axios.get(API_URL + `coach_team/getAllLeaguesByCoach/${userId}`, { headers: authHeader(), data: { userId } }).then((response) => {
         return response.data;
     });
 };
-const getAllTeamsByCoach = () => {
-    return axios.get(API_URL + `coach_team/getAllTeamsByCoach`, { headers: authHeader() }).then((response) => {
+const getAllTeamsByCoach = (userId) => {
+    return axios.get(API_URL + `coach_team/getAllTeamsByCoach/${userId}`, { headers: authHeader(), data: { userId } }).then((response) => {
+        return response.data;
+    });
+};
+const getAllTeamsByLeagueSeason = (userId, seasonId, leagueId) => {
+    return axios.get(API_URL + `coach_team/getAllTeamsByLeagueSeason/${userId}/${seasonId}/${leagueId}`, { headers: authHeader(), data: { userId, seasonId, leagueId } }).then((response) => {
         return response.data;
     });
 };
@@ -1284,6 +1289,7 @@ const gameService = {
     getAllPlayersByCoach,
     getAllLeaguesByCoach,
     getAllTeamsByCoach,
+    getAllTeamsByLeagueSeason,
     getAllLeaguesOfAdditionalGamesByCoach,
     getAllTeamsOfAdditionalGamesByCoach,
     getNumberOfGamesOrdered,
