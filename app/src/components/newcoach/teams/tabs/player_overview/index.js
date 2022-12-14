@@ -17,7 +17,7 @@ import TeamPlayerLogoList from './playerLogoList';
 import { ActionData } from '../../../components/common';
 import { XmlDataFilterTeamPlayer } from '../../../components/xmldatateam';
 
-const TeamPlayersOverview = ({ games, gameIds, teamId, teamName }) => {
+const TeamPlayersOverview = ({ games, gameIds, teamId, teamName, t }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
     const [videoData, setVideoData] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -261,8 +261,8 @@ const TeamPlayersOverview = ({ games, gameIds, teamId, teamName }) => {
     return (
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', padding: '10px 10px' }}>
-                <TeamPlayerLogoList games={games} gameIds={gameIds} teamId={teamId} setIds={setPlayerIds} />
-                {values.expandButtons && <GamePlayerTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
+                <TeamPlayerLogoList t={t} games={games} gameIds={gameIds} teamId={teamId} setIds={setPlayerIds} />
+                {values.expandButtons && <GamePlayerTagButtonList t={t} selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
                     <Box sx={{ 'svg path': { fill: 'black' }, cursor: 'pointer' }} onClick={handleExpandButtons}>
@@ -270,6 +270,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId, teamName }) => {
                     </Box>
                 </Box>
                 <GameTagMenu
+                    t={t}
                     anchor={menuAnchorEl}
                     onClose={() => setMenuAnchorEl(null)}
                     onView={handleClickView}
@@ -288,6 +289,7 @@ const TeamPlayersOverview = ({ games, gameIds, teamId, teamName }) => {
                     />
                 )}
                 <GamePlayerTagList
+                    t={t}
                     isLoading={loading}
                     expand={values.expandButtons}
                     tagList={values.playList}

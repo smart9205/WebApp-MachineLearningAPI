@@ -4,7 +4,7 @@ import { Box, CircularProgress } from '@mui/material';
 import GameTagListItem from './tagListItem';
 import '../../../coach_style.css';
 
-const GameTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onChecked, onVideo, onTime }) => {
+const GameTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onChecked, onVideo, onTime, t }) => {
     return tagList.length > 0 ? (
         <Box sx={{ overflowY: 'auto', maxHeight: expand ? '30vh' : '63vh', minHeight: '30vh' }}>
             <Box sx={{ margin: '0 4px 8px 0', width: 'calc(100% - 4px)' }}>
@@ -31,7 +31,7 @@ const GameTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onCh
             )}
             {tagList.length === 0 && !isLoading && (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '80%' }}>
-                    <p className="page-tab-title">No Data to Display</p>
+                    <p className="page-tab-title">{t('No Data to Display')}</p>
                 </Box>
             )}
         </Box>

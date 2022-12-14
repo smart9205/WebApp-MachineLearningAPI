@@ -13,7 +13,7 @@ import '../coach_style.css';
 
 const Tabs = ['Overview', 'Players'];
 
-const OpponentPage = () => {
+const OpponentPage = ({ t }) => {
     const params = useParams();
     const [values, setValues] = useState({
         game: {},
@@ -53,14 +53,14 @@ const OpponentPage = () => {
                                 <Link to="/new_coach/opponents">
                                     <ChevronLeftIcon sx={{ width: '30px', height: '30px' }} />
                                 </Link>
-                                <p className="page-title">Game</p>
+                                <p className="page-title">{t('Game')}</p>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '8px 16px' }}>
                                     <img style={{ width: '20px' }} src={values.game.home_team_image ? values.game.home_team_image : TEAM_ICON_DEFAULT} />
                                     <p className="bigger-text">{values.game.home_team_name}</p>
                                 </Box>
-                                <p className="menu-item">VS</p>
+                                <p className="menu-item">{t('VS')}</p>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '8px 16px' }}>
                                     <img style={{ width: '20px' }} src={values.game.away_team_image ? values.game.away_team_image : TEAM_ICON_DEFAULT} />
                                     <p className="bigger-text">{values.game.away_team_name}</p>
@@ -79,14 +79,14 @@ const OpponentPage = () => {
                                     onClick={() => handleTabClick(index)}
                                     sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '4px', width: 'fit-content', cursor: 'pointer' }}
                                 >
-                                    <p className="page-tab-title">{tab}</p>
+                                    <p className="page-tab-title">{t(tab)}</p>
                                     <Box sx={{ width: '100%', height: '2px', backgroundColor: values.curTab === index ? '#0A7304' : '#F8F8F8' }} />
                                 </Box>
                             ))}
                         </Box>
                     </Box>
-                    {values.curTab === 0 && <OpponentOverview game={values.game} />}
-                    {values.curTab === 1 && <OpponentPlayers game={values.game} />}
+                    {values.curTab === 0 && <OpponentOverview t={t} game={values.game} />}
+                    {values.curTab === 1 && <OpponentPlayers t={t} game={values.game} />}
                 </>
             )}
         </Box>

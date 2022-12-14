@@ -312,9 +312,9 @@ const TeamOverview = ({ games, gameIds, teamname, teamId, t }) => {
         <Box sx={{ width: '100%', background: 'white', maxHeight: '85vh', minHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', minWidth: '550px', flexDirection: 'column', padding: '16px 16px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
-                    <GameOverviewHeader isOur={values.isOur} ourname={teamname} enemyname="Opponents" onChangeTeam={handleChangeTeam} mb="0" />
+                    <GameOverviewHeader isOur={values.isOur} ourname={teamname} enemyname={t('Opponents')} onChangeTeam={handleChangeTeam} mb="0" />
                 </Box>
-                {values.expandButtons && <GameTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} isTeams={true} />}
+                {values.expandButtons && <GameTagButtonList t={t} selectedTag={tagIndex} onShow={handleShowPopover} isTeams={true} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
                     <Box sx={{ 'svg path': { fill: 'black' }, cursor: 'pointer' }} onClick={handleExpandButtons}>
@@ -322,6 +322,7 @@ const TeamOverview = ({ games, gameIds, teamname, teamId, t }) => {
                     </Box>
                 </Box>
                 <GameTagMenu
+                    t={t}
                     anchor={menuAnchorEl}
                     onClose={() => setMenuAnchorEl(null)}
                     onView={handleClickView}

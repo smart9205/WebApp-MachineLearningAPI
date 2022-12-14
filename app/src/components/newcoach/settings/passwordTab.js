@@ -26,7 +26,7 @@ const passwordList = [
     }
 ];
 
-const SettingsPassword = () => {
+const SettingsPassword = ({ t }) => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const [values, setValues] = useState({
         oldPassword: '',
@@ -71,16 +71,16 @@ const SettingsPassword = () => {
             <div className="settings-password-container">
                 {passwordList.map((pass) => (
                     <FormControl sx={{ gap: '4px' }} key={pass.id}>
-                        <p className="normal-text">{pass.title}</p>
+                        <p className="normal-text">{t(pass.title)}</p>
                         <TextField
                             type={values[pass.show] ? 'text' : 'password'}
                             value={values[pass.id]}
                             label=""
                             inputProps={{ 'aria-label': 'Without label' }}
                             variant="outlined"
-                            placeholder="Enter password here"
+                            placeholder={t('Enter password here')}
                             onChange={handleChange(pass.id)}
-                            helperText={errors.confirm ? 'Password cannot be empty' : ''}
+                            helperText={errors.confirm ? t('Password cannot be empty') : ''}
                             error={errors.confirm}
                             InputProps={{
                                 endAdornment: (
@@ -106,7 +106,7 @@ const SettingsPassword = () => {
                         onClick={saveChanges}
                         sx={{ width: '200px', fontSize: '0.7rem' }}
                     >
-                        Update Password
+                        {t('Update Password')}
                     </SaveButton>
                 </Box>
             </div>

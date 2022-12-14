@@ -387,7 +387,7 @@ const Players = ({ t }) => {
                                     sx={{ borderRadius: '10px', outline: 'none', height: '36px', width: '200px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                 >
                                     <MenuItem key="0" value="none">
-                                        All
+                                        {t('All')}
                                     </MenuItem>
                                     {seasonList.map((season, index) => (
                                         <MenuItem key={index + 1} value={season}>
@@ -409,7 +409,7 @@ const Players = ({ t }) => {
                                     sx={{ borderRadius: '10px', outline: 'none', height: '36px', width: '300px', fontSize: '0.8rem', '& legend': { display: 'none' }, '& fieldset': { top: 0 } }}
                                 >
                                     <MenuItem key="0" value="none">
-                                        All
+                                        {t('All')}
                                     </MenuItem>
                                     {teamList.map((team, index) => (
                                         <MenuItem key={index + 1} value={team}>
@@ -421,7 +421,7 @@ const Players = ({ t }) => {
                             <TextField
                                 value={searchText}
                                 onChange={handleChange('searchText')}
-                                placeholder="Search"
+                                placeholder={t('Search')}
                                 label=""
                                 inputProps={{ 'aria-label': 'Without label' }}
                                 variant="outlined"
@@ -518,7 +518,7 @@ const Players = ({ t }) => {
                                 gameIds={gameList.map((item) => item.id)}
                                 initialState={playerStat}
                             />
-                            <TeamStatsVideoPlayer open={videoOpen} onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />
+                            <TeamStatsVideoPlayer t={t} open={videoOpen} onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />
                             <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
                             <PlayersGamesDialog t={t} open={gamesOpen} onClose={() => setGamesOpen(false)} list={playerGames} playerName={playerStat?.player_name ?? ''} />
                             <Popover

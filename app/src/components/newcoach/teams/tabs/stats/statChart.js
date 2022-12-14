@@ -170,6 +170,7 @@ const TeamStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                 ))}
             </div>
             <TeamStatsVideoPlayer
+                t={t}
                 open={videoOpen}
                 onClose={(flag) => {
                     setVideoOpen(false);

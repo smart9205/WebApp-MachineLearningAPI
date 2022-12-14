@@ -18,7 +18,7 @@ import GameExportToEdits from '../overview/exportEdits';
 import { getPeriod } from '../overview/tagListItem';
 import GameVideoPlayer from '../../gameVideoPlayer';
 
-const GamePlayers = ({ game }) => {
+const GamePlayers = ({ game, t }) => {
     const [curTeamTagIdx, setCurTeamTagIdx] = useState(0);
     const [videoData, setVideoData] = useReducer((old, action) => ({ ...old, ...action }), {
         idx: 0,
@@ -284,7 +284,7 @@ const GamePlayers = ({ game }) => {
                     mb="8px"
                 />
                 <GamePlayerLogoList game={game} teamId={values.teamId} opponent={values.opponentTeamId} our={values.isOur} setIds={setPlayerIds} isEdit={values.isOur} />
-                {values.expandButtons && <GamePlayerTagButtonList selectedTag={tagIndex} onShow={handleShowPopover} />}
+                {values.expandButtons && <GamePlayerTagButtonList t={t} selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
                     <Box sx={{ 'svg path': { fill: 'black' }, cursor: 'pointer' }} onClick={handleExpandButtons}>
@@ -292,6 +292,7 @@ const GamePlayers = ({ game }) => {
                     </Box>
                 </Box>
                 <GameTagMenu
+                    t={t}
                     anchor={menuAnchorEl}
                     onClose={() => setMenuAnchorEl(null)}
                     onView={handleClickView}
@@ -310,6 +311,7 @@ const GamePlayers = ({ game }) => {
                     />
                 )}
                 <GamePlayerTagList
+                    t={t}
                     isLoading={loading}
                     expand={values.expandButtons}
                     tagList={values.playList}

@@ -19,7 +19,7 @@ import TeamPlayerTagEditDialog from '../stats/playerTagEdit';
 
 import '../../../../player/Profile.css';
 
-const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList }) => {
+const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList, t }) => {
     const handle = useFullScreenHandle();
     const player = useRef(null);
     const [playRate, setPlayRate] = useState(1);
@@ -156,7 +156,7 @@ const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                                     <FastRewindIcon color="white" />
                                 </IconButton>
                                 <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate(0.5)}>
-                                    Slow
+                                    {t('Slow')}
                                 </Button>
                                 <IconButton
                                     onClick={() => {
@@ -168,7 +168,7 @@ const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                                     {play && playRate === 1 ? <PauseIcon /> : <PlayIcon />}
                                 </IconButton>
                                 <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate((s) => s + 0.5)}>
-                                    Fast
+                                    {t('Fast')}
                                 </Button>
                                 <IconButton style={{ color: 'white', backgroundColor: '#80808069' }} onClick={() => fastVideo(3)}>
                                     <FastForwardIcon color="white" />
@@ -189,6 +189,7 @@ const TeamGamesVideoPlayer = ({ open, onClose, video_url, tagList }) => {
                 </div>
                 {tagList.length > 0 && (
                     <TeamPlayerTagEditDialog
+                        t={t}
                         open={tagEditOpen}
                         onClose={(flag) => {
                             setTagEditOpen(false);

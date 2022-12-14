@@ -14,7 +14,7 @@ import { XmlDataFilterOpponents } from '../components/xmldata';
 import { getFormattedDate } from '../components/utilities';
 import '../coach_style.css';
 
-const GameListItem = ({ row, isHover }) => {
+const GameListItem = ({ row, isHover, t }) => {
     const navigate = useNavigate();
     const [exportExcel, setExportExcel] = useState(false);
     const [exportGate, setExportGate] = useState(false);
@@ -150,7 +150,7 @@ const GameListItem = ({ row, isHover }) => {
                     <img src={ExportIcon} />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <p className="menu-item">{row.home_team_name}</p>
-                        <p className="menu-item">Export to Sportcode</p>
+                        <p className="menu-item">{t('Export to Sportcode')}</p>
                     </Box>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
@@ -158,7 +158,7 @@ const GameListItem = ({ row, isHover }) => {
                     <img src={ExportIcon} />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <p className="menu-item">{row.away_team_name}</p>
-                        <p className="menu-item">Export to Sportcode</p>
+                        <p className="menu-item">{t('Export to Sportcode')}</p>
                     </Box>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
@@ -166,7 +166,7 @@ const GameListItem = ({ row, isHover }) => {
                     <img src={ExportIcon} />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <p className="menu-item">{row.home_team_name}</p>
-                        <p className="menu-item">Export to Excel</p>
+                        <p className="menu-item">{t('Export to Excel')}</p>
                     </Box>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
@@ -174,13 +174,13 @@ const GameListItem = ({ row, isHover }) => {
                     <img src={ExportIcon} />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <p className="menu-item">{row.away_team_name}</p>
-                        <p className="menu-item">Export to Excel</p>
+                        <p className="menu-item">{t('Export to Excel')}</p>
                     </Box>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', cursor: 'pointer' }} onClick={() => handleDownloadVideo(row.video_url)}>
                     <DownloadIcon />
-                    <p className="menu-item">Download Video</p>
+                    <p className="menu-item">{t('Download Video')}</p>
                 </Box>
             </Popover>
             {exportGate && <XmlDataFilterOpponents game={row} teamId={teamId} setXML={setExportGate} setLoading={setLoading} />}

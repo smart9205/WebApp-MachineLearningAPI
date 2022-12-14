@@ -480,6 +480,7 @@ const TeamPlayerStatDialog = ({ open, onClose, player, teamId, seasonId, games, 
             </DialogContent>
             <GamePlayerStatErrorMessage open={errorOpen} onClose={() => setErrorOpen(false)} />
             <TeamStatsVideoPlayer
+                t={t}
                 open={videoOpen}
                 onClose={(flag) => {
                     setVideoOpen(false);

@@ -11,7 +11,7 @@ import CorrectionsVideoPlayer from './videoDialog';
 import { PLAYER_ICON_DEFAULT } from '../../../common/staticData';
 import { UPDATE_CORRECTION_COUNT } from '../../../actions/types';
 
-const Corrections = () => {
+const Corrections = ({ t }) => {
     const [corrections, setCorrections] = useState([]);
     const [playOpen, setPlayOpen] = useState(false);
     const [correctItem, setCorrectItem] = useState(null);
@@ -62,7 +62,7 @@ const Corrections = () => {
             {!loading && (
                 <>
                     <Box sx={{ padding: '24px 24px 24px 24px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>Corrections</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#1a1b1d' }}>{t('Corrections')}</Typography>
                     </Box>
                     <Box sx={{ maxHeight: '85vh', overflowY: 'auto', width: '100%' }}>
                         {corrections.map((item, index) => (

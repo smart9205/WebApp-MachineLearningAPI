@@ -15,7 +15,7 @@ const courtAreaList = [
     { name: 'Offensive', id: 1 }
 ];
 
-const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
+const TeamPlayerTagEditDialog = ({ open, onClose, player, t }) => {
     const [actionList, setActionList] = useState([]);
     const [actionTypeList, setActionTypeList] = useState([]);
     const [actionResultList, setActionResultList] = useState([]);
@@ -93,12 +93,12 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg">
-            <DialogTitle>Player Tag Edit</DialogTitle>
+            <DialogTitle>{t('Player Tag Edit')}</DialogTitle>
             <DialogContent dividers style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     <div>
                         <p className="normal-text" style={{ paddingLeft: '12px' }}>
-                            Players
+                            {t('Players')}
                         </p>
                         <Select
                             value={values.player_name}
@@ -119,7 +119,7 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
                     </div>
                     <div>
                         <p className="normal-text" style={{ paddingLeft: '12px' }}>
-                            Court Areas
+                            {t('Court Areas')}
                         </p>
                         <Select
                             value={values.court_area}
@@ -138,12 +138,16 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
                             ))}
                         </Select>
                     </div>
-                    <FormControlLabel control={<Switch checked={values.inside_pain} onChange={(e) => setValues({ ...values, inside_pain: e.target.checked })} />} label="In the box" sx={{ mt: 1 }} />
+                    <FormControlLabel
+                        control={<Switch checked={values.inside_pain} onChange={(e) => setValues({ ...values, inside_pain: e.target.checked })} />}
+                        label={t('In the box')}
+                        sx={{ mt: 1 }}
+                    />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     <div>
                         <p className="normal-text" style={{ paddingLeft: '12px' }}>
-                            Actions
+                            {t('Actions')}
                         </p>
                         <Select
                             value={values.action_name}
@@ -164,7 +168,7 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
                     </div>
                     <div>
                         <p className="normal-text" style={{ paddingLeft: '12px' }}>
-                            Action Types
+                            {t('Action Types')}
                         </p>
                         <Select
                             value={values.action_type}
@@ -185,7 +189,7 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
                     </div>
                     <div>
                         <p className="normal-text" style={{ paddingLeft: '12px' }}>
-                            Action Results
+                            {t('Action Results')}
                         </p>
                         <Select
                             value={values.action_result}
@@ -210,7 +214,7 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
                         value={values.start_time}
                         onChange={handleChange('start_time')}
                         placeholder="00:00:00"
-                        label="Start Time"
+                        label={t('Start Time')}
                         variant="outlined"
                         sx={{ width: '300px', fontSize: '0.8rem', '& .MuiOutlinedInput-root': { borderRadius: '10px' }, '& .MuiOutlinedInput-input': { padding: '0 12px', height: '36px' } }}
                     />
@@ -218,7 +222,7 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
                         value={values.end_time}
                         onChange={handleChange('end_time')}
                         placeholder="00:00:00"
-                        label="End Time"
+                        label={t('End Time')}
                         variant="outlined"
                         sx={{ width: '300px', fontSize: '0.8rem', '& .MuiOutlinedInput-root': { borderRadius: '10px' }, '& .MuiOutlinedInput-input': { padding: '0 12px', height: '36px' } }}
                     />
@@ -226,10 +230,10 @@ const TeamPlayerTagEditDialog = ({ open, onClose, player }) => {
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" onClick={() => onClose(false)}>
-                    Cancel
+                    {t('Cancel')}
                 </Button>
                 <Button variant="outlined" onClick={() => handleTagSave()}>
-                    Save
+                    {t('Save')}
                 </Button>
             </DialogActions>
         </Dialog>

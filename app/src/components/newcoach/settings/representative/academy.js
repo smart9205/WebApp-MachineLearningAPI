@@ -5,7 +5,7 @@ import FolderSharedIcon from '@mui/icons-material/FolderShared';
 
 import GameService from '../../../../services/game.service';
 
-const SettingsAcademyControl = ({ userId, select }) => {
+const SettingsAcademyControl = ({ userId, select, t }) => {
     const [academyList, setAcademyList] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ const SettingsAcademyControl = ({ userId, select }) => {
 
     return (
         <div className="settings_academy_container">
-            <p className="normal-text">Academy</p>
+            <p className="normal-text">{t('Academy')}</p>
             <div className="academy_section">
                 {loading ? (
                     <div style={{ width: '100%', height: '80%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

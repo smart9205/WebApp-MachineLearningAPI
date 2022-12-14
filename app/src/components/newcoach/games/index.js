@@ -296,6 +296,7 @@ const Games = ({ t }) => {
                             {getGamesList().map((game, index) => (
                                 <Box key={index} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
                                     <GameListItem
+                                        t={t}
                                         row={game}
                                         isHover={values.hoverIndex === index}
                                         isPending={values.curTab === 1}

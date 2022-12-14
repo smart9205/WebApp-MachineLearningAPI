@@ -171,6 +171,7 @@ const GameStatsBoxList = ({ game, list, teamId, refreshPage, isEdit, t }) => {
                 ))}
             </Box>
             <GameStatsVideoPlayer
+                t={t}
                 open={videoOpen}
                 onClose={(flag) => {
                     setVideoOpen(false);

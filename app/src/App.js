@@ -174,7 +174,7 @@ const App = () => {
                                         path="/new_coach/settings"
                                         element={
                                             <NewCoach>
-                                                <Settings />
+                                                <Settings t={t} />
                                             </NewCoach>
                                         }
                                     />
@@ -230,7 +230,7 @@ const App = () => {
                                         path="/new_coach/opponents"
                                         element={
                                             <NewCoach>
-                                                <Opponents />
+                                                <Opponents t={t} />
                                             </NewCoach>
                                         }
                                     />
@@ -238,7 +238,7 @@ const App = () => {
                                         path="/new_coach/opponents/:gameId"
                                         element={
                                             <NewCoach>
-                                                <OpponentPage />
+                                                <OpponentPage t={t} />
                                             </NewCoach>
                                         }
                                     />
@@ -262,7 +262,7 @@ const App = () => {
                                         path="/new_coach/corrections"
                                         element={
                                             <NewCoach>
-                                                <Corrections />
+                                                <Corrections t={t} />
                                             </NewCoach>
                                         }
                                     />
