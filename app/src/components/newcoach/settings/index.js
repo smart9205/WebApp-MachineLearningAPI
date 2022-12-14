@@ -14,8 +14,12 @@ const Settings = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        if (currentUser.roles.includes('ROLE_REPRESENTATIVE')) Tabs = [...Tabs, 'Representative'];
-        if (currentUser.roles.includes('ROLE_MANAGER')) Tabs = [...Tabs, 'Manager'];
+        if (!Tabs.includes('Representative')) {
+            if (currentUser.roles.includes('ROLE_REPRESENTATIVE')) Tabs = [...Tabs, 'Representative'];
+        }
+        if (!Tabs.includes('Manager')) {
+            if (currentUser.roles.includes('ROLE_MANAGER')) Tabs = [...Tabs, 'Manager'];
+        }
     }, [currentUser]);
 
     console.log(currentUser.roles);
