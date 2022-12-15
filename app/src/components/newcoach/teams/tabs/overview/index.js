@@ -332,6 +332,7 @@ const TeamOverview = ({ games, gameIds, teamname, teamId, t }) => {
                 />
                 {values.playList.length > 0 && (
                     <GameTagControlSection
+                        t={t}
                         clipCount={values.playList.length}
                         isSelectAll={values.selectAll}
                         onAll={(e) => setValues({ ...values, selectAll: e.target.checked })}
@@ -352,8 +353,8 @@ const TeamOverview = ({ games, gameIds, teamname, teamId, t }) => {
                     onTime={handleChangeTime}
                 />
             </Box>
-            <TeamVideoPlayer videoData={videoData} games={games} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} gameTime={gameTime} isTeams={true} />
-            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} isTeams={true} />
+            <TeamVideoPlayer t={t} videoData={videoData} games={games} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} gameTime={gameTime} isTeams={true} />
+            <GameExportToEdits t={t} open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} isTeams={true} />
             {exportHudl && <XmlDataFilterTeamOverview games={gameList} tagList={exportList} isOur={values.isOur} tag_name={tagIndex} team_name={teamname} setExportXML={setExportHudl} />}
         </Box>
     );

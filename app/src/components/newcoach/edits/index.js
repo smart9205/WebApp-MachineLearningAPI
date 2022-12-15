@@ -65,7 +65,7 @@ const Edits = ({ t }) => {
                         showPlay={false}
                     />
                 </div>
-                <EditVideoPlayer idx={curTagIdx} tagList={editTagList} onChangeClip={setCurTagIdx} drawOpen={true} />
+                <EditVideoPlayer t={t} idx={curTagIdx} tagList={editTagList} onChangeClip={setCurTagIdx} drawOpen={true} />
             </Box>
         </Box>
     );

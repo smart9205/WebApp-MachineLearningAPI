@@ -169,7 +169,7 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList, t }) => {
                                     <FastRewindIcon color="white" />
                                 </IconButton>
                                 <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate(0.5)}>
-                                    Slow
+                                    {t('Slow')}
                                 </Button>
                                 <IconButton
                                     onClick={() => {
@@ -181,7 +181,7 @@ const TeamStatsVideoPlayer = ({ open, onClose, video_url, tagList, t }) => {
                                     {play && playRate === 1 ? <PauseIcon /> : <PlayIcon />}
                                 </IconButton>
                                 <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate((s) => s + 0.5)}>
-                                    Fast
+                                    {t('Fast')}
                                 </Button>
                                 <IconButton style={{ color: 'white', backgroundColor: '#80808069' }} onClick={() => fastVideo(3)}>
                                     <FastForwardIcon color="white" />

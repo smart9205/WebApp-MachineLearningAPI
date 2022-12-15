@@ -182,7 +182,7 @@ const GameStatsBoxList = ({ game, list, teamId, refreshPage, isEdit, t }) => {
                 tagList={playData}
                 isEdit={isEdit}
             />
-            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
+            <GameExportToEdits t={t} open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );
 };

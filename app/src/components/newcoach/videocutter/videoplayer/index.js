@@ -44,7 +44,7 @@ const styles = {
     }
 };
 
-export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
+export default function VCVideoPlayer({ saveEdit, drawOpen, updateList, t }) {
     const handle = useFullScreenHandle();
     const player = useRef(null);
     const [play, setPlay] = useState(false);
@@ -252,7 +252,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                             }}
                         >
                             <Button variant="outlined" disabled={gameList.length === 0} onClick={() => setListOpen(true)}>
-                                Select Games
+                                {t('Select Games')}
                             </Button>
                             {listOpen && (
                                 <List sx={{ maxWidth: 500, bgcolor: 'background.paper', maxHeight: 300, position: 'relative', overflow: 'auto', color: 'black' }}>
@@ -324,7 +324,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                                 sx={{ width: '45px !important', minWidth: '45px !important', maxWidth: '45px !important', color: 'white', fontSize: '0.7rem' }}
                                 onClick={() => setPlayRate(0.5)}
                             >
-                                Slow
+                                {t('Slow')}
                             </Button>
                             <IconButton
                                 onClick={() => {
@@ -340,7 +340,7 @@ export default function VCVideoPlayer({ saveEdit, drawOpen, updateList }) {
                                 sx={{ width: '45px !important', minWidth: '45px !important', maxWidth: '45px !important', color: 'white', fontSize: '0.7rem' }}
                                 onClick={() => setPlayRate((s) => s + 0.5)}
                             >
-                                Fast
+                                {t('Fast')}
                             </Button>
                             <IconButton style={styles.button} onClick={() => fastVideo(3)}>
                                 <FastForwardIcon color="white" />

@@ -217,7 +217,7 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId, t }) 
                                     <TableCell key={`${index}-game`} align="center" width="240px">
                                         <div>
                                             <p className="normal-text">{`${item.season_name}, ${item.league_name}`}</p>
-                                            <p className="normal-text">{`${getFormattedDate(item.game_date)} vs ${getAwayTeamName(item)}`}</p>
+                                            <p className="normal-text">{`${getFormattedDate(item.game_date)} ${t('VS')} ${getAwayTeamName(item)}`}</p>
                                         </div>
                                     </TableCell>
                                     {properties.map((prop) => (
@@ -237,7 +237,7 @@ const GoalkeepersGamesDialog = ({ open, onClose, list, playerName, teamId, t }) 
                     </Table>
                 </TableContainer>
                 <TeamGamesVideoPlayer t={t} open={videoOpen} onClose={() => setVideoOpen(false)} video_url={videoURL} tagList={playData} />
-                <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
+                <GameExportToEdits t={t} open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
             </DialogContent>
         </Dialog>
     );

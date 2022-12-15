@@ -519,7 +519,7 @@ const Players = ({ t }) => {
                                 initialState={playerStat}
                             />
                             <TeamStatsVideoPlayer t={t} open={videoOpen} onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />
-                            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
+                            <GameExportToEdits t={t} open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
                             <PlayersGamesDialog t={t} open={gamesOpen} onClose={() => setGamesOpen(false)} list={playerGames} playerName={playerStat?.player_name ?? ''} />
                             <Popover
                                 id={menuPopoverId}

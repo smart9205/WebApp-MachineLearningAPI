@@ -276,7 +276,7 @@ const TeamGames = ({ games, gameIds, teamId, seasonId, t }) => {
                 video_url={videoURL}
                 tagList={playData}
             />
-            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
+            <GameExportToEdits t={t} open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );
 };

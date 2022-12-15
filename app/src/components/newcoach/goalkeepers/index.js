@@ -553,7 +553,7 @@ const Goalkeepers = ({ t }) => {
                         initialState={playerStat}
                     />
                     <TeamStatsVideoPlayer t={t} open={videoOpen} onClose={() => setVideoOpen(false)} video_url={gameList} tagList={playData} />
-                    <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
+                    <GameExportToEdits t={t} open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
                     <GoalkeepersGamesDialog
                         t={t}
                         open={gamesOpen}

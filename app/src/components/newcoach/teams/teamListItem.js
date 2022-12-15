@@ -66,7 +66,9 @@ const TeamListItem = ({ row, isHover, t }) => {
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <p className="normal-text">{t('DRAW')}</p>
+                    <p className="normal-text" style={{ textTransform: 'uppercase' }}>
+                        {t('Draw')}
+                    </p>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#A4AAB0', borderRadius: '12px', width: '24px', height: '24px' }}>
                             <p className="normal-text-white">D</p>
@@ -75,7 +77,9 @@ const TeamListItem = ({ row, isHover, t }) => {
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', flex: 2, padding: '0 8px' }}>
-                    <p className="normal-text">{t('LOSE')}</p>
+                    <p className="normal-text" style={{ textTransform: 'uppercase' }}>
+                        {t('Lose')}
+                    </p>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#C1272D', borderRadius: '12px', width: '24px', height: '24px' }}>
                             <p className="normal-text-white">L</p>

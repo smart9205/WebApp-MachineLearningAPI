@@ -43,7 +43,7 @@ const styles = {
         backgroundColor: '#80808069'
     }
 };
-export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpen }) {
+export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpen, t }) {
     const handle = useFullScreenHandle();
     const { tagList, autoPlay, idx, click, videoPlay, cnt = null } = videoData;
 
@@ -204,7 +204,7 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
                             <FastRewindIcon color="white" />
                         </IconButton>
                         <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate(0.5)}>
-                            Slow
+                            {t('Slow')}
                         </Button>
                         <IconButton
                             onClick={() => {
@@ -216,7 +216,7 @@ export default function GameVideoPlayer({ videoData, game, onChangeClip, drawOpe
                             {play && playRate === 1 ? <PauseIcon /> : <PlayArrowIcon />}
                         </IconButton>
                         <Button variant="outlined" sx={{ width: '60px', color: 'white' }} onClick={() => setPlayRate((s) => s + 0.5)}>
-                            Fast
+                            {t('Fast')}
                         </Button>
                         <IconButton style={styles.button} onClick={() => fastVideo(3)}>
                             <FastForwardIcon color="white" />

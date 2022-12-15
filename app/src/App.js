@@ -150,7 +150,7 @@ const App = () => {
 
                                 <Route path="/tagging/:id" element={<Tagging />} />
 
-                                <Route path="/shareedit/:code" element={<CoachSharedEditVideoPlayer />} />
+                                <Route path="/shareedit/:code" element={<CoachSharedEditVideoPlayer t={t} />} />
 
                                 <Route path="/new_coach" element={<RoleRoute role="ROLE_COACH" />}>
                                     <Route path="/new_coach" element={<Navigate to="/new_coach/teams" replace />} />

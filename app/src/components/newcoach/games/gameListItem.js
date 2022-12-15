@@ -217,7 +217,7 @@ const GameListItem = ({ row, isHover, isPending = false, updateList, team, stand
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickSportCodeShort}>
                     <img src={ExportIcon} />
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('Export to Sportscode Short Version')}</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 500, color: '#1a1b1d' }}>{t('Export to Sportscode Short version')}</Typography>
                 </Box>
                 <Divider sx={{ width: '100%' }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', cursor: 'pointer' }} onClick={handleClickExcel}>

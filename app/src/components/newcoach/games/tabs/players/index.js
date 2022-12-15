@@ -283,7 +283,7 @@ const GamePlayers = ({ game, t }) => {
                     onChangeTeam={handleChangeTeam}
                     mb="8px"
                 />
-                <GamePlayerLogoList game={game} teamId={values.teamId} opponent={values.opponentTeamId} our={values.isOur} setIds={setPlayerIds} isEdit={values.isOur} />
+                <GamePlayerLogoList t={t} game={game} teamId={values.teamId} opponent={values.opponentTeamId} our={values.isOur} setIds={setPlayerIds} isEdit={values.isOur} />
                 {values.expandButtons && <GamePlayerTagButtonList t={t} selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
@@ -302,6 +302,7 @@ const GamePlayers = ({ game, t }) => {
                 />
                 {values.playList.length > 0 && (
                     <GameTagControlSection
+                        t={t}
                         clipCount={values.playList.length}
                         isSelectAll={values.selectAll}
                         onAll={(e) => setValues({ ...values, selectAll: e.target.checked })}
@@ -322,9 +323,9 @@ const GamePlayers = ({ game, t }) => {
                     onTime={handleChangeTime}
                 />
             </Box>
-            <GameVideoPlayer videoData={videoData} game={gameTime} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />
+            <GameVideoPlayer t={t} videoData={videoData} game={gameTime} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />
             {exportHudl && <XmlDataFilterGamePlayer game={game} tagList={playerTagList} isOur={values.isOur} tag_name={tagIndex.name} setExportXML={setExportHudl} />}
-            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={playerTagList} isTeams={false} />
+            <GameExportToEdits t={t} open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={playerTagList} isTeams={false} />
         </Box>
     );
 };

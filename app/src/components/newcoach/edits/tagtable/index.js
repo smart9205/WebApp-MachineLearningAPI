@@ -190,7 +190,7 @@ const EditTagTable = ({ loading, tagList, setIdx, selected, sort, name, update, 
                             <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{t('Select Edit')}</Typography>
                         </DialogTitle>
                         <DialogContent dividers={true} style={{ display: 'flex' }}>
-                            <EditFolderTreeView setEdit={setControlEdit} isMain={false} entireHeight="400px" treeHeight="100%" />
+                            <EditFolderTreeView t={t} setEdit={setControlEdit} isMain={false} entireHeight="400px" treeHeight="100%" />
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={() => handleClose()}>{t('Cancel')}</Button>

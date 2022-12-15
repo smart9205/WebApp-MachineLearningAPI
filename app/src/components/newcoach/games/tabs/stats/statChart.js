@@ -175,7 +175,7 @@ const GameStatsChart = ({ chartId, title, isType, action_results, list, filterTe
                 tagList={playData}
                 isEdit={isEdit}
             />
-            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
+            <GameExportToEdits t={t} open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Box>
     );
 };

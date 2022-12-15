@@ -352,6 +352,7 @@ const GameOverview = ({ game, t }) => {
                 />
                 {values.playList.length > 0 && (
                     <GameTagControlSection
+                        t={t}
                         clipCount={values.playList.length}
                         isSelectAll={values.selectAll}
                         onAll={(e) => setValues({ ...values, selectAll: e.target.checked })}
@@ -372,9 +373,9 @@ const GameOverview = ({ game, t }) => {
                     onTime={handleChangeTime}
                 />
             </Box>
-            <GameVideoPlayer videoData={videoData} game={gameTime} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />
+            <GameVideoPlayer t={t} videoData={videoData} game={gameTime} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />
             {exportHudl && <XmlDataFilterGame game={game} tagList={playerTagList} isOur={values.isOur} tag_name={tagIndex} setExportXML={setExportHudl} />}
-            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} isTeams={true} />
+            <GameExportToEdits t={t} open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={exportList} isTeams={true} />
         </Box>
     );
 };

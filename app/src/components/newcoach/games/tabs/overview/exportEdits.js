@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import GameService from '../../../../../services/game.service';
 import EditFolderTreeView from '../../../edits/treeview';
 
-const GameExportToEdits = ({ open, onClose, tagList, isTeams }) => {
+const GameExportToEdits = ({ open, onClose, tagList, isTeams, t }) => {
     const [curEdit, setCurEdit] = useState(null);
 
     const getPeriod = (id) => {
@@ -44,7 +44,7 @@ const GameExportToEdits = ({ open, onClose, tagList, isTeams }) => {
                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>Export to My Edits</Typography>
             </DialogTitle>
             <DialogContent dividers={true} style={{ display: 'flex', overflowY: 'hidden' }}>
-                <EditFolderTreeView setEdit={setCurEdit} isMain={false} entireHeight="390px" treeHeight="85%" />
+                <EditFolderTreeView t={t} setEdit={setCurEdit} isMain={false} entireHeight="390px" treeHeight="85%" />
                 <Box sx={{ overflowY: 'auto', maxHeight: '390px', width: '600px', paddingLeft: '16px' }}>
                     <Box sx={{ margin: '0 4px 8px 0', width: 'calc(100% - 4px)' }}>
                         {tagList.map((item, index) => (

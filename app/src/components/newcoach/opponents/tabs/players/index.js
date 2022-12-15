@@ -264,7 +264,7 @@ const OpponentPlayers = ({ game, t }) => {
         <Box sx={{ width: '100%', background: 'white', maxHeight: '80vh', overflowY: 'auto', display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', padding: '24px 10px' }}>
                 <GameOverviewHeader isOur={values.isOur} ourname={game.home_team_name} enemyname={game.away_team_name} onChangeTeam={handleChangeTeam} mb="8px" />
-                <GamePlayerLogoList game={game} teamId={game.home_team_id} opponent={game.away_team_id} our={values.isOur} setIds={setPlayerIds} isEdit={false} />
+                <GamePlayerLogoList t={t} game={game} teamId={game.home_team_id} opponent={game.away_team_id} our={values.isOur} setIds={setPlayerIds} isEdit={false} />
                 {values.expandButtons && <GamePlayerTagButtonList t={t} selectedTag={tagIndex} onShow={handleShowPopover} />}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ flex: 1, height: '1px', background: 'black' }} />
@@ -283,6 +283,7 @@ const OpponentPlayers = ({ game, t }) => {
                 />
                 {values.playList.length > 0 && (
                     <GameTagControlSection
+                        t={t}
                         clipCount={values.playList.length}
                         isSelectAll={values.selectAll}
                         onAll={(e) => setValues({ ...values, selectAll: e.target.checked })}
@@ -303,9 +304,9 @@ const OpponentPlayers = ({ game, t }) => {
                     onTime={handleChangeTime}
                 />
             </Box>
-            <GameVideoPlayer videoData={videoData} game={gameTime} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />
+            <GameVideoPlayer t={t} videoData={videoData} game={gameTime} onChangeClip={(idx) => setCurTeamTagIdx(idx)} drawOpen={true} />
             {exportHudl && <XmlDataFilterGamePlayer game={game} tagList={playerTagList} isOur={values.isOur} tag_name={tagIndex.name} setExportXML={setExportHudl} />}
-            <GameExportToEdits open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={playerTagList} isTeams={false} />
+            <GameExportToEdits t={t} open={exportEditOpen} onClose={() => setExportEditOpen(false)} tagList={playerTagList} isTeams={false} />
         </Box>
     );
 };

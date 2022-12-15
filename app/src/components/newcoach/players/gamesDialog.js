@@ -159,7 +159,7 @@ const PlayersGamesDialog = ({ open, onClose, list, playerName, t }) => {
                     </Table>
                 </TableContainer>
                 <TeamGamesVideoPlayer t={t} open={videoOpen} onClose={() => setVideoOpen(false)} video_url={videoURL} tagList={playData} />
-                <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
+                <GameExportToEdits t={t} open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
             </DialogContent>
         </Dialog>
     );

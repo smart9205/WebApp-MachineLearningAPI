@@ -280,26 +280,26 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
             <DialogContent style={{ padding: '16px', display: 'flex', gap: '24px' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     <Box sx={{ border: '1px solid #E8E8E8', display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px', borderRadius: '8px' }}>
-                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>PROFILE</Typography>
+                        <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{t('PROFILE')}</Typography>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '460px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', width: '120px', height: '120px' }}>
                                 <img src={player?.image ? player?.image : USER_IMAGE_DEFAULT} style={{ borderRadius: '12px', height: '100%' }} />
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '320px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>First name</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>{t('FirstName')}</Typography>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.first_name ?? ''}</Typography>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Last name</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>{t('LastName')}</Typography>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.last_name ?? ''}</Typography>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Jersey Number</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>{t('Jersey Number')}</Typography>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.jersey_number ?? ''}</Typography>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>Position</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 600, color: '#1a1b1d', flex: 1 }}>{t('Position')}</Typography>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d', flex: 1 }}>{player?.name ?? ''}</Typography>
                                 </div>
                             </div>
@@ -307,17 +307,17 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
                     </Box>
                     <Box sx={{ border: '1px solid #E8E8E8', borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>FILTERS</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{t('FILTERS')}</Typography>
                             <Button variant="outlined" color="success" sx={{ textTransform: 'none' }} onClick={() => handlePlayerStat()}>
-                                Recalculate
+                                {t('Recalculate')}
                             </Button>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>MATCH PERIOD</Typography>
+                            <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{t('MATCH PERIOD')}</Typography>
                             <div style={{ width: '100%' }}>
                                 <ToggleButtonGroup color="success" fullWidth size="small" value={gameHalf} onChange={handleChangeGameHalf}>
-                                    <ToggleButton value="first">1 HALF</ToggleButton>
-                                    <ToggleButton value="second">2 HALF</ToggleButton>
+                                    <ToggleButton value="first">{t('1 HALF')}</ToggleButton>
+                                    <ToggleButton value="second">{t('2 HALF')}</ToggleButton>
                                 </ToggleButtonGroup>
                                 <ToggleButtonGroup color="success" fullWidth size="small" value={gameTime} onChange={handleChangeGameTime}>
                                     <ToggleButton value="1">1-15'</ToggleButton>
@@ -360,18 +360,18 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1, padding: '6px', borderRadius: '8px', border: '1px solid #E8E8E8' }}>
                                 <div style={{ width: '100%' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>GAME RESULT</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{t('GAME RESULT')}</Typography>
                                     <ToggleButtonGroup disabled exclusive color="success" fullWidth size="small" value={gameResult} onChange={handleChangeGameResult}>
-                                        <ToggleButton value="1">Won</ToggleButton>
-                                        <ToggleButton value="2">Draw</ToggleButton>
-                                        <ToggleButton value="3">Lose</ToggleButton>
+                                        <ToggleButton value="1">{t('Won')}</ToggleButton>
+                                        <ToggleButton value="2">{t('Draw')}</ToggleButton>
+                                        <ToggleButton value="3">{t('Lose')}</ToggleButton>
                                     </ToggleButtonGroup>
                                 </div>
                                 <div style={{ width: '100%' }}>
-                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>GAME PLACE</Typography>
+                                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, color: '#1a1b1d' }}>{t('GAME PLACE')}</Typography>
                                     <ToggleButtonGroup disabled exclusive color="success" fullWidth size="small" value={gamePlace} onChange={handleChangeGamePlace}>
-                                        <ToggleButton value="1">Home</ToggleButton>
-                                        <ToggleButton value="2">Away</ToggleButton>
+                                        <ToggleButton value="1">{t('Home')}</ToggleButton>
+                                        <ToggleButton value="2">{t('Away')}</ToggleButton>
                                     </ToggleButtonGroup>
                                 </div>
                             </div>
@@ -379,7 +379,7 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
                     </Box>
                 </Box>
                 <Box sx={{ border: '1px solid #E8E8E8', borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>PLAYER STATS</Typography>
+                    <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px', fontWeight: 600, color: '#1a1b1d' }}>{t('PLAYER STATS')}</Typography>
                     <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', gap: '8px' }}>
                         {getStatList().map((item, index) => (
                             <div
@@ -401,7 +401,7 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
                                 onClick={() => handleDisplayVideo(item)}
                                 onContextMenu={handleExportTags(item)}
                             >
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{item.title}</Typography>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>{t(item.title)}</Typography>
                                 <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: '#1a1b1d' }}>
                                     {!loading ? (playerState ? playerState[`total_${item.id}`] : '0') : '0'}
                                 </Typography>
@@ -423,7 +423,7 @@ const GamePlayerStatDialog = ({ open, onClose, player, game, teamId, initialStat
                 tagList={playData}
                 isEdit={isEdit}
             />
-            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
+            <GameExportToEdits t={t} open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Dialog>
     );
 };

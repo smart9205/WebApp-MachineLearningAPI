@@ -450,7 +450,7 @@ const LeadersPlayerStatDialog = ({ open, onClose, player, t }) => {
                 video_url={gameList}
                 tagList={playData}
             />
-            <GameExportToEdits open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
+            <GameExportToEdits t={t} open={exportOpen} onClose={() => setExportOpen(false)} tagList={playData} isTeams={false} />
         </Dialog>
     );
 };

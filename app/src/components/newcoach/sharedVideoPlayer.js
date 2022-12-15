@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import EditVideoPlayer from './edits/videoplayer';
 import GameService from '../../services/game.service';
 
-const CoachSharedEditVideoPlayer = () => {
+const CoachSharedEditVideoPlayer = ({ t }) => {
     const params = useParams();
     const [curTagIndex, setCurTagIndex] = useState(0);
     const [tagList, setTagList] = useState([]);
@@ -27,7 +27,7 @@ const CoachSharedEditVideoPlayer = () => {
 
     return (
         <div style={{ display: 'flex' }}>
-            <EditVideoPlayer idx={curTagIndex} tagList={tagList} onChangeClip={setCurTagIndex} drawOpen={false} />
+            <EditVideoPlayer t={t} idx={curTagIndex} tagList={tagList} onChangeClip={setCurTagIndex} drawOpen={false} />
         </div>
     );
 };
