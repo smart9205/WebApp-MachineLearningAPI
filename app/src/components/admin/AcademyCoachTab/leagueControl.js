@@ -34,9 +34,9 @@ const AcademyLeagueControl = ({ academy, select }) => {
     };
 
     const handleDeleteAcademyLeague = (item) => {
-        setAcademyLeagueList(academyLeagueList.filter((data) => data.league_name !== item.league_name));
-        setSelectedIndex(-1);
         select(null);
+        setSelectedIndex(-1);
+        setAcademyLeagueList(academyLeagueList.filter((data) => data.league_name !== item.league_name));
     };
 
     const handleAddAcademyLeague = (item) => {
@@ -93,12 +93,14 @@ const AcademyLeagueControl = ({ academy, select }) => {
                                     cursor: 'pointer',
                                     background: getBackgroundColor(index)
                                 }}
-                                onClick={() => {
-                                    setSelectedIndex(index);
-                                    select(item);
-                                }}
                             >
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <div
+                                    style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}
+                                    onClick={() => {
+                                        setSelectedIndex(index);
+                                        select(item);
+                                    }}
+                                >
                                     <FolderSharedIcon />
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: 'white' }}>{item.league_name}</Typography>
                                 </div>

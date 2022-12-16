@@ -118,9 +118,8 @@ const AcademyCoachTeamControl = ({ academy, league }) => {
                                     cursor: 'pointer',
                                     background: getBackgroundColor(index)
                                 }}
-                                onClick={() => setSelectedIndex(index)}
                             >
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }} onClick={() => setSelectedIndex(index)}>
                                     <FolderSharedIcon />
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: 'white' }}>{item.team_name}</Typography>
                                 </div>
