@@ -54,12 +54,13 @@ const AcademyCoachControl = ({ academy, select }) => {
     };
 
     const loadAllAcademyCoaches = () => {
-        if (academy === null) return;
-
-        setLoading(true);
         select(null);
         setSelectedIndex(-1);
         setAcademyCoachList([]);
+
+        if (academy === null) return;
+
+        setLoading(true);
         GameService.getAcademyCoach(academy.id).then((res) => {
             setAcademyCoachList(res);
             setLoading(false);

@@ -60,16 +60,12 @@ const AcademyCoachTeamControl = ({ academy, league }) => {
     }, []);
 
     useEffect(() => {
-        if (academy === null || seasonFilter === null || league === null) {
-            setAcademyTeamList([]);
-            setSelectedIndex(-1);
-
-            return;
-        }
-
-        setLoading(true);
         setAcademyTeamList([]);
         setSelectedIndex(-1);
+
+        if (academy === null || seasonFilter === null || league === null) return;
+
+        setLoading(true);
         GameService.getAllTeamsByLeagueSeason(academy.user_id, seasonFilter.id, league.league_id).then((res) => {
             setAcademyTeamList(res);
             setLoading(false);

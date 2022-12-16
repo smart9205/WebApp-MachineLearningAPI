@@ -46,12 +46,13 @@ const AcademyLeagueControl = ({ academy, select }) => {
     };
 
     const loadAllAcademyLeagues = () => {
-        if (academy === null) return;
-
-        setLoading(true);
         select(null);
         setSelectedIndex(-1);
         setAcademyLeagueList([]);
+
+        if (academy === null) return;
+
+        setLoading(true);
         GameService.getAllLeaguesByCoach(academy.user_id).then((res) => {
             setAcademyLeagueList(res);
             setLoading(false);
