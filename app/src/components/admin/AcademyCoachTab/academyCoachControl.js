@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 
 import GameService from '../../../services/game.service';
+import { USER_IMAGE_DEFAULT } from '../../../common/staticData';
 
 const AcademyCoachControl = ({ academy, select }) => {
     const [academyCoachList, setAcademyCoachList] = useState([]);
@@ -18,14 +19,18 @@ const AcademyCoachControl = ({ academy, select }) => {
     const [loading, setLoading] = useState(false);
 
     const handleOpenAcademiesDialog = () => {
-        GameService.getAllAcademies().then((res) => {
+        GameService.getAllAcademyCoaches().then((res) => {
             setAcademies(res);
             setDialogOpen(true);
         });
     };
 
     const getSearchedList = () => {
-        return academies.filter((item) => item.name.includes(searchText) || item.Country.includes(searchText));
+        return academies.filter((item) => {
+            const user_name = `${item.first_name} ${item.last_name}`;
+
+            return user_name.includes(searchText);
+        });
     };
 
     const getBackgroundColor = (index) => {
@@ -152,11 +157,13 @@ const AcademyCoachControl = ({ academy, select }) => {
                         {getSearchedList().map((item, index) => (
                             <div
                                 key={index}
-                                style={{ display: 'flex', alignItems: 'center', padding: '4px 8px', borderBottom: '1px solid #E8E8E8', cursor: 'pointer' }}
+                                style={{ display: 'flex', alignItems: 'center', padding: '8px 8px', borderBottom: '1px solid #E8E8E8', cursor: 'pointer' }}
                                 onClick={() => handleAddAcademyCoach(item)}
                             >
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: 'white', flex: 4 }}>{item.name}</Typography>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: 'white', flex: 3 }}>{item.Country}</Typography>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '80px' }}>
+                                    <img src={item.user_image ? item.user_image : USER_IMAGE_DEFAULT} style={{ height: '50px' }} />
+                                </div>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: 'white' }}>{`${item.first_name} ${item.last_name}`}</Typography>
                             </div>
                         ))}
                     </div>

@@ -769,6 +769,12 @@ const getAcademyCoach = (userId) => {
     });
 };
 
+const getAllAcademyCoaches = (userId) => {
+    return axios.get(API_URL + `user/academy_coach/all`, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
 const deleteAcademyCoach = (userId, academyId) => {
     return axios.delete(API_URL + `user/academy_coach/delete/${userId}/${academyId}`, { headers: authHeader(), data: { userId, academyId } }).then((response) => {
         return response.data;
@@ -1202,6 +1208,7 @@ const gameService = {
     getAcademiesForRepresentative,
     getTeamsByAcademy,
     getAcademyCoach,
+    getAllAcademyCoaches,
     getAllAcademies,
     getAllCoachTeam,
     getAllGamesByCoach,

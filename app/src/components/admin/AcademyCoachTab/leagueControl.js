@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 
 import GameService from '../../../services/game.service';
+import { TEAM_ICON_DEFAULT } from '../../../common/staticData';
 
 const AcademyLeagueControl = ({ academy, select }) => {
     const [academyLeagueList, setAcademyLeagueList] = useState([]);
@@ -25,16 +26,22 @@ const AcademyLeagueControl = ({ academy, select }) => {
     };
 
     const getSearchedList = () => {
-        return leagueList.filter((item) => item.name.includes(searchText) || item.Country.includes(searchText));
+        return leagueList.filter((item) => item.name.includes(searchText));
     };
 
     const getBackgroundColor = (index) => {
         return selectedIndex === index ? '#3C3C3C' : 'none';
     };
 
-    const handleDeleteAcademyLeague = (item) => {};
+    const handleDeleteAcademyLeague = (item) => {
+        setAcademyLeagueList(academyLeagueList.filter((data) => data.league_name !== item.league_name));
+        setSelectedIndex(-1);
+        select(null);
+    };
 
-    const handleAddAcademyLeague = (item) => {};
+    const handleAddAcademyLeague = (item) => {
+        setAcademyLeagueList((list) => [...list, { league_id: item.id, league_name: item.name, image: item.image }]);
+    };
 
     const loadAllAcademyLeagues = () => {
         if (academy === null) return;
@@ -57,7 +64,7 @@ const AcademyLeagueControl = ({ academy, select }) => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: '1rem', color: 'white', textAlign: 'center', margin: 0 }}>Coaches</p>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: '1rem', color: 'white', textAlign: 'center', margin: 0 }}>Leagues</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', border: '1px solid #E8E8E8', borderRadius: '8px', width: '280px', height: '70vh', padding: '16px 12px' }}>
                 <div style={{ width: '100%', textAlign: 'right' }}>
                     <Button variant="outlined" disabled={academy === null} onClick={() => handleOpenAcademiesDialog()}>
@@ -147,8 +154,10 @@ const AcademyLeagueControl = ({ academy, select }) => {
                                 style={{ display: 'flex', alignItems: 'center', padding: '4px 8px', borderBottom: '1px solid #E8E8E8', cursor: 'pointer' }}
                                 onClick={() => handleAddAcademyLeague(item)}
                             >
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: 'white', flex: 4 }}>{item.name}</Typography>
-                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: 'white', flex: 3 }}>{item.Country}</Typography>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '120px' }}>
+                                    <img src={item.image ? item.image : TEAM_ICON_DEFAULT} style={{ height: '50px' }} />
+                                </div>
+                                <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '0.7rem', color: 'white' }}>{item.name}</Typography>
                             </div>
                         ))}
                     </div>

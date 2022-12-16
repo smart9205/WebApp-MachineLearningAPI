@@ -122,6 +122,12 @@ module.exports = function (app) {
     controller.getAcademyCoach
   );
 
+  app.get(
+    "/user/academy_coach/all",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.getAllAcademyCoaches
+  );
+
   app.put(
     "/user/academy_coach/add/:userId/:academyId",
     [authJwt.verifyToken, authJwt.isAdminOrCoach],

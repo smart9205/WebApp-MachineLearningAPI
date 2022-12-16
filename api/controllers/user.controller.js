@@ -312,3 +312,24 @@ exports.getAcademyCoach = (req, res) => {
       });
     });
 };
+
+exports.getAllAcademyCoaches = (req, res) => {
+  Sequelize.query(
+    `select
+      public."Users".*,
+      public."Roles".name as role_name
+    from public."User_Roles"
+    join public."Users" on public."Users".id = public."User_Roles"."userId"
+    join public."Roles" on public."Roles".id = public."User_Roles"."roleId"
+    where public."User_Roles"."roleId" = 3
+    `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving seasons.",
+      });
+    });
+};
