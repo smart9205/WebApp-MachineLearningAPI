@@ -40,7 +40,9 @@ const AcademyLeagueControl = ({ academy, select }) => {
     };
 
     const handleAddAcademyLeague = (item) => {
-        setAcademyLeagueList((list) => [...list, { league_id: item.id, league_name: item.name, image: item.image }]);
+        const filtered = academyLeagueList.filter((data) => data.league_id === item.id);
+
+        if (filtered.length === 0) setAcademyLeagueList((list) => [...list, { league_id: item.id, league_name: item.name, image: item.image }]);
     };
 
     const loadAllAcademyLeagues = () => {

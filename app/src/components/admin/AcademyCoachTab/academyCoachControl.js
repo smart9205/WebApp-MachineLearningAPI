@@ -44,9 +44,13 @@ const AcademyCoachControl = ({ academy, select }) => {
     };
 
     const handleAddAcademyCoach = (item) => {
-        GameService.addAcademyCoach(item.id, academy.id).then((res) => {
-            loadAllAcademyCoaches();
-        });
+        const filtered = academyCoachList.filter((data) => data.user_id === item.id);
+
+        if (filtered.length === 0) {
+            GameService.addAcademyCoach(item.id, academy.id).then((res) => {
+                loadAllAcademyCoaches();
+            });
+        }
     };
 
     const loadAllAcademyCoaches = () => {

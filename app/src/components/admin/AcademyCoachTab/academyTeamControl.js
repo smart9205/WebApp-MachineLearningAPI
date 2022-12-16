@@ -32,9 +32,13 @@ const AcademyCoachTeamControl = ({ academy, league }) => {
     };
 
     const handleAddCoachTeam = (item) => {
-        GameService.addCoachTeam({ user_id: academy.user_id, season_id: seasonFilter.id, league_id: league.league_id, team_id: item.id }).then((res) => {
-            setRefreshDialog(!refreshDialog);
-        });
+        const filtered = academyTeamList.filter((data) => data.user_id === academy.user_id && data.season_id === seasonFilter.id && data.league_id === league.league_id && data.team_id === item.id);
+
+        if (filtered.length === 0) {
+            GameService.addCoachTeam({ user_id: academy.user_id, season_id: seasonFilter.id, league_id: league.league_id, team_id: item.id }).then((res) => {
+                setRefreshDialog(!refreshDialog);
+            });
+        }
     };
 
     const handleDeleteCoachTeam = (item) => {
@@ -72,7 +76,7 @@ const AcademyCoachTeamControl = ({ academy, league }) => {
         });
     }, [academy, league, refreshDialog, seasonFilter]);
 
-    console.log('$$$$$$$$$', academy);
+    console.log('$$$$$$$$$', academyTeamList);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
