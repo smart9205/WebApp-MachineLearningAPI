@@ -6,8 +6,6 @@ import GameExportToEdits from '../overview/exportEdits';
 import { getPeriod } from '../overview/tagListItem';
 import GameStatsVideoPlayer from './videoDialog';
 
-import '../../../coach_style.css';
-
 const GameStatsChart = ({ chartId, title, isType, action_results, list, filterText, game, teamId, refreshPage, isEdit, t }) => {
     const [playerList, setPlayerList] = useState([]);
     const [hoverId, setHoverId] = useState('');

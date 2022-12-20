@@ -3,8 +3,6 @@ import { Box, Typography } from '@mui/material';
 
 import ForwardIcon from '@mui/icons-material/ForwardTwoTone';
 
-import '../../../coach_style.css';
-
 const GameOverviewHeader = ({ isOur, ourname, enemyname, onChangeTeam, mb }) => {
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', marginBottom: mb }}>

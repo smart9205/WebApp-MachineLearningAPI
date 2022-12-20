@@ -4,8 +4,6 @@ import { Box, Popover, Divider } from '@mui/material';
 import ExportIcon from '../../../../../assets/Export.svg';
 import VideoIcon from '@mui/icons-material/SlideshowOutlined';
 
-import '../../../coach_style.css';
-
 const GameTagMenu = ({ anchor, onClose, onView, onHudl, onRender, onEdits, t }) => {
     const menuPopoverOpen = Boolean(anchor);
     const menuPopoverId = menuPopoverOpen ? 'simple-popover' : undefined;

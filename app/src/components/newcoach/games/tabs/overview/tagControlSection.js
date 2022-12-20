@@ -3,8 +3,6 @@ import { Box, Checkbox } from '@mui/material';
 
 import ExportIcon from '../../../../../assets/Export.svg';
 
-import '../../../coach_style.css';
-
 const GameTagControlSection = ({ clipCount, isSelectAll, onAll, onHudl, onRender, onEdits, t }) => {
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 8px' }}>

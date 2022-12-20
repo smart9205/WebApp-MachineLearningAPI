@@ -20,8 +20,6 @@ import EditNameDialog from './editNameDialog';
 import DeleteConfirmDialog from '../../../../common/DeleteConfirmDialog';
 import EditShareDialog from './shareDialog';
 
-import '../../coach_style.css';
-
 let child_ids = [];
 
 function getChilds(folders, parent_id) {

@@ -1,20 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-    Box,
-    CircularProgress,
-    Divider,
-    getNativeSelectUtilityClasses,
-    MenuItem,
-    Popover,
-    Select,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableSortLabel
-} from '@mui/material';
+import { Box, CircularProgress, Divider, MenuItem, Popover, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { useSelector } from 'react-redux';
 
 import EditIcon from '@mui/icons-material/EditOutlined';
@@ -32,8 +17,6 @@ import TeamStatsVideoPlayer from '../teams/tabs/stats/videoDialog';
 import GameExportToEdits from '../games/tabs/overview/exportEdits';
 import GoalkeepersGamesDialog from './gamesDialog';
 import GoalkeeperStatDialog from './status';
-
-import '../coach_style.css';
 
 const headCells = [
     { id: 'total_player_games', title: 'Games Played', action: '' },
@@ -398,10 +381,10 @@ const Goalkeepers = ({ t }) => {
         let teamIds = [];
 
         setLoading(true);
-        await GameService.getAllLeaguesByCoach().then((res) => {
+        await GameService.getAllLeaguesByCoach(currentUser.id).then((res) => {
             leagueIds = getLeagueIds(res);
         });
-        await GameService.getAllTeamsByCoach().then((res) => {
+        await GameService.getAllTeamsByCoach(currentUser.id).then((res) => {
             teamIds = getTeamIds(res);
         });
 

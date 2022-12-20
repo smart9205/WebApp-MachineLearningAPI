@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Box, CircularProgress, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, CircularProgress, MenuItem, Select, TextField } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined';
 
@@ -8,7 +9,6 @@ import LeadersPlayerStatColumn from './playerStatColumn';
 import { MenuProps } from '../components/common';
 import { getComparator, stableSort } from '../components/utilities';
 import LeadersPlayerStatDialog from './status';
-import '../coach_style.css';
 
 const statCategory = [
     { id: 'player_games', title: 'Games Played' },
@@ -65,6 +65,8 @@ const Leaders = ({ t }) => {
         leagueFilter: 'none',
         playerFilter: null
     });
+
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const handleChange = (prop) => (e) => {
         setValues({ ...values, [prop]: e.target.value });
@@ -228,11 +230,11 @@ const Leaders = ({ t }) => {
             let teamIds = [];
 
             setLoading(true);
-            await GameService.getAllLeaguesByCoach().then((res) => {
+            await GameService.getAllLeaguesByCoach(currentUser.id).then((res) => {
                 setLeagueList(getLeagueList(res));
                 leagueIds = getLeagueIds(res);
             });
-            await GameService.getAllTeamsByCoach().then((res) => {
+            await GameService.getAllTeamsByCoach(currentUser.id).then((res) => {
                 setTeamList(getTeamList(res));
                 teamIds = getTeamIds(res);
             });

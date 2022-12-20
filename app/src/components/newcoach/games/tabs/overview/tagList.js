@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, CircularProgress } from '@mui/material';
 
 import GameTagListItem from './tagListItem';
-import '../../../coach_style.css';
 
 const GameTagList = ({ isLoading, expand, tagList, curTagListIdx, checkArr, onChecked, onVideo, onTime, t }) => {
     return tagList.length > 0 ? (

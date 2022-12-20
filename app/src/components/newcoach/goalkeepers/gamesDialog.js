@@ -7,8 +7,6 @@ import GameService from '../../../services/game.service';
 import { ActionData } from '../components/common';
 import { getPeriod } from '../games/tabs/overview/tagListItem';
 import TeamGamesVideoPlayer from '../teams/tabs/games/videoDialog';
-
-import '../coach_style.css';
 import GameExportToEdits from '../games/tabs/overview/exportEdits';
 
 const properties = [

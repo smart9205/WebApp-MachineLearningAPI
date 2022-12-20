@@ -5,8 +5,6 @@ import GameExportToEdits from '../overview/exportEdits';
 import { getPeriod } from '../overview/tagListItem';
 import GameStatsVideoPlayer from './videoDialog';
 
-import '../../../coach_style.css';
-
 let boxList = [
     [
         { id: 'goal', title: 'Goals Scored', total: 0, data: [] },

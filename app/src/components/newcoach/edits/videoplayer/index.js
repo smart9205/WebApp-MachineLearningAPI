@@ -18,7 +18,6 @@ import GameImage from '../../../../assets/MyEdits.png';
 import { getPeriod } from '../../games/tabs/overview/tagListItem';
 import { TEAM_ICON_DEFAULT } from '../../../../common/staticData';
 
-import '../../coach_style.css';
 // import VIDEO from '../../assets/1.mp4'
 
 const styles = {

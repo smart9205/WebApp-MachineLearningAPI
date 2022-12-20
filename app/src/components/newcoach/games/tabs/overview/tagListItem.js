@@ -4,8 +4,6 @@ import { Box } from '@mui/material';
 import MinusIcon from '@mui/icons-material/IndeterminateCheckBox';
 import AddIcon from '@mui/icons-material/AddBox';
 
-import '../../../coach_style.css';
-
 export function getPeriod(id) {
     return id === 1 ? 'H1' : id === 2 ? 'H2' : 'OT';
 }

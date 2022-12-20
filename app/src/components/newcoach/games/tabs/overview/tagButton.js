@@ -3,8 +3,6 @@ import { Box } from '@mui/material';
 
 import MenuIcon from '@mui/icons-material/MenuOutlined';
 
-import '../../../coach_style.css';
-
 const GameTagButton = ({ isSelected, tagname, onShow, width, t }) => {
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', width: width }}>
