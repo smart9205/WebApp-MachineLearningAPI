@@ -39,6 +39,9 @@ import { compose } from '@mui/system';
 import Others from './contents/Others';
 import GK from './contents/GK';
 import { getPeriod } from '../newcoach/games/tabs/overview/tagListItem';
+import hideImg from '../../assets/icons/bx-hide.png';
+import showImg from '../../assets/icons/bx-show.png';
+import useVideoPlayer from './common/useVideoPlayer';
 const drawerWidth = '30%';
 
 const PLAYBACK_RATE = [
@@ -116,7 +119,6 @@ export default function Tagging() {
 
         await GameService.getGame(game_id)
             .then((res) => {
-
                 if (!((!res.done_tagging && currentUser.roles.includes('ROLE_TAGGER')) || currentUser.roles.includes('ROLE_ADMIN'))) {
                     navigate('/');
                     window.alert('Game has been already tagged');
@@ -146,9 +148,26 @@ export default function Tagging() {
     const [curTeamTag, setCurTeamTag] = React.useState(null);
     const [curTagStatusText, setCurTagStatusText] = React.useState('');
     const [defenseTeamGoalKeeper, setDefenseTeamGoalKeeper] = React.useState([]);
-    const [teamTagId, setTeamTagId] = React.useState(null)
-    const [startTime, setStartTime] = React.useState(null)
-    const [teamTagClicked, setTeamTagClicked] = React.useState(true)
+    const [teamTagId, setTeamTagId] = React.useState(null);
+    const [startTime, setStartTime] = React.useState(null);
+    const [teamTagClicked, setTeamTagClicked] = React.useState(true);
+    const [isShow, setShow] = React.useState(true);
+
+    const overlayElRef = React.useRef(null);
+
+    const [width, setWidth] = React.useState(0);
+    const [height, setHeight] = React.useState(0);
+
+    React.useEffect(() => {
+        setWidth(overlayElRef.current.clientWidth);
+        setHeight(overlayElRef.current.clientHeight);
+    });
+
+    function fnShow() {
+        setShow(!isShow);
+    }
+
+    const { positions } = useVideoPlayer(player, game_id);
 
     const [state, setState] = React.useReducer((old, action) => ({ ...old, ...action }), {
         url: '',
@@ -275,7 +294,7 @@ export default function Tagging() {
             .then((res) => {
                 setPlayerTagList(res);
             })
-            .catch(() => { });
+            .catch(() => {});
     };
 
     const changePlayRate = (flag) => {
@@ -341,8 +360,8 @@ export default function Tagging() {
     const taggingButtonClicked = (action) => {
         setModalOpen(true);
         setModalContent(action);
-        setTeamTagId(null)
-        setTeamTagClicked(true)
+        setTeamTagId(null);
+        setTeamTagClicked(true);
         setPlay(false);
 
         const curTime = player.current.getCurrentTime();
@@ -366,30 +385,29 @@ export default function Tagging() {
             setTeamTag({ id: res.id });
             setTagCnt(tagCnt + 1);
             return res;
-        } catch (e) { }
+        } catch (e) {}
     };
 
     const addPlayerTag = async (PTag) => await GameService.addPlayerTag(PTag);
 
-    let playerTagTime = []
+    let playerTagTime = [];
 
     const sendTimeData = (data) => {
-        playerTagTime.push(data)
-        setClicked(true)
-        setTeamTagClicked(true)
-    }
+        playerTagTime.push(data);
+        setClicked(true);
+        setTeamTagClicked(true);
+    };
 
     const setTaggingState = (tags) => {
-
-        let start_time = '00:00:00'
-        let end_time = '00:00:00'
+        let start_time = '00:00:00';
+        let end_time = '00:00:00';
 
         if (playerTagTime.length <= 0) {
-            start_time = playerTag.start_time
-            end_time = playerTag.end_time
+            start_time = playerTag.start_time;
+            end_time = playerTag.end_time;
         } else {
-            start_time = playerTagTime[0].start_time
-            end_time = playerTagTime[0].end_time
+            start_time = playerTagTime[0].start_time;
+            end_time = playerTagTime[0].end_time;
         }
         setTempPlayerTagList([
             ...temp_playerTag_list,
@@ -416,13 +434,13 @@ export default function Tagging() {
     }, [config]);
 
     const saveTags = async (isCP = false) => {
-        setPlay(false)
-        let tTag = null
+        setPlay(false);
+        let tTag = null;
         if (teamTagId !== null) {
-            tTag = teamTagId
+            tTag = teamTagId;
         } else {
             let temp = await addTeamTag(isCP);
-            tTag = temp.id
+            tTag = temp.id;
         }
         for (const pTag of temp_playerTag_list) {
             await addPlayerTag({ ...pTag, team_tag_id: tTag });
@@ -633,7 +651,88 @@ export default function Tagging() {
                                 controls={true}
                                 width="100%"
                                 height="97%"
+                                style={{
+                                    pointerEvents: 'auto'
+                                }}
                             />
+
+                            <div
+                                className="detection"
+                                id="detectdiv"
+                                ref={overlayElRef}
+                                style={{
+                                    display: 'flex',
+                                    top: 0,
+                                    justifyContent: 'spaceEvenly',
+                                    position: 'absolute',
+                                    width: '100%',
+                                    height: '100%',
+                                    flexWrap: 'wrap',
+                                    pointerEvents: 'none'
+                                }}
+                            >
+                                {isShow &&
+                                    positions.map((item) => {
+                                        let x = item.x;
+                                        let y = item.y;
+                                        let w = item.w;
+                                        let h = item.h;
+                                        let player_id = item.pui;
+                                        let frame_id = item.id;
+
+                                        let xpos = (width * x) / 1920;
+                                        let ypos = (height * y) / 1080;
+                                        let rect_w = (width * w) / 1920;
+                                        let rect_h = (height * h) / 1080;
+
+                                        return (
+                                            <div
+                                                key={frame_id}
+                                                style={{
+                                                    backgroundColor: 'rgba(255, 255, 255, 0)',
+                                                    position: 'absolute',
+                                                    left: xpos,
+                                                    top: ypos - 16,
+                                                    width: rect_w,
+                                                    height: rect_h + 16,
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center'
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        backgroundColor: 'rgba(0, 0, 0, 0.55)',
+                                                        paddingLeft: 2,
+                                                        paddingRight: 2,
+                                                        width: 'fitContent',
+                                                        height: 16,
+                                                        leftMargin: 'auto',
+                                                        rightMargin: 'auto',
+                                                        fontSize: 12,
+                                                        color: 'white'
+                                                    }}
+                                                >
+                                                    {player_id}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                            </div>
+
+                            <div
+                                style={{
+                                    width: '100%',
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 15,
+                                    display: 'flex'
+                                }}
+                            >
+                                <div className="fnbuttons" onClick={fnShow}>
+                                    {isShow ? <img src={hideImg} style={{ filter: 'invert(1)' }} /> : <img src={showImg} style={{ filter: 'invert(1)' }} />}
+                                </div>
+                            </div>
                         </div>
                         {curTagStatusText !== '' && (
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', position: 'absolute', top: '10px' }}>
