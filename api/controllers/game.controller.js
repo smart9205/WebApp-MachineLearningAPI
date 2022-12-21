@@ -4,6 +4,7 @@ const Game = db.game;
 const Op = db.Sequelize.Op;
 const Sequelize = db.sequelize;
 const Team_Tag = db.team_tag;
+const Email_Queue = db.email_queue;
 
 exports.create = (req, res) => {
   // Validate request
@@ -1365,4 +1366,53 @@ exports.getHideGame = (req, res) => {
         message: err.message || "Some error occurred while removing all Games.",
       });
     });
+};
+
+sendEmailToCoach = async (email, userId, subject, html) => {
+  const sendgrid = require("@sendgrid/mail");
+  sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+
+  const msg = {
+    to: email, // Change to your recipient
+    from: "scouting4u2010@gmail.com", // Change to your verified sender
+    subject: subject,
+    html: html,
+  };
+
+  const email_queue = await Email_Queue.create({
+    user_id: userId,
+    user_email: email,
+    send_date: new Date(),
+    subject: subject,
+    content: html,
+  });
+
+  sendgrid
+    .send(msg)
+    .then((resp) => {
+      Email_Queue.update({ success: true }, { where: { id: email_queue.id } });
+    })
+    .catch((error) => {
+      console.error(error);
+      Email_Queue.update({ success: false }, { where: { id: email_queue.id } });
+    });
+};
+
+exports.sendEmailToUser = (req, res) => {
+  var html = `<!DOCTYPE html>
+            <html>
+              <head>
+                <meta charset="UTF-8">
+              </head>
+              <body>
+                <h2>Done Tagging of Game is checked</h2>
+              </body>
+            </html>`;
+
+  sendEmailToCoach(
+    req.params.email,
+    req.params.userId,
+    "Check Your Email",
+    html
+  );
 };

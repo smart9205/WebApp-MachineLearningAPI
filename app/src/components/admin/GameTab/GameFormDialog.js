@@ -205,6 +205,45 @@ export default function GameFormDialog({ open, setOpen, gameListUpdated, actionT
         );
     };
 
+    useEffect(() => {
+        if (actionType === 'Edit' && doneTagging) {
+            GameService.getAllCoachTeam().then((res) => {
+                const coachTeams = res;
+                const coachTeamIds = res.map((item) => item.team_id);
+
+                if (coachTeamIds.includes(homeTeam.id)) {
+                    const userIds = coachTeams.filter((item) => item.team_id === homeTeam.id).map((item) => item.user_id);
+                    let users = [];
+                    let coachUsers = [];
+
+                    GameService.getAllUsers().then((res) => {
+                        users = res;
+                    });
+                    coachUsers = users.filter((item) => userIds.includes(item.id));
+
+                    coachUsers.map(async (item) => {
+                        await GameService.sendEmailToUser(item.id, item.email);
+                    });
+                }
+
+                if (coachTeamIds.includes(awayTeam.id)) {
+                    const userIds = coachTeams.filter((item) => item.team_id === awayTeam.id).map((item) => item.user_id);
+                    let users = [];
+                    let coachUsers = [];
+
+                    GameService.getAllUsers().then((res) => {
+                        users = res;
+                    });
+                    coachUsers = users.filter((item) => userIds.includes(item.id));
+
+                    coachUsers.map(async (item) => {
+                        await GameService.sendEmailToUser(item.id, item.email);
+                    });
+                }
+            });
+        }
+    }, [doneTagging]);
+
     return (
         <Dialog open={open} classes={{ paper: classes.paper }} onClose={() => setOpen(false)} scroll="paper" aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
             {loading && (

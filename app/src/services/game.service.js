@@ -787,6 +787,12 @@ const getAllAcademies = (userId) => {
     });
 };
 
+const sendEmailToUser = (userId, email) => {
+    return axios.put(API_URL + `game/send_email/${userId}/${email}`, { userId, email }, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
 const getAllPositions = () => {
     return axios.get(API_URL + 'player/position', { headers: authHeader() }).then((response) => {
         return response.data;
@@ -1352,7 +1358,8 @@ const gameService = {
     deleteAcademyFromRepresentative,
     deleteTeamsFromAcademy,
     deleteHideGame,
-    deleteAcademyCoach
+    deleteAcademyCoach,
+    sendEmailToUser
 };
 
 export default gameService;

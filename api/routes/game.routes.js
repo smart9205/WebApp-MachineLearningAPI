@@ -386,4 +386,10 @@ module.exports = (app) => {
     [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.deleteHideGame
   );
+
+  app.put(
+    "/game/send_email/:userId/:email",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.sendEmailToUser
+  );
 };
