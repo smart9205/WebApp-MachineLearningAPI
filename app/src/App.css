@@ -21,6 +21,18 @@ body > iframe {
     position: relative;
     padding-top: 56.25%;
 }
+
+.detection {
+    display: flex;
+    top: 0;
+    justify-content: space-evenly;
+    position: absolute;
+    width: 97%;
+    height: 97%;
+    flex-wrap: wrap;
+    pointer-events: none;
+}
+
 .react-player {
     position: absolute;
     top: 0;

@@ -15,8 +15,7 @@ const useVideoPlayer = (videoElement, game_id) => {
 
     const retreivedata = async (strHr, strMin, strsec, minTobackward, minToforward, detectFr, isMerge) => {
         let videoTime = `${strHr}:${strMin}:${strsec}`;
-        await gameService.getPlayersDetection(game_id, videoTime, minTobackward, minToforward).then((data) => {
-            console.log('-==--=-=-=-=-=', data);
+        await gameService.getPlayersDetection(game_id, videoTime, minTobackward, minToforward).then((data) => {            
             if (data.length == 0) {
                 console.log('data is empty--');
                 retreiving.current = false;
@@ -126,7 +125,7 @@ const useVideoPlayer = (videoElement, game_id) => {
     useEffect(() => {
         let timeInt = setInterval(() => {
             detect();
-        }, 25);
+        }, 40);
         return () => clearInterval(timeInt);
     }, []);
 

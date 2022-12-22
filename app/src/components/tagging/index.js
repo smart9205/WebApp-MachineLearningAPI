@@ -649,7 +649,7 @@ export default function Tagging() {
                                 playing={play}
                                 playbackRate={PLAYBACK_RATE[playRate].rate}
                                 controls={true}
-                                width="100%"
+                                width="97%"
                                 height="97%"
                                 style={{
                                     pointerEvents: 'auto'
@@ -657,19 +657,8 @@ export default function Tagging() {
                             />
 
                             <div
-                                className="detection"
-                                id="detectdiv"
+                                className="detection"                                
                                 ref={overlayElRef}
-                                style={{
-                                    display: 'flex',
-                                    top: 0,
-                                    justifyContent: 'spaceEvenly',
-                                    position: 'absolute',
-                                    width: '100%',
-                                    height: '100%',
-                                    flexWrap: 'wrap',
-                                    pointerEvents: 'none'
-                                }}
                             >
                                 {isShow &&
                                     positions.map((item) => {
@@ -715,6 +704,15 @@ export default function Tagging() {
                                                 >
                                                     {player_id}
                                                 </div>
+                                                
+                                                <div
+                                                    style = {{
+                                                        flexGrow:1,
+                                                        border: '1px solid red',
+                                                        width: '100%'
+                                                    }}>
+                                                </div>
+
                                             </div>
                                         );
                                     })}
