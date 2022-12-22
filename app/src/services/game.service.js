@@ -665,6 +665,30 @@ const getAllUsers = () => {
     });
 };
 
+const getAllUsersWithSubscription = () => {
+    return axios.get(API_URL + 'user/all_subscription', { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const deleteUser = (userId) => {
+    return axios.delete(API_URL + `user/delete/${userId}`, { headers: authHeader(), data: { userId } }).then((response) => {
+        return response.data;
+    });
+};
+
+const updateUser = (req) => {
+    return axios.post(API_URL + 'user/update', req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
+const addNewUser = (req) => {
+    return axios.post(API_URL + 'user/add', req, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
 const getAllRepresentatives = () => {
     return axios.get(API_URL + 'user/representative', { headers: authHeader() }).then((response) => {
         return response.data;
@@ -1173,6 +1197,7 @@ const gameService = {
     addTeamToAcademy,
     addHideGame,
     addAcademyCoach,
+    addNewUser,
 
     addUserEdits,
     createUserFolder,
@@ -1210,6 +1235,7 @@ const gameService = {
     getOpponentTags,
     getAllCoach,
     getAllUsers,
+    getAllUsersWithSubscription,
     getAllRepresentatives,
     getAcademiesForRepresentative,
     getTeamsByAcademy,
@@ -1336,6 +1362,7 @@ const gameService = {
     sendShareEmail,
     verifyShareId,
     editAcademy,
+    updateUser,
 
     deletePlayersInTeam,
 
@@ -1359,6 +1386,7 @@ const gameService = {
     deleteTeamsFromAcademy,
     deleteHideGame,
     deleteAcademyCoach,
+    deleteUser,
     sendEmailToUser
 };
 

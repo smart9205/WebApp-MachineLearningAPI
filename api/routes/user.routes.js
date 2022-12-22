@@ -139,4 +139,28 @@ module.exports = function (app) {
     [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.deleteAcademyCoach
   );
+
+  app.get(
+    "/user/all_subscription",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.getAllUsersWithSubscription
+  );
+
+  app.delete(
+    "/user/delete/:userId",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.deleteUser
+  );
+
+  app.post(
+    "/user/update",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.updateUser
+  );
+
+  app.post(
+    "/user/add",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.addNewUser
+  );
 };

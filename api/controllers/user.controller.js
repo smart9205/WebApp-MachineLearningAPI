@@ -2,6 +2,9 @@ const db = require("../models");
 const User = db.user;
 const Sequelize = db.sequelize;
 
+var bcrypt = require("bcryptjs");
+var randomstring = require("randomstring");
+
 exports.allAccess = (req, res) => {
   res.status(200).send("Public Content.");
 };
@@ -326,6 +329,85 @@ exports.getAllAcademyCoaches = (req, res) => {
   )
     .then((data) => {
       res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving seasons.",
+      });
+    });
+};
+
+exports.getAllUsersWithSubscription = (req, res) => {
+  Sequelize.query(
+    `
+      select
+        public."Users".*,
+        public."User_Subscriptions".start_date as subscription_start,
+        public."User_Subscriptions".end_date as subscription_end
+      from public."Users"
+      join public."User_Subscriptions" on public."User_Subscriptions".user_id = public."Users".id
+    `
+  )
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving seasons.",
+      });
+    });
+};
+
+exports.deleteUser = (req, res) => {
+  Sequelize.query(
+    `delete from public."Users" where public."Users".id = ${req.params.userId}`
+  )
+    .then((data) => {
+      res.send("Successfully deleted");
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving seasons.",
+      });
+    });
+};
+
+exports.updateUser = (req, res) => {
+  Sequelize.query(
+    `
+    UPDATE public."Users"
+    SET first_name='${req.body.first_name}',
+    last_name='${req.body.last_name}',
+    country='${req.body.country}',
+    phone_number='${req.body.phone}',
+    user_image='${req.body.logo}'
+    WHERE id = ${req.body.userId}
+  `
+  )
+    .then((data) => {
+      res.send("Successfully updated");
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving seasons.",
+      });
+    });
+};
+
+exports.addNewUser = (req, res) => {
+  const password = randomstring.generate(8);
+
+  User.create({
+    email: req.body.email,
+    password: bcrypt.hashSync(password, 8),
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    country: req.body.country,
+    phone_number: req.body.phone,
+    user_image: req.body.logo,
+  })
+    .then((data) => {
+      res.send("Successfully added");
     })
     .catch((err) => {
       res.status(500).send({
