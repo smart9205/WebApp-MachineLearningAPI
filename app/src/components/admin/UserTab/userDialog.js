@@ -28,14 +28,21 @@ const UserDialog = ({ open, onClose, mode, user, refresh }) => {
     };
 
     useEffect(() => {
-        if (mode === 'Add') return;
-
-        setUserLogo(user.user_image ?? '');
-        setFirstName(user.first_name ?? '');
-        setLastName(user.last_name ?? '');
-        setEmail(user.email ?? '');
-        setPhone(user.phone_number ?? '');
-        setCountry(user.country ?? '');
+        if (mode === 'Add') {
+            setUserLogo('');
+            setFirstName('');
+            setLastName('');
+            setEmail('');
+            setPhone('');
+            setCountry('');
+        } else {
+            setUserLogo(user.user_image ?? '');
+            setFirstName(user.first_name ?? '');
+            setLastName(user.last_name ?? '');
+            setEmail(user.email ?? '');
+            setPhone(user.phone_number ?? '');
+            setCountry(user.country ?? '');
+        }
     }, [open, mode, user]);
 
     return (
