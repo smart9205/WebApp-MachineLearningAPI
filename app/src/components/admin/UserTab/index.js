@@ -31,6 +31,7 @@ import { getComparator, getFormattedDate, stableSort } from '../../newcoach/comp
 import { USER_IMAGE_DEFAULT } from '../../../common/staticData';
 import PasswordDialog from './passwordDialog';
 import UserDialog from './userDialog';
+import SubscriptionDialog from './subscriptionDialog';
 
 const headCells = [
     { id: 'id', title: 'ID' },
@@ -55,6 +56,7 @@ const AdminUserTab = ({ t }) => {
     const [userOpen, setUserOpen] = useState(false);
     const [userEditMode, setUserEditMode] = useState('Add');
     const [searchText, setSearchText] = useState('');
+    const [subscriptionOpen, setSubscriptionOpen] = useState(false);
 
     const handleDeleteClose = (flag) => {
         setDeleteOpen(false);
@@ -140,6 +142,7 @@ const AdminUserTab = ({ t }) => {
                 </Dialog>
                 <PasswordDialog open={passwordOpen} onClose={() => setPasswordOpen(false)} user={selectedUser} />
                 <UserDialog open={userOpen} onClose={() => setUserOpen(false)} mode={userEditMode} user={selectedUser} refresh={setRefreshPage} />
+                <SubscriptionDialog open={subscriptionOpen} onClose={() => setSubscriptionOpen(false)} user={selectedUser} refresh={setRefreshPage} />
                 <Paper sx={{ width: '100%', mb: 2 }}>
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
@@ -165,6 +168,7 @@ const AdminUserTab = ({ t }) => {
                                         </TableCell>
                                     ))}
                                     <TableCell key="edit" sx={{ width: 100 }} />
+                                    <TableCell key="subscription" sx={{ width: 100 }} />
                                     <TableCell key="password" sx={{ width: 100 }} />
                                     <TableCell key="delete" sx={{ width: 70 }} />
                                 </TableRow>
@@ -197,6 +201,17 @@ const AdminUserTab = ({ t }) => {
                                                     }}
                                                 >
                                                     {t('Edit')}
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell align="center" sx={{ width: 100 }}>
+                                                <Button
+                                                    variant="outlined"
+                                                    onClick={() => {
+                                                        setSelectedUser(item);
+                                                        setSubscriptionOpen(true);
+                                                    }}
+                                                >
+                                                    Subscription
                                                 </Button>
                                             </TableCell>
                                             <TableCell align="center" sx={{ width: 100 }}>

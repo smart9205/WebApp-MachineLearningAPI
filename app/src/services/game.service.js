@@ -787,6 +787,12 @@ const addAcademyCoach = (userId, academyId) => {
     });
 };
 
+const updateSubscription = (subId, start, end) => {
+    return axios.put(API_URL + `user/subscription/update/${subId}/${start}/${end}`, { subId, start, end }, { headers: authHeader() }).then((response) => {
+        return response.data;
+    });
+};
+
 const getAcademyCoach = (userId) => {
     return axios.get(API_URL + `user/academy_coach/get/${userId}`, { headers: authHeader(), data: { userId } }).then((response) => {
         return response.data;
@@ -1363,6 +1369,7 @@ const gameService = {
     verifyShareId,
     editAcademy,
     updateUser,
+    updateSubscription,
 
     deletePlayersInTeam,
 

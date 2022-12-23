@@ -163,4 +163,10 @@ module.exports = function (app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.addNewUser
   );
+
+  app.put(
+    "/user/subscription/update/:subId/:start/:end",
+    [authJwt.verifyToken, authJwt.isAdminOrCoach],
+    controller.updateSubscription
+  );
 };

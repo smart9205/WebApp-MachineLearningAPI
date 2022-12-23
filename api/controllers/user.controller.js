@@ -342,6 +342,7 @@ exports.getAllUsersWithSubscription = (req, res) => {
     `
       select
         public."Users".*,
+        public."User_Subscriptions".id as subscription_id,
         public."User_Subscriptions".start_date as subscription_start,
         public."User_Subscriptions".end_date as subscription_end
       from public."Users"
@@ -408,6 +409,25 @@ exports.addNewUser = (req, res) => {
   })
     .then((data) => {
       res.send("Successfully added");
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving seasons.",
+      });
+    });
+};
+
+exports.updateSubscription = (req, res) => {
+  Sequelize.query(
+    `
+      update public."User_Subscriptions"
+      set start_date='${req.params.start}',
+      end_date='${req.params.end}'
+      where id=${req.params.subId}
+    `
+  )
+    .then((data) => {
+      res.send("Successfully updated");
     })
     .catch((err) => {
       res.status(500).send({
