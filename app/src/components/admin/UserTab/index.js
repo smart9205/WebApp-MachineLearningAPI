@@ -36,6 +36,9 @@ import SubscriptionDialog from './subscriptionDialog';
 const headCells = [
     { id: 'id', title: 'ID' },
     { id: 'name', title: 'Name' },
+    { id: 'email', title: 'Email' },
+    { id: 'country', title: 'Country' },
+    { id: 'subscription_name', title: 'Subscription' },
     { id: 'subscription_start', title: 'Subscription Start Date' },
     { id: 'subscription_end', title: 'Subscription End Date' }
 ];
@@ -188,6 +191,9 @@ const AdminUserTab = ({ t }) => {
                                             </TableCell>
                                             <TableCell align="center">{item.id}</TableCell>
                                             <TableCell align="center">{`${item.first_name} ${item.last_name}`}</TableCell>
+                                            <TableCell align="center">{item.email}</TableCell>
+                                            <TableCell align="center">{item.country}</TableCell>
+                                            <TableCell align="center">{item.subscription_name}</TableCell>
                                             <TableCell align="center">{getFormattedDate(item.subscription_start)}</TableCell>
                                             <TableCell align="center">{getFormattedDate(item.subscription_end)}</TableCell>
                                             <TableCell align="center" sx={{ width: 100 }}>

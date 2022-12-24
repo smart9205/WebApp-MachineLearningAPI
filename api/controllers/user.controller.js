@@ -344,9 +344,11 @@ exports.getAllUsersWithSubscription = (req, res) => {
         public."Users".*,
         public."User_Subscriptions".id as subscription_id,
         public."User_Subscriptions".start_date as subscription_start,
-        public."User_Subscriptions".end_date as subscription_end
+        public."User_Subscriptions".end_date as subscription_end,
+        public."Subscriptions".name as subscription_name
       from public."Users"
       join public."User_Subscriptions" on public."User_Subscriptions".user_id = public."Users".id
+      join public."Subscriptions" on public."Subscriptions".id = public."User_Subscriptions".subscription_id
     `
   )
     .then((data) => {
@@ -422,7 +424,8 @@ exports.updateSubscription = (req, res) => {
     `
       update public."User_Subscriptions"
       set start_date='${req.params.start}',
-      end_date='${req.params.end}'
+      end_date='${req.params.end}',
+      subscription_id=${req.params.scriptId}
       where id=${req.params.subId}
     `
   )

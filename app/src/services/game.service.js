@@ -787,8 +787,8 @@ const addAcademyCoach = (userId, academyId) => {
     });
 };
 
-const updateSubscription = (subId, start, end) => {
-    return axios.put(API_URL + `user/subscription/update/${subId}/${start}/${end}`, { subId, start, end }, { headers: authHeader() }).then((response) => {
+const updateSubscription = (subId, scriptId, start, end) => {
+    return axios.put(API_URL + `user/subscription/update/${subId}/${scriptId}/${start}/${end}`, { subId, start, end }, { headers: authHeader() }).then((response) => {
         return response.data;
     });
 };

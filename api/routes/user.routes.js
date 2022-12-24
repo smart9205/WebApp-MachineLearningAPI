@@ -165,7 +165,7 @@ module.exports = function (app) {
   );
 
   app.put(
-    "/user/subscription/update/:subId/:start/:end",
+    "/user/subscription/update/:subId/:scriptId/:start/:end",
     [authJwt.verifyToken, authJwt.isAdminOrCoach],
     controller.updateSubscription
   );

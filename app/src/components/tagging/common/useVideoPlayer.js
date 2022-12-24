@@ -125,7 +125,7 @@ const useVideoPlayer = (videoElement, game_id) => {
     useEffect(() => {
         let timeInt = setInterval(() => {
             detect();
-        }, 40);
+        }, 10);
         return () => clearInterval(timeInt);
     }, []);
 
