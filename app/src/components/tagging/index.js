@@ -480,15 +480,16 @@ export default function Tagging() {
         setState({ offense: team, start_time: subSecToHHMMSS(st, 5) });
     };
 
+    // function to display time difference between first tag and current tag in same period
     const displayTagInfo = () => {
         if (curTeamTag === null) return '';
 
-        const sameTags = teamTagList.filter((item) => item.period === curTeamTag.period);
+        const sameTags = teamTagList.filter((item) => item.period === curTeamTag.period); // get tags that period is same as current tag
 
         if (player && player.current.getCurrentTime() < toSecond(sameTags[sameTags.length - 1].start_time)) return '';
 
         const period = getPeriod(curTeamTag.period);
-        let time = Math.floor(player.current.getCurrentTime()) - toSecond(sameTags[sameTags.length - 1].start_time);
+        let time = Math.floor(player.current.getCurrentTime()) - toSecond(sameTags[sameTags.length - 1].start_time); // Calculates the difference
 
         let minutes = Math.floor(time / 60);
         let seconds = time - minutes * 60;
@@ -645,7 +646,7 @@ export default function Tagging() {
                                 ref={player}
                                 onPlay={() => setPlay(true)}
                                 onPause={() => setPlay(false)}
-                                onProgress={(p) => setCurTagStatusText(displayTagInfo())}
+                                // onProgress={(p) => setCurTagStatusText(displayTagInfo())} // display time difference between first tag and current tag in same game period
                                 playing={play}
                                 playbackRate={PLAYBACK_RATE[playRate].rate}
                                 controls={true}
@@ -656,10 +657,7 @@ export default function Tagging() {
                                 }}
                             />
 
-                            <div
-                                className="detection"                                
-                                ref={overlayElRef}
-                            >
+                            <div className="detection" ref={overlayElRef}>
                                 {isShow &&
                                     positions.map((item) => {
                                         let x = item.x;
@@ -704,15 +702,14 @@ export default function Tagging() {
                                                 >
                                                     {player_id}
                                                 </div>
-                                                
+
                                                 <div
-                                                    style = {{
-                                                        flexGrow:1,
+                                                    style={{
+                                                        flexGrow: 1,
                                                         border: '1px solid red',
                                                         width: '100%'
-                                                    }}>
-                                                </div>
-
+                                                    }}
+                                                ></div>
                                             </div>
                                         );
                                     })}
@@ -732,13 +729,13 @@ export default function Tagging() {
                                 </div>
                             </div>
                         </div>
-                        {curTagStatusText !== '' && (
+                        {/* {curTagStatusText !== '' && (
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', position: 'absolute', top: '10px' }}>
                                 <div style={{ background: 'blue', width: 'fit-content', padding: '4px 8px' }}>
                                     <Typography sx={{ fontFamily: "'DM Sans', sans-serif", fontSize: '20px', fontWeight: 500, color: 'white' }}>{curTagStatusText}</Typography>
                                 </div>
                             </div>
-                        )}
+                        )} */}
                     </div>
                     {open && (
                         <>
