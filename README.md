@@ -1,14 +1,10 @@
-# PERN For Soccer
+# PERN(Postgres, Express, React, Node)
 
 This is PERN project for New soccer project
 
 ## Overview
 
 Here stands the overview of this project.
-
-## Abbreviations Used
-
-PERN = (PostgreSQL, Express JS, React, Node.JS)
 
 ## Development
 - Backend development
